@@ -3,12 +3,12 @@ const webpack = require('webpack');
 
 
 module.exports = {
+    watch: true, // 변경 사항을 감지하여 자동으로 재빌드
+    mode: 'development',
     context: path.resolve(__dirname, 'src/main/react'),
     entry: {
         main: './Main.js', //여러페이지 설정이 가능함
-        user: './User.js',
-
-
+        user: './User/User/User.js'
     },
     devtool: 'sourcemaps',
     cache: true,

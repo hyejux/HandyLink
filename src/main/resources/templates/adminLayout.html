@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${pageName}]]</title>
+    <link rel="stylesheet" th:href="@{/css/adminLayout.css}"/>
+
+</head>
+<body>
+
+<div class='mainBox'>
+
+    <div class="sidebar">
+        <div class="logo">HandyLink</div>
+        <!-- <div class="menu-btn"> <a href="./customer.do"> 메인  </a> </div> -->
+        <div class="menu-btn">  <a href="./product.do"> <i class="bi bi-house-gear-fill"></i> 가게 관리 </a></div>
+        <div class="menu-btn dropdown-btn"> <i class="bi bi-calendar-check"></i> 예약 관리 <i class="bi bi-caret-down-fill"></i> <i class="bi bi-caret-left-fill"></i> </div>
+
+        <div class="dropdown">
+            <a href="./price.do"> <i class="bi bi-gear-fill"> </i> 예약 설정</a>
+            <a href="./order.do"> <i class="bi bi-check2-circle"> </i> 예약 관리</a>
+        </div>
+
+        <div class="menu-btn"> <a href="./stat.do"> <i class="bi bi-bar-chart-line-fill"></i> 통계 관리</a></div>
+        <div class="menu-btn">  <a href="./customer.do"> <i class="bi bi-person-circle"></i> 고객 관리 </a></div>
+        <div class="menu-btn"><a href="./inquiry.do">  <i class="bi bi-chat-left-text-fill"></i> 문의 관리</a></div>
+    </div>
+
+    <!-- btn-st -->
+    <div class="layout-container">
+        <div class="layout-nav">
+
+            <div class="layout-profile">
+
+                <div class="layout-profile-info">
+                    <div class="layout-profile-box">
+                        팬케이크샵 가로수길점 
+                    </div>
+                    <div class="layout-profile-buttons">
+                        <button type="button" class="layout-profile-button layout-mypage-button" onclick="location.href='./myPage.do'">마이 페이지</button>
+                        <button type="button" class="layout-profile-button layout-logout-button" onclick="location.href='./logout'">로그아웃</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="root"></div>
+
+
+    </div>
+
+    <script th:src="@{'/bundle/' + ${pageName} + '.bundle.js'}"></script>
+
+    <script>
+        // // 드롭다운 버튼 클릭 시 드롭다운 토글
+        // document.querySelector('.dropdown-btn').addEventListener('click', function() {
+        //     const dropdown = document.querySelector('.dropdown');
+
+        //     // 배경색 변경
+        //     this.classList.toggle('active'); // active 클래스 토글
+        // });
+        document.querySelector('.dropdown-btn').addEventListener('click', function() {
+                const dropdown = document.querySelector('.dropdown');
+                const downIcon = document.querySelector('.bi-caret-down-fill');
+                const leftIcon = document.querySelector('.bi-caret-left-fill');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+
+                // 드롭다운 상태에 따라 max-height 조정
+                if (dropdown.style.maxHeight) {
+                    dropdown.style.maxHeight = null; // 숨김
+                    downIcon.style.display = 'block'; // 아래 화살표 보이기
+                    leftIcon.style.display = 'none'; // 왼쪽 화살표 숨기기
+                } else {
+                    dropdown.style.maxHeight = dropdown.scrollHeight + "px"; // 펼침
+                    downIcon.style.display = 'none'; // 아래 화살표 숨기기
+                    leftIcon.style.display = 'block'; // 왼쪽 화살표 보이기
+                }
+
+                // 배경색 변경
+                this.classList.toggle('active'); // active 클래스 토글
+            });
+    </script>
+
+
+</div>
+</body>
+</html>

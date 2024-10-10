@@ -1,12 +1,14 @@
-package com.example.HiMade.admin.service;
+package com.example.HiMade.admin.mapper;
+
 
 import com.example.HiMade.admin.dto.adminReservationDTO;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-public interface AdminReservationService
-{
+@Mapper
+public interface AdminReservationMapper {
+
   public List<adminReservationDTO> getList();
   public void setCategory(adminReservationDTO dto);
 }

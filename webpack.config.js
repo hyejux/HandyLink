@@ -12,8 +12,7 @@ module.exports = {
         admin: './Admin/Admin.js',
         adminReservation : './Admin/AdminReservation.js',
         paymentInfo: './User/Payment/PaymentInfo.js',
-        Inquiry: './User/Inpuiry/Inpuiry.js',
-        adminReservation : './Admin/AdminReservation.js'
+//        Inquiry: './User/Inpuiry/Inpuiry.js',
     },
     devtool: 'sourcemaps',
     cache: true,

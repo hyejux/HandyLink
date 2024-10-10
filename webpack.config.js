@@ -9,7 +9,8 @@ module.exports = {
     entry: {
         main: './Main.js', //여러페이지 설정이 가능함
         user: './User/User/User.js',
-        admin: './Admin/Admin.js'
+        admin: './Admin/Admin.js',
+        adminReservation : './Admin/AdminReservation.js'
     },
     devtool: 'sourcemaps',
     cache: true,

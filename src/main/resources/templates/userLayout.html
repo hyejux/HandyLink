@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가게 둘러보기</title>
+    <link rel="stylesheet" th:href="@{/css/userLayout.css}"/>
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+<div class="user-main-container">
+    <div id="root"></div>
+        <div class="user-bottom-nav">
+            <a href="#">
+                <span>메인</span>
+            </a>
+            <a href="#">
+                <span>검색</span>
+            </a>
+            <a href="#">
+                <span>예약</span>
+            </a>
+            <a href="#">
+                <span>문의</span>
+            </a>
+            <a href="#">
+                <span>MY</span>
+            </a>
+        </div>
+</div>
+<script th:src="@{'/bundle/' + ${pageName} + '.bundle.js'}"></script>
+
+
+</body>
+
+</html>

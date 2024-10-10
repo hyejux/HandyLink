@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class MainController {
 
-  @GetMapping("/{pageName}.do") 
+  @GetMapping("/{pageName}.user")
   public String page(@PathVariable String pageName, Model model) {
     model.addAttribute("pageName", pageName);
     System.out.println("뷰이름:" + pageName);
 
-    return "view";
+    return "userLayout";
   }
 
   @GetMapping("/{pageName}.admin")

@@ -8,7 +8,8 @@ module.exports = {
     context: path.resolve(__dirname, 'src/main/react'),
     entry: {
         main: './Main.js', //여러페이지 설정이 가능함
-        user: './User/User/User.js'
+        user: './User/User/User.js',
+        admin: './Admin/Admin.js'
     },
     devtool: 'sourcemaps',
     cache: true,

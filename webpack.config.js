@@ -14,6 +14,7 @@ module.exports = {
         paymentInfo: './User/Payment/PaymentInfo.js',
 //        Inquiry: './User/Inpuiry/Inpuiry.js',
         adminReservation : './Admin/AdminReservation.js',
+        adminReservation : './Admin/AdminReservation.js',
         AdminStore: './Admin/AdminStore.js',
         AdminRegist: './Admin/AdminRegist.js'
     },

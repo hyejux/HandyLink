@@ -24,6 +24,15 @@ public class MainController {
     return "adminLayout";
   }
 
+
+  @GetMapping("/{pageName}.master")
+  public String pageMaster(@PathVariable String pageName, Model model) {
+    model.addAttribute("pageName", pageName);
+    System.out.println("뷰이름:" + pageName);
+
+    return "masterLayout";
+  }
+
   @GetMapping("/{pageName}.signup")
   public String signup(@PathVariable String pageName, Model model){
     model.addAttribute("pageName", pageName);

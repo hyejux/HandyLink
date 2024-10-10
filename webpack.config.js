@@ -16,7 +16,8 @@ module.exports = {
         adminReservation : './Admin/AdminReservation.js',
         adminReservation : './Admin/AdminReservation.js',
         AdminStore: './Admin/AdminStore.js',
-        AdminRegist: './Admin/AdminRegist.js'
+        AdminRegist: './Admin/AdminRegist.js',
+         master: './Master/Master.js'
     },
     devtool: 'sourcemaps',
     cache: true,

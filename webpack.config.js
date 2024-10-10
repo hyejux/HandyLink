@@ -14,7 +14,8 @@ module.exports = {
         paymentInfo: './User/Payment/PaymentInfo.js',
 //        Inquiry: './User/Inpuiry/Inpuiry.js',
         adminReservation : './Admin/AdminReservation.js',
-        userChatRoom : './User/Inquiry/UserChatRoom.js'
+        userChatRoom : './User/Inquiry/UserChatRoom.js',
+        master: './Master/Master.js'
     },
     devtool: 'sourcemaps',
     cache: true,

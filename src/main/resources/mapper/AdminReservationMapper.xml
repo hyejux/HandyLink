@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.HiMade.admin.mapper.AdminReservationMapper">
+    <select id="getList" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
+        select * from category
+    </select>
+
+    <insert id="setCategory">
+        INSERT INTO CATEGORY (category_level, parent_category_level, service_name, service_price, service_content, store_id)
+        VALUES (#{categoryLevel}, #{parentCategoryLevel}, #{serviceName}, #{servicePrice}, #{serviceContent}, 1)
+    </insert>
+
+</mapper>

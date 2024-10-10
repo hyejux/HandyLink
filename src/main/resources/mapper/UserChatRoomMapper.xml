@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.HiMade.user.mapper.UserChatRoomMapper">
+    <select id="selectTest" resultType="com.example.HiMade.user.dto.UserChatDTO">
+        select * from chat
+    </select>
+
+    <insert id="insertTest" parameterType="com.example.HiMade.user.dto.UserChatDTO">
+        INSERT INTO CHAT (chat_content, chat_time, store_id, user_id)
+        VALUES (#{chatContent}, CURRENT_TIMESTAMP, #{storeId}, #{userId})
+    </insert>
+</mapper>

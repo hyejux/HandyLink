@@ -1,0 +1,128 @@
+.admin-store-regist-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 50px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.step {
+    text-align: center;
+    position: relative;
+    margin-right: 30px;
+    width: 100%;
+}
+
+.icon {
+    width: 100%;
+    height: 60px;
+    background-color: rgba(79, 109, 218, 0.3);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #727272;
+}
+
+.step.active .icon {
+    background-color: rgb(79, 109, 218);
+    color: white;
+}
+
+.icon p {
+    margin: 0;
+    text-align: center;
+    font-size: small;
+}
+
+.step:last-child {
+    margin-right: 0;
+}
+
+.step::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 30px;
+    height: 2px;
+    background-color: rgba(79, 109, 218, 0.3);
+    transform: translateY(-50%);
+}
+
+.step:last-child::after {
+    display: none;
+}
+
+.container {
+    background-color: white;
+    width: 95%;
+    padding: 20px;
+    /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); */
+}
+
+.terms-section, .privacy-section {
+    margin-bottom: 20px;
+}
+
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    /* display: block; */
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    margin-top: 10px;
+    resize: none;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding: 0 20px;
+}
+
+.buttons > a {
+    text-decoration: none;
+    font-size: 16px;
+    color: #999;
+    font-family: 'ghanachoco';
+}
+
+.buttons > button {
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: white;
+}
+
+
+
+.next-btn {
+/* background-color: rgba(199, 4, 4, 0.685); */
+    color: rgb(79, 109, 218);
+    font-family: 'ghanachoco';
+}

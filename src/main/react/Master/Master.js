@@ -1,28 +1,94 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import './Master.css'; // CSS 파일 경로
-
+import './Master.css';
 
 const Master = () => {
     const [store, setStore] = useState([]);
     const [storeInfo, setStoreInfo] = useState([]);
 
+    // 모든 가게의 정보 불러옴
     useEffect(() => {
-        // 가게 목록을 가져오는 API 호출
         fetch('/store')
             .then((response) => response.json())
             .then((data) => {
                 setStore(data);
-                // 모든 가게의 정보를 자동으로 가져오기
                 const infoPromises = data.map((store) =>
                     fetch(`/store/info/${store.storeId}`).then((response) => response.json())
                 );
                 Promise.all(infoPromises)
                     .then((infoData) => setStoreInfo(infoData))
-                    .catch((error) => console.error('Error fetching store info:', error));
+                    .catch((error) => console.error('가게 정보를 가져오는 중 오류 발생:', error));
             })
-            .catch((error) => console.error('Error fetching store:', error));
+            .catch((error) => console.error('가게 목록을 가져오는 중 오류 발생:', error));
     }, []);
+    
+
+    // 활성화된 가게 필터링
+    const activeStores = store.filter((store) => store.storeStatus === '활성화');
+    // 대기, 비활성화된 가게 필터링
+    const waitingOrInactiveStores = store.filter((store) => store.storeStatus !== '활성화');
+
+    const handleApprove = (storeId, currentStatus) => {
+        const confirmationMessage = currentStatus === '대기'
+            ? "승인 하시겠습니까?"
+            : "활성화 하시겠습니까?";
+
+        if (window.confirm(confirmationMessage)) {
+            fetch(`/store/${storeId}/approve`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        const successMessage = currentStatus === '대기'
+                            ? "승인이 완료되었습니다."
+                            : "가게가 활성화 되었습니다.";
+                        alert(successMessage);
+                        // 승인된 가게 목록 다시 업데이트
+                        return fetch('/store');
+                    }
+                    throw new Error('가게 상태 업데이트에 실패했습니다.');
+                })
+                .then((response) => response.json())
+                .then((data) => setStore(data))
+                .catch((error) => {
+                    const errorMessage = currentStatus === '대기'
+                        ? "승인에 실패했습니다."
+                        : "활성화에 실패했습니다.";
+                    console.error('가게 상태 업데이트 중 오류 발생:', error);
+                    alert(errorMessage);
+                });
+        }
+    };
+
+
+    const handleDeactivate = (storeId) => {
+        if (window.confirm("가게를 비활성화 하시겠습니까?")) {
+            fetch(`/store/${storeId}/deactivate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        alert("가게가 비활성화 되었습니다.");
+                        // 가게 목록 다시 업데이트
+                        return fetch('/store');
+                    }
+                    throw new Error('가게 상태 업데이트에 실패했습니다.'); 
+                })
+                .then((response) => response.json())
+                .then((data) => setStore(data))
+                .catch((error) => {
+                    console.error('가게 상태 업데이트 중 오류 발생:', error); 
+                    alert("비활성화에 실패했습니다.");
+                });
+        }
+    };
+
 
     return (
         <div>
@@ -45,10 +111,11 @@ const Master = () => {
                         <th>영업 시작 시간</th>
                         <th>영업 종료 시간</th>
                         <th>활성화</th>
+                        <th>비활성화</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {store.map((store, index) => (
+                    {activeStores.map((store, index) => (
                         <tr key={store.storeId}>
                             <td>{store.storeId}</td>
                             <td>{store.storeName}</td>
@@ -65,13 +132,15 @@ const Master = () => {
                             <td>{storeInfo[index]?.storeStartTime || '-'}</td>
                             <td>{storeInfo[index]?.storeEndTime || '-'}</td>
                             <td>{store.storeStatus}</td>
+                            <td>
+                                <button onClick={() => handleDeactivate(store.storeId)}>비활성화</button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
 
-
-            <h3>업체 목록</h3>
+            <h3>승인대기</h3>
             <table>
                 <thead>
                     <tr>
@@ -90,10 +159,11 @@ const Master = () => {
                         <th>영업 시작 시간</th>
                         <th>영업 종료 시간</th>
                         <th>활성화</th>
+                        <th>승인</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {store.map((store, index) => (
+                    {waitingOrInactiveStores.map((store, index) => (
                         <tr key={store.storeId}>
                             <td>{store.storeId}</td>
                             <td>{store.storeName}</td>
@@ -110,6 +180,14 @@ const Master = () => {
                             <td>{storeInfo[index]?.storeStartTime || '-'}</td>
                             <td>{storeInfo[index]?.storeEndTime || '-'}</td>
                             <td>{store.storeStatus}</td>
+                            <td>
+                                {store.storeStatus === '대기' ? (
+                                    <button onClick={() => handleApprove(store.storeId, '대기')}>승인</button>
+                                ) : (
+                                    <button onClick={() => handleApprove(store.storeId, '비활성화')}>활성화</button>
+                                )}
+                            </td>
+
                         </tr>
                     ))}
                 </tbody>

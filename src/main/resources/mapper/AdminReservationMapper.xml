@@ -5,7 +5,11 @@
 
 <mapper namespace="com.example.HiMade.admin.mapper.AdminReservationMapper">
     <select id="getList" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
-        select * from category
+        select c.category_id, c.category_level, c.parent_category_level, c.service_name , c.service_price, c.service_content, c.store_id, ci.image_url
+        from category c
+        left join category_image ci
+        on c.category_id = ci.category_id
+        where category_level = 1
     </select>
 
     <insert id="setCategory">

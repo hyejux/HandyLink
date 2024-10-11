@@ -19,7 +19,8 @@
     "webpack-cli": "^5.1.4"
   },
   "scripts": {
+    "build": "webpack --mode production",
     "start": "gradlew bootRun",
-    "watch": "node_modules\\.bin\\webpack --watch --devtool inline-source-map"
+    "watch": "node_modules\\.bin\\webpack --watch --devtool source-map"
   }
 }

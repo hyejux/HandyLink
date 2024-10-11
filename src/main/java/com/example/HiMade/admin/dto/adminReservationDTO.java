@@ -18,4 +18,6 @@ public class adminReservationDTO {
   private String serviceContent;
   private String storeId;
 
+  private String imageUrl;
+
 }

@@ -16,6 +16,8 @@ module.exports = {
         AdminStore: './Admin/AdminStore.js',
         AdminRegist: './Admin/AdminRegist.js',
         master: './Master/Master.js',
+        masterStore: './Master/MasterStore.js',
+        masterApproval: './Master/MasterApproval.js',
         adminReserveSetting : './Admin/AdminReserveSetting.js',
         adminReserveSettingDetail : './Admin/AdminReserveSettingDetail.js',
         AdminReserveSettingDetailModify : './Admin/AdminReserveSettingDetailModify.js'

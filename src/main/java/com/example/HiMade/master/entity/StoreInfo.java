@@ -14,6 +14,7 @@ import java.sql.Time;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreInfo {
+    
     @Id
     private Long storeId;
 

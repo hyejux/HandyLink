@@ -12,14 +12,14 @@ module.exports = {
         admin: './Admin/Admin.js',
         adminReservation : './Admin/AdminReservation.js',
         paymentInfo: './User/Payment/PaymentInfo.js',
-//        Inquiry: './User/Inpuiry/Inpuiry.js',
-        adminReservation : './Admin/AdminReservation.js',
         userChatRoom : './User/Inquiry/UserChatRoom.js',
-        master: './Master/Master.js',
-        adminReservation : './Admin/AdminReservation.js',
         AdminStore: './Admin/AdminStore.js',
         AdminRegist: './Admin/AdminRegist.js',
-         master: './Master/Master.js'
+        master: './Master/Master.js',
+        adminReserveSetting : './Admin/AdminReserveSetting.js',
+        adminReserveSettingDetail : './Admin/AdminReserveSettingDetail.js',
+        AdminReserveSettingDetailModify : './Admin/AdminReserveSettingDetailModify.js'
+
     },
     devtool: 'sourcemaps',
     cache: true,

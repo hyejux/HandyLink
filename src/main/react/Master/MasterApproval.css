@@ -1,12 +1,12 @@
 .header-container {
-  display: flex; 
-  justify-content: space-between; 
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
 h3 {
-  margin: 0; 
+  margin: 0;
 }
 
 /* 셀렉트 필터 */
@@ -19,7 +19,8 @@ h3 {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  outline: none; /* 포커스 시 경계선 제거 */
+  outline: none;
+  /* 포커스 시 경계선 제거 */
 }
 
 /* 테이블 */
@@ -67,4 +68,23 @@ p {
 
 .activate-button:active {
   background-color: #388e3c;
+}
+
+/* 상세보기 버튼 */
+.details-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.details-button:hover {
+  background-color: #0056b3;
+}
+
+.details-button:active {
+  background-color: #004085;
 }

@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './MasterApproval.css';
+import StoreInfoModal from './StoreInfoModal';
 
 function MasterApproval() {
   const [store, setStore] = useState([]);
   const [storeInfo, setStoreInfo] = useState([]);
   const [filter, setFilter] = useState('전체');
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
+  const [selectedStore, setSelectedStore] = useState(null); // 선택된 업체 기본 정보
+  const [selectedStoreInfo, setSelectedStoreInfo] = useState(null); // 선택된 업체 추가 정보
 
   useEffect(() => {
     fetch('/store')
@@ -62,6 +66,20 @@ function MasterApproval() {
     }
   };
 
+  // 모달 열기 함수
+  const handleShowModal = (store, storeInfo) => {
+    setSelectedStore(store);
+    setSelectedStoreInfo(storeInfo);
+    setIsModalOpen(true);
+  };
+
+  // 모달 닫기 함수
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedStore(null);
+    setSelectedStoreInfo(null);
+  };
+
   return (
     <div>
       <div className="header-container">
@@ -79,22 +97,16 @@ function MasterApproval() {
       <table>
         <thead>
           <tr>
-            <th>업체 ID</th>
-            <th>업체 이름</th>
-            {/* <th>카테고리</th> */}
+            <th>업체ID</th>
+            <th>업체명</th>
             <th>대표자</th>
-            {/* <th>매니저 이름</th> */}
-            {/* <th>매니저 전화</th> */}
-            {/* <th>주소</th> */}
+            <th>담당자</th>
+            <th>담당자연락처</th>
+            <th>주소</th>
             <th>사업자 번호</th>
-            <th>가입일</th>
-            {/* <th>소개</th> */}
-            {/* <th>주차 가능</th> */}
-            {/* <th>SNS</th> */}
-            {/* <th>영업 시작 시간</th> */}
-            {/* <th>영업 종료 시간</th> */}
+            <th>업체정보</th>
             <th>상태</th>
-            <th>승인&활성화</th>
+            <th>비활성화</th>
           </tr>
         </thead>
         <tbody>
@@ -102,18 +114,14 @@ function MasterApproval() {
             <tr key={store.storeId}>
               <td>{store.storeId}</td>
               <td>{store.storeName}</td>
-              {/* <td>{store.storeCate || '-'}</td> */}
               <td>{store.storeMaster || '-'}</td>
-              {/* <td>{store.managerName || '-'}</td> */}
-              {/* <td>{store.managerPhone || '-'}</td> */}
-              {/* <td>{store.storeAddr || '-'}</td> */}
+              <td>{store.managerName || '-'}</td>
+              <td>{store.managerPhone || '-'}</td>
+              <td>{store.storeAddr || '-'}</td>
               <td>{store.storeBusinessNo || '-'}</td>
-              <td>{new Date(store.storeSignup).toLocaleString() || '-'}</td>
-              {/* <td>{storeInfo[index]?.storeIntro || '-'}</td> */}
-              {/* <td>{storeInfo[index]?.storeParkingYn || '-'}</td> */}
-              {/* <td>{storeInfo[index]?.storeSns || '-'}</td> */}
-              {/* <td>{storeInfo[index]?.storeStartTime || '-'}</td> */}
-              {/* <td>{storeInfo[index]?.storeEndTime || '-'}</td> */}
+              <td>
+                <button className="details-button" onClick={() => handleShowModal(store, storeInfo[index])}>상세보기</button>
+              </td>
               <td>{store.storeStatus}</td>
               <td>
                 {store.storeStatus === '대기' ? (
@@ -126,6 +134,7 @@ function MasterApproval() {
           ))}
         </tbody>
       </table>
+      <StoreInfoModal isOpen={isModalOpen} onClose={handleCloseModal} store={selectedStore} storeInfo={selectedStoreInfo} />
     </div>
   );
 };

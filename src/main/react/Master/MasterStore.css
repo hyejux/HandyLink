@@ -39,7 +39,7 @@ p {
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
-  font-size: 14px;    
+  font-size: 14px;
 }
 
 .deactivate-button:hover {
@@ -48,4 +48,23 @@ p {
 
 .deactivate-button:active {
   background-color: #c70000;
+}
+
+/* 상세보기 버튼 */
+.details-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.details-button:hover {
+  background-color: #0056b3;
+}
+
+.details-button:active {
+  background-color: #004085;
 }

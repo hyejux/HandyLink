@@ -21,22 +21,69 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `/* masterLayout.css */
-table {
-    width: 100%;
-    border-collapse: collapse; /* 테이블 경계가 겹치지 않도록 설정 */
+___CSS_LOADER_EXPORT___.push([module.id, `h3 {
+    color: #333;
+    padding-bottom: 5px;
+    text-align: center;
 }
 
-th, td {
-    border: 1px solid #dddddd; /* 테이블 셀 경계 색상 설정 */
-    text-align: left; /* 텍스트 정렬 */
-    padding: 8px; /* 셀 안쪽 여백 */
+/* 가게 상태별 수 */
+.store-counts {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.count-card {
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    padding: 20px;
+    flex: 1;
+    margin: 0 10px;
+    text-align: center;
+}
+
+.count-card h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.count-card p {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+/* 테이블 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
 }
 
 th {
-    background-color: #f2f2f2; /* 헤더 배경 색상 */
+    background-color: #1d2830;
+    color: white;
 }
-`, "",{"version":3,"sources":["webpack://./Master/Master.css"],"names":[],"mappings":"AAAA,qBAAqB;AACrB;IACI,WAAW;IACX,yBAAyB,EAAE,uBAAuB;AACtD;;AAEA;IACI,yBAAyB,EAAE,mBAAmB;IAC9C,gBAAgB,EAAE,WAAW;IAC7B,YAAY,EAAE,YAAY;AAC9B;;AAEA;IACI,yBAAyB,EAAE,aAAa;AAC5C","sourcesContent":["/* masterLayout.css */\r\ntable {\r\n    width: 100%;\r\n    border-collapse: collapse; /* 테이블 경계가 겹치지 않도록 설정 */\r\n}\r\n\r\nth, td {\r\n    border: 1px solid #dddddd; /* 테이블 셀 경계 색상 설정 */\r\n    text-align: left; /* 텍스트 정렬 */\r\n    padding: 8px; /* 셀 안쪽 여백 */\r\n}\r\n\r\nth {\r\n    background-color: #f2f2f2; /* 헤더 배경 색상 */\r\n}\r\n"],"sourceRoot":""}]);
+
+tr:hover {
+    background-color: #e0e0e0;
+}
+
+p {
+    font-size: 16px;
+    color: #555;
+}
+
+
+`, "",{"version":3,"sources":["webpack://./Master/Master.css"],"names":[],"mappings":"AAAA;IACI,WAAW;IACX,mBAAmB;IACnB,kBAAkB;AACtB;;AAEA,aAAa;AACb;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;AACvB;;AAEA;IACI,yBAAyB;IACzB,kBAAkB;IAClB,aAAa;IACb,OAAO;IACP,cAAc;IACd,kBAAkB;AACtB;;AAEA;IACI,SAAS;IACT,eAAe;AACnB;;AAEA;IACI,eAAe;IACf,iBAAiB;AACrB;;;AAGA,QAAQ;AACR;IACI,WAAW;IACX,yBAAyB;IACzB,gBAAgB;AACpB;;AAEA;;IAEI,aAAa;IACb,gBAAgB;IAChB,sBAAsB;AAC1B;;AAEA;IACI,yBAAyB;IACzB,YAAY;AAChB;;AAEA;IACI,yBAAyB;AAC7B;;AAEA;IACI,eAAe;IACf,WAAW;AACf","sourcesContent":["h3 {\r\n    color: #333;\r\n    padding-bottom: 5px;\r\n    text-align: center;\r\n}\r\n\r\n/* 가게 상태별 수 */\r\n.store-counts {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    margin-bottom: 30px;\r\n}\r\n\r\n.count-card {\r\n    background-color: #f2f2f2;\r\n    border-radius: 8px;\r\n    padding: 20px;\r\n    flex: 1;\r\n    margin: 0 10px;\r\n    text-align: center;\r\n}\r\n\r\n.count-card h4 {\r\n    margin: 0;\r\n    font-size: 16px;\r\n}\r\n\r\n.count-card p {\r\n    font-size: 24px;\r\n    font-weight: bold;\r\n}\r\n\r\n\r\n/* 테이블 */\r\ntable {\r\n    width: 100%;\r\n    border-collapse: collapse;\r\n    margin-top: 20px;\r\n}\r\n\r\nth,\r\ntd {\r\n    padding: 12px;\r\n    text-align: left;\r\n    border: 1px solid #ddd;\r\n}\r\n\r\nth {\r\n    background-color: #1d2830;\r\n    color: white;\r\n}\r\n\r\ntr:hover {\r\n    background-color: #e0e0e0;\r\n}\r\n\r\np {\r\n    font-size: 16px;\r\n    color: #555;\r\n}\r\n\r\n\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -34013,50 +34060,66 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
- // CSS 파일 경로
 
-var Master = function Master() {
+function Master() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
     store = _useState2[0],
     setStore = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState4 = _slicedToArray(_useState3, 2),
-    storeInfo = _useState4[0],
-    setStoreInfo = _useState4[1];
+    activeStores = _useState4[0],
+    setActiveStores = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState6 = _slicedToArray(_useState5, 2),
+    waitingStores = _useState6[0],
+    setWaitingStores = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState8 = _slicedToArray(_useState7, 2),
+    inactiveStores = _useState8[0],
+    setInactiveStores = _useState8[1];
+
+  // 모든 가게의 정보 불러옴
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    // 가게 목록을 가져오는 API 호출
     fetch('/store').then(function (response) {
       return response.json();
     }).then(function (data) {
       setStore(data);
-      // 모든 가게의 정보를 자동으로 가져오기
-      var infoPromises = data.map(function (store) {
-        return fetch("/store/info/".concat(store.storeId)).then(function (response) {
-          return response.json();
-        });
-      });
-      Promise.all(infoPromises).then(function (infoData) {
-        return setStoreInfo(infoData);
-      })["catch"](function (error) {
-        return console.error('Error fetching store info:', error);
-      });
+      updateStoreCounts(data);
     })["catch"](function (error) {
-      return console.error('Error fetching store:', error);
+      return console.error('가게 목록을 가져오는 중 오류 발생:', error);
     });
   }, []);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uAC00\uAC8C \uBAA9\uB85D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uAC00\uAC8C ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uAC00\uAC8C \uC774\uB984"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uCE74\uD14C\uACE0\uB9AC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB300\uD45C\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB9E4\uB2C8\uC800 \uC774\uB984"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB9E4\uB2C8\uC800 \uC804\uD654"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC8FC\uC18C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0AC\uC5C5\uC790 \uBC88\uD638"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uAC00\uC785\uC77C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC18C\uAC1C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC8FC\uCC28 \uAC00\uB2A5"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "SNS"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC601\uC5C5 \uC2DC\uC791 \uC2DC\uAC04"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC601\uC5C5 \uC885\uB8CC \uC2DC\uAC04"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uD65C\uC131\uD654"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, store.map(function (store, index) {
-    var _storeInfo$index, _storeInfo$index2, _storeInfo$index3, _storeInfo$index4, _storeInfo$index5;
+
+  // 상태에 따른 가게 리스트 업데이트
+  var updateStoreCounts = function updateStoreCounts(data) {
+    setActiveStores(data.filter(function (store) {
+      return store.storeStatus === '활성화';
+    }));
+    setWaitingStores(data.filter(function (store) {
+      return store.storeStatus === '대기';
+    }));
+    setInactiveStores(data.filter(function (store) {
+      return store.storeStatus === '비활성화';
+    }));
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uAC00\uAC8C \uC0C1\uD0DC \uD604\uD669"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "store-counts"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "count-card"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uC2B9\uC778 \uB300\uAE30 \uAC00\uAC8C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, waitingStores.length)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "count-card"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uC2B9\uC778\uB41C \uAC00\uAC8C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, activeStores.length)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "count-card"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uBE44\uD65C\uC131\uD654\uB41C \uAC00\uAC8C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, inactiveStores.length))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC2B9\uC778 \uB300\uAE30 \uAC00\uAC8C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC2B9\uC778\uB41C \uAC00\uAC8C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uBE44\uD65C\uC131\uD654\uB41C \uAC00\uAC8C"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, Array.from({
+    length: Math.max(activeStores.length, waitingStores.length, inactiveStores.length)
+  }).map(function (_, index) {
+    var _waitingStores$index, _activeStores$index, _inactiveStores$index;
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", {
-      key: store.storeId
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeId), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeCate || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeMaster || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerName || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerPhone || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeAddr || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeBusinessNo || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, new Date(store.storeSignup).toLocaleString() || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_storeInfo$index = storeInfo[index]) === null || _storeInfo$index === void 0 ? void 0 : _storeInfo$index.storeIntro) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_storeInfo$index2 = storeInfo[index]) === null || _storeInfo$index2 === void 0 ? void 0 : _storeInfo$index2.storeParkingYn) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_storeInfo$index3 = storeInfo[index]) === null || _storeInfo$index3 === void 0 ? void 0 : _storeInfo$index3.storeSns) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_storeInfo$index4 = storeInfo[index]) === null || _storeInfo$index4 === void 0 ? void 0 : _storeInfo$index4.storeStartTime) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_storeInfo$index5 = storeInfo[index]) === null || _storeInfo$index5 === void 0 ? void 0 : _storeInfo$index5.storeEndTime) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeStatus));
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC5C5\uCCB4 \uBAA9\uB85D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uAC00\uAC8C ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uAC00\uAC8C \uC774\uB984"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uCE74\uD14C\uACE0\uB9AC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB300\uD45C\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB9E4\uB2C8\uC800 \uC774\uB984"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB9E4\uB2C8\uC800 \uC804\uD654"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC8FC\uC18C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0AC\uC5C5\uC790 \uBC88\uD638"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uAC00\uC785\uC77C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC18C\uAC1C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC8FC\uCC28 \uAC00\uB2A5"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "SNS"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC601\uC5C5 \uC2DC\uC791 \uC2DC\uAC04"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC601\uC5C5 \uC885\uB8CC \uC2DC\uAC04"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uD65C\uC131\uD654"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, store.map(function (store, index) {
-    var _storeInfo$index6, _storeInfo$index7, _storeInfo$index8, _storeInfo$index9, _storeInfo$index10;
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", {
-      key: store.storeId
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeId), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeCate || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeMaster || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerName || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerPhone || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeAddr || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeBusinessNo || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, new Date(store.storeSignup).toLocaleString() || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_storeInfo$index6 = storeInfo[index]) === null || _storeInfo$index6 === void 0 ? void 0 : _storeInfo$index6.storeIntro) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_storeInfo$index7 = storeInfo[index]) === null || _storeInfo$index7 === void 0 ? void 0 : _storeInfo$index7.storeParkingYn) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_storeInfo$index8 = storeInfo[index]) === null || _storeInfo$index8 === void 0 ? void 0 : _storeInfo$index8.storeSns) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_storeInfo$index9 = storeInfo[index]) === null || _storeInfo$index9 === void 0 ? void 0 : _storeInfo$index9.storeStartTime) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_storeInfo$index10 = storeInfo[index]) === null || _storeInfo$index10 === void 0 ? void 0 : _storeInfo$index10.storeEndTime) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeStatus));
+      key: index
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_waitingStores$index = waitingStores[index]) === null || _waitingStores$index === void 0 ? void 0 : _waitingStores$index.storeName) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_activeStores$index = activeStores[index]) === null || _activeStores$index === void 0 ? void 0 : _activeStores$index.storeName) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_inactiveStores$index = inactiveStores[index]) === null || _inactiveStores$index === void 0 ? void 0 : _inactiveStores$index.storeName) || '-'));
   }))));
-};
+}
 var root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(document.getElementById("root"));
 root.render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Master, null));
 })();

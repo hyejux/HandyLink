@@ -1,11 +1,13 @@
 package com.example.HiMade.admin.serviceImpl;
 
+import com.example.HiMade.admin.dto.adminRSDTO;
 import com.example.HiMade.admin.dto.adminReservationDTO;
 import com.example.HiMade.admin.mapper.AdminReservationMapper;
 import com.example.HiMade.admin.service.AdminMainService;
 import com.example.HiMade.admin.service.AdminReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,4 +31,28 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   public adminReservationDTO getListDetail(int id) {
     return adminReservationMapper.getListDetail(id);
   }
+
+  @Override
+  public List<adminReservationDTO> getSubItem(int id) {
+    return adminReservationMapper.getSubItem(id);
+  }
+
+  @Override
+  public Integer setMainCategory(adminReservationDTO dto) {
+    adminReservationMapper.setMainCategory(dto);
+    return dto.getCategoryId();
+  }
+
+  @Override
+  public int setMainCategory2(adminRSDTO dto) {
+       adminReservationMapper.setMainCategory2(dto);
+       return dto.getMiddleId();
+  }
+
+  @Override
+  public void setMainCategory3(adminRSDTO dto) {
+    adminReservationMapper.setMainCategory3(dto);
+  }
+
+
 }

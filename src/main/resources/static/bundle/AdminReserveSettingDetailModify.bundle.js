@@ -57,6 +57,22 @@ ___CSS_LOADER_EXPORT___.push([module.id, `
 }
 
 
+.btn-del:hover {
+  border: 2px solid #3e3f47;
+  background-color: #3e3f47;
+  transition: 0.1s;
+}
+
+.btn-del {
+  border: 2px solid #1d2830;
+  color : #ffffff;
+  font-weight: bold;
+  background-color: #2e3133;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+
 .btn-modi:hover {
   border: 2px solid #3e3f47;
   background-color: #3e3f47;
@@ -117,7 +133,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `
 }
 
 
-`, "",{"version":3,"sources":["webpack://./Admin/AdminReserveSetting.css"],"names":[],"mappings":";;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;EAChB,iBAAiB;EACjB,mBAAmB;AACrB;;AAEA;EACE,iBAAiB;EACjB,mBAAmB;AACrB;;CAEC;EACC,yBAAyB;EACzB,eAAe;EACf,iBAAiB;EACjB,kBAAkB;EAClB,yBAAyB;;AAE3B;;AAEA;EACE,yBAAyB;EACzB,eAAe;EACf,iBAAiB;EACjB,yBAAyB;EACzB,gCAAgC;EAChC,6BAA6B;AAC/B;;;AAGA;EACE,yBAAyB;EACzB,yBAAyB;EACzB,gBAAgB;AAClB;;AAEA;EACE,yBAAyB;EACzB,yBAAyB;EACzB,gBAAgB;AAClB;;;AAGA;EACE,mBAAmB;AACrB;;AAEA;EACE,sBAAsB;EACtB,8CAA8C;EAC9C,mBAAmB;EACnB,aAAa;EACb,oBAAoB;EACpB,WAAW;EACX,mBAAmB;EACnB,aAAa;AACf;;AAEA;EACE,YAAY;EACZ,UAAU;EACV,WAAW;EACX,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,YAAY;EACZ,iBAAiB;EACjB,mBAAmB;;AAErB;;AAEA;EACE,4BAA4B;EAC5B,WAAW;EACX,iBAAiB;EACjB,kBAAkB;AACpB;;AAEA;EACE,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,eAAe;EACf,iBAAiB;EACjB,qBAAqB;AACvB","sourcesContent":["\r\n\r\n.main-content {\r\n  margin: 50px;\r\n}\r\n\r\n.main-content-title{\r\n  font-size : 35px;\r\n  font-weight: bold;\r\n  margin-bottom: 10px;\r\n}\r\n\r\n.main-btns{\r\n  text-align: right;\r\n  margin-bottom: 30px;\r\n}\r\n\r\n .btn-st {\r\n  border: 1px solid #1d2830;\r\n  color : #ffffff;\r\n  font-weight: bold;\r\n  border-radius: 3px;\r\n  background-color: #2e3133;\r\n\r\n}\r\n\r\n.btn-modi {\r\n  border: 2px solid #1d2830;\r\n  color : #ffffff;\r\n  font-weight: bold;\r\n  background-color: #2e3133;\r\n  border-bottom-right-radius: 10px;\r\n  border-top-right-radius: 10px;\r\n}\r\n\r\n\r\n.btn-modi:hover {\r\n  border: 2px solid #3e3f47;\r\n  background-color: #3e3f47;\r\n  transition: 0.1s;\r\n}\r\n\r\n.btn-st:hover {\r\n  border: 1px solid #6b6c7e;\r\n  background-color: #6b6c7e;\r\n  transition: 0.1s;\r\n}\r\n\r\n\r\n.main-contents{\r\n  border-radius: 10px;\r\n}\r\n\r\n.reserve-container {\r\n  border: 1px solid #ddd;\r\n  box-shadow: 0 2px 4px 0 #eee, 0 3px 5px 0 #eee;\r\n  border-radius: 10px;\r\n  display: flex;\r\n  /* margin: 2% 10%; */\r\n  width: 100%;\r\n  margin-bottom: 30px;\r\n  height: 150px;\r\n}\r\n\r\n.reserve-img {\r\n  margin: 20px;\r\n  width: 50%;\r\n  height: 80%;\r\n  position: relative;\r\n}\r\n\r\n.reserve-img > img {\r\n  width: 100%;\r\n  height: 100%;\r\n  object-fit: cover;\r\n  border-radius: 10px;\r\n\r\n}\r\n\r\n.reserve-content{\r\n  /* border : 1px solid red; */\r\n  width: 100%;\r\n  margin: 30px 20px;\r\n  margin-right: 30px;\r\n}\r\n\r\n.reserve-content-title {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  margin-bottom: 30px;\r\n  font-size: 25px;\r\n  font-weight: bold;\r\n  align-items: baseline;\r\n}\r\n\r\n\r\n"],"sourceRoot":""}]);
+`, "",{"version":3,"sources":["webpack://./Admin/AdminReserveSetting.css"],"names":[],"mappings":";;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;EAChB,iBAAiB;EACjB,mBAAmB;AACrB;;AAEA;EACE,iBAAiB;EACjB,mBAAmB;AACrB;;CAEC;EACC,yBAAyB;EACzB,eAAe;EACf,iBAAiB;EACjB,kBAAkB;EAClB,yBAAyB;;AAE3B;;AAEA;EACE,yBAAyB;EACzB,eAAe;EACf,iBAAiB;EACjB,yBAAyB;EACzB,gCAAgC;EAChC,6BAA6B;AAC/B;;;AAGA;EACE,yBAAyB;EACzB,yBAAyB;EACzB,gBAAgB;AAClB;;AAEA;EACE,yBAAyB;EACzB,eAAe;EACf,iBAAiB;EACjB,yBAAyB;EACzB,gCAAgC;EAChC,6BAA6B;AAC/B;;;AAGA;EACE,yBAAyB;EACzB,yBAAyB;EACzB,gBAAgB;AAClB;;AAEA;EACE,yBAAyB;EACzB,yBAAyB;EACzB,gBAAgB;AAClB;;;AAGA;EACE,mBAAmB;AACrB;;AAEA;EACE,sBAAsB;EACtB,8CAA8C;EAC9C,mBAAmB;EACnB,aAAa;EACb,oBAAoB;EACpB,WAAW;EACX,mBAAmB;EACnB,aAAa;AACf;;AAEA;EACE,YAAY;EACZ,UAAU;EACV,WAAW;EACX,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,YAAY;EACZ,iBAAiB;EACjB,mBAAmB;;AAErB;;AAEA;EACE,4BAA4B;EAC5B,WAAW;EACX,iBAAiB;EACjB,kBAAkB;AACpB;;AAEA;EACE,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,eAAe;EACf,iBAAiB;EACjB,qBAAqB;AACvB","sourcesContent":["\r\n\r\n.main-content {\r\n  margin: 50px;\r\n}\r\n\r\n.main-content-title{\r\n  font-size : 35px;\r\n  font-weight: bold;\r\n  margin-bottom: 10px;\r\n}\r\n\r\n.main-btns{\r\n  text-align: right;\r\n  margin-bottom: 30px;\r\n}\r\n\r\n .btn-st {\r\n  border: 1px solid #1d2830;\r\n  color : #ffffff;\r\n  font-weight: bold;\r\n  border-radius: 3px;\r\n  background-color: #2e3133;\r\n\r\n}\r\n\r\n.btn-modi {\r\n  border: 2px solid #1d2830;\r\n  color : #ffffff;\r\n  font-weight: bold;\r\n  background-color: #2e3133;\r\n  border-bottom-right-radius: 10px;\r\n  border-top-right-radius: 10px;\r\n}\r\n\r\n\r\n.btn-del:hover {\r\n  border: 2px solid #3e3f47;\r\n  background-color: #3e3f47;\r\n  transition: 0.1s;\r\n}\r\n\r\n.btn-del {\r\n  border: 2px solid #1d2830;\r\n  color : #ffffff;\r\n  font-weight: bold;\r\n  background-color: #2e3133;\r\n  border-bottom-right-radius: 10px;\r\n  border-top-right-radius: 10px;\r\n}\r\n\r\n\r\n.btn-modi:hover {\r\n  border: 2px solid #3e3f47;\r\n  background-color: #3e3f47;\r\n  transition: 0.1s;\r\n}\r\n\r\n.btn-st:hover {\r\n  border: 1px solid #6b6c7e;\r\n  background-color: #6b6c7e;\r\n  transition: 0.1s;\r\n}\r\n\r\n\r\n.main-contents{\r\n  border-radius: 10px;\r\n}\r\n\r\n.reserve-container {\r\n  border: 1px solid #ddd;\r\n  box-shadow: 0 2px 4px 0 #eee, 0 3px 5px 0 #eee;\r\n  border-radius: 10px;\r\n  display: flex;\r\n  /* margin: 2% 10%; */\r\n  width: 100%;\r\n  margin-bottom: 30px;\r\n  height: 150px;\r\n}\r\n\r\n.reserve-img {\r\n  margin: 20px;\r\n  width: 50%;\r\n  height: 80%;\r\n  position: relative;\r\n}\r\n\r\n.reserve-img > img {\r\n  width: 100%;\r\n  height: 100%;\r\n  object-fit: cover;\r\n  border-radius: 10px;\r\n\r\n}\r\n\r\n.reserve-content{\r\n  /* border : 1px solid red; */\r\n  width: 100%;\r\n  margin: 30px 20px;\r\n  margin-right: 30px;\r\n}\r\n\r\n.reserve-content-title {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  margin-bottom: 30px;\r\n  font-size: 25px;\r\n  font-weight: bold;\r\n  align-items: baseline;\r\n}\r\n\r\n\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -39344,8 +39360,6 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
-
-
 var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
     _useState2 = _slicedToArray(_useState, 2),
@@ -39355,10 +39369,24 @@ var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify()
     _useState4 = _slicedToArray(_useState3, 2),
     reserveModi = _useState4[0],
     setReserveModi = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState6 = _slicedToArray(_useState5, 2),
+    subItemModi = _useState6[0],
+    setSubItemModi = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+      name: '',
+      price: '',
+      isPaid: false,
+      isRequired: false,
+      inputType: ''
+    }]),
+    _useState8 = _slicedToArray(_useState7, 2),
+    categories = _useState8[0],
+    setCategories = _useState8[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var path = window.location.pathname;
-    var pathSegments = path.split('/'); // URL 경로를 '/'로 나눕니다.
-    var categoryId = pathSegments[pathSegments.length - 1]; // 마지막 세그먼트를 가져옵니다.
+    var pathSegments = path.split('/');
+    var categoryId = pathSegments[pathSegments.length - 1];
     setCateId(categoryId);
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -39368,52 +39396,54 @@ var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify()
     })["catch"](function (error) {
       console.log('Error Category', error);
     });
+    axios__WEBPACK_IMPORTED_MODULE_4__["default"].get("/adminReservation/getSubItem/".concat(cateId)).then(function (response) {
+      console.log(response.data);
+      var transformedData = response.data.map(function (item) {
+        return {
+          name: item.serviceName,
+          // serviceName -> name
+          price: item.servicePrice,
+          // servicePrice -> price
+          isPaid: item.isPaid === 'Y',
+          // isPaid ("Y"/"N") -> true/false
+          isRequired: item.isRequired === 'Y',
+          // isRequired ("Y"/"N") -> true/false
+          inputType: item.subCategoryType // subCategoryType -> inputType
+        };
+      });
+      setCategories(transformedData);
+    })["catch"](function (error) {
+      console.log('Error subItemModi', error);
+    });
   }, [cateId]);
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("미니 팬케이크"),
-    _useState6 = _slicedToArray(_useState5, 2),
-    name = _useState6[0],
-    setName = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(13000),
-    _useState8 = _slicedToArray(_useState7, 2),
-    price = _useState8[0],
-    setPrice = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("작은 선물용으로 좋은 미니 팬케이크 입니다. 다양한 옵션으로 주문가능합니다."),
-    _useState10 = _slicedToArray(_useState9, 2),
-    description = _useState10[0],
-    setDescription = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+  var handleAddCategory = function handleAddCategory() {
+    setCategories([].concat(_toConsumableArray(categories), [{
       name: '',
-      price: ''
-    }]),
-    _useState12 = _slicedToArray(_useState11, 2),
-    subCategories = _useState12[0],
-    setSubCategories = _useState12[1];
-  var handleAddSubCategory = function handleAddSubCategory() {
-    setSubCategories([].concat(_toConsumableArray(subCategories), [{
-      name: '',
-      price: ''
+      price: '',
+      isPaid: false,
+      isRequired: false,
+      inputType: ''
     }]));
   };
-  var handleRemoveSubCategory = function handleRemoveSubCategory(index) {
-    var newSubCategories = subCategories.filter(function (_, i) {
+  var handleRemoveCategory = function handleRemoveCategory(index) {
+    setCategories(categories.filter(function (_, i) {
       return i !== index;
-    });
-    setSubCategories(newSubCategories);
+    }));
   };
-  var handleChangeSubCategory = function handleChangeSubCategory(index, field, value) {
-    var newSubCategories = subCategories.map(function (sub, i) {
-      return i === index ? _objectSpread(_objectSpread({}, sub), {}, _defineProperty({}, field, value)) : sub;
+  var handleChangeCategory = function handleChangeCategory(index, field, value) {
+    var newCategories = categories.map(function (category, i) {
+      return i === index ? _objectSpread(_objectSpread({}, category), {}, _defineProperty({}, field, value)) : category;
     });
-    setSubCategories(newSubCategories);
+    setCategories(newCategories);
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "main-content-title"
-  }, "\uC608\uC57D \uC218\uC815"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, "\uC608\uC57D \uC11C\uBE44\uC2A4 \uC218\uC81522"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "main-btns"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     type: "button",
     className: "btn-st"
-  }, " \uC218\uC815\uC644\uB8CC ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, "\uC218\uC815\uC644\uB8CC")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "main-contents"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "reserve-container"
@@ -39425,7 +39455,7 @@ var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify()
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     type: "button",
     className: "btn-st btn-imgChg"
-  }, " \uC0AC\uC9C4 \uBCC0\uACBD\uD558\uAE30 ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, "\uC0AC\uC9C4 \uBCC0\uACBD\uD558\uAE30")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "reserve-content"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "reserve-content-title"
@@ -39456,84 +39486,99 @@ var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify()
     className: "main-btns"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     type: "button",
-    className: "btn-st"
-  }, " \uCD94\uAC00\uD558\uAE30 ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "btn-st",
+    onClick: handleAddCategory
+  }, "\uCD94\uAC00\uD558\uAE30")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "category-contents"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "category-container"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "category-container-content"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "type-input-require"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "type-paid"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
-    type: "checkbox"
-  }), " \uBB34\uB8CC", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
-    type: "checkbox"
-  }), " \uC720\uB8CC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "type-require"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
-    type: "checkbox"
-  }), " \uD544\uC218", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
-    type: "checkbox"
-  }), " \uC120\uD0DD")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "type-category-sub"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
-    type: "text",
-    placeholder: "\uC774\uB984"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
-    type: "number",
-    placeholder: "\uAC00\uACA9"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "type-input-type"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
-    type: "checkbox"
-  }), " \uC120\uD0DD (\uD558\uB098)", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
-    type: "checkbox"
-  }), " \uC120\uD0DD (\uB2E4\uC911)", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
-    type: "checkbox"
-  }), " \uC22B\uC790", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
-    type: "checkbox"
-  }), " \uD14D\uC2A4\uD2B8"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "category-sub-sub"
-  }, subCategories.map(function (sub, index) {
+  }, categories.map(function (category, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      className: "type-category-sub-sub",
+      className: "category-container",
       key: index
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "category-container-content"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "type-input-require"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "type-paid"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+      type: "checkbox",
+      checked: !category.isPaid,
+      onChange: function onChange(e) {
+        return handleChangeCategory(index, 'isPaid', !e.target.checked);
+      }
+    }), " \uBB34\uB8CC", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+      type: "checkbox",
+      checked: category.isPaid,
+      onChange: function onChange(e) {
+        return handleChangeCategory(index, 'isPaid', e.target.checked);
+      }
+    }), " \uC720\uB8CC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "type-require"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+      type: "checkbox",
+      checked: category.isRequired,
+      onChange: function onChange(e) {
+        return handleChangeCategory(index, 'isRequired', e.target.checked);
+      }
+    }), " \uD544\uC218", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+      type: "checkbox",
+      checked: !category.isRequired,
+      onChange: function onChange(e) {
+        return handleChangeCategory(index, 'isRequired', !e.target.checked);
+      }
+    }), " \uC120\uD0DD")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "type-category-sub"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
       type: "text",
       placeholder: "\uC774\uB984",
-      value: sub.name,
+      value: category.name,
       onChange: function onChange(e) {
-        return handleChangeSubCategory(index, 'name', e.target.value);
+        return handleChangeCategory(index, 'name', e.target.value);
       }
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
       type: "number",
       placeholder: "\uAC00\uACA9",
-      value: sub.price,
+      value: category.price,
+      disabled: category.isPaid === true && (category.inputType === 'SELECT1' || category.inputType === 'SELECTN'),
       onChange: function onChange(e) {
-        return handleChangeSubCategory(index, 'price', e.target.value);
+        return handleChangeCategory(index, 'price', e.target.value);
       }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "type-input-type"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+      type: "checkbox",
+      checked: category.inputType === 'SELECT1',
+      onChange: function onChange() {
+        return handleChangeCategory(index, 'inputType', 'SELECT1');
+      }
+    }), " \uC120\uD0DD (\uD558\uB098)", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+      type: "checkbox",
+      checked: category.inputType === 'SELECTN',
+      onChange: function onChange() {
+        return handleChangeCategory(index, 'inputType', 'SELECTN');
+      }
+    }), " \uC120\uD0DD (\uB2E4\uC911)", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+      type: "checkbox",
+      checked: category.inputType === 'NUMBER',
+      onChange: function onChange() {
+        return handleChangeCategory(index, 'inputType', 'NUMBER');
+      }
+    }), " \uC22B\uC790", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+      type: "checkbox",
+      checked: category.inputType === 'TEXT',
+      onChange: function onChange() {
+        return handleChangeCategory(index, 'inputType', 'TEXT');
+      }
+    }), " \uD14D\uC2A4\uD2B8")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       type: "button",
-      className: "btn-sub-del",
+      className: "btn-del",
       onClick: function onClick() {
-        return handleRemoveSubCategory(index);
+        return handleRemoveCategory(index);
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("i", {
-      className: "bi bi-x-lg"
+      className: "bi bi-x-square"
     })));
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-    type: "button",
-    className: "btn-sub-add",
-    onClick: handleAddSubCategory
-  }, "+"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-    type: "button",
-    className: "btn-modi"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("i", {
-    className: "bi bi-x-square"
-  }))))));
+  }))));
 };
 var root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(document.getElementById('root'));
 root.render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(AdminReserveSettingDetailModify, null));

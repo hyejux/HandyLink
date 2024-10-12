@@ -57,6 +57,22 @@ ___CSS_LOADER_EXPORT___.push([module.id, `
 }
 
 
+.btn-del:hover {
+  border: 2px solid #3e3f47;
+  background-color: #3e3f47;
+  transition: 0.1s;
+}
+
+.btn-del {
+  border: 2px solid #1d2830;
+  color : #ffffff;
+  font-weight: bold;
+  background-color: #2e3133;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+
 .btn-modi:hover {
   border: 2px solid #3e3f47;
   background-color: #3e3f47;
@@ -117,7 +133,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `
 }
 
 
-`, "",{"version":3,"sources":["webpack://./Admin/AdminReserveSetting.css"],"names":[],"mappings":";;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;EAChB,iBAAiB;EACjB,mBAAmB;AACrB;;AAEA;EACE,iBAAiB;EACjB,mBAAmB;AACrB;;CAEC;EACC,yBAAyB;EACzB,eAAe;EACf,iBAAiB;EACjB,kBAAkB;EAClB,yBAAyB;;AAE3B;;AAEA;EACE,yBAAyB;EACzB,eAAe;EACf,iBAAiB;EACjB,yBAAyB;EACzB,gCAAgC;EAChC,6BAA6B;AAC/B;;;AAGA;EACE,yBAAyB;EACzB,yBAAyB;EACzB,gBAAgB;AAClB;;AAEA;EACE,yBAAyB;EACzB,yBAAyB;EACzB,gBAAgB;AAClB;;;AAGA;EACE,mBAAmB;AACrB;;AAEA;EACE,sBAAsB;EACtB,8CAA8C;EAC9C,mBAAmB;EACnB,aAAa;EACb,oBAAoB;EACpB,WAAW;EACX,mBAAmB;EACnB,aAAa;AACf;;AAEA;EACE,YAAY;EACZ,UAAU;EACV,WAAW;EACX,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,YAAY;EACZ,iBAAiB;EACjB,mBAAmB;;AAErB;;AAEA;EACE,4BAA4B;EAC5B,WAAW;EACX,iBAAiB;EACjB,kBAAkB;AACpB;;AAEA;EACE,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,eAAe;EACf,iBAAiB;EACjB,qBAAqB;AACvB","sourcesContent":["\r\n\r\n.main-content {\r\n  margin: 50px;\r\n}\r\n\r\n.main-content-title{\r\n  font-size : 35px;\r\n  font-weight: bold;\r\n  margin-bottom: 10px;\r\n}\r\n\r\n.main-btns{\r\n  text-align: right;\r\n  margin-bottom: 30px;\r\n}\r\n\r\n .btn-st {\r\n  border: 1px solid #1d2830;\r\n  color : #ffffff;\r\n  font-weight: bold;\r\n  border-radius: 3px;\r\n  background-color: #2e3133;\r\n\r\n}\r\n\r\n.btn-modi {\r\n  border: 2px solid #1d2830;\r\n  color : #ffffff;\r\n  font-weight: bold;\r\n  background-color: #2e3133;\r\n  border-bottom-right-radius: 10px;\r\n  border-top-right-radius: 10px;\r\n}\r\n\r\n\r\n.btn-modi:hover {\r\n  border: 2px solid #3e3f47;\r\n  background-color: #3e3f47;\r\n  transition: 0.1s;\r\n}\r\n\r\n.btn-st:hover {\r\n  border: 1px solid #6b6c7e;\r\n  background-color: #6b6c7e;\r\n  transition: 0.1s;\r\n}\r\n\r\n\r\n.main-contents{\r\n  border-radius: 10px;\r\n}\r\n\r\n.reserve-container {\r\n  border: 1px solid #ddd;\r\n  box-shadow: 0 2px 4px 0 #eee, 0 3px 5px 0 #eee;\r\n  border-radius: 10px;\r\n  display: flex;\r\n  /* margin: 2% 10%; */\r\n  width: 100%;\r\n  margin-bottom: 30px;\r\n  height: 150px;\r\n}\r\n\r\n.reserve-img {\r\n  margin: 20px;\r\n  width: 50%;\r\n  height: 80%;\r\n  position: relative;\r\n}\r\n\r\n.reserve-img > img {\r\n  width: 100%;\r\n  height: 100%;\r\n  object-fit: cover;\r\n  border-radius: 10px;\r\n\r\n}\r\n\r\n.reserve-content{\r\n  /* border : 1px solid red; */\r\n  width: 100%;\r\n  margin: 30px 20px;\r\n  margin-right: 30px;\r\n}\r\n\r\n.reserve-content-title {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  margin-bottom: 30px;\r\n  font-size: 25px;\r\n  font-weight: bold;\r\n  align-items: baseline;\r\n}\r\n\r\n\r\n"],"sourceRoot":""}]);
+`, "",{"version":3,"sources":["webpack://./Admin/AdminReserveSetting.css"],"names":[],"mappings":";;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;EAChB,iBAAiB;EACjB,mBAAmB;AACrB;;AAEA;EACE,iBAAiB;EACjB,mBAAmB;AACrB;;CAEC;EACC,yBAAyB;EACzB,eAAe;EACf,iBAAiB;EACjB,kBAAkB;EAClB,yBAAyB;;AAE3B;;AAEA;EACE,yBAAyB;EACzB,eAAe;EACf,iBAAiB;EACjB,yBAAyB;EACzB,gCAAgC;EAChC,6BAA6B;AAC/B;;;AAGA;EACE,yBAAyB;EACzB,yBAAyB;EACzB,gBAAgB;AAClB;;AAEA;EACE,yBAAyB;EACzB,eAAe;EACf,iBAAiB;EACjB,yBAAyB;EACzB,gCAAgC;EAChC,6BAA6B;AAC/B;;;AAGA;EACE,yBAAyB;EACzB,yBAAyB;EACzB,gBAAgB;AAClB;;AAEA;EACE,yBAAyB;EACzB,yBAAyB;EACzB,gBAAgB;AAClB;;;AAGA;EACE,mBAAmB;AACrB;;AAEA;EACE,sBAAsB;EACtB,8CAA8C;EAC9C,mBAAmB;EACnB,aAAa;EACb,oBAAoB;EACpB,WAAW;EACX,mBAAmB;EACnB,aAAa;AACf;;AAEA;EACE,YAAY;EACZ,UAAU;EACV,WAAW;EACX,kBAAkB;AACpB;;AAEA;EACE,WAAW;EACX,YAAY;EACZ,iBAAiB;EACjB,mBAAmB;;AAErB;;AAEA;EACE,4BAA4B;EAC5B,WAAW;EACX,iBAAiB;EACjB,kBAAkB;AACpB;;AAEA;EACE,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,eAAe;EACf,iBAAiB;EACjB,qBAAqB;AACvB","sourcesContent":["\r\n\r\n.main-content {\r\n  margin: 50px;\r\n}\r\n\r\n.main-content-title{\r\n  font-size : 35px;\r\n  font-weight: bold;\r\n  margin-bottom: 10px;\r\n}\r\n\r\n.main-btns{\r\n  text-align: right;\r\n  margin-bottom: 30px;\r\n}\r\n\r\n .btn-st {\r\n  border: 1px solid #1d2830;\r\n  color : #ffffff;\r\n  font-weight: bold;\r\n  border-radius: 3px;\r\n  background-color: #2e3133;\r\n\r\n}\r\n\r\n.btn-modi {\r\n  border: 2px solid #1d2830;\r\n  color : #ffffff;\r\n  font-weight: bold;\r\n  background-color: #2e3133;\r\n  border-bottom-right-radius: 10px;\r\n  border-top-right-radius: 10px;\r\n}\r\n\r\n\r\n.btn-del:hover {\r\n  border: 2px solid #3e3f47;\r\n  background-color: #3e3f47;\r\n  transition: 0.1s;\r\n}\r\n\r\n.btn-del {\r\n  border: 2px solid #1d2830;\r\n  color : #ffffff;\r\n  font-weight: bold;\r\n  background-color: #2e3133;\r\n  border-bottom-right-radius: 10px;\r\n  border-top-right-radius: 10px;\r\n}\r\n\r\n\r\n.btn-modi:hover {\r\n  border: 2px solid #3e3f47;\r\n  background-color: #3e3f47;\r\n  transition: 0.1s;\r\n}\r\n\r\n.btn-st:hover {\r\n  border: 1px solid #6b6c7e;\r\n  background-color: #6b6c7e;\r\n  transition: 0.1s;\r\n}\r\n\r\n\r\n.main-contents{\r\n  border-radius: 10px;\r\n}\r\n\r\n.reserve-container {\r\n  border: 1px solid #ddd;\r\n  box-shadow: 0 2px 4px 0 #eee, 0 3px 5px 0 #eee;\r\n  border-radius: 10px;\r\n  display: flex;\r\n  /* margin: 2% 10%; */\r\n  width: 100%;\r\n  margin-bottom: 30px;\r\n  height: 150px;\r\n}\r\n\r\n.reserve-img {\r\n  margin: 20px;\r\n  width: 50%;\r\n  height: 80%;\r\n  position: relative;\r\n}\r\n\r\n.reserve-img > img {\r\n  width: 100%;\r\n  height: 100%;\r\n  object-fit: cover;\r\n  border-radius: 10px;\r\n\r\n}\r\n\r\n.reserve-content{\r\n  /* border : 1px solid red; */\r\n  width: 100%;\r\n  margin: 30px 20px;\r\n  margin-right: 30px;\r\n}\r\n\r\n.reserve-content-title {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  margin-bottom: 30px;\r\n  font-size: 25px;\r\n  font-weight: bold;\r\n  align-items: baseline;\r\n}\r\n\r\n\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

@@ -34342,15 +34342,15 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 function AdminReserveSettingDetail() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("미니 팬케이크"),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState2 = _slicedToArray(_useState, 2),
     name = _useState2[0],
     setName = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(13000),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
     _useState4 = _slicedToArray(_useState3, 2),
     price = _useState4[0],
     setPrice = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("작은 선물용으로 좋은 미니 팬케이크 입니다. 다양한 옵션으로 주문가능합니다."),
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState6 = _slicedToArray(_useState5, 2),
     description = _useState6[0],
     setDescription = _useState6[1];
@@ -34393,12 +34393,12 @@ function AdminReserveSettingDetail() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "reserve-img"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
-    src: "http://localhost:8585/img/cake001.jpg",
+    src: "http://localhost:8585/img/noimage.jpg",
     alt: "My Image"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     type: "button",
     className: "btn-st btn-imgChg"
-  }, " \uC0AC\uC9C4 \uBCC0\uACBD\uD558\uAE30 ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, " \uC0AC\uC9C4 \uB4F1\uB85D\uD558\uAE30 ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "reserve-content"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "reserve-content-title"
@@ -34409,7 +34409,8 @@ function AdminReserveSettingDetail() {
     value: name,
     onChange: function onChange(e) {
       return setName(e.target.value);
-    }
+    },
+    placeholder: "\uC0C1\uD488\uBA85\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694."
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "reserve-content-title-price"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
@@ -34417,14 +34418,16 @@ function AdminReserveSettingDetail() {
     value: price,
     onChange: function onChange(e) {
       return setPrice(e.target.value);
-    }
+    },
+    placeholder: "\uAC00\uACA9\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694."
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "reserve-content-text"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", {
     value: description,
     onChange: function onChange(e) {
       return setDescription(e.target.value);
-    }
+    },
+    placeholder: "\uC0C1\uD488 \uB0B4\uC6A9\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694."
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "main-btns"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {

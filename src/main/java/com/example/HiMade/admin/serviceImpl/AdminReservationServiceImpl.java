@@ -24,4 +24,9 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   public void setCategory(adminReservationDTO dto) {
       adminReservationMapper.setCategory(dto);
   }
+
+  @Override
+  public adminReservationDTO getListDetail(int id) {
+    return adminReservationMapper.getListDetail(id);
+  }
 }

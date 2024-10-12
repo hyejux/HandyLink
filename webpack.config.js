@@ -7,6 +7,7 @@ module.exports = {
     mode: 'development',
     context: path.resolve(__dirname, 'src/main/react'),
     entry: {
+
         main: './Main.js', //여러페이지 설정이 가능함
         user: './User/User/User.js',
         admin: './Admin/Admin.js',
@@ -18,7 +19,9 @@ module.exports = {
         master: './Master/Master.js',
         adminReserveSetting : './Admin/AdminReserveSetting.js',
         adminReserveSettingDetail : './Admin/AdminReserveSettingDetail.js',
-        AdminReserveSettingDetailModify : './Admin/AdminReserveSettingDetailModify.js'
+        AdminReserveSettingDetailModify : './Admin/AdminReserveSettingDetailModify.js',
+        UserQnaList : './QNA/UserQnaList.js',
+        UserQnaRegist : './QNA/UserQnaRegist.js'
 
     },
     devtool: 'sourcemaps',

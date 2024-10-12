@@ -23,6 +23,14 @@ public class AdminReservationController {
     return adminReservationService.getList();
   }
 
+
+  @GetMapping("/getListDetail/{id}")
+  public adminReservationDTO getListDetail(@PathVariable int id) {
+    System.out.println(adminReservationService.getListDetail(id));
+    System.out.println(id);
+    return adminReservationService.getListDetail(id);
+  }
+
   @PostMapping("/setCategory")
   public void setCategory(@RequestBody adminReservationDTO dto) {
     adminReservationService.setCategory(dto);

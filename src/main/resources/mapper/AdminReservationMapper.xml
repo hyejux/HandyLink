@@ -12,6 +12,14 @@
         where category_level = 1
     </select>
 
+    <select id="getListDetail" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
+        select c.category_id, c.category_level, c.parent_category_level, c.service_name , c.service_price, c.service_content, c.store_id, ci.image_url
+        from category c
+        left join category_image ci
+        on c.category_id = ci.category_id
+        where c.category_level = 1 AND  c.category_id = #{id};
+    </select>
+
     <insert id="setCategory">
         INSERT INTO CATEGORY (category_level, parent_category_level, service_name, service_price, service_content, store_id)
         VALUES (#{categoryLevel}, #{parentCategoryLevel}, #{serviceName}, #{servicePrice}, #{serviceContent}, 1)

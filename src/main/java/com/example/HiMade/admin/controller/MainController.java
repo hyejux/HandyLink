@@ -24,14 +24,16 @@ public class MainController {
     return "adminLayout";
   }
 
-  @GetMapping("/{pageName}.admin?age={id}")
+  @GetMapping("/{pageName}.admin/{id}")
   public String pageAdmin(@PathVariable String pageName, @PathVariable String id, Model model) {
     model.addAttribute("pageName", pageName);
     model.addAttribute("id", id); // id를 모델에 추가
     System.out.println("뷰이름: " + pageName + ", ID: " + id);
+    System.out.println("id ------------" + id);
 
     return "adminLayout"; // 반환할 뷰 이름
   }
+
 
   @GetMapping("/{pageName}.master")
   public String pageMaster(@PathVariable String pageName, Model model) {

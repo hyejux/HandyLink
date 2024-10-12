@@ -7,9 +7,9 @@ import './AdminReserveSettingDetail.css';
 
 
 function AdminReserveSettingDetail() {
- const [name, setName] = useState("미니 팬케이크");
-  const [price, setPrice] = useState(13000);
-  const [description, setDescription] = useState("작은 선물용으로 좋은 미니 팬케이크 입니다. 다양한 옵션으로 주문가능합니다.");
+ const [name, setName] = useState("");
+  const [price, setPrice] = useState(0);
+  const [description, setDescription] = useState("");
   const [subCategories, setSubCategories] = useState([{ name: '', price: '' }]);
 
   const handleAddSubCategory = () => {
@@ -38,8 +38,8 @@ function AdminReserveSettingDetail() {
           <div className="main-contents">
             <div className="reserve-container">
               <div className="reserve-img">
-                <img src="http://localhost:8585/img/cake001.jpg" alt="My Image" />
-                <button type="button" className="btn-st btn-imgChg"> 사진 변경하기 </button>
+              <img src={`http://localhost:8585/img/noimage.jpg`} alt="My Image" />
+                <button type="button" className="btn-st btn-imgChg"> 사진 등록하기 </button>
               </div>
               <div className="reserve-content">
                 <div className="reserve-content-title">
@@ -48,6 +48,7 @@ function AdminReserveSettingDetail() {
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
+                      placeholder="상품명을 입력해주세요."
                     />
                   </div>
                   <div className="reserve-content-title-price">
@@ -55,6 +56,7 @@ function AdminReserveSettingDetail() {
                       type="number"
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
+                      placeholder="가격을 입력해주세요."
                     />
                   </div>
                 </div>
@@ -62,6 +64,7 @@ function AdminReserveSettingDetail() {
                   <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    placeholder="상품 내용을 입력해주세요."
                   />
                 </div>
               </div>

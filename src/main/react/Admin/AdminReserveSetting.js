@@ -37,9 +37,10 @@ const [reservationList, setReservationList] = useState([]);
 //          const pageName = "AdminReserveSettingDetailModify"; // 전달할 첫 번째 값
 //          navigate(`/${pageName}.admin/${id}`); // 두 번째 값으로 id를 포함
 //      };
-   const goToAdminPage = (id) => {
-                window.location.href = `/AdminReserveSettingDetail.admin/${id}`;
-      };
+const goToAdminPage = (id) => {
+    window.location.href = `/AdminReserveSettingDetailModify.admin/${id}`;
+};
+
 
 //    const navigate = useNavigate();
 //

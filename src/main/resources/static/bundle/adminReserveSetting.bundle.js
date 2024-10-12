@@ -39130,7 +39130,7 @@ function AdminReserveSetting() {
   //          navigate(`/${pageName}.admin/${id}`); // 두 번째 값으로 id를 포함
   //      };
   var goToAdminPage = function goToAdminPage(id) {
-    window.location.href = "/AdminReserveSettingDetail.admin/".concat(id);
+    window.location.href = "/AdminReserveSettingDetailModify.admin/".concat(id);
   };
 
   //    const navigate = useNavigate();

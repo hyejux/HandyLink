@@ -11,4 +11,5 @@ public interface AdminReservationMapper {
 
   public List<adminReservationDTO> getList();
   public void setCategory(adminReservationDTO dto);
+  public adminReservationDTO getListDetail(int id);
 }

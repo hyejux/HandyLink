@@ -16,15 +16,15 @@ function MasterStore() {
                 );
                 Promise.all(infoPromises)
                     .then((infoData) => setStoreInfo(infoData))
-                    .catch((error) => console.error('가게 정보를 가져오는 중 오류 발생:', error));
+                    .catch((error) => console.error('업체 정보를 가져오는 중 오류 발생:', error));
             })
-            .catch((error) => console.error('가게 목록을 가져오는 중 오류 발생:', error));
+            .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
     }, []);
 
     const activeStores = store.filter((store) => store.storeStatus === '활성화');
 
     const handleDeactivate = (storeId) => {
-        if (window.confirm("가게를 비활성화 하시겠습니까?")) {
+        if (window.confirm("업체를 비활성화 하시겠습니까?")) {
             fetch(`/store/${storeId}/deactivate`, {
                 method: 'POST',
                 headers: {
@@ -33,15 +33,15 @@ function MasterStore() {
             })
                 .then((response) => {
                     if (response.ok) {
-                        alert("가게가 비활성화 되었습니다.");
+                        alert("업체가 비활성화 되었습니다.");
                         return fetch('/store');
                     }
-                    throw new Error('가게 상태 업데이트에 실패했습니다.');
+                    throw new Error('업체 상태 업데이트에 실패했습니다.');
                 })
                 .then((response) => response.json())
                 .then((data) => setStore(data))
                 .catch((error) => {
-                    console.error('가게 상태 업데이트 중 오류 발생:', error);
+                    console.error('업체 상태 업데이트 중 오류 발생:', error);
                     alert("비활성화에 실패했습니다.");
                 });
         }
@@ -49,12 +49,12 @@ function MasterStore() {
 
     return (
         <div>
-            <h3>가게 관리</h3>
+            <h3>업체관리</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>가게 ID</th>
-                        <th>가게 이름</th>
+                        <th>업체 ID</th>
+                        <th>업체 이름</th>
                         {/* <th>카테고리</th> */}
                         <th>대표자</th>
                         {/* <th>매니저 이름</th> */}

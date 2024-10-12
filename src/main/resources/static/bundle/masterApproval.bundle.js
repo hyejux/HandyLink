@@ -34095,10 +34095,10 @@ function MasterApproval() {
       Promise.all(infoPromises).then(function (infoData) {
         return setStoreInfo(infoData);
       })["catch"](function (error) {
-        return console.error('가게 정보를 가져오는 중 오류 발생:', error);
+        return console.error('업체 정보를 가져오는 중 오류 발생:', error);
       });
     })["catch"](function (error) {
-      return console.error('가게 목록을 가져오는 중 오류 발생:', error);
+      return console.error('업체 목록을 가져오는 중 오류 발생:', error);
     });
   }, []);
 
@@ -34123,17 +34123,17 @@ function MasterApproval() {
         }
       }).then(function (response) {
         if (response.ok) {
-          alert(currentStatus === '대기' ? "승인이 완료되었습니다." : "가게가 활성화 되었습니다.");
+          alert(currentStatus === '대기' ? "승인이 완료되었습니다." : "업체가 활성화 되었습니다.");
           return fetch('/store');
         }
-        throw new Error('가게 상태 업데이트에 실패했습니다.');
+        throw new Error('업체 상태 업데이트에 실패했습니다.');
       }).then(function (response) {
         return response.json();
       }).then(function (data) {
         return setStore(data);
       })["catch"](function (error) {
         alert(currentStatus === '대기' ? "승인에 실패했습니다." : "활성화에 실패했습니다.");
-        console.error('가게 상태 업데이트 중 오류 발생:', error);
+        console.error('업체 상태 업데이트 중 오류 발생:', error);
       });
     }
   };
@@ -34153,7 +34153,7 @@ function MasterApproval() {
     value: "\uB300\uAE30"
   }, "\uB300\uAE30"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "\uBE44\uD65C\uC131\uD654"
-  }, "\uBE44\uD65C\uC131\uD654")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uAC00\uAC8C ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uAC00\uAC8C \uC774\uB984"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB300\uD45C\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0AC\uC5C5\uC790 \uBC88\uD638"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uAC00\uC785\uC77C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0C1\uD0DC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC2B9\uC778&\uD65C\uC131\uD654"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, filteredStores.map(function (store, index) {
+  }, "\uBE44\uD65C\uC131\uD654")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4 ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4 \uC774\uB984"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB300\uD45C\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0AC\uC5C5\uC790 \uBC88\uD638"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uAC00\uC785\uC77C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0C1\uD0DC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC2B9\uC778&\uD65C\uC131\uD654"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, filteredStores.map(function (store, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", {
       key: store.storeId
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeId), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeMaster || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeBusinessNo || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, new Date(store.storeSignup).toLocaleString() || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeStatus), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeStatus === '대기' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {

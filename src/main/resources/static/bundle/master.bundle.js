@@ -34079,7 +34079,7 @@ function Master() {
     inactiveStores = _useState8[0],
     setInactiveStores = _useState8[1];
 
-  // 모든 가게의 정보 불러옴
+  // 모든 업체 정보 불러옴
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     fetch('/store').then(function (response) {
       return response.json();
@@ -34087,11 +34087,11 @@ function Master() {
       setStore(data);
       updateStoreCounts(data);
     })["catch"](function (error) {
-      return console.error('가게 목록을 가져오는 중 오류 발생:', error);
+      return console.error('업체 목록을 가져오는 중 오류 발생:', error);
     });
   }, []);
 
-  // 상태에 따른 가게 리스트 업데이트
+  // 상태에 따른 업체 리스트 업데이트
   var updateStoreCounts = function updateStoreCounts(data) {
     setActiveStores(data.filter(function (store) {
       return store.storeStatus === '활성화';
@@ -34103,15 +34103,15 @@ function Master() {
       return store.storeStatus === '비활성화';
     }));
   };
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uAC00\uAC8C \uC0C1\uD0DC \uD604\uD669"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC5C5\uCCB4 \uC0C1\uD0DC \uD604\uD669"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "store-counts"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "count-card"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uC2B9\uC778 \uB300\uAE30 \uAC00\uAC8C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, waitingStores.length)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uC2B9\uC778 \uB300\uAE30 \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, waitingStores.length)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "count-card"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uC2B9\uC778\uB41C \uAC00\uAC8C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, activeStores.length)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uC2B9\uC778\uB41C \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, activeStores.length)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "count-card"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uBE44\uD65C\uC131\uD654\uB41C \uAC00\uAC8C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, inactiveStores.length))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC2B9\uC778 \uB300\uAE30 \uAC00\uAC8C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC2B9\uC778\uB41C \uAC00\uAC8C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uBE44\uD65C\uC131\uD654\uB41C \uAC00\uAC8C"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, Array.from({
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uBE44\uD65C\uC131\uD654\uB41C \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, inactiveStores.length))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC2B9\uC778 \uB300\uAE30 \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC2B9\uC778\uB41C \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uBE44\uD65C\uC131\uD654\uB41C \uC5C5\uCCB4"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, Array.from({
     length: Math.max(activeStores.length, waitingStores.length, inactiveStores.length)
   }).map(function (_, index) {
     var _waitingStores$index, _activeStores$index, _inactiveStores$index;

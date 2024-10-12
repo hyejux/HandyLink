@@ -8,7 +8,7 @@ function Master() {
     const [waitingStores, setWaitingStores] = useState([]);
     const [inactiveStores, setInactiveStores] = useState([]);
 
-    // 모든 가게의 정보 불러옴
+    // 모든 업체 정보 불러옴
     useEffect(() => {
         fetch('/store')
             .then((response) => response.json())
@@ -16,10 +16,10 @@ function Master() {
                 setStore(data);
                 updateStoreCounts(data);
             })
-            .catch((error) => console.error('가게 목록을 가져오는 중 오류 발생:', error));
+            .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
     }, []);
 
-    // 상태에 따른 가게 리스트 업데이트
+    // 상태에 따른 업체 리스트 업데이트
     const updateStoreCounts = (data) => {
         setActiveStores(data.filter(store => store.storeStatus === '활성화'));
         setWaitingStores(data.filter(store => store.storeStatus === '대기'));
@@ -28,27 +28,27 @@ function Master() {
 
     return (
         <div>
-            <h3>가게 상태 현황</h3>
+            <h3>업체 상태 현황</h3>
             <div className="store-counts">
                 <div className="count-card">
-                    <h4>승인 대기 가게</h4>
+                    <h4>승인 대기 업체</h4>
                     <p>{waitingStores.length}</p>
                 </div>
                 <div className="count-card">
-                    <h4>승인된 가게</h4>
+                    <h4>승인된 업체</h4>
                     <p>{activeStores.length}</p>
                 </div>
                 <div className="count-card">
-                    <h4>비활성화된 가게</h4>
+                    <h4>비활성화된 업체</h4>
                     <p>{inactiveStores.length}</p>
                 </div>
             </div>
             <table>
                 <thead>
                     <tr>
-                        <th>승인 대기 가게</th>
-                        <th>승인된 가게</th>
-                        <th>비활성화된 가게</th>
+                        <th>승인 대기 업체</th>
+                        <th>승인된 업체</th>
+                        <th>비활성화된 업체</th>
                     </tr>
                 </thead>
                 <tbody>

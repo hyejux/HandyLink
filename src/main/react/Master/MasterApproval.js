@@ -17,9 +17,9 @@ function MasterApproval() {
         );
         Promise.all(infoPromises)
           .then((infoData) => setStoreInfo(infoData))
-          .catch((error) => console.error('가게 정보를 가져오는 중 오류 발생:', error));
+          .catch((error) => console.error('업체 정보를 가져오는 중 오류 발생:', error));
       })
-      .catch((error) => console.error('가게 목록을 가져오는 중 오류 발생:', error));
+      .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
   }, []);
 
   // 상태 필터링
@@ -48,16 +48,16 @@ function MasterApproval() {
       })
         .then((response) => {
           if (response.ok) {
-            alert(currentStatus === '대기' ? "승인이 완료되었습니다." : "가게가 활성화 되었습니다.");
+            alert(currentStatus === '대기' ? "승인이 완료되었습니다." : "업체가 활성화 되었습니다.");
             return fetch('/store');
           }
-          throw new Error('가게 상태 업데이트에 실패했습니다.');
+          throw new Error('업체 상태 업데이트에 실패했습니다.');
         })
         .then((response) => response.json())
         .then((data) => setStore(data))
         .catch((error) => {
           alert(currentStatus === '대기' ? "승인에 실패했습니다." : "활성화에 실패했습니다.");
-          console.error('가게 상태 업데이트 중 오류 발생:', error);
+          console.error('업체 상태 업데이트 중 오류 발생:', error);
         });
     }
   };
@@ -79,8 +79,8 @@ function MasterApproval() {
       <table>
         <thead>
           <tr>
-            <th>가게 ID</th>
-            <th>가게 이름</th>
+            <th>업체 ID</th>
+            <th>업체 이름</th>
             {/* <th>카테고리</th> */}
             <th>대표자</th>
             {/* <th>매니저 이름</th> */}

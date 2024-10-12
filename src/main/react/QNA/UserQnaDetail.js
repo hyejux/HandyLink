@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom/client';
 import './UserQnaDetail.css';
 
 function UserQnaDetail() {
+
   const [messages, setMessages] = useState([
     { id: 1, text: "안녕하세요", sender: "incoming" },
     { id: 2, text: "뭘 도와드릴까요?", sender: "incoming" },
@@ -76,4 +78,7 @@ function UserQnaDetail() {
   );
 }
 
-export default UserQnaDetail;
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(<UserQnaDetail />);
+

@@ -88,11 +88,6 @@ function UserQnaList() { // 함수 선언에서 괄호 추가
   );
 }
 
-export default UserQnaList;
-
-
-
-
 //페이지 root가 되는 JS는 root에 삽입되도록 처리
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

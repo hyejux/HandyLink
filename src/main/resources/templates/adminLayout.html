@@ -36,13 +36,13 @@
 
             <!-- <div class="menu-btn"> <a href="./customer.do"> 메인  </a> </div> -->
             <div class="menu-btn">  <a href="./product.do"> <i class="bi bi-house-gear-fill"></i> 가게 </a></div>
-<!--            <div class="menu-btn dropdown-btn">  <a href="./AdminReserveSetting.admin"> <i class="bi bi-calendar-check"></i>  예약  </a> <i class="bi2 bi-caret-down-fill"></i> <i class="bi2 bi-caret-left-fill"></i> </div>-->
-                <div class="menu-btn ">  <a href="./AdminReserveSetting.admin"> <i class="bi bi-calendar-check"></i>  예약  </a></div>
+            <div class="menu-btn dropdown-btn">   <i class="bi bi-calendar-check"></i>  예약  <i class="bi bi-caret-down-fill"></i> <i class="bi2 bi-caret-left-fill"></i> </div>
+<!--                <div class="menu-btn ">  <a href="../AdminReserveSetting.admin"> <i class="bi bi-calendar-check"></i>  예약  </a></div>-->
 
-<!--            <div class="dropdown">-->
-<!--                <a href="./AdminReserveSetting.admin"> <i class="bi bi-gear-fill"> </i> 예약설정</a>-->
-<!--                <a href="./order.do"> <i class="bi bi-check2-circle"> </i> 예약관리</a>-->
-<!--            </div>-->
+            <div class="dropdown">
+                <a href="../AdminReserveSetting.admin"> <i class="bi bi-gear-fill"> </i> 예약설정</a>
+                <a href="./order.do"> <i class="bi bi-check2-circle"> </i> 예약관리</a>
+            </div>
             <div class="menu-btn"> <a href="./stat.do"> <i class="bi bi-bar-chart-line-fill"></i> 통계</a></div>
             <div class="menu-btn">  <a href="./customer.do"> <i class="bi bi-person-circle"></i> 고객 </a></div>
             <div class="menu-btn"><a href="./inquiry.do">  <i class="bi bi-chat-left-text-fill"></i> 문의</a></div>
@@ -64,35 +64,35 @@
 
 <script th:src="@{'/bundle/' + ${pageName} + '.bundle.js'}"></script>
 
-<!--<script>-->
-<!--    // // 드롭다운 버튼 클릭 시 드롭다운 토글-->
-<!--    // document.querySelector('.dropdown-btn').addEventListener('click', function() {-->
-<!--    //     const dropdown = document.querySelector('.dropdown');-->
+<script>
+    // // 드롭다운 버튼 클릭 시 드롭다운 토글
+    // document.querySelector('.dropdown-btn').addEventListener('click', function() {
+    //     const dropdown = document.querySelector('.dropdown');
 
-<!--    //     // 배경색 변경-->
-<!--    //     this.classList.toggle('active'); // active 클래스 토글-->
-<!--    // });-->
-<!--    document.querySelector('.dropdown-btn').addEventListener('click', function() {-->
-<!--            const dropdown = document.querySelector('.dropdown');-->
-<!--            const downIcon = document.querySelector('.bi-caret-down-fill');-->
-<!--            const leftIcon = document.querySelector('.bi-caret-left-fill');-->
-<!--            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';-->
+    //     // 배경색 변경
+    //     this.classList.toggle('active'); // active 클래스 토글
+    // });
+    document.querySelector('.dropdown-btn').addEventListener('click', function() {
+            const dropdown = document.querySelector('.dropdown');
+            const downIcon = document.querySelector('.bi-caret-down-fill');
+            const leftIcon = document.querySelector('.bi-caret-left-fill');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 
-<!--            // 드롭다운 상태에 따라 max-height 조정-->
-<!--            if (dropdown.style.maxHeight) {-->
-<!--                dropdown.style.maxHeight = null; // 숨김-->
-<!--                downIcon.style.display = 'block'; // 아래 화살표 보이기-->
-<!--                leftIcon.style.display = 'none'; // 왼쪽 화살표 숨기기-->
-<!--            } else {-->
-<!--                dropdown.style.maxHeight = dropdown.scrollHeight + "px"; // 펼침-->
-<!--                downIcon.style.display = 'none'; // 아래 화살표 숨기기-->
-<!--                leftIcon.style.display = 'block'; // 왼쪽 화살표 보이기-->
-<!--            }-->
+            // 드롭다운 상태에 따라 max-height 조정
+            if (dropdown.style.maxHeight) {
+                dropdown.style.maxHeight = null; // 숨김
+                downIcon.style.display = 'block'; // 아래 화살표 보이기
+                leftIcon.style.display = 'none'; // 왼쪽 화살표 숨기기
+            } else {
+                dropdown.style.maxHeight = dropdown.scrollHeight + "px"; // 펼침
+                downIcon.style.display = 'none'; // 아래 화살표 숨기기
+                leftIcon.style.display = 'block'; // 왼쪽 화살표 보이기
+            }
 
-<!--            // 배경색 변경-->
-<!--            this.classList.toggle('active'); // active 클래스 토글-->
-<!--        });-->
-<!--</script>-->
+            // 배경색 변경
+            this.classList.toggle('active'); // active 클래스 토글
+        });
+</script>
 
 
 </div>

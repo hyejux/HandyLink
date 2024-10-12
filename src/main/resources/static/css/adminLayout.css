@@ -138,10 +138,16 @@ font-weight: 600;
 
 
 .dropdown {
+margin-bottom: 5px;
   text-decoration: none;
   color: #000;
   display: none;
   transition: opacity 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+
+.dropdown > a:nth-child(1){
+    border-top: 1px solid #ddd;
 }
 
 
@@ -175,7 +181,7 @@ letter-spacing : 3px;
   display: block;
   margin-bottom: 5px;
 border-bottom: 1px solid #ddd;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 500;
   color: #464646;
   text-align: center;
@@ -266,7 +272,7 @@ display : block;
 .layout-profile {
   margin-top: 10px;
   float: right;
-  width: 400px;
+  width: 500px;
 
 
 }
@@ -292,7 +298,7 @@ width : 110px;
   /*홍길동 님*/
   align-items: center;
   color : #fff;
-  margin-right: 30px;
+  margin-right: 20px;
 }
 
 .layout-profile-button{

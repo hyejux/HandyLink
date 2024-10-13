@@ -21,22 +21,69 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `/* masterLayout.css */
-table {
-    width: 100%;
-    border-collapse: collapse; /* 테이블 경계가 겹치지 않도록 설정 */
+___CSS_LOADER_EXPORT___.push([module.id, `h3 {
+    color: #333;
+    padding-bottom: 5px;
+    text-align: center;
 }
 
-th, td {
-    border: 1px solid #dddddd; /* 테이블 셀 경계 색상 설정 */
-    text-align: left; /* 텍스트 정렬 */
-    padding: 8px; /* 셀 안쪽 여백 */
+/* 가게 상태별 수 */
+.store-counts {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.count-card {
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    padding: 20px;
+    flex: 1;
+    margin: 0 10px;
+    text-align: center;
+}
+
+.count-card h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.count-card p {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+/* 테이블 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
 }
 
 th {
-    background-color: #f2f2f2; /* 헤더 배경 색상 */
+    background-color: #1d2830;
+    color: white;
 }
-`, "",{"version":3,"sources":["webpack://./Master/Master.css"],"names":[],"mappings":"AAAA,qBAAqB;AACrB;IACI,WAAW;IACX,yBAAyB,EAAE,uBAAuB;AACtD;;AAEA;IACI,yBAAyB,EAAE,mBAAmB;IAC9C,gBAAgB,EAAE,WAAW;IAC7B,YAAY,EAAE,YAAY;AAC9B;;AAEA;IACI,yBAAyB,EAAE,aAAa;AAC5C","sourcesContent":["/* masterLayout.css */\r\ntable {\r\n    width: 100%;\r\n    border-collapse: collapse; /* 테이블 경계가 겹치지 않도록 설정 */\r\n}\r\n\r\nth, td {\r\n    border: 1px solid #dddddd; /* 테이블 셀 경계 색상 설정 */\r\n    text-align: left; /* 텍스트 정렬 */\r\n    padding: 8px; /* 셀 안쪽 여백 */\r\n}\r\n\r\nth {\r\n    background-color: #f2f2f2; /* 헤더 배경 색상 */\r\n}\r\n"],"sourceRoot":""}]);
+
+tr:hover {
+    background-color: #e0e0e0;
+}
+
+p {
+    font-size: 16px;
+    color: #555;
+}
+
+
+`, "",{"version":3,"sources":["webpack://./Master/Master.css"],"names":[],"mappings":"AAAA;IACI,WAAW;IACX,mBAAmB;IACnB,kBAAkB;AACtB;;AAEA,aAAa;AACb;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;AACvB;;AAEA;IACI,yBAAyB;IACzB,kBAAkB;IAClB,aAAa;IACb,OAAO;IACP,cAAc;IACd,kBAAkB;AACtB;;AAEA;IACI,SAAS;IACT,eAAe;AACnB;;AAEA;IACI,eAAe;IACf,iBAAiB;AACrB;;;AAGA,QAAQ;AACR;IACI,WAAW;IACX,yBAAyB;IACzB,gBAAgB;AACpB;;AAEA;;IAEI,aAAa;IACb,gBAAgB;IAChB,sBAAsB;AAC1B;;AAEA;IACI,yBAAyB;IACzB,YAAY;AAChB;;AAEA;IACI,yBAAyB;AAC7B;;AAEA;IACI,eAAe;IACf,WAAW;AACf","sourcesContent":["h3 {\r\n    color: #333;\r\n    padding-bottom: 5px;\r\n    text-align: center;\r\n}\r\n\r\n/* 가게 상태별 수 */\r\n.store-counts {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    margin-bottom: 30px;\r\n}\r\n\r\n.count-card {\r\n    background-color: #f2f2f2;\r\n    border-radius: 8px;\r\n    padding: 20px;\r\n    flex: 1;\r\n    margin: 0 10px;\r\n    text-align: center;\r\n}\r\n\r\n.count-card h4 {\r\n    margin: 0;\r\n    font-size: 16px;\r\n}\r\n\r\n.count-card p {\r\n    font-size: 24px;\r\n    font-weight: bold;\r\n}\r\n\r\n\r\n/* 테이블 */\r\ntable {\r\n    width: 100%;\r\n    border-collapse: collapse;\r\n    margin-top: 20px;\r\n}\r\n\r\nth,\r\ntd {\r\n    padding: 12px;\r\n    text-align: left;\r\n    border: 1px solid #ddd;\r\n}\r\n\r\nth {\r\n    background-color: #1d2830;\r\n    color: white;\r\n}\r\n\r\ntr:hover {\r\n    background-color: #e0e0e0;\r\n}\r\n\r\np {\r\n    font-size: 16px;\r\n    color: #555;\r\n}\r\n\r\n\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

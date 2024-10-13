@@ -13,9 +13,11 @@ public interface AdminReservationMapper {
   public List<adminReservationDTO> getList();
   public void setCategory(adminReservationDTO dto);
   public adminReservationDTO getListDetail(int id);
+  public List<adminRSDTO> getMiddleItem(int id);
   public List<adminReservationDTO> getSubItem(int id);
 //  public void setMainCategory(adminRSDTO dto);
   public Integer setMainCategory(adminReservationDTO dto);
   public int setMainCategory2(adminRSDTO dto);
   public void setMainCategory3(adminRSDTO dto);
+  public void setMainCategory4(adminReservationDTO dto);
 }

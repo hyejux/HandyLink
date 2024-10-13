@@ -21,14 +21,18 @@
         where c.category_level = 1 AND  c.category_id = #{id}
     </select>
 
-    <select id="getSubItem" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
+    <select id="getMiddleItem" resultType="com.example.HiMade.admin.dto.adminRSDTO">
         select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_id, sc.category_status, sc.category_id, sc.sub_category_type, sc.is_required, sc.is_paid
         from category c
         LEFT join sub_category_status sc
         on c.category_id = sc.category_id
-        WHERE c.parent_category_id = #{id}
+        WHERE c.parent_category_id = #{id}  AND c.category_level = 2
     </select>
 
+    <select id="getSubItem" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
+        select * from category c
+        where parent_category_id = #{id} AND category_level = 3;
+    </select>
 
     <insert id="setCategory">
         INSERT INTO CATEGORY (category_level, parent_category_id, service_name, service_price, service_content, store_id)
@@ -54,6 +58,9 @@
         VALUES (#{middleId}, #{subCategoryType}, #{isRequired}, #{isPaid});
     </insert>
 
-
+    <insert id="setMainCategory4" parameterType="com.example.HiMade.admin.dto.adminReservationDTO">
+        INSERT INTO category (category_level, parent_category_id, service_name, service_price, store_id)
+        VALUES (3, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 1)
+    </insert>
 
 </mapper>

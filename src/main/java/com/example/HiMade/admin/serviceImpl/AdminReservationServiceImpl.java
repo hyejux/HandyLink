@@ -33,8 +33,18 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   }
 
   @Override
-  public List<adminReservationDTO> getSubItem(int id) {
-    return adminReservationMapper.getSubItem(id);
+  public List<adminRSDTO> getMiddleItem(int id) {
+
+    List<adminRSDTO> dto = adminReservationMapper.getMiddleItem(id);
+    System.out.println("service dto ::  " + dto );
+
+    for (adminRSDTO d : dto ){
+      System.out.println(d);
+      System.out.println();
+      d.setSubCategories(adminReservationMapper.getSubItem(d.getCategoryId()));
+    }
+    System.out.println(dto);
+    return dto;
   }
 
   @Override
@@ -52,6 +62,11 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   @Override
   public void setMainCategory3(adminRSDTO dto) {
     adminReservationMapper.setMainCategory3(dto);
+  }
+
+  @Override
+  public void setMainCategory4(adminReservationDTO dto) {
+    adminReservationMapper.setMainCategory4(dto);
   }
 
 

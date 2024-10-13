@@ -33619,4 +33619,4 @@ root.render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElem
 
 /******/ })()
 ;
-//# sourceMappingURL=userChatRoom.bundle.js.map
+//# sourceMappingURL=UserChatRoom.bundle.js.map

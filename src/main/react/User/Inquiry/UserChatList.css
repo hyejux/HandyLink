@@ -1,0 +1,91 @@
+.user-chat-container {
+    padding: 30px;
+    background-color: white;
+}
+
+.user-chat-header {
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 60px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 35px;
+}
+
+.search-bar input {
+    border: none;
+    background-color: transparent;
+    flex-grow: 1;
+    padding-left: 10px;
+}
+
+.search-bar input:focus {
+    outline: none;
+}
+
+.inquiry-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.inquiry-item {
+    display: flex;
+    justify-content: space-between;
+    height: 70px;
+    background-color: #f8f8f8;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.inquiry-item:hover {
+    border-color: #bbb;
+}
+
+.inquiry-item img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.inquiry-content {
+    flex-grow: 1;
+}
+
+.inquiry-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.inquiry-message {
+    width: 400px;
+    font-size: 14px;
+    color: #000;
+    margin: 5px 0 0 0;
+    display: -webkit-box; /* Flexbox와 유사한 동작을 제공 */
+    -webkit-line-clamp: 2; /* 최대 줄 수를 2줄로 설정 */
+    -webkit-box-orient: vertical; /* 수직 박스 정렬 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
+}
+
+.inquiry-time {
+    font-size: 12px;
+    color: gray;
+    text-align: right;
+    margin-top: 5px;
+}

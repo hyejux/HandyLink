@@ -34,6 +34,22 @@
 }
 
 
+.btn-del:hover {
+  border: 2px solid #3e3f47;
+  background-color: #3e3f47;
+  transition: 0.1s;
+}
+
+.btn-del {
+  border: 2px solid #1d2830;
+  color : #ffffff;
+  font-weight: bold;
+  background-color: #2e3133;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+
 .btn-modi:hover {
   border: 2px solid #3e3f47;
   background-color: #3e3f47;

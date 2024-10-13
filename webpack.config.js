@@ -7,12 +7,13 @@ module.exports = {
     mode: 'development',
     context: path.resolve(__dirname, 'src/main/react'),
     entry: {
+
         main: './Main.js', //여러페이지 설정이 가능함
         user: './User/User/User.js',
         admin: './Admin/Admin.js',
         adminReservation : './Admin/AdminReservation.js',
         paymentInfo: './User/Payment/PaymentInfo.js',
-        userChatRoom : './User/Inquiry/UserChatRoom.js',
+        UserChatRoom : './User/Inquiry/UserChatRoom.js',
         AdminStore: './Admin/AdminStore.js',
         AdminRegist: './Admin/AdminRegist.js',
         master: './Master/Master.js',
@@ -20,7 +21,17 @@ module.exports = {
         masterApproval: './Master/MasterApproval.js',
         adminReserveSetting : './Admin/AdminReserveSetting.js',
         adminReserveSettingDetail : './Admin/AdminReserveSettingDetail.js',
-        AdminReserveSettingDetailModify : './Admin/AdminReserveSettingDetailModify.js'
+        AdminReserveSettingDetailModify : './Admin/AdminReserveSettingDetailModify.js',
+        UserQnaList : './QNA/UserQnaList.js',
+        UserQnaRegist : './QNA/UserQnaRegist.js',
+        UserSignUp : './User/User/UserSignUp.js',
+        UserSignUpFinish : './User/User/UserSignUpFinish.js',
+        UserMyPage : './User/User/UserMyPage.js',
+        UserLoginPage : './User/User/UserLoginPage.js',
+        UserAccountFind : './User/User/UserAccountFind.js',
+        UserChatList : './User/Inquiry/UserChatList.js',
+
+
 
     },
     devtool: 'sourcemaps',

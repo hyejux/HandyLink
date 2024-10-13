@@ -39340,15 +39340,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _AdminReserveSetting_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AdminReserveSetting.css */ "./Admin/AdminReserveSetting.css");
 /* harmony import */ var _AdminReserveSettingDetail_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./AdminReserveSettingDetail.css */ "./Admin/AdminReserveSettingDetail.css");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -39361,28 +39361,40 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState2 = _slicedToArray(_useState, 2),
-    cateId = _useState2[0],
-    setCateId = _useState2[1];
+    reserveModi = _useState2[0],
+    setReserveModi = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState4 = _slicedToArray(_useState3, 2),
-    reserveModi = _useState4[0],
-    setReserveModi = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState6 = _slicedToArray(_useState5, 2),
-    subItemModi = _useState6[0],
-    setSubItemModi = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
-      name: '',
-      price: '',
+    subItemModi = _useState4[0],
+    setSubItemModi = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+      serviceName: '',
+      servicePrice: 0,
       isPaid: false,
       isRequired: false,
-      inputType: ''
+      subCategoryType: 'SELECT1',
+      subCategories: [{
+        serviceName: '',
+        servicePrice: ''
+      }]
     }]),
+    _useState6 = _slicedToArray(_useState5, 2),
+    categories = _useState6[0],
+    setCategories = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+      serviceName: '',
+      servicePrice: 0,
+      serviceContent: ''
+    }),
     _useState8 = _slicedToArray(_useState7, 2),
-    categories = _useState8[0],
-    setCategories = _useState8[1];
+    reserveAdd = _useState8[0],
+    setReserveAdd = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState10 = _slicedToArray(_useState9, 2),
+    cateId = _useState10[0],
+    setCateId = _useState10[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var path = window.location.pathname;
     var pathSegments = path.split('/');
@@ -39396,19 +39408,26 @@ var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify()
     })["catch"](function (error) {
       console.log('Error Category', error);
     });
-    axios__WEBPACK_IMPORTED_MODULE_4__["default"].get("/adminReservation/getSubItem/".concat(cateId)).then(function (response) {
-      console.log(response.data);
+    axios__WEBPACK_IMPORTED_MODULE_4__["default"].get("/adminReservation/getMiddleItem/".concat(cateId)).then(function (response) {
+      console.log("get" + JSON.stringify(response.data));
       var transformedData = response.data.map(function (item) {
         return {
-          name: item.serviceName,
+          serviceName: item.serviceName,
           // serviceName -> name
-          price: item.servicePrice,
+          servicePrice: item.servicePrice,
           // servicePrice -> price
           isPaid: item.isPaid === 'Y',
           // isPaid ("Y"/"N") -> true/false
           isRequired: item.isRequired === 'Y',
           // isRequired ("Y"/"N") -> true/false
-          inputType: item.subCategoryType // subCategoryType -> inputType
+          subCategoryType: item.subCategoryType,
+          // subCategoryType -> inputType
+          subCategories: item.subCategories.map(function (sub) {
+            return {
+              serviceName: sub.serviceName,
+              servicePrice: sub.servicePrice
+            };
+          })
         };
       });
       setCategories(transformedData);
@@ -39416,15 +39435,43 @@ var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify()
       console.log('Error subItemModi', error);
     });
   }, [cateId]);
+  var setName = function setName(value) {
+    setReserveAdd(function (prevState) {
+      return _objectSpread(_objectSpread({}, prevState), {}, {
+        serviceName: value
+      });
+    });
+  };
+  var setPrice = function setPrice(value) {
+    setReserveAdd(function (prevState) {
+      return _objectSpread(_objectSpread({}, prevState), {}, {
+        servicePrice: value
+      });
+    });
+  };
+  var setDescription = function setDescription(value) {
+    setReserveAdd(function (prevState) {
+      return _objectSpread(_objectSpread({}, prevState), {}, {
+        serviceContent: value
+      });
+    });
+  };
   var handleAddCategory = function handleAddCategory() {
     setCategories([].concat(_toConsumableArray(categories), [{
-      name: '',
-      price: '',
+      serviceName: '',
+      servicePrice: 0,
       isPaid: false,
       isRequired: false,
-      inputType: ''
+      subCategoryType: '',
+      subCategories: [{
+        serviceName: '',
+        servicePrice: 0
+      }]
     }]));
   };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    console.log(categories);
+  }, [categories]);
   var handleRemoveCategory = function handleRemoveCategory(index) {
     setCategories(categories.filter(function (_, i) {
       return i !== index;
@@ -39436,23 +39483,52 @@ var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify()
     });
     setCategories(newCategories);
   };
+  var handleAddSubCategory = function handleAddSubCategory(categoryIndex) {
+    var newSubCategory = {
+      serviceName: '',
+      servicePrice: 0
+    };
+    var updatedCategories = categories.map(function (category, index) {
+      return index === categoryIndex ? _objectSpread(_objectSpread({}, category), {}, {
+        subCategories: [].concat(_toConsumableArray(category.subCategories), [newSubCategory])
+      }) : category;
+    });
+    setCategories(updatedCategories);
+  };
+  var handleRemoveSubCategory = function handleRemoveSubCategory(categoryIndex, subCategoryIndex) {
+    var updatedCategories = categories.map(function (category, index) {
+      return index === categoryIndex ? _objectSpread(_objectSpread({}, category), {}, {
+        subCategories: category.subCategories.filter(function (_, i) {
+          return i !== subCategoryIndex;
+        })
+      }) : category;
+    });
+    setCategories(updatedCategories);
+  };
+  var handleChangeSubCategory = function handleChangeSubCategory(categoryIndex, subCategoryIndex, field, value) {
+    var updatedCategories = categories.map(function (category, index) {
+      return index === categoryIndex ? _objectSpread(_objectSpread({}, category), {}, {
+        subCategories: category.subCategories.map(function (sub, i) {
+          return i === subCategoryIndex ? _objectSpread(_objectSpread({}, sub), {}, _defineProperty({}, field, value)) : sub;
+        })
+      }) : category;
+    });
+    setCategories(updatedCategories);
+  };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "main-content-title"
-  }, "\uC608\uC57D \uC11C\uBE44\uC2A4 \uC218\uC81522"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, "\uC608\uC57D \uC11C\uBE44\uC2A4 \uC218\uC815"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "main-btns"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     type: "button",
     className: "btn-st"
-  }, "\uC218\uC815\uC644\uB8CC")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, "\uC644\uB8CC")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "main-contents"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "reserve-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "reserve-img"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
-    src: "http://localhost:8585/img/".concat(reserveModi.imageUrl),
-    alt: "My Image"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     type: "button",
     className: "btn-st btn-imgChg"
   }, "\uC0AC\uC9C4 \uBCC0\uACBD\uD558\uAE30")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -39466,7 +39542,8 @@ var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify()
     value: reserveModi.serviceName,
     onChange: function onChange(e) {
       return setName(e.target.value);
-    }
+    },
+    placeholder: "\uC11C\uBE44\uC2A4 \uBA85"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "reserve-content-title-price"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
@@ -39474,14 +39551,16 @@ var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify()
     value: reserveModi.servicePrice,
     onChange: function onChange(e) {
       return setPrice(e.target.value);
-    }
+    },
+    placeholder: "\uC11C\uBE44\uC2A4 \uAC00\uACA9"
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "reserve-content-text"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", {
     value: reserveModi.serviceContent,
     onChange: function onChange(e) {
       return setDescription(e.target.value);
-    }
+    },
+    placeholder: "\uC11C\uBE44\uC2A4 \uC124\uBA85"
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "main-btns"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
@@ -39531,52 +39610,87 @@ var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify()
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
       type: "text",
       placeholder: "\uC774\uB984",
-      value: category.name,
+      value: category.serviceName,
       onChange: function onChange(e) {
-        return handleChangeCategory(index, 'name', e.target.value);
+        return handleChangeCategory(index, 'serviceName', e.target.value);
       }
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
       type: "number",
       placeholder: "\uAC00\uACA9",
-      value: category.price,
-      disabled: category.isPaid === true && (category.inputType === 'SELECT1' || category.inputType === 'SELECTN'),
+      value: category.servicePrice,
+      disabled: category.isPaid === true && (category.subCategoryType === 'SELECT1' || category.subCategoryType === 'SELECTN'),
       onChange: function onChange(e) {
-        return handleChangeCategory(index, 'price', e.target.value);
+        return handleChangeCategory(index, 'servicePrice', e.target.value);
       }
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "type-input-type"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
       type: "checkbox",
-      checked: category.inputType === 'SELECT1',
+      checked: category.subCategoryType === 'SELECT1',
       onChange: function onChange() {
-        return handleChangeCategory(index, 'inputType', 'SELECT1');
+        return handleChangeCategory(index, 'subCategoryType', 'SELECT1');
       }
     }), " \uC120\uD0DD (\uD558\uB098)", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
       type: "checkbox",
-      checked: category.inputType === 'SELECTN',
+      checked: category.subCategoryType === 'SELECTN',
       onChange: function onChange() {
-        return handleChangeCategory(index, 'inputType', 'SELECTN');
+        return handleChangeCategory(index, 'subCategoryType', 'SELECTN');
       }
     }), " \uC120\uD0DD (\uB2E4\uC911)", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
       type: "checkbox",
-      checked: category.inputType === 'NUMBER',
+      checked: category.subCategoryType === 'NUMBER',
       onChange: function onChange() {
-        return handleChangeCategory(index, 'inputType', 'NUMBER');
+        return handleChangeCategory(index, 'subCategoryType', 'NUMBER');
       }
     }), " \uC22B\uC790", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
       type: "checkbox",
-      checked: category.inputType === 'TEXT',
+      checked: category.subCategoryType === 'TEXT',
       onChange: function onChange() {
-        return handleChangeCategory(index, 'inputType', 'TEXT');
+        return handleChangeCategory(index, 'subCategoryType', 'TEXT');
       }
-    }), " \uD14D\uC2A4\uD2B8")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    }), " \uD14D\uC2A4\uD2B8"), category.subCategoryType === 'SELECT1' || category.subCategoryType === 'SELECTN' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "category-sub-sub"
+    }, category.subCategories.map(function (subCategory, subIndex) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+        className: "type-category-sub-sub",
+        key: subIndex
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+        type: "text",
+        placeholder: "\uC774\uB984",
+        value: subCategory.serviceName,
+        onChange: function onChange(e) {
+          return handleChangeSubCategory(index, subIndex, 'serviceName', e.target.value);
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+        type: "number",
+        placeholder: "\uAC00\uACA9",
+        value: subCategory.servicePrice,
+        onChange: function onChange(e) {
+          return handleChangeSubCategory(index, subIndex, 'servicePrice', e.target.value);
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+        type: "button",
+        className: "btn-sub-del",
+        onClick: function onClick() {
+          return handleRemoveSubCategory(index, subIndex);
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("i", {
+        className: "bi bi-x-lg"
+      })));
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      type: "button",
+      className: "btn-sub-add",
+      onClick: function onClick() {
+        return handleAddSubCategory(index);
+      }
+    }, " + ")) : null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       type: "button",
       className: "btn-del",
       onClick: function onClick() {
         return handleRemoveCategory(index);
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("i", {
-      className: "bi bi-x-square"
+      className: "bi bi-x-lg"
     })));
   }))));
 };

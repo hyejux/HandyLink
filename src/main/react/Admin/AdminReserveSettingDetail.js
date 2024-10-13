@@ -11,7 +11,7 @@ const AdminReserveSettingDetailModify = () => {
     isPaid: false,
     isRequired: false,
     subCategoryType: 'SELECT1',
-    subCategories: [] // Added to manage subcategories
+    subCategories: [ {serviceName : '', servicePrice : ''}] // Added to manage subcategories
   }]);
   
   const [reserveAdd, setReserveAdd] = useState({
@@ -253,14 +253,14 @@ const AdminReserveSettingDetailModify = () => {
                         <input
                           type="text"
                           placeholder="이름"
-                          value={subCategory.name}
-                          onChange={(e) => handleChangeSubCategory(index, subIndex, 'name', e.target.value)}
+                          value={subCategory.serviceName}
+                          onChange={(e) => handleChangeSubCategory(index, subIndex, 'serviceName', e.target.value)}
                         />
                         <input
                           type="number"
                           placeholder="가격"
-                          value={subCategory.price}
-                          onChange={(e) => handleChangeSubCategory(index, subIndex, 'price', e.target.value)}
+                          value={subCategory.servicePrice}
+                          onChange={(e) => handleChangeSubCategory(index, subIndex, 'servicePrice', e.target.value)}
                         />
                         <button type="button" className="btn-sub-del" onClick={() => handleRemoveSubCategory(index, subIndex)}>
                           <i className="bi bi-x-lg"></i>

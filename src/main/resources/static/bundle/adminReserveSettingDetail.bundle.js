@@ -39367,7 +39367,10 @@ var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify()
       isPaid: false,
       isRequired: false,
       subCategoryType: 'SELECT1',
-      subCategories: [] // Added to manage subcategories
+      subCategories: [{
+        serviceName: '',
+        servicePrice: ''
+      }] // Added to manage subcategories
     }]),
     _useState2 = _slicedToArray(_useState, 2),
     categories = _useState2[0],
@@ -39627,16 +39630,16 @@ var AdminReserveSettingDetailModify = function AdminReserveSettingDetailModify()
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
         type: "text",
         placeholder: "\uC774\uB984",
-        value: subCategory.name,
+        value: subCategory.serviceName,
         onChange: function onChange(e) {
-          return handleChangeSubCategory(index, subIndex, 'name', e.target.value);
+          return handleChangeSubCategory(index, subIndex, 'serviceName', e.target.value);
         }
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
         type: "number",
         placeholder: "\uAC00\uACA9",
-        value: subCategory.price,
+        value: subCategory.servicePrice,
         onChange: function onChange(e) {
-          return handleChangeSubCategory(index, subIndex, 'price', e.target.value);
+          return handleChangeSubCategory(index, subIndex, 'servicePrice', e.target.value);
         }
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
         type: "button",

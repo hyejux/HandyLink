@@ -1,0 +1,188 @@
+.signup-container {
+    background-color: white;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    margin: 0;
+    margin-top: 2cap;
+    margin-bottom: 40px;
+    font-size: 25px;
+    color: #444;
+}
+
+.profile-img {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+    position: relative;
+}
+.profile-img img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+.edit-icon {
+    position: absolute;
+    bottom: 0;
+    right: 41%;
+    width: 25px;
+    height: 25px;
+    background-color: #2C348F;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.form-signup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    position: relative;
+    width: 400px;
+    text-align: center;
+}
+
+.form-group input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #fff inset;
+    -webkit-text-fill-color: #000;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #e3e3e3;
+    border-radius: 6px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+.btn-checkid {
+    width: 75px;
+    height: 30px;
+    padding: 0px 11px;
+    display: flex;
+    position: absolute;
+    top: 39%;
+    left: 80%;
+    border: 0;
+    border-radius: 5px;
+    /* color: red; */
+    /* background-color: blue; */
+    line-height: 30px;
+    cursor: pointer;
+    background-color: #4551BF;
+    color: #fff;
+    font-size: 12px;
+}
+
+.btn-checkid:hover {
+    /* color: #555; */
+}
+
+.btn-signup {
+    width: 50%;
+    margin-top: 30px;
+    padding: 10px;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: rgb(146,169,255);
+    background: linear-gradient(207deg, rgba(146,169,255,1) 0%, rgba(53,58,148,1) 100%);
+}
+
+.password-group {
+    position: relative;
+}
+
+.password-group .invisible-icon1 {
+    position: absolute;
+    top: 45%;
+    left: 92%;
+}
+
+.password-group .invisible-icon2 {
+    position: absolute;
+    top: 45%;
+    left: 92%;
+}
+
+/* 테두리 애니메이션 */
+/* 테두리 애니메이션 효과 */
+.effect-8 ~ .focus-border {
+    position: absolute;
+    width: 100%; /* input 요소의 너비에 맞게 설정 */
+    height: 56%; /* input 요소의 높이에 맞게 설정 */
+    top: 30%;
+    left: 0;
+    pointer-events: none;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.effect-8 ~ .focus-border:before,
+.effect-8 ~ .focus-border:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #ccc;
+    transition: 0.2s;
+    border-radius: 3px;
+}
+.effect-8 ~ .focus-border:after {
+    top: auto;
+    bottom: 0;
+    left: auto;
+    right: 0;
+}
+.effect-8 ~ .focus-border i:before,
+.effect-8 ~ .focus-border i:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 0;
+    background-color: #ccc;
+    transition: 0.2s;
+    border-radius: 3px;
+}
+.effect-8 ~ .focus-border i:after {
+    left: auto;
+    right: 0;
+    top: auto;
+    bottom: 0;
+}
+.effect-8:focus ~ .focus-border:before,
+.effect-8:focus ~ .focus-border:after {
+    width: 100%;
+    transition: 0.3s;
+}
+.effect-8:focus ~ .focus-border i:before,
+.effect-8:focus ~ .focus-border i:after {
+    height: 100%;
+    transition: 0.3s;
+}

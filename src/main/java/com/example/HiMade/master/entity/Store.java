@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Store {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long storeId;
@@ -31,5 +30,4 @@ public class Store {
     @Column(name = "store_status")
     @Enumerated(EnumType.STRING)
     private StoreStatus storeStatus;
-    
 }

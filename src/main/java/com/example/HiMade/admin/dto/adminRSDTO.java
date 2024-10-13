@@ -2,6 +2,8 @@ package com.example.HiMade.admin.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -25,4 +27,5 @@ public class adminRSDTO {
   private String isRequired;
   private String isPaid;
 
+  private List<adminReservationDTO> subCategories;
 }

@@ -2,10 +2,52 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "../../../node_modules/css-loader/dist/cjs.js!./Master/Master.css":
-/*!************************************************************************!*\
-  !*** ../../../node_modules/css-loader/dist/cjs.js!./Master/Master.css ***!
-  \************************************************************************/
+/***/ "./Master/StoreInfoModal.js":
+/*!**********************************!*\
+  !*** ./Master/StoreInfoModal.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "../../../node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _StoreInfoModal_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./StoreInfoModal.css */ "./Master/StoreInfoModal.css");
+
+
+function StoreInfoModal(_ref) {
+  var isOpen = _ref.isOpen,
+    onClose = _ref.onClose,
+    store = _ref.store,
+    storeInfo = _ref.storeInfo;
+  if (!isOpen || !store || !storeInfo) return null;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "modal"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "modal-content"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: "close-button",
+    onClick: onClose
+  }, "\xD7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, store.storeName, " \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "modal-body"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "info-section"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uAE30\uBCF8 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uAC00\uC785\uC77C:"), " ", store.storeSignup), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC5C5\uC885:"), " ", store.storeCate)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "info-section"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC6B4\uC601 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC601\uC5C5\uC2DC\uAC04:"), " ", storeInfo.storeStartTime, " - ", storeInfo.storeEndTime), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uD734\uBB34\uC77C:"), " ", storeInfo.storeBreakDate), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uACC4\uC88C\uBC88\uD638:"), " ", storeInfo.accountNumber)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "info-section"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uCD94\uAC00 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC18C\uAC1C:"), " ", storeInfo.storeIntro), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC8FC\uCC28\uAC00\uB2A5\uC5EC\uBD80:"), " ", storeInfo.storeParkingYn), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "SNS:"), " ", storeInfo.storeSns), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uACF5\uC9C0\uC0AC\uD56D:"), " ", storeInfo.notice)))));
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (StoreInfoModal);
+
+/***/ }),
+
+/***/ "../../../node_modules/css-loader/dist/cjs.js!./Master/MasterApproval.css":
+/*!********************************************************************************!*\
+  !*** ../../../node_modules/css-loader/dist/cjs.js!./Master/MasterApproval.css ***!
+  \********************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -21,69 +63,180 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `h3 {
-    color: #333;
-    padding-bottom: 5px;
-    text-align: center;
+___CSS_LOADER_EXPORT___.push([module.id, `.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-/* 가게 상태별 수 */
-.store-counts {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
+h3 {
+  margin: 0;
 }
 
-.count-card {
-    background-color: #f2f2f2;
-    border-radius: 8px;
-    padding: 20px;
-    flex: 1;
-    margin: 0 10px;
-    text-align: center;
+/* 셀렉트 필터 */
+.store-filter-container {
+  display: flex;
+  align-items: center;
 }
 
-.count-card h4 {
-    margin: 0;
-    font-size: 16px;
+.store-filter-container select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  /* 포커스 시 경계선 제거 */
 }
-
-.count-card p {
-    font-size: 24px;
-    font-weight: bold;
-}
-
 
 /* 테이블 */
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
 th,
 td {
-    padding: 12px;
-    text-align: left;
-    border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
 }
 
 th {
-    background-color: #1d2830;
-    color: white;
+  background-color: #1d2830;
+  color: white;
 }
 
 tr:hover {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
 p {
-    font-size: 16px;
-    color: #555;
+  font-size: 16px;
+  color: #555;
 }
 
+/* 승인, 활성화 버튼 */
+.activate-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
 
-`, "",{"version":3,"sources":["webpack://./Master/Master.css"],"names":[],"mappings":"AAAA;IACI,WAAW;IACX,mBAAmB;IACnB,kBAAkB;AACtB;;AAEA,aAAa;AACb;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;AACvB;;AAEA;IACI,yBAAyB;IACzB,kBAAkB;IAClB,aAAa;IACb,OAAO;IACP,cAAc;IACd,kBAAkB;AACtB;;AAEA;IACI,SAAS;IACT,eAAe;AACnB;;AAEA;IACI,eAAe;IACf,iBAAiB;AACrB;;;AAGA,QAAQ;AACR;IACI,WAAW;IACX,yBAAyB;IACzB,gBAAgB;AACpB;;AAEA;;IAEI,aAAa;IACb,gBAAgB;IAChB,sBAAsB;AAC1B;;AAEA;IACI,yBAAyB;IACzB,YAAY;AAChB;;AAEA;IACI,yBAAyB;AAC7B;;AAEA;IACI,eAAe;IACf,WAAW;AACf","sourcesContent":["h3 {\r\n    color: #333;\r\n    padding-bottom: 5px;\r\n    text-align: center;\r\n}\r\n\r\n/* 가게 상태별 수 */\r\n.store-counts {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    margin-bottom: 30px;\r\n}\r\n\r\n.count-card {\r\n    background-color: #f2f2f2;\r\n    border-radius: 8px;\r\n    padding: 20px;\r\n    flex: 1;\r\n    margin: 0 10px;\r\n    text-align: center;\r\n}\r\n\r\n.count-card h4 {\r\n    margin: 0;\r\n    font-size: 16px;\r\n}\r\n\r\n.count-card p {\r\n    font-size: 24px;\r\n    font-weight: bold;\r\n}\r\n\r\n\r\n/* 테이블 */\r\ntable {\r\n    width: 100%;\r\n    border-collapse: collapse;\r\n    margin-top: 20px;\r\n}\r\n\r\nth,\r\ntd {\r\n    padding: 12px;\r\n    text-align: left;\r\n    border: 1px solid #ddd;\r\n}\r\n\r\nth {\r\n    background-color: #1d2830;\r\n    color: white;\r\n}\r\n\r\ntr:hover {\r\n    background-color: #e0e0e0;\r\n}\r\n\r\np {\r\n    font-size: 16px;\r\n    color: #555;\r\n}\r\n\r\n\r\n"],"sourceRoot":""}]);
+.activate-button:hover {
+  background-color: #45a049;
+}
+
+.activate-button:active {
+  background-color: #388e3c;
+}
+
+/* 상세보기 버튼 */
+.details-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.details-button:hover {
+  background-color: #0056b3;
+}
+
+.details-button:active {
+  background-color: #004085;
+}
+`, "",{"version":3,"sources":["webpack://./Master/MasterApproval.css"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,mBAAmB;AACrB;;AAEA;EACE,SAAS;AACX;;AAEA,WAAW;AACX;EACE,aAAa;EACb,mBAAmB;AACrB;;AAEA;EACE,YAAY;EACZ,sBAAsB;EACtB,kBAAkB;EAClB,aAAa;EACb,iBAAiB;AACnB;;AAEA,QAAQ;AACR;EACE,WAAW;EACX,yBAAyB;EACzB,gBAAgB;AAClB;;AAEA;;EAEE,aAAa;EACb,gBAAgB;EAChB,sBAAsB;AACxB;;AAEA;EACE,yBAAyB;EACzB,YAAY;AACd;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,eAAe;EACf,WAAW;AACb;;AAEA,eAAe;AACf;EACE,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,kBAAkB;EAClB,kBAAkB;EAClB,eAAe;EACf,eAAe;AACjB;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,yBAAyB;AAC3B;;AAEA,YAAY;AACZ;EACE,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,kBAAkB;EAClB,kBAAkB;EAClB,eAAe;EACf,eAAe;AACjB;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,yBAAyB;AAC3B","sourcesContent":[".header-container {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  align-items: center;\r\n  margin-bottom: 20px;\r\n}\r\n\r\nh3 {\r\n  margin: 0;\r\n}\r\n\r\n/* 셀렉트 필터 */\r\n.store-filter-container {\r\n  display: flex;\r\n  align-items: center;\r\n}\r\n\r\n.store-filter-container select {\r\n  padding: 8px;\r\n  border: 1px solid #ccc;\r\n  border-radius: 4px;\r\n  outline: none;\r\n  /* 포커스 시 경계선 제거 */\r\n}\r\n\r\n/* 테이블 */\r\ntable {\r\n  width: 100%;\r\n  border-collapse: collapse;\r\n  margin-top: 20px;\r\n}\r\n\r\nth,\r\ntd {\r\n  padding: 12px;\r\n  text-align: left;\r\n  border: 1px solid #ddd;\r\n}\r\n\r\nth {\r\n  background-color: #1d2830;\r\n  color: white;\r\n}\r\n\r\ntr:hover {\r\n  background-color: #e0e0e0;\r\n}\r\n\r\np {\r\n  font-size: 16px;\r\n  color: #555;\r\n}\r\n\r\n/* 승인, 활성화 버튼 */\r\n.activate-button {\r\n  background-color: #4CAF50;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 5px;\r\n  padding: 10px 15px;\r\n  cursor: pointer;\r\n  font-size: 14px;\r\n}\r\n\r\n.activate-button:hover {\r\n  background-color: #45a049;\r\n}\r\n\r\n.activate-button:active {\r\n  background-color: #388e3c;\r\n}\r\n\r\n/* 상세보기 버튼 */\r\n.details-button {\r\n  background-color: #007bff;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 5px;\r\n  padding: 10px 15px;\r\n  cursor: pointer;\r\n  font-size: 14px;\r\n}\r\n\r\n.details-button:hover {\r\n  background-color: #0056b3;\r\n}\r\n\r\n.details-button:active {\r\n  background-color: #004085;\r\n}\r\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "../../../node_modules/css-loader/dist/cjs.js!./Master/StoreInfoModal.css":
+/*!********************************************************************************!*\
+  !*** ../../../node_modules/css-loader/dist/cjs.js!./Master/StoreInfoModal.css ***!
+  \********************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/sourceMaps.js */ "../../../node_modules/css-loader/dist/runtime/sourceMaps.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "../../../node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, `.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 500px;
+  max-width: 90%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  animation: slideIn 0.3s ease;
+  overflow: auto;
+}
+
+.close-button {
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+h2 {
+  margin-top: 0;
+  color: #333;
+  font-size: 26px;
+  border-bottom: 2px solid #f1f1f1;
+  padding-bottom: 10px;
+}
+
+.modal-body {
+  margin-top: 20px;
+}
+
+.info-section {
+  margin-bottom: 20px;
+}
+
+.info-section h3 {
+  color: #000;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+p {
+  color: #555;
+  font-size: 16px;
+  line-height: 1.6;
+}`, "",{"version":3,"sources":["webpack://./Master/StoreInfoModal.css"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,uBAAuB;EACvB,mBAAmB;EACnB,eAAe;EACf,MAAM;EACN,OAAO;EACP,WAAW;EACX,YAAY;EACZ,oCAAoC;EACpC,0BAA0B;EAC1B,aAAa;AACf;;AAEA;EACE,yBAAyB;EACzB,aAAa;EACb,mBAAmB;EACnB,YAAY;EACZ,cAAc;EACd,0CAA0C;EAC1C,4BAA4B;EAC5B,cAAc;AAChB;;AAEA;EACE,YAAY;EACZ,eAAe;EACf,eAAe;AACjB;;AAEA;EACE,aAAa;EACb,WAAW;EACX,eAAe;EACf,gCAAgC;EAChC,oBAAoB;AACtB;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,mBAAmB;AACrB;;AAEA;EACE,WAAW;EACX,eAAe;EACf,mBAAmB;AACrB;;AAEA;EACE,WAAW;EACX,eAAe;EACf,gBAAgB;AAClB","sourcesContent":[".modal {\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  background-color: rgba(0, 0, 0, 0.8);\r\n  backdrop-filter: blur(8px);\r\n  z-index: 1000;\r\n}\r\n\r\n.modal-content {\r\n  background-color: #ffffff;\r\n  padding: 30px;\r\n  border-radius: 10px;\r\n  width: 500px;\r\n  max-width: 90%;\r\n  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);\r\n  animation: slideIn 0.3s ease;\r\n  overflow: auto;\r\n}\r\n\r\n.close-button {\r\n  float: right;\r\n  font-size: 28px;\r\n  cursor: pointer;\r\n}\r\n\r\nh2 {\r\n  margin-top: 0;\r\n  color: #333;\r\n  font-size: 26px;\r\n  border-bottom: 2px solid #f1f1f1;\r\n  padding-bottom: 10px;\r\n}\r\n\r\n.modal-body {\r\n  margin-top: 20px;\r\n}\r\n\r\n.info-section {\r\n  margin-bottom: 20px;\r\n}\r\n\r\n.info-section h3 {\r\n  color: #000;\r\n  font-size: 20px;\r\n  margin-bottom: 10px;\r\n}\r\n\r\np {\r\n  color: #555;\r\n  font-size: 16px;\r\n  line-height: 1.6;\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -33637,10 +33790,10 @@ if (false) {} else {
 
 /***/ }),
 
-/***/ "./Master/Master.css":
-/*!***************************!*\
-  !*** ./Master/Master.css ***!
-  \***************************/
+/***/ "./Master/MasterApproval.css":
+/*!***********************************!*\
+  !*** ./Master/MasterApproval.css ***!
+  \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -33659,7 +33812,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "../../../node_modules/style-loader/dist/runtime/styleTagTransform.js");
 /* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_Master_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js!./Master.css */ "../../../node_modules/css-loader/dist/cjs.js!./Master/Master.css");
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_MasterApproval_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js!./MasterApproval.css */ "../../../node_modules/css-loader/dist/cjs.js!./Master/MasterApproval.css");
 
       
       
@@ -33679,12 +33832,64 @@ options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WE
 options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
 options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
 
-var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_Master_css__WEBPACK_IMPORTED_MODULE_6__["default"], options);
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_MasterApproval_css__WEBPACK_IMPORTED_MODULE_6__["default"], options);
 
 
 
 
-       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_Master_css__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_Master_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_Master_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
+       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_MasterApproval_css__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_MasterApproval_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_MasterApproval_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
+
+
+/***/ }),
+
+/***/ "./Master/StoreInfoModal.css":
+/*!***********************************!*\
+  !*** ./Master/StoreInfoModal.css ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/styleDomAPI.js */ "../../../node_modules/style-loader/dist/runtime/styleDomAPI.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/insertBySelector.js */ "../../../node_modules/style-loader/dist/runtime/insertBySelector.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js */ "../../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/insertStyleElement.js */ "../../../node_modules/style-loader/dist/runtime/insertStyleElement.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "../../../node_modules/style-loader/dist/runtime/styleTagTransform.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_StoreInfoModal_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js!./StoreInfoModal.css */ "../../../node_modules/css-loader/dist/cjs.js!./Master/StoreInfoModal.css");
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var options = {};
+
+options.styleTagTransform = (_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
+options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
+options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
+options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
+options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_StoreInfoModal_css__WEBPACK_IMPORTED_MODULE_6__["default"], options);
+
+
+
+
+       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_StoreInfoModal_css__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_StoreInfoModal_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_StoreInfoModal_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
 
 
 /***/ }),
@@ -34044,14 +34249,15 @@ module.exports = styleTagTransform;
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!**************************!*\
-  !*** ./Master/Master.js ***!
-  \**************************/
+/*!**********************************!*\
+  !*** ./Master/MasterApproval.js ***!
+  \**********************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "../../../node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "../../../node_modules/react-dom/client.js");
-/* harmony import */ var _Master_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Master.css */ "./Master/Master.css");
+/* harmony import */ var _MasterApproval_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MasterApproval.css */ "./Master/MasterApproval.css");
+/* harmony import */ var _StoreInfoModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./StoreInfoModal */ "./Master/StoreInfoModal.js");
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -34061,69 +34267,149 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
-function Master() {
+
+function MasterApproval() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
     store = _useState2[0],
     setStore = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState4 = _slicedToArray(_useState3, 2),
-    activeStores = _useState4[0],
-    setActiveStores = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    storeInfo = _useState4[0],
+    setStoreInfo = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('전체'),
     _useState6 = _slicedToArray(_useState5, 2),
-    waitingStores = _useState6[0],
-    setWaitingStores = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    filter = _useState6[0],
+    setFilter = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState8 = _slicedToArray(_useState7, 2),
-    inactiveStores = _useState8[0],
-    setInactiveStores = _useState8[1];
+    isModalOpen = _useState8[0],
+    setIsModalOpen = _useState8[1]; // 모달 상태 관리
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState10 = _slicedToArray(_useState9, 2),
+    selectedStore = _useState10[0],
+    setSelectedStore = _useState10[1]; // 선택된 업체 기본 정보
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState12 = _slicedToArray(_useState11, 2),
+    selectedStoreInfo = _useState12[0],
+    setSelectedStoreInfo = _useState12[1]; // 선택된 업체 추가 정보
 
-  // 모든 업체 정보 불러옴
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     fetch('/store').then(function (response) {
       return response.json();
     }).then(function (data) {
       setStore(data);
-      updateStoreCounts(data);
+      var infoPromises = data.map(function (store) {
+        return fetch("/store/info/".concat(store.storeId)).then(function (response) {
+          return response.json();
+        });
+      });
+      Promise.all(infoPromises).then(function (infoData) {
+        return setStoreInfo(infoData);
+      })["catch"](function (error) {
+        return console.error('업체 정보를 가져오는 중 오류 발생:', error);
+      });
     })["catch"](function (error) {
       return console.error('업체 목록을 가져오는 중 오류 발생:', error);
     });
   }, []);
 
-  // 상태에 따른 업체 리스트 업데이트
-  var updateStoreCounts = function updateStoreCounts(data) {
-    setActiveStores(data.filter(function (store) {
-      return store.storeStatus === '활성화';
-    }));
-    setWaitingStores(data.filter(function (store) {
+  // 상태 필터링
+  var filteredStores = store.filter(function (store) {
+    if (filter === '대기') {
       return store.storeStatus === '대기';
-    }));
-    setInactiveStores(data.filter(function (store) {
+    } else if (filter === '비활성화') {
       return store.storeStatus === '비활성화';
-    }));
+    } else if (filter === '전체') {
+      return store.storeStatus === '대기' || store.storeStatus === '비활성화';
+    }
+    return true;
+  });
+  var handleApprove = function handleApprove(storeId, currentStatus) {
+    var confirmationMessage = currentStatus === '대기' ? "승인 하시겠습니까?" : "활성화 하시겠습니까?";
+    if (window.confirm(confirmationMessage)) {
+      fetch("/store/".concat(storeId, "/approve"), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        if (response.ok) {
+          alert(currentStatus === '대기' ? "승인이 완료되었습니다." : "업체가 활성화 되었습니다.");
+          return fetch('/store');
+        }
+        throw new Error('업체 상태 업데이트에 실패했습니다.');
+      }).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        return setStore(data);
+      })["catch"](function (error) {
+        alert(currentStatus === '대기' ? "승인에 실패했습니다." : "활성화에 실패했습니다.");
+        console.error('업체 상태 업데이트 중 오류 발생:', error);
+      });
+    }
   };
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC5C5\uCCB4 \uC0C1\uD0DC \uD604\uD669"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "store-counts"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "count-card"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uC2B9\uC778 \uB300\uAE30 \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, waitingStores.length)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "count-card"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uC2B9\uC778\uB41C \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, activeStores.length)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "count-card"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uBE44\uD65C\uC131\uD654\uB41C \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, inactiveStores.length))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC2B9\uC778 \uB300\uAE30 \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC2B9\uC778\uB41C \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uBE44\uD65C\uC131\uD654\uB41C \uC5C5\uCCB4"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, Array.from({
-    length: Math.max(activeStores.length, waitingStores.length, inactiveStores.length)
-  }).map(function (_, index) {
-    var _waitingStores$index, _activeStores$index, _inactiveStores$index;
+
+  // 모달 열기 함수
+  var handleShowModal = function handleShowModal(store, storeInfo) {
+    setSelectedStore(store);
+    setSelectedStoreInfo(storeInfo);
+    setIsModalOpen(true);
+  };
+
+  // 모달 닫기 함수
+  var handleCloseModal = function handleCloseModal() {
+    setIsModalOpen(false);
+    setSelectedStore(null);
+    setSelectedStoreInfo(null);
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "header-container"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC2B9\uC778\uAD00\uB9AC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "store-filter-container"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", {
+    id: "store-status-select",
+    onChange: function onChange(e) {
+      return setFilter(e.target.value);
+    },
+    value: filter
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
+    value: "\uC804\uCCB4"
+  }, "\uC804\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
+    value: "\uB300\uAE30"
+  }, "\uB300\uAE30"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
+    value: "\uBE44\uD65C\uC131\uD654"
+  }, "\uBE44\uD65C\uC131\uD654")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uBA85"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB300\uD45C\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB2F4\uB2F9\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB2F4\uB2F9\uC790\uC5F0\uB77D\uCC98"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC8FC\uC18C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0AC\uC5C5\uC790 \uBC88\uD638"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0C1\uD0DC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uBE44\uD65C\uC131\uD654"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, filteredStores.map(function (store, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", {
-      key: index
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_waitingStores$index = waitingStores[index]) === null || _waitingStores$index === void 0 ? void 0 : _waitingStores$index.storeName) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_activeStores$index = activeStores[index]) === null || _activeStores$index === void 0 ? void 0 : _activeStores$index.storeName) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_inactiveStores$index = inactiveStores[index]) === null || _inactiveStores$index === void 0 ? void 0 : _inactiveStores$index.storeName) || '-'));
-  }))));
+      key: store.storeId
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeId), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeMaster || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerName || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerPhone || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeAddr || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeBusinessNo || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      className: "details-button",
+      onClick: function onClick() {
+        return handleShowModal(store, storeInfo[index]);
+      }
+    }, "\uC0C1\uC138\uBCF4\uAE30")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeStatus), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeStatus === '대기' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      className: "activate-button",
+      onClick: function onClick() {
+        return handleApprove(store.storeId, '대기');
+      }
+    }, "\uC2B9\uC778") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      className: "activate-button",
+      onClick: function onClick() {
+        return handleApprove(store.storeId, '비활성화');
+      }
+    }, "\uD65C\uC131\uD654")));
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_StoreInfoModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    isOpen: isModalOpen,
+    onClose: handleCloseModal,
+    store: selectedStore,
+    storeInfo: selectedStoreInfo
+  }));
 }
+;
 var root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(document.getElementById("root"));
-root.render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Master, null));
+root.render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(MasterApproval, null));
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=master.bundle.js.map
+//# sourceMappingURL=masterApproval.bundle.js.map

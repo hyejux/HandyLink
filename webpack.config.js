@@ -10,12 +10,12 @@ module.exports = {
 
         main: './Main.js', //여러페이지 설정이 가능함
         user: './User/User/User.js',
+        userMain: './User/User/UserMain.js',
         admin: './Admin/Admin.js',
+        StoreSignUp: './Admin/StoreSignUp.js',
         adminReservation : './Admin/AdminReservation.js',
         paymentInfo: './User/Payment/PaymentInfo.js',
         UserChatRoom : './User/Inquiry/UserChatRoom.js',
-        AdminStore: './Admin/AdminStore.js',
-        AdminRegist: './Admin/AdminRegist.js',
         master: './Master/Master.js',
         adminReserveSetting : './Admin/AdminReserveSetting.js',
         adminReserveSettingDetail : './Admin/AdminReserveSettingDetail.js',
@@ -27,9 +27,7 @@ module.exports = {
         UserMyPage : './User/User/UserMyPage.js',
         UserLoginPage : './User/User/UserLoginPage.js',
         UserAccountFind : './User/User/UserAccountFind.js',
-        UserChatList : './User/Inquiry/UserChatList.js',
-
-
+        UserChatList : './User/Inquiry/UserChatList.js'
 
     },
     devtool: 'sourcemaps',

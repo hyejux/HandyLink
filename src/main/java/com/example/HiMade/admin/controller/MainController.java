@@ -48,6 +48,6 @@ public class MainController {
     model.addAttribute("pageName", pageName);
     System.out.println("뷰이름:" +pageName);
 
-    return "adminSignUp";
+    return "storeRegist";
   }
 }

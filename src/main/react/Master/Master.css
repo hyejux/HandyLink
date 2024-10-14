@@ -1,15 +1,72 @@
-/* masterLayout.css */
-table {
-    width: 100%;
-    border-collapse: collapse; /* 테이블 경계가 겹치지 않도록 설정 */
+h3 {
+    color: #333;
+    padding-bottom: 5px;
+    text-align: center;
 }
 
-th, td {
-    border: 1px solid #dddddd; /* 테이블 셀 경계 색상 설정 */
-    text-align: left; /* 텍스트 정렬 */
-    padding: 8px; /* 셀 안쪽 여백 */
+/* 가게 상태별 수 */
+.store-counts {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.count-card {
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    padding: 20px;
+    flex: 1;
+    margin: 0 10px;
+    text-align: center;
+}
+
+.count-card h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.count-card p {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+/* 테이블 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
 }
 
 th {
-    background-color: #f2f2f2; /* 헤더 배경 색상 */
+    background-color: #1d2830;
+    color: white;
 }
+
+tr:hover {
+    background-color: #e0e0e0;
+}
+
+p {
+    font-size: 16px;
+    color: #555;
+}
+
+.tables-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .table-column {
+    flex: 1;
+    margin: 0 10px;
+  }
+  
+

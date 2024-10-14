@@ -6,26 +6,26 @@
 <mapper namespace="com.example.HiMade.user.mapper.UserAccountMapper">
 
     <!-- 아이디 중복 확인 쿼리 -->
-    <select id="checkEmail" parameterType="String" resultType="int">
-        SELECT COUNT(*) FROM USERS WHERE user_email = #{userEmail}
+    <select id="checkId" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM USERS WHERE user_id = #{userId}
     </select>
 
     <!-- 유저 등록 -->
     <insert id="insertUser" parameterType="UserDTO">
-        INSERT INTO USERS (user_pw, user_name, user_birth, user_gender, user_phonenum, user_signup, user_img_url, refund_account_number, user_email)
-        VALUES (#{userPw}, #{userName}, #{userBirth}, #{userGender}, #{userPhonenum}, CURRENT_DATE, #{userImgUrl}, #{refundAccountNumber}, #{userEmail})
+        INSERT INTO USERS (user_id, user_pw, user_name, user_birth, user_gender, user_phonenum, user_signup, user_img_url, refund_account_number)
+        VALUES (#{userId}, #{userPw}, #{userName}, #{userBirth}, #{userGender}, #{userPhonenum}, CURRENT_DATE, #{userImgUrl}, #{refundAccountNumber})
     </insert>
 
     <!-- 로그인 쿼리 -->
     <select id="loginUser" parameterType="UserDTO" resultType="UserDTO">
-        SELECT user_id, user_email, user_name, user_birth, user_phonenum, user_gender, user_signup
+        SELECT user_id, user_name, user_birth, user_phonenum, user_gender, user_signup
         FROM USERS
-        WHERE user_email = #{userEmail} AND user_pw = #{userPw}
+        WHERE user_id = #{userId} AND user_pw = #{userPw}
     </select>
 
     <!-- 유저 정보 조회 쿼리 -->
-    <select id="getUserById" parameterType="long" resultType="com.example.HiMade.user.dto.UserDTO">
-        SELECT user_id, user_email, user_name, user_birth, user_phonenum, user_gender, user_signup
+    <select id="getUserById" parameterType="String" resultType="com.example.HiMade.user.dto.UserDTO">
+        SELECT user_id, user_name, user_birth, user_phonenum, user_gender, user_signup
         FROM USERS
         WHERE user_id = #{userId}
     </select>
@@ -37,7 +37,18 @@
             user_birth = #{userBirth},
             user_gender = #{userGender},
             user_img_url = #{userImgUrl}
-        WHERE user_email = #{userEmail}
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updatePassword" parameterType="UserDTO">
+        UPDATE USERS
+        SET user_pw = #{userPw},
+            user_name = #{userName},
+            user_phonenum = #{userPhonenum},
+            user_birth = #{userBirth},
+            user_gender = #{userGender},
+            user_img_url = #{userImgUrl}
+        WHERE user_id = #{userId}
     </update>
 
 </mapper>

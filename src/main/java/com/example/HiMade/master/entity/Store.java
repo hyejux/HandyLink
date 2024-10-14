@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.sql.Time;
 
 @Entity
 @Table(name = "store")
@@ -14,8 +15,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class Store {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long storeId;
+    private String storeId;
 
     private String storePw;
     private String storeCate;
@@ -30,4 +30,14 @@ public class Store {
     @Column(name = "store_status")
     @Enumerated(EnumType.STRING)
     private StoreStatus storeStatus;
+
+    private String storeIntro;
+    private String storeParkingYn;
+    private String storeSns;
+    private String imageUrl;
+    private String notice;
+    private Time storeStartTime;
+    private Time storeCloseTime;
+    private String storeDayOff;
+    private String storeAccount;
 }

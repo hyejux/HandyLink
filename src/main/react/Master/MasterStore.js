@@ -6,11 +6,9 @@ import StoreInfoModal from './StoreInfoModal';
 function MasterStore() {
     const [store, setStore] = useState([]);
     const [storeInfo, setStoreInfo] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedStore, setSelectedStore] = useState(null);
-    const [selectedStoreInfo, setSelectedStoreInfo] = useState(null);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchStores, setSearchStores] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
+    const [selectedStore, setSelectedStore] = useState(null); // 선택된 업체 기본 정보
+    const [selectedStoreInfo, setSelectedStoreInfo] = useState(null); // 선택된 업체 추가 정보
 
     useEffect(() => {
         fetch('/store')
@@ -27,25 +25,7 @@ function MasterStore() {
             .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
     }, []);
 
-    useEffect(() => {
-        const activeStores = store.filter((store) => store.storeStatus === '활성화');
-        setSearchStores(activeStores);
-    }, [store]);
-
-    const handleSearch = () => {
-        const lowerCaseQuery = searchQuery.toLowerCase();
-        const activeStores = store.filter(
-            (store) => store.storeStatus === '활성화' && 
-            store.storeName.toLowerCase().includes(lowerCaseQuery)
-        );
-        setSearchStores(activeStores);
-    };
-
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            handleSearch();
-        }
-    };
+    const activeStores = store.filter((store) => store.storeStatus === '활성화');
 
     const handleDeactivate = (storeId) => {
         if (window.confirm("업체를 비활성화 하시겠습니까?")) {
@@ -71,12 +51,14 @@ function MasterStore() {
         }
     };
 
+    // 모달 열기 함수
     const handleShowModal = (store, storeInfo) => {
         setSelectedStore(store);
         setSelectedStoreInfo(storeInfo);
         setIsModalOpen(true);
     };
 
+    // 모달 닫기 함수
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setSelectedStore(null);
@@ -85,19 +67,7 @@ function MasterStore() {
 
     return (
         <div>
-            <div className="header-container">
             <h3>업체관리</h3>
-            <div className="search-bar">
-                <input 
-                    type="text" 
-                    placeholder="업체명을 입력하세요" 
-                    value={searchQuery} 
-                    onChange={(e) => setSearchQuery(e.target.value)} 
-                    onKeyDown={handleKeyDown}
-                />
-                <button onClick={handleSearch}>검색</button>
-            </div>
-            </div>
             <table>
                 <thead>
                     <tr>
@@ -114,7 +84,7 @@ function MasterStore() {
                     </tr>
                 </thead>
                 <tbody>
-                    {searchStores.map((store, index) => (
+                    {activeStores.map((store, index) => (
                         <tr key={store.storeId}>
                             <td>{store.storeId}</td>
                             <td>{store.storeName}</td>

@@ -1,0 +1,15 @@
+/* masterLayout.css */
+table {
+    width: 100%;
+    border-collapse: collapse; /* 테이블 경계가 겹치지 않도록 설정 */
+}
+
+th, td {
+    border: 1px solid #dddddd; /* 테이블 셀 경계 색상 설정 */
+    text-align: left; /* 텍스트 정렬 */
+    padding: 8px; /* 셀 안쪽 여백 */
+}
+
+th {
+    background-color: #f2f2f2; /* 헤더 배경 색상 */
+}

@@ -12,10 +12,12 @@ public class adminReservationDTO {
 
   private int categoryId;
   private int categoryLevel;
-  private int parentCategoryLevel;
+  private int parentCategoryId;
   private String serviceName;
   private int servicePrice;
   private String serviceContent;
   private String storeId;
+
+  private String imageUrl;
 
 }

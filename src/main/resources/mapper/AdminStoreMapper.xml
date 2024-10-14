@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.HiMade.admin.mapper.AdminStoreMapper">
+    <insert id="registStore" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
+        INSERT INTO store_test (
+        store_id,
+        store_pw,
+        store_cate,
+        store_name,
+        store_master,
+        manager_name,
+        manager_phone,
+        store_addr,
+        store_business_no,
+        store_signup,
+        store_status,
+        store_intro,
+        store_parking_yn,
+        store_sns,
+        store_notice,
+        store_start_time,
+        store_close_time,
+        store_day_off,
+        store_account,
+        image_url
+        ) VALUES (
+        #{storeId},
+        #{storePw},
+        #{storeCate},
+        #{storeName},
+        #{storeMaster},
+        #{managerName},
+        #{managerPhone},
+        #{storeAddr, typeHandler=com.example.HiMade.admin.handler.JsonHandler, jdbcType=VARCHAR}, <!-- JSONB 형식으로 처리 -->
+        #{storeBusinessNo},
+        now(),
+        '대기',
+        #{storeIntro},
+        #{storeParkingYn},
+        #{storeSns, typeHandler=com.example.HiMade.admin.handler.JsonHandler, jdbcType=VARCHAR}, <!-- JSONB 형식으로 처리 -->
+        #{storeNotice},
+        #{storeOpenTime},
+        #{storeCloseTime},
+        #{storeDayOff, typeHandler=com.example.HiMade.admin.handler.ArrayHandler, jdbcType=ARRAY}, <!-- 배열 처리 -->
+        #{storeAccount, typeHandler=com.example.HiMade.admin.handler.JsonHandler, jdbcType=VARCHAR}, <!-- JSONB 형식으로 처리 -->
+        null
+        )
+    </insert>
+</mapper>

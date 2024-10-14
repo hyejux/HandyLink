@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.HiMade.user.mapper.UserReservationMapper">
+    <select id="getMyReserveList" resultType="com.example.HiMade.user.dto.UserRL">
+        select s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rs.reservation_slot_time, rf.main_category_id, c.service_name
+        from reservation r
+        JOIN store s
+        ON s.store_id = r.store_id
+        JOIN reservation_form rf
+        ON r.reservation_no = rf.reservation_no
+        JOIN category c
+        ON c.category_id = rf.main_category_id
+        JOIN reservation_slot rs
+        ON rs.reservation_slot_key = r.reservation_slot_key
+        group by r.reservation_no,s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rs.reservation_slot_time, rf.main_category_id, c.service_name;
+
+    </select>
+
+    <select id="getDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">
+        select * from reservation_slot where reservation_slot_date = #{date}
+    </select>
+
+</mapper>

@@ -12,6 +12,7 @@ module.exports = {
         user: './User/User/User.js',
         admin: './Admin/Admin.js',
         StoreSignUp: './Admin/StoreSignUp.js',
+        AdminLogin: './Admin/AdminLogin.js',
         adminReservation : './Admin/AdminReservation.js',
         paymentInfo: './User/Payment/PaymentInfo.js',
         UserChatRoom : './User/Inquiry/UserChatRoom.js',

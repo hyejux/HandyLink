@@ -1,5 +1,6 @@
 .admin-store-info-regist-container {
     padding: 0 20px;
+    height: auto;
 }
 
 .admin-store-info-regist-container
@@ -121,31 +122,36 @@ textarea {
 }
 
 .admin-store-info-regist-container
-.photo-upload > button {
-    border: none;
-    margin-top: 10px;
-    padding: 3px 15px;
-    font-size: 12px;
-    background-color: #9e9e9e;
-    color: #ffffff;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
-    font-weight: 500;
+.photo-upload {
+    height: auto;
 }
 
-.admin-store-info-regist-container
-.photo-upload > button:hover {
-    background-color: #727272;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
+/*.admin-store-info-regist-container*/
+/*.photo-upload > button {*/
+/*    border: none;*/
+/*    margin-top: 10px;*/
+/*    padding: 3px 15px;*/
+/*    font-size: 12px;*/
+/*    background-color: #9e9e9e;*/
+/*    color: #ffffff;*/
+/*    border-radius: 5px;*/
+/*    cursor: pointer;*/
+/*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
+/*    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;*/
+/*    font-weight: 500;*/
+/*}*/
 
-.admin-store-info-regist-container
-.photo-upload > button:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
+/*.admin-store-info-regist-container*/
+/*.photo-upload > button:hover {*/
+/*    background-color: #727272;*/
+/*    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);*/
+/*}*/
+
+/*.admin-store-info-regist-container*/
+/*.photo-upload > button:active {*/
+/*    transform: translateY(2px);*/
+/*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);*/
+/*}*/
 
 .admin-store-info-regist-container
 .photo-upload .photo-grid {
@@ -153,12 +159,15 @@ textarea {
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     margin-top: 10px;
+    height: auto;
 }
 
 .admin-store-info-regist-container
 .photo-upload .photo-item {
     border: 1px solid #ccc;
     position: relative;
+    width: 100%;
+    height: 150px;
 }
 
 .admin-store-info-regist-container
@@ -168,15 +177,41 @@ textarea {
 }
 
 .admin-store-info-regist-container
-.bi-x-circle {
+.bi-x-circle-fill {
     position: absolute;
     top: 5px;
     right: -10px;
-    color: #ccc; /* 약간 어두운 글씨 */
+    color: #727272; /* 약간 어두운 글씨 */
     cursor: pointer;
     width: 20px;
     height: 20px;
+    font-size: 15px;
+}
+
+.custom-file-upload {
+    border: none;
+    margin-top: 10px;
+    padding: 3px 15px;
+    width: 10%;
     font-size: 12px;
+    background-color: #9e9e9e;
+    color: #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+    font-weight: 500;
+    text-align: center;
+}
+
+.custom-file-upload:hover {
+    background-color: #727272;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.custom-file-upload:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* .submit-btn {

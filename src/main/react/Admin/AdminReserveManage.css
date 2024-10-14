@@ -1,0 +1,146 @@
+
+
+.main-content {
+  margin: 50px;
+}
+
+.main-content-title{
+  font-size : 35px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.main-btns{
+  text-align: right;
+  margin-bottom: 30px;
+}
+
+
+.main-contents{
+  border-radius: 10px;
+}
+
+
+ .btn-st {
+  border: 1px solid #1d2830;
+  color : #ffffff;
+  font-weight: bold;
+  border-radius: 3px;
+  background-color: #2e3133;
+
+}
+
+
+/* ------------------------------------------ */
+
+.management-container {
+  /* margin: 40px; */
+  /* border: 1px solid #ddd; */
+  /* border-radius: 8px; */
+ /* background-color: #f9f9f9;*/
+}
+
+.management-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.top-controls input[type="text"] {
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.top-controls select {
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.add-btn, .report-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+/*
+.add-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.report-btn {
+  background-color: #28a745;
+  color: white;
+} */
+
+.management-table {
+  width: 100%;
+  /* border: 1px solid #ddd; */
+  border-collapse: collapse;
+
+}
+
+.management-table thead {
+  background-color: #f5f5f5;
+}
+
+.management-table th, .management-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.management-table th {
+  font-weight: bold;
+}
+
+/* .management-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+} */
+
+.flight-btn {
+  background-color: #4f4f4f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 10%;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.management-table tbody tr td img {
+  border-radius: 100%;
+  width: 38px;
+}
+
+
+/* .management-table tbody tr td:nth-child(2)  {
+  display: flex;
+  gap: 5%;
+  align-items: center;
+
+} */
+
+.material-symbols-outlined {
+font-size: 20px;
+}
+
+.management-table thead tr th > div{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}

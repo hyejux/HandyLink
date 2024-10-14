@@ -2,6 +2,7 @@ package com.example.HiMade.admin.serviceImpl;
 
 import com.example.HiMade.admin.dto.adminRSDTO;
 import com.example.HiMade.admin.dto.adminReservationDTO;
+import com.example.HiMade.admin.dto.adminReserveMangeDTO;
 import com.example.HiMade.admin.mapper.AdminReservationMapper;
 import com.example.HiMade.admin.service.AdminMainService;
 import com.example.HiMade.admin.service.AdminReservationService;
@@ -67,6 +68,11 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   @Override
   public void setMainCategory4(adminReservationDTO dto) {
     adminReservationMapper.setMainCategory4(dto);
+  }
+
+  @Override
+  public List<adminReserveMangeDTO> getManageList() {
+    return adminReservationMapper.getManageList();
   }
 
 

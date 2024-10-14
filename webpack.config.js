@@ -20,6 +20,7 @@ module.exports = {
         adminReserveSetting : './Admin/AdminReserveSetting.js',
         adminReserveSettingDetail : './Admin/AdminReserveSettingDetail.js',
         AdminReserveSettingDetailModify : './Admin/AdminReserveSettingDetailModify.js',
+        adminReserveManage : './Admin/AdminReserveManage.js',
         UserQnaList : './QNA/UserQnaList.js',
         UserQnaRegist : './QNA/UserQnaRegist.js',
         UserSignUp : './User/User/UserSignUp.js',

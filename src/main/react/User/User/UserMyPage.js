@@ -9,11 +9,13 @@ function UserMyPage () {
 
     const [userInfo, setUserInfo] = useState({
         profileImage: "/img/user_basic_profile.jpg",
-        userEmail: '',
+        userId: '',
         userName: '',
         userPhonenum: '',
         userBirth: '',
         userGender: 'M',
+        userPw: '',
+        repassword: '',
     });
     const [file, setFile] = useState(null);
 
@@ -39,12 +41,23 @@ function UserMyPage () {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // 비밀번호와 비밀번호 확인이 일치하는지 확인
+        if (userInfo.userPw && userInfo.userPw !== userInfo.repassword) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+        }
+
         const formData = new FormData();
-        formData.append('userEmail', userInfo.userEmail);
+        formData.append('userId', userInfo.userId);
         formData.append('userName', userInfo.userName);
         formData.append('userPhonenum', userInfo.userPhonenum);
         formData.append('userBirth', userInfo.userBirth);
         formData.append('userGender', userInfo.userGender);
+
+        // 비밀번호가 입력된 경우에만 서버로 전송
+        if (userInfo.userPw) {
+            formData.append('userPw', userInfo.userPw);
+        }
 
         // 파일이 있을 때만 프로필 이미지를 추가
         if (file) {
@@ -84,7 +97,7 @@ function UserMyPage () {
                     const data = await response.json();
                     setUserInfo({
                         ...userInfo,
-                        userEmail: data.userEmail,
+                        userId: data.userId,
                         userName: data.userName,
                         userPhonenum: data.userPhonenum,
                         userBirth: data.userBirth,
@@ -140,12 +153,12 @@ function UserMyPage () {
 
                 <form className="user-mypage-form" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="userEmail">ID</label>
+                        <label htmlFor="userId">ID</label>
                         <input
                             type="text"
-                            id="userEmail"
-                            name="userEmail"
-                            value={userInfo.userEmail}
+                            id="userId"
+                            name="userId"
+                            value={userInfo.userId}
                             disabled
                         />
                     </div>

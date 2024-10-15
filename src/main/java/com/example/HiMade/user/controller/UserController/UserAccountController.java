@@ -19,9 +19,9 @@ public class UserAccountController {
     private UserAccountService userAccountService;
 
     // 아이디(이메일) 중복 확인
-    @GetMapping("/checkEmail")
-    public ResponseEntity<?> checkEmail(@RequestParam("userEmail") String email) {
-        boolean isDuplicate = userAccountService.checkEmail(email);
+    @GetMapping("/checkId")
+    public ResponseEntity<?> checkEmail(@RequestParam("userId") String userId) {
+        boolean isDuplicate = userAccountService.checkId(userId);
         if (isDuplicate) {
             return ResponseEntity.ok().body("{\"isDuplicate\": true}");
         } else {
@@ -56,7 +56,7 @@ public class UserAccountController {
             return null;
         }
 
-        String uploadDir = "C:/uploads";  // 업로드 경로 설정
+        String uploadDir = "C:/profile";  // 업로드 경로 설정
         File uploadFolder = new File(uploadDir);
 
         // 경로가 없으면 디렉토리 생성
@@ -80,9 +80,9 @@ public class UserAccountController {
         UserDTO user = userAccountService.loginUser(userDTO);
         System.out.println("로그인한 사용자 정보: " + user);
         if (user != null) {
-            System.out.println("로그인 성공: " + user.getUserEmail());
+            System.out.println("로그인 성공: " + user.getUserId());
             session.setAttribute("userId", user.getUserId()); // 세션에 로그인된 유저의 ID 저장
-            return ResponseEntity.ok(user); // 로그인 성공 시 유저 정보를 반환
+            return ResponseEntity.ok(user); // 로그인 성공 시 유저 DTO를 반환
         } else {
             return ResponseEntity.status(401).body("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
@@ -91,7 +91,7 @@ public class UserAccountController {
     // 정보 조회
     @GetMapping("/profile")
     public ResponseEntity<UserDTO> getUserProfile(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
+        String userId = session.getAttribute("userId").toString();
         if (userId != null) {
             UserDTO user = userAccountService.getUserById(userId);
             return ResponseEntity.ok(user);
@@ -102,16 +102,22 @@ public class UserAccountController {
     // 사용자 정보 수정
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@ModelAttribute UserDTO userDTO, @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
-        // 로그로 전달된 userPhone 값 확인
-        System.out.println("업데이트할 연락처: " + userDTO.getUserPhonenum());
         System.out.println("업데이트할 사용자 정보: " + userDTO.toString());
-
         try {
             if (profileImage != null && !profileImage.isEmpty()) {
                 String savedFilePath = saveProfileImage(profileImage); // 이미지 저장
                 userDTO.setUserImgUrl(savedFilePath); // 이미지 URL 설정
             }
-            userAccountService.updateUser(userDTO); // 사용자 정보 수정 로직 실행
+
+            // 비밀번호가 입력된 경우에만 비밀번호 업데이트
+            if (userDTO.getUserPw() != null && !userDTO.getUserPw().isEmpty()) {
+                System.out.println("비밀번호 변경 요청: " + userDTO.getUserPw());
+                userAccountService.updatePassword(userDTO);  // 비밀번호 포함 업데이트
+            } else {
+                userAccountService.updateUser(userDTO);  // 비밀번호 없이 사용자 정보만 업데이트
+            }
+
+            userAccountService.updateUser(userDTO);
             return ResponseEntity.ok(userDTO);
         } catch (Exception e) {
             e.printStackTrace();

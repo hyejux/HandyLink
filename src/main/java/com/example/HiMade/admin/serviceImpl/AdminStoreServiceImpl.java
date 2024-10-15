@@ -15,7 +15,6 @@ public class AdminStoreServiceImpl implements AdminStoreService {
 
     @Override
     public void registStore(StoreRegistDTO storeRegistDTO) {
-        System.out.println("서비스 "+storeRegistDTO);
         adminStoreMapper.registStore(storeRegistDTO);
     }
 }

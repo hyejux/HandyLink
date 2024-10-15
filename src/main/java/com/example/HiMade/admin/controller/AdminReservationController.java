@@ -4,6 +4,7 @@ package com.example.HiMade.admin.controller;
 import com.example.HiMade.admin.dto.adminRSDTO;
 import com.example.HiMade.admin.dto.adminReservationDTO;
 import com.example.HiMade.admin.dto.adminReserveAdd;
+import com.example.HiMade.admin.dto.adminReserveMangeDTO;
 import com.example.HiMade.admin.service.AdminMainService;
 import com.example.HiMade.admin.service.AdminReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,12 @@ public class AdminReservationController {
   @Autowired
   private AdminReservationService adminReservationService;
 
+
+  @GetMapping("/getManageList")
+  public List<adminReserveMangeDTO> getManageList(){
+    System.out.println(adminReservationService.getManageList());
+    return adminReservationService.getManageList();
+  }
 
   @GetMapping("/getList")
   public List<adminReservationDTO> getList() {

@@ -39,7 +39,7 @@ public class StoreRegistDTO {
     private LocalTime storeCloseTime; //영업종료시간
     private List<String> storeDayOff; //휴무일
     private StoreAccount storeAccount; //업체계좌번호
-//    private String imageUrl; //img경로
+    private List<String>  imageUrl; //img경로
 
 
 

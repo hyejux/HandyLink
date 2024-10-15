@@ -15,6 +15,12 @@
   margin-bottom: 30px;
 }
 
+
+.main-contents{
+  border-radius: 10px;
+}
+
+
  .btn-st {
   border: 1px solid #1d2830;
   color : #ffffff;
@@ -62,10 +68,6 @@
   transition: 0.1s;
 }
 
-
-.main-contents{
-  border-radius: 10px;
-}
 
 .reserve-container {
   border: 1px solid #ddd;

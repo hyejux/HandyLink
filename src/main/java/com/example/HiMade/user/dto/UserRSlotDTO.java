@@ -16,7 +16,6 @@ public class UserRSlotDTO {
 
   private int reservationSlotKey;
   private LocalDate reservationSlotDate;
-  private Time reservationSlotTime;
   private int slotCount;
   private int slotStatusCount;
   private Boolean reservationActive ;

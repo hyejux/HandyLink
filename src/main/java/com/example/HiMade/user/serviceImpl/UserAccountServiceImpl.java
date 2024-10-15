@@ -20,8 +20,8 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public boolean checkEmail(String email) {
-        return userAccountMapper.checkEmail(email) > 0; // 이메일 중복 시 true 반환
+    public boolean checkId(String userId) {
+        return userAccountMapper.checkId(userId) > 0; // 이메일 중복 시 true 반환
     }
 
     @Override
@@ -30,13 +30,17 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserDTO getUserById(Long userId) {
+    public UserDTO getUserById(String userId) {
         return userAccountMapper.getUserById(userId);
     }
 
     @Override
     public void updateUser(UserDTO userDTO) {
-        System.out.println("서비스 계층에서 전달된 연락처: " + userDTO.getUserPhonenum());  // 로그 추가
         userAccountMapper.updateUser(userDTO);
+    }
+
+    @Override
+    public void updatePassword(UserDTO userDTO) {
+        userAccountMapper.updatePassword(userDTO);
     }
 }

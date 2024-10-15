@@ -46,8 +46,8 @@ function StoreSignUp() {
         storeAccount: {
             accountBank: '',
             accountNumber: ''
-        }
-//        image: []
+        },
+        imageUrl: []
     });
 
     // 스텝증가
@@ -198,6 +198,38 @@ function StoreSignUp() {
         console.log("step03 ",storeInfoRegistData);
     },[storeInfoData, storeInfoRegistData]);
 
+    //step03 사진 업로드
+    const [selectedImages, setSelectedImages] = useState([]); // 화면에 보여질 파일 리스트
+//    const [selectedFiles, setSelectedFiles] = useState([]); // 서버에 전송할 파일 리스트
+
+    const onSelectFile = (e) => {
+        e.preventDefault();
+        const files = Array.from(e.target.files); // 선택된 파일들 배열로 변환
+
+        // 이미지는 8장 이하일 때만 추가
+        if (selectedImages.length + files.length <= 8) {
+            const newImages = files.map((file) => URL.createObjectURL(file)); // URL 생성
+            const newImageUrls = [...storeInfoRegistData.imageUrl, ...files.map(file => URL.createObjectURL(file))];
+
+            // 상태 업데이트
+            setSelectedImages((prev) => [...prev, ...newImages]);
+            setStoreInfoRegistData((prev) => ({
+                ...prev,
+                imageUrl: newImageUrls // URL 배열로 업데이트
+            }));
+        } else {
+            alert('이미지는 최대 8장까지 업로드 가능합니다.');
+        }
+    };
+
+    const removeImage = (index) => {
+        setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
+        setStoreInfoRegistData((prev) => ({
+            ...prev,
+            imageUrl: prev.imageUrl.filter((_, i) => i !== index) // URL 업데이트
+        }));
+    };
+    //사진업로드
 
     //등록하기
     const handleStoreRegist = async() => {
@@ -206,14 +238,14 @@ function StoreSignUp() {
                 ...storeInfoData,
                 ...storeInfoRegistData
             });
+            if (currentStep < 4) {
+                setCurrentStep(currentStep + 1);
+            }
             console.log('성공 ', response.data);
         } catch (error){
             console.error('error ', error);
         }
     };
-
-
-
 
     return (
     <div className="admin-body">
@@ -443,33 +475,30 @@ function StoreSignUp() {
                     <label htmlFor="photos">사진
                         <span className="small-text">* 최대 8장</span>
                     </label>
-                    <button type="button">사진업로드</button>
-                    <div className="photo-grid">
-                        <div className="photo-item">
-                            <img src="../img1.jpg" alt="대표 사진" />
-                            <i className="bi bi-x-circle"></i>
+                    <label htmlFor="file-upload" className="custom-file-upload">
+                        파일 업로드
+                    </label>
+                    <input
+                        id="file-upload"
+                        type="file"
+                        multiple // 여러 파일 선택 가능
+                        onChange={onSelectFile}
+                        accept=".png, .jpg, image/*"
+                        style={{ display: 'none', marginTop: '10px' }} // 항상 보이도록 설정
+                    />
+                    {selectedImages.length ? (
+                        <div className="photo-grid">
+                            {selectedImages.map((image, index) => (
+                                <div key={index} className="photo-item">
+                                    <img src={image} alt={`첨부파일 ${index + 1}`} />
+                                    <i className="bi bi-x-circle-fill" onClick={() => removeImage(index)}></i>
+                                </div>
+                            ))}
                         </div>
-                        <div className="photo-item">
-                            <img src="../img1.jpg" alt="" />
-                            <i className="bi bi-x-circle"></i>
-                        </div>
-                        <div className="photo-item">
-                            <img src="../img3.jpg" alt="" />
-                            <i className="bi bi-x-circle"></i>
-                        </div>
-                        <div className="photo-item">
-                            <img src="../img2.jpg" alt="" />
-                            <i className="bi bi-x-circle"></i>
-                        </div>
-                        <div className="photo-item">
-                            <img src="../img5.jpg" alt="" />
-                            <i className="bi bi-x-circle"></i>
-                        </div>
-                        <div className="photo-item">
-                            <img src="../img5.jpg" alt="" />
-                            <i className="bi bi-x-circle"></i>
-                        </div>
-                    </div>
+                        ) : (
+                        <div className="photo-grid">파일을 첨부할 수 있습니다.</div>
+                    )}
+
                 </div>
 
                 <div className="buttons">
@@ -498,7 +527,7 @@ function StoreSignUp() {
                         </div>
                     </div>
 
-                    <button type="button" class="login-go-btn"> 로그인하기 </button>
+                    <button type="button" className="login-go-btn" onClick={() => { location.href = '/adminlogin.signup';}}> 로그인하기 </button>
                 </div>
             </div>
         )}

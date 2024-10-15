@@ -13,6 +13,7 @@ module.exports = {
         userMain: './User/User/UserMain.js',
         admin: './Admin/Admin.js',
         StoreSignUp: './Admin/StoreSignUp.js',
+        AdminLogin: './Admin/AdminLogin.js',
         adminReservation : './Admin/AdminReservation.js',
         paymentInfo: './User/Payment/PaymentInfo.js',
         UserChatRoom : './User/Inquiry/UserChatRoom.js',
@@ -21,6 +22,8 @@ module.exports = {
         adminReserveSettingDetail : './Admin/AdminReserveSettingDetail.js',
         AdminReserveSettingDetailModify : './Admin/AdminReserveSettingDetailModify.js',
         adminReserveManage : './Admin/AdminReserveManage.js',
+        UserMyReservationList : './User/Reservation/UserMyReservationList.js',
+        UserStoreDetailService : '/User/Reservation/UserStoreDetailService.js',
         UserQnaList : './QNA/UserQnaList.js',
         UserQnaRegist : './QNA/UserQnaRegist.js',
         UserSignUp : './User/User/UserSignUp.js',
@@ -28,7 +31,8 @@ module.exports = {
         UserMyPage : './User/User/UserMyPage.js',
         UserLoginPage : './User/User/UserLoginPage.js',
         UserAccountFind : './User/User/UserAccountFind.js',
-        UserChatList : './User/Inquiry/UserChatList.js'
+        UserChatList : './User/Inquiry/UserChatList.js',
+        UserReservationDate : './User/Reservation/UserReservationDate.js'
 
     },
     devtool: 'sourcemaps',

@@ -20,9 +20,26 @@ __webpack_require__.r(__webpack_exports__);
 function StoreInfoModal(_ref) {
   var isOpen = _ref.isOpen,
     onClose = _ref.onClose,
-    store = _ref.store,
-    storeInfo = _ref.storeInfo;
-  if (!isOpen || !store || !storeInfo) return null;
+    store = _ref.store;
+  if (!isOpen || !store) return null;
+  var parseJson = function parseJson(jsonString) {
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error("JSON 파싱 오류:", error);
+      return {};
+    }
+  };
+  var parseDayOff = function parseDayOff(dayOffString) {
+    return dayOffString.replace(/{|}/g, "").split(",").map(function (dayOff) {
+      return dayOff.trim();
+    });
+  };
+  var addrInfo = parseJson(store.storeAddr);
+  var dayOffInfo = parseDayOff(store.storeDayOff);
+  var accountInfo = parseJson(store.storeAccount);
+  var snsInfo = parseJson(store.storeSns);
+  console.log("store:", store);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "modal"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -34,11 +51,23 @@ function StoreInfoModal(_ref) {
     className: "modal-body"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "info-section"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uAE30\uBCF8 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uAC00\uC785\uC77C:"), " ", store.storeSignup), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC5C5\uC885:"), " ", store.storeCate)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uAE30\uBCF8 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uAC00\uC785\uC77C:"), " ", store.storeSignup), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC5C5\uC885:"), " ", store.storeCate), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC6B0\uD3B8\uBC88\uD638:"), " ", addrInfo.zipcode), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC8FC\uC18C:"), " ", addrInfo.addr, " ", addrInfo.addrdetail)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "info-section"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC6B4\uC601 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC601\uC5C5\uC2DC\uAC04:"), " ", storeInfo.storeStartTime, " - ", storeInfo.storeEndTime), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uD734\uBB34\uC77C:"), " ", storeInfo.storeBreakDate), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uACC4\uC88C\uBC88\uD638:"), " ", storeInfo.accountNumber)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC6B4\uC601 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC601\uC5C5\uC2DC\uAC04:"), " ", store.storeStartTime, " - ", store.storeCloseTime), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uD734\uBB34\uC77C:"), " ", Array.isArray(dayOffInfo) && dayOffInfo.length > 0 ? dayOffInfo.map(function (day, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+      key: index
+    }, day, index < dayOffInfo.length - 1 ? ', ' : '');
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, "\uC815\uBCF4 \uC5C6\uC74C")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uACF5\uC9C0\uC0AC\uD56D:"), " ", store.storeNotice), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uACC4\uC88C\uBC88\uD638:"), " ", accountInfo.accountBank, " : ", accountInfo.accountNumber)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "info-section"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uCD94\uAC00 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC18C\uAC1C:"), " ", storeInfo.storeIntro), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC8FC\uCC28\uAC00\uB2A5\uC5EC\uBD80:"), " ", storeInfo.storeParkingYn), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "SNS:"), " ", storeInfo.storeSns), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uACF5\uC9C0\uC0AC\uD56D:"), " ", storeInfo.notice)))));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uCD94\uAC00 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC18C\uAC1C:"), " ", store.storeIntro), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC8FC\uCC28\uAC00\uB2A5\uC5EC\uBD80:"), " ", store.storeParkingYn), Array.isArray(snsInfo) && snsInfo.length > 0 ? snsInfo.map(function (sns, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      key: index
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, sns.snsName, ":"), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+      href: sns.snsLink,
+      target: "_blank",
+      rel: "noopener noreferrer"
+    }, sns.snsLink)));
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "\uC815\uBCF4 \uC5C6\uC74C")))));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (StoreInfoModal);
 
@@ -34273,42 +34302,23 @@ function MasterApproval() {
     _useState2 = _slicedToArray(_useState, 2),
     store = _useState2[0],
     setStore = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('전체'),
     _useState4 = _slicedToArray(_useState3, 2),
-    storeInfo = _useState4[0],
-    setStoreInfo = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('전체'),
+    filter = _useState4[0],
+    setFilter = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState6 = _slicedToArray(_useState5, 2),
-    filter = _useState6[0],
-    setFilter = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    isModalOpen = _useState6[0],
+    setIsModalOpen = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState8 = _slicedToArray(_useState7, 2),
-    isModalOpen = _useState8[0],
-    setIsModalOpen = _useState8[1]; // 모달 상태 관리
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState10 = _slicedToArray(_useState9, 2),
-    selectedStore = _useState10[0],
-    setSelectedStore = _useState10[1]; // 선택된 업체 기본 정보
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState12 = _slicedToArray(_useState11, 2),
-    selectedStoreInfo = _useState12[0],
-    setSelectedStoreInfo = _useState12[1]; // 선택된 업체 추가 정보
-
+    selectedStore = _useState8[0],
+    setSelectedStore = _useState8[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     fetch('/store').then(function (response) {
       return response.json();
     }).then(function (data) {
       setStore(data);
-      var infoPromises = data.map(function (store) {
-        return fetch("/store/info/".concat(store.storeId)).then(function (response) {
-          return response.json();
-        });
-      });
-      Promise.all(infoPromises).then(function (infoData) {
-        return setStoreInfo(infoData);
-      })["catch"](function (error) {
-        return console.error('업체 정보를 가져오는 중 오류 발생:', error);
-      });
     })["catch"](function (error) {
       return console.error('업체 목록을 가져오는 중 오류 발생:', error);
     });
@@ -34351,9 +34361,8 @@ function MasterApproval() {
   };
 
   // 모달 열기 함수
-  var handleShowModal = function handleShowModal(store, storeInfo) {
+  var handleShowModal = function handleShowModal(store) {
     setSelectedStore(store);
-    setSelectedStoreInfo(storeInfo);
     setIsModalOpen(true);
   };
 
@@ -34361,7 +34370,14 @@ function MasterApproval() {
   var handleCloseModal = function handleCloseModal() {
     setIsModalOpen(false);
     setSelectedStore(null);
-    setSelectedStoreInfo(null);
+  };
+  var parseJson = function parseJson(jsonString) {
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error("JSON 파싱 오류:", error);
+      return {};
+    }
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "header-container"
@@ -34379,13 +34395,14 @@ function MasterApproval() {
     value: "\uB300\uAE30"
   }, "\uB300\uAE30"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "\uBE44\uD65C\uC131\uD654"
-  }, "\uBE44\uD65C\uC131\uD654")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uBA85"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB300\uD45C\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB2F4\uB2F9\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB2F4\uB2F9\uC790\uC5F0\uB77D\uCC98"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC8FC\uC18C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0AC\uC5C5\uC790 \uBC88\uD638"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0C1\uD0DC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uBE44\uD65C\uC131\uD654"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, filteredStores.map(function (store, index) {
+  }, "\uBE44\uD65C\uC131\uD654")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uBA85"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB300\uD45C\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB2F4\uB2F9\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB2F4\uB2F9\uC790\uC5F0\uB77D\uCC98"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC8FC\uC18C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0AC\uC5C5\uC790 \uBC88\uD638"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0C1\uD0DC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uBE44\uD65C\uC131\uD654"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, filteredStores.map(function (store) {
+    var addrInfo = parseJson(store.storeAddr);
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", {
       key: store.storeId
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeId), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeMaster || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerName || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerPhone || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeAddr || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeBusinessNo || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeId), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeMaster || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerName || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerPhone || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, addrInfo.addr, " ", addrInfo.addrdetail), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeBusinessNo || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       className: "details-button",
       onClick: function onClick() {
-        return handleShowModal(store, storeInfo[index]);
+        return handleShowModal(store);
       }
     }, "\uC0C1\uC138\uBCF4\uAE30")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeStatus), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeStatus === '대기' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       className: "activate-button",
@@ -34401,8 +34418,7 @@ function MasterApproval() {
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_StoreInfoModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
     isOpen: isModalOpen,
     onClose: handleCloseModal,
-    store: selectedStore,
-    storeInfo: selectedStoreInfo
+    store: selectedStore
   }));
 }
 ;

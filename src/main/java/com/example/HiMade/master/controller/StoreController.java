@@ -22,27 +22,21 @@ public class StoreController {
 
     @GetMapping("/{id}")
     public Store getStoreById(@PathVariable String id) {
-        return storeRepository.findById(id).orElse(null);  // String 타입 그대로 사용
+        return storeRepository.findById(id).orElse(null);
     }
 
     @PostMapping("/{storeId}/approve")
     public Store approveStore(@PathVariable String storeId) {
-        Store store = storeRepository.findById(storeId).orElse(null);  // Removed Long conversion
-        if (store != null) {
-            store.setStoreStatus(StoreStatus.활성화);
-            return storeRepository.save(store);
-        }
-        return null;
+        storeRepository.updateStoreStatus(storeId, StoreStatus.활성화);
+        return storeRepository.findById(storeId).orElse(null);
     }
 
     @PostMapping("/{storeId}/deactivate")
     public Store deactivateStore(@PathVariable String storeId) {
-        Store store = storeRepository.findById(storeId).orElse(null);  // Removed Long conversion
-        if (store != null) {
-            store.setStoreStatus(StoreStatus.비활성화);
-            return storeRepository.save(store);
-        }
-        return null;
+        storeRepository.updateStoreStatus(storeId, StoreStatus.비활성화);
+        return storeRepository.findById(storeId).orElse(null);
     }
+
+
 
 }

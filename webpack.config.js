@@ -10,6 +10,7 @@ module.exports = {
 
         main: './Main.js', //여러페이지 설정이 가능함
         user: './User/User/User.js',
+        userMain: './User/User/UserMain.js',
         admin: './Admin/Admin.js',
         StoreSignUp: './Admin/StoreSignUp.js',
         AdminLogin: './Admin/AdminLogin.js',
@@ -21,6 +22,7 @@ module.exports = {
         adminReserveSetting : './Admin/AdminReserveSetting.js',
         adminReserveSettingDetail : './Admin/AdminReserveSettingDetail.js',
         AdminReserveSettingDetailModify : './Admin/AdminReserveSettingDetailModify.js',
+        adminReserveManage : './Admin/AdminReserveManage.js',
         UserQnaList : './QNA/UserQnaList.js',
         UserQnaRegist : './QNA/UserQnaRegist.js',
         UserSignUp : './User/User/UserSignUp.js',

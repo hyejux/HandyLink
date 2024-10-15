@@ -12,7 +12,7 @@ function UserSignUp() {
     const [file, setFile] = useState(null);
     // 폼 입력을 위한 상태
     const [formData, setFormData] = useState({
-        userEmail: '',
+        userId: '',
         userPw: '',
         repassword: '',
         userName: '',
@@ -22,7 +22,7 @@ function UserSignUp() {
         userImgUrl: ''
     });
     // 중복 확인 여부
-    const [emailChecked, setEmailChecked] = useState(false);
+    const [idChecked, setIdChecked] = useState(false);
 
     // 입력값 변화 시 상태 업데이트
     const handleInputChange = (e) => {
@@ -31,8 +31,8 @@ function UserSignUp() {
             ...formData,
             [name]: value
         });
-        if (name === 'userEmail') {
-            setEmailChecked(false); // 이메일이 변경될 때마다 중복 체크 초기화
+        if (name === 'userId') {
+            setIdChecked(false); // 이메일이 변경될 때마다 중복 체크 초기화
         }
     };
 
@@ -62,21 +62,21 @@ function UserSignUp() {
     };
 
 // 이메일 중복 확인 로직
-    const handleCheckEmail = async () => {
-        if (!formData.userEmail) {
+    const handleCheckId = async () => {
+        if (!formData.userId) {
             alert("이메일을 입력해주세요.");
             return;
         }
 
         try {
-            const response = await fetch(`/user/checkEmail?userEmail=${formData.userEmail}`);
+            const response = await fetch(`/user/checkId?userId=${formData.userId}`);
             const result = await response.json();
             if (result.isDuplicate) {
                 alert("이미 사용 중인 이메일입니다.");
-                setEmailChecked(false);
+                setIdChecked(false);
             } else {
                 alert("사용 가능한 이메일입니다.");
-                setEmailChecked(true);
+                setIdChecked(true);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -93,14 +93,14 @@ function UserSignUp() {
             return;
         }
 
-        // if (!emailChecked) {
+        // if (!idChecked) {
         //     alert("이메일 중복 확인을 해주세요.");
         //     return;
         // }
 
         // FormData 객체를 사용하여 파일 포함 데이터를 전송
         const data = new FormData();
-        data.append('userEmail', formData.userEmail);
+        data.append('userId', formData.userId);
         data.append('userPw', formData.userPw);
         data.append('userName', formData.userName);
         data.append('userPhonenum', formData.userPhonenum);
@@ -122,12 +122,14 @@ function UserSignUp() {
                 const result = await response.text();
                 alert(result);
                 window.location.href = '/UserLoginPage.user';
+
                 if (result.userImgUrl) {
                     setFormData({
                         ...formData,
                         userImgUrl: result.userImgUrl // 서버에서 받은 이미지 URL을 저장
                     });
                 }
+
             } else {
                 console.log('서버 응답 오류:', response.status); // 응답 오류 로그
             }
@@ -150,18 +152,18 @@ function UserSignUp() {
                 </div>
                 <form className="form-signup" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="userEmail">Email</label>
+                        <label htmlFor="userId">ID</label>
                         <input
                             type="email"
-                            id="userEmail"
-                            name="userEmail"
+                            id="userId"
+                            name="userId"
                             className="effect-8"
                             placeholder="이메일 입력"
-                            value={formData.userEmail}
+                            value={formData.userId}
                             onChange={handleInputChange}
                         />
                         <div className="focus-border"><i></i></div>
-                        <button type="button" className="btn-checkid" onClick={handleCheckEmail}>중복 확인</button>
+                        <button type="button" className="btn-checkid" onClick={handleCheckId}>중복 확인</button>
                     </div>
 
                     <div className="form-group password-group">

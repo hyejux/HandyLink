@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 
 function UserLoginPage () {
     const [passwordVisible, setPasswordVisible] = useState(false);
-    const [userEmail, setUserEmail] = useState('');
+    const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
 
     const togglePasswordVisibility = () => {
@@ -14,7 +14,7 @@ function UserLoginPage () {
     // 로그인 처리 함수
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("로그인 시도 중:", { userEmail, userPw });
+        console.log("로그인 시도 중:", { userId, userPw });
 
         try {
             const response = await fetch('/user/login', {
@@ -23,7 +23,7 @@ function UserLoginPage () {
                     'Content-Type': 'application/json',
                 },
                 // 변경된 상태 변수명을 사용
-                body: JSON.stringify({ userEmail, userPw }),
+                body: JSON.stringify({ userId, userPw }),
             });
 
             console.log("서버 응답 상태 코드:", response.status); // 서버 응답 코드 확인
@@ -49,12 +49,12 @@ function UserLoginPage () {
                     <div className="form-group">
                         <input
                             type="text"
-                            id="userEmail"
+                            id="userId"
                             placeholder=" "
-                            value={userEmail}
-                            onChange={(e) => setUserEmail(e.target.value)}
+                            value={userId}
+                            onChange={(e) => setUserId(e.target.value)}
                         />
-                        <label htmlFor="userEmail">이메일</label>
+                        <label htmlFor="userId">이메일</label>
                     </div>
 
                     <div className="form-group">

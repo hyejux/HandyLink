@@ -12,7 +12,7 @@ import java.sql.Date;
 @ToString
 @Builder
 public class UserDTO {
-    private Long userId; // 시퀀스 PK
+    private String userId;
     private String userPw;
     private String userName;
     private String userBirth;
@@ -21,5 +21,4 @@ public class UserDTO {
     private Date userSignup;
     private String userImgUrl;
     private Long refundAccountNumber;
-    private String userEmail; // 로그인용 아이디
 }

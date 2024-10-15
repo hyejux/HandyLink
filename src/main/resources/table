@@ -1,7 +1,7 @@
+
+(데이터베이스와 아래 테이블 설계도가 몇 가지 다른 부분 있어서 수정함)
+
 -- 시퀀스 생성
-
-
-
 
 CREATE SEQUENCE store_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE user_seq START WITH 1 INCREMENT BY 1;
@@ -19,24 +19,38 @@ CREATE SEQUENCE reservation_slot_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE refund_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE inquiry_answer_seq START WITH 1 INCREMENT BY 1;
 
+
+
 -- 테이블 생성
+
+-- STORE 테이블
 CREATE TABLE STORE (
-    store_id BIGINT NOT NULL DEFAULT nextval('store_seq'),  -- 시퀀스 설정
+    store_id VARCHAR(100) NOT NULL,  -- VARCHAR로 변경
     store_pw VARCHAR(100) NULL,
     store_cate VARCHAR(50) NULL,
     store_name VARCHAR(40) NULL,
     store_master VARCHAR(50) NULL,
     manager_name VARCHAR(50) NULL,
     manager_phone VARCHAR(20) NULL,
-    store_addr VARCHAR(255) NULL,
+    store_addr JSONB NULL,  -- 추가
     store_business_no VARCHAR(12) NULL,
     store_signup TIMESTAMP NULL,
     store_status VARCHAR(20) NULL CHECK (store_status IN ('대기', '활성화', '비활성화')),
-    PRIMARY KEY (store_id)  -- 기본 키 설정
+    store_intro TEXT NULL,  -- 추가
+    store_parking_yn VARCHAR(1) NULL CHECK (store_parking_yn IN ('Y', 'N')),  -- 추가
+    store_sns JSONB NULL,  -- 추가
+    image_url TEXT[] NULL,  -- 추가
+    store_notice TEXT NULL,  -- 추가
+    store_start_time TIME NULL,  -- 추가
+    store_close_time TIME NULL,  -- 추가
+    store_day_off TEXT[] NULL,  -- 추가
+    store_account JSONB NULL,  -- 추가
+    PRIMARY KEY (store_id)
 );
 
+-- USERS 테이블
 CREATE TABLE USERS (
-    user_id BIGINT NOT NULL DEFAULT nextval('user_seq'),  -- 시퀀스 설정
+    user_id VARCHAR(100) NOT NULL,  -- VARCHAR로 변경
     user_pw VARCHAR(100) NULL,
     user_name VARCHAR(50) NULL,
     user_birth VARCHAR(8) NULL,
@@ -45,116 +59,127 @@ CREATE TABLE USERS (
     user_signup DATE NULL,
     user_img_url VARCHAR(300) NULL,
     refund_account_number BIGINT NULL,
-    PRIMARY KEY (user_id)  -- 기본 키 설정
+    PRIMARY KEY (user_id)
 );
 
+-- RESERVATION 테이블
 CREATE TABLE RESERVATION (
-    reservation_no BIGINT NOT NULL DEFAULT nextval('reservation_seq'),  -- 시퀀스 설정
-    reservation_status VARCHAR(20) NULL CHECK (reservation_status IN ('대기', '완료', '취소')),
+    reservation_no BIGINT NOT NULL DEFAULT nextval('reservation_seq'),
+    reservation_status VARCHAR(100) NULL CHECK (reservation_status IN ('대기', '완료', '취소')),
     confirm_time TIMESTAMP NULL,
     reg_time TIMESTAMP NULL,
     customer_request TEXT NULL,
+    reservation_price BIGINT NULL,  -- 추가
     store_id VARCHAR(100) NOT NULL,
     user_id VARCHAR(100) NOT NULL,
-    PRIMARY KEY (reservation_no)  -- 기본 키 설정
+    PRIMARY KEY (reservation_no),
+    FOREIGN KEY (store_id) REFERENCES STORE (store_id) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
+-- PAYMENT 테이블
 CREATE TABLE PAYMENT (
-    payment_id BIGINT NOT NULL DEFAULT nextval('payment_seq'),  -- 시퀀스 설정
+    payment_id BIGINT NOT NULL DEFAULT nextval('payment_seq'),
     payment_method VARCHAR(20) NULL CHECK (payment_method IN ('신용카드', '직불카드', '모바일결제')),
     payment_amount BIGINT NULL,
     payment_date TIMESTAMP NULL,
     payment_status VARCHAR(1) NULL CHECK (payment_status IN ('Y', 'N')),
     reservation_no BIGINT NULL,
-    PRIMARY KEY (payment_id)  -- 기본 키 설정
+    PRIMARY KEY (payment_id)
 );
 
+-- REVIEW 테이블
 CREATE TABLE REVIEW (
-    review_no BIGINT NOT NULL DEFAULT nextval('review_seq'),  -- 시퀀스 설정
-    review_rating DECIMAL(2, 1) NULL CHECK (review_rating BETWEEN 1 AND 5),
+    review_no BIGINT NOT NULL DEFAULT nextval('review_seq'),
+    review_rating NUMERIC(2, 1) NULL CHECK (review_rating >= 1 AND review_rating <= 5),
     review_content VARCHAR(255) NULL,
     review_date TIMESTAMP NULL,
     reservation_no BIGINT NULL,
     review_img_url VARCHAR(255) NULL,
-    PRIMARY KEY (review_no)  -- 기본 키 설정
+    PRIMARY KEY (review_no)
 );
 
+-- INQUIRY 테이블
 CREATE TABLE INQUIRY (
-    inquiry_no BIGINT NOT NULL DEFAULT nextval('inquiry_seq'),  -- 시퀀스 설정
+    inquiry_no BIGINT NOT NULL DEFAULT nextval('inquiry_seq'),
     inquiry_date TIMESTAMP NULL,
     inquiry_content TEXT NULL,
     visibility CHAR(1) NULL,
     inquiry_status CHAR(1) NULL,
     store_id VARCHAR(100) NOT NULL,
     user_id VARCHAR(100) NOT NULL,
-    PRIMARY KEY (inquiry_no)  -- 기본 키 설정
+    PRIMARY KEY (inquiry_no),
+    FOREIGN KEY (store_id) REFERENCES STORE (store_id) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
-CREATE TABLE STORE_INFO (
-    store_id BIGINT NOT NULL,
-    store_intro TEXT NULL,
-    store_parking_yn VARCHAR(1) NULL CHECK (store_parking_yn IN ('Y', 'N')),
-    store_sns VARCHAR(255) NULL,
-    image_url VARCHAR(255) NULL,
-    notice TEXT NULL,
-    store_start_time TIME NULL,
-    store_end_time TIME NULL,
-    store_break_date DATE NULL,
-    account_number BIGINT NULL,
-    PRIMARY KEY (store_id)  -- 기본 키 설정
+-- INQUIRY_ANSWER 테이블
+CREATE TABLE INQUIRY_ANSWER (
+    inquiry_no BIGINT NOT NULL,
+    answer_text TEXT NULL,
+    answer_time TIMESTAMP NULL,
+    PRIMARY KEY (inquiry_no),
+    FOREIGN KEY (inquiry_no) REFERENCES INQUIRY (inquiry_no)
 );
 
-CREATE TABLE CHAT (
-    chat_no BIGINT NOT NULL DEFAULT nextval('chat_seq'),  -- 시퀀스 설정
-    chat_content TEXT NULL,
-    chat_time TIMESTAMP NULL,
-    store_id VARCHAR(100) NOT NULL,
-    user_id VARCHAR(100) NOT NULL,
-    PRIMARY KEY (chat_no)  -- 기본 키 설정
-);
-
+-- ALERT 테이블
 CREATE TABLE ALERT (
-    alert_no BIGINT NOT NULL DEFAULT nextval('alert_seq'),  -- 시퀀스 설정
+    alert_no BIGINT NOT NULL DEFAULT nextval('alert_seq'),
     store_id VARCHAR(100) NOT NULL,
     user_id VARCHAR(100) NOT NULL,
     alert_type VARCHAR(50) NULL,
     alert_content TEXT NULL,
     alert_send_date TIMESTAMP NULL,
-    PRIMARY KEY (alert_no)  -- 기본 키 설정
+    PRIMARY KEY (alert_no),
+    FOREIGN KEY (store_id) REFERENCES STORE (store_id) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
+-- CATEGORY 테이블
 CREATE TABLE CATEGORY (
-    category_id BIGINT NOT NULL DEFAULT nextval('category_seq'),  -- 시퀀스 설정
+    category_id BIGINT NOT NULL DEFAULT nextval('category_seq'),
     category_level BIGINT NULL,
-    parent_category_level BIGINT NULL,
+    parent_category_id BIGINT NULL,  -- parent_category_level -> parent_category_id로 변경
     service_name VARCHAR(50) NULL,
     service_price BIGINT NULL,
     service_content TEXT NULL,
     store_id VARCHAR(100) NOT NULL,
-    PRIMARY KEY (category_id)  -- 기본 키 설정
+    PRIMARY KEY (category_id),
+    FOREIGN KEY (store_id) REFERENCES STORE (store_id) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
+-- CATEGORY_IMAGE 테이블 (새로 추가됨)
+CREATE TABLE CATEGORY_IMAGE (
+    image_id BIGINT NOT NULL DEFAULT nextval('image_seq'),
+    category_id BIGINT NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    image_description TEXT NULL,
+    PRIMARY KEY (image_id),
+    FOREIGN KEY (category_id) REFERENCES CATEGORY (category_id) ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+-- CHAT 테이블
+CREATE TABLE CHAT (
+    chat_no BIGINT NOT NULL DEFAULT nextval('chat_seq'),
+    chat_content TEXT NULL,
+    chat_time TIMESTAMP NULL,
+    store_id VARCHAR(100) NOT NULL,
+    user_id VARCHAR(100) NOT NULL,
+    PRIMARY KEY (chat_no),
+    FOREIGN KEY (store_id) REFERENCES STORE (store_id) ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+-- RESERVATION_FORM 테이블
 CREATE TABLE RESERVATION_FORM (
-    reservation_no BIGINT NOT NULL DEFAULT nextval('reservation_form_seq'),  -- 시퀀스 설정
+    reservation_form_key BIGINT NOT NULL DEFAULT nextval('reservation_form_seq'),
     main_category_id BIGINT NULL,
     middle_category_id BIGINT NULL,
     sub_category_id BIGINT NULL,
     middle_category_value TEXT NULL,
-    service_price BIGINT NULL,
-    PRIMARY KEY (reservation_no)  -- 기본 키 설정
+    reservation_no BIGINT NULL,
+    PRIMARY KEY (reservation_form_key)
 );
 
-CREATE TABLE SUB_CATEGORY_STATUS (
-    category_status BIGINT NOT NULL DEFAULT nextval('sub_category_status_seq'),  -- 시퀀스 설정
-    category_id BIGINT NULL,
-    sub_category_type VARCHAR(10) NULL CHECK (sub_category_type IN ('SELECT1', 'SELECTN', 'TEXT', 'NUMBER')),
-    is_required VARCHAR(1) NULL CHECK (is_required IN ('Y', 'N')),
-    is_paid VARCHAR(1) NULL CHECK (is_paid IN ('Y', 'N')),
-    PRIMARY KEY (category_status)  -- 기본 키 설정
-);
-
+-- RESERVATION_SLOT 테이블 (새로 추가됨)
 CREATE TABLE RESERVATION_SLOT (
-    reservation_slot_key BIGINT NOT NULL DEFAULT nextval('reservation_slot_seq'),  -- 시퀀스 설정
+    reservation_slot_key BIGINT NOT NULL DEFAULT nextval('reservation_slot_seq'),
     reservation_slot_date DATE NULL,
     reservation_slot_time TIMESTAMP NULL,
     slot_count BIGINT NULL,
@@ -162,30 +187,27 @@ CREATE TABLE RESERVATION_SLOT (
     reservation_active VARCHAR(1) NULL CHECK (reservation_active IN ('Y', 'N')),
     store_id VARCHAR(100) NOT NULL,
     category_id BIGINT NULL,
-    PRIMARY KEY (reservation_slot_key)  -- 기본 키 설정
+    PRIMARY KEY (reservation_slot_key),
+    FOREIGN KEY (store_id) REFERENCES STORE (store_id) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
+-- REFUND 테이블
 CREATE TABLE REFUND (
-    refund_id BIGINT NOT NULL DEFAULT nextval('refund_seq'),  -- 시퀀스 설정
+    refund_id BIGINT NOT NULL DEFAULT nextval('refund_seq'),
     refund_method VARCHAR(20) NULL CHECK (refund_method IN ('신용카드', '계좌이체')),
     refund_amount BIGINT NULL,
     refund_date TIMESTAMP NULL,
     refund_status VARCHAR(20) NULL CHECK (refund_status IN ('대기', '완료', '취소')),
     payment_id BIGINT NOT NULL,
-    PRIMARY KEY (refund_id)  -- 기본 키 설정
+    PRIMARY KEY (refund_id)
 );
 
-CREATE TABLE INQUIRY_ANSWER (
-    inquiry_no BIGINT NOT NULL,
-    answer_text TEXT NULL,
-    answer_time TIMESTAMP NULL,
-    PRIMARY KEY (inquiry_no)  -- 기본 키 설정
+-- SUB_CATEGORY_STATUS 테이블
+CREATE TABLE SUB_CATEGORY_STATUS (
+    category_status BIGINT NOT NULL DEFAULT nextval('sub_category_status_seq'),
+    category_id BIGINT NULL,
+    sub_category_type VARCHAR(10) NULL CHECK (sub_category_type IN ('SELECT1', 'SELECTN', 'TEXT', 'NUMBER')),
+    is_required VARCHAR(1) NULL CHECK (is_required IN ('Y', 'N')),
+    is_paid VARCHAR(1) NULL CHECK (is_paid IN ('Y', 'N')),
+    PRIMARY KEY (category_status)
 );
-
--- Foreign Keys
-ALTER TABLE STORE_INFO ADD CONSTRAINT FK_STORE_TO_STORE_INFO_1 FOREIGN KEY (store_id)
-REFERENCES STORE (store_id);
-ALTER TABLE RESERVATION_FORM ADD CONSTRAINT FK_RESERVATION_TO_RESERVATION_FORM_1 FOREIGN KEY (reservation_no)
-REFERENCES RESERVATION (reservation_no);
-ALTER TABLE INQUIRY_ANSWER ADD CONSTRAINT FK_INQUIRY_TO_INQUIRY_ANSWER_1 FOREIGN KEY (inquiry_no)
-REFERENCES INQUIRY (inquiry_no);

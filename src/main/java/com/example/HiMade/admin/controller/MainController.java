@@ -34,6 +34,16 @@ public class MainController {
     return "adminLayout"; // 반환할 뷰 이름
   }
 
+  @GetMapping("/{pageName}.user/{id}")
+  public String pageUser(@PathVariable String pageName, @PathVariable String id, Model model) {
+    model.addAttribute("pageName", pageName);
+    model.addAttribute("id", id); // id를 모델에 추가
+    System.out.println("뷰이름: " + pageName + ", ID: " + id);
+    System.out.println("id ------------" + id);
+
+    return "userLayout"; // 반환할 뷰 이름
+  }
+
 
   @GetMapping("/{pageName}.master")
   public String pageMaster(@PathVariable String pageName, Model model) {

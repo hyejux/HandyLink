@@ -5,23 +5,15 @@ import StoreInfoModal from './StoreInfoModal';
 
 function MasterApproval() {
   const [store, setStore] = useState([]);
-  const [storeInfo, setStoreInfo] = useState([]);
   const [filter, setFilter] = useState('전체');
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
-  const [selectedStore, setSelectedStore] = useState(null); // 선택된 업체 기본 정보
-  const [selectedStoreInfo, setSelectedStoreInfo] = useState(null); // 선택된 업체 추가 정보
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedStore, setSelectedStore] = useState(null);
 
   useEffect(() => {
     fetch('/store')
       .then((response) => response.json())
       .then((data) => {
         setStore(data);
-        const infoPromises = data.map((store) =>
-          fetch(`/store/info/${store.storeId}`).then((response) => response.json())
-        );
-        Promise.all(infoPromises)
-          .then((infoData) => setStoreInfo(infoData))
-          .catch((error) => console.error('업체 정보를 가져오는 중 오류 발생:', error));
       })
       .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
   }, []);
@@ -67,9 +59,8 @@ function MasterApproval() {
   };
 
   // 모달 열기 함수
-  const handleShowModal = (store, storeInfo) => {
+  const handleShowModal = (store) => {
     setSelectedStore(store);
-    setSelectedStoreInfo(storeInfo);
     setIsModalOpen(true);
   };
 
@@ -77,8 +68,17 @@ function MasterApproval() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedStore(null);
-    setSelectedStoreInfo(null);
   };
+
+  const parseJson = (jsonString) => {
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error("JSON 파싱 오류:", error);
+      return {};
+    }
+  };
+
 
   return (
     <div>
@@ -93,7 +93,6 @@ function MasterApproval() {
           </select>
         </div>
       </div>
-      
 
       <table>
         <thead>
@@ -111,31 +110,36 @@ function MasterApproval() {
           </tr>
         </thead>
         <tbody>
-          {filteredStores.map((store, index) => (
-            <tr key={store.storeId}>
-              <td>{store.storeId}</td>
-              <td>{store.storeName}</td>
-              <td>{store.storeMaster || '-'}</td>
-              <td>{store.managerName || '-'}</td>
-              <td>{store.managerPhone || '-'}</td>
-              <td>{store.storeAddr || '-'}</td>
-              <td>{store.storeBusinessNo || '-'}</td>
-              <td>
-                <button className="details-button" onClick={() => handleShowModal(store, storeInfo[index])}>상세보기</button>
-              </td>
-              <td>{store.storeStatus}</td>
-              <td>
-                {store.storeStatus === '대기' ? (
-                  <button className="activate-button" onClick={() => handleApprove(store.storeId, '대기')}>승인</button>
-                ) : (
-                  <button className="activate-button" onClick={() => handleApprove(store.storeId, '비활성화')}>활성화</button>
-                )}
-              </td>
-            </tr>
-          ))}
+          {filteredStores.map((store) => {
+            const addrInfo = parseJson(store.storeAddr);
+
+            return (
+              <tr key={store.storeId}>
+                <td>{store.storeId}</td>
+                <td>{store.storeName}</td>
+                <td>{store.storeMaster || '-'}</td>
+                <td>{store.managerName || '-'}</td>
+                <td>{store.managerPhone || '-'}</td>
+                <td>{addrInfo.addr} {addrInfo.addrdetail}</td>
+                <td>{store.storeBusinessNo || '-'}</td>
+                <td>
+                  <button className="details-button" onClick={() => handleShowModal(store)}>상세보기</button>
+                </td>
+                <td>{store.storeStatus}</td>
+                <td>
+                  {store.storeStatus === '대기' ? (
+                    <button className="activate-button" onClick={() => handleApprove(store.storeId, '대기')}>승인</button>
+                  ) : (
+                    <button className="activate-button" onClick={() => handleApprove(store.storeId, '비활성화')}>활성화</button>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
+
       </table>
-      <StoreInfoModal isOpen={isModalOpen} onClose={handleCloseModal} store={selectedStore} storeInfo={selectedStoreInfo} />
+      <StoreInfoModal isOpen={isModalOpen} onClose={handleCloseModal} store={selectedStore} />
     </div>
   );
 };

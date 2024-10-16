@@ -18,6 +18,8 @@ module.exports = {
         paymentInfo: './User/Payment/PaymentInfo.js',
         UserChatRoom : './User/Inquiry/UserChatRoom.js',
         master: './Master/Master.js',
+        masterStore: './Master/MasterStore.js',
+        masterApproval: './Master/MasterApproval.js',
         adminReserveSetting : './Admin/AdminReserveSetting.js',
         adminReserveSettingDetail : './Admin/AdminReserveSettingDetail.js',
         AdminReserveSettingDetailModify : './Admin/AdminReserveSettingDetailModify.js',

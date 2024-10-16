@@ -10,10 +10,7 @@ import './UserReservationOption.css';
 
 function UserReservationOption() {
 
-    const [selectedFlavor, setSelectedFlavor] = useState(null); // SELECT1의 경우
-    const [selectedFlavors, setSelectedFlavors] = useState([]); // SELECTN의 경우
-
-
+  const [selectedFlavors, setSelectedFlavors] = useState([]); // 빈 배열로 초기화
  const [categoryInputs, setCategoryInputs] = useState({});
 
 
@@ -111,116 +108,38 @@ const isSelectN = true; // SELECTN이면 true, SELECT1이면 false로 설정
   useEffect(() => {
     console.log("Candle Count:", candleCount);
   }, [candleCount]); // candleCount가 변경될 때마다 실행
+
    const [selectedSubCategories, setSelectedSubCategories] = useState({ parentCategoryId: null, subCategoryIds: [] });
 
 
 
-/*  const handleInputChange = (index, type, value) => {
-    setCategoryInputs(prev => ({
-      ...prev,
-      [index]: {
-        ...prev[index],
-        [type]: value
-      }
-    }));
-  };*/
-
-
 // Handle flavor selection for SELECT1 (single selection)
 const handleFlavorSelect1 = (subCategory, index) => {
-    setSelectedFlavors(prev => ({
-        ...prev,
-        [index]: subCategory // Overwrite previous selection for this category index
-    }));
+  setSelectedFlavors(prev => ({
+      ...prev,
+      [index]: [subCategory] // 단일 선택 설정
+  }));
 };
 
-// Handle flavor selection for SELECTN (multiple selections)
+
 const handleFlavorSelectN = (subCategory, index) => {
-    setSelectedFlavors(prev => ({
-        ...prev,
-        [index]: prev[index]?.includes(subCategory)
-            ? prev[index].filter(item => item !== subCategory) // Deselect if already selected
-            : [...(prev[index] || []), subCategory] // Select if not already selected
-    }));
+  setSelectedFlavors(prev => {
+      const currentSelection = prev[index] || [];
+      return {
+          ...prev,
+          [index]: currentSelection.includes(subCategory)
+              ? currentSelection.filter(item => item !== subCategory) // 이미 선택된 경우 제거
+              : [...currentSelection, subCategory] // 선택되지 않은 경우 추가
+      };
+  });
 };
 
 
 
-//  const handleFlavorSelect1 = (subCategory) => {
-//    setSelectedFlavor(subCategory);
-//    setSelectedSubCategoryIds([subCategory.categoryId]); // SELECT1의 경우 ID를 배열에 저장
-//    setCategoryInputs(prev => ({
-//      ...prev,
-//      [subCategory.serviceName]: subCategory // Store selected flavor
-//    }));
-//  };
-//
-//  const handleFlavorSelectN = (subCategory) => {
-//        if (selectedFlavors.includes(subCategory)) {
-//            // 선택된 경우, 제거
-//            setSelectedFlavors((prev) => prev.filter((flavor) => flavor !== subCategory));
-//            setSelectedSubCategories((prev) => ({
-//                parentCategoryId: prev.parentCategoryId,
-//                subCategoryIds: prev.subCategoryIds.filter(id => id !== subCategory.categoryId), // ID 제거
-//            }));
-//        } else {
-//            // 선택되지 않은 경우, 추가
-//            setSelectedFlavors((prev) => [...prev, subCategory]);
-//            setSelectedSubCategories((prev) => ({
-//                parentCategoryId: subCategory.categoryId, // 상위 카테고리 ID 저장
-//                subCategoryIds: [...prev.subCategoryIds, subCategory.categoryId], // ID 추가
-//            }));
-//
-//        }
-//    };
-  // 선택된 subCategory ID 배열 로그 출력
   useEffect(() => {
     console.log("setSelectedSubCategories", selectedSubCategories);
   }, [selectedSubCategories]);
 
-
-
-/*
-   // Handle input changes for TEXT and NUMBER types
-    const handleInputChange = (index, subCategoryType, value) => {
-        setCategoryInputs(prev => ({
-            ...prev,
-            [index]: {
-                ...prev[index],
-                [subCategoryType]: value
-            }
-        }));
-        console.log("Category Inputs:", { ...categoryInputs, [index]: { ...categoryInputs[index], [subCategoryType]: value } });
-    };
-
-*/
-
-/*  // Handle flavor selection for SELECT1
-  const handleFlavorSelect1 = (subCategory) => {
-    setSelectedFlavor(subCategory);
-    setCategoryInputs(prev => ({
-      ...prev,
-      [subCategory.serviceName]: subCategory // Store selected flavor
-    }));
-    console.log("Selected (SELECT1):", subCategory);
-  };*/
-/*
-  // Handle flavor selection for SELECTN
-  const handleFlavorSelectN = (subCategory) => {
-    if (selectedFlavors.includes(subCategory)) {
-      setSelectedFlavors((prev) => prev.filter((flavor) => flavor !== subCategory)); // Remove selected
-      setCategoryInputs(prev => {
-        const { [subCategory.serviceName]: removed, ...rest } = prev; // Remove from inputs
-        return rest;
-      });
-    } else {
-      setSelectedFlavors((prev) => [...prev, subCategory]); // Add selected
-      setCategoryInputs(prev => ({
-        ...prev,
-        [subCategory.serviceName]: subCategory // Store selected flavor
-      }));
-    }
-  };*/
 
   // Log category inputs whenever they change
   useEffect(() => {
@@ -364,7 +283,7 @@ const handleFlavorSelectN = (subCategory, index) => {
                  {category.subCategories.map((subCategory, subIndex) => (
                      <button
                              key={subIndex}
-                             className={`flavor-button ${selectedFlavors[index]?.includes(subCategory) ? 'selected' : ''}`} // Conditionally add 'selected' class
+                             className={`option-btn ${selectedFlavors[index]?.includes(subCategory) ? 'selected' : ''}`} // Conditionally add 'selected' class
                              onClick={() => category.subCategoryType === 'SELECT1'
                                ? handleFlavorSelect1(subCategory, index)
                                : handleFlavorSelectN(subCategory, index)}

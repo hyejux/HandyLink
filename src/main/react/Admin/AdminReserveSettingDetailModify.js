@@ -16,7 +16,7 @@ const AdminReserveSettingDetailModify = () => {
     subCategoryType: 'SELECT1',
     subCategories: [ {serviceName : '', servicePrice : ''}]
   }]);
-  
+
   const [reserveAdd, setReserveAdd] = useState({
     serviceName: '',
     servicePrice: 0,

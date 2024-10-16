@@ -6,18 +6,11 @@ import Calendar from 'react-calendar';
 import { useState, useEffect } from 'react';
 import { format, addHours } from 'date-fns';
 import "./UserReservationDate.css";
-import { test1 } from './ex';
+
+
 
 function UserReservationDate() {
-//  const [date, setDate] = useState(new Date()); // 초기 날짜 설정
-//
-//  const handleDateChange = (newDate) => {
-//    setDate(newDate); // 날짜 변경 시 상태 업데이트
-//  };
-//  // 시간 선택 처리 함수
-//  const handleTimeSelect = (time) => {
-//    setSelectedTime(time);
-//  };
+
 
 const [cateId, setCateId] = useState(0);
 useEffect(() => {
@@ -28,16 +21,13 @@ useEffect(() => {
 }, []);
 
 
-
-
-
-  const [date, setDate] = useState(new Date()); // 초기 날짜 설정
+ const [date, setDate] = useState(new Date()); // 초기 날짜 설정
  const [dateTime, setDateTime] = useState([]); // useState로 상태를 초기화합니다.
 
-    const handleDateChange = (newDate) => {
+  const handleDateChange = (newDate) => {
         setDate(newDate);
   const adjustedDate = addHours(newDate, 9);
-    const formattedDate = format(adjustedDate, 'yyyy-MM-dd');
+  const formattedDate = format(adjustedDate, 'yyyy-MM-dd');
       console.log(formattedDate);
         // axios로 API 호출
         axios.post('/userReservation/getDateTime', { reservationSlotDate: formattedDate })
@@ -75,11 +65,19 @@ useEffect(() => {
   };
 
 
-  const goToAdminPage = (id) => {
-    test1('sdfsdfsdfsdf')
-    window.location.href = `/userStoreDetailService.user`;
-};
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
+    const goToAdminPage = (id) => {
+        // 세션 스토리지에 값 저장
+        sessionStorage.setItem('selectSlot', selectSlot);
+        sessionStorage.setItem('formattedDate', formattedDate);
+
+        // 다음 페이지로 이동
+        window.location.href = `../UserReservationOption.user/${id}`;
+    };
+
+    // 사용 예
+    console.log(selectSlot, formattedDate);
 
 
  return (
@@ -175,7 +173,7 @@ useEffect(() => {
         </div>
 
         <div className="user-content-last">
-          <button type="button">다음 <i className="bi bi-chevron-right"></i></button>
+          <button type="button"  onClick={() => goToAdminPage(cateId)}>다음 <i className="bi bi-chevron-right"></i></button>
         </div>
       </div>
 

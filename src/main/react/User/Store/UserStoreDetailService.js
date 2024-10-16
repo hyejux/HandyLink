@@ -6,8 +6,7 @@ import Calendar from 'react-calendar';
 import { useState, useEffect } from 'react';
 import { format, addHours } from 'date-fns';
 import "./userStoreDetailService.css";
-import { test1 } from './ex';
-import { getTest } from './ex';
+
 
 function UserStoreDetailService() {
 
@@ -28,7 +27,6 @@ function UserStoreDetailService() {
           window.location.href = `/UserReservationDate.user/${id}`;
       };
 
-console.log(getTest());
       
       
 
@@ -47,7 +45,7 @@ console.log(getTest());
         <div className="user-content-first">
           <div className="user-content-first-img">
             {/* 이미지 부분에 필요한 경우 src 설정 */}
-            {/* <img src="../img3.jpg" alt="가게 이미지" width="100%" height="300px" /> */}
+         <img src="/img/store001.jpeg" alt="가게 이미지" width="100%" height="300px" />
           </div>
           <div className="user-content-first-img-num">
 

@@ -51,7 +51,7 @@ function UserMyReservationList() {
                     </div>
                 <div className="time">
                 <i class="bi bi-clock-fill"></i>
-                    <span>{value.reservationSlotTime.split("T")[1].substring(0, 5)}</span>
+                    <span>8:00</span>
                     </div>
                 </div>
                 

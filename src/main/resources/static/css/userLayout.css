@@ -207,9 +207,9 @@ body {
   background-color: #fff;
   border: none;
 }
-
+/* 
 .store-detail-menu {
-  /* border: 1px solid red; */
+  
   display: flex;
   justify-content: center;
 }
@@ -226,7 +226,7 @@ body {
 
 .store-detail-menu>button:active {
   background-color: #ddd;
-}
+} */
 
 /* ----------------------------------------- */
 

@@ -20,9 +20,26 @@ __webpack_require__.r(__webpack_exports__);
 function StoreInfoModal(_ref) {
   var isOpen = _ref.isOpen,
     onClose = _ref.onClose,
-    store = _ref.store,
-    storeInfo = _ref.storeInfo;
-  if (!isOpen || !store || !storeInfo) return null;
+    store = _ref.store;
+  if (!isOpen || !store) return null;
+  var parseJson = function parseJson(jsonString) {
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error("JSON 파싱 오류:", error);
+      return {};
+    }
+  };
+  var parseDayOff = function parseDayOff(dayOffString) {
+    return dayOffString.replace(/{|}/g, "").split(",").map(function (dayOff) {
+      return dayOff.trim();
+    });
+  };
+  var addrInfo = parseJson(store.storeAddr);
+  var dayOffInfo = parseDayOff(store.storeDayOff);
+  var accountInfo = parseJson(store.storeAccount);
+  var snsInfo = parseJson(store.storeSns);
+  console.log("store:", store);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "modal"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -34,11 +51,23 @@ function StoreInfoModal(_ref) {
     className: "modal-body"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "info-section"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uAE30\uBCF8 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uAC00\uC785\uC77C:"), " ", store.storeSignup), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC5C5\uC885:"), " ", store.storeCate)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uAE30\uBCF8 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uAC00\uC785\uC77C:"), " ", store.storeSignup), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC5C5\uC885:"), " ", store.storeCate), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC6B0\uD3B8\uBC88\uD638:"), " ", addrInfo.zipcode), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC8FC\uC18C:"), " ", addrInfo.addr, " ", addrInfo.addrdetail)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "info-section"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC6B4\uC601 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC601\uC5C5\uC2DC\uAC04:"), " ", storeInfo.storeStartTime, " - ", storeInfo.storeEndTime), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uD734\uBB34\uC77C:"), " ", storeInfo.storeBreakDate), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uACC4\uC88C\uBC88\uD638:"), " ", storeInfo.accountNumber)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC6B4\uC601 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC601\uC5C5\uC2DC\uAC04:"), " ", store.storeStartTime, " - ", store.storeCloseTime), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uD734\uBB34\uC77C:"), " ", Array.isArray(dayOffInfo) && dayOffInfo.length > 0 ? dayOffInfo.map(function (day, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+      key: index
+    }, day, index < dayOffInfo.length - 1 ? ', ' : '');
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, "\uC815\uBCF4 \uC5C6\uC74C")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uACF5\uC9C0\uC0AC\uD56D:"), " ", store.storeNotice), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uACC4\uC88C\uBC88\uD638:"), " ", accountInfo.accountBank, " : ", accountInfo.accountNumber)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "info-section"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uCD94\uAC00 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC18C\uAC1C:"), " ", storeInfo.storeIntro), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC8FC\uCC28\uAC00\uB2A5\uC5EC\uBD80:"), " ", storeInfo.storeParkingYn), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "SNS:"), " ", storeInfo.storeSns), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uACF5\uC9C0\uC0AC\uD56D:"), " ", storeInfo.notice)))));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uCD94\uAC00 \uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC18C\uAC1C:"), " ", store.storeIntro), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "\uC8FC\uCC28\uAC00\uB2A5\uC5EC\uBD80:"), " ", store.storeParkingYn), Array.isArray(snsInfo) && snsInfo.length > 0 ? snsInfo.map(function (sns, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      key: index
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, sns.snsName, ":"), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+      href: sns.snsLink,
+      target: "_blank",
+      rel: "noopener noreferrer"
+    }, sns.snsLink)));
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "\uC815\uBCF4 \uC5C6\uC74C")))));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (StoreInfoModal);
 
@@ -132,7 +161,53 @@ p {
 
 .details-button:active {
   background-color: #004085;
-}`, "",{"version":3,"sources":["webpack://./Master/MasterStore.css"],"names":[],"mappings":"AAAA;EACE,WAAW;EACX,mBAAmB;AACrB;;AAEA;EACE,WAAW;EACX,yBAAyB;EACzB,gBAAgB;AAClB;;AAEA;;EAEE,aAAa;EACb,gBAAgB;EAChB,sBAAsB;AACxB;;AAEA;EACE,yBAAyB;EACzB,YAAY;AACd;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,eAAe;EACf,WAAW;AACb;;;AAGA,YAAY;AACZ;EACE,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,kBAAkB;EAClB,kBAAkB;EAClB,eAAe;EACf,eAAe;AACjB;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,yBAAyB;AAC3B;;AAEA,YAAY;AACZ;EACE,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,kBAAkB;EAClB,kBAAkB;EAClB,eAAe;EACf,eAAe;AACjB;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,yBAAyB;AAC3B","sourcesContent":["h3 {\r\n  color: #333;\r\n  padding-bottom: 5px;\r\n}\r\n\r\ntable {\r\n  width: 100%;\r\n  border-collapse: collapse;\r\n  margin-top: 20px;\r\n}\r\n\r\nth,\r\ntd {\r\n  padding: 12px;\r\n  text-align: left;\r\n  border: 1px solid #ddd;\r\n}\r\n\r\nth {\r\n  background-color: #1d2830;\r\n  color: white;\r\n}\r\n\r\ntr:hover {\r\n  background-color: #e0e0e0;\r\n}\r\n\r\np {\r\n  font-size: 16px;\r\n  color: #555;\r\n}\r\n\r\n\r\n/* 비활성화 버튼 */\r\n.deactivate-button {\r\n  background-color: #ff4d4d;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 5px;\r\n  padding: 10px 15px;\r\n  cursor: pointer;\r\n  font-size: 14px;\r\n}\r\n\r\n.deactivate-button:hover {\r\n  background-color: #e60000;\r\n}\r\n\r\n.deactivate-button:active {\r\n  background-color: #c70000;\r\n}\r\n\r\n/* 상세보기 버튼 */\r\n.details-button {\r\n  background-color: #007bff;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 5px;\r\n  padding: 10px 15px;\r\n  cursor: pointer;\r\n  font-size: 14px;\r\n}\r\n\r\n.details-button:hover {\r\n  background-color: #0056b3;\r\n}\r\n\r\n.details-button:active {\r\n  background-color: #004085;\r\n}"],"sourceRoot":""}]);
+}
+
+
+/* 검색바 */
+.header-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input {
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-bar button {
+  padding: 10px 15px;
+  background-color: #a9a9a9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.search-bar button:hover {
+  background-color: #888888;
+}
+
+.search-bar button:focus {
+  outline: none;
+}
+
+
+`, "",{"version":3,"sources":["webpack://./Master/MasterStore.css"],"names":[],"mappings":"AAAA;EACE,WAAW;EACX,mBAAmB;AACrB;;AAEA;EACE,WAAW;EACX,yBAAyB;EACzB,gBAAgB;AAClB;;AAEA;;EAEE,aAAa;EACb,gBAAgB;EAChB,sBAAsB;AACxB;;AAEA;EACE,yBAAyB;EACzB,YAAY;AACd;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,eAAe;EACf,WAAW;AACb;;;AAGA,YAAY;AACZ;EACE,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,kBAAkB;EAClB,kBAAkB;EAClB,eAAe;EACf,eAAe;AACjB;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,yBAAyB;AAC3B;;AAEA,YAAY;AACZ;EACE,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,kBAAkB;EAClB,kBAAkB;EAClB,eAAe;EACf,eAAe;AACjB;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,yBAAyB;AAC3B;;;AAGA,QAAQ;AACR;EACE,aAAa;EACb,2BAA2B;EAC3B,mBAAmB;EACnB,mBAAmB;AACrB;;AAEA;EACE,cAAc;EACd,aAAa;EACb,mBAAmB;AACrB;;AAEA;EACE,YAAY;EACZ,aAAa;EACb,sBAAsB;EACtB,kBAAkB;EAClB,eAAe;EACf,aAAa;AACf;;AAEA;EACE,kBAAkB;EAClB,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,kBAAkB;EAClB,eAAe;EACf,eAAe;EACf,gBAAgB;AAClB;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,aAAa;AACf","sourcesContent":["h3 {\r\n  color: #333;\r\n  padding-bottom: 5px;\r\n}\r\n\r\ntable {\r\n  width: 100%;\r\n  border-collapse: collapse;\r\n  margin-top: 20px;\r\n}\r\n\r\nth,\r\ntd {\r\n  padding: 12px;\r\n  text-align: left;\r\n  border: 1px solid #ddd;\r\n}\r\n\r\nth {\r\n  background-color: #1d2830;\r\n  color: white;\r\n}\r\n\r\ntr:hover {\r\n  background-color: #e0e0e0;\r\n}\r\n\r\np {\r\n  font-size: 16px;\r\n  color: #555;\r\n}\r\n\r\n\r\n/* 비활성화 버튼 */\r\n.deactivate-button {\r\n  background-color: #ff4d4d;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 5px;\r\n  padding: 10px 15px;\r\n  cursor: pointer;\r\n  font-size: 14px;\r\n}\r\n\r\n.deactivate-button:hover {\r\n  background-color: #e60000;\r\n}\r\n\r\n.deactivate-button:active {\r\n  background-color: #c70000;\r\n}\r\n\r\n/* 상세보기 버튼 */\r\n.details-button {\r\n  background-color: #007bff;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 5px;\r\n  padding: 10px 15px;\r\n  cursor: pointer;\r\n  font-size: 14px;\r\n}\r\n\r\n.details-button:hover {\r\n  background-color: #0056b3;\r\n}\r\n\r\n.details-button:active {\r\n  background-color: #004085;\r\n}\r\n\r\n\r\n/* 검색바 */\r\n.header-container {\r\n  display: flex;\r\n  justify-content: flex-start;\r\n  align-items: center;\r\n  margin-bottom: 20px;\r\n}\r\n\r\n.search-bar {\r\n  margin: 0 auto;\r\n  display: flex;\r\n  align-items: center;\r\n}\r\n\r\n.search-bar input {\r\n  width: 300px;\r\n  padding: 10px;\r\n  border: 1px solid #ccc;\r\n  border-radius: 5px;\r\n  font-size: 16px;\r\n  outline: none;\r\n}\r\n\r\n.search-bar button {\r\n  padding: 10px 15px;\r\n  background-color: #a9a9a9;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 5px;\r\n  font-size: 16px;\r\n  cursor: pointer;\r\n  margin-left: 8px;\r\n}\r\n\r\n.search-bar button:hover {\r\n  background-color: #888888;\r\n}\r\n\r\n.search-bar button:focus {\r\n  outline: none;\r\n}\r\n\r\n\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -34252,38 +34327,19 @@ function MasterStore() {
     _useState2 = _slicedToArray(_useState, 2),
     store = _useState2[0],
     setStore = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState4 = _slicedToArray(_useState3, 2),
-    storeInfo = _useState4[0],
-    setStoreInfo = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    isModalOpen = _useState4[0],
+    setIsModalOpen = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState6 = _slicedToArray(_useState5, 2),
-    isModalOpen = _useState6[0],
-    setIsModalOpen = _useState6[1]; // 모달 상태 관리
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState8 = _slicedToArray(_useState7, 2),
-    selectedStore = _useState8[0],
-    setSelectedStore = _useState8[1]; // 선택된 업체 기본 정보
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState10 = _slicedToArray(_useState9, 2),
-    selectedStoreInfo = _useState10[0],
-    setSelectedStoreInfo = _useState10[1]; // 선택된 업체 추가 정보
-
+    selectedStore = _useState6[0],
+    setSelectedStore = _useState6[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     fetch('/store').then(function (response) {
       return response.json();
     }).then(function (data) {
-      setStore(data);
-      var infoPromises = data.map(function (store) {
-        return fetch("/store/info/".concat(store.storeId)).then(function (response) {
-          return response.json();
-        });
-      });
-      Promise.all(infoPromises).then(function (infoData) {
-        return setStoreInfo(infoData);
-      })["catch"](function (error) {
-        return console.error('업체 정보를 가져오는 중 오류 발생:', error);
-      });
+      return setStore(data);
     })["catch"](function (error) {
       return console.error('업체 목록을 가져오는 중 오류 발생:', error);
     });
@@ -34302,23 +34358,25 @@ function MasterStore() {
         if (response.ok) {
           alert("업체가 비활성화 되었습니다.");
           return fetch('/store');
+        } else {
+          return response.text().then(function (errorText) {
+            throw new Error("\uC5C5\uCCB4 \uC0C1\uD0DC \uC5C5\uB370\uC774\uD2B8\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4. \uC0C1\uD0DC \uCF54\uB4DC: ".concat(response.status, ", \uBA54\uC2DC\uC9C0: ").concat(errorText));
+          });
         }
-        throw new Error('업체 상태 업데이트에 실패했습니다.');
       }).then(function (response) {
         return response.json();
       }).then(function (data) {
         return setStore(data);
       })["catch"](function (error) {
         console.error('업체 상태 업데이트 중 오류 발생:', error);
-        alert("비활성화에 실패했습니다.");
+        alert("\uBE44\uD65C\uC131\uD654\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4. \uC624\uB958 \uBA54\uC2DC\uC9C0: ".concat(error.message));
       });
     }
   };
 
   // 모달 열기 함수
-  var handleShowModal = function handleShowModal(store, storeInfo) {
+  var handleShowModal = function handleShowModal(store) {
     setSelectedStore(store);
-    setSelectedStoreInfo(storeInfo);
     setIsModalOpen(true);
   };
 
@@ -34326,15 +34384,23 @@ function MasterStore() {
   var handleCloseModal = function handleCloseModal() {
     setIsModalOpen(false);
     setSelectedStore(null);
-    setSelectedStoreInfo(null);
   };
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC5C5\uCCB4\uAD00\uB9AC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uBA85"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB300\uD45C\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB2F4\uB2F9\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB2F4\uB2F9\uC790\uC5F0\uB77D\uCC98"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC8FC\uC18C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0AC\uC5C5\uC790 \uBC88\uD638"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0C1\uD0DC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uBE44\uD65C\uC131\uD654"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, activeStores.map(function (store, index) {
+  var parseJson = function parseJson(jsonString) {
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error("JSON 파싱 오류:", error);
+      return {};
+    }
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC5C5\uCCB4\uAD00\uB9AC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uBA85"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB300\uD45C\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB2F4\uB2F9\uC790"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uB2F4\uB2F9\uC790\uC5F0\uB77D\uCC98"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC8FC\uC18C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0AC\uC5C5\uC790 \uBC88\uD638"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uC815\uBCF4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC0C1\uD0DC"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uBE44\uD65C\uC131\uD654"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, activeStores.map(function (store) {
+    var addrInfo = parseJson(store.storeAddr);
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", {
       key: store.storeId
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeId), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeMaster || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerName || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerPhone || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeAddr || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeBusinessNo || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeId), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeMaster || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerName || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.managerPhone || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, addrInfo.addr, " ", addrInfo.addrdetail), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeBusinessNo || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       className: "details-button",
       onClick: function onClick() {
-        return handleShowModal(store, storeInfo[index]);
+        return handleShowModal(store);
       }
     }, "\uC0C1\uC138\uBCF4\uAE30")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeStatus), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       className: "deactivate-button",
@@ -34345,11 +34411,9 @@ function MasterStore() {
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_StoreInfoModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
     isOpen: isModalOpen,
     onClose: handleCloseModal,
-    store: selectedStore,
-    storeInfo: selectedStoreInfo
+    store: selectedStore
   }));
 }
-;
 var root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(document.getElementById("root"));
 root.render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(MasterStore, null));
 })();

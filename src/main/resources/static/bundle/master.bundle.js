@@ -82,8 +82,18 @@ p {
     color: #555;
 }
 
+.tables-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .table-column {
+    flex: 1;
+    margin: 0 10px;
+  }
+  
 
-`, "",{"version":3,"sources":["webpack://./Master/Master.css"],"names":[],"mappings":"AAAA;IACI,WAAW;IACX,mBAAmB;IACnB,kBAAkB;AACtB;;AAEA,aAAa;AACb;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;AACvB;;AAEA;IACI,yBAAyB;IACzB,kBAAkB;IAClB,aAAa;IACb,OAAO;IACP,cAAc;IACd,kBAAkB;AACtB;;AAEA;IACI,SAAS;IACT,eAAe;AACnB;;AAEA;IACI,eAAe;IACf,iBAAiB;AACrB;;;AAGA,QAAQ;AACR;IACI,WAAW;IACX,yBAAyB;IACzB,gBAAgB;AACpB;;AAEA;;IAEI,aAAa;IACb,gBAAgB;IAChB,sBAAsB;AAC1B;;AAEA;IACI,yBAAyB;IACzB,YAAY;AAChB;;AAEA;IACI,yBAAyB;AAC7B;;AAEA;IACI,eAAe;IACf,WAAW;AACf","sourcesContent":["h3 {\r\n    color: #333;\r\n    padding-bottom: 5px;\r\n    text-align: center;\r\n}\r\n\r\n/* 가게 상태별 수 */\r\n.store-counts {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    margin-bottom: 30px;\r\n}\r\n\r\n.count-card {\r\n    background-color: #f2f2f2;\r\n    border-radius: 8px;\r\n    padding: 20px;\r\n    flex: 1;\r\n    margin: 0 10px;\r\n    text-align: center;\r\n}\r\n\r\n.count-card h4 {\r\n    margin: 0;\r\n    font-size: 16px;\r\n}\r\n\r\n.count-card p {\r\n    font-size: 24px;\r\n    font-weight: bold;\r\n}\r\n\r\n\r\n/* 테이블 */\r\ntable {\r\n    width: 100%;\r\n    border-collapse: collapse;\r\n    margin-top: 20px;\r\n}\r\n\r\nth,\r\ntd {\r\n    padding: 12px;\r\n    text-align: left;\r\n    border: 1px solid #ddd;\r\n}\r\n\r\nth {\r\n    background-color: #1d2830;\r\n    color: white;\r\n}\r\n\r\ntr:hover {\r\n    background-color: #e0e0e0;\r\n}\r\n\r\np {\r\n    font-size: 16px;\r\n    color: #555;\r\n}\r\n\r\n\r\n"],"sourceRoot":""}]);
+`, "",{"version":3,"sources":["webpack://./Master/Master.css"],"names":[],"mappings":"AAAA;IACI,WAAW;IACX,mBAAmB;IACnB,kBAAkB;AACtB;;AAEA,aAAa;AACb;IACI,aAAa;IACb,8BAA8B;IAC9B,mBAAmB;AACvB;;AAEA;IACI,yBAAyB;IACzB,kBAAkB;IAClB,aAAa;IACb,OAAO;IACP,cAAc;IACd,kBAAkB;AACtB;;AAEA;IACI,SAAS;IACT,eAAe;AACnB;;AAEA;IACI,eAAe;IACf,iBAAiB;AACrB;;;AAGA,QAAQ;AACR;IACI,WAAW;IACX,yBAAyB;IACzB,gBAAgB;AACpB;;AAEA;;IAEI,aAAa;IACb,gBAAgB;IAChB,sBAAsB;AAC1B;;AAEA;IACI,yBAAyB;IACzB,YAAY;AAChB;;AAEA;IACI,yBAAyB;AAC7B;;AAEA;IACI,eAAe;IACf,WAAW;AACf;;AAEA;IACI,aAAa;IACb,8BAA8B;EAChC;;EAEA;IACE,OAAO;IACP,cAAc;EAChB","sourcesContent":["h3 {\r\n    color: #333;\r\n    padding-bottom: 5px;\r\n    text-align: center;\r\n}\r\n\r\n/* 가게 상태별 수 */\r\n.store-counts {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    margin-bottom: 30px;\r\n}\r\n\r\n.count-card {\r\n    background-color: #f2f2f2;\r\n    border-radius: 8px;\r\n    padding: 20px;\r\n    flex: 1;\r\n    margin: 0 10px;\r\n    text-align: center;\r\n}\r\n\r\n.count-card h4 {\r\n    margin: 0;\r\n    font-size: 16px;\r\n}\r\n\r\n.count-card p {\r\n    font-size: 24px;\r\n    font-weight: bold;\r\n}\r\n\r\n\r\n/* 테이블 */\r\ntable {\r\n    width: 100%;\r\n    border-collapse: collapse;\r\n    margin-top: 20px;\r\n}\r\n\r\nth,\r\ntd {\r\n    padding: 12px;\r\n    text-align: left;\r\n    border: 1px solid #ddd;\r\n}\r\n\r\nth {\r\n    background-color: #1d2830;\r\n    color: white;\r\n}\r\n\r\ntr:hover {\r\n    background-color: #e0e0e0;\r\n}\r\n\r\np {\r\n    font-size: 16px;\r\n    color: #555;\r\n}\r\n\r\n.tables-container {\r\n    display: flex;\r\n    justify-content: space-between;\r\n  }\r\n  \r\n  .table-column {\r\n    flex: 1;\r\n    margin: 0 10px;\r\n  }\r\n  \r\n\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -34103,7 +34113,7 @@ function Master() {
       return store.storeStatus === '비활성화';
     }));
   };
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC5C5\uCCB4 \uC0C1\uD0DC \uD604\uD669"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "\uC5C5\uCCB4\uD604\uD669"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "store-counts"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "count-card"
@@ -34111,14 +34121,33 @@ function Master() {
     className: "count-card"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uC2B9\uC778\uB41C \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, activeStores.length)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "count-card"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uBE44\uD65C\uC131\uD654\uB41C \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, inactiveStores.length))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC2B9\uC778 \uB300\uAE30 \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC2B9\uC778\uB41C \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uBE44\uD65C\uC131\uD654\uB41C \uC5C5\uCCB4"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, Array.from({
-    length: Math.max(activeStores.length, waitingStores.length, inactiveStores.length)
-  }).map(function (_, index) {
-    var _waitingStores$index, _activeStores$index, _inactiveStores$index;
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uBE44\uD65C\uC131\uD654\uB41C \uC5C5\uCCB4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, inactiveStores.length))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "tables-container"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "table-column"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uC2B9\uC778 \uB300\uAE30 \uC5C5\uCCB4 \uBAA9\uB85D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uBA85"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, waitingStores.length > 0 ? waitingStores.map(function (store, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", {
       key: index
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_waitingStores$index = waitingStores[index]) === null || _waitingStores$index === void 0 ? void 0 : _waitingStores$index.storeName) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_activeStores$index = activeStores[index]) === null || _activeStores$index === void 0 ? void 0 : _activeStores$index.storeName) || '-'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, ((_inactiveStores$index = inactiveStores[index]) === null || _inactiveStores$index === void 0 ? void 0 : _inactiveStores$index.storeName) || '-'));
-  }))));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeName));
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
+    colSpan: "1"
+  }, "\uC2B9\uC778 \uB300\uAE30 \uC5C5\uCCB4\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4."))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "table-column"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uC2B9\uC778\uB41C \uC5C5\uCCB4 \uBAA9\uB85D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uBA85"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, activeStores.length > 0 ? activeStores.map(function (store, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", {
+      key: index
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeName));
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
+    colSpan: "1"
+  }, "\uC2B9\uC778\uB41C \uC5C5\uCCB4\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4."))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "table-column"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "\uBE44\uD65C\uC131\uD654\uB41C \uC5C5\uCCB4 \uBAA9\uB85D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "\uC5C5\uCCB4\uBA85"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, inactiveStores.length > 0 ? inactiveStores.map(function (store, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", {
+      key: index
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, store.storeName));
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
+    colSpan: "1"
+  }, "\uBE44\uD65C\uC131\uD654\uB41C \uC5C5\uCCB4\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.")))))));
 }
 var root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(document.getElementById("root"));
 root.render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Master, null));

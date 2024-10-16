@@ -68,7 +68,7 @@ useEffect(() => {
   };
 
      const goToAdminPage = (id) => {
-          window.location.href = `/UserReservationOption.user/${id}`;
+          window.location.href = `../UserReservationOption.user/${id}`;
       };
 
 

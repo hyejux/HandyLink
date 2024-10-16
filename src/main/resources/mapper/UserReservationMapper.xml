@@ -21,6 +21,7 @@
 
     <select id="getDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">
         select * from reservation_slot where reservation_slot_date = #{date}
+        AND category_id = 118;
     </select>
 
 

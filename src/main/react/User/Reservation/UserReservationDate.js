@@ -21,16 +21,13 @@ useEffect(() => {
 }, []);
 
 
-
-
-
-  const [date, setDate] = useState(new Date()); // 초기 날짜 설정
+ const [date, setDate] = useState(new Date()); // 초기 날짜 설정
  const [dateTime, setDateTime] = useState([]); // useState로 상태를 초기화합니다.
 
-    const handleDateChange = (newDate) => {
+  const handleDateChange = (newDate) => {
         setDate(newDate);
   const adjustedDate = addHours(newDate, 9);
-    const formattedDate = format(adjustedDate, 'yyyy-MM-dd');
+  const formattedDate = format(adjustedDate, 'yyyy-MM-dd');
       console.log(formattedDate);
         // axios로 API 호출
         axios.post('/userReservation/getDateTime', { reservationSlotDate: formattedDate })
@@ -67,10 +64,20 @@ useEffect(() => {
       setSelectSlot(slot);
   };
 
-     const goToAdminPage = (id) => {
-          window.location.href = `../UserReservationOption.user/${id}`;
-      };
 
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+    const goToAdminPage = (id) => {
+        // 세션 스토리지에 값 저장
+        sessionStorage.setItem('selectSlot', selectSlot);
+        sessionStorage.setItem('formattedDate', formattedDate);
+
+        // 다음 페이지로 이동
+        window.location.href = `../UserReservationOption.user/${id}`;
+    };
+
+    // 사용 예
+    console.log(selectSlot, formattedDate);
 
 
  return (

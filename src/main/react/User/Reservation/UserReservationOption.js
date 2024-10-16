@@ -112,9 +112,10 @@ const isSelectN = true; // SELECTN이면 true, SELECT1이면 false로 설정
     console.log("Candle Count:", candleCount);
   }, [candleCount]); // candleCount가 변경될 때마다 실행
    const [selectedSubCategories, setSelectedSubCategories] = useState({ parentCategoryId: null, subCategoryIds: [] });
-  const [selectedSubCategoryIds, setSelectedSubCategoryIds] = useState([]);
 
-  const handleInputChange = (index, type, value) => {
+
+
+/*  const handleInputChange = (index, type, value) => {
     setCategoryInputs(prev => ({
       ...prev,
       [index]: {
@@ -122,35 +123,56 @@ const isSelectN = true; // SELECTN이면 true, SELECT1이면 false로 설정
         [type]: value
       }
     }));
-  };
+  };*/
 
-  const handleFlavorSelect1 = (subCategory) => {
-    setSelectedFlavor(subCategory);
-    setSelectedSubCategoryIds([subCategory.categoryId]); // SELECT1의 경우 ID를 배열에 저장
-    setCategoryInputs(prev => ({
-      ...prev,
-      [subCategory.serviceName]: subCategory // Store selected flavor
+
+// Handle flavor selection for SELECT1 (single selection)
+const handleFlavorSelect1 = (subCategory, index) => {
+    setSelectedFlavors(prev => ({
+        ...prev,
+        [index]: subCategory // Overwrite previous selection for this category index
     }));
-  };
+};
 
-  const handleFlavorSelectN = (subCategory) => {
-        if (selectedFlavors.includes(subCategory)) {
-            // 선택된 경우, 제거
-            setSelectedFlavors((prev) => prev.filter((flavor) => flavor !== subCategory));
-            setSelectedSubCategories((prev) => ({
-                parentCategoryId: prev.parentCategoryId,
-                subCategoryIds: prev.subCategoryIds.filter(id => id !== subCategory.categoryId), // ID 제거
-            }));
-        } else {
-            // 선택되지 않은 경우, 추가
-            setSelectedFlavors((prev) => [...prev, subCategory]);
-            setSelectedSubCategories((prev) => ({
-                parentCategoryId: subCategory.categoryId, // 상위 카테고리 ID 저장
-                subCategoryIds: [...prev.subCategoryIds, subCategory.categoryId], // ID 추가
-            }));
+// Handle flavor selection for SELECTN (multiple selections)
+const handleFlavorSelectN = (subCategory, index) => {
+    setSelectedFlavors(prev => ({
+        ...prev,
+        [index]: prev[index]?.includes(subCategory)
+            ? prev[index].filter(item => item !== subCategory) // Deselect if already selected
+            : [...(prev[index] || []), subCategory] // Select if not already selected
+    }));
+};
 
-        }
-    };
+
+
+//  const handleFlavorSelect1 = (subCategory) => {
+//    setSelectedFlavor(subCategory);
+//    setSelectedSubCategoryIds([subCategory.categoryId]); // SELECT1의 경우 ID를 배열에 저장
+//    setCategoryInputs(prev => ({
+//      ...prev,
+//      [subCategory.serviceName]: subCategory // Store selected flavor
+//    }));
+//  };
+//
+//  const handleFlavorSelectN = (subCategory) => {
+//        if (selectedFlavors.includes(subCategory)) {
+//            // 선택된 경우, 제거
+//            setSelectedFlavors((prev) => prev.filter((flavor) => flavor !== subCategory));
+//            setSelectedSubCategories((prev) => ({
+//                parentCategoryId: prev.parentCategoryId,
+//                subCategoryIds: prev.subCategoryIds.filter(id => id !== subCategory.categoryId), // ID 제거
+//            }));
+//        } else {
+//            // 선택되지 않은 경우, 추가
+//            setSelectedFlavors((prev) => [...prev, subCategory]);
+//            setSelectedSubCategories((prev) => ({
+//                parentCategoryId: subCategory.categoryId, // 상위 카테고리 ID 저장
+//                subCategoryIds: [...prev.subCategoryIds, subCategory.categoryId], // ID 추가
+//            }));
+//
+//        }
+//    };
   // 선택된 subCategory ID 배열 로그 출력
   useEffect(() => {
     console.log("setSelectedSubCategories", selectedSubCategories);
@@ -205,6 +227,28 @@ const isSelectN = true; // SELECTN이면 true, SELECT1이면 false로 설정
     console.log("Category Inputs:", categoryInputs);
   }, [categoryInputs]);
 
+    const slot = sessionStorage.getItem('selectSlot');
+    const date = sessionStorage.getItem('formattedDate');
+
+    console.log('Slot:', slot);
+    console.log('Date:', date);
+
+
+    // ---------------------------------
+
+
+    // 입력 값이 변경될 때마다 상태 업데이트
+    const handleInputChange = (index, value) => {
+        setCategoryInputs(prev => ({
+            ...prev,
+            [index]: value
+        }));
+    };
+
+    // 상태 변경 시 콘솔에 출력
+    useEffect(() => {
+        console.log('Category Inputs:', categoryInputs);
+    }, [categoryInputs]);
 
 
 
@@ -244,10 +288,10 @@ const isSelectN = true; // SELECTN이면 true, SELECT1이면 false로 설정
            <div className="user-content-container2">
              <div className="user-reserve-data">
                <div>
-                 <i className="bi bi-calendar-check-fill"></i> 가져온 날짜
+                 <i className="bi bi-calendar-check-fill"></i> {date}
                </div>
                <div>
-                 <i className="bi bi-clock-fill"></i> 가져온 시간
+                 <i className="bi bi-clock-fill"></i> {slot}
                </div>
              </div>
            </div>
@@ -286,8 +330,8 @@ const isSelectN = true; // SELECTN이면 true, SELECT1이면 false로 설정
               <input
                 className="input-text"
                 type="text"
-                value={lettering}
-                onChange={handleLetteringChange}
+                      value={categoryInputs[index] || ''} // value를 categoryInputs에서 가져오도록 설정
+                onChange={(e) => handleInputChange(index, e.target.value)}
               />
             </div>
           </div>
@@ -303,8 +347,8 @@ const isSelectN = true; // SELECTN이면 true, SELECT1이면 false로 설정
               <input
                 className="input-text2"
                 type="number"
-                value={candleCount}
-                onChange={handleCandleCountChange}
+                    value={categoryInputs[index] || ''} // value를 categoryInputs에서 가져오도록 설정
+                  onChange={(e) => handleInputChange(index, e.target.value)}
               />
             </div>
           </div>
@@ -318,25 +362,14 @@ const isSelectN = true; // SELECTN이면 true, SELECT1이면 false로 설정
             </div>
             <div className="sub-container5">
                  {category.subCategories.map((subCategory, subIndex) => (
-                   <button
-                     key={subIndex}
-                     type="button"
-                     className={`option-btn ${
-                       isSelectN
-                         ? selectedFlavors.includes(subCategory) // SELECTN일 때 여러 개 선택 가능
-                           ? "selected"
-                           : ""
-                         : selectedFlavor === subCategory // SELECT1일 때 하나만 선택 가능
-                         ? "selected"
-                         : ""
-                     }`}
-                     onClick={() =>
-                       isSelectN
-                         ? handleFlavorSelectN(subCategory) // SELECTN 선택
-                         : handleFlavorSelect1(subCategory) // SELECT1 선택
-                     }
-                   >
-                     {subCategory.serviceName} <div> +{subCategory.servicePrice}</div>
+                     <button
+                             key={subIndex}
+                             className={`flavor-button ${selectedFlavors[index]?.includes(subCategory) ? 'selected' : ''}`} // Conditionally add 'selected' class
+                             onClick={() => category.subCategoryType === 'SELECT1'
+                               ? handleFlavorSelect1(subCategory, index)
+                               : handleFlavorSelectN(subCategory, index)}
+                           >
+                       {subCategory.serviceName} <div> +{subCategory.servicePrice}</div>
                    </button>
               ))}
             </div>

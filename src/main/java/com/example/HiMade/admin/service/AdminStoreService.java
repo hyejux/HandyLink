@@ -11,5 +11,5 @@ public interface AdminStoreService {
     void registStore(StoreRegistDTO storeRegistDTO); //업체등록
     String uploadImage(MultipartFile file); // 이미지 업로드
     Integer duplicatedId(String storeId); //아이디 중복검사
-    List<String> getStoreImg(String storeId); //이미지 불러오기
+    StoreRegistDTO getStoreInfo(String storeId); //이미지 불러오기
 }

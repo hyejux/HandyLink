@@ -58,8 +58,8 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
-    public List<String> getStoreImg(String  storeId) {
-        return adminStoreMapper.getStoreImg(storeId);
+    public StoreRegistDTO getStoreInfo(String storeId) {
+        return adminStoreMapper.getStoreInfo(storeId);
     }
 
 }

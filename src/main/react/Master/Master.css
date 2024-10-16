@@ -59,4 +59,14 @@ p {
     color: #555;
 }
 
+.tables-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .table-column {
+    flex: 1;
+    margin: 0 10px;
+  }
+  
 

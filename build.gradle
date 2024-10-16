@@ -40,5 +40,6 @@ dependencies {
 
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0' // 최신 버전으로 업데이트
 
+//	implementation 'org.springframework.boot:spring-boot-starter-security' // spring security
 
 }

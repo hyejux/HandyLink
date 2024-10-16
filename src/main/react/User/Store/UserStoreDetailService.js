@@ -45,7 +45,7 @@ function UserStoreDetailService() {
         <div className="user-content-first">
           <div className="user-content-first-img">
             {/* 이미지 부분에 필요한 경우 src 설정 */}
-            {/* <img src="../img3.jpg" alt="가게 이미지" width="100%" height="300px" /> */}
+         <img src="/img/store001.jpeg" alt="가게 이미지" width="100%" height="300px" />
           </div>
           <div className="user-content-first-img-num">
 

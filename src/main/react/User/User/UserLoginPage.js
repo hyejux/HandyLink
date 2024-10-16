@@ -14,33 +14,28 @@ function UserLoginPage () {
     // 로그인 처리 함수
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("로그인 시도 중:", { userId, userPw });
 
         try {
             const response = await fetch('/user/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                // 변경된 상태 변수명을 사용
-                body: JSON.stringify({ userId, userPw }),
+                body: new URLSearchParams({
+                    userId: userId,
+                    userPw: userPw
+                }),
             });
 
-            console.log("서버 응답 상태 코드:", response.status); // 서버 응답 코드 확인
-
             if (response.ok) {
-                const data = await response.json();
-                alert('로그인 성공!');
-                window.location.href = '/UserMyPage.user';
+                window.location.href = '/UserMyPage.user';  // 로그인 성공 시 이동
             } else {
-                alert('로그인 실패: 이메일 또는 비밀번호를 확인하세요.');
+                alert('로그인 실패');
             }
         } catch (error) {
-            console.error('Error:', error);
-            alert('로그인 중 오류가 발생했습니다.');
+            console.error('로그인 중 오류 발생:', error);
         }
     };
-
     return (
         <div>
             <div className="user-login-container">
@@ -50,6 +45,7 @@ function UserLoginPage () {
                         <input
                             type="text"
                             id="userId"
+                            name="userId"
                             placeholder=" "
                             value={userId}
                             onChange={(e) => setUserId(e.target.value)}
@@ -61,6 +57,7 @@ function UserLoginPage () {
                         <input
                             type={passwordVisible ? 'text' : 'password'}
                             id="userPw"
+                            name="userPw"
                             placeholder=" "
                             value={userPw}
                             onChange={(e) => setUserPw(e.target.value)}

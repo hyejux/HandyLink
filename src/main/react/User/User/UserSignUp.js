@@ -61,8 +61,9 @@ function UserSignUp() {
         setRepasswordVisible(!repasswordVisible);
     };
 
-// 이메일 중복 확인 로직
+    // 아이디 중복 확인
     const handleCheckId = async () => {
+
         if (!formData.userId) {
             alert("이메일을 입력해주세요.");
             return;
@@ -70,6 +71,7 @@ function UserSignUp() {
 
         try {
             const response = await fetch(`/user/checkId?userId=${formData.userId}`);
+
             const result = await response.json();
             if (result.isDuplicate) {
                 alert("이미 사용 중인 이메일입니다.");
@@ -93,10 +95,10 @@ function UserSignUp() {
             return;
         }
 
-        // if (!idChecked) {
-        //     alert("이메일 중복 확인을 해주세요.");
-        //     return;
-        // }
+        if (!idChecked) {
+            alert("이메일 중복 확인을 해주세요.");
+            return;
+        }
 
         // FormData 객체를 사용하여 파일 포함 데이터를 전송
         const data = new FormData();
@@ -121,7 +123,7 @@ function UserSignUp() {
             if (response.ok) {
                 const result = await response.text();
                 alert(result);
-                window.location.href = '/UserLoginPage.user';
+                window.location.href = '/UserSignUpFinish.user';
 
                 if (result.userImgUrl) {
                     setFormData({

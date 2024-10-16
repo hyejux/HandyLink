@@ -8,8 +8,7 @@ import org.apache.ibatis.annotations.Param;
 public interface UserAccountMapper {
     void insertUser(UserDTO userDTO);
     int checkId(String userId);
-    UserDTO loginUser(UserDTO userDTO);
     UserDTO getUserById(@Param("userId") String userId);
     void updateUser(UserDTO userDTO);
-    void updatePassword(UserDTO userDTO);
+    void updateUserWithPassword(UserDTO userDTO);
 }

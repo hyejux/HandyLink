@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import './AdminReserveSetting.css';
 import './AdminReserveSettingDetail.css';
 
@@ -11,9 +12,9 @@ const AdminReserveSettingDetailModify = () => {
     isPaid: false,
     isRequired: false,
     subCategoryType: 'SELECT1',
-    subCategories: [ {serviceName : '', servicePrice : ''}] // Added to manage subcategories
+    subCategories: [{ name: '', price: 0 }]
   }]);
-  
+
   const [reserveAdd, setReserveAdd] = useState({
     serviceName: '',
     servicePrice: 0,
@@ -34,104 +35,90 @@ const AdminReserveSettingDetailModify = () => {
       categories: transformedCategories
     };
 
-    axios
-      .post(`/adminReservation/setMainCategory`, requestData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(response => {
-        console.log(response.data);
-        // window.location.href = '../AdminReserveSetting.admin';
-      })
-      .catch(error => {
-        console.log('Error setMainCategory', error);
-      });
+    axios.post(`/adminReservation/setMainCategory`, requestData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => {
+      console.log(response.data);
+      // window.location.href = '../AdminReserveSetting.admin';
+    })
+    .catch(error => {
+      console.log('Error setMainCategory', error);
+    });
   };
 
-  const setName = (value) => {
-    setReserveAdd((prevState) => ({
-      ...prevState,
-      serviceName: value
-    }));
-  };
-
-  const setPrice = (value) => {
-    setReserveAdd((prevState) => ({
-      ...prevState,
-      servicePrice: value
-    }));
-  };
-
-  const setDescription = (value) => {
-    setReserveAdd((prevState) => ({
-      ...prevState,
-      serviceContent: value
-    }));
+  const handleInputChange = (e, setter) => {
+    setter(e.target.value);
   };
 
   const handleAddCategory = () => {
-    setCategories([...categories, {
+    setCategories(prev => [...prev, {
       serviceName: '',
       servicePrice: 0,
       isPaid: false,
       isRequired: false,
       subCategoryType: '',
-      subCategories: [{ name: '', price: 0 }] 
+      subCategories: [{ name: '', price: 0 }]
     }]);
   };
 
-   
-  useEffect(() => {
-      console.log(categories);
-  });
-
   const handleRemoveCategory = (index) => {
-    setCategories(categories.filter((_, i) => i !== index));
+    setCategories(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleChangeCategory = (index, field, value) => {
-    const newCategories = categories.map((category, i) =>
+    setCategories(prev => prev.map((category, i) =>
       i === index ? { ...category, [field]: value } : category
-    );
-    setCategories(newCategories);
+    ));
   };
 
   const handleAddSubCategory = (categoryIndex) => {
     const newSubCategory = { name: '', price: 0 };
-    const updatedCategories = categories.map((category, index) =>
+    setCategories(prev => prev.map((category, index) =>
       index === categoryIndex
         ? { ...category, subCategories: [...category.subCategories, newSubCategory] }
         : category
-    );
-    setCategories(updatedCategories);
+    ));
   };
 
   const handleRemoveSubCategory = (categoryIndex, subCategoryIndex) => {
-    const updatedCategories = categories.map((category, index) =>
+    setCategories(prev => prev.map((category, index) =>
       index === categoryIndex
-        ? {
-            ...category,
-            subCategories: category.subCategories.filter((_, i) => i !== subCategoryIndex)
-          }
+        ? { ...category, subCategories: category.subCategories.filter((_, i) => i !== subCategoryIndex) }
         : category
-    );
-    setCategories(updatedCategories);
+    ));
   };
 
   const handleChangeSubCategory = (categoryIndex, subCategoryIndex, field, value) => {
-    const updatedCategories = categories.map((category, index) =>
+    setCategories(prev => prev.map((category, index) =>
       index === categoryIndex
         ? {
-            ...category,
-            subCategories: category.subCategories.map((sub, i) =>
-              i === subCategoryIndex ? { ...sub, [field]: value } : sub
-            )
-          }
+          ...category,
+          subCategories: category.subCategories.map((sub, i) =>
+            i === subCategoryIndex ? { ...sub, [field]: value } : sub
+          )
+        }
         : category
-    );
-    setCategories(updatedCategories);
+    ));
   };
+
+  const onDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const reorderedCategories = Array.from(categories);
+    const [removed] = reorderedCategories.splice(result.source.index, 1);
+    reorderedCategories.splice(result.destination.index, 0, removed);
+
+    setCategories(reorderedCategories);
+  };
+
+
+  useEffect(() => {
+    console.log('Category :', categories);
+}, [categories]);
+
 
   return (
     <div>
@@ -140,147 +127,163 @@ const AdminReserveSettingDetailModify = () => {
         <button type="button" className="btn-st" onClick={handleComplete}>완료</button>
       </div>
       <div className="main-contents">
-        <div className="reserve-container">
-        <div className="reserve-img">
-            {/* <img src={http://localhost:8585/img/${reserveModi.imageUrl}} alt="My Image" /> */}
-            <button type="button" className="btn-st btn-imgChg">사진 변경하기</button>
-          </div>
-          <div className="reserve-content">
-            <div className="reserve-content-title">
-              <div className="reserve-content-title-name">
-                <input
-                  type="text"
-                  value={reserveAdd.serviceName}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder='서비스 명'
-                />
-              </div>
-              <div className="reserve-content-title-price">
-                <input
-                  type="number"
-                  value={reserveAdd.servicePrice}
-                  onChange={(e) => setPrice(e.target.value)}
-                  placeholder='서비스 가격'
-                />
-              </div>
+      <div className="reserve-container">
+      <div className="reserve-img">
+          {/* <img src={http://localhost:8585/img/${reserveModi.imageUrl}} alt="My Image" /> */}
+          <button type="button" className="btn-st btn-imgChg">사진 변경하기</button>
+        </div>
+        <div className="reserve-content">
+          <div className="reserve-content-title">
+            <div className="reserve-content-title-name">
+              <input
+                type="text"
+                value={reserveAdd.serviceName}
+                onChange={(e) => setName(e.target.value)}
+                placeholder='서비스 명'
+              />
             </div>
-            <div className="reserve-content-text">
-              <textarea
-                value={reserveAdd.serviceContent}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder='서비스 설명'
+            <div className="reserve-content-title-price">
+              <input
+                type="number"
+                value={reserveAdd.servicePrice}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder='서비스 가격'
               />
             </div>
           </div>
+          <div className="reserve-content-text">
+            <textarea
+              value={reserveAdd.serviceContent}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder='서비스 설명'
+            />
+          </div>
         </div>
+      </div>
 
-        <div className="main-btns">
-          <button type="button" className="btn-st" onClick={handleAddCategory}>추가하기</button>
-        </div>
+      <div className="main-btns">
+        <button type="button" className="btn-st" onClick={handleAddCategory}>추가하기</button>
+      </div>
 
-        <div className="category-contents">
-          {categories.map((category, index) => (
-            <div className="category-container" key={index}>
-              <div className="category-container-content">
-                <div className="type-input-require">
-                  <div className="type-paid">
-                    <input
-                      type="checkbox"
-                      checked={!category.isPaid}
-                      onChange={(e) => handleChangeCategory(index, 'isPaid', !e.target.checked)}
-                    /> 무료
-                    <input
-                      type="checkbox"
-                      checked={category.isPaid}
-                      onChange={(e) => handleChangeCategory(index, 'isPaid', e.target.checked)}
-                    /> 유료
-                  </div>
-                  <div className="type-require">
-                    <input
-                      type="checkbox"
-                      checked={category.isRequired}
-                      onChange={(e) => handleChangeCategory(index, 'isRequired', e.target.checked)}
-                    /> 필수
-                    <input
-                      type="checkbox"
-                      checked={!category.isRequired}
-                      onChange={(e) => handleChangeCategory(index, 'isRequired', !e.target.checked)}
-                    /> 선택
-                  </div>
-                </div>
-                <div className="type-category-sub">
-                  <input
-                    type="text"
-                    placeholder="이름"
-                    value={category.serviceName}
-                    onChange={(e) => handleChangeCategory(index, 'serviceName', e.target.value)}
-                  />
-                  <input
-                    type="number"
-                    placeholder="가격"
-                    value={category.servicePrice}
-                    disabled={category.isPaid === true && (category.subCategoryType === 'SELECT1' || category.subCategoryType === 'SELECTN')}
-                    onChange={(e) => handleChangeCategory(index, 'servicePrice', e.target.value)}
-                  />
-                </div>
-                <div className="type-input-type">
-                  <input
-                    type="checkbox"
-                    checked={category.subCategoryType === 'SELECT1'}
-                    onChange={() => handleChangeCategory(index, 'subCategoryType', 'SELECT1')}
-                  /> 선택 (하나)
-                  <input
-                    type="checkbox"
-                    checked={category.subCategoryType === 'SELECTN'}
-                    onChange={() => handleChangeCategory(index, 'subCategoryType', 'SELECTN')}
-                  /> 선택 (다중)
-                  <input
-                    type="checkbox"
-                    checked={category.subCategoryType === 'NUMBER'}
-                    onChange={() => handleChangeCategory(index, 'subCategoryType', 'NUMBER')}
-                  /> 숫자
-                  <input
-                    type="checkbox"
-                    checked={category.subCategoryType === 'TEXT'}
-                    onChange={() => handleChangeCategory(index, 'subCategoryType', 'TEXT')}
-                  /> 텍스트
-                </div>
+      <div className="category-contents">
 
-                {category.subCategoryType === 'SELECT1' || category.subCategoryType === 'SELECTN' ? (
-                  <div className="category-sub-sub">
-                    {category.subCategories.map((subCategory, subIndex) => (
-                      <div className="type-category-sub-sub" key={subIndex}>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="categories">
+        {(provided) => (
+          <div className="category-contents" {...provided.droppableProps} ref={provided.innerRef}>
+            {categories.map((category, index) => (
+              <Draggable key={index} draggableId={`category-${index}`} index={index}>
+                {(provided) => (
+                  <div className="category-container" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                    <div className="category-container-content">
+                      <div className="type-input-require">
+                        <div className="type-paid">
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={category.isPaid}
+                              onChange={() => handleChangeCategory(index, 'isPaid', !category.isPaid)}
+                            />
+                            유료
+                          </label>
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={!category.isPaid}
+                              onChange={() => handleChangeCategory(index, 'isPaid', category.isPaid)}
+                            />
+                            무료
+                          </label>
+                        </div>
+                        <div className="type-require">
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={category.isRequired}
+                              onChange={() => handleChangeCategory(index, 'isRequired', !category.isRequired)}
+                            />
+                            필수
+                          </label>
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={!category.isRequired}
+                              onChange={() => handleChangeCategory(index, 'isRequired', category.isRequired)}
+                            />
+                            선택
+                          </label>
+                        </div>
+                      </div>
+                      <div className="type-category-sub">
                         <input
                           type="text"
                           placeholder="이름"
-                          value={subCategory.serviceName}
-                          onChange={(e) => handleChangeSubCategory(index, subIndex, 'serviceName', e.target.value)}
+                          value={category.serviceName}
+                          onChange={(e) => handleChangeCategory(index, 'serviceName', e.target.value)}
                         />
                         <input
                           type="number"
                           placeholder="가격"
-                          value={subCategory.servicePrice}
-                          onChange={(e) => handleChangeSubCategory(index, subIndex, 'servicePrice', e.target.value)}
+                          value={category.servicePrice}
+                          onChange={(e) => handleChangeCategory(index, 'servicePrice', Number(e.target.value))}
                         />
-                        <button type="button" className="btn-sub-del" onClick={() => handleRemoveSubCategory(index, subIndex)}>
+                      </div>
+
+                      {/* <button type="button" onClick={() => handleRemoveSubCategory(index, subIndex)}>삭제하기</button>
+                      <div className="remove-category-btn">
+                     
+                        <button type="button" onClick={() => handleAddSubCategory(index)}>서브카테고리 추가</button>
+                      </div> */}
+
+                     
+                  <div className="category-sub-sub">
+                      {category.subCategories.map((subCategory, subIndex) => (
+                           
+                        <div key={subIndex} className="type-category-sub-sub">
+                          <input
+                            type="text"
+                            placeholder="서브카테고리 이름"
+                            value={subCategory.name}
+                            onChange={(e) => handleChangeSubCategory(index, subIndex, 'name', e.target.value)}
+                          />
+                          <input
+                            type="number"
+                            placeholder="서브카테고리 가격"
+                            value={subCategory.price}
+                            onChange={(e) => handleChangeSubCategory(index, subIndex, 'price', Number(e.target.value))}
+                          />
+                           <button type="button" className="btn-sub-del" onClick={() => handleRemoveSubCategory(index, subIndex)}>
                           <i className="bi bi-x-lg"></i>
                         </button>
-                      </div>
-                    ))}
-                    <button type="button" className="btn-sub-add" onClick={() => handleAddSubCategory(index)}> + </button>
-                  </div>
-                ) : null}
 
-              
-              </div>
-              <button type="button" className="btn-del" onClick={() => handleRemoveCategory(index)}>
+
+                        </div>
+                    
+                         
+                      ))}
+                          <button type="button" className="btn-sub-add" onClick={() => handleAddSubCategory(index)}> + </button>
+                          </div>
+                    </div>
+                    
+                    <button type="button" className="btn-del" onClick={() => handleRemoveCategory(index)}>
                   <i className="bi bi-x-lg"></i>
                 </button>
-            </div>
-          ))}
-            
-        </div>
-        
+                    {/* <button type="button" onClick={() => handleRemoveCategory(index)}>삭제하기</button> */}
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+      {/* <div className="main-btns">
+        <button type="button" className="btn-st" onClick={handleComplete}>완료</button>
+        <button type="button" className="btn-st" onClick={handleAddCategory}>추가하기</button>
+      </div> */}
+    </DragDropContext>
+
+    </div>
       </div>
     </div>
   );

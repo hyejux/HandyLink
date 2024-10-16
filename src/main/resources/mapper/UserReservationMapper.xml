@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.HiMade.user.mapper.UserReservationMapper">
     <select id="getMyReserveList" resultType="com.example.HiMade.user.dto.UserRL">
-        select s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rs.reservation_slot_time, rf.main_category_id, c.service_name
+        select s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name
         from reservation r
         JOIN store s
         ON s.store_id = r.store_id
@@ -15,12 +15,13 @@
         ON c.category_id = rf.main_category_id
         JOIN reservation_slot rs
         ON rs.reservation_slot_key = r.reservation_slot_key
-        group by r.reservation_no,s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rs.reservation_slot_time, rf.main_category_id, c.service_name;
+        group by r.reservation_no,s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name;
 
     </select>
 
     <select id="getDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">
         select * from reservation_slot where reservation_slot_date = #{date}
+        AND category_id = 118;
     </select>
 
 

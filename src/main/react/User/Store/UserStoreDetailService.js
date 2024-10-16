@@ -6,8 +6,7 @@ import Calendar from 'react-calendar';
 import { useState, useEffect } from 'react';
 import { format, addHours } from 'date-fns';
 import "./userStoreDetailService.css";
-import { test1 } from './ex';
-import { getTest } from './ex';
+
 
 function UserStoreDetailService() {
 
@@ -28,7 +27,6 @@ function UserStoreDetailService() {
           window.location.href = `/UserReservationDate.user/${id}`;
       };
 
-console.log(getTest());
       
       
 

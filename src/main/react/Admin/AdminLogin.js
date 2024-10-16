@@ -31,18 +31,14 @@ function AdminLogin() {
             });
 
             const storeId = response.data;
+            console.log(storeId);
 
-            if(storeId != null){
-                alert(`로그인성공 ${storeId}`);
-                window.location.href = '/admin.admin';
+            if (response.status === 200 && storeId) { // storeId가 null 또는 빈 문자열이 아닌지 확인
+                alert(`로그인 성공 ${storeId}`);
+                window.location.href = `/admin.admin?storeId=${storeId}`;
             } else {
                 alert('해당 정보를 찾을 수 없습니다.');
-                window.location.href= '/adminlogin.login';
             }
-
-            // 로그인 성공 후 리디렉션 처리
-//            console.log('로그인 성공:', response.data);
-//            window.location.href = '/admin.admin'; // 성공 시 리디렉션
 
         } catch (error) {
             console.error('로그인 시도 중 오류:', error);
@@ -52,50 +48,52 @@ function AdminLogin() {
 
     return (
     <div className="parts">
-    <div className="part1">
-    <div className="top-text">편리한 주문 <br />편리한 제작</div>
-    <div className="bottom-text">HandyLink에서<br />경험해보세요.</div>
-    </div>
+        <div className="part1">
+            <div className="top-text">편리한 주문 <br />편리한 제작</div>
+            <div className="bottom-text">HandyLink에서<br />경험해보세요.</div>
+        </div>
 
-    <div className="part2">
-    <form onSubmit={handleSubmit}>
-    <div className="login-container">
-    <div className="login-title">HandyLink</div>
-    <div className="login-box">
-    <input
-    type="text"
-    name="id" // name 속성 추가
-    placeholder="아이디"
-    value={inputLogin.id}
-    onChange={handleChange}
-    />
-    <input
-    type="password"
-    name="pw" // name 속성 추가
-    placeholder="비밀번호"
-    value={inputLogin.pw}
-    onChange={handleChange}
-    />
-    <div className="find-msg">
-    <a href="">
-    아이디/비밀번호 찾기
-    </a>
-    </div>
-    </div>
+        <div className="part2">
+            <form onSubmit={handleSubmit}>
+                <div className="login-container">
+                    <div className="login-title">HandyLink</div>
+                    <div className="login-box">
+                        <input
+                            type="text"
+                            name="id" // name 속성 추가
+                            placeholder="아이디"
+                            value={inputLogin.id}
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="password"
+                            name="pw" // name 속성 추가
+                            placeholder="비밀번호"
+                            value={inputLogin.pw}
+                            onChange={handleChange}
+                        />
+                        <div className="find-msg">
+                            <a href="">
+                                아이디/비밀번호 찾기
+                            </a>
+                        </div>
+                    </div>
 
-    <button type="submit">로그인</button>
+                    <button type="submit">로그인</button>
 
-    <div className="singup-msg">
-    <a href="storesignup.signup">
-    <span>스토어 입점하기</span>
-    </a>
-    </div>
-    </div>
-    </form>
-    </div>
+                    <div className="singup-msg">
+                        <a href="storesignup.signup">
+                            <span>스토어 입점하기</span>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
     );
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<AdminLogin />);
+root.render(
+    <AdminLogin />
+);

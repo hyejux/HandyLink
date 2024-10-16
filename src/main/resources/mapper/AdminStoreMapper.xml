@@ -5,8 +5,8 @@
 
 <mapper namespace="com.example.HiMade.admin.mapper.AdminStoreMapper">
 
-    <select id="loginCheck" resultType="string">
-        select store_id from store
+    <select id="loginCheck" resultType="com.example.HiMade.admin.dto.StoreRegistDTO">
+        select * from store
         where store_id = #{id} and store_pw = #{pw}
     </select>
 

@@ -70,27 +70,6 @@ public class AdminStoreController {
     public List<String> getStoreImg(@RequestParam String storeId){
         return adminStoreService.getStoreImg(storeId);
     }
-//
-//
-//
-//    @PostMapping("/loginForm")
-//    public String loginForm(@RequestBody Map<String, String> loginData) {
-//        String id = loginData.get("id");
-//        String pw = loginData.get("pw");
-//
-//        System.out.println("입력" + id + pw);
-//
-//        String result = adminStoreService.loginCheck(id, pw);
-//        System.out.println("아이디 " + result);
-//
-//        if (result != null) {
-//            // 로그인 성공 시 리디렉션
-//            return "redirect:/admin.admin";
-//        } else {
-//            // 로그인 실패 시 에러 메시지를 포함하여 로그인 페이지로 리디렉션
-//            return "redirect:/admin.login?err=true";
-//        }
-//    }
 
 
 }

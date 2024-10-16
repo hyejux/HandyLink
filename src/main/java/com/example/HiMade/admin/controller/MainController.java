@@ -4,6 +4,8 @@ import com.example.HiMade.admin.dto.StoreRegistDTO;
 import com.example.HiMade.admin.service.AdminStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +19,6 @@ public class MainController {
   @Autowired
   @Qualifier("adminStoreService")
   private AdminStoreService adminStoreService;
-
-  // BCryptPasswordEncoder 빈 주입
-//  @Autowired
-//  private BCryptPasswordEncoder passwordEncoder;
 
   @GetMapping("/{pageName}.user")
   public String page(@PathVariable String pageName, Model model) {
@@ -70,44 +68,26 @@ public class MainController {
   }
 
   @PostMapping("/loginForm")
-  public String loginForm(@RequestBody Map<String, String> loginData) {
+  public ResponseEntity<String> loginForm(@RequestBody Map<String, String> loginData, HttpSession session, Model model) {
     String id = loginData.get("id");
     String pw = loginData.get("pw");
 
     System.out.println("입력" + id + pw);
+    StoreRegistDTO store = adminStoreService.loginCheck(id, pw);
+    String storeId = store.getStoreId();
+    System.out.println("해당업체정보 "+ store);
 
-    String result = adminStoreService.loginCheck(id, pw);
-    System.out.println("아이디 "+ result);
-    if(result != null){
-      return "redirect:/admin.admin";
+    model.addAttribute("store", store);
+
+
+
+    if(storeId != null && !storeId.isEmpty()){
+      session.setAttribute("storeId", storeId);
+      return ResponseEntity.ok(storeId);
     } else {
-      return "redirect:/adminlogin.login";
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인실패"); //401반환
     }
   }
 
-
-
-//  @PostMapping("/loginForm")
-//  public String loginForm(@RequestParam String id, @RequestParam String pw,
-//                          Authentication auth, HttpSession session) {
-//    System.out.println("login-------------");
-//
-//    StoreRegistDTO storeRegistDTO = adminStoreService.getStoreId(id);
-//    System.out.println("받아온 아이디: " + storeRegistDTO);
-//
-//    // 비밀번호 확인
-//    if (storeRegistDTO == null || !isPasswordValid(pw, storeRegistDTO.getStorePw())) {
-//      return "redirect:/adminLogin.login?err=true"; // 로그인 실패 시
-//    }
-//
-//    // 세션에 사용자 아이디 저장
-//    session.setAttribute("loggedInAdmin", storeRegistDTO);
-//    return "redirect:/admin.adminLayout"; // 로그인 성공 시 리디렉션
-//  }
-//
-//  // 비밀번호 검증 메소드 추가
-//  private boolean isPasswordValid(String rawPassword, String encodedPassword) {
-//    return passwordEncoder.matches(rawPassword, encodedPassword);
-//  }
 
 }

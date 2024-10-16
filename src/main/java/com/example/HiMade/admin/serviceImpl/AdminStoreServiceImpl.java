@@ -19,10 +19,8 @@ public class AdminStoreServiceImpl implements AdminStoreService {
 
 
     @Override
-    public String loginCheck(String id, String pw) {
-        System.out.println("서비스입력 "+id+pw);
-        String result = adminStoreMapper.loginCheck(id,pw);
-        System.out.println(result);
+    public StoreRegistDTO loginCheck(String id, String pw) {
+        StoreRegistDTO result = adminStoreMapper.loginCheck(id,pw);
         return result;
     }
 

@@ -46,11 +46,10 @@ function Master() {
 
             <div className="tables-container">
                 <div className="table-column">
-                    <h4>승인 대기 업체 목록</h4>
                     <table>
                         <thead>
                             <tr>
-                                <th>업체명</th>
+                                <th>승인 대기 업체</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,11 +69,10 @@ function Master() {
                 </div>
 
                 <div className="table-column">
-                    <h4>승인된 업체 목록</h4>
                     <table>
                         <thead>
                             <tr>
-                                <th>업체명</th>
+                                <th>승인된 업체</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -94,11 +92,10 @@ function Master() {
                 </div>
 
                 <div className="table-column">
-                    <h4>비활성화된 업체 목록</h4>
                     <table>
                         <thead>
                             <tr>
-                                <th>업체명</th>
+                                <th>비활성화된 업체</th>
                             </tr>
                         </thead>
                         <tbody>

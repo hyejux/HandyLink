@@ -11,6 +11,7 @@ module.exports = {
         main: './Main.js', //여러페이지 설정이 가능함
         user: './User/User/User.js',
         userMain: './User/User/UserMain.js',
+        userSearch: './User/User/UserSearch.js',
         admin: './Admin/Admin.js',
         StoreSignUp: './Admin/StoreSignUp.js',
         AdminLogin: './Admin/AdminLogin.js',

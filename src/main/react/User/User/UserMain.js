@@ -85,24 +85,28 @@ function UserMain() {
         <h3>내 주변 가게</h3>
 
         <div className="user-main-list-wrap" ref={storeListRef1}>
-          {store.length > 0 && store.map((store) => {
-            const imageUrls = parseImageUrl(store.imageUrl);
-            const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
+          {store.length > 0 ? (
+            store.map((store) => {
+              const imageUrls = parseImageUrl(store.imageUrl);
+              const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
 
-            return (
-              <div className="user-main-list-container" key={store.storeId}>
-                <div className="user-category-menu">
-                  <div className="user-category-menu-img">
-                    <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
-                    <img src={imageUrl} alt={store.storeName} />
+              return (
+                <div className="user-main-list-container" key={store.storeId}>
+                  <div className="user-category-menu">
+                    <div className="user-category-menu-img">
+                      <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
+                      <img src={imageUrl} alt={store.storeName} />
+                    </div>
+                    <div className="store-title-1">{store.storeName}</div>
+                    <div className="store-category"> {store.storeCategory || '미등록'}</div>
+                    <div className="store-distance">내 위치에서 {store.storeDistance || '정보 없음'}</div>
                   </div>
-                  <div className="store-title-1">{store.storeName}</div>
-                  <div className="store-category"> {store.storeCategory || '미등록'}</div>
-                  <div className="store-distance">내 위치에서 {store.storeDistance || '정보 없음'}</div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div className="no-stores">업체 목록이 없습니다.</div> // 업체 목록이 없을 때 표시되는 메시지
+          )}
         </div>
       </div>
 
@@ -113,61 +117,75 @@ function UserMain() {
         <h3>인기 서비스/트렌드</h3>
 
         <div className="user-main-list-wrap" ref={storeListRef2}>
-          {store.length > 0 && store.map((store) => {
-            const imageUrls = parseImageUrl(store.imageUrl);
-            const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
+          {store.length > 0 ? (
+            store.map((store) => {
+              const imageUrls = parseImageUrl(store.imageUrl);
+              const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
 
-            return (
-              <div className="user-main-list-container" key={store.storeId}>
-                <div className="user-category-menu">
-                  <div className="user-category-menu-img">
-                    <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
-                    <img src={imageUrl} alt={store.storeName} />
-                  </div>
-                  <div className="store-title-2">{store.storeName}</div>
-                  <div className="store-review-option">
-                    <span className="store-review">⭐4.8</span>
-                    <span className="store-option"> {store.storeCategory || '미등록'}</span> •
-                    <span className="store-option"> {store.storeCategory || '미등록'}</span>
+              return (
+                <div className="user-main-list-container" key={store.storeId}>
+                  <div className="user-category-menu">
+                    <div className="user-category-menu-img">
+                      <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
+                      <img src={imageUrl} alt={store.storeName} />
+                    </div>
+                    <div className="store-title-2">{store.storeName}</div>
+                    <div className="store-review-option">
+                      <span className="store-review">⭐4.8</span>
+                      <span className="store-option"> {store.storeCategory || '미등록'}</span> •
+                      <span className="store-option"> {store.storeCategory || '미등록'}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div className="no-stores">업체 목록이 없습니다.</div> // 업체 목록이 없을 때 표시되는 메시지
+          )}
         </div>
       </div>
 
-      {/* 이벤트/할인  */}
+      {/* 이벤트/할인 */}
       <div className="user-main-content last-content">
         <button className="nav-button left" ref={btnLeftStoreRef3} aria-label="왼쪽으로 이동">‹</button>
         <button className="nav-button right" ref={btnRightStoreRef3} aria-label="오른쪽으로 이동">›</button>
         <h3>이벤트/할인</h3>
 
         <div className="user-main-list-wrap" ref={storeListRef3}>
-          {store.length > 0 && store.map((store) => {
-            const imageUrls = parseImageUrl(store.imageUrl);
-            const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
+          {store.length > 0 ? (
+            store.map((store) => {
+              const imageUrls = parseImageUrl(store.imageUrl);
+              const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
 
-            return (
-              <div className="user-main-list-container" key={store.storeId}>
-                <div className="user-category-menu">
-                  <div className="user-category-menu-img">
-                    <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
-                    <img src={imageUrl} alt={store.storeName} />
-                    <div className="event-box">이벤트</div>
-                  </div>
-                  <div className="store-title-2">{store.storeName}</div>
-                  <div className="store-review-option">
-                    <span className="store-review">⭐4.8</span>
-                    <span className="store-option"> {store.storeCategory || '미등록'}</span> •
-                    <span className="store-option"> {store.storeCategory || '미등록'}</span>
+              return (
+                <div className="user-main-list-container" key={store.storeId}>
+                  <div className="user-category-menu">
+                    <div className="user-category-menu-img">
+                      <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
+                      <img src={imageUrl} alt={store.storeName} />
+                      <div className="event-box">이벤트</div>
+                    </div>
+                    <div className="store-title-2">{store.storeName}</div>
+                    <div className="store-review-option">
+                      <span className="store-review">⭐4.8</span>
+                      <span className="store-option"> {store.storeCategory || '미등록'}</span> •
+                      <span className="store-option"> {store.storeCategory || '미등록'}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div className="no-stores">업체 목록이 없습니다.</div> // 업체 목록이 없을 때 표시되는 메시지
+          )}
         </div>
+
+        
       </div>
+
+      
+
+      
 
       <footer className="user-bottom-nav">
         <a href="#"><span>메인</span></a>

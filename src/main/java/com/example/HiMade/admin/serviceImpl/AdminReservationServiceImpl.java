@@ -1,8 +1,6 @@
 package com.example.HiMade.admin.serviceImpl;
 
-import com.example.HiMade.admin.dto.adminRSDTO;
-import com.example.HiMade.admin.dto.adminReservationDTO;
-import com.example.HiMade.admin.dto.adminReserveMangeDTO;
+import com.example.HiMade.admin.dto.*;
 import com.example.HiMade.admin.mapper.AdminReservationMapper;
 import com.example.HiMade.admin.service.AdminMainService;
 import com.example.HiMade.admin.service.AdminReservationService;
@@ -74,6 +72,13 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   public List<adminReserveMangeDTO> getManageList() {
     return adminReservationMapper.getManageList();
   }
+
+  //예약 상태 변경
+  @Override
+  public void updateStatus(UpdateReservationStatusDTO dto) {
+    adminReservationMapper.updateStatus(dto);
+  }
+
 
 
 }

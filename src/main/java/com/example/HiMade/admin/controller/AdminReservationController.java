@@ -1,10 +1,7 @@
 package com.example.HiMade.admin.controller;
 
 
-import com.example.HiMade.admin.dto.adminRSDTO;
-import com.example.HiMade.admin.dto.adminReservationDTO;
-import com.example.HiMade.admin.dto.adminReserveAdd;
-import com.example.HiMade.admin.dto.adminReserveMangeDTO;
+import com.example.HiMade.admin.dto.*;
 import com.example.HiMade.admin.service.AdminMainService;
 import com.example.HiMade.admin.service.AdminReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +92,11 @@ public class AdminReservationController {
     adminReservationService.setCategory(dto);
   }
 
+  //예약 상태 변경
+  @PostMapping("/updateStatus")
+  public void updateStatus(@RequestBody UpdateReservationStatusDTO dto) {
+    adminReservationService.updateStatus(dto);
+  }
 
 
 }

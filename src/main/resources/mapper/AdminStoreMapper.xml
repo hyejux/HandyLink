@@ -61,9 +61,38 @@
         )
     </insert>
 
-    <select id="getStoreImg" resultType="java.util.List">
-        select image_url from store
+    <select id="getStoreInfo" resultMap="storeRegistResultMap">
+        select
+            *
+        from store
         where store_id = #{storeId}
+
     </select>
+
+    <resultMap id="storeRegistResultMap" type="com.example.HiMade.admin.dto.StoreRegistDTO">
+        <result property="storeId" column="store_id"/>
+        <result property="storePw" column="store_pw"/>
+        <result property="storeCate" column="store_cate"/>
+        <result property="storeName" column="store_name"/>
+        <result property="storeMaster" column="store_master"/>
+        <result property="managerName" column="manager_name"/>
+        <result property="managerPhone" column="manager_phone"/>
+        <result property="storeAddr" column="store_addr" typeHandler="com.example.HiMade.admin.handler.JsonHandler"/> <!-- JSONB 처리 -->
+        <result property="storeBusinessNo" column="store_business_no"/>
+
+        <!-- StoreInfoDTO - 업체정보 -->
+        <result property="storeIntro" column="store_intro"/>
+        <result property="storeParkingYn" column="store_parking_yn"/>
+        <result property="storeSns" column="store_sns" typeHandler="com.example.HiMade.admin.handler.JsonHandler"/> <!-- JSONB 처리 -->
+        <result property="storeNotice" column="store_notice"/>
+        <result property="storeOpenTime" column="store_open_time"/>
+        <result property="storeCloseTime" column="store_close_time"/>
+        <result property="storeDayOff" column="store_day_off" typeHandler="com.example.HiMade.admin.handler.ArrayHandler"/> <!-- JSONB 처리 -->
+        <result property="storeAccount" column="store_account" typeHandler="com.example.HiMade.admin.handler.JsonHandler"/> <!-- JSONB 처리 -->
+        <result property="imageUrl" column="image_url" typeHandler="com.example.HiMade.admin.handler.ArrayHandler"/> <!-- JSONB 처리 -->
+        <result property="storeSignup" column="store_signup"/>
+        <result property="storeStatus" column="store_status"/>
+    </resultMap>
+
 
 </mapper>

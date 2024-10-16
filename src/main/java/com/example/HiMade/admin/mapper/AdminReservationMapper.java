@@ -1,9 +1,7 @@
 package com.example.HiMade.admin.mapper;
 
 
-import com.example.HiMade.admin.dto.adminRSDTO;
-import com.example.HiMade.admin.dto.adminReservationDTO;
-import com.example.HiMade.admin.dto.adminReserveMangeDTO;
+import com.example.HiMade.admin.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -23,4 +21,7 @@ public interface AdminReservationMapper {
   public void setMainCategory4(adminReservationDTO dto);
 
   public List<adminReserveMangeDTO> getManageList();
+
+  //예약 상태 변경
+  void updateStatus(UpdateReservationStatusDTO dto);
 }

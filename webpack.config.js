@@ -38,7 +38,12 @@ module.exports = {
         UserLoginPage : './User/User/UserLoginPage.js',
         UserAccountFind : './User/User/UserAccountFind.js',
         UserChatList : './User/Inquiry/UserChatList.js',
-        UserReservationDate : './User/Reservation/UserReservationDate.js'
+        UserReservationDate : './User/Reservation/UserReservationDate.js',
+
+
+
+
+        MyStore: './Admin/MyStore.js'
 
     },
     devtool: 'sourcemaps',

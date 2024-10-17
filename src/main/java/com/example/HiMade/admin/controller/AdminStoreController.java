@@ -42,6 +42,15 @@ public class AdminStoreController {
         adminStoreService.registStore(storeRegistDTO);
     }
 
+    //가게관리-업데이트
+    @PostMapping("/updateStoreSet")
+    public void updateStoreSet(@RequestBody StoreRegistDTO storeRegistDTO){
+        System.out.println("내가게수정 " + storeRegistDTO);
+
+        adminStoreService.updateStoreSet(storeRegistDTO);
+    }
+
+
     // 파일 업로드 메서드
     @PostMapping("/uploadImageToServer")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {

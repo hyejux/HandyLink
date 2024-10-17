@@ -37,7 +37,7 @@ function PaymentInfo() {
             buyer_tel: "010-1234-5678",
             buyer_addr: "구매자 주소",
             buyer_postcode: "우편번호",
-            m_redirect_url: "https://yourdomain.com/redirect",
+            m_redirect_url: window.location.href,
         };
 
         IMP.request_pay(data, function (response) {
@@ -57,6 +57,25 @@ function PaymentInfo() {
         lat: 37.5709, // 가게의 위도
         lng: 126.9851, // 가게의 경도
     };
+
+     // 사용자 위치 권한 요청 및 위치 설정
+    useEffect(() => {
+        if (showMap) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log("위치 정보 허용됨:", position);
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    });
+                },
+                (error) => {
+                    console.error("위치 정보 거부됨:", error);
+                    alert("위치 정보를 허용해주세요.");
+                }
+            );
+        }
+    }, [showMap]);
 
 
     // 결제 정보를 가져옴

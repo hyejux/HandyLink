@@ -390,7 +390,6 @@ function UserMain() {
                 <div className="user-category-menu">
                   <div className="user-category-menu-img event-img">
                     <img src={image} alt={`광고 배너 ${index + 1}`} />
-                    <div className="event-box">이벤트</div>
                   </div>
                   <div className="ad-title">특가 상품 안내</div>
                   <div className="ad-description">

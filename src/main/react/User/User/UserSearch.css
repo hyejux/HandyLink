@@ -241,6 +241,7 @@ body {
   padding: 10px;
   align-items: baseline;
   position: relative;
+  background-color: #ffffff;
 }
 
 .store-search-bar img {
@@ -253,6 +254,7 @@ body {
   padding: 10px;
   border: none;
   outline: none;
+  background-color: #ffffff;
 }
 
 
@@ -344,16 +346,15 @@ body {
   }
 
   .nav-button.left {
-    left: -30px;
+    left: 0px;
     /* 부모 요소의 왼쪽에 고정 */
   }
 
   .nav-button.right {
-    right: -30px;
+    right: 0px;
     /* 부모 요소의 오른쪽에 고정 */
   }
 }
-
 
 
 

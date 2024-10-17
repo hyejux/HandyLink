@@ -6,6 +6,7 @@ function UserMyPage () {
     const [profileImage, setProfileImage] = useState("/img/user_basic_profile.jpg"); // 초기 프로필 이미지
     const [passwordVisible, setPasswordVisible] = useState(false); // 비밀번호
     const [repasswordVisible, setRepasswordVisible] = useState(false);
+    const [isKakaoLogin, setIsKakaoLogin] = useState(false); // 카카오 로그인 여부 상태 추가
 
     const [userInfo, setUserInfo] = useState({
         profileImage: "/img/user_basic_profile.jpg",
@@ -41,7 +42,7 @@ function UserMyPage () {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // 비밀번호와 비밀번호 확인이 일치하는지 확인
+        // 비밀번호 확인 로직
         if (userInfo.userPw && userInfo.userPw !== userInfo.repassword) {
             alert("비밀번호가 일치하지 않습니다.");
             return;
@@ -54,20 +55,18 @@ function UserMyPage () {
         formData.append('userBirth', userInfo.userBirth);
         formData.append('userGender', userInfo.userGender);
 
-        // 비밀번호가 입력된 경우에만 서버로 전송
-        if (userInfo.userPw) {
-            formData.append('userPw', userInfo.userPw);
-        }
-
-        // 파일이 있을 때만 프로필 이미지를 추가
+        // 카카오 로그인 사용자는 파일 업로드를 처리하지 않음
         if (file) {
             formData.append('profileImage', file);
+        } else if (userInfo.profileImage) {
+            // 파일이 없을 때는 기존의 이미지 URL을 유지
+            formData.append('userImgUrl', userInfo.profileImage);
         }
 
         try {
             const response = await fetch('/user/update', {
                 method: 'PUT',
-                body: formData
+                body: formData,
             });
 
             if (response.ok) {
@@ -75,7 +74,7 @@ function UserMyPage () {
                 alert("정보 수정이 완료되었습니다.");
                 setUserInfo({
                     ...userInfo,
-                    profileImage: result.userImgUrl || userInfo.profileImage
+                    profileImage: result.userImgUrl || userInfo.profileImage, // 기존 이미지 유지
                 });
             } else {
                 alert("정보 수정에 실패했습니다.");
@@ -84,6 +83,7 @@ function UserMyPage () {
             console.error('Error:', error);
         }
     };
+
 
     // 사용자 정보 가져오기
     useEffect(() => {
@@ -95,6 +95,7 @@ function UserMyPage () {
                 });
                 if (response.ok) {
                     const data = await response.json();
+                    console.log('로그 Fetched user profile:', data); // 데이터 확인 로그 추가
                     setUserInfo({
                         ...userInfo,
                         userId: data.userId,
@@ -102,18 +103,24 @@ function UserMyPage () {
                         userPhonenum: data.userPhonenum,
                         userBirth: data.userBirth,
                         userGender: data.userGender,
-                        profileImage: data.userImgUrl,
+                        profileImage: data.userImgUrl || '/img/user_basic_profile.jpg',
                     });
+
+                    // 비밀번호가 'KAKAO'이면 카카오 로그인으로 간주
+                    if (data.userPw === 'KAKAO') {
+                        setIsKakaoLogin(true); // 카카오 로그인 여부 설정
+                    }
                 } else {
                     console.error('정보 가져오기 실패');
                 }
             } catch (error) {
-                console.error('정보 가져오기 실패 삐융:', error);
+                console.error('정보 가져오기 실패:', error);
             }
         };
 
         fetchUserProfile();
     }, []);
+
 
 
     // 프로필 이미지 변경 및 미리보기
@@ -163,29 +170,37 @@ function UserMyPage () {
                         />
                     </div>
 
-                    <div className="form-group password-group">
-                        <label htmlFor="userPw">PW</label>
-                        <input
-                            type={passwordVisible ? "text" : "password"}
-                            id="userPw"
-                            placeholder="비밀번호 입력"
-                        />
-                        <div className="invisible-icon1" onClick={togglePasswordVisibility}>
-                            <i className={passwordVisible ? "bi bi-eye-fill" : "bi bi-eye-slash-fill"}></i>
-                        </div>
-                    </div>
+                    {!isKakaoLogin && (
+                        <>
+                            <div className="form-group password-group">
+                                <label htmlFor="userPw">PW</label>
+                                <input
+                                    type={passwordVisible ? "text" : "password"}
+                                    id="userPw"
+                                    placeholder="비밀번호 입력"
+                                    value={userInfo.userPw}
+                                    onChange={handleInputChange}
+                                />
+                                <div className="invisible-icon1" onClick={togglePasswordVisibility}>
+                                    <i className={passwordVisible ? "bi bi-eye-fill" : "bi bi-eye-slash-fill"}></i>
+                                </div>
+                            </div>
 
-                    <div className="form-group password-group">
-                        <label htmlFor="repassword">RE-PASSWORD</label>
-                        <input
-                            type={repasswordVisible ? "text" : "password"}
-                            id="repassword"
-                            placeholder="비밀번호 재입력"
-                        />
-                        <div className="invisible-icon2" onClick={toggleRepasswordVisibility}>
-                            <i className={repasswordVisible ? "bi bi-eye-fill" : "bi bi-eye-slash-fill"}></i>
-                        </div>
-                    </div>
+                            <div className="form-group password-group">
+                                <label htmlFor="repassword">RE-PASSWORD</label>
+                                <input
+                                    type={repasswordVisible ? "text" : "password"}
+                                    id="repassword"
+                                    placeholder="비밀번호 재입력"
+                                    value={userInfo.repassword}
+                                    onChange={handleInputChange}
+                                />
+                                <div className="invisible-icon2" onClick={toggleRepasswordVisibility}>
+                                    <i className={repasswordVisible ? "bi bi-eye-fill" : "bi bi-eye-slash-fill"}></i>
+                                </div>
+                            </div>
+                        </>
+                    )}
 
                     <div className="form-group">
                         <label htmlFor="userName">NAME</label>

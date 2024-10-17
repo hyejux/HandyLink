@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import './UserSignUp.css';
 
 function UserSignUp() {
@@ -23,6 +23,38 @@ function UserSignUp() {
     });
     // 중복 확인 여부
     const [idChecked, setIdChecked] = useState(false);
+
+    // 카카오 회원가입 여부 상태
+    const [isKakaoSignUp, setIsKakaoSignUp] = useState(false);
+
+    useEffect(() => {
+        // 카카오 사용자 정보가 세션에 저장된 경우 불러오기
+        fetch('/user/kakao-info')
+            .then(response => response.json())
+            .then(data => {
+                console.log("로그 Kakao user info:", data);
+
+                if (data.userName || data.userImgUrl) {
+                    // 카카오 회원가입 시
+                    setIsKakaoSignUp(true);  // 카카오 회원가입일 경우 true로 설정
+
+                    // 서버에서 받아온 값을 formData로 업데이트
+                    setFormData(prevFormData => ({
+                        ...prevFormData,
+                        userName: data.userName || '', // 서버에서 받은 userName을 formData에 설정
+                        userImgUrl: data.userImgUrl || '' // 서버에서 받은 프로필 이미지 URL을 formData에 설정
+                    }));
+
+                    // 프로필 이미지 미리보기 업데이트
+                    if (data.userImgUrl) {
+                        setPreviewImage(data.userImgUrl);  // 미리보기 이미지 업데이트
+                    }
+                }
+            })
+            .catch(error => console.error('Error fetching Kakao user info:', error));
+    }, []);
+
+
 
     // 입력값 변화 시 상태 업데이트
     const handleInputChange = (e) => {
@@ -90,53 +122,69 @@ function UserSignUp() {
         e.preventDefault();
 
         // 폼 데이터 유효성 검사
-        if (formData.userPw !== formData.repassword) {
+        if (!isKakaoSignUp && formData.userPw !== formData.repassword) {
             alert("비밀번호가 일치하지 않습니다.");
             return;
         }
 
-        if (!idChecked) {
+        // 카카오 회원가입 시 ID(이메일) 중복 체크를 하지 않음
+        if (!isKakaoSignUp && !idChecked) {
             alert("이메일 중복 확인을 해주세요.");
             return;
         }
 
-        // FormData 객체를 사용하여 파일 포함 데이터를 전송
-        const data = new FormData();
-        data.append('userId', formData.userId);
-        data.append('userPw', formData.userPw);
-        data.append('userName', formData.userName);
-        data.append('userPhonenum', formData.userPhonenum);
-        data.append('userBirth', formData.userBirth);
-        data.append('userGender', formData.userGender);
-
-        if (file) {
-            data.append('profileImage', file); // 선택한 파일 추가
-            console.log('프로필 이미지 추가됨:', file);
-        }
-
         try {
-            const response = await fetch('/user/signup', {
-                method: 'POST',
-                body: data,
-            });
+            let response;
+            if (isKakaoSignUp) {
+                // 카카오 회원가입
+                const kakaoData = {
+                    userId: formData.userId,
+                    userName: formData.userName,
+                    userPhonenum: formData.userPhonenum,
+                    userBirth: formData.userBirth,
+                    userGender: formData.userGender,
+                    userImgUrl: formData.userImgUrl // 카카오에서 제공한 이미지 URL
+                };
+                response = await fetch('/user/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(kakaoData)
+                });
+            } else {
+                // 일반 회원가입
+                const data = new FormData();
+                data.append('userId', formData.userId);
+                data.append('userPw', formData.userPw);
+                data.append('userName', formData.userName);
+                data.append('userPhonenum', formData.userPhonenum);
+                data.append('userBirth', formData.userBirth);
+                data.append('userGender', formData.userGender);
+
+                if (file) {
+                    data.append('profileImage', file);
+                    console.log('프로필 이미지 추가됨:', file);
+                }
+
+                response = await fetch('/user/signup', {
+                    method: 'POST',
+                    body: data,
+                });
+            }
 
             if (response.ok) {
                 const result = await response.text();
                 alert(result);
                 window.location.href = '/UserSignUpFinish.user';
-
-                if (result.userImgUrl) {
-                    setFormData({
-                        ...formData,
-                        userImgUrl: result.userImgUrl // 서버에서 받은 이미지 URL을 저장
-                    });
-                }
-
             } else {
-                console.log('서버 응답 오류:', response.status); // 응답 오류 로그
+                const errorText = await response.text();
+                console.log('서버 응답 오류:', response.status, errorText);
+                alert(`회원가입 실패: ${errorText}`);
             }
         } catch (error) {
             console.error('Error:', error);
+            alert('회원가입 중 오류가 발생했습니다.');
         }
     };
 
@@ -153,54 +201,60 @@ function UserSignUp() {
                            style={{display: "none"}}/>
                 </div>
                 <form className="form-signup" onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="userId">ID</label>
-                        <input
-                            type="email"
-                            id="userId"
-                            name="userId"
-                            className="effect-8"
-                            placeholder="이메일 입력"
-                            value={formData.userId}
-                            onChange={handleInputChange}
-                        />
-                        <div className="focus-border"><i></i></div>
-                        <button type="button" className="btn-checkid" onClick={handleCheckId}>중복 확인</button>
-                    </div>
-
-                    <div className="form-group password-group">
-                        <label htmlFor="userPw">PASSWORD</label>
-                        <input
-                            type={passwordVisible ? "text" : "password"}
-                            id="userPw"
-                            name="userPw"
-                            className="effect-8"
-                            placeholder="비밀번호 입력"
-                            value={formData.userPw}
-                            onChange={handleInputChange}
-                        />
-                        <div className="focus-border"><i></i></div>
-                        <div className="invisible-icon1" onClick={togglePasswordVisibility}>
-                            <i className={passwordVisible ? "bi bi-eye-fill" : "bi bi-eye-slash-fill"}></i>
+                    {!isKakaoSignUp && (
+                        <div className="form-group">
+                            <label htmlFor="userId">ID</label>
+                            <input
+                                type="text"
+                                id="userId"
+                                name="userId"
+                                className="effect-8"
+                                placeholder="이메일 입력"
+                                value={formData.userId}
+                                onChange={handleInputChange}
+                            />
+                            <div className="focus-border"><i></i></div>
+                            <button type="button" className="btn-checkid" onClick={handleCheckId}>중복 확인</button>
                         </div>
-                    </div>
+                    )}
 
-                    <div className="form-group password-group">
-                        <label htmlFor="repassword">RE-PASSWORD</label>
-                        <input
-                            type={repasswordVisible ? "text" : "password"}
-                            id="repassword"
-                            name="repassword"
-                            className="effect-8"
-                            placeholder="비밀번호 재입력"
-                            value={formData.repassword}
-                            onChange={handleInputChange}
-                        />
-                        <div className="focus-border"><i></i></div>
-                        <div className="invisible-icon2" onClick={toggleRepasswordVisibility}>
-                            <i className={repasswordVisible ? "bi bi-eye-fill" : "bi bi-eye-slash-fill"}></i>
-                        </div>
-                    </div>
+                    {!isKakaoSignUp && (
+                        <>
+                            <div className="form-group password-group">
+                                <label htmlFor="userPw">PASSWORD</label>
+                                <input
+                                    type={passwordVisible ? "text" : "password"}
+                                    id="userPw"
+                                    name="userPw"
+                                    className="effect-8"
+                                    placeholder="비밀번호 입력"
+                                    value={formData.userPw}
+                                    onChange={handleInputChange}
+                                />
+                                <div className="focus-border"><i></i></div>
+                                <div className="invisible-icon1" onClick={togglePasswordVisibility}>
+                                    <i className={passwordVisible ? "bi bi-eye-fill" : "bi bi-eye-slash-fill"}></i>
+                                </div>
+                            </div>
+
+                            <div className="form-group password-group">
+                                <label htmlFor="repassword">RE-PASSWORD</label>
+                                <input
+                                    type={repasswordVisible ? "text" : "password"}
+                                    id="repassword"
+                                    name="repassword"
+                                    className="effect-8"
+                                    placeholder="비밀번호 재입력"
+                                    value={formData.repassword}
+                                    onChange={handleInputChange}
+                                />
+                                <div className="focus-border"><i></i></div>
+                                <div className="invisible-icon2" onClick={toggleRepasswordVisibility}>
+                                    <i className={repasswordVisible ? "bi bi-eye-fill" : "bi bi-eye-slash-fill"}></i>
+                                </div>
+                            </div>
+                        </>
+                    )}
 
                     <div className="form-group">
                         <label htmlFor="userName">NAME</label>

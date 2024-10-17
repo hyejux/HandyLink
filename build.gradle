@@ -41,5 +41,8 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0' // 최신 버전으로 업데이트
 
 	implementation 'org.springframework.boot:spring-boot-starter-security' // spring security
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' // OAuth2 의존성 추가
+	implementation 'io.github.cdimascio:dotenv-java:2.2.3' // dotenv-java 의존성 추가
+
 
 }

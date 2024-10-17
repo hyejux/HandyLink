@@ -32,7 +32,7 @@
             store_parking_yn,
             store_sns,
             store_notice,
-            store_start_time,
+            store_open_time,
             store_close_time,
             store_day_off,
             store_account,

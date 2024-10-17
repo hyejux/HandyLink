@@ -600,7 +600,7 @@ function StoreSignUp() {
                         </div>
                     </div>
 
-                    <button type="button" className="login-go-btn" onClick={() => { location.href = '/adminlogin.signup';}}> 로그인하기 </button>
+                    <button type="button" className="login-go-btn" onClick={() => { location.href = '/adminlogin.login';}}> 로그인하기 </button>
                 </div>
             </div>
         )}

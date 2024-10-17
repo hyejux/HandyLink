@@ -1,190 +1,286 @@
-// import React, { useEffect } from 'react';
-// import './user-store-list.css';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useEffect, useState, useRef } from 'react';
+import ReactDOM from "react-dom/client";
+import useKakaoLoader from '../Payment/useKakaoLoader';
+import './UserSearch.css';
 
-// const UserSearch = () => {
-//   useEffect(() => {
-//     // 스크롤 버튼 설정
-//     const setupScrollControls = (listWrap, btnLeft, btnRight) => {
-//       btnLeft.addEventListener('click', () => {
-//         listWrap.scrollBy({ left: -200, behavior: 'smooth' });
-//       });
+function UserSearch() {
+  const [store, setStore] = useState([]);
+  const [distances, setDistances] = useState({});
+  const [currentPosition, setCurrentPosition] = useState(null);
+  const [visibleCount, setVisibleCount] = useState(2); // 가게 표시 개수 상태
+  const LOAD_MORE_COUNT = 1; // 더 볼 가게 수
 
-//       btnRight.addEventListener('click', () => {
-//         listWrap.scrollBy({ left: 200, behavior: 'smooth' });
-//       });
+  // 각 섹션마다 다른 ref를 사용
+  const storeListRef1 = useRef(null);
 
-//       listWrap.addEventListener('scroll', () => {
-//         updateButtonVisibility(listWrap, btnLeft, btnRight);
-//       });
+  const btnLeftStoreRef1 = useRef(null);
+  const btnRightStoreRef1 = useRef(null);
 
-//       updateButtonVisibility(listWrap, btnLeft, btnRight);
-//     };
+  const setupScrollControls = (listWrap, btnLeft, btnRight) => {
+    btnLeft.addEventListener('click', () => {
+        listWrap.scrollBy({ left: -200, behavior: 'smooth' });
+    });
 
-//     const updateButtonVisibility = (list, leftBtn, rightBtn) => {
-//       const scrollLeft = list.scrollLeft;
-//       const maxScrollLeft = list.scrollWidth - list.clientWidth;
-//       leftBtn.style.display = scrollLeft <= 0 ? 'none' : 'block';
-//       rightBtn.style.display = scrollLeft >= maxScrollLeft ? 'none' : 'block';
-//     };
+    btnRight.addEventListener('click', () => {
+        listWrap.scrollBy({ left: 200, behavior: 'smooth' });
+    });
 
-//     const listWrap = document.querySelector('.user-main-list-wrap');
-//     const btnLeft = document.querySelector('.nav-button.left');
-//     const btnRight = document.querySelector('.nav-button.right');
-//     setupScrollControls(listWrap, btnLeft, btnRight);
+    listWrap.addEventListener('scroll', () => {
+      updateButtonVisibility(listWrap, btnLeft, btnRight);
+    });
 
-//     const listWrap2 = document.querySelector('.user-main-list-wrap2');
-//     const btnLeft2 = document.querySelector('.nav-button-wrap2.left');
-//     const btnRight2 = document.querySelector('.nav-button-wrap2.right');
-//     setupScrollControls(listWrap2, btnLeft2, btnRight2);
+    updateButtonVisibility(listWrap, btnLeft, btnRight);
+  };
 
-//     const hashtagListWrap = document.querySelector('.user-hashtag-list-wrap');
-//     const btnLeft3 = document.querySelector('.nav-button-wrap3.left');
-//     const btnRight3 = document.querySelector('.nav-button-wrap3.right');
-//     setupScrollControls(hashtagListWrap, btnLeft3, btnRight3);
+  const updateButtonVisibility = (list, leftBtn, rightBtn) => {
+    const scrollLeft = list.scrollLeft;
+    const maxScrollLeft = list.scrollWidth - list.clientWidth;
 
-//     const buttons = document.querySelectorAll('.user-main-list-menu button');
-//     buttons.forEach(button => {
-//       button.addEventListener('click', () => {
-//         buttons.forEach(btn => btn.classList.remove('active'));
-//         button.classList.add('active');
-//       });
-//     });
+    leftBtn.style.display = scrollLeft <= 0 ? 'none' : 'block';
+    rightBtn.style.display = scrollLeft >= maxScrollLeft ? 'none' : 'block';
+  };
 
-//     document.querySelectorAll('.dropdown-item').forEach(item => {
-//       item.addEventListener('click', function () {
-//         const buttonText = this.getAttribute('data-value');
-//         document.getElementById('dropdownButtonText').textContent = buttonText;
-//       });
-//     });
-//   }, []);
+  useEffect(() => {
+    // 각 섹션마다 스크롤 제어 설정
+    setupScrollControls(storeListRef1.current, btnLeftStoreRef1.current, btnRightStoreRef1.current);
+  }, [store]);
 
-//   return (
-//     <div className="user-main-container">
-//       <div className="user-top-nav">
-//         <div className="logo">HandyLink!</div>
-//       </div>
 
-//       <div className="store-search-bar">
-//         <i className="bi bi-search"></i>
-//         <input type="text" placeholder="찾으시는 가게가 있나요?" />
-//         <button className="nav-button left">‹</button>
-//         <button className="nav-button right">›</button>
-//       </div>
 
-//       <div className="user-main-content">
-//         <div className="user-main-list-wrap">
-//           <div className="user-main-list-container">
-//             <div className="user-category-menu">
-//               <div className="user-category-menu-img">
-//                 <img src="../img1.jpg" alt="디저트" />
-//               </div>
-//               <div className="user-category-name">디저트</div>
-//             </div>
-//           </div>
-//           {/* Other list items */}
-//         </div>
+  // parseImageUrl 함수 정의
+  const parseImageUrl = (urlString) => {
+    return urlString.replace(/{|}/g, "").split(",").map(url => url.trim());
+  };
 
-//         <div className="user-hashtag-list-wrap">
-//           <div className="user-hashtag-list">
-//             <button type="button" className="btn-hashtag">
-//               <a href="#">
-//                 <img src="/icon/free-icon-font-hastag-5068648.png" alt="" />
-//                 레터링케이크
-//               </a>
-//             </button>
-//             {/* Other hashtags */}
-//           </div>
-//         </div>
+  const parseJson = (jsonString) => {
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error("JSON 파싱 오류:", error);
+      return {};
+    }
+  };
 
-//         <div className="user-hit-search-list">
-//           <button className="nav-button-wrap3 left">‹</button>
-//           <button className="nav-button-wrap3 right">›</button>
+    // Kakao Maps API 로드
+    useKakaoLoader();
 
-//           <h4>
-//             <img src="/icon/icon-fire.png" alt="fire" /> 10월 인기 가게
-//           </h4>
-//           <ol className="store-list">
-//             <li>1 <a href="#">오늘도 케이크</a></li>
-//             {/* Other store items */}
-//           </ol>
-//         </div>
+  useEffect(() => {
+    // 데이터 fetch
+    fetch('/store')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('네트워크 응답이 올바르지 않습니다.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const activeStores = data.filter((store) => store.storeStatus === '활성화');
+        setStore(activeStores);
+      })
+      .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
+  }, []);
 
-//         <div className="user-main-list-wrap2">
-//           <div className="user-main-list-menu">
-//             <button type="button">자양동</button>
-//             {/* Other menu items */}
-//           </div>
-//         </div>
 
-//         <div className="user-main-list-wrap3">
-//           <button className="nav-button-wrap2 left">‹</button>
-//           <button className="nav-button-wrap2 right">›</button>
 
-//           <div className="user-main-list-sub-part">
-//             <div>
-//               검색결과 <span>3</span> 건
-//             </div>
 
-//             <div className="dropdown">
-//               <button className="btn btn-sm" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-//                 <span id="dropdownButtonText">추천순</span> <i className="bi bi-chevron-down"></i>
-//               </button>
-//               <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-//                 <li><a className="dropdown-item" href="#" data-value="추천순">추천순</a></li>
-//                 {/* Other dropdown items */}
-//               </ul>
-//             </div>
-//           </div>
+    // Kakao Map API를 이용한 거리 계산 함수
+    const calculateDistance = (lat1, lng1, lat2, lng2) => {
+      const R = 6371; // 지구 반지름 (킬로미터 단위)
+      const dLat = (lat2 - lat1) * (Math.PI / 180);
+      const dLng = (lng2 - lng1) * (Math.PI / 180);
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))); // 거리 반환
+    };
+  
+    // 거리 계산 및 geocoder 로드
+    const getStoreDistance = (storeAddr) => {
+      if (currentPosition) {
+        if (window.kakao) {
+          const geocoder = new kakao.maps.services.Geocoder();
+  
+          // storeAddr 파싱
+          const addrInfo = parseJson(storeAddr);
+          const addrOnly = addrInfo.addr; // addr 필드만 추출
+  
+          geocoder.addressSearch(addrOnly, (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              const storeLat = result[0].y;
+              const storeLng = result[0].x;
+              const distance = calculateDistance(
+                currentPosition.lat,
+                currentPosition.lng,
+                storeLat,
+                storeLng
+              );
+              setDistances((prevDistances) => ({
+                ...prevDistances,
+                [storeAddr]: distance.toFixed(2), // addr 또는 storeId로 거리 저장
+              }));
+            } else {
+              console.error(`거리 계산 불가: ${addrOnly} - ${status}`);
+            }
+          });
+        } else {
+          console.log("Kakao 객체가 정의되지 않음");
+        }
+      } else {
+        console.log("내 위치 확인 불가");
+      }
+    };
+  
+  
+    useEffect(() => {
+      // Kakao Maps API 로드 후 가게 거리 계산
+      if (currentPosition && store.length > 0) {
+        store.forEach(store => {
+          getStoreDistance(store.storeAddr);
+        });
+      }
+    }, [store, currentPosition]);
+  
+    // 거리 변환 함수
+    const formatDistance = (distance) => {
+      const km = parseFloat(distance); // 거리 값을 float로 변환
+      if (km >= 1) {
+        return `${km.toFixed(2)} km`;  // 1km 이상일 경우 km 단위
+      } else {
+        return `${(km * 1000).toFixed(0)} m`;  // 1km 미만일 경우 m 단위
+      }
+    };
+  
+  
+    const handleLoadMore = () => {
+      if (visibleCount >= store.length) {
+        alert("마지막 가게 입니다.");
+      } else {
+        setVisibleCount((prevCount) => prevCount + LOAD_MORE_COUNT); // 상수로 증가
+      }
+    };
 
-//           <div className="user-main-list-sub-content">
-//             <i className="bi bi-heart"></i>
-//             <div className="sub-content-img-box">
-//               <img src="../img3.jpg" alt="오늘도 케이크" />
-//             </div>
 
-//             <div className="sub-content-top">
-//               <div className="sub-content-container">
-//                 <div className="sub-content-title">오늘도 케이크</div>
-//                 <div className="sub-content-category">디저트</div>
-//               </div>
-//               <div className="sub-content-date">
-//                 <img src="/icon/free-icon-font-clock-five-7602662.png" alt="시계" /> 영업중 10:00 ~ 22:00
-//               </div>
-//             </div>
 
-//             <div className="sub-content-mid">
-//               <div className="sub-content-review">
-//                 ⭐<span>4.8</span> <span>(10,959)</span>
-//               </div>
-//               <div className="sub-content-location">
-//                 <img src="/icon/free-icon-font-marker-3916862.png" alt="위치" /> 현재 위치에서 950m
-//               </div>
-//             </div>
+  return (
+    <div className="user-main-container">
+      <div className="user-top-nav">
+        <logo className="logo">HandyLink!</logo>
+      </div>
 
-//             <div className="sub-content-bottom">
-//               <div className="sub-content-price">₩ 12,000 ~</div>
-//               <div className="sub-content-option-container">
-//                 <img src="/icon/free-icon-font-hastag-5068648.png" alt="" />
-//                 <span className="sub-content-option">레터링케이크</span>
-//                 {/* Other options */}
-//               </div>
-//             </div>
-//           </div>
+      <div className="store-search-bar">
+        <i className="bi bi-search"></i>
+        <input type="text" placeholder="찾으시는 가게가 있나요?" />
+      </div>
 
-//           {/* Other sub-contents */}
-//         </div>
 
-//         <div className="user-bottom-nav">
-//           <a href="#"><span>메인</span></a>
-//           <a href="#"><span>검색</span></a>
-//           <a href="#"><span>예약</span></a>
-//           <a href="#"><span>문의</span></a>
-//           <a href="#"><span>MY</span></a>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
+      <div className='user-hashtag-container' ref={storeListRef1}>
+        <button className="nav-button left" ref={btnLeftStoreRef1} aria-label="왼쪽으로 이동">‹</button>
+        <button className="nav-button right" ref={btnRightStoreRef1} aria-label="오른쪽으로 이동">›</button>
+        <h3>추천 해시태그</h3>
 
-// ReactDOM.createRoot(document.getElementById("root")).render(<UserMain />);
+        <div className="user-hashtag-list-wrap">
+          <div className="user-hashtag-list">
+            <button type="button" className="btn-hashtag"><a href="#"><img src="/icon/free-icon-font-hastag-5068648.png" alt="" /> 레터링케이크</a></button>
+            <button type="button" className="btn-hashtag"><a href="#"><img src="/icon/free-icon-font-hastag-5068648.png" alt="" /> 플라워 박스</a></button>
+            <button type="button" className="btn-hashtag"><a href="#"><img src="/icon/free-icon-font-hastag-5068648.png" alt="" /> 꽃바구니</a></button>
+            <button type="button" className="btn-hashtag"><a href="#"><img src="/icon/free-icon-font-hastag-5068648.png" alt="" /> 아이스크림</a></button>
+            <button type="button" className="btn-hashtag"><a href="#"><img src="/icon/free-icon-font-hastag-5068648.png" alt="" /> 쿠키 & 머핀</a></button>
+            <button type="button" className="btn-hashtag"><a href="#"><img src="/icon/free-icon-font-hastag-5068648.png" alt="" /> 볼륨매직</a></button>
+            <button type="button" className="btn-hashtag"><a href="#"><img src="/icon/free-icon-font-hastag-5068648.png" alt="" /> 도자기 체험 클래스</a></button>
+            <button type="button" className="btn-hashtag"><a href="#"><img src="/icon/free-icon-font-hastag-5068648.png" alt="" /> 기념일 꽃</a></button>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div className="user-hit-search-list">
+      <h4>10월 인기 가게</h4>
+      <ol className="store-list">
+        {store.map((store, index) => (
+          <li key={store.storeId}>
+            {index + 1} <a href="#">{store.storeName}</a>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+
+      <div className="user-main-list-wrap3-header">
+        <h3>배고파죽겠어요 님을 위한 추천 가게</h3>
+      </div>
+
+      <div className="user-main-list-wrap3">
+        {store.length > 0 ? (
+          store.slice(0, visibleCount).map((store) => {
+            const imageUrls = parseImageUrl(store.imageUrl);
+            const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "../img3.jpg";
+            const storeDistance = distances[store.storeAddr] ? formatDistance(distances[store.storeAddr]) : '정보 없음';
+
+            return (
+              <div className="user-main-list-sub-content" key={store.storeId}>
+                <i className="bi bi-heart"></i>
+                <div className="sub-content-img-box">
+                  <img src={imageUrl} alt={store.storeName} />
+                </div>
+
+                <div className="sub-content-top">
+                  <div className="sub-content-container">
+                    <div className="sub-content-title">{store.storeName}</div>
+                    <div className="sub-content-category">{store.storeCategory || '미등록'}</div>
+                  </div>
+                  <div className="sub-content-date">
+                    {/* <img src="/icon/free-icon-font-clock-five-7602662.png" alt="시계" /> */} 영업시간: {store.storeStartTime} - {store.storeCloseTime}
+                  </div>
+                </div>
+
+                <div className="sub-content-mid">
+                  <div className="sub-content-review">
+                    ⭐<span>{store.reviewRating || '4.8'}</span>
+                    <span>({store.reviewCount || '10,959'})</span>
+                  </div>
+                  <div className="sub-content-location">
+                  내 위치에서 {distances[store.storeAddr] ? formatDistance(distances[store.storeAddr]) : '정보 없음'}
+                  </div>
+                </div>
+
+                <div className="sub-content-bottom">
+                  <div className="sub-content-price">₩ {store.price || '12,000'} ~ </div>
+                  <div className="sub-content-option-container">
+                    {store.tags && store.tags.map((tag, index) => (
+                      <React.Fragment key={index}>
+                        {/* <img src="/icon/free-icon-font-hastag-5068648.png" alt="" /> */}
+                        <span className="sub-content-option">{tag}</span>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+        )}
+      </div>
+
+      <div className='load-more-btn-wrap'>
+        <button onClick={handleLoadMore} className="load-more-btn">추천 가게 더 보기</button>
+      </div>
+
+
+
+
+
+      <footer className="user-bottom-nav">
+        <a href="#"><span>메인</span></a>
+        <a href="#"><span>검색</span></a>
+        <a href="#"><span>예약</span></a>
+        <a href="#"><span>문의</span></a>
+        <a href="#"><span>MY</span></a>
+      </footer>
+
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<UserSearch />);

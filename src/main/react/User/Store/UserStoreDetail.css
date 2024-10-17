@@ -300,7 +300,7 @@ body {
   .user-reserve-menu {
     display: flex;
     gap: 3%;
-
+    width: 100%;
   }
   .user-reserve-menu img{
     width: 150px;
@@ -309,7 +309,7 @@ body {
   .user-reserve-menu-content{
     display: flex;
     flex-direction: column;
-
+    width: 100%;
   
   }
 

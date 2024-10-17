@@ -19,6 +19,22 @@ body {
 
 }
 
+.user-reserve-menu {
+  display: flex;
+  gap: 3%;
+
+}
+.user-reserve-menu img{
+  width: 120px;
+  border-radius: 5px;
+}
+.user-reserve-menu-content{
+  display: flex;
+  flex-direction: column;
+    width : 100%;
+
+}
+
 .user-top-nav {
     padding: 10px;
     text-align: center;
@@ -291,7 +307,7 @@ body {
 
   } */
   .user-reserve-menu img{
-    width: 150px;
+    width: 120px;
     border-radius: 5px;
   }
   .user-reserve-menu-content{
@@ -324,25 +340,6 @@ body {
   }
 
   /* --------------------------------------- */
-  .user-reserve-menu-img {
-    margin : 20px;
-    display: flex;
-    overflow: auto;
-    scrollbar-width: thin;
-
-    background-color: white;
-    border-radius: 10px;
-    margin: 20px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #2C348F;
-    margin-bottom: 50px;
-  }
-  .user-reserve-menu-img > img{
-    width: 150px;
-    border-radius: 5px;
-    margin-right: 20px;
-  }
 
 .user-reserve-date-title {
     font-size: 30px;

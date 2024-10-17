@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from "react-dom/client";
+import useKakaoLoader from '../Payment/useKakaoLoader';
 import './UserSearch.css';
 
 function UserSearch() {
@@ -15,7 +16,7 @@ function UserSearch() {
   const btnLeftStoreRef1 = useRef(null);
   const btnRightStoreRef1 = useRef(null);
 
-  const setupScrollControls = (listWrap, btnLeft, btnRight, isFourth = false) => {
+  const setupScrollControls = (listWrap, btnLeft, btnRight) => {
     btnLeft.addEventListener('click', () => {
         listWrap.scrollBy({ left: -200, behavior: 'smooth' });
     });
@@ -51,14 +52,17 @@ function UserSearch() {
     return urlString.replace(/{|}/g, "").split(",").map(url => url.trim());
   };
 
-  // const parseJson = (jsonString) => {
-  //   try {
-  //     return JSON.parse(jsonString);
-  //   } catch (error) {
-  //     console.error("JSON 파싱 오류:", error);
-  //     return {};
-  //   }
-  // };
+  const parseJson = (jsonString) => {
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error("JSON 파싱 오류:", error);
+      return {};
+    }
+  };
+
+    // Kakao Maps API 로드
+    useKakaoLoader();
 
   useEffect(() => {
     // 데이터 fetch
@@ -77,13 +81,83 @@ function UserSearch() {
   }, []);
 
 
-  const handleLoadMore = () => {
-    if (visibleCount >= store.length) {
-      alert("마지막 가게 입니다.");
-    } else {
-      setVisibleCount((prevCount) => prevCount + LOAD_MORE_COUNT); // 상수로 증가
-    }
-  };
+
+
+    // Kakao Map API를 이용한 거리 계산 함수
+    const calculateDistance = (lat1, lng1, lat2, lng2) => {
+      const R = 6371; // 지구 반지름 (킬로미터 단위)
+      const dLat = (lat2 - lat1) * (Math.PI / 180);
+      const dLng = (lng2 - lng1) * (Math.PI / 180);
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))); // 거리 반환
+    };
+  
+    // 거리 계산 및 geocoder 로드
+    const getStoreDistance = (storeAddr) => {
+      if (currentPosition) {
+        if (window.kakao) {
+          const geocoder = new kakao.maps.services.Geocoder();
+  
+          // storeAddr 파싱
+          const addrInfo = parseJson(storeAddr);
+          const addrOnly = addrInfo.addr; // addr 필드만 추출
+  
+          geocoder.addressSearch(addrOnly, (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              const storeLat = result[0].y;
+              const storeLng = result[0].x;
+              const distance = calculateDistance(
+                currentPosition.lat,
+                currentPosition.lng,
+                storeLat,
+                storeLng
+              );
+              setDistances((prevDistances) => ({
+                ...prevDistances,
+                [storeAddr]: distance.toFixed(2), // addr 또는 storeId로 거리 저장
+              }));
+            } else {
+              console.error(`거리 계산 불가: ${addrOnly} - ${status}`);
+            }
+          });
+        } else {
+          console.log("Kakao 객체가 정의되지 않음");
+        }
+      } else {
+        console.log("내 위치 확인 불가");
+      }
+    };
+  
+  
+    useEffect(() => {
+      // Kakao Maps API 로드 후 가게 거리 계산
+      if (currentPosition && store.length > 0) {
+        store.forEach(store => {
+          getStoreDistance(store.storeAddr);
+        });
+      }
+    }, [store, currentPosition]);
+  
+    // 거리 변환 함수
+    const formatDistance = (distance) => {
+      const km = parseFloat(distance); // 거리 값을 float로 변환
+      if (km >= 1) {
+        return `${km.toFixed(2)} km`;  // 1km 이상일 경우 km 단위
+      } else {
+        return `${(km * 1000).toFixed(0)} m`;  // 1km 미만일 경우 m 단위
+      }
+    };
+  
+  
+    const handleLoadMore = () => {
+      if (visibleCount >= store.length) {
+        alert("마지막 가게 입니다.");
+      } else {
+        setVisibleCount((prevCount) => prevCount + LOAD_MORE_COUNT); // 상수로 증가
+      }
+    };
 
 
 
@@ -118,25 +192,18 @@ function UserSearch() {
         </div>
       </div>
 
+
+
       <div className="user-hit-search-list">
-
-        <button className="nav-button-wrap3 left">‹</button>
-        <button className="nav-button-wrap3 right">›</button>
-
-        <h4><img src="/icon/icon-fire.png" alt="fire"/> 10월 인기 가게</h4>
-        <ol className="store-list">
-          <li>1 <a href="#">오늘도 케이크</a></li>
-          <li>2 <a href="#">내일도 케이크</a></li>
-          <li>3 <a href="#">행복한 도자기</a></li>
-          <li>4 <a href="#">오즈 베이커리</a></li>
-          <li>5 <a href="#">아트플라워 </a></li>
-          <li>6 <a href="#">올리브 베이커리</a></li>
-          <li>7 <a href="#">작은 정원</a></li>
-          <li>8 <a href="#">더케이크샵</a></li>
-          <li>9 <a href="#">뷰티하우스 </a></li>
-          <li>10 <a href="#">도자기 마을</a></li>
-        </ol>
-      </div>
+      <h4>10월 인기 가게</h4>
+      <ol className="store-list">
+        {store.map((store, index) => (
+          <li key={store.storeId}>
+            {index + 1} <a href="#">{store.storeName}</a>
+          </li>
+        ))}
+      </ol>
+    </div>
 
 
       <div className="user-main-list-wrap3-header">
@@ -173,7 +240,7 @@ function UserSearch() {
                     <span>({store.reviewCount || '10,959'})</span>
                   </div>
                   <div className="sub-content-location">
-                    {/* <img src="/icon/free-icon-font-marker-3916862.png" alt="위치" /> */} 현재 위치에서 {storeDistance}
+                  내 위치에서 {distances[store.storeAddr] ? formatDistance(distances[store.storeAddr]) : '정보 없음'}
                   </div>
                 </div>
 

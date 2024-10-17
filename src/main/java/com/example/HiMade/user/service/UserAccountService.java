@@ -11,4 +11,6 @@ public interface UserAccountService {
     UserDTO getUserById(String userId);
     void updateUser(UserDTO userDTO);
     UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException;
+    String getKakaoAccessToken(String code);
+    UserDTO getKakaoUserInfo(String accessToken);
 }

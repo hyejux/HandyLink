@@ -7,6 +7,8 @@ function UserMain() {
   const [store, setStore] = useState([]);
   const [distances, setDistances] = useState({});
   const [currentPosition, setCurrentPosition] = useState(null);
+  const [visibleCount, setVisibleCount] = useState(2); // 가게 표시 개수 상태
+  const LOAD_MORE_COUNT = 1; // 더 볼 가게 수
 
   // 각 섹션마다 다른 ref를 사용
   const storeListRef1 = useRef(null);
@@ -66,7 +68,6 @@ function UserMain() {
       return {};
     }
   };
-
 
   // Kakao Maps API 로드
   useKakaoLoader();
@@ -165,6 +166,15 @@ function UserMain() {
       return `${km.toFixed(2)} km`;  // 1km 이상일 경우 km 단위
     } else {
       return `${(km * 1000).toFixed(0)} m`;  // 1km 미만일 경우 m 단위
+    }
+  };
+
+
+  const handleLoadMore = () => {
+    if (visibleCount >= store.length) {
+      alert("마지막 가게 입니다.");
+    } else {
+      setVisibleCount((prevCount) => prevCount + LOAD_MORE_COUNT); // 상수로 증가
     }
   };
 
@@ -283,10 +293,70 @@ function UserMain() {
             <div className="no-stores">정보를 불러오지 못 했습니다 😭 </div>
           )}
         </div>
-
-
       </div>
 
+
+
+      <div className="user-main-list-wrap3-header">
+        <h3>배고파죽겠어요 님을 위한 추천 가게</h3>
+      </div>
+
+      <div className="user-main-list-wrap3">
+        {store.length > 0 ? (
+          store.slice(0, visibleCount).map((store) => {
+            const imageUrls = parseImageUrl(store.imageUrl);
+            const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "../img3.jpg";
+            const storeDistance = distances[store.storeAddr] ? formatDistance(distances[store.storeAddr]) : '정보 없음';
+
+            return (
+              <div className="user-main-list-sub-content" key={store.storeId}>
+                <i className="bi bi-heart"></i>
+                <div className="sub-content-img-box">
+                  <img src={imageUrl} alt={store.storeName} />
+                </div>
+
+                <div className="sub-content-top">
+                  <div className="sub-content-container">
+                    <div className="sub-content-title">{store.storeName}</div>
+                    <div className="sub-content-category">{store.storeCategory || '미등록'}</div>
+                  </div>
+                  <div className="sub-content-date">
+                    {/* <img src="/icon/free-icon-font-clock-five-7602662.png" alt="시계" /> */} 영업시간: {store.storeStartTime} - {store.storeCloseTime}
+                  </div>
+                </div>
+
+                <div className="sub-content-mid">
+                  <div className="sub-content-review">
+                    ⭐<span>{store.reviewRating || '4.8'}</span>
+                    <span>({store.reviewCount || '10,959'})</span>
+                  </div>
+                  <div className="sub-content-location">
+                    {/* <img src="/icon/free-icon-font-marker-3916862.png" alt="위치" /> */} 현재 위치에서 {storeDistance}
+                  </div>
+                </div>
+
+                <div className="sub-content-bottom">
+                  <div className="sub-content-price">₩ {store.price || '12,000'} ~ </div>
+                  <div className="sub-content-option-container">
+                    {store.tags && store.tags.map((tag, index) => (
+                      <React.Fragment key={index}>
+                        {/* <img src="/icon/free-icon-font-hastag-5068648.png" alt="" /> */}
+                        <span className="sub-content-option">{tag}</span>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+        )}
+      </div>
+
+      <div className='load-more-btn-wrap'>
+        <button onClick={handleLoadMore} className="load-more-btn">추천 가게 더 보기</button>
+      </div>
 
       <footer className="user-bottom-nav">
         <a href="#"><span>메인</span></a>
@@ -295,6 +365,7 @@ function UserMain() {
         <a href="#"><span>문의</span></a>
         <a href="#"><span>MY</span></a>
       </footer>
+
     </div>
   );
 }

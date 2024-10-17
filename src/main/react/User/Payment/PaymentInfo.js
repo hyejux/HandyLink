@@ -84,6 +84,10 @@ function PaymentInfo() {
                 reservationNo,
             });
             alert(`결제 정보가 추가되었습니다: ${response.data.paymentId}`);
+            setPaymentMethod("");  // 상태 초기화
+            setPaymentAmount(0);   // 상태 초기화
+            setPaymentStatus("");  // 상태 초기화
+            setReservationNo("");  // 상태 초기화
             fetchPayments();
         } catch (error) {
             console.error("결제 정보를 추가하는 중 오류 발생:", error);

@@ -131,6 +131,7 @@ body {
   display: flex;
   padding: 10px;
   align-items: baseline;
+  background-color: #ffffff;
 }
 
 .store-search-bar img {
@@ -143,6 +144,7 @@ body {
   padding: 10px;
   border: none;
   outline: none;
+  background-color: #ffffff;
 }
 
 
@@ -165,9 +167,25 @@ body {
   box-shadow: none;
 }
 
+.event-container {
+  width: 100%;
+  background-color: white;
+  margin: 0;
+  flex-shrink: 0;
+  border: none;
+  box-shadow: none;
+}
+
 .user-category-menu-img {
   width: 100%;
   height: 185px;
+  gap: 3%;
+  position: relative;
+}
+
+.event-img {
+  width: 100%;
+  height: 300px;
   gap: 3%;
   position: relative;
 }
@@ -188,6 +206,13 @@ body {
   height: 100%;
   background-size: cover;
   border-radius: 10px;
+}
+
+.event-img img {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  border-radius: 0;
 }
 
 .store-title-1 {
@@ -290,3 +315,147 @@ body {
   }
 }
 
+/* ---------------------------------------------------- */
+
+.user-main-list-wrap3-header {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.user-main-list-wrap3-header > h3 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+
+.user-main-list-wrap3 {
+  padding: 20px;
+  position: relative;
+}
+
+.user-main-list-sub-content {
+  padding: 10px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border: 2px solid #2C348F;
+}
+
+.user-main-list-sub-content>.bi {
+  position: absolute;
+  font-size: 25px;
+  color: #fff;
+  top: 20px;
+  left: 510px;
+}
+
+.sub-content-img-box {
+  height: 200px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+
+}
+
+.sub-content-img-box img {
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover
+}
+
+
+/* 가게명 */
+.sub-content-title {
+  font-size: 25px;
+  font-weight: bold;
+  margin: 0 10px;
+}
+
+/* 가게 카테고리 */
+.sub-content-category {
+  margin-top: 5px;
+}
+
+/* 영업시간 */
+.sub-content-date {
+  margin: 5px 10px 0 0;
+  font-size: 14px;
+}
+
+.sub-content-date img {
+  width: 16px;
+}
+
+.bi-clock-fill {
+  margin-right: 5px;
+}
+
+/* 별점 */
+.sub-content-review {
+  font-size: 20px;
+  margin-left: 5px;
+}
+
+.sub-content-review>span:nth-child(1) {
+  color: #FFD700;
+}
+
+.sub-content-review>span:nth-child(2) {
+  color: #999;
+}
+
+/* 위치 */
+.sub-content-location {
+  margin: 0 10px 5px 0;
+  font-size: 14px;
+}
+
+.sub-content-location img {
+  width: 16px;
+}
+
+.bi-geo-alt-fill {
+  margin-right: 5px;
+}
+
+/* 가격 */
+.sub-content-price {
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+/* 해시태그(메뉴명) */
+.sub-content-option-container img {
+  width: 12px;
+}
+
+.sub-content-option {
+  font-size: 16px;
+}
+
+
+
+/* 더 보기 버튼 */
+.load-more-btn-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 100px 0;
+}
+
+.load-more-btn {
+  background-color: rgba(44, 52, 143, 0.16);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  width: 400px;
+  height: 50px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.load-more-btn:hover {
+  background-color: rgba(44, 52, 143, 0.30);
+}

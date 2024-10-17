@@ -14,27 +14,42 @@ function UserMain() {
   const storeListRef1 = useRef(null);
   const storeListRef2 = useRef(null);
   const storeListRef3 = useRef(null);
+  const storeListRef4 = useRef(null);
 
   const btnLeftStoreRef1 = useRef(null);
   const btnLeftStoreRef2 = useRef(null);
   const btnLeftStoreRef3 = useRef(null);
+  const btnLeftStoreRef4 = useRef(null);
   const btnRightStoreRef1 = useRef(null);
   const btnRightStoreRef2 = useRef(null);
   const btnRightStoreRef3 = useRef(null);
+  const btnRightStoreRef4 = useRef(null);
 
-  const setupScrollControls = (listWrap, btnLeft, btnRight) => {
+  const setupScrollControls = (listWrap, btnLeft, btnRight, isFourth = false) => {
     btnLeft.addEventListener('click', () => {
-      listWrap.scrollBy({ left: -200, behavior: 'smooth' });
+      // 4번째 버튼일 경우 다르게 스크롤
+      if (isFourth) {
+        // 원하는 동작으로 스크롤 조정 (예: 100px씩 스크롤)
+        listWrap.scrollBy({ left: -600, behavior: 'smooth' });
+      } else {
+        listWrap.scrollBy({ left: -200, behavior: 'smooth' });
+      }
     });
-
+  
     btnRight.addEventListener('click', () => {
-      listWrap.scrollBy({ left: 200, behavior: 'smooth' });
+      // 4번째 버튼일 경우 다르게 스크롤
+      if (isFourth) {
+        // 원하는 동작으로 스크롤 조정 (예: 100px씩 스크롤)
+        listWrap.scrollBy({ left: 600, behavior: 'smooth' });
+      } else {
+        listWrap.scrollBy({ left: 200, behavior: 'smooth' });
+      }
     });
-
+  
     listWrap.addEventListener('scroll', () => {
       updateButtonVisibility(listWrap, btnLeft, btnRight);
     });
-
+  
     updateButtonVisibility(listWrap, btnLeft, btnRight);
   };
 
@@ -51,6 +66,7 @@ function UserMain() {
     setupScrollControls(storeListRef1.current, btnLeftStoreRef1.current, btnRightStoreRef1.current);
     setupScrollControls(storeListRef2.current, btnLeftStoreRef2.current, btnRightStoreRef2.current);
     setupScrollControls(storeListRef3.current, btnLeftStoreRef3.current, btnRightStoreRef3.current);
+    setupScrollControls(storeListRef4.current, btnLeftStoreRef4.current, btnRightStoreRef4.current, true);
   }, [store]);
 
 
@@ -357,6 +373,36 @@ function UserMain() {
       <div className='load-more-btn-wrap'>
         <button onClick={handleLoadMore} className="load-more-btn">추천 가게 더 보기</button>
       </div>
+
+      
+
+      {/* 광고 배너 */}
+      <div className="user-main-content last-content">
+        <button className="nav-button left" ref={btnLeftStoreRef4} aria-label="왼쪽으로 이동">‹</button>
+        <button className="nav-button right" ref={btnRightStoreRef4} aria-label="오른쪽으로 이동">›</button>
+        <h3>광고</h3>
+
+        <div className="user-main-list-wrap" ref={storeListRef4}>
+          {/* 광고 이미지 배열 (로컬 이미지 경로를 사용하세요) */}
+          {['./img/event1.jpg', './img/event4.jpg', './img/event2.jpg', './img/event3.jpg', './img/event4.jpg',]
+            .map((image, index) => (
+              <div className="user-main-list-container event-container" key={index}>
+                <div className="user-category-menu">
+                  <div className="user-category-menu-img event-img">
+                    <img src={image} alt={`광고 배너 ${index + 1}`} />
+                    <div className="event-box">이벤트</div>
+                  </div>
+                  <div className="ad-title">특가 상품 안내</div>
+                  <div className="ad-description">
+                    <span>50% 할인 중!</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+
+
 
       <footer className="user-bottom-nav">
         <a href="#"><span>메인</span></a>

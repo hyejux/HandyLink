@@ -6,17 +6,17 @@
 <mapper namespace="com.example.HiMade.admin.mapper.AdminStoreMapper">
 
     <select id="loginCheck" resultType="com.example.HiMade.admin.dto.StoreRegistDTO">
-        select * from store
+        select * from store_admin
         where store_id = #{id} and store_pw = #{pw}
     </select>
 
     <select id="duplicatedId" resultType="Integer">
-        select count(*) from store
+        select count(*) from store_admin
         where store_id = #{storeId}
     </select>
 
     <insert id="registStore" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
-        INSERT INTO store (
+        INSERT INTO store_admin (
             store_id,
             store_pw,
             store_cate,
@@ -24,19 +24,12 @@
             store_master,
             manager_name,
             manager_phone,
-            store_addr,
             store_business_no,
             store_signup,
             store_status,
-            store_intro,
-            store_parking_yn,
-            store_sns,
-            store_notice,
-            store_start_time,
-            store_close_time,
-            store_day_off,
-            store_account,
-            image_url
+            zipcode,
+            addr,
+            addrdetail
         ) VALUES (
             #{storeId},
             #{storePw},
@@ -45,21 +38,30 @@
             #{storeMaster},
             #{managerName},
             #{managerPhone},
-            #{storeAddr, typeHandler=com.example.HiMade.admin.handler.JsonHandler, jdbcType=VARCHAR}, <!-- JSONB 형식으로 처리 -->
             #{storeBusinessNo},
             now(),
             '대기',
-            #{storeIntro},
-            #{storeParkingYn},
-            #{storeSns, typeHandler=com.example.HiMade.admin.handler.JsonHandler, jdbcType=VARCHAR}, <!-- JSONB 형식으로 처리 -->
-            #{storeNotice},
-            #{storeOpenTime},
-            #{storeCloseTime},
-            #{storeDayOff, typeHandler=com.example.HiMade.admin.handler.ArrayHandler, jdbcType=ARRAY}, <!-- 배열 처리 -->
-            #{storeAccount, typeHandler=com.example.HiMade.admin.handler.JsonHandler, jdbcType=VARCHAR}, <!-- JSONB 형식으로 처리 -->
-            #{imageUrl, typeHandler=com.example.HiMade.admin.handler.ArrayHandler, jdbcType=ARRAY} <!-- 배열 처리 -->
+            #{zipcode},
+            #{addr},
+            #{addrdetail}
         )
     </insert>
+
+    <update id="updateStoreSet" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
+        update store_admin
+        set
+            store_intro = #{storeIntro},
+            store_notice = #{storeNotice},
+            store_open_time = #{storeOpenTime},
+            store_close_time = #{storeCloseTime},
+            store_parking_yn = #{storeParkingYn},
+            account_bank = #{accountBank},
+            account_number = #{accountNumber}
+        where store_id = #{storeId}
+    </update>
+
+
+
 
     <select id="getStoreInfo" resultMap="storeRegistResultMap">
         select
@@ -77,19 +79,15 @@
         <result property="storeMaster" column="store_master"/>
         <result property="managerName" column="manager_name"/>
         <result property="managerPhone" column="manager_phone"/>
-        <result property="storeAddr" column="store_addr" typeHandler="com.example.HiMade.admin.handler.JsonHandler"/> <!-- JSONB 처리 -->
+        <result property="storeAddr" column="store_addr"/>
         <result property="storeBusinessNo" column="store_business_no"/>
 
         <!-- StoreInfoDTO - 업체정보 -->
         <result property="storeIntro" column="store_intro"/>
         <result property="storeParkingYn" column="store_parking_yn"/>
-        <result property="storeSns" column="store_sns" typeHandler="com.example.HiMade.admin.handler.JsonHandler"/> <!-- JSONB 처리 -->
         <result property="storeNotice" column="store_notice"/>
         <result property="storeOpenTime" column="store_open_time"/>
         <result property="storeCloseTime" column="store_close_time"/>
-        <result property="storeDayOff" column="store_day_off" typeHandler="com.example.HiMade.admin.handler.ArrayHandler"/> <!-- JSONB 처리 -->
-        <result property="storeAccount" column="store_account" typeHandler="com.example.HiMade.admin.handler.JsonHandler"/> <!-- JSONB 처리 -->
-        <result property="imageUrl" column="image_url" typeHandler="com.example.HiMade.admin.handler.ArrayHandler"/> <!-- JSONB 처리 -->
         <result property="storeSignup" column="store_signup"/>
         <result property="storeStatus" column="store_status"/>
     </resultMap>

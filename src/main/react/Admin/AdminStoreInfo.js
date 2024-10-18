@@ -65,14 +65,13 @@ function AdminStoreInfo() {
     }, []);
 
     //수정하기
-    const [isDisabled, setIsDisabled] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(true);
 
     const toggleModify = () => {
         setIsDisabled(!isDisabled);
 
         console.log("수정",isDisabled);
     }
-    결정하다
 
 
 
@@ -85,65 +84,59 @@ function AdminStoreInfo() {
     <div className="admin-store-info-container">
         <h1>My Store</h1>
 
-        {/*<div className="store-img-box">
-            <div className="store-image">
-            <img src="../img3.jpg" alt="store" />
-            </div>
-        </div>*/}
-
-        {/*storeImg.length ? (
-            <div className="store-img-box">
-                {storeImg.map((url, index) => (
+        <div className="store-img-box">
+            {storeInfo.imageUrl && storeInfo.imageUrl.length > 0 ? (
+                storeInfo.imageUrl.map((url, index) => (
                     <div key={index} className="store-image">
                         <img src={url} alt={`storeImg ${index + 1}`} />
                     </div>
-                ))}
-            </div>
-            ) : (
-            <p>이미지가 없습니다.</p> // 상태가 비어있을 때 보여줄 메시지
-        )}*/}
+                ))
+                ) : (
+                <p>이미지가 없습니다.</p>
+            )}
+        </div>
 
         <div className="form-cont">
             <div className="form-group">
                 <label htmlFor="store-name">상호명</label>
                 <div className="input-field">
-                    <input type="text" value={storeInfo.storeName} disable={isDisabled}/>
+                    <input type="text" value={storeInfo.storeName} required={!isDisabled} disabled={isDisabled}/>
                 </div>
             </div>
 
             <div className="form-group">
                 <label htmlFor="username">아이디</label>
                 <div className="input-field">
-                    <input type="text" value={storeInfo.storeId} disable={isDisabled}/>
+                    <input type="text" value={storeInfo.storeId} disabled={isDisabled}/>
                 </div>
             </div>
 
             <div className="form-group">
                 <label htmlFor="password">비밀번호</label>
                 <div className="input-field">
-                    <input type="text" value={storeInfo.storePw} disable={isDisabled}/>
+                    <input type="text" value={storeInfo.storePw} disabled={isDisabled}/>
                 </div>
             </div>
 
             <div className="form-group">
                 <label htmlFor="manager">담당자명</label>
                 <div className="input-field">
-                    <input type="text" value={storeInfo.managerName} disable={isDisabled}/>
+                    <input type="text" value={storeInfo.managerName} disabled={isDisabled}/>
                 </div>
             </div>
 
             <div className="form-group">
                 <label htmlFor="contact">연락처</label>
                 <div className="input-field">
-                    <input type="text" value={storeInfo.managerPhone} disable={isDisabled}/>
+                    <input type="text" value={storeInfo.managerPhone} disabled={isDisabled}/>
                 </div>
             </div>
 
             <div className="form-group">
                 <label htmlFor="address">가게 주소</label>
                 <div className="input-field">
-                    <input type="text" value={storeInfo.storeAddr.addr} disable/>
-                    <input type="text" value={storeInfo.storeAddr.addrdetail} disable/>
+                    <input type="text" value={storeInfo.storeAddr.addr} disabled/>
+                    <input type="text" value={storeInfo.storeAddr.addrdetail} disabled/>
                 </div>
             </div>
 
@@ -158,7 +151,7 @@ function AdminStoreInfo() {
             <div className="form-group">
                 <label htmlFor="description">소개</label>
                 <div className="input-field">
-                    <textarea rows="4" readOnly style={{ resize: 'none' }} value={storeInfo.storeIntro} disable={isDisabled}/>
+                    <textarea rows="4" readOnly style={{ resize: 'none' }} value={storeInfo.storeIntro} disabled={isDisabled}/>
                 </div>
             </div>
 
@@ -174,8 +167,8 @@ function AdminStoreInfo() {
                 <label htmlFor="hours">영업 시간</label>
                 <div className="input-field hours-group">
                     <div className="days-time-box">
-                        <input type="time" value={storeInfo.storeOpenTime} disabled={isDisabled} /> ~
-                        <input type="time" value={storeInfo.storeCloseTime} disabled={isDisabled} />
+                        <label htmlFor="storeOpenTime"> 시작 <input type="time" value={storeInfo.storeOpenTime} disabled={isDisabled} /></label>
+                        <label htmlFor="storeCloseTime"> 마감 <input type="time" value={storeInfo.storeCloseTime} disabled={isDisabled} /></label>
                     </div>
                 </div>
             </div>

@@ -23,32 +23,10 @@ function StoreSignUp() {
         storeMaster:'',
         managerName:'',
         managerPhone:'',
-        storeAddr: {
-            zipcode: '',
-            addr:'',
-            addrdetail:''
-        },
-        storeBusinessNo:''
-    });
-
-    //step03
-    const [storeInfoRegistData, setStoreInfoRegistData] = useState ({
-        storeIntro: '',
-        storeNotice: '',
-        storeOpenTime: '',
-        storeCloseTime: '',
-        storeDayOff: [],
-        storeParkingYn: '',
-        storeSns: [
-            { snsLink: '', snsName: '' }, // 첫 번째 SNS 세트
-            { snsLink: '', snsName: '' }, // 두 번째 SNS 세트
-            { snsLink: '', snsName: '' }  // 세 번째 SNS 세트
-        ],
-        storeAccount: {
-            accountBank: '',
-            accountNumber: ''
-        },
-        imageUrl: []
+        storeBusinessNo:'',
+        zipcode: '',
+        addr:'',
+        addrdetail:''
     });
 
     // 스텝증가
@@ -130,34 +108,15 @@ function StoreSignUp() {
                 // 주소정보설정
                 setStoreInfoData(prevData => ({
                     ...prevData,
-                    storeAddr: {
-                        ...prevData.storeAddr,
-                        zipcode: data.zonecode,
-                        addr: addr,
-                        addrdetail: '' // 상세 주소는 비워둡니다.
-                    }
+                    zipcode: data.zonecode,
+                    addr: addr,
+                    addrdetail: ''
                 }));
 
                 // 상세주소 필드로 커서 이동
                 detailAddressRef.current.focus();
             }
         }).open();
-    };
-
-    //휴무일 이벤트
-    const handleChangeDayOff = (e) => {
-        const { value, checked } = e.target;
-
-        setStoreInfoRegistData(prevData => {
-            const updatedDayOff = checked
-            ? [...prevData.storeDayOff, value] // 체크
-            : prevData.storeDayOff.filter(day => day !== value); // 체크 해제
-
-            return {
-                ...prevData,
-                storeDayOff: updatedDayOff
-            };
-        });
     };
 
     //주차여부
@@ -170,135 +129,9 @@ function StoreSignUp() {
         }));
     };
 
-    //sns링크-이름
-    const handleChangeSns = (index, field, value) => {
-        const updatedSNS = [...storeInfoRegistData.storeSns];
-        updatedSNS[index][field] = value;
-        setStoreInfoRegistData(prevData => ({
-            ...prevData,
-            storeSns: updatedSNS
-        }));
-    };
-
-    //account값 저장
-    const handleChangeAccount = (e) => {
-        const { name, value } = e.target;
-
-        if(name === 'accountBank'){
-            setStoreInfoRegistData(prevData => ({
-                ...prevData,
-                storeAccount: {
-                    ...prevData.storeAccount,
-                    accountBank: value
-                }
-            }));
-        }else if (name === 'accountNumber'){
-            setStoreInfoRegistData(prevData => ({
-                ...prevData,
-                storeAccount: {
-                    ...prevData.storeAccount,
-                    accountNumber: value
-                }
-            }));
-        }
-    }
-
-    //step03 인풋저장
-    const handleChangeInfo = (e) => {
-        const { id, value } = e.target;
-        setStoreInfoRegistData({
-            ...storeInfoRegistData,
-            [id]: value // id 속성에 해당하는 값을 동적으로 업데이트
-        });
-    }
-
     useEffect (() => {
         console.log("step02 ",storeInfoData);
-        console.log("step03 ",storeInfoRegistData);
-    },[storeInfoData, storeInfoRegistData]);
-
-
-    //step03 사진 업로드
-    const [selectedImages, setSelectedImages] = useState([]); // 화면에 보여질 파일 리스트 (미리보기 URL)
-    const [uploadedImageUrls, setUploadedImageUrls] = useState([]); // 서버에서 반환된 실제 이미지 URL들
-
-    const onSelectFile = async (e) => {
-        e.preventDefault();
-        const files = Array.from(e.target.files); // 선택된 파일들 배열로 변환
-
-        // 이미지는 8장 이하일 때만 추가
-        if (selectedImages.length + files.length <= 8) {
-
-            // 미리보기
-            const selectImgs = files.map(file => URL.createObjectURL(file));
-            setSelectedImages(prev => [...prev, ...selectImgs]);
-
-            const uploadPromises = files.map(async (file) => {
-                const formData = new FormData();
-                formData.append('file', file);
-
-                try {
-                    // 서버에 파일 업로드
-                    const response = await axios.post('/adminStore/uploadImageToServer', formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    });
-
-                    // 서버에서 반환된 URL
-                    return response.data; // imageUrl만 반환해야 합니다.
-                } catch (error) {
-                    console.error("파일 업로드 오류: ", error); // 오류 로그 추가
-                    return null; // 오류가 발생할 경우 null 반환
-                }
-            });
-
-            // 모든 URL을 받아서 상태 업데이트
-            const imageUrls = await Promise.all(uploadPromises);
-            console.log("업로드된 이미지 URL들: ", imageUrls); // 확인 로그 추가
-
-            // null 값 필터링
-            const filteredUrls = imageUrls.filter(url => url !== null);
-
-            // 실제 서버 URL 배열 업데이트
-            setUploadedImageUrls((prev) => [...prev, ...filteredUrls]);
-
-            // Store 정보 업데이트
-            setStoreInfoRegistData((prev) => ({
-                ...prev,
-                imageUrl: [...prev.imageUrl, ...filteredUrls], // URL 배열로 업데이트
-            }));
-        } else {
-            alert('이미지는 최대 8장까지 업로드 가능합니다.');
-        }
-    };
-
-    const removeImage = async (index) => {
-        // 미리보기와 서버 URL이 각각 동기화되어야 함
-        const imageUrlToRemove = uploadedImageUrls[index];
-
-        try {
-            // 서버에 삭제 요청
-            await axios.delete('/adminStore/deleteImage', { data: { imageUrl: imageUrlToRemove } });
-
-            // 미리보기 이미지 상태 업데이트
-            setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
-
-            // 서버에서 저장된 실제 URL 상태 업데이트
-            setUploadedImageUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
-
-            // Store 정보 업데이트
-            setStoreInfoRegistData((prev) => ({
-                ...prev,
-                imageUrl: prev.imageUrl.filter((_, i) => i !== index), // URL 배열에서 삭제
-            }));
-
-        } catch (error) {
-            console.error("이미지 삭제 오류: ", error); // 오류 로그 추가
-        }
-    };
-
-    //사진업로드
+    },[storeInfoData]);
 
 
 
@@ -306,8 +139,7 @@ function StoreSignUp() {
     const handleStoreRegist = async() => {
         try {
             const response = await axios.post('/adminStore/registStore',{
-                ...storeInfoData,
-                ...storeInfoRegistData
+                ...storeInfoData
             });
             if (currentStep < 4) {
                 setCurrentStep(currentStep + 1);
@@ -323,24 +155,19 @@ function StoreSignUp() {
         {/*Step Indicator*/}
         <div className="step-indicator">
             <div className={`step ${currentStep === 1 ? 'active' : ''}`}>
-            <div className="icon">
-            <p>STEP 01<br/>이용약관/개인정보방침 동의</p>
-            </div>
+                <div className="icon">
+                <p>STEP 01<br/>이용약관/개인정보방침 동의</p>
+                </div>
             </div>
             <div className={`step ${currentStep === 2 ? 'active' : ''}`}>
-            <div className="icon">
-            <p>STEP 02<br/>신규등록</p>
-            </div>
+                <div className="icon">
+                <p>STEP 02<br/>신규등록</p>
+                </div>
             </div>
             <div className={`step ${currentStep === 3 ? 'active' : ''}`}>
-            <div className="icon">
-            <p>STEP 03<br/>가게정보등록</p>
-            </div>
-            </div>
-            <div className={`step ${currentStep === 4 ? 'active' : ''}`}>
-            <div className="icon">
-            <p>STEP 04<br/>가입완료</p>
-            </div>
+                <div className="icon">
+                <p>STEP 03<br/>가입완료</p>
+                </div>
             </div>
         </div>
 
@@ -435,18 +262,15 @@ function StoreSignUp() {
                     <div className="input-group">
                         <label htmlFor="address">사업자 주소</label>
                         <div className="btn-group">
-                            <input type="text" id="zipcode" value={storeInfoData.storeAddr.zipcode} ref={postcodeRef} placeholder="우편번호" style={{ width: '20%' }} readOnly />
+                            <input type="text" id="zipcode" value={storeInfoData.zipcode} ref={postcodeRef} placeholder="우편번호" style={{ width: '20%' }} readOnly />
                             <input type="button" className="btn-postcode" onClick={openPostcode} style={{ width: '20%' }} value="우편번호 찾기" />
                         </div>
-                        <input type="text" id="addr" value={storeInfoData.storeAddr.addr} ref={addressRef} placeholder="주소" readOnly />
-                        <input type="text" id="addrdetail" value={storeInfoData.storeAddr.addrdetail} ref={detailAddressRef} placeholder="상세주소"
+                        <input type="text" id="addr" value={storeInfoData.addr} ref={addressRef} placeholder="주소" readOnly />
+                        <input type="text" id="addrdetail" value={storeInfoData.addrdetail} ref={detailAddressRef} placeholder="상세주소"
                             onChange={(e) =>
                                 setStoreInfoData(prevData => ({
                                     ...prevData,
-                                    storeAddr: {
-                                        ...prevData.storeAddr,
-                                        addrdetail: e.target.value
-                                    }
+                                    addrdetail: e.target.value
                                 }))
                             }
                         />
@@ -460,130 +284,14 @@ function StoreSignUp() {
 
                 <div className="buttons">
                     <button type="button" className="cancel-btn" onClick={handleGoBack}>◀ 이전</button>
-                    <button type="submit" className="next-btn" onClick={handleClickNext}>다음단계 ▶</button>
+                    <button type="submit" className="next-btn" onClick={handleStoreRegist}>등록하기 ▶</button>
                 </div>
             </div>
         )}
 
 
-        {/* step03 가게정보등록 */}
+        {/* step03 가입완로 */}
         {currentStep === 3 && (
-            <div className="admin-store-info-regist-container">
-
-                {/* Main Form */}
-                <div className="noti-text">
-                    <i className="bi bi-check-lg"></i>
-                    해당 사이트에 등록할 가게 정보를 입력하는 단계입니다.
-                </div>
-
-                <label htmlFor="storeIntro">소개</label>
-                <textarea id="storeIntro" rows="4" placeholder="가게 소개를 입력하세요." style={{ maxHeight: "80px", overflowY: "auto" }} onChange={handleChangeInfo}></textarea>
-
-                <label htmlFor="storeNotice">공지사항</label>
-                <textarea id="storeNotice" rows="4" placeholder="공지사항을 입력하세요." style={{ maxHeight: "80px", overflowY: "auto" }} onChange={handleChangeInfo} ></textarea>
-
-                <div className="operating-hours">
-                    <label htmlFor="hours">영업 시간</label>
-                    <div className="op-hours">
-                        <label htmlFor="storeOpenTime"> 시작 <input type="time" id="storeOpenTime" onChange={handleChangeInfo} /></label>
-                        <label htmlFor="storeCloseTime"> 마감 <input type="time" id="storeCloseTime" onChange={handleChangeInfo} /></label>
-                    </div>
-                </div>
-
-                <div className="dayoffs">
-                    <label htmlFor="dayoffs">휴무일</label>
-                    <div className="dayoff">
-                        <label htmlFor="mon"><input type="checkbox" name="dayoff" id="mon" value="월요일" onChange={handleChangeDayOff}/> 월요일</label>
-                        <label htmlFor="tue"><input type="checkbox" name="dayoff" id="tue" value="화요일" onChange={handleChangeDayOff} /> 화요일</label>
-                        <label htmlFor="wed"><input type="checkbox" name="dayoff" id="wed" value="수요일" onChange={handleChangeDayOff} /> 수요일</label>
-                        <label htmlFor="thu"><input type="checkbox" name="dayoff" id="thu" value="목요일" onChange={handleChangeDayOff} /> 목요일</label>
-                        <label htmlFor="fri"><input type="checkbox" name="dayoff" id="fri" value="금요일" onChange={handleChangeDayOff} /> 금요일</label>
-                        <label htmlFor="sat"><input type="checkbox" name="dayoff" id="sat" value="토요일" onChange={handleChangeDayOff} /> 토요일</label>
-                        <label htmlFor="sun"><input type="checkbox" name="dayoff" id="sun" value="일요일" onChange={handleChangeDayOff} /> 일요일</label>
-                    </div>
-                </div>
-
-                <div className="parking">
-                    <label htmlFor="parking">주차 여부</label>
-                    <div className="parking-yn">
-                        <label htmlFor="parkingY"><input type="radio" name="parking" id="parkingY" value="Y" checked={storeInfoRegistData.storeParkingYn === 'Y'} onChange={handleChangeParking}/> 주차 가능</label>
-                        <label htmlFor="parkingN"><input type="radio" name="parking" id="parkingN" value="N" checked={storeInfoRegistData.storeParkingYn === 'N'} onChange={handleChangeParking}/> 주차 불가</label>
-                    </div>
-                </div>
-
-                <div className="sns">
-                    <label htmlFor="sns">SNS 링크(선택)
-                        <span className="small-text">* 최대 3개</span>
-                    </label>
-                    <div className="sns-box">
-                        <input type="text" className="snsLink" placeholder="링크를 입력하세요" value={storeInfoRegistData.storeSns[0].snsLink} onChange={(e)=>handleChangeSns(0, 'snsLink', e.target.value)} />
-                        <input type="text" className="snsName" placeholder="표기 ex) 인스타그램" value={storeInfoRegistData.storeSns[0].snsName} onChange={(e)=>handleChangeSns(0, 'snsName', e.target.value)} />
-                    </div>
-                    <div className="sns-box">
-                        <input type="text" className="snsLink" placeholder="링크를 입력하세요" value={storeInfoRegistData.storeSns[1].snsLink} onChange={(e)=>handleChangeSns(1, 'snsLink', e.target.value)} />
-                        <input type="text" className="snsName" placeholder="표기 ex) 인스타그램" value={storeInfoRegistData.storeSns[1].snsName} onChange={(e)=>handleChangeSns(1, 'snsName', e.target.value)} />
-                    </div>
-                    <div className="sns-box">
-                        <input type="text" className="snsLink" placeholder="링크를 입력하세요" value={storeInfoRegistData.storeSns[2].snsLink} onChange={(e)=>handleChangeSns(2, 'snsLink', e.target.value)} />
-                        <input type="text" className="snsName" placeholder="표기 ex) 인스타그램" value={storeInfoRegistData.storeSns[2].snsName} onChange={(e)=>handleChangeSns(2, 'snsName', e.target.value)} />
-                    </div>
-                </div>
-
-                <div className="account">
-                    <label htmlFor="account">계좌번호</label>
-                    <div className="account-info">
-                        <select className="account-bank" name="accountBank" onChange={handleChangeAccount}>
-                            <option value="">은행 선택</option>
-                            <option value="농협">농협</option>
-                            <option value="국민">국민</option>
-                            <option value="하나">하나</option>
-                            <option value="우리">우리</option>
-                            <option value="카카오뱅크">카카오뱅크</option>
-                        </select>
-                        <input type="text" id="account-number" name="accountNumber" placeholder="- 제외하고 입력하세요." style={{width: '30%'}} onChange={handleChangeAccount}/>
-                    </div>
-                </div>
-
-                <div className="photo-upload">
-                    <label htmlFor="photos">사진
-                        <span className="small-text">* 최대 8장</span>
-                    </label>
-                    <label htmlFor="file-upload" className="custom-file-upload">
-                        파일 업로드
-                    </label>
-                    <input
-                        id="file-upload"
-                        type="file"
-                        multiple // 여러 파일 선택 가능
-                        onChange={onSelectFile}
-                        accept=".png, .jpg, image/*"
-                        style={{ display: 'none', marginTop: '10px' }} // 항상 보이도록 설정
-                    />
-                    {selectedImages.length ? (
-                        <div className="photo-grid">
-                            {selectedImages.map((url, index) => (
-                                <div key={index} className="photo-item">
-                                    <img src={url} alt={`첨부파일 ${index + 1}`} />
-                                    <i className="bi bi-x-circle-fill" onClick={() => removeImage(index)}></i>
-                                </div>
-                            ))}
-                        </div>
-                        ) : (
-                        <div className="photo-grid">파일을 첨부할 수 있습니다.</div>
-                    )}
-
-                </div>
-
-                <div className="buttons">
-                    <button type="button" className="cancel-btn" onClick={handleGoBack}>◀ 이전</button>
-                    <button type="submit" className="next-btn" onClick={handleStoreRegist} >등록하기 ▶</button>
-                </div>
-            </div>
-        )}
-
-
-        {/* step04 가입완로 */}
-        {currentStep === 4 && (
             <div class="admin-store-regist-container">
                 {/* Main Form */}
                 <div class="admin-singup-complete-container">
@@ -600,7 +308,7 @@ function StoreSignUp() {
                         </div>
                     </div>
 
-                    <button type="button" className="login-go-btn" onClick={() => { location.href = '/adminlogin.signup';}}> 로그인하기 </button>
+                    <button type="button" className="login-go-btn" onClick={() => { location.href = '/adminlogin.login';}}> 로그인하기 </button>
                 </div>
             </div>
         )}
@@ -610,6 +318,6 @@ function StoreSignUp() {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-<StoreSignUp />
+    <StoreSignUp />
 );
 

@@ -7,6 +7,9 @@ function MasterStore() {
     const [store, setStore] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStore, setSelectedStore] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");  // 검색어 상태
+    const [searchResult, setSearchResult] = useState([]);  // 검색 결과 상태
+    const [isSearched, setIsSearched] = useState(false);  // 검색 트리거 상태
 
     useEffect(() => {
         fetch('/store')
@@ -44,7 +47,6 @@ function MasterStore() {
         }
     };
 
-
     // 모달 열기 함수
     const handleShowModal = (store) => {
         setSelectedStore(store);
@@ -66,9 +68,49 @@ function MasterStore() {
         }
     };
 
+    // 검색어 변경 핸들러
+    const handleSearchInputChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    // 검색 실행 함수
+    const handleSearch = () => {
+        const filteredStores = activeStores.filter((store) =>
+            store.storeName.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setSearchResult(filteredStores);  // 검색 결과 업데이트
+        setIsSearched(true);  // 검색이 실행됨
+    };
+
+    // 엔터키로 검색 실행
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+    // 검색 결과 또는 전체 목록을 보여줌
+    const displayedStores = isSearched ? searchResult : activeStores;
+
     return (
         <div>
-            <h3>업체관리</h3>
+            <div className="header-container">
+                <h3>업체관리</h3>
+
+                {/* 검색바 추가 */}
+                <div className="search-bar">
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={handleSearchInputChange}
+                        onKeyPress={handleKeyPress} // 엔터키 입력 처리
+                        placeholder="업체명 검색"
+                    />
+                    <button onClick={handleSearch}>검색</button>
+                </div>
+            </div>
+
+
             <table>
                 <thead>
                     <tr>
@@ -85,7 +127,7 @@ function MasterStore() {
                     </tr>
                 </thead>
                 <tbody>
-                    {activeStores.map((store) => {
+                    {displayedStores.map((store) => {
                         const addrInfo = parseJson(store.storeAddr);
 
                         return (
@@ -109,6 +151,7 @@ function MasterStore() {
                     })}
                 </tbody>
             </table>
+
             <StoreInfoModal isOpen={isModalOpen} onClose={handleCloseModal} store={selectedStore} />
         </div>
     );

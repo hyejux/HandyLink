@@ -31,7 +31,7 @@ function AdminLogin() {
             });
 
             const storeId = response.data;
-            console.log(storeId);
+            sessionStorage.setItem('storeId', storeId);
 
             if (response.status === 200 && storeId) { // storeId가 null 또는 빈 문자열이 아닌지 확인
                 alert(`로그인 성공 ${storeId}`);

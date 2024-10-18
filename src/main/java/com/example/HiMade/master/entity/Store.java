@@ -42,7 +42,7 @@ public class Store {
     private String storeSns; // 이 필드는 JSON 배열로 유지
     private String imageUrl;
     private String storeNotice;
-    private Time storeStartTime;
+    private Time storeOpenTime;
     private Time storeCloseTime;
     private String storeDayOff;
     private String storeAccount; // 이 필드는 JSON 객체로 유지

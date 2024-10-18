@@ -67,4 +67,13 @@
         VALUES (3, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 1)
     </insert>
 
+
+    <!--  예약 상태 변경  -->
+    <update id="updateStatus" parameterType="com.example.HiMade.admin.dto.UpdateReservationStatusDTO">
+        UPDATE reservation
+        SET reservation_status = #{newStatus}
+        WHERE reservation_no = #{reservationId}
+    </update>
+
+
 </mapper>

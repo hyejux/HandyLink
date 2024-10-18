@@ -30,6 +30,11 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
+    public void updateStoreSet(StoreRegistDTO storeRegistDTO) {
+        adminStoreMapper.updateStoreSet(storeRegistDTO);
+    }
+
+    @Override
     public String uploadImage(MultipartFile file) { //이미지 URL 변환해서 리턴
         String imageUrl = null;
         try {
@@ -58,8 +63,8 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
-    public List<String> getStoreImg(String  storeId) {
-        return adminStoreMapper.getStoreImg(storeId);
+    public StoreRegistDTO getStoreInfo(String storeId) {
+        return adminStoreMapper.getStoreInfo(storeId);
     }
 
 }

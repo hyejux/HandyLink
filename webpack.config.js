@@ -1,6 +1,6 @@
 var path = require('path');
 const webpack = require('webpack');
-
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
     watch: true, // 변경 사항을 감지하여 자동으로 재빌드
@@ -89,5 +89,15 @@ module.exports = {
         new webpack.ProvidePlugin({
           process: 'process/browser',
         }),
-      ],
+        // 카카오
+        new Dotenv({
+            path: './.env', // .env 파일 경로
+            systemvars: true,
+            expand: true
+        }),
+        new webpack.DefinePlugin({
+            'process.env.REACT_APP_KAKAO_CLIENT_ID': JSON.stringify(process.env.REACT_APP_KAKAO_CLIENT_ID),
+            'process.env.REACT_APP_KAKAO_REDIRECT_URI': JSON.stringify(process.env.REACT_APP_KAKAO_REDIRECT_URI)
+        })
+    ],
 };

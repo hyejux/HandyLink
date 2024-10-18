@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './UserLoginPage.css';
 import ReactDOM from "react-dom/client";
 
 function UserLoginPage () {
+
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
@@ -35,6 +36,26 @@ function UserLoginPage () {
         } catch (error) {
             console.error('로그인 중 오류 발생:', error);
         }
+    };
+
+    // 카카오
+    const handleKakaoLogin = () => {
+        // .env에서 REST API 키 가져오기
+        const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+        const REST_API_KEY = process.env.REACT_APP_KAKAO_CLIENT_ID;
+
+        if (!REST_API_KEY || !REDIRECT_URI) {
+            console.error("Kakao API 키 또는 리다이렉트 URI가 설정되지 않았습니다.");
+            return;
+        }
+
+        // Kakao 인증 URL 생성
+        const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
+
+        console.log("Kakao Auth URL:", KAKAO_AUTH_URL); // 확인용 콘솔 출력
+
+        // 카카오 인증 페이지로 리다이렉트
+        window.location.href = KAKAO_AUTH_URL;
     };
     return (
         <div>
@@ -79,7 +100,7 @@ function UserLoginPage () {
                 <div className="divider">또는</div>
 
                 <div className="social-login">
-                <img src="/img/kakao_login.png" alt="Kakao Login" title="Kakao 로그인"/>
+                    <img src="/img/kakao_login.png" alt="Kakao Login" title="Kakao로 시작하기" onClick={handleKakaoLogin}/>
                 </div>
 
                 <div className="footer-text">

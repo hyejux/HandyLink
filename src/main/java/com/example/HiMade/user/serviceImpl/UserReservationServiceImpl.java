@@ -3,6 +3,7 @@ package com.example.HiMade.user.serviceImpl;
 
 import com.example.HiMade.user.dto.UserRL;
 import com.example.HiMade.user.dto.UserRSlotDTO;
+import com.example.HiMade.user.dto.UserReservationDTO;
 import com.example.HiMade.user.mapper.UserReservationMapper;
 import com.example.HiMade.user.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,10 @@ public class UserReservationServiceImpl implements UserReservationService {
   public List<UserRSlotDTO> getDateTime(LocalDate Date) {
     System.out.println(userReservationMapper.getDateTime(Date));
     return userReservationMapper.getDateTime(Date);
+  }
+
+  @Override
+  public void setReservationForm(UserReservationDTO dto) {
+    userReservationMapper.setReservationForm(dto);
   }
 }

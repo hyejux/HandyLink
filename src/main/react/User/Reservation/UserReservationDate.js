@@ -19,6 +19,7 @@ function UserReservationDate() {
   const [date, setDate] = useState(new Date());
   const [dateTime, setDateTime] = useState([]);
 
+
   const handleDateChange = (newDate) => {
     setDate(newDate);
     const adjustedDate = addHours(newDate, 9);
@@ -65,13 +66,59 @@ function UserReservationDate() {
     setSelectSlot2(slot);
   };
 
-  const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  const [rSloyKey, setRSloyKey] = useState('00:00');
 
+  const handleSlotClick3 = (reservationSlotKey) => {
+    console.log(`Selected time slot: ${reservationSlotKey}`);
+    setRSloyKey(reservationSlotKey);
+  };
+
+  const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  
   const goToAdminPage = (id) => {
-    sessionStorage.setItem('selectSlot', selectSlot2);
+    sessionStorage.setItem('reservationSlotKey',rSloyKey);
+    sessionStorage.setItem('selectSlot', selectSlot3);
     sessionStorage.setItem('formattedDate', formattedDate);
     window.location.href = `../UserReservationOption.user/${id}`;
   };
+
+  const [selectSlot3, setSelectSlot3] = useState('00:00');
+
+  useEffect(() => {
+    const formattedSlot = selectSlot2.replace(/오전\s+|오후\s+/g, '').trim();
+  
+    // "오후 03:00" 또는 "오전 03:00"에서 "15:00" 또는 "03:00"으로 변환
+    const timeParts = formattedSlot.split(':');
+    let hours = parseInt(timeParts[0]);
+    const isAfternoon = selectSlot2.includes('오후');
+  
+    if (isAfternoon && hours < 12) {
+      hours += 12; // 12시간 형식에서 24시간 형식으로 변환
+    } else if (!isAfternoon && hours === 12) {
+      hours = 0; // 12AM을 00으로 변환
+    }
+  
+    const resultSlot = `${String(hours).padStart(2, '0')}:${timeParts[1]}`;
+  
+    console.log(`Selected time slot: ${resultSlot}`);
+    setSelectSlot3(resultSlot);
+  },[selectSlot2]);
+  
+
+  const [reserveModi, setReserveModi] = useState('');
+
+  useEffect(() => {
+    axios
+      .get(`/adminReservation/getListDetail/${cateId}`)
+      .then(response => {
+        console.log(response.data);
+        setReserveModi(response.data);
+      })
+      .catch(error => {
+        console.log('Error Category', error);
+      });
+
+    }, [cateId]);
 
   return (
     <div className="user-main-container">
@@ -97,6 +144,23 @@ function UserReservationDate() {
             <div><i className="bi bi-telephone-fill"></i> 070 - 1236 -7897</div>
           </div>
         </div>
+        <div className="user-content-container">
+             <div className="user-reserve-menu">
+               <div className="user-reserve-menu-img">
+               <img src="/img/user_basic_profile.jpg" />
+               </div>
+               <div className="user-reserve-menu-content">
+                 <div>{reserveModi.serviceName} </div> 
+                 <div>
+                   {reserveModi.serviceContent}
+                 
+                 </div>
+                 <div> {reserveModi.servicePrice} 원 ~</div>
+                 
+               </div>
+             </div>
+           </div>
+
 
         <div className="user-content-container">
           <div className="user-reserve-date-title">예약일 선택</div>
@@ -124,6 +188,7 @@ function UserReservationDate() {
                       onClick={() => {
                         handleSlotClick(index);  // 슬롯 선택 관리
                         handleSlotClick2(slots); // 슬롯 시간 출력
+                        handleSlotClick3(slot.reservationSlotKey);
                       }}
                       style={{
                         backgroundColor: selectedSlot === index ? '#2C348F' : 'transparent',

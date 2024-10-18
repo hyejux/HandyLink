@@ -2,6 +2,7 @@ package com.example.HiMade.user.controller.ReservationController;
 
 
 import com.example.HiMade.user.dto.UserRSlotDTO;
+import com.example.HiMade.user.dto.UserReservationDTO;
 import com.example.HiMade.user.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +26,10 @@ public class UserReservationController {
     return userReservationService.getDateTime(date);
   }
 
+  @PostMapping("/setReservationForm")
+  public void setReservationForm(@RequestBody UserReservationDTO dto) {
+    System.out.println(dto);
+    userReservationService.setReservationForm(dto);
+  }
 
 }

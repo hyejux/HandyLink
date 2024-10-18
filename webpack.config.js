@@ -1,6 +1,6 @@
 var path = require('path');
 const webpack = require('webpack');
-
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
     watch: true, // 변경 사항을 감지하여 자동으로 재빌드
@@ -11,6 +11,7 @@ module.exports = {
         main: './Main.js', //여러페이지 설정이 가능함
         user: './User/User/User.js',
         userMain: './User/User/UserMain.js',
+        userSearch: './User/User/UserSearch.js',
         admin: './Admin/Admin.js',
         StoreSignUp: './Admin/StoreSignUp.js',
         AdminLogin: './Admin/AdminLogin.js',
@@ -37,7 +38,12 @@ module.exports = {
         UserLoginPage : './User/User/UserLoginPage.js',
         UserAccountFind : './User/User/UserAccountFind.js',
         UserChatList : './User/Inquiry/UserChatList.js',
-        UserReservationDate : './User/Reservation/UserReservationDate.js'
+        UserReservationDate : './User/Reservation/UserReservationDate.js',
+
+
+
+
+        MyStore: './Admin/MyStore.js'
 
     },
     devtool: 'sourcemaps',
@@ -88,5 +94,15 @@ module.exports = {
         new webpack.ProvidePlugin({
           process: 'process/browser',
         }),
-      ],
+        // 카카오
+        new Dotenv({
+            path: './.env', // .env 파일 경로
+            systemvars: true,
+            expand: true
+        }),
+        new webpack.DefinePlugin({
+            'process.env.REACT_APP_KAKAO_CLIENT_ID': JSON.stringify(process.env.REACT_APP_KAKAO_CLIENT_ID),
+            'process.env.REACT_APP_KAKAO_REDIRECT_URI': JSON.stringify(process.env.REACT_APP_KAKAO_REDIRECT_URI)
+        })
+    ],
 };

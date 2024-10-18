@@ -62,6 +62,7 @@ public class MainController {
     return "masterLayout";
   }
 
+  //업체가입
   @GetMapping("/{pageName}.signup")
   public String signup(@PathVariable String pageName, Model model){
     model.addAttribute("pageName", pageName);
@@ -69,6 +70,7 @@ public class MainController {
     return "storeRegist";
   }
 
+  //업체로그인
   @GetMapping("/{pageName}.login")
   public String login(@RequestParam(value = "err", required = false) String err,
                       @PathVariable String pageName, Model model) {
@@ -81,7 +83,7 @@ public class MainController {
   }
 
   @PostMapping("/loginForm")
-  public ResponseEntity<String> loginForm(@RequestBody Map<String, String> loginData, HttpSession session, Model model) {
+  public ResponseEntity<String> loginForm(@RequestBody Map<String, String> loginData, HttpSession session) {
     String id = loginData.get("id");
     String pw = loginData.get("pw");
 
@@ -90,12 +92,10 @@ public class MainController {
     String storeId = store.getStoreId();
     System.out.println("해당업체정보 "+ store);
 
-    model.addAttribute("store", store);
-
-
-
     if(storeId != null && !storeId.isEmpty()){
       session.setAttribute("storeId", storeId);
+      session.setAttribute("storeName", store.getStoreName());
+
       return ResponseEntity.ok(storeId);
     } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인실패"); //401반환

@@ -6,133 +6,188 @@ import './AdminStoreInfo.css';
 
 function AdminStoreInfo() {
 
-    const [storeImg, setStoreImg] = useState([]); //서버에서 불러온 img
+    const [storeInfo, setStoreInfo] = useState({
+        storeId:'',
+        storePw:'',
+        storeCate:'',
+        storeName:'',
+        storeMaster:'',
+        managerName:'',
+        managerPhone:'',
+        storeAddr: {
+            zipcode: '',
+            addr:'',
+            addrdetail:''
+        },
+        storeBusinessNo:'',
+        storeIntro: '',
+        storeNotice: '',
+        storeOpenTime: '',
+        storeCloseTime: '',
+        storeDayOff: [],
+        storeParkingYn: '',
+        storeSns: [
+            { snsLink: '', snsName: '' }, // 첫 번째 SNS 세트
+            { snsLink: '', snsName: '' }, // 두 번째 SNS 세트
+            { snsLink: '', snsName: '' }  // 세 번째 SNS 세트
+        ],
+        storeAccount: {
+            accountBank: '',
+            accountNumber: ''
+        },
+        imageUrl: [],
+        storeSignup:'',
+        storeStatus:''
+    });
 
-    useEffect(() => { // async를 제거하고, useEffect 내부에서 async 함수를 정의합니다.
+    useEffect(() => {
         const fetchStoreImages = async () => {
             try {
-                const response = await axios.get('/adminStore/storeInfoImg',{storeId: "test123"});
-                console.log("이미지 응답: ", response.data);
-                setStoreImg(response.data); // 응답 데이터로 상태 업데이트
+                // 세션 스토리지에서 storeId 가져오기
+                const storeId = sessionStorage.getItem('storeId');
+                console.log("세션에서 가져온 storeId: ", storeId);
+
+                // sessionId가 null이 아닌 경우에만 API 요청
+                if (storeId) {
+                    const response = await axios.get(`/adminStore/storeInfo?storeId=${storeId}`);
+                    console.log("업체정보: ", response.data);
+                    setStoreInfo(response.data); // 상태 업데이트
+                } else {
+                    console.log("세션 ID가 없습니다.");
+                }
             } catch (error) {
                 console.log("error: ", error);
             }
         };
 
-        fetchStoreImages(); // 함수 호출
+        fetchStoreImages();
+
     }, []);
+
+    //수정하기
+    const [isDisabled, setIsDisabled] = useState(true);
+
+    const toggleModify = () => {
+        setIsDisabled(!isDisabled);
+
+        console.log("수정",isDisabled);
+    }
+
+
+
+
+
+
+
 
     return(
     <div className="admin-store-info-container">
-    <h1>My Store</h1>
+        <h1>My Store</h1>
 
-    {/*div className="store-img-box">
-        <div className="store-image">
-        <img src="../img3.jpg" alt="store" />
-        </div>
-    </div>*/}
-
-    {storeImg.length ? (
         <div className="store-img-box">
-            {storeImg.map((url, index) => (
-                <div key={index} className="store-image">
-                    <img src={url} alt={`storeImg ${index + 1}`} />
-                </div>
-            ))}
+            {storeInfo.imageUrl && storeInfo.imageUrl.length > 0 ? (
+                storeInfo.imageUrl.map((url, index) => (
+                    <div key={index} className="store-image">
+                        <img src={url} alt={`storeImg ${index + 1}`} />
+                    </div>
+                ))
+                ) : (
+                <p>이미지가 없습니다.</p>
+            )}
         </div>
-        ) : (
-        <p>이미지가 없습니다.</p> // 상태가 비어있을 때 보여줄 메시지
-    )}
 
-    <div className="form-cont">
-    <div className="form-group">
-    <label htmlFor="store-name">상호명</label>
-    <div className="input-field">
-    꽃마을
-    </div>
-    </div>
+        <div className="form-cont">
+            <div className="form-group">
+                <label htmlFor="store-name">상호명</label>
+                <div className="input-field">
+                    <input type="text" value={storeInfo.storeName} required={!isDisabled} disabled={isDisabled}/>
+                </div>
+            </div>
 
-    <div className="form-group">
-    <label htmlFor="username">아이디</label>
-    <div className="input-field">
-    dbcl1234
-    </div>
-    </div>
+            <div className="form-group">
+                <label htmlFor="username">아이디</label>
+                <div className="input-field">
+                    <input type="text" value={storeInfo.storeId} disabled={isDisabled}/>
+                </div>
+            </div>
 
-    <div className="form-group">
-    <label htmlFor="password">비밀번호</label>
-    <div className="input-field">
-    **********
-    </div>
-    </div>
+            <div className="form-group">
+                <label htmlFor="password">비밀번호</label>
+                <div className="input-field">
+                    <input type="text" value={storeInfo.storePw} disabled={isDisabled}/>
+                </div>
+            </div>
 
-    <div className="form-group">
-    <label htmlFor="manager">담당자명</label>
-    <div className="input-field">
-    장소영
-    </div>
-    </div>
+            <div className="form-group">
+                <label htmlFor="manager">담당자명</label>
+                <div className="input-field">
+                    <input type="text" value={storeInfo.managerName} disabled={isDisabled}/>
+                </div>
+            </div>
 
-    <div className="form-group">
-    <label htmlFor="contact">연락처</label>
-    <div className="input-field">
-    010-0000-0000
-    </div>
-    </div>
+            <div className="form-group">
+                <label htmlFor="contact">연락처</label>
+                <div className="input-field">
+                    <input type="text" value={storeInfo.managerPhone} disabled={isDisabled}/>
+                </div>
+            </div>
 
-    <div className="form-group">
-    <label htmlFor="address">가게 주소</label>
-    <div className="input-field">
-    서울특별시 강남구 서초대로 143번길 00빌딩 2층
-    </div>
-    </div>
+            <div className="form-group">
+                <label htmlFor="address">가게 주소</label>
+                <div className="input-field">
+                    <input type="text" value={storeInfo.storeAddr.addr} disabled/>
+                    <input type="text" value={storeInfo.storeAddr.addrdetail} disabled/>
+                </div>
+            </div>
 
-    <div className="form-group">
-    <label htmlFor="public">공개 여부</label>
-    <div className="input-field radio-group">
-    <input type="radio" name="public" checked disabled /> <span> 공개 </span>
-    <input type="radio" name="public" disabled /> <span> 비공개 </span>
-    </div>
-    </div>
+            <div className="form-group">
+                <label htmlFor="public">공개 여부</label>
+                <div className="input-field radio-group">
+                    <input type="radio" name="public" value="활성화" checked={storeInfo.storeStatus === '활성화'} disabled={isDisabled} /> <span> 공개 </span>
+                    <input type="radio" name="public" value="비활성화" checked={storeInfo.storeStatus === '비활성화'} disabled={isDisabled} /> <span> 비공개 </span>
+                </div>
+            </div>
 
-    <div className="form-group">
-    <label htmlFor="description">소개</label>
-    <div className="input-field">
-    <textarea rows="4" readOnly disabled style={{ resize: 'none' }}>
-    해당 가게는 꽃을 전문적으로 판매하는 가게입니다. 다양한 꽃들을 합리적인 가격으로 제공하며, 고객 만족도를 높이기 위해 항상 최선을 다하고 있습니다.
-    </textarea>
-    </div>
-    </div>
+            <div className="form-group">
+                <label htmlFor="description">소개</label>
+                <div className="input-field">
+                    <textarea rows="4" readOnly style={{ resize: 'none' }} value={storeInfo.storeIntro} disabled={isDisabled}/>
+                </div>
+            </div>
 
-    <div className="form-group">
-    <label htmlFor="parking">주차장 여부</label>
-    <div className="input-field radio-group">
-    <input type="radio" name="parking" checked disabled /> O
-    <input type="radio" name="parking" disabled /> X
-    </div>
-    </div>
+            <div className="form-group">
+                <label htmlFor="parking">주차장 여부</label>
+                <div className="input-field radio-group">
+                    <input type="radio" name="parking"  value="Y" checked={storeInfo.storeParkingYn === 'Y'} disabled={isDisabled} /> O
+                    <input type="radio" name="parking" value="N" checked={storeInfo.storeParkingYn === 'N'} disabled={isDisabled} /> X
+                </div>
+            </div>
 
-    <div className="form-group">
-    <label htmlFor="hours">영업 시간</label>
-    <div className="input-field hours-group">
-    <div className="days-time-box">
-    <span> 월요일 </span>
-    <input type="time" value="09:00" disabled /> ~
-    <input type="time" value="18:00" disabled />
-    </div>
-    </div>
-    </div>
+            <div className="form-group">
+                <label htmlFor="hours">영업 시간</label>
+                <div className="input-field hours-group">
+                    <div className="days-time-box">
+                        <label htmlFor="storeOpenTime"> 시작 <input type="time" value={storeInfo.storeOpenTime} disabled={isDisabled} /></label>
+                        <label htmlFor="storeCloseTime"> 마감 <input type="time" value={storeInfo.storeCloseTime} disabled={isDisabled} /></label>
+                    </div>
+                </div>
+            </div>
 
-    <div className="form-group">
-    <label htmlFor="sns">SNS 링크</label>
-    <div className="input-field sns-links">
-    <a href="https://instagram.com/mystore">인스타그램</a>
-    <a href="https://facebook.com/mystore">페이스북</a>
-    </div>
-    </div>
-    </div>
+            <div className="form-group">
+                <label htmlFor="sns">SNS 링크</label>
+                <div className="input-field sns-links">
+                    {storeInfo.storeSns.map((sns, index) => (
+                        <a key={index} href={sns.snsLink} target="_blank" rel="noopener noreferrer">
+                            <span>{sns.snsName}</span>
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </div>
 
-    <button className="submit-btn">수정</button>
+        <button type="button" className="modify-btn" onClick={toggleModify}>
+            {isDisabled ? '수정하기' : '수정완료'}
+        </button>
     </div>
     );
 }

@@ -60,7 +60,11 @@ function AdminReserveManage() {
 
     const [viewMode, setViewMode] = useState('calendar');
     const [reservationList, setReservationList] = useState([]);
-    const [startMonth] = useState(new Date()); // 현재 월을 시작 월로 설정
+    const [selectedDates, setSelectedDates] = useState([]);
+    const [displayedDates, setDisplayedDates] = useState([]); // 선택된 날짜를 표시할 상태 추가
+    const [startMonth] = useState(new Date());
+    const [updatingReservationId, setUpdatingReservationId] = useState(null); // 현재 업데이트 중인 예약 ID
+    const [newStatus, setNewStatus] = useState(''); // 새로운 예약 상태
 
     useEffect(() => {
         axios.get('/adminReservation/getManageList')
@@ -71,21 +75,67 @@ function AdminReserveManage() {
             .catch(error => {
                 console.log('Error Category', error);
             });
-    }, [])
+    }, []);
 
     // 캘린더에 예약건 반환
     const getReservationsForDate = (date) => {
         return reservationList
             .filter(reservation =>
-                new Date(reservation.confirmTime).toLocaleDateString() === date.toLocaleDateString()
+                new Date(reservation.regTime).toLocaleDateString() === date.toLocaleDateString()
             )
-            .sort((a, b) => new Date(a.confirmTime) - new Date(b.confirmTime)); // 시간순 정렬
+            .sort((a, b) => new Date(a.regTime) - new Date(b.regTime));
     };
+
+    const handleDateClick = (date) => {
+        const dateString = date.toLocaleDateString();
+        setSelectedDates((prevSelected) => {
+            if (prevSelected.includes(dateString)) {
+                return prevSelected.filter(d => d !== dateString);
+            } else {
+                return [...prevSelected, dateString];
+            }
+        });
+    };
+
+    // 선택된 날짜를 화면에 띄우고 선택된 날짜 초기화
+    const handleShowSelectedDates = () => {
+        setDisplayedDates(selectedDates);
+        setSelectedDates([]); // 선택된 날짜 초기화
+    };
+
+    // 예약 상태 변경
+    const handleStatusChange = (reservationNo, status) => {
+        if (!status) {
+            alert('예약 상태를 선택해야 합니다.');
+            return;
+        }
+
+        axios.post('/adminReservation/updateStatus', {
+            reservationId: reservationNo,
+            newStatus: status,
+        })
+            .then(response => {
+                setReservationList(prevList => prevList.map(item =>
+                    item.reservationNo === reservationNo ? { ...item, reservationStatus: status } : item
+                ));
+                setUpdatingReservationId(null); // 업데이트 완료 후 ID 초기화
+                setNewStatus(''); // 새로운 상태 초기화
+            })
+            .catch(error => {
+                console.error('Error updating reservation status:', error);
+            });
+    };
+
+    // 예약 상태 변경 취소 버튼
+    const handleCancelUpdate = () => {
+        setUpdatingReservationId(null);
+        setNewStatus('');
+    };
+
+    console.log(reservationList);
 
 
     return (
-
-
         <div>
             <div className="main-content-title">
                 예약 관리
@@ -99,11 +149,23 @@ function AdminReserveManage() {
                 </div>
             </div>
 
-            <div className="main-btns">
-                {/* <button type="button" className="btn-st" >
-                    추가하기
-                </button> */}
-            </div>
+            {/* <div className="main-btns">
+                <button type="button" className="btn-st" onClick={handleShowSelectedDates}>
+                    선택한 날짜
+                </button>
+            </div> */}
+
+            {/* 선택된 날짜를 버튼 아래에 표시 */}
+            {/* {displayedDates.length > 0 && (
+                <div className="selected-dates-display">
+                    <h4>선택된 날짜:</h4>
+                    <ul>
+                        {displayedDates.map((date, index) => (
+                            <li key={index}>{date}</li>
+                        ))}
+                    </ul>
+                </div>
+            )} */}
 
             <div className="main-contents">
                 {viewMode === 'list' ? (
@@ -118,6 +180,7 @@ function AdminReserveManage() {
                                     <th>총액</th>
                                     <th>요청사항</th>
                                     <th>예약 상태</th>
+                                    <th>상태 변경</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -126,68 +189,109 @@ function AdminReserveManage() {
                                         <td><input type="checkbox" /></td>
                                         <td>{value.reservationNo}</td>
                                         <td>{value.userId}</td>
-                                        <td>{value.confirmTime}</td>
+                                        <td>{value.regTime}</td>
                                         <td>{value.reservationPrice}</td>
                                         <td>{value.customerRequest}</td>
-                                        <td><button className="flight-btn">{value.reservationStatus}</button></td>
+                                        <td>{value.reservationStatus}</td>
+                                        <td>
+                                            {updatingReservationId === value.reservationNo ? (
+                                                <div>
+                                                    <select
+                                                        value={newStatus}
+                                                        onChange={(e) => setNewStatus(e.target.value)}
+                                                    >
+                                                        <option value="">상태 선택</option>
+                                                        {value.reservationStatus !== '대기' && <option value="대기">대기</option>}
+                                                        {value.reservationStatus !== '취소' && <option value="취소">취소</option>}
+                                                        {value.reservationStatus !== '완료' && <option value="완료">완료</option>}
+                                                    </select>
+                                                    <button onClick={() => handleStatusChange(value.reservationNo, newStatus)}>업데이트</button>
+                                                    <button onClick={handleCancelUpdate}>취소</button>
+                                                </div>
+                                            ) : (
+                                                <button className="flight-btn" onClick={() => setUpdatingReservationId(value.reservationNo)}>
+                                                    상태 변경
+                                                </button>
+                                            )}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
                 ) : (
-                    <div className="custom-calendar">
-                        <h3>{startMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</h3>
-                        <Calendar
-                        onChange={() => { }}
-                        value={startMonth}
-                        locale="en-US" // 영어 설정
-                        tileClassName={({ date, view }) => {
-                            if (view === 'month') {
-                                if (date.getDay() === 0) { // 일요일
-                                    return 'sunday'; // 일요일에만 'sunday' 클래스 추가
-                                } else if (date.getDay() === 6) { // 토요일
-                                    return 'saturday'; // 토요일에만 'saturday' 클래스 추가
-                                }
-                            }
-                            return null; // 기본값은 null
-                        }}
-                        tileContent={({ date, view }) => {
-                            if (view === 'month') {
-                                const reservations = getReservationsForDate(date);
-                                if (reservations.length > 0) {
-                                    return (
-                                        <ul className="reservation-list">
-                                            {reservations.map((reservation) => {
-                                                const time = new Date(reservation.confirmTime);
-                                                const formattedTime = `${time.getHours()}:${time.getMinutes().toString().padStart(2, '0')}`;
-                                                return (
-                                                    <li key={reservation.reservationNo}>
-                                                        시간: {formattedTime} <br/> 예약자: {reservation.userId} <br/> 상태: {reservation.reservationStatus} 
-                                                    </li>
-                                                );
-                                            })}
+                    <div className="calendar-and-reservation-info">
+                        <div className="custom-calendar">
+                            <h3>{startMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</h3>
+                            <Calendar
+                                onChange={() => { }}
+                                value={startMonth}
+                                locale="en-US"
+                                tileClassName={({ date, view }) => {
+                                    if (view === 'month') {
+                                        const dateString = date.toLocaleDateString();
+                                        if (selectedDates.includes(dateString)) {
+                                            return 'selected-date';
+                                        }
+                                    }
+                                    return null;
+                                }}
+                                tileContent={({ date, view }) => {
+                                    if (view === 'month') {
+                                        const reservations = getReservationsForDate(date);
+                                        if (reservations.length > 0) {
+                                            return (
+                                                <ul className="reservation-list">
+                                                    {reservations.map((reservation) => {
+                                                        return (
+                                                            <li key={reservation.reservationNo}>
+                                                                {reservation.reservationTime} <br /> {reservation.userId} <br />{reservation.reservationStatus}
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ul>
+                                            );
+                                        }
+                                    }
+                                    return null;
+                                }}
+                                onClickDay={handleDateClick}
+                            />
+                        </div>
+
+                        {/* 선택된 날짜가 있을 때만 예약 정보 리스트 표시 */}
+                        {selectedDates.length > 0 && (
+                            <div className="reservation-info-container">
+                                <h3>예약 정보</h3>
+                                {selectedDates.map((dateString, index) => (
+                                    <div key={index}>
+                                        <h4>{dateString}</h4>
+                                        <ul>
+                                            {getReservationsForDate(new Date(dateString)).map(reservation => (
+                                                <li key={reservation.reservationNo}>
+                                                    <strong>예약번호:</strong> {reservation.reservationNo} <br />
+                                                    <strong>예약상태:</strong> {reservation.reservationStatus} <br />
+                                                    <strong>예약시간:</strong> {reservation.reservationTime} <br />
+                                                    <strong>예약등록일시:</strong> {reservation.regTime} <br />
+                                                    <strong>요청사항:</strong> {reservation.customerRequest} <br />
+                                                    <strong>총액:</strong> {reservation.reservationPrice} <br />
+                                                    <strong>업체아이디:</strong> {reservation.storeId} <br />
+                                                    <strong>사용자아이디:</strong> {reservation.userId} <br />
+                                                </li>
+                                            ))}
                                         </ul>
-                                    );
-                                }
-                            }
-                            return null; // 예약이 없을 경우 null 반환
-                        }}
-                    />
-
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-            {/* Pagination can be added here if needed */}
-            {/* <div className="pagination">
-                       <span>Rows per page: 14</span>
-                       <span>1-4 of 4</span>
-                       <button>&lt;</button>
-                       <button>&gt;</button>
-                   </div> */}
-        </div>
 
-    )
+
+                )}
+
+            </div>
+        </div>
+    );
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

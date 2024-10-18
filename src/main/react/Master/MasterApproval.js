@@ -6,6 +6,9 @@ import StoreInfoModal from './StoreInfoModal';
 function MasterApproval() {
   const [store, setStore] = useState([]);
   const [filter, setFilter] = useState('전체');
+  const [searchQuery, setSearchQuery] = useState("");  // 검색어 상태
+  const [searchTerm, setSearchTerm] = useState("");    // 검색 버튼으로 트리거된 실제 검색어
+  const [isSearched, setIsSearched] = useState(false);  // 검색이 트리거되었는지 여부
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStore, setSelectedStore] = useState(null);
 
@@ -29,6 +32,24 @@ function MasterApproval() {
     }
     return true;
   });
+
+  // 검색 필터링 (검색이 트리거되었을 때만)
+  const searchFilteredStores = isSearched
+    ? filteredStores.filter((store) =>
+        store.storeName.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : filteredStores;
+
+  const handleSearch = () => {
+    setSearchTerm(searchQuery);  // 현재 입력된 검색어로 검색 트리거
+    setIsSearched(true);  // 검색이 수행되었음을 표시
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();  // Enter 키로 검색 트리거
+    }
+  };
 
   const handleApprove = (storeId, currentStatus) => {
     const confirmationMessage = currentStatus === '대기'
@@ -79,11 +100,22 @@ function MasterApproval() {
     }
   };
 
-
   return (
     <div>
       <div className="header-container">
         <h3>승인관리</h3>
+
+         {/* 검색바 추가 */}
+         <div className="search-bar">
+                <input
+                   type="text"
+                   value={searchQuery}
+                   onChange={(e) => setSearchQuery(e.target.value)}
+                   onKeyPress={handleKeyPress}  // 엔터키로 검색 가능
+                   placeholder="업체명 검색"
+                />
+               <button onClick={handleSearch}>검색</button>
+            </div>
 
         <div className="store-filter-container">
           <select id="store-status-select" onChange={(e) => setFilter(e.target.value)} value={filter}>
@@ -91,6 +123,7 @@ function MasterApproval() {
             <option value="대기">대기</option>
             <option value="비활성화">비활성화</option>
           </select>
+
         </div>
       </div>
 
@@ -110,7 +143,7 @@ function MasterApproval() {
           </tr>
         </thead>
         <tbody>
-          {filteredStores.map((store) => {
+          {searchFilteredStores.map((store) => {
             const addrInfo = parseJson(store.storeAddr);
 
             return (
@@ -137,7 +170,6 @@ function MasterApproval() {
             );
           })}
         </tbody>
-
       </table>
       <StoreInfoModal isOpen={isModalOpen} onClose={handleCloseModal} store={selectedStore} />
     </div>

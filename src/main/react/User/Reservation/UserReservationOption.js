@@ -110,12 +110,27 @@ const handleFlavorSelectN = (subCategory, index) => {
   });
 };
 
+const goToAdminPage = (id) => {
+  sessionStorage.setItem('combinedInputs', JSON.stringify(combinedInputs));
+  window.location.href = `../UserReservationConfirm.user/${id}`;
+  
+};
 
 
 
 
+ 
 
+  // // 객체를 세션 스토리지에 저장하는 함수
+  // const saveToSessionStorage = () => {
+  //   // 객체를 JSON 문자열로 변환하여 저장
+  //   sessionStorage.setItem('categoryInputs', JSON.stringify(categoryInputs));
+  // };
 
+  // useEffect(() => {
+  //   saveToSessionStorage(); // 컴포넌트가 렌더링될 때 저장
+  //   loadFromSessionStorage(); // 저장된 데이터를 불러옴
+  // }, []);
 
 
    // 상태 변경 시 콘솔에 출력
@@ -126,10 +141,11 @@ const handleFlavorSelectN = (subCategory, index) => {
 //------------------------------------
     const slot = sessionStorage.getItem('selectSlot');
     const date = sessionStorage.getItem('formattedDate');
+    const reservationSlotKey = sessionStorage.getItem('reservationSlotKey');
 
     console.log('Slot:', slot);
     console.log('Date:', date);
-
+    console.log('reservationSlotKey:', reservationSlotKey);
 
 
  return (
@@ -144,12 +160,6 @@ const handleFlavorSelectN = (subCategory, index) => {
          </div>
 
          <div className="user-main-content">
-           <div className="store-detail-menu">
-             <button type="button">홈</button>
-             <button type="button">정보</button>
-             <button type="button">예약</button>
-             <button type="button">리뷰</button>
-           </div>
 
            <div className="user-content-container">
              <div className="user-reserve-menu">
@@ -157,11 +167,13 @@ const handleFlavorSelectN = (subCategory, index) => {
                <img src="/img/user_basic_profile.jpg" />
                </div>
                <div className="user-reserve-menu-content">
-                 <div>{reserveModi.serviceName} </div>
+                 <div>{reserveModi.serviceName} </div> 
                  <div>
                    {reserveModi.serviceContent}
-                   {reserveModi.servicePrice}
+                 
                  </div>
+                 <div> {reserveModi.servicePrice} 원 ~</div>
+                 
                </div>
              </div>
            </div>
@@ -317,7 +329,7 @@ const handleFlavorSelectN = (subCategory, index) => {
 
 <div className="user-content-container6">
   <div className="user-content-last">
-    <button type="button">
+    <button type="button" onClick={() => goToAdminPage(cateId)}>
       다음 <i className="bi bi-chevron-right"></i>
     </button>
   </div>

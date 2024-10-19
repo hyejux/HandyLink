@@ -151,7 +151,7 @@ function UserMain() {
             );
             setDistances((prevDistances) => ({
               ...prevDistances,
-              [storeAddr]: distance.toFixed(2), // addr 또는 storeId로 거리 저장
+              [storeAddr]: distance.toFixed(2),
             }));
           } else {
             console.error(`거리 계산 불가: ${addrOnly} - ${status}`);
@@ -220,7 +220,7 @@ function UserMain() {
               const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
 
               return (
-                <div className="user-main-list-container" key={store.storeId}>
+                <div className="user-main-list-container" key={store.storeNo}>
                   <div className="user-category-menu">
                     <div className="user-category-menu-img">
                       <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
@@ -253,7 +253,7 @@ function UserMain() {
               const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
 
               return (
-                <div className="user-main-list-container" key={store.storeId}>
+                <div className="user-main-list-container" key={store.storeNo}>
                   <div className="user-category-menu">
                     <div className="user-category-menu-img">
                       <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
@@ -288,7 +288,7 @@ function UserMain() {
               const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
 
               return (
-                <div className="user-main-list-container" key={store.storeId}>
+                <div className="user-main-list-container" key={store.storeNo}>
                   <div className="user-category-menu">
                     <div className="user-category-menu-img">
                       <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
@@ -325,7 +325,7 @@ function UserMain() {
             const storeDistance = distances[store.storeAddr] ? formatDistance(distances[store.storeAddr]) : '정보 없음';
 
             return (
-              <div className="user-main-list-sub-content" key={store.storeId}>
+              <div className="user-main-list-sub-content" key={store.storeNo}>
                 <i className="bi bi-heart"></i>
                 <div className="sub-content-img-box">
                   <img src={imageUrl} alt={store.storeName} />

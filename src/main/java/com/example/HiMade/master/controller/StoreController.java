@@ -20,23 +20,20 @@ public class StoreController {
         return storeRepository.findAll();
     }
 
-    @GetMapping("/{id}")
-    public Store getStoreById(@PathVariable String id) {
-        return storeRepository.findById(id).orElse(null);
+    @GetMapping("/{storeNo}")
+    public Store getStoreById(@PathVariable Long storeNo) { //
+        return storeRepository.findByStoreNo(storeNo).orElse(null);
     }
 
-    @PostMapping("/{storeId}/approve")
-    public Store approveStore(@PathVariable String storeId) {
-        storeRepository.updateStoreStatus(storeId, StoreStatus.활성화);
-        return storeRepository.findById(storeId).orElse(null);
+    @PostMapping("/{storeNo}/approve") // storeNo로 변경
+    public Store approveStore(@PathVariable Long storeNo) { //
+        storeRepository.updateStoreStatusByStoreNo(storeNo, StoreStatus.활성화);
+        return storeRepository.findByStoreNo(storeNo).orElse(null);
     }
 
-    @PostMapping("/{storeId}/deactivate")
-    public Store deactivateStore(@PathVariable String storeId) {
-        storeRepository.updateStoreStatus(storeId, StoreStatus.비활성화);
-        return storeRepository.findById(storeId).orElse(null);
+    @PostMapping("/{storeNo}/deactivate") // storeNo로 변경
+    public Store deactivateStore(@PathVariable Long storeNo) { //
+        storeRepository.updateStoreStatusByStoreNo(storeNo, StoreStatus.비활성화);
+        return storeRepository.findByStoreNo(storeNo).orElse(null);
     }
-
-
-
 }

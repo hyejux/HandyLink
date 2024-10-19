@@ -188,7 +188,7 @@ function UserReservationDate() {
         <div className="user-content-container">
              <div className="user-reserve-menu">
                <div className="user-reserve-menu-img">
-               <img src="/img/user_basic_profile.jpg" />
+               <img src={`${reserveModi.imageUrl}`} alt="My Image" />
                </div>
                <div className="user-reserve-menu-content">
                  <div>{reserveModi.serviceName} </div> 

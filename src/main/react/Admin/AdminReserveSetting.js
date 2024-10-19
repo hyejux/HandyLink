@@ -62,7 +62,7 @@ const goToAdminPage = (id) => {
 
           <div className="reserve-container" key={index}>
                   <div className="reserve-img">
-                   <img src={`${value.imageUrl}`} alt="My Image" />
+                  <img src={`${value.imageUrl}`} alt="My Image" />
 
                    </div>
 

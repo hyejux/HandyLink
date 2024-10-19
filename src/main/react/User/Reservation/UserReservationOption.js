@@ -16,6 +16,7 @@ function UserReservationOption() {
   
   const [reserveModi, setReserveModi] = useState('');
   const [categories, setCategories] = useState([{
+    categoryId: 0,
     serviceName: '',
     servicePrice: 0,
     isPaid: false,
@@ -50,6 +51,7 @@ function UserReservationOption() {
         console.log("get" + JSON.stringify(response.data));
   
         const transformedData = response.data.map(item => ({
+          categoryId: item.categoryId,
           serviceName: item.serviceName,
           servicePrice: item.servicePrice,
           isPaid: item.isPaid === 'Y',
@@ -72,18 +74,25 @@ function UserReservationOption() {
 // combinedInputs 상태 정의
 const [combinedInputs, setCombinedInputs] = useState([]); // 배열로 초기화
 
+
 // 입력값 변경 처리
   // 입력값 변경 처리
-  const handleCategoryInputChange = (index, value, servicePrice) => {
+  const handleCategoryInputChange = (index, value, servicePrice, categoryId) => {
     setCombinedInputs(prev => {
       const updatedInputs = [...prev];
       updatedInputs[index] = { 
         ...updatedInputs[index], 
+     
         inputValue: value, // 입력값 업데이트
-        servicePrice: servicePrice // 서비스 가격 업데이트
+        servicePrice: servicePrice ,// 서비스 가격 업데이트
+        categoryId : categoryId
       };
       return updatedInputs;
     });
+
+
+
+
   };
 
 // 옵션 선택 처리 (단일 선택)
@@ -135,8 +144,9 @@ const goToAdminPage = (id) => {
 
    // 상태 변경 시 콘솔에 출력
    useEffect(() => {
+    console.log(categories);
     console.log('Category Inputs:', combinedInputs);
-}, [combinedInputs]);
+}, [combinedInputs,categories]);
 
 //------------------------------------
     const slot = sessionStorage.getItem('selectSlot');
@@ -164,7 +174,7 @@ const goToAdminPage = (id) => {
            <div className="user-content-container">
              <div className="user-reserve-menu">
                <div className="user-reserve-menu-img">
-               <img src="/img/user_basic_profile.jpg" />
+               <img src={`${reserveModi.imageUrl}`} alt="My Image" />
                </div>
                <div className="user-reserve-menu-content">
                  <div>{reserveModi.serviceName} </div> 
@@ -227,7 +237,7 @@ const goToAdminPage = (id) => {
             className="input-text"
             type="text"
             value={combinedInputs[index]?.inputValue || ''}  // combinedInputs에서 value 가져오기
-            onChange={(e) => handleCategoryInputChange(index, e.target.value, category.servicePrice)}
+            onChange={(e) => handleCategoryInputChange(index, e.target.value, category.servicePrice, category.categoryId)}
           />
         </div>
       </div>
@@ -247,7 +257,7 @@ const goToAdminPage = (id) => {
             className="input-text2"
             type="number"
             value={combinedInputs[index]?.inputValue || ''}  // 통합된 상태에서 값 가져오기
-            onChange={(e) => handleCategoryInputChange(index, e.target.value, category.servicePrice)}
+            onChange={(e) => handleCategoryInputChange(index, e.target.value, category.servicePrice, category.categoryId)}
           />
         </div>
       </div>

@@ -19,7 +19,7 @@ public class UserCateDTO {
   private String storeId;
 
   private int imageId;
-  
+
   private String imageUrl;
   private String imageDescription;
 

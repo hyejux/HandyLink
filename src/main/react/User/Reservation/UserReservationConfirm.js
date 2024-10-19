@@ -46,6 +46,7 @@ function UserReservationConfirm() {
         console.log("get" + JSON.stringify(response.data));
   
         const transformedData = response.data.map(item => ({
+          categoryId: item.categoryId,
           serviceName: item.serviceName,
           servicePrice: item.servicePrice,
           isPaid: item.isPaid === 'Y',
@@ -206,7 +207,7 @@ const calculateTotalPrice = () => {
            <div className="user-content-container">
              <div className="user-reserve-menu">
                <div className="user-reserve-menu-img">
-               <img src="/img/user_basic_profile.jpg" />
+               <img src={`${reserveModi.imageUrl}`} alt="My Image" />
                </div>
                <div className="user-reserve-menu-content">
                  <div>{reserveModi.serviceName} </div> 

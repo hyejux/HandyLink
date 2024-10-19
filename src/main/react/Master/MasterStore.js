@@ -5,23 +5,16 @@ import StoreInfoModal from './StoreInfoModal';
 
 function MasterStore() {
     const [store, setStore] = useState([]);
-    const [storeInfo, setStoreInfo] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
-    const [selectedStore, setSelectedStore] = useState(null); // 선택된 업체 기본 정보
-    const [selectedStoreInfo, setSelectedStoreInfo] = useState(null); // 선택된 업체 추가 정보
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedStore, setSelectedStore] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");  // 검색어 상태
+    const [searchResult, setSearchResult] = useState([]);  // 검색 결과 상태
+    const [isSearched, setIsSearched] = useState(false);  // 검색 트리거 상태
 
     useEffect(() => {
         fetch('/store')
             .then((response) => response.json())
-            .then((data) => {
-                setStore(data);
-                const infoPromises = data.map((store) =>
-                    fetch(`/store/info/${store.storeId}`).then((response) => response.json())
-                );
-                Promise.all(infoPromises)
-                    .then((infoData) => setStoreInfo(infoData))
-                    .catch((error) => console.error('업체 정보를 가져오는 중 오류 발생:', error));
-            })
+            .then((data) => setStore(data))
             .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
     }, []);
 
@@ -39,22 +32,24 @@ function MasterStore() {
                     if (response.ok) {
                         alert("업체가 비활성화 되었습니다.");
                         return fetch('/store');
+                    } else {
+                        return response.text().then((errorText) => {
+                            throw new Error(`업체 상태 업데이트에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
+                        });
                     }
-                    throw new Error('업체 상태 업데이트에 실패했습니다.');
                 })
                 .then((response) => response.json())
                 .then((data) => setStore(data))
                 .catch((error) => {
                     console.error('업체 상태 업데이트 중 오류 발생:', error);
-                    alert("비활성화에 실패했습니다.");
+                    alert(`비활성화에 실패했습니다. 오류 메시지: ${error.message}`);
                 });
         }
     };
 
     // 모달 열기 함수
-    const handleShowModal = (store, storeInfo) => {
+    const handleShowModal = (store) => {
         setSelectedStore(store);
-        setSelectedStoreInfo(storeInfo);
         setIsModalOpen(true);
     };
 
@@ -62,12 +57,60 @@ function MasterStore() {
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setSelectedStore(null);
-        setSelectedStoreInfo(null);
     };
+
+    const parseJson = (jsonString) => {
+        try {
+            return JSON.parse(jsonString);
+        } catch (error) {
+            console.error("JSON 파싱 오류:", error);
+            return {};
+        }
+    };
+
+    // 검색어 변경 핸들러
+    const handleSearchInputChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    // 검색 실행 함수
+    const handleSearch = () => {
+        const filteredStores = activeStores.filter((store) =>
+            store.storeName.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setSearchResult(filteredStores);  // 검색 결과 업데이트
+        setIsSearched(true);  // 검색이 실행됨
+    };
+
+    // 엔터키로 검색 실행
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+    // 검색 결과 또는 전체 목록을 보여줌
+    const displayedStores = isSearched ? searchResult : activeStores;
 
     return (
         <div>
-            <h3>업체관리</h3>
+            <div className="header-container">
+                <h3>업체관리</h3>
+
+                {/* 검색바 추가 */}
+                <div className="search-bar">
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={handleSearchInputChange}
+                        onKeyPress={handleKeyPress} // 엔터키 입력 처리
+                        placeholder="업체명 검색"
+                    />
+                    <button onClick={handleSearch}>검색</button>
+                </div>
+            </div>
+
+
             <table>
                 <thead>
                     <tr>
@@ -84,30 +127,35 @@ function MasterStore() {
                     </tr>
                 </thead>
                 <tbody>
-                    {activeStores.map((store, index) => (
-                        <tr key={store.storeId}>
-                            <td>{store.storeId}</td>
-                            <td>{store.storeName}</td>
-                            <td>{store.storeMaster || '-'}</td>
-                            <td>{store.managerName || '-'}</td>
-                            <td>{store.managerPhone || '-'}</td>
-                            <td>{store.storeAddr || '-'}</td>
-                            <td>{store.storeBusinessNo || '-'}</td>
-                            <td>
-                                <button className="details-button" onClick={() => handleShowModal(store, storeInfo[index])}>상세보기</button>
-                            </td>
-                            <td>{store.storeStatus}</td>
-                            <td>
-                                <button className="deactivate-button" onClick={() => handleDeactivate(store.storeId)}>비활성화</button>
-                            </td>
-                        </tr>
-                    ))}
+                    {displayedStores.map((store) => {
+                        const addrInfo = parseJson(store.storeAddr);
+
+                        return (
+                            <tr key={store.storeId}>
+                                <td>{store.storeId}</td>
+                                <td>{store.storeName}</td>
+                                <td>{store.storeMaster || '-'}</td>
+                                <td>{store.managerName || '-'}</td>
+                                <td>{store.managerPhone || '-'}</td>
+                                <td>{addrInfo.addr} {addrInfo.addrdetail}</td>
+                                <td>{store.storeBusinessNo || '-'}</td>
+                                <td>
+                                    <button className="details-button" onClick={() => handleShowModal(store)}>상세보기</button>
+                                </td>
+                                <td>{store.storeStatus}</td>
+                                <td>
+                                    <button className="deactivate-button" onClick={() => handleDeactivate(store.storeId)}>비활성화</button>
+                                </td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
-            <StoreInfoModal isOpen={isModalOpen} onClose={handleCloseModal} store={selectedStore} storeInfo={selectedStoreInfo} />
+
+            <StoreInfoModal isOpen={isModalOpen} onClose={handleCloseModal} store={selectedStore} />
         </div>
     );
-};
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<MasterStore />);

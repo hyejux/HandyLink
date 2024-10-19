@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.HiMade.admin.mapper.AdminStoreMapper">
+
+    <select id="loginCheck" resultType="com.example.HiMade.admin.dto.StoreRegistDTO">
+        select * from store_admin
+        where store_id = #{id} and store_pw = #{pw}
+    </select>
+
+    <select id="duplicatedId" resultType="Integer">
+        select count(*) from store_admin
+        where store_id = #{storeId}
+    </select>
+
+    <insert id="registStore" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
+        INSERT INTO store_admin (
+            store_id,
+            store_pw,
+            store_cate,
+            store_name,
+            store_master,
+            manager_name,
+            manager_phone,
+            store_business_no,
+            store_signup,
+            store_status,
+            zipcode,
+            addr,
+            addrdetail
+        ) VALUES (
+            #{storeId},
+            #{storePw},
+            #{storeCate},
+            #{storeName},
+            #{storeMaster},
+            #{managerName},
+            #{managerPhone},
+            #{storeBusinessNo},
+            now(),
+            '대기',
+            #{zipcode},
+            #{addr},
+            #{addrdetail}
+        )
+    </insert>
+
+    <update id="updateStoreSet" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
+        update store_admin
+        set
+            store_intro = #{storeIntro},
+            store_notice = #{storeNotice},
+            store_open_time = #{storeOpenTime},
+            store_close_time = #{storeCloseTime},
+            store_parking_yn = #{storeParkingYn},
+            account_bank = #{accountBank},
+            account_number = #{accountNumber}
+        where store_id = #{storeId}
+    </update>
+
+
+
+
+    <select id="getStoreInfo" resultMap="storeRegistResultMap">
+        select
+            *
+        from store
+        where store_id = #{storeId}
+
+    </select>
+
+    <resultMap id="storeRegistResultMap" type="com.example.HiMade.admin.dto.StoreRegistDTO">
+        <result property="storeId" column="store_id"/>
+        <result property="storePw" column="store_pw"/>
+        <result property="storeCate" column="store_cate"/>
+        <result property="storeName" column="store_name"/>
+        <result property="storeMaster" column="store_master"/>
+        <result property="managerName" column="manager_name"/>
+        <result property="managerPhone" column="manager_phone"/>
+        <result property="storeAddr" column="store_addr"/>
+        <result property="storeBusinessNo" column="store_business_no"/>
+
+        <!-- StoreInfoDTO - 업체정보 -->
+        <result property="storeIntro" column="store_intro"/>
+        <result property="storeParkingYn" column="store_parking_yn"/>
+        <result property="storeNotice" column="store_notice"/>
+        <result property="storeOpenTime" column="store_open_time"/>
+        <result property="storeCloseTime" column="store_close_time"/>
+        <result property="storeSignup" column="store_signup"/>
+        <result property="storeStatus" column="store_status"/>
+    </resultMap>
+
+
+</mapper>

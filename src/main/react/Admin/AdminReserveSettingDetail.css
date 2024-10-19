@@ -55,6 +55,7 @@
   .category-container-content{
     width: 100%;
     padding : 30px;
+    background-color : #fff;
   }
 
   .type-paid{

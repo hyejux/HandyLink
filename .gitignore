@@ -5,6 +5,10 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+src/main/resources/static/bundle/*.js.map
+src/main/resources/static/bundle/*.js
+
+
 ### STS ###
 .apt_generated
 .classpath
@@ -13,9 +17,9 @@ build/
 .settings
 .springBeans
 .sts4-cache
-#bin/
-#!**/src/main/**/bin/
-#!**/src/test/**/bin/
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
 .idea
@@ -36,13 +40,13 @@ out/
 ### VS Code ###
 .vscode/
 
-
 ### Node Module ###
 /node_modules
-
-
-src/main/resources/static/bundle/*.js
 
 *.log
 
 src/main/resources/application.properties
+
+
+.env
+

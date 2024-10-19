@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './UserLoginPage.css';
 import ReactDOM from "react-dom/client";
 
 function UserLoginPage () {
+
     const [passwordVisible, setPasswordVisible] = useState(false);
-    const [userEmail, setUserEmail] = useState('');
+    const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
 
     const togglePasswordVisibility = () => {
@@ -14,33 +15,48 @@ function UserLoginPage () {
     // 로그인 처리 함수
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("로그인 시도 중:", { userEmail, userPw });
 
         try {
             const response = await fetch('/user/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                // 변경된 상태 변수명을 사용
-                body: JSON.stringify({ userEmail, userPw }),
+                body: new URLSearchParams({
+                    userId: userId,
+                    userPw: userPw
+                }),
             });
 
-            console.log("서버 응답 상태 코드:", response.status); // 서버 응답 코드 확인
-
             if (response.ok) {
-                const data = await response.json();
-                alert('로그인 성공!');
-                window.location.href = '/UserMyPage.user';
+                window.location.href = '/UserMyPage.user';  // 로그인 성공 시 이동
             } else {
-                alert('로그인 실패: 이메일 또는 비밀번호를 확인하세요.');
+                alert('로그인 실패');
             }
         } catch (error) {
-            console.error('Error:', error);
-            alert('로그인 중 오류가 발생했습니다.');
+            console.error('로그인 중 오류 발생:', error);
         }
     };
 
+    // 카카오
+    const handleKakaoLogin = () => {
+        // .env에서 REST API 키 가져오기
+        const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+        const REST_API_KEY = process.env.REACT_APP_KAKAO_CLIENT_ID;
+
+        if (!REST_API_KEY || !REDIRECT_URI) {
+            console.error("Kakao API 키 또는 리다이렉트 URI가 설정되지 않았습니다.");
+            return;
+        }
+
+        // Kakao 인증 URL 생성
+        const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
+
+        console.log("Kakao Auth URL:", KAKAO_AUTH_URL); // 확인용 콘솔 출력
+
+        // 카카오 인증 페이지로 리다이렉트
+        window.location.href = KAKAO_AUTH_URL;
+    };
     return (
         <div>
             <div className="user-login-container">
@@ -49,18 +65,20 @@ function UserLoginPage () {
                     <div className="form-group">
                         <input
                             type="text"
-                            id="userEmail"
+                            id="userId"
+                            name="userId"
                             placeholder=" "
-                            value={userEmail}
-                            onChange={(e) => setUserEmail(e.target.value)}
+                            value={userId}
+                            onChange={(e) => setUserId(e.target.value)}
                         />
-                        <label htmlFor="userEmail">이메일</label>
+                        <label htmlFor="userId">이메일</label>
                     </div>
 
                     <div className="form-group">
                         <input
                             type={passwordVisible ? 'text' : 'password'}
                             id="userPw"
+                            name="userPw"
                             placeholder=" "
                             value={userPw}
                             onChange={(e) => setUserPw(e.target.value)}
@@ -82,7 +100,7 @@ function UserLoginPage () {
                 <div className="divider">또는</div>
 
                 <div className="social-login">
-                <img src="/img/kakao_login.png" alt="Kakao Login" title="Kakao 로그인"/>
+                    <img src="/img/kakao_login.png" alt="Kakao Login" title="Kakao로 시작하기" onClick={handleKakaoLogin}/>
                 </div>
 
                 <div className="footer-text">

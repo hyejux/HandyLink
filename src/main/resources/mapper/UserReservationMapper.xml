@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.HiMade.user.mapper.UserReservationMapper">
+    <select id="getMyReserveList" resultType="com.example.HiMade.user.dto.UserRL">
+        select s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name
+        from reservation r
+        LEFT JOIN store s
+        ON s.store_id = r.store_id
+        LEFT JOIN reservation_form rf
+        ON r.reservation_no = rf.reservation_no
+        LEFT JOIN category c
+        ON c.category_id = rf.main_category_id
+        LEFT JOIN reservation_slot rs
+        ON rs.reservation_slot_key = r.reservation_slot_key
+        LEFT JOIN users u
+        ON u.user_id = r.user_id
+        where r.user_id = 'hello@naver.com'
+        group by r.reservation_no,s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name
+
+    </select>
+
+    <select id="getDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">
+        select * from reservation_slot where reservation_slot_date = #{date}
+        AND category_id = 118
+    </select>
+
+    <insert id="setReservationForm" parameterType="UserReservationDTO">
+        INSERT INTO reservation (reservation_status, reservation_time, reg_time, customer_request, reservation_price, store_id, user_id, reservation_slot_key)
+        VALUES ('대기', #{reservationTime} , CURRENT_TIMESTAMP , #{customerRequest},  #{reservationPrice}, 'bbb123', 'hello@naver.com', #{reservationSlotKey} )
+    </insert>
+
+
+</mapper>

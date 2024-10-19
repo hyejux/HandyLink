@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>[[${pageName}]]</title>
     <link rel="stylesheet" th:href="@{/css/adminLayout.css}"/>
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 <body>
 
@@ -19,10 +19,10 @@
 
             <div class="layout-profile-info">
                 <div class="layout-profile-box">
-                    달콤한 케이크 잠실점
+                    <p th:text="${session.storeName}">상호명</p>
                 </div>
                 <div class="layout-profile-buttons">
-                    <button type="button" class="layout-profile-button layout-mypage-button" onclick="location.href='./myPage.do'">마이 페이지</button>
+                    <button type="button" class="layout-profile-button layout-mypage-button" onclick="location.href='./adminstoreinfo.admin'">마이 페이지</button>
                     <button type="button" class="layout-profile-button layout-logout-button" onclick="location.href='./logout'">로그아웃</button>
                 </div>
             </div>
@@ -35,13 +35,13 @@
         <div class="sidebar">
 
             <!-- <div class="menu-btn"> <a href="./customer.do"> 메인  </a> </div> -->
-            <div class="menu-btn">  <a href="./product.do"> <i class="bi bi-house-gear-fill"></i> 가게 </a></div>
+            <div class="menu-btn">  <a href="./myStore.admin"> <i class="bi bi-house-gear-fill"></i> 가게 </a></div>
             <div class="menu-btn dropdown-btn">   <i class="bi bi-calendar-check"></i>  예약  <i class="bi bi-caret-down-fill"></i> <i class="bi2 bi-caret-left-fill"></i> </div>
 <!--                <div class="menu-btn ">  <a href="../AdminReserveSetting.admin"> <i class="bi bi-calendar-check"></i>  예약  </a></div>-->
 
             <div class="dropdown">
                 <a href="../AdminReserveSetting.admin"> <i class="bi bi-gear-fill"> </i> 예약설정</a>
-                <a href="./order.do"> <i class="bi bi-check2-circle"> </i> 예약관리</a>
+                <a href="./AdminReserveManage.admin"> <i class="bi bi-check2-circle"> </i> 예약관리</a>
             </div>
             <div class="menu-btn"> <a href="./stat.do"> <i class="bi bi-bar-chart-line-fill"></i> 통계</a></div>
             <div class="menu-btn">  <a href="./customer.do"> <i class="bi bi-person-circle"></i> 고객 </a></div>

@@ -28,7 +28,7 @@ function Master() {
 
     return (
         <div>
-            <h3>업체 상태 현황</h3>
+            <h3>업체현황</h3>
             <div className="store-counts">
                 <div className="count-card">
                     <h4>승인 대기 업체</h4>
@@ -43,24 +43,77 @@ function Master() {
                     <p>{inactiveStores.length}</p>
                 </div>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>승인 대기 업체</th>
-                        <th>승인된 업체</th>
-                        <th>비활성화된 업체</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {Array.from({ length: Math.max(activeStores.length, waitingStores.length, inactiveStores.length) }).map((_, index) => (
-                        <tr key={index}>
-                            <td>{waitingStores[index]?.storeName || '-'}</td>
-                            <td>{activeStores[index]?.storeName || '-'}</td>
-                            <td>{inactiveStores[index]?.storeName || '-'}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+
+            <div className="tables-container">
+                <div className="table-column">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>승인 대기 업체</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {waitingStores.length > 0 ? (
+                                waitingStores.map((store, index) => (
+                                    <tr key={index}>
+                                        <td>{store.storeName}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="1">승인 대기 업체가 없습니다.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="table-column">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>승인된 업체</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {activeStores.length > 0 ? (
+                                activeStores.map((store, index) => (
+                                    <tr key={index}>
+                                        <td>{store.storeName}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="1">승인된 업체가 없습니다.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="table-column">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>비활성화된 업체</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {inactiveStores.length > 0 ? (
+                                inactiveStores.map((store, index) => (
+                                    <tr key={index}>
+                                        <td>{store.storeName}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="1">비활성화된 업체가 없습니다.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 }

@@ -10,7 +10,11 @@
         left join category_image ci
         on c.category_id = ci.category_id
         where category_level = 1
-        ORDER BY c.category_id DESC;
+        ORDER BY c.category_id DESC
+    </select>
+
+    <select id="getManageList" resultType="com.example.HiMade.admin.dto.adminReserveMangeDTO">
+        select * from reservation
     </select>
 
     <select id="getListDetail" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
@@ -62,5 +66,14 @@
         INSERT INTO category (category_level, parent_category_id, service_name, service_price, store_id)
         VALUES (3, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 1)
     </insert>
+
+
+    <!--  예약 상태 변경  -->
+    <update id="updateStatus" parameterType="com.example.HiMade.admin.dto.UpdateReservationStatusDTO">
+        UPDATE reservation
+        SET reservation_status = #{newStatus}
+        WHERE reservation_no = #{reservationId}
+    </update>
+
 
 </mapper>

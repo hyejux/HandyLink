@@ -7,7 +7,9 @@
 
 <select id="getStoreMainCategory" resultType="com.example.HiMade.user.dto.UserCateDTO">
     select *
-    from category
+    from category c
+    left join category_image ci
+    on c.category_id = ci.category_id
     where category_level = 1
     AND store_id = 'bbb123';
 </select>

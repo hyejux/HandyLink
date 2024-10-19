@@ -1,17 +1,15 @@
 var path = require('path');
 const webpack = require('webpack');
-const Dotenv = require('dotenv-webpack');
+
 
 module.exports = {
     watch: true, // 변경 사항을 감지하여 자동으로 재빌드
     mode: 'development',
     context: path.resolve(__dirname, 'src/main/react'),
     entry: {
-
-        main: './Main.js', //여러페이지 설정이 가능함
+main: './Main.js', //여러페이지 설정이 가능함
         user: './User/User/User.js',
         userMain: './User/User/UserMain.js',
-        userSearch: './User/User/UserSearch.js',
         admin: './Admin/Admin.js',
         StoreSignUp: './Admin/StoreSignUp.js',
         AdminLogin: './Admin/AdminLogin.js',
@@ -28,9 +26,10 @@ module.exports = {
         adminReserveManage : './Admin/AdminReserveManage.js',
         UserMyReservationList : './User/Reservation/UserMyReservationList.js',
         UserReservationConfirm : './User/Reservation/UserReservationConfirm.js',
+        UserReservationComplete : './User/Reservation/UserReservationComplete.js',
 /*        UserStoreDetailService : '/User/Store/UserStoreDetailService.js',*/
-        UserStoreDetail : '/User/Store/UserStoreDetail.js',
-         UserReservationOption : '/User/Reservation/UserReservationOption.js',
+        UserStoreDetail : './User/Store/UserStoreDetail.js',
+         UserReservationOption : './User/Reservation/UserReservationOption.js',
         UserQnaList : './QNA/UserQnaList.js',
         UserQnaRegist : './QNA/UserQnaRegist.js',
         UserSignUp : './User/User/UserSignUp.js',
@@ -40,8 +39,6 @@ module.exports = {
         UserAccountFind : './User/User/UserAccountFind.js',
         UserChatList : './User/Inquiry/UserChatList.js',
         UserReservationDate : './User/Reservation/UserReservationDate.js',
-
-
 
 
         MyStore: './Admin/MyStore.js'
@@ -95,15 +92,5 @@ module.exports = {
         new webpack.ProvidePlugin({
           process: 'process/browser',
         }),
-        // 카카오
-        new Dotenv({
-            path: './.env', // .env 파일 경로
-            systemvars: true,
-            expand: true
-        }),
-        new webpack.DefinePlugin({
-            'process.env.REACT_APP_KAKAO_CLIENT_ID': JSON.stringify(process.env.REACT_APP_KAKAO_CLIENT_ID),
-            'process.env.REACT_APP_KAKAO_REDIRECT_URI': JSON.stringify(process.env.REACT_APP_KAKAO_REDIRECT_URI)
-        })
-    ],
+      ],
 };

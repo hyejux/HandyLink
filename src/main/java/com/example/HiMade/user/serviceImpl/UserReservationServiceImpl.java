@@ -38,4 +38,6 @@ public class UserReservationServiceImpl implements UserReservationService {
   public List<UserReservationDTO> getSlotTime(int slotkey) {
     return userReservationMapper.getSlotTime(slotkey);
   }
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.HiMade.user.mapper;
 
+import com.example.HiMade.admin.dto.AdminCategoryImgDTO;
 import com.example.HiMade.user.dto.UserRL;
 import com.example.HiMade.user.dto.UserRSlotDTO;
 import com.example.HiMade.user.dto.UserReservationDTO;
@@ -15,4 +16,5 @@ public interface UserReservationMapper {
   public List<UserRSlotDTO> getDateTime(LocalDate Date);
   public void setReservationForm(UserReservationDTO dto);
   public List<UserReservationDTO> getSlotTime(int slotkey);
+  public void setMainCategoryImg(AdminCategoryImgDTO dto);
 }

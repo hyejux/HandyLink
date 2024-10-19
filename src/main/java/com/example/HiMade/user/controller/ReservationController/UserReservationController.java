@@ -39,4 +39,7 @@ public class UserReservationController {
 
     return userReservationService.getSlotTime(slotkey);
   }
+
+
+
 }

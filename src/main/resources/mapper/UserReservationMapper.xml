@@ -27,10 +27,18 @@
         AND category_id = 118
     </select>
 
-    <insert id="setReservationForm" parameterType="UserReservationDTO">
+    <insert id="setReservationForm" parameterType="UserReservationDTO" useGeneratedKeys="true" keyProperty="reservationNo">
         INSERT INTO reservation (reservation_status, reservation_time, reg_time, customer_request, reservation_price, store_id, user_id, reservation_slot_key)
-        VALUES ('대기', #{reservationTime} , CURRENT_TIMESTAMP , #{customerRequest},  #{reservationPrice}, 'bbb123', 'hello@naver.com', #{reservationSlotKey} )
+        VALUES ('대기', #{reservationTime}, CURRENT_TIMESTAMP, #{customerRequest}, #{reservationPrice}, 'bbb123', 'hello@naver.com', #{reservationSlotKey})
+        RETURNING reservation_no
     </insert>
+
+    <insert id="setReservationFormDetail" parameterType="com.example.HiMade.user.dto.UserReservationFormDTO">
+        insert into reservation_form (main_category_id, middle_category_id, sub_category_id, middle_category_value, reservation_no )
+        values(#{mainCategoryId}, #{middleCategoryId}, #{subCategoryId}, #{middleCategoryValue}, #{reservationNo})
+
+    </insert>
+
 
     <select id="getSlotTime" resultType="com.example.HiMade.user.dto.UserReservationDTO">
         select reservation_time, count(*) AS reservation_time_status, reservation_slot_key

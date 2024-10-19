@@ -6,6 +6,7 @@ import Calendar from 'react-calendar';
 import { useState, useEffect } from 'react';
 import { format, addHours } from 'date-fns';
 import './UserReservationOption.css';
+import { json } from 'react-router-dom';
 
 
 function UserReservationOption() {
@@ -73,7 +74,7 @@ function UserReservationOption() {
 
 // combinedInputs 상태 정의
 const [combinedInputs, setCombinedInputs] = useState([]); // 배열로 초기화
-
+const [formData, setFormData] = useState([]);
 
 // 입력값 변경 처리
   // 입력값 변경 처리
@@ -90,22 +91,45 @@ const [combinedInputs, setCombinedInputs] = useState([]); // 배열로 초기화
       return updatedInputs;
     });
 
-
+    setFormData(prev => {
+      const updatedFormDatas = [...prev];
+      updatedFormDatas[index] = {
+        ...updatedFormDatas[index],
+        mainCategoryId : reserveModi.categoryId,
+        middleCategoryId :  categoryId,
+        subCategoryId : null,
+        middleCategoryValue : value
+      };
+      return updatedFormDatas;
+    })
 
 
   };
 
 // 옵션 선택 처리 (단일 선택)
-const handleFlavorSelect1 = (subCategory, index) => {
+const handleFlavorSelect1 = (subCategory, index, categoryId) => {
   setCombinedInputs(prev => {
     const updatedInputs = [...prev];
     updatedInputs[index] = { ...updatedInputs[index], [index]: [subCategory] }; // 단일 선택 업데이트
     return updatedInputs;
   });
+
+  setFormData(prev => {
+    const updatedFormDatas = [...prev];
+      updatedFormDatas[index] = {
+        ...updatedFormDatas[index],
+        mainCategoryId : reserveModi.categoryId,
+        middleCategoryId : categoryId,
+        subCategoryId : subCategory.categoryId,
+        middleCategoryValue : null
+      };
+    return updatedFormDatas;
+  })
+
 };
 
-// 옵션 선택 처리 (다중 선택)
-const handleFlavorSelectN = (subCategory, index) => {
+// 옵션 선택 처리 (다중 선택) --> n 
+const handleFlavorSelectN = (subCategory, index, categoryId) => {
   setCombinedInputs(prev => {
     const updatedInputs = [...prev];
     const currentSelection = updatedInputs[index]?.[index] || [];
@@ -117,9 +141,24 @@ const handleFlavorSelectN = (subCategory, index) => {
     };
     return updatedInputs;
   });
+
+  setFormData(prev => {
+    const updatedFormDatas = [...prev];
+    updatedFormDatas[index] = {
+      ...updatedFormDatas[index],
+      mainCategoryId : reserveModi.categoryId,
+      middleCategoryId : categoryId,
+      subCategoryId : subCategory.categoryId,
+      middleCategoryValue : null
+    };
+    return updatedFormDatas;
+  })
+
+
 };
 
 const goToAdminPage = (id) => {
+  sessionStorage.setItem('formData', JSON.stringify(formData));
   sessionStorage.setItem('combinedInputs', JSON.stringify(combinedInputs));
   window.location.href = `../UserReservationConfirm.user/${id}`;
   
@@ -146,7 +185,8 @@ const goToAdminPage = (id) => {
    useEffect(() => {
     console.log(categories);
     console.log('Category Inputs:', combinedInputs);
-}, [combinedInputs,categories]);
+    console.log('formData 입니다 ' + JSON.stringify(formData));
+}, [combinedInputs,categories,formData]);
 
 //------------------------------------
     const slot = sessionStorage.getItem('selectSlot');
@@ -277,8 +317,8 @@ const goToAdminPage = (id) => {
               className={`option-btn ${combinedInputs[index]?.[index]?.includes(subCategory) ? 'selected' : ''}`}
               onClick={() =>
                 category.subCategoryType === "SELECT1"
-                  ? handleFlavorSelect1(subCategory, index)
-                  : handleFlavorSelectN(subCategory, index)
+                  ? handleFlavorSelect1(subCategory, index,category.categoryId)
+                  : handleFlavorSelectN(subCategory, index,category.categoryId)
               }
             >
               {subCategory.serviceName} <div> +{subCategory.servicePrice}</div>

@@ -4,6 +4,7 @@ package com.example.HiMade.user.serviceImpl;
 import com.example.HiMade.user.dto.UserRL;
 import com.example.HiMade.user.dto.UserRSlotDTO;
 import com.example.HiMade.user.dto.UserReservationDTO;
+import com.example.HiMade.user.dto.UserReservationFormDTO;
 import com.example.HiMade.user.mapper.UserReservationMapper;
 import com.example.HiMade.user.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,24 @@ public class UserReservationServiceImpl implements UserReservationService {
   }
 
   @Override
-  public void setReservationForm(UserReservationDTO dto) {
-    userReservationMapper.setReservationForm(dto);
+  public int setReservationForm(UserReservationDTO dto) {
+
+    int go = userReservationMapper.setReservationForm(dto);
+    System.out.println("insert 된 reservation_id" +  dto.getReservationNo());
+    return dto.getReservationNo();
   }
 
   @Override
   public List<UserReservationDTO> getSlotTime(int slotkey) {
     return userReservationMapper.getSlotTime(slotkey);
+  }
+
+  @Override
+  public void setReservationFormDetail(List<UserReservationFormDTO> dto) {
+    for (UserReservationFormDTO d : dto ){
+      System.out.println("삽입 값" + d);
+      userReservationMapper.setReservationFormDetail(d);
+    }
   }
 
 

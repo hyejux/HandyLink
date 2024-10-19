@@ -86,47 +86,62 @@ function UserReservationConfirm() {
     };
 
     console.log('최종 예약 데이터:', reservationData);
-
     axios
-    .post(`/userReservation/setReservationForm`, reservationData)
-    .then(response => {
-      console.log(response.data);
-      setReserveModi(response.data);
-    })
-    .catch(error => {
-      console.log('Error Category', error);
-    });
+  .post(`/userReservation/setReservationForm`, reservationData)
+  .then(response => {
+    const reservation_id = response.data;  // 예약 번호를 받아옴
+    console.log("reservation_no 주문번호 ! : : ", reservation_id);
+
+    // reservation_id가 설정된 후에 배열을 업데이트
+    const updatedArray = formData.map(item => ({
+      ...item,  // 기존 객체의 모든 속성 복사
+      reservationNo: reservation_id  // reservationNo 추가
+    }));
+
+    console.log('업데이트된 배열:', updatedArray);
+
+    // 필요시 여기서 두 번째 요청을 진행
+    return axios.post(`/userReservation/setReservationFormDetail`, updatedArray);
+  })
+  .then(response => {
+    console.log("두 번째 요청 성공! ", response.data);
+  })
+  .catch(error => {
+    console.log('Error Category', error);
+  });
   
   };
  
   
+  
+  const calculateTotalPrice = () => {
+    return combinedInputs.reduce((acc, item) => {
+      if (typeof item === 'object' && item !== null) {
+          console.log('Processing object:', item);
+          // 객체의 각 값이 배열인 경우
+          for (const key in item) {
+              if (Array.isArray(item[key])) {
+                  console.log(`Processing array at key ${key}:`, item[key]);
+                  return acc + item[key].reduce((sum, innerItem) => {
+                      // innerItem이 객체인지 확인하고 servicePrice 합산
+                      return sum + (innerItem.servicePrice || 0);
+                  }, 0);
+              } else {
+                  // 값이 배열이 아닐 경우 servicePrice 합산
+                  return acc + (item.servicePrice || 0);
+              }
+          }
+      }
+    }, 0);
+  };
 
-// combinedInputs 상태 정의
-const [combinedInputs, setCombinedInputs] = useState([]); // 배열로 초기화
-console.log(combinedInputs);
 
+//   
+    const [formData, setFormData] = useState([]);
+    const [combinedInputs, setCombinedInputs] = useState([]); // 배열로 초기화
+    console.log(combinedInputs);
+    console.log(formData);
 
-
-const calculateTotalPrice = () => {
-  return combinedInputs.reduce((acc, item) => {
-    if (typeof item === 'object' && item !== null) {
-        console.log('Processing object:', item);
-        // 객체의 각 값이 배열인 경우
-        for (const key in item) {
-            if (Array.isArray(item[key])) {
-                console.log(`Processing array at key ${key}:`, item[key]);
-                return acc + item[key].reduce((sum, innerItem) => {
-                    // innerItem이 객체인지 확인하고 servicePrice 합산
-                    return sum + (innerItem.servicePrice || 0);
-                }, 0);
-            } else {
-                // 값이 배열이 아닐 경우 servicePrice 합산
-                return acc + (item.servicePrice || 0);
-            }
-        }
-    }
-  }, 0);
-};
 
 
     // useEffect를 사용하여 combinedInputs나 reserveModi가 업데이트될 때마다 총 가격을 계산
@@ -147,17 +162,19 @@ const calculateTotalPrice = () => {
       console.log(parsedData);
       setCombinedInputs(parsedData);
     }
+    const storedformData = sessionStorage.getItem('formData');
+    if (storedformData) {
+      // JSON 문자열을 다시 객체로 변환
+      const parsedFormData = JSON.parse(storedformData);
+      console.log(parsedFormData);
+      setFormData(parsedFormData);
+    }
   };
 
   useEffect(() => {
     loadFromSessionStorage(); // 저장된 데이터를 불러옴
   }, []);
 
-
-   // 상태 변경 시 콘솔에 출력
-   useEffect(() => {
-    console.log('Category Inputs:', combinedInputs);
-}, [combinedInputs]);
 
 //------------------------------------
     const slot = sessionStorage.getItem('selectSlot');
@@ -341,7 +358,7 @@ const calculateTotalPrice = () => {
 
 <div className="user-content-container6">
   <div className="user-content-last">
-    <button type="button"  onClick={() => {submitBtn(); goToAdminPage(); }}>
+    <button type="button"  onClick={() => {submitBtn();  }}>
       다음 <i className="bi bi-chevron-right"></i>
     </button>
   </div>

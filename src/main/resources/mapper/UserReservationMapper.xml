@@ -32,5 +32,12 @@
         VALUES ('대기', #{reservationTime} , CURRENT_TIMESTAMP , #{customerRequest},  #{reservationPrice}, 'bbb123', 'hello@naver.com', #{reservationSlotKey} )
     </insert>
 
+    <select id="getSlotTime" resultType="com.example.HiMade.user.dto.UserReservationDTO">
+        select reservation_time, count(*) AS reservation_time_status, reservation_slot_key
+        from reservation
+        where store_no = 7 AND reservation_slot_key = #{reservationSlotKey}
+        group by reservation_time,  reservation_slot_key;
+    </select>
+
 
 </mapper>

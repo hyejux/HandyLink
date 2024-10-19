@@ -33,4 +33,9 @@ public class UserReservationServiceImpl implements UserReservationService {
   public void setReservationForm(UserReservationDTO dto) {
     userReservationMapper.setReservationForm(dto);
   }
+
+  @Override
+  public List<UserReservationDTO> getSlotTime(int slotkey) {
+    return userReservationMapper.getSlotTime(slotkey);
+  }
 }

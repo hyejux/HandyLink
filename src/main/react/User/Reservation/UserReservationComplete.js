@@ -5,48 +5,24 @@ import DatePicker from 'react-datepicker';
 import Calendar from 'react-calendar';
 import { useState, useEffect } from 'react';
 import { format, addHours } from 'date-fns';
-import './UserReservationConfirm.css';
+import './UserReservationComplete.css';
 
 
-function UserReservationConfirm() {
+function UserReservationComplete() {
   
 
-  const loadFromSessionStorage = () => {
-    const storedData = sessionStorage.getItem('combinedInputs');
-    if (storedData) {
-      // JSON 문자열을 다시 객체로 변환
-      const parsedData = JSON.parse(storedData);
-      console.log(parsedData);
-      setCombinedInputs(parsedData);
-    }
-  };
-
-  useEffect(() => {
-    loadFromSessionStorage(); // 저장된 데이터를 불러옴
-  }, []);
-  
-  const slot = sessionStorage.getItem('selectSlot');
-  const date = sessionStorage.getItem('formattedDate');
-  const reservationSlotKey = sessionStorage.getItem('reservationSlotKey');
-
-  console.log('Slot:', slot);
-  console.log('Date:', date);
-  console.log('reservationSlotKey:', reservationSlotKey);
-
-
-   // 상태 변경 시 콘솔에 출력
-   useEffect(() => {
-    console.log('Category Inputs:', combinedInputs);
-}, [combinedInputs]);
 
 //------------------------------------
 
 
 
  return (
-   <div>
-   \
+   <div>   
+          결제가 완료되었습니다 !
 
+
+          <a href='/UserMain.user'> 홈으로 가기 </a>
+          주문내역으로 가기 이런것도 ㄱㅊ을듯
      </div>
   )
 };
@@ -54,7 +30,7 @@ function UserReservationConfirm() {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-    <UserReservationConfirm />
+    <UserReservationComplete />
 );
 
 

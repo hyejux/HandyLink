@@ -19,24 +19,20 @@ body {
 
 }
 
-.user-reserve-title {
-  font-size: 25px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-.user-reserve-data{
-  border : 1px solid #ddd;
-  border-radius: 10px;
+.user-reserve-menu {
   display: flex;
-  justify-content: space-between;
-  font-size: 15px;
-  font-weight: bold;
-  padding: 10px 50px;
-  margin-bottom: 20px;
-}
+  gap: 3%;
 
-.user-reserve-data  .bi {
-margin-right: 10px;
+}
+.user-reserve-menu img{
+  width: 120px;
+  border-radius: 5px;
+}
+.user-reserve-menu-content{
+  display: flex;
+  flex-direction: column;
+    width : 100%;
+
 }
 
 .user-top-nav {
@@ -81,7 +77,7 @@ margin-right: 10px;
     background-image: linear-gradient(to right, #94b6e9, #56c9ef, #33d8d7, #73e0a7, #bfdf77);
     font-family: 'ghanachoco';
     font-size: 25px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
   }
 
 
@@ -222,165 +218,8 @@ body {
 
 
 /* --------------------------------------------------- */
-.sub-container5 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 4열 */
-  gap: 10px; /* 버튼 간의 간격 */
-}
 
 
-.user-content-last {
-  display: flex;
-  justify-content: flex-end;
-}
-.user-content-last > button {
-    text-align: center;
-    background-color: #2C348F;
-    width: 100px;
-    height: 35px;
-    border: none;
-    border-radius: 3px;
-    color: #fff;
-}
-.user-content-last > button .bi {
-  color: #fff;
-}
-.option-btn {
-  border: 2px solid #ddd;
-  border-radius: 10px;
-  font-size: 13px;
-  padding: 5px 10px;
-  cursor: pointer;
-  background-color: #fff;
-}
-.option-btn:hover {
-  background-color: #E0F0FF;
-}
-.option-btn:active {
-  background-color: #E0F0FF;
-}
-
-.option-btn.selected  {
-  background-color: #E0F0FF;
-}
-
-
-.sub-container5 {
-  display: grid;
-}
-
-
-.ertical-bar {
-  background-attachment: red;
-  width: 100%;
-  height: 10px;
-}
-.bold-text {
-  font-weight: bold;
-}
-
-.sub-title{
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content:space-between
-}
-.option-title {
-  font-size: 15px;
-  color : #959595;
-}
-.input-text {
-  width: 100%;
-  height: 20px;
-  border : 1px solid #ddd;
-  border-radius: 10px;
-}
-.sub-container3 > div {
-  font-size: 16px;
-}
-.sub-container5 > div {
-  font-size : 20px;
-}
-
-.sub-container4 > div {
-  font-weight: bold;
-  font-size: 18px;
-}
-.option-title2 {
-  text-align: right;
-  width: 100%;
-  font-size: 15px;
-  color : #959595;
-  margin-bottom: 20px;
-}
-.input-text2 {
-  width: 50%;
-  height: 20px;
-  border : 1px solid #ddd;
-  border-radius: 10px;
-}
-
-.user-content-container3 {
-  background-color: white;
-  border-radius: 10px;
-  margin: 10px;
-  padding: 20px;
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-
-}
-
-.user-content-container6 {
-  background-color: white;
-  border-radius: 10px;
-  margin: 10px;
-  padding: 20px;
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
-  margin-bottom: 20px;
-  /*border: 1px solid #ddd;*/
-}
-.user-reserve-title2 {
-  font-size: 25px;
-  font-weight: bold;
-
-}
-
-.user-content-container3 > .sub-container4  {
-  display: flex;
-  justify-content: flex-end;
-
-}
-
-.user-content-container3 > .sub-container5  {
-  display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-}
-
-
-.user-content-container3 > .sub-container3  {
-  display: flex;
-  justify-content: space-between;
-
-}
-
-.user-content-container3 > .sub-container3:nth-child(1) {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.user-content-container2 {
-  background-color: white;
-  border-radius: 10px;
-  margin: 20px;
-  /* padding: 20px; */
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
-  margin-bottom: 20px;
-  /* border: 1px solid #2C348F; */
-}
   .user-content-container {
     background-color: white;
     border-radius: 10px;
@@ -403,7 +242,7 @@ body {
   }
 
   .bi {
-
+    color : #2C348F;
   }
 
   .user-content-first-img-num {
@@ -462,11 +301,11 @@ body {
     color : #2C348F;
   }
 /* ----------------------------------------- */
-  .user-reserve-menu {
+  /* .user-reserve-menu {
     display: flex;
     gap: 3%;
 
-  }
+  } */
   .user-reserve-menu img{
     width: 120px;
     border-radius: 5px;
@@ -474,7 +313,7 @@ body {
   .user-reserve-menu-content{
     display: flex;
     flex-direction: column;
-    width : 100%;
+
 
   }
 
@@ -490,6 +329,7 @@ body {
 
   .user-reserve-menu-content div:nth-child(2) {
     height: 100%;
+    margin-bottom: 10px;
   }
 
   .user-reserve-menu-content div:nth-child(3) {
@@ -498,3 +338,147 @@ body {
     font-size: 20px;
     font-weight: bold;
   }
+
+  /* --------------------------------------- */
+
+.user-reserve-date-title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.user-reserve-data{
+    border : 1px solid #ddd;
+    border-radius: 50px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 50px;
+    margin-bottom: 20px;
+}
+
+.user-reserve-data  .bi {
+  margin-right: 10px;
+}
+
+.user-reserve-date-calender {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+}
+
+.user-reserve-date-time {
+    margin-bottom: 20px;
+    height: 100px;
+    width: 100%;
+    overflow-x: auto; /* 가로 스크롤을 활성화 */
+    scrollbar-width: thin;
+    white-space: nowrap; /* 버튼들이 가로로 나열되도록 */
+    display: flex;
+    align-items: center;
+
+    /* border-radius: 50px;
+    padding: 10px 30px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd; */
+}
+
+.user-reserve-date-time button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    font-size: 15px;
+    font-family: 'Pretendard-Regular';
+    font-weight: bold;
+}
+
+.user-content-last {
+    /* border : 1px solid red; */
+    padding : 20px;
+}
+.user-content-last > button {
+    float: right;
+    background-color: #2C348F;
+    /* background: rgb(146,169,255);
+    background: linear-gradient(207deg, rgba(146,169,255,1) 0%, rgba(53,58,148,1) 100%); */
+    width: 100px;
+    height: 35px;
+    border : none;
+    border-radius: 3px;
+    color : #fff;
+}
+.user-content-last  .bi {
+  color : #fff;
+  font-size: 15px;
+}
+
+/* custom-calendar.css */
+
+.react-calendar {
+    font-family: 'Pretendard-Regular';
+    font-size: 20px;
+  width: 100%;
+ max-width: 400px; /* 캘린더의 최대 너비 설정 */
+  background-color: #ffffff; /* 배경색 */
+  border-radius: 10px; /* 부드러운 모서리 */
+/*  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); *//* 그림자 효과 */
+  margin: 20px auto; /* 상하 여백 및 중앙 정렬 */
+  padding: 10px; /* 패딩 */
+}
+
+.react-calendar__month-view {
+  padding: 0; /* 월 보기 패딩 제거 */
+      text-align: center;
+}
+
+.react-calendar__tile {
+  max-width: 50px;
+      height: 54px;
+      background-color : #fff;
+  border-radius: 5px; /* 타일의 부드러운 모서리 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  font-size : 15px;
+  border: 1px solid #ddd;
+  cursor : pointer;
+
+
+}
+
+.react-calendar__tile:hover {
+  background-color: #bcc1ff; /* 호버 시 배경색 변화 */
+}
+
+.react-calendar__tile--active {
+  background-color: #2C348F; /* 선택된 날짜 색상 */
+  color: white; /* 선택된 날짜 텍스트 색상 */
+}
+
+.react-calendar__tile--now {
+  background-color:#ebebeb; /* 오늘 날짜 배경색 */
+  color : #000;
+}
+
+.react-calendar__navigation {
+  margin-bottom: 10px; /* 네비게이션 바와 캘린더 사이의 여백 */
+  text-align: center;
+      font-size: 15px;
+}
+
+.react-calendar__navigation button {
+  background: none; /* 버튼 배경 제거 */
+  border: none; /* 버튼 테두리 제거 */
+  color: #2C348F; /* 버튼 텍스트 색상 */
+      font-size: 25px; /* 버튼 텍스트 크기 */
+      font-weight: bold;
+        font-family: 'Pretendard-Regular';
+        margin-bottom : 10px;
+}
+
+.react-calendar__navigation button:hover {
+  color: #2C348F; /* 호버 시 텍스트 색상 */
+}

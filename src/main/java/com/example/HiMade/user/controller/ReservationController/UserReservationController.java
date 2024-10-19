@@ -32,4 +32,11 @@ public class UserReservationController {
     userReservationService.setReservationForm(dto);
   }
 
+  @PostMapping("/getSlotTime")
+  public List<UserReservationDTO> getSlotTime(@RequestBody UserRSlotDTO dto){
+    int slotkey = dto.getReservationSlotKey();
+    System.out.println("슬롯키"  + slotkey);
+
+    return userReservationService.getSlotTime(slotkey);
+  }
 }

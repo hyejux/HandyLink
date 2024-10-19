@@ -167,7 +167,10 @@ const calculateTotalPrice = () => {
     console.log('Date:', date);
     console.log('reservationSlotKey:', reservationSlotKey);
 
+    const goToAdminPage = () => {
 
+      window.location.href = `../UserReservationComplete.user`;
+    };
 
  return (
    <div>
@@ -287,8 +290,8 @@ const calculateTotalPrice = () => {
          
   
            <div className="user-content-container3">
-               <div className="sub-container3">
-               <div className="user-reserve-title"> 총액 </div>
+               <div className="sub-container5">
+                  <div> 총액 </div>
                  <div> {totalPrice} </div>
                </div>
              </div>
@@ -296,7 +299,22 @@ const calculateTotalPrice = () => {
            <hr />
 
           <div className="user-content-container2">
-             <div className="user-reserve-title"></div>
+
+
+      <div className="user-content-container3">
+        <div className="sub-title">
+                요청사항
+        </div>
+        <div className="sub-container3">
+          <input
+            className="input-text"
+            type="text"
+            value={requestText}
+            onChange={handleRequestChange}
+          />
+        </div>
+      </div>
+             {/* <div className="user-reserve-title"></div>
              <div className="user-content-container3">
                 <div> 요청사항 </div>
                  <div>  <input
@@ -304,7 +322,7 @@ const calculateTotalPrice = () => {
               value={requestText}
               onChange={handleRequestChange}
             /> </div> 
-             </div>
+             </div> */}
            </div>
            <hr/>
 
@@ -322,7 +340,7 @@ const calculateTotalPrice = () => {
 
 <div className="user-content-container6">
   <div className="user-content-last">
-    <button type="button" onClick={submitBtn}>
+    <button type="button"  onClick={() => {submitBtn(); goToAdminPage(); }}>
       다음 <i className="bi bi-chevron-right"></i>
     </button>
   </div>

@@ -26,6 +26,10 @@ function UserStoreDetail() {
     window.location.href = `/UserReservationDate.user/${id}`;
   };
 
+
+
+
+
   const [activeSection, setActiveSection] = useState('home'); 
 
   return (

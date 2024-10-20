@@ -4,27 +4,37 @@ import React, { useState, useEffect } from "react";
 
 function UserAccountFind () {
     const [formType, setFormType] = useState("id"); // 'id' 또는 'pw'
-    const [id, setId] = useState("");
-    const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
+    const [userId, setUserId] = useState("");
+    const [userName, setUserName] = useState("");
+    const [phonenum, setPhonenum] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [foundId, setFoundId] = useState(null);
+    const [isUserVerified, setIsUserVerified] = useState(false);
 
     // 입력 필드를 초기화하는 함수
     const clearInputFields = () => {
-        setId("");
-        setName("");
-        setPhone("");
+        setUserId("");
+        setUserName("");
+        setPhonenum("");
+        setNewPassword("");
+        setConfirmPassword("");
+        setFoundId(null);
+        setIsUserVerified(false);
     };
 
     // 아이디 찾기 폼 보이기
     const showIdForm = () => {
-        setFormType("id");
+        setFormType("userId");
         clearInputFields();
+        setFoundId(null);
     };
 
     // 비밀번호 찾기 폼 보이기
     const showPwForm = () => {
-        setFormType("pw");
+        setFormType("userPw");
         clearInputFields();
+        setFoundId(null);
     };
 
     // input 필드에 값이 있을 경우 'used' 클래스 추가
@@ -46,8 +56,72 @@ function UserAccountFind () {
                 }
             });
         });
-    }, [id, name, phone]);
+    }, [userId, userName, phonenum, newPassword, confirmPassword]);
 
+    // 아이디 찾기 요청 함수
+    const handleFindId = async () => {
+        try {
+            const response = await fetch(`/user/find-id?userName=${userName}&phonenum=${phonenum}`);
+            if (response.ok) {
+                const data = await response.text();
+                setFoundId(data);
+            } else {
+                alert("사용자 정보를 찾을 수 없습니다.");
+            }
+        } catch (error) {
+            console.error("Error finding user ID:", error);
+            alert("아이디 찾기 요청에 실패했습니다.");
+        }
+    };
+
+    // 사용자 검증 요청 함수
+    const handleVerifyUser = async () => {
+        try {
+            const response = await fetch("/user/verify-reset-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId, userName, phonenum }),
+            });
+            const data = await response.json();
+            if (data.verified) {
+                setIsUserVerified(true);
+            } else {
+                alert(data.message || "사용자 정보를 찾을 수 없습니다.");
+            }
+        } catch (error) {
+            console.error("Error verifying user:", error);
+            alert("사용자 검증 요청에 실패했습니다.");
+        }
+    };
+
+    // 비밀번호 재설정 요청 함수
+    const handleResetPassword = async () => {
+
+        if (newPassword !== confirmPassword) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+        }
+
+        try {
+            const response = await fetch("/user/reset-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId, newPassword }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert("비밀번호가 성공적으로 변경되었습니다.");
+                clearInputFields();
+                setFormType("id");
+                window.location.href = '/UserLoginPage.user';
+            } else {
+                alert(data.message || "비밀번호 변경에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("Error resetting password:", error);
+            alert("비밀번호 변경에 실패했습니다.");
+        }
+    };
 
     return (
         <div>
@@ -58,8 +132,8 @@ function UserAccountFind () {
                         id="find-id-btn"
                         onClick={showIdForm}
                         style={{
-                            backgroundColor: formType === "id" ? "#4653C0" : "#E5E5EA",
-                            color: formType === "id" ? "#fff" : "#000",
+                            backgroundColor: formType === "userId" ? "#4653C0" : "#E5E5EA",
+                            color: formType === "userId" ? "#fff" : "#000",
                         }}
                     >
                         아이디 찾기
@@ -69,8 +143,8 @@ function UserAccountFind () {
                         id="find-pw-btn"
                         onClick={showPwForm}
                         style={{
-                            backgroundColor: formType === "pw" ? "#4653C0" : "#E5E5EA",
-                            color: formType === "pw" ? "#fff" : "#000",
+                            backgroundColor: formType === "userPw" ? "#4653C0" : "#E5E5EA",
+                            color: formType === "userPw" ? "#fff" : "#000",
                         }}
                     >
                         비밀번호 찾기
@@ -83,14 +157,14 @@ function UserAccountFind () {
 
                 <form id="account-form">
                     {/* 아이디 찾기/비밀번호 찾기에 따라 필드 보이기 */}
-                    {formType === "pw" && (
+                    {formType === "userPw" && (
                         <div className="form-group" id="id-form-group">
                             <input
                                 type="text"
-                                id="id"
+                                id="userId"
                                 placeholder=" "
-                                value={id}
-                                onChange={(e) => setId(e.target.value)}
+                                value={userId}
+                                onChange={(e) => setUserId(e.target.value)}
                                 required
                             />
                             <label htmlFor="id">아이디</label>
@@ -101,10 +175,10 @@ function UserAccountFind () {
                     <div className="form-group" id="name-form-group">
                         <input
                             type="text"
-                            id="name"
+                            id="userName"
                             placeholder=" "
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value)}
                             required
                         />
                         <label htmlFor="name">이름</label>
@@ -114,10 +188,10 @@ function UserAccountFind () {
                     <div className="form-group" id="phone-form-group">
                         <input
                             type="text"
-                            id="phone-number"
+                            id="phonenum"
                             placeholder=" "
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            value={phonenum}
+                            onChange={(e) => setPhonenum(e.target.value)}
                             required
                         />
                         <label htmlFor="phone-number">연락처</label>
@@ -128,10 +202,56 @@ function UserAccountFind () {
                         type="button"
                         className="btn-findaccount"
                         id="btn-findaccount"
+                        onClick={formType === "userId" ? handleFindId : handleVerifyUser}
                     >
-                        {formType === "id" ? "아이디 찾기" : "비밀번호 찾기"}
+                        {formType === "userId" ? "아이디 찾기" : "비밀번호 찾기"}
                     </button>
                 </form>
+
+                {/* 아이디 찾기 결과 표시 */}
+                {foundId && (
+                    <div className="found-id">
+                        찾은 아이디: {foundId}
+                    </div>
+                )}
+
+                {/* 사용자 검증 완료 시 새 비밀번호 입력 폼 표시 */}
+                {isUserVerified && (
+                    <form id="reset-password-form">
+                        <div className="form-group">
+                            <input
+                                type="password"
+                                placeholder=" "
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                required
+                            />
+                            <label htmlFor="new-password">새 비밀번호</label>
+                            <div className="highlight"></div>
+                            <div className="bar"></div>
+                        </div>
+                        <div className="form-group">
+                            <input
+                                type="password"
+                                placeholder=" "
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                            />
+                            <label htmlFor="confirm-password">비밀번호 확인</label>
+                            <div className="highlight"></div>
+                            <div className="bar"></div>
+                        </div>
+                        <button
+                            type="button"
+                            className="btn-findaccount"
+                            onClick={handleResetPassword}
+                        >
+                            비밀번호 변경
+                        </button>
+                    </form>
+                )}
+
             </div>
         </div>
     );

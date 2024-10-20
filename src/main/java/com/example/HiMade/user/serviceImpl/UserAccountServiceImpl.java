@@ -185,4 +185,21 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         }
         return null;
     }
+
+    @Override
+    public String findUserId(String userName, String phonenum) {
+        return userAccountMapper.findUserIdByNameAndPhone(userName, phonenum);
+    }
+
+    @Override
+    public boolean verifyUserForPasswordReset(String userId, String userName, String phonenum) {
+        return userAccountMapper.verifyUserForPasswordReset(userId, userName, phonenum) > 0;
+    }
+
+    @Override
+    @Transactional
+    public void resetPassword(String userId, String newPassword) {
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        userAccountMapper.updatePassword(userId, encodedPassword);
+    }
 }

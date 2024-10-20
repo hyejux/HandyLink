@@ -13,4 +13,7 @@ public interface UserAccountService {
     UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException;
     String getKakaoAccessToken(String code);
     UserDTO getKakaoUserInfo(String accessToken);
+    String findUserId(String userName, String phonenum);
+    boolean verifyUserForPasswordReset(String userId, String userName, String phonenum);
+    void resetPassword(String userId, String newPassword);
 }

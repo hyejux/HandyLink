@@ -1,5 +1,7 @@
 var path = require('path');
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
+
 
 
 module.exports = {
@@ -91,6 +93,12 @@ main: './Main.js', //여러페이지 설정이 가능함
         // fix "process is not defined" error:
         new webpack.ProvidePlugin({
           process: 'process/browser',
+        }),
+
+        // .env 파일 로드
+        new Dotenv({
+            path: './.env', // .env 파일 경로 설정
+            systemvars: true, // 시스템 환경 변수를 가져오기 위해 설정
         }),
       ],
 };

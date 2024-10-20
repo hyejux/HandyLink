@@ -16,6 +16,11 @@ function UserLoginPage () {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!userId.trim() || !userPw.trim()) {
+            alert('아이디와 비밀번호를 입력해주세요.');
+            return;
+        }
+
         try {
             const response = await fetch('/user/login', {
                 method: 'POST',

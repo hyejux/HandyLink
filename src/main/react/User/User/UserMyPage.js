@@ -177,6 +177,7 @@ function UserMyPage () {
                                 <input
                                     type={passwordVisible ? "text" : "password"}
                                     id="userPw"
+                                    name="userPw" // name 속성 추가
                                     placeholder="비밀번호 입력"
                                     value={userInfo.userPw}
                                     onChange={handleInputChange}
@@ -191,6 +192,7 @@ function UserMyPage () {
                                 <input
                                     type={repasswordVisible ? "text" : "password"}
                                     id="repassword"
+                                    name="repassword" // name 속성 추가
                                     placeholder="비밀번호 재입력"
                                     value={userInfo.repassword}
                                     onChange={handleInputChange}

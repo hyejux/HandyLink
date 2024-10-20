@@ -62,7 +62,7 @@ const goToAdminPage = (id) => {
 
           <div className="reserve-container" key={index}>
                   <div className="reserve-img">
-                   <img src={`http://localhost:8585/img/${value.imageUrl}`} alt="My Image" />
+                  <img src={`${value.imageUrl}`} alt="My Image" />
 
                    </div>
 
@@ -77,9 +77,16 @@ const goToAdminPage = (id) => {
                      </div>
                    </div>
 
-               <button  type="button" class="btn-modi" onClick={() => goToAdminPage(value.categoryId)}>
-                             <i className="bi bi-pencil-square">{value.categoryId}</i>
+                        <div className='btn-ali'>
+                        <button  type="button" class="btn-modi" onClick={() => goToAdminPage(value.categoryId)}>
+                            <i className="bi bi-pencil-square">{value.categoryId}</i>
+                        </button>
+                         <button  type="button" class="btn-modi" onClick={() => goToAdminPage(value.categoryId)}>
+                         <i class="bi bi-gear-fill"> </i>
                          </button>
+  </div>
+
+           
                  </div>
              ))}
       </div>

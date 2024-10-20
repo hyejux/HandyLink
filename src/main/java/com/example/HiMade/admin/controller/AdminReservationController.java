@@ -5,7 +5,9 @@ import com.example.HiMade.admin.dto.*;
 import com.example.HiMade.admin.service.AdminMainService;
 import com.example.HiMade.admin.service.AdminReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -98,5 +100,10 @@ public class AdminReservationController {
     adminReservationService.updateStatus(dto);
   }
 
+  //사진등록
+  @PostMapping("/setMainCategoryImg")
+    public void setMainCategoryImg(@RequestParam("file") MultipartFile file,  @RequestParam("category_id") int categoryId) {
+      adminReservationService.setMainCategoryImg(file, categoryId);
+    }
 
 }

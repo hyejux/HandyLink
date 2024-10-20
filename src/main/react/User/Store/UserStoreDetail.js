@@ -26,6 +26,10 @@ function UserStoreDetail() {
     window.location.href = `/UserReservationDate.user/${id}`;
   };
 
+
+
+
+
   const [activeSection, setActiveSection] = useState('home'); 
 
   return (
@@ -94,7 +98,8 @@ function UserStoreDetail() {
                 <div className="user-content-container" key={index} onClick={() => goToAdminPage(value.categoryId)}>
                   <div className="user-reserve-menu">
                     <div className="user-reserve-menu-img">
-                      <img src="/img/user_basic_profile.jpg" alt="Profile" />
+                    <img src={`${value.imageUrl}`} alt="My Image" />
+
                     </div>
                     <div className="user-reserve-menu-content">
                       <div>{value.serviceName}</div>

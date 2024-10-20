@@ -1,6 +1,7 @@
 package com.example.HiMade.admin.service;
 
 import com.example.HiMade.admin.dto.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,5 +21,8 @@ public interface AdminReservationService
 
   //예약 상태 변경
   void updateStatus(UpdateReservationStatusDTO dto);
+
+  //서비스 별 사진 등록
+  public void setMainCategoryImg(MultipartFile file, int categoryId);
 
 }

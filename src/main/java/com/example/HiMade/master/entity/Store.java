@@ -47,6 +47,10 @@ public class Store {
     private String storeDayOff;
     private String storeAccount; // 이 필드는 JSON 객체로 유지
 
+    // store_no를 추가하여 시퀀스와 연결
+    @Column(name = "store_no", nullable = false)
+    private Long storeNo; //
+
     public Map<String, Object> getStoreAddrAsMap() {
         return jsonToMap(storeAddr);
     }

@@ -4,8 +4,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.HiMade.user.mapper.UserReservationMapper">
+
+    <select id="getMyReservationDetail" resultType="com.example.HiMade.user.dto.UserRD">
+        SELECT rf.reservation_no, rf.reservation_form_key,  rf.middle_category_value,
+        main_c.service_name AS main_category_name,
+        main_c.service_price AS main_price,
+        middle_c.service_name AS middle_category_name,
+        middle_c.service_price AS middle_price,
+        sub_c.service_name AS sub_category_name,
+        sub_c.service_price AS sub_price
+        FROM reservation_form rf
+        LEFT JOIN
+        category main_c ON rf.main_category_id = main_c.category_id
+        LEFT JOIN
+        category middle_c ON rf.middle_category_id = middle_c.category_id
+        LEFT JOIN
+        category sub_c ON rf.sub_category_id = sub_c.category_id
+
+    </select>
+
+
+
+
     <select id="getMyReserveList" resultType="com.example.HiMade.user.dto.UserRL">
-        select s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name
+        select s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name, r.reservation_time
         from reservation r
         LEFT JOIN store s
         ON s.store_id = r.store_id

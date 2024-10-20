@@ -129,13 +129,6 @@ const removeImage = async (index) => {
 
 
 
-
-
-
-
-
-
-
   // -----------------------------------
   const [categories, setCategories] = useState([{
     serviceName: '',
@@ -151,6 +144,28 @@ const removeImage = async (index) => {
     servicePrice: 0,
     serviceContent: ''
   });
+  
+  const setName = (name) => {
+    setReserveAdd(prev => ({
+      ...prev,
+      serviceName: name
+    }));
+  };
+  
+  const setPrice = (price) => {
+    setReserveAdd(prev => ({
+      ...prev,
+      servicePrice: price
+    }));
+  };
+  
+  const setDescription = (description) => {
+    setReserveAdd(prev => ({
+      ...prev,
+      serviceContent: description
+    }));
+  };
+  
 
   const handleComplete = () => {
     const transformedCategories = categories.map(category => ({
@@ -267,9 +282,9 @@ const removeImage = async (index) => {
       {imagePreview && <img src={imagePreview} alt="미리보기" style={{ width: '100px', height: '100px' }} />}
    
     </div>
-    <button type="button" className="btn-st btn-imgChg" onClick={handleUpload}>
+    {/* <button type="button" className="btn-st btn-imgChg" onClick={handleUpload}>
         사진 변경하기
-      </button>
+      </button> */}
         </div>
         <div className="reserve-content">
           <div className="reserve-content-title">
@@ -301,7 +316,7 @@ const removeImage = async (index) => {
       </div>
 
       <div className="main-btns">
-        <button type="button" className="btn-st" onClick={handleAddCategory}>추가하기</button>
+        <button type="button" className="btn-st" onClick={() => { handleAddCategory();}}>추가하기</button>
       </div>
 
       <div className="category-contents">
@@ -352,6 +367,7 @@ const removeImage = async (index) => {
                             선택
                           </label>
                         </div>
+                        
                       </div>
                       <div className="type-category-sub">
                         <input
@@ -367,6 +383,29 @@ const removeImage = async (index) => {
                           onChange={(e) => handleChangeCategory(index, 'servicePrice', Number(e.target.value))}
                         />
                       </div>
+
+                      <div className="type-input-type">
+                  <input
+                    type="checkbox"
+                    checked={category.subCategoryType === 'SELECT1'}
+                    onChange={() => handleChangeCategory(index, 'subCategoryType', 'SELECT1')}
+                  /> 선택 (하나)
+                  <input
+                    type="checkbox"
+                    checked={category.subCategoryType === 'SELECTN'}
+                    onChange={() => handleChangeCategory(index, 'subCategoryType', 'SELECTN')}
+                  /> 선택 (다중)
+                  <input
+                    type="checkbox"
+                    checked={category.subCategoryType === 'NUMBER'}
+                    onChange={() => handleChangeCategory(index, 'subCategoryType', 'NUMBER')}
+                  /> 숫자
+                  <input
+                    type="checkbox"
+                    checked={category.subCategoryType === 'TEXT'}
+                    onChange={() => handleChangeCategory(index, 'subCategoryType', 'TEXT')}
+                  /> 텍스트
+                </div>
 
                       {/* <button type="button" onClick={() => handleRemoveSubCategory(index, subIndex)}>삭제하기</button>
                       <div className="remove-category-btn">

@@ -358,7 +358,7 @@ function UserReservationConfirm() {
 
 <div className="user-content-container6">
   <div className="user-content-last">
-    <button type="button"  onClick={() => {submitBtn();  }}>
+    <button type="button"  onClick={() => {submitBtn(); goToAdminPage(); }}>
       다음 <i className="bi bi-chevron-right"></i>
     </button>
   </div>

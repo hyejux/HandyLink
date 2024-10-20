@@ -11,7 +11,7 @@ function UserMyReservationList() {
     const [reservationList, setReservationList] = useState([]);
 
        useEffect(() => {
-            axios.get('/userMyReservationList/getMyReserveList')
+            axios.get('/userMyReservation/getMyReserveList')
                 .then(response => {
                     console.log(response.data);
                     setReservationList(response.data);
@@ -29,12 +29,16 @@ function UserMyReservationList() {
     serviceContent: ''
   });
 
+    const goToUserPage = (id) => {
+       window.location.href = `../UserMyReservationDetail.user/${id}`;
+      };
+
   return (
     <div>
-           <div className="user-main-content">
+           <div className="user-main-content" >
 
            {reservationList.map((value, index) => (
-            <div className="user-content-container"  key={index}>
+            <div className="user-content-container"  key={index} onClick={()=>{goToUserPage(value.reservationNo)}}>
               <div className="reservation-header">
                 <span className="reservation-status">{value.reservationStatus}</span>
                 <div className="reservation-time">{value.regTime} </div>
@@ -51,7 +55,7 @@ function UserMyReservationList() {
                     </div>
                 <div className="time">
                 <i class="bi bi-clock-fill"></i>
-                    <span>8:00</span>
+                    <span>{value.reservationTime}</span>
                     </div>
                 </div>
                 

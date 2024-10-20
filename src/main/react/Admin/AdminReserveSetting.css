@@ -15,7 +15,12 @@
   margin-bottom: 30px;
 }
 
-
+.btn-ali {
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .main-contents{
   border-radius: 10px;
 }

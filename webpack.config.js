@@ -41,7 +41,7 @@ main: './Main.js', //여러페이지 설정이 가능함
         UserAccountFind : './User/User/UserAccountFind.js',
         UserChatList : './User/Inquiry/UserChatList.js',
         UserReservationDate : './User/Reservation/UserReservationDate.js',
-
+        UserMyReservationDetail : '/User/Reservation/UserMyReservationDetail.js',
 
         MyStore: './Admin/MyStore.js'
 

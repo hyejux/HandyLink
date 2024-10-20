@@ -142,19 +142,35 @@ const handleFlavorSelectN = (subCategory, index, categoryId) => {
     return updatedInputs;
   });
 
+
   setFormData(prev => {
     const updatedFormDatas = [...prev];
-    updatedFormDatas[index] = {
-      ...updatedFormDatas[index],
-      mainCategoryId : reserveModi.categoryId,
-      middleCategoryId : categoryId,
-      subCategoryId : subCategory.categoryId,
-      middleCategoryValue : null
+  
+    // 새로운 선택 항목을 생성
+    const newSelection = {
+      mainCategoryId: reserveModi.categoryId,  // mainCategoryId
+      middleCategoryId: categoryId,            // middleCategoryId
+      subCategoryId: subCategory.categoryId,   // subCategoryId
+      middleCategoryValue: subCategory.value || null,  // 값이 없으면 null
     };
+  
+    // 이미 해당 항목이 있는지 확인
+    const existingIndex = updatedFormDatas.findIndex(item =>
+      item.mainCategoryId === reserveModi.categoryId &&
+      item.middleCategoryId === categoryId &&
+      item.subCategoryId === subCategory.categoryId
+    );
+  
+    if (existingIndex !== -1) {
+      // 항목이 이미 있으면 제거
+      updatedFormDatas.splice(existingIndex, 1);
+    } else {
+      // 항목이 없으면 추가
+      updatedFormDatas.splice(index + 1, 0, newSelection);
+    }
+  
     return updatedFormDatas;
-  })
-
-
+  });
 };
 
 const goToAdminPage = (id) => {

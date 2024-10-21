@@ -22,28 +22,35 @@ body {
 
 
 
-.user-top-nav {
-    padding: 10px;
-    text-align: center;
-    background-color: #ffffff;
-    border-bottom: 1px solid #ddd;
-    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+.user-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 600px;
+  height: 60px;
+  border-top: 1px solid #ddd;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-weight: bold;
+  /* box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3); */
 }
 
-.user-bottom-nav{
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    max-width: 600px;
-    height: 60px;
-    border-top: 1px solid #ddd;
-    background-color: #fff;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    font-weight: bold;
-    /* box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3); */
+.user-top-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  /* text-align: center; */
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+  /* position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 100; */
 }
+
 
 .user-bottom-nav a {
     color: #000;

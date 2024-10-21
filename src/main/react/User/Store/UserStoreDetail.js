@@ -53,11 +53,8 @@ function UserStoreDetail() {
     <div>
       <div className="user-main-container">
         <div className="user-top-nav">
-          <div className="user-top-btns">
-            <button type="button"> &lt; </button>
-            <div className="logo">HandyLink</div>
-            <button type="button"> &gt; </button>
-          </div>
+           <i className="bi bi-arrow-left"></i>
+        <logo className="logo"> 상단바 고민중 </logo>
         </div>
 
         <div className="user-main-content">

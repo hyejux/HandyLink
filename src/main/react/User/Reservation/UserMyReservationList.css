@@ -300,13 +300,11 @@ body {
 .reservation-info-box {
   display: flex;
   align-items: center;
-
   font-weight: bold;
   font-size: 14px;
   border: 1px solid #5a46db;
   border-radius: 5px;
   padding: 5px 8px;
-  width: 55%;
   justify-content: space-around;
 
 }
@@ -320,7 +318,9 @@ body {
 .reservation-info {
   display: flex;
   justify-content: flex-end;
+  margin-top: 20px;
   margin-bottom: 20px;
+
 }
 
 

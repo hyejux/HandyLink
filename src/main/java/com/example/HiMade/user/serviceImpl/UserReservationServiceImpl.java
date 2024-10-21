@@ -7,6 +7,7 @@ import com.example.HiMade.user.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class UserReservationServiceImpl implements UserReservationService {
     return userReservationMapper.getDateTime(Date);
   }
 
+  @Transactional
   @Override
   public int setReservationForm(UserReservationDTO dto) {
 
@@ -40,6 +42,7 @@ public class UserReservationServiceImpl implements UserReservationService {
     return userReservationMapper.getSlotTime(slotkey);
   }
 
+  @Transactional
   @Override
   public void setReservationFormDetail(List<UserReservationFormDTO> dto) {
     for (UserReservationFormDTO d : dto ){
@@ -49,8 +52,9 @@ public class UserReservationServiceImpl implements UserReservationService {
   }
 
   @Override
-  public List<UserRD> getMyReservationDetail() {
-    return userReservationMapper.getMyReservationDetail();
+  public List<UserRD> getMyReservationDetail(int id) {
+    System.out.println(userReservationMapper.getMyReservationDetail(id));
+    return userReservationMapper.getMyReservationDetail(id);
   }
 
 

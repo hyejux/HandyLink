@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,7 +56,6 @@ public class UserAccountController {
                                          @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
                                          HttpSession session) {
         logger.info("Received UserDTO: {}", userDTO);
-        logger.info("Received ProfileImage: {}", (profileImage != null ? profileImage.getOriginalFilename() : "null"));
 
         try {
             // 카카오 로그인 사용자인지 확인
@@ -105,38 +105,17 @@ public class UserAccountController {
 
         // 파일 저장 경로 생성
         Path filePath = uploadPath.resolve(newFilename);
-        Files.copy(profileImage.getInputStream(), filePath);
+        try (InputStream inputStream = profileImage.getInputStream()) {
+            Files.copy(inputStream, filePath);
+        }
 
         System.out.println("파일이 저장되었습니다: " + filePath);
 
-        // 웹에서 접근 가능한 경로 반환
-        return "/static/uploads/" + newFilename;
+        // 파일명만 반환
+        return newFilename;
     }
 
-    // 일반 로그인
-//    @PostMapping("/login")
-//    public ResponseEntity<?> loginUser(@RequestBody UserDTO userDTO, HttpSession session, HttpServletRequest request) {
-//        try {
-//            // 사용자 정보 가져오기
-//            //UserDTO user = userAccountService.getUserById(userDTO.getUserId());
-//            UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-//
-//            // 세션 확인 및 생성
-//            if (session == null || session.isNew()) {
-//                session = session != null ? session : request.getSession(); // 새로운 세션 생성
-//            }
-//
-//            // 세션에 사용자 정보 저장
-//            session.setAttribute("user", user);
-//
-//            System.out.println("세션에 저장된 ID " + session.getId());
-//
-//            // 사용자 정보를 클라이언트에 응답
-//            return ResponseEntity.ok(user);
-//        } catch (UsernameNotFoundException | BadCredentialsException e) {
-//            return ResponseEntity.status(401).body("이메일 또는 비밀번호가 일치하지 않습니다.");
-//        }
-//    }
+
 
 
     // 카카오 로그인 처리
@@ -181,7 +160,6 @@ public class UserAccountController {
                 // 세션에 사용자 정보 저장
                 session.setAttribute("userId", existingUser.getUserId());
                 System.out.println("로그: 세션에 저장된 사용자 ID: " + session.getAttribute("userId"));
-                //System.out.println("로그: 세션 ID: " + session.getId());
 
                 // 세션에 저장된 SecurityContext 확인 추가
                 SecurityContext contextInSession = (SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
@@ -194,7 +172,6 @@ public class UserAccountController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("로그 로그 Detailed error: " + e.getMessage());  // 더 자세한 오류 메시지
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카카오 로그인 처리 중 오류 발생");
         }
     }
@@ -217,11 +194,17 @@ public class UserAccountController {
             String userId = auth.getName(); // 여기서 userId를 직접 가져옴
             UserDTO user = userAccountService.getUserById(userId);
             if (user != null) {
+                // 프로필 이미지 URL을 동적으로 생성 (파일명만 저장된 경우)
+                if (user.getUserImgUrl() != null && !user.getUserImgUrl().isEmpty()) {
+                    user.setUserImgUrl("/uploads/" + Paths.get(user.getUserImgUrl()).getFileName().toString());
+                }
                 return ResponseEntity.ok(user);
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+
 
     // 사용자 정보 수정 (비밀번호 포함)
     @PutMapping("/update")

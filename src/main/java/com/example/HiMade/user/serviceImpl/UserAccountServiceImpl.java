@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafProperties;
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -49,6 +50,8 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private ThymeleafProperties thymeleafProperties;
 
     // 생성자를 통해 의존성 주입
     public UserAccountServiceImpl(BCryptPasswordEncoder passwordEncoder, UserAccountMapper userAccountMapper) {
@@ -100,15 +103,12 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
     // 시큐리티 방식의 로그인 (사용자 인증)
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        logger.debug("loadUserByUsername 호출됨: {}", userId);
         UserDTO user = userAccountMapper.getUserById(userId);
+
         if (user == null) {
             logger.error("유저를 찾을 수 없음: {}", userId);
             throw new UsernameNotFoundException("찾을 수 없는 유저 : " + userId);
         }
-
-        // 인증 정보 확인 로그
-        logger.debug("인증된 사용자: {}", user.getUserId());
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
@@ -132,9 +132,8 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
         ResponseEntity<Map> response = restTemplate.postForEntity(KAKAO_TOKEN_URL, request, Map.class);
 
-        System.out.println("로그 로그 Sending request to Kakao token URL: " + KAKAO_TOKEN_URL);
-        System.out.println("로그 로그 Request body: " + body);
-
+        System.out.println("로그 Kakao token URL: " + KAKAO_TOKEN_URL);
+        System.out.println("로그 Request body: " + body);
 
         if (response.getStatusCode() == HttpStatus.OK) {
             Map<String, Object> responseBody = response.getBody();
@@ -162,8 +161,6 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
             String nickname = (String) properties.get("nickname");
             String profileImage = (String) properties.get("profile_image");
 
-            // 로그로 확인
-            System.out.println("카카오 프로필 이미지: " + profileImage);
             // UserDTO로 변환
             return UserDTO.builder()
                     .userId(kakaoId)

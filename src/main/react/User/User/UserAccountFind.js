@@ -3,7 +3,7 @@ import './UserAccountFind.css';
 import React, { useState, useEffect } from "react";
 
 function UserAccountFind () {
-    const [formType, setFormType] = useState("id"); // 'id' 또는 'pw'
+    const [formType, setFormType] = useState("userId"); // 'id' 또는 'pw'
     const [userId, setUserId] = useState("");
     const [userName, setUserName] = useState("");
     const [phonenum, setPhonenum] = useState("");
@@ -11,6 +11,7 @@ function UserAccountFind () {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [foundId, setFoundId] = useState(null);
     const [isUserVerified, setIsUserVerified] = useState(false);
+    const [message, setMessage] = useState("");
 
     // 입력 필드를 초기화하는 함수
     const clearInputFields = () => {
@@ -21,6 +22,7 @@ function UserAccountFind () {
         setConfirmPassword("");
         setFoundId(null);
         setIsUserVerified(false);
+        setMessage("");
     };
 
     // 아이디 찾기 폼 보이기
@@ -28,6 +30,7 @@ function UserAccountFind () {
         setFormType("userId");
         clearInputFields();
         setFoundId(null);
+        setMessage("");
     };
 
     // 비밀번호 찾기 폼 보이기
@@ -35,6 +38,7 @@ function UserAccountFind () {
         setFormType("userPw");
         clearInputFields();
         setFoundId(null);
+        setMessage("");
     };
 
     // input 필드에 값이 있을 경우 'used' 클래스 추가
@@ -58,23 +62,23 @@ function UserAccountFind () {
         });
     }, [userId, userName, phonenum, newPassword, confirmPassword]);
 
-    // 아이디 찾기 요청 함수
+    // 아이디 찾기 함수
     const handleFindId = async () => {
         try {
             const response = await fetch(`/user/find-id?userName=${userName}&phonenum=${phonenum}`);
             if (response.ok) {
                 const data = await response.text();
                 setFoundId(data);
+                setMessage("");
             } else {
-                alert("사용자 정보를 찾을 수 없습니다.");
+                setMessage("사용자 정보를 찾을 수 없습니다.");
             }
         } catch (error) {
             console.error("Error finding user ID:", error);
-            alert("아이디 찾기 요청에 실패했습니다.");
         }
     };
 
-    // 사용자 검증 요청 함수
+    // 비밀번호 찾기 함수
     const handleVerifyUser = async () => {
         try {
             const response = await fetch("/user/verify-reset-password", {
@@ -85,16 +89,17 @@ function UserAccountFind () {
             const data = await response.json();
             if (data.verified) {
                 setIsUserVerified(true);
+                setMessage("");
             } else {
-                alert(data.message || "사용자 정보를 찾을 수 없습니다.");
+                setIsUserVerified(false);
+                setMessage(data.message);
             }
         } catch (error) {
             console.error("Error verifying user:", error);
-            alert("사용자 검증 요청에 실패했습니다.");
         }
     };
 
-    // 비밀번호 재설정 요청 함수
+    // 비밀번호 초기화 함수
     const handleResetPassword = async () => {
 
         if (newPassword !== confirmPassword) {
@@ -156,62 +161,73 @@ function UserAccountFind () {
                 </div>
 
                 <form id="account-form">
-                    {/* 아이디 찾기/비밀번호 찾기에 따라 필드 보이기 */}
-                    {formType === "userPw" && (
-                        <div className="form-group" id="id-form-group">
-                            <input
-                                type="text"
-                                id="userId"
-                                placeholder=" "
-                                value={userId}
-                                onChange={(e) => setUserId(e.target.value)}
-                                required
-                            />
-                            <label htmlFor="id">아이디</label>
-                            <div className="highlight"></div>
-                            <div className="bar"></div>
-                        </div>
+                    {/* 사용자 검증이 되지 않은 경우 아이디, 이름, 연락처 입력 폼 표시 */}
+                    {!isUserVerified && (
+                        <>
+                            {formType === "userPw" && (
+                                <div className="form-group" id="id-form-group">
+                                    <input
+                                        type="text"
+                                        id="userId"
+                                        placeholder=" "
+                                        value={userId}
+                                        onChange={(e) => setUserId(e.target.value)}
+                                        required
+                                    />
+                                    <label htmlFor="id">아이디</label>
+                                    <div className="highlight"></div>
+                                    <div className="bar"></div>
+                                </div>
+                            )}
+                            <div className="form-group" id="name-form-group">
+                                <input
+                                    type="text"
+                                    id="userName"
+                                    placeholder=" "
+                                    value={userName}
+                                    onChange={(e) => setUserName(e.target.value)}
+                                    required
+                                />
+                                <label htmlFor="name">이름</label>
+                                <div className="highlight"></div>
+                                <div className="bar"></div>
+                            </div>
+                            <div className="form-group" id="phone-form-group">
+                                <input
+                                    type="text"
+                                    id="phonenum"
+                                    placeholder=" "
+                                    value={phonenum}
+                                    onChange={(e) => setPhonenum(e.target.value)}
+                                    required
+                                />
+                                <label htmlFor="phone-number">연락처</label>
+                                <div className="highlight"></div>
+                                <div className="bar"></div>
+                            </div>
+                            <button
+                                type="button"
+                                className="btn-findaccount"
+                                id="btn-findaccount"
+                                onClick={formType === "userId" ? handleFindId : handleVerifyUser}
+                            >
+                                {formType === "userId" ? "아이디 찾기" : "비밀번호 찾기"}
+                            </button>
+                        </>
                     )}
-                    <div className="form-group" id="name-form-group">
-                        <input
-                            type="text"
-                            id="userName"
-                            placeholder=" "
-                            value={userName}
-                            onChange={(e) => setUserName(e.target.value)}
-                            required
-                        />
-                        <label htmlFor="name">이름</label>
-                        <div className="highlight"></div>
-                        <div className="bar"></div>
-                    </div>
-                    <div className="form-group" id="phone-form-group">
-                        <input
-                            type="text"
-                            id="phonenum"
-                            placeholder=" "
-                            value={phonenum}
-                            onChange={(e) => setPhonenum(e.target.value)}
-                            required
-                        />
-                        <label htmlFor="phone-number">연락처</label>
-                        <div className="highlight"></div>
-                        <div className="bar"></div>
-                    </div>
-                    <button
-                        type="button"
-                        className="btn-findaccount"
-                        id="btn-findaccount"
-                        onClick={formType === "userId" ? handleFindId : handleVerifyUser}
-                    >
-                        {formType === "userId" ? "아이디 찾기" : "비밀번호 찾기"}
-                    </button>
                 </form>
+
 
                 {/* 아이디 찾기 결과 표시 */}
                 {foundId && (
                     <div className="found-id">
                         찾은 아이디: {foundId}
+                    </div>
+                )}
+
+                {message && (
+                    <div className="message">
+                        {message}
                     </div>
                 )}
 
@@ -238,7 +254,7 @@ function UserAccountFind () {
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
                             />
-                            <label htmlFor="confirm-password">비밀번호 확인</label>
+                            <label htmlFor="confirm-password">새 비밀번호 확인</label>
                             <div className="highlight"></div>
                             <div className="bar"></div>
                         </div>

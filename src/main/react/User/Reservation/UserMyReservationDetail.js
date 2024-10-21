@@ -3,27 +3,41 @@ import ReactDOM from 'react-dom/client';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { FaCalendar, FaClock } from 'react-icons/fa';
+import './UserMyReservationDetail.css';
 
 
 
 function UserMyReservationDetail() {
   const [cateId, setCateId] = useState(0);
-    const [reservationList, setReservationList] = useState([]);
+  const [reservationList, setReservationList] = useState([]);
+  const [paymentInfo, setPaymentInfo] = useState([]);
 
-       useEffect(() => {
-        const path = window.location.pathname;
-        const pathSegments = path.split('/');
-        const categoryId = pathSegments[pathSegments.length - 1];
-        setCateId(categoryId);
-            axios.get(`/userMyReservation/getMyReservationDetail/${categoryId}`)
-                .then(response => {
-                    console.log(response.data);
-                    setReservationList(response.data);
-                })
-                .catch(error => {
-                    console.log('Error Category', error);
-                });
-        }, [])
+  useEffect(() => {
+    const path = window.location.pathname;
+    const pathSegments = path.split('/');
+    const categoryId = pathSegments[pathSegments.length - 1];
+    setCateId(categoryId);
+    axios.get(`/userMyReservation/getMyReservationDetail/${categoryId}`)
+      .then(response => {
+        console.log(response.data);
+        setReservationList(response.data);
+      })
+      .catch(error => {
+        console.log('Error Category', error);
+      });
+
+    // 결제 정보 가져옴
+    axios.get(`/userPaymentInfo/getPaymentInfo/${categoryId}`)
+      .then(response => {
+        console.log(response.data);
+        setPaymentInfo(response.data);
+      })
+      .catch(error => {
+        console.log('Error fetching payment info', error);
+      });
+  }, []);
+
+
 
   const [category, setCategory] = useState({
     categoryLevel: 0,
@@ -32,16 +46,21 @@ function UserMyReservationDetail() {
     servicePrice: 0,
     serviceContent: ''
   });
+
+  // 결제 일시 포맷
+  const formatDate = (dateString) => dateString.split('T')[0] + ' ' + dateString.split('T')[1].substring(0, 8);
+
+
   return (
     <div>
 
-<h1> 예약 정보 (가게이름이나 주문일시, 상태 등등) </h1>
- <button type="button" > 예약 취소 </button>
-   <hr/>
-<h1> 예약자 정보 </h1>
+      <h1> 예약 정보 (가게이름이나 주문일시, 상태 등등) </h1>
+      <button type="button" > 예약 취소 </button>
+      <hr />
+      <h1> 예약자 정보 </h1>
 
-   <hr/>
- <h1> 주문내역 </h1>
+      <hr />
+      <h1> 주문내역 </h1>
 
       {reservationList.map((item, index) => {
         // 현재 항목의 대분류가 이전 항목과 다른 경우만 출력
@@ -67,24 +86,122 @@ function UserMyReservationDetail() {
           </div>
         );
       })}
-<h1> 총액 </h1>
+      <h1> 총액 </h1>
 
-   <hr/>
-   <h1> 요청사항 </h1>
+      <hr />
+      <h1> 요청사항 </h1>
 
-      <hr/>
+      <hr />
 
-   <h1> 결제 정보 </h1>
+       {/* 결제 정보 */}
+       <div className="user-payment-info-container">
+        <div className="payment-info-top">
+          <div className="payment-left">결제 정보</div>
+          <div className="payment-right"><a href="#">결제 상세</a></div>
+        </div>
+        <div className="payment-info">
+          {paymentInfo.length > 0 ? (
+            paymentInfo.map((payment, index) => (
+              <div key={index} className="info-row">
+                <div className="left">결제 일시</div>
+                <div className="right">{formatDate(payment.paymentDate)}</div>
+              </div>
+            ))
+          ) : (
+            <div className="info-row">
+              <div className="left">결제 정보가 없습니다.</div>
+            </div>
+          )}
+          {paymentInfo.length > 0 && paymentInfo.map((payment, index) => (
+            <div key={index}>
+              <div className="info-row">
+                <div className="left">결제수단</div>
+                <div className="right">{payment.paymentMethod}</div>
+              </div>
+              <div className="info-row">
+                <div className="left">결제 금액</div>
+                <div className="right">{payment.paymentAmount}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
-      <hr/>
+      <hr />
 
-<h1> 주의사항 </h1>
 
-   <hr/>
+      {/* <h1>결제 정보</h1>
+      <div className="user-payment-info-container">
+        <div className="header">결제 정보</div>
+        <div className="payment-info">
+          {paymentInfo.length > 0 ? (
+            paymentInfo.map((payment, index) => (
+              <div key={index}>
+                <div className="info-row">
+                  <div className="left">결제 일시</div>
+                  <div className="right">{payment.paymentDate}</div>
+                </div>
+                <div className="info-row">
+                  <div className="left">결제 수단</div>
+                  <div className="right">{payment.paymentMethod}</div>
+                </div>
+                <div className="info-row">
+                  <div className="left">결제 금액</div>
+                  <div className="right">{payment.paymentAmount}</div>
+                </div>
+       */}
+                {/* 대분류와 중분류 출력 */}
+              {/* {reservationList.map((item, resIndex) => {
+                const isFirstInGroup = resIndex === 0 || reservationList[resIndex - 1].mainCategoryName !== item.mainCategoryName;
+                const isMiddleCategoryDifferent = resIndex === 0 || reservationList[resIndex - 1].middleCategoryName !== item.middleCategoryName;
 
-<h1> 환불규정 </h1>
+                return (
+                  <div key={resIndex}>
+                    {isFirstInGroup && (
+                      <div className="info-row">
+                        <div className="left"><i class="bi bi-dot"></i> {item.mainCategoryName}</div>
+                        <div className="right">(+{item.mainPrice}원)</div>
+                      </div>
+                    )}
+                    {isMiddleCategoryDifferent && 
+                     null
+                    }
+                    {item.middleCategoryValue ? (
+                      <div className="info-row info-row2">
+                        <div className="left"><i class="bi bi-dash"></i> {item.middleCategoryName}</div>
+                        <div className="right">{item.middleCategoryValue + '개'} (+{item.middlePrice}원)</div>
+                      </div>
+                    ) : (
+                      <div className="info-row info-row2">
+                        <div className="left"><i class="bi bi-dash"></i> {item.subCategoryName}</div>
+                        <div className="right">(+{item.subPrice}원)</div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}              
+              </div>
+              
+            ))
+          ) : (
+            <div className="info-row">
+              <div className="left">결제 정보가 없습니다.</div>
+            </div>
+          )}
+        </div>
+      </div> */}
 
-   <hr/>
+
+
+      <hr />
+
+      <h1> 주의사항 </h1>
+
+      <hr />
+
+      <h1> 환불규정 </h1>
+
+      <hr />
 
 
 

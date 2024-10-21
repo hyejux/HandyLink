@@ -80,11 +80,16 @@ function AdminReserveManage() {
     // 캘린더에 예약건 반환
     const getReservationsForDate = (date) => {
         return reservationList
+            // reservationList에서 각 예약(reservation)의 등록 시간(regTime)을 Date 객체로 변환합니다.
             .filter(reservation =>
+                // toLocaleDateString() 메서드를 사용하여 해당 날짜를 문자열로 변환합니다.
+                // 주어진 date와 같은 날짜인 예약만 필터링합니다.
                 new Date(reservation.regTime).toLocaleDateString() === date.toLocaleDateString()
             )
+            // 필터링된 예약 목록을 등록 시간에 따라 정렬합니다
             .sort((a, b) => new Date(a.regTime) - new Date(b.regTime));
     };
+
 
     const handleDateClick = (date) => {
         const dateString = date.toLocaleDateString();
@@ -236,7 +241,9 @@ function AdminReserveManage() {
                                     }
                                     return null;
                                 }}
+                                // tileContent: 각 날짜에 예약 정보를 표시하는 로직입니다. getReservationsForDate(date) 함수를 호출하여 현재 날짜의 예약 목록을 가져와서, 예약이 있을 경우 이를 <ul> 리스트로 렌더링합니다.
                                 tileContent={({ date, view }) => {
+                                    // tileClassName: 현재 월 뷰(view === 'month')일 때, 날짜가 선택된 날짜(selectedDates) 배열에 포함되어 있으면 selected-date 클래스를 반환하여 해당 날짜를 강조합니다.
                                     if (view === 'month') {
                                         const reservations = getReservationsForDate(date);
                                         if (reservations.length > 0) {
@@ -255,6 +262,7 @@ function AdminReserveManage() {
                                     }
                                     return null;
                                 }}
+                                // onClickDay: 날짜를 클릭했을 때 호출되는 함수로, handleDateClick을 통해 선택된 날짜를 업데이트합니다.
                                 onClickDay={handleDateClick}
                             />
                         </div>
@@ -285,8 +293,6 @@ function AdminReserveManage() {
                             </div>
                         )}
                     </div>
-
-
                 )}
 
             </div>

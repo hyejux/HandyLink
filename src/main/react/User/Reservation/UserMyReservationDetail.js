@@ -47,8 +47,12 @@ function UserMyReservationDetail() {
     serviceContent: ''
   });
 
-  // 결제 일시 포맷
-  const formatDate = (dateString) => dateString.split('T')[0] + ' ' + dateString.split('T')[1].substring(0, 8);
+  // 결제 일시 포맷 (년/월/일 시:분:초)
+  const formatDate = (dateString) => {
+    const [date, time] = dateString.split('T');
+    const formattedDate = date.replace(/-/g, '.'); // '-'을 '/'로 변경
+    return `${formattedDate} ${time.substring(0, 8)}`; // 'YYYY/MM/DD HH:MM:SS' 형식으로 반환
+  };
 
 
   return (
@@ -98,16 +102,11 @@ function UserMyReservationDetail() {
         <div className="payment-info-top">
           <div className="payment-left">결제 정보</div>
           <div className="payment-right">
-          <a 
-        href="#" 
-        onClick={(e) => {
-            e.preventDefault(); // 기본 링크 동작 방지
-            window.location.href = `/paymentInfo.user/${cateId}`; // 페이지 이동
-        }}
-    >
-        결제 상세
-    </a>
+            <a href="#" onClick={() => window.location.href = `/paymentInfo.user/${cateId}`}>
+              결제 상세
+            </a>
           </div>
+
         </div>
         <div className="payment-info">
           {paymentInfo.length > 0 ? (

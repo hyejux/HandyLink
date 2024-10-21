@@ -97,8 +97,21 @@ function PaymentInfo() {
         fetchReservationAndPayments();
     }, []); // 컴포넌트가 마운트될 때 한 번만 실행됩니다.
 
-    // 결제 일시 포맷
-  const formatDate = (dateString) => dateString.split('T')[0] + ' ' + dateString.split('T')[1].substring(0, 8);
+
+
+    // 결제 일시 포맷 (년/월/일 시:분:초)
+    const formatDate1 = (dateString) => {
+        const [date, time] = dateString.split('T');
+        const formattedDate = date.replace(/-/g, '.'); // '-'을 '/'로 변경
+        return `${formattedDate} ${time.substring(0, 8)}`; // 'YYYY/MM/DD HH:MM:SS' 형식으로 반환
+    };
+
+
+    // 결제 일시 포맷 (년/월/일만 표시)
+    const formatDate2 = (dateString) => {
+        return dateString.split('T')[0].split('-').join('.'); // 'YYYY/MM/DD' 형식으로 반환
+    };
+
 
     return (
         <div>
@@ -113,22 +126,60 @@ function PaymentInfo() {
                 </div>
             )}
 
-            <h3>셀렉트 테스트</h3>
-            <ul>
-                {paymentInfo.map((payment) => (
-                    <li key={payment.paymentId} style={{ marginBottom: '10px' }}>
-                        결제 ID: {payment.paymentId} <br />
-                        결제 방법: {payment.paymentMethod} <br />
-                        금액: {payment.paymentAmount} 원 <br />
-                        결제일시: {new Date(payment.paymentDate).toLocaleString()} <br />
-                        상태: {payment.paymentStatus} <br />
-                        예약번호: {payment.reservationNo} <br />
-                    </li>
-                ))}
-            </ul>
 
-            <h1>결제 정보</h1>
-            <div className="user-payment-info-container">
+
+            <div className="user-content-container">
+                {paymentInfo.length > 0 && paymentInfo[0].paymentDate && (
+                    <div className="header">
+                        {formatDate2(paymentInfo[0].paymentDate)}
+                    </div>
+                )}
+            </div>
+
+            <div className="user-content-container">
+                <div className="header">예약 정보</div>
+                <div className="reservation-date">2024.10.3(목) 오후 2:30</div>
+                <div className="reservation-info">
+                    <img src="../img/cake001.jpg" alt="예약 이미지" />
+                    <div className="reservation-details">
+                        <div className="store-name">오늘도 케이크</div>
+
+
+                        {/* 대분류와 중분류 출력 */}
+                        {reservationList.map((item, resIndex) => {
+                            const isFirstInGroup = resIndex === 0 || reservationList[resIndex - 1].mainCategoryName !== item.mainCategoryName;
+
+                            return (
+                                <div key={resIndex}>
+                                    {isFirstInGroup && (
+                                        <div className="menu">{item.mainCategoryName}</div>
+                                    )}
+                                    {item.middleCategoryValue ? (
+                                        <div className="option">
+                                            <span><i className="bi bi-dot"></i>  {item.middleCategoryName}</span>
+                                            <span>({item.middleCategoryValue}개)  {/*(+{item.middlePrice}원)*/}</span>
+                                        </div>
+                                    ) : (
+                                        <div className="option">
+                                            <span><i className="bi bi-dot"></i>  {item.subCategoryName}</span>
+                                            {/* <span>(+{item.subPrice}원)</span> */}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                </div>
+                <div className="button-group">
+                    <button className="button btn-left">가게 정보</button>
+                    <button className="button btn-right" onClick={() => window.location.href = `/UserMyReservationDetail.user/${reservationNo}`}>
+                        예약 상세
+                    </button>
+                </div>
+            </div>
+
+            <div className="user-content-container">
                 <div className="header">결제 정보</div>
                 <div className="payment-info">
                     {paymentInfo.length > 0 ? (
@@ -136,7 +187,7 @@ function PaymentInfo() {
                             <div key={index}>
                                 <div className="info-row">
                                     <div className="left">결제 일시</div>
-                                    <div className="right">{formatDate(payment.paymentDate)}</div>
+                                    <div className="right">{formatDate1(payment.paymentDate)}</div>
                                 </div>
                                 <div className="info-row">
                                     <div className="left">결제 수단</div>

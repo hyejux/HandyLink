@@ -17,6 +17,7 @@ public class UserCateDTO {
   private int servicePrice;
   private String serviceContent;
   private String storeId;
+  private int storeNo;
 
   private int imageId;
 

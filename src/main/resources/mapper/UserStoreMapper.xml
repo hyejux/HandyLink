@@ -11,7 +11,7 @@
     left join category_image ci
     on c.category_id = ci.category_id
     where category_level = 1
-    AND store_id = 'bbb123';
+    AND store_no = #{id};
 </select>
 
 </mapper>

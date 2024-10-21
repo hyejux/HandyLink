@@ -58,16 +58,19 @@
 
 }
 
+
+
 .user-main-content {
   margin-bottom: 30px;
   position: relative;
 }
 
-.user-main-content2{
-  /* padding : 15px; */
-  margin-bottom: 100px;
+
+.user-main-content2 {
+  margin-bottom: 40px;
   /* border : 1px solid blue; */
 }
+
 
 
 .last-content {

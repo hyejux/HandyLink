@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface UserStoreMapper {
-  public List<UserCateDTO> getStoreMainCategory(String storeId);
+  public List<UserCateDTO> getStoreMainCategory(int id);
 }

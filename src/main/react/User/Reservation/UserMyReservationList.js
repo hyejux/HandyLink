@@ -37,6 +37,13 @@ function UserMyReservationList() {
     <div>
            <div className="user-main-content" >
 
+           <div className="user-top-nav">
+           {/* <i className="bi bi-arrow-left"></i> */}
+        <logo className="logo"> 내 예약 내역 </logo>
+      
+      </div>
+
+
            {reservationList.map((value, index) => (
             <div className="user-content-container"  key={index} onClick={()=>{goToUserPage(value.reservationNo)}}>
               <div className="reservation-header">

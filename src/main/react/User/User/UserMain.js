@@ -218,7 +218,7 @@ function UserMain() {
 
   return (
     <div>
-       <div className="user-main-container">
+       <div className="user-main-content2">
 
      
       <div className="user-top-nav">

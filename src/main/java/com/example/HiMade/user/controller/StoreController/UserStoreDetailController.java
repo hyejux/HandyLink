@@ -16,12 +16,11 @@ public class UserStoreDetailController {
   @Autowired
   private UserStoreService userStoreService;
 
-  @PostMapping("/getStoreMainCategory")
-  public List<UserCateDTO> getStoreMainCategory(@RequestBody UserCateDTO dto) {
-    String storeId = dto.getStoreId();
-    System.out.println(storeId);
-    System.out.println(userStoreService.getStoreMainCategory(storeId));
-    return userStoreService.getStoreMainCategory(storeId);
+  @GetMapping("/getStoreMainCategory/{id}")
+  public List<UserCateDTO> getStoreMainCategory(@PathVariable int id) {
+    System.out.println("gg" + id);
+    System.out.println( userStoreService.getStoreMainCategory(id));
+    return userStoreService.getStoreMainCategory(id);
   }
 
 

@@ -7,11 +7,15 @@ import { FaCalendar, FaClock } from 'react-icons/fa';
 
 
 function UserMyReservationDetail() {
-
+  const [cateId, setCateId] = useState(0);
     const [reservationList, setReservationList] = useState([]);
 
        useEffect(() => {
-            axios.get('/userMyReservation/getMyReservationDetail')
+        const path = window.location.pathname;
+        const pathSegments = path.split('/');
+        const categoryId = pathSegments[pathSegments.length - 1];
+        setCateId(categoryId);
+            axios.get(`/userMyReservation/getMyReservationDetail/${categoryId}`)
                 .then(response => {
                     console.log(response.data);
                     setReservationList(response.data);

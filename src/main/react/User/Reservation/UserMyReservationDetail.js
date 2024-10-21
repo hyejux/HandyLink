@@ -93,11 +93,21 @@ function UserMyReservationDetail() {
 
       <hr />
 
-       {/* 결제 정보 */}
-       <div className="user-payment-info-container">
+      {/* 결제 정보 */}
+      <div className="user-payment-info-container">
         <div className="payment-info-top">
           <div className="payment-left">결제 정보</div>
-          <div className="payment-right"><a href="#">결제 상세</a></div>
+          <div className="payment-right">
+          <a 
+        href="#" 
+        onClick={(e) => {
+            e.preventDefault(); // 기본 링크 동작 방지
+            window.location.href = `/paymentInfo.user/${cateId}`; // 페이지 이동
+        }}
+    >
+        결제 상세
+    </a>
+          </div>
         </div>
         <div className="payment-info">
           {paymentInfo.length > 0 ? (
@@ -128,70 +138,6 @@ function UserMyReservationDetail() {
       </div>
 
       <hr />
-
-
-      {/* <h1>결제 정보</h1>
-      <div className="user-payment-info-container">
-        <div className="header">결제 정보</div>
-        <div className="payment-info">
-          {paymentInfo.length > 0 ? (
-            paymentInfo.map((payment, index) => (
-              <div key={index}>
-                <div className="info-row">
-                  <div className="left">결제 일시</div>
-                  <div className="right">{payment.paymentDate}</div>
-                </div>
-                <div className="info-row">
-                  <div className="left">결제 수단</div>
-                  <div className="right">{payment.paymentMethod}</div>
-                </div>
-                <div className="info-row">
-                  <div className="left">결제 금액</div>
-                  <div className="right">{payment.paymentAmount}</div>
-                </div>
-       */}
-                {/* 대분류와 중분류 출력 */}
-              {/* {reservationList.map((item, resIndex) => {
-                const isFirstInGroup = resIndex === 0 || reservationList[resIndex - 1].mainCategoryName !== item.mainCategoryName;
-                const isMiddleCategoryDifferent = resIndex === 0 || reservationList[resIndex - 1].middleCategoryName !== item.middleCategoryName;
-
-                return (
-                  <div key={resIndex}>
-                    {isFirstInGroup && (
-                      <div className="info-row">
-                        <div className="left"><i class="bi bi-dot"></i> {item.mainCategoryName}</div>
-                        <div className="right">(+{item.mainPrice}원)</div>
-                      </div>
-                    )}
-                    {isMiddleCategoryDifferent && 
-                     null
-                    }
-                    {item.middleCategoryValue ? (
-                      <div className="info-row info-row2">
-                        <div className="left"><i class="bi bi-dash"></i> {item.middleCategoryName}</div>
-                        <div className="right">{item.middleCategoryValue + '개'} (+{item.middlePrice}원)</div>
-                      </div>
-                    ) : (
-                      <div className="info-row info-row2">
-                        <div className="left"><i class="bi bi-dash"></i> {item.subCategoryName}</div>
-                        <div className="right">(+{item.subPrice}원)</div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}              
-              </div>
-              
-            ))
-          ) : (
-            <div className="info-row">
-              <div className="left">결제 정보가 없습니다.</div>
-            </div>
-          )}
-        </div>
-      </div> */}
-
-
 
       <hr />
 

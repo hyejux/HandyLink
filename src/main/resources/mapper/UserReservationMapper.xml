@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.HiMade.user.mapper.UserReservationMapper">
 
-    <select id="getMyReservationDetail" resultType="com.example.HiMade.user.dto.UserRD">
+    <select id="getMyReservationDetail" resultType="com.example.HiMade.user.dto.UserRD" parameterType="int">
         SELECT rf.reservation_no, rf.reservation_form_key,  rf.middle_category_value,
         main_c.service_name AS main_category_name,
         main_c.service_price AS main_price,
@@ -20,7 +20,7 @@
         category middle_c ON rf.middle_category_id = middle_c.category_id
         LEFT JOIN
         category sub_c ON rf.sub_category_id = sub_c.category_id
-
+        where reservation_no = #{id}
     </select>
 
 

@@ -16,9 +16,9 @@
         VALUES (#{userId}, #{userPw}, #{userName}, #{userBirth}, #{userGender}, #{userPhonenum}, CURRENT_DATE, #{userImgUrl}, #{refundAccountNumber})
     </insert>
 
-    <!-- 유저 정보 조회 (로그인 시 사용) -->
+    <!-- 유저 정보 조회 -->
     <select id="getUserById" parameterType="String" resultType="com.example.HiMade.user.dto.UserDTO">
-        SELECT user_id, user_pw, user_name, user_birth, user_phonenum, user_gender, user_signup
+        SELECT user_id, user_pw, user_name, user_birth, user_phonenum, user_gender, user_signup, user_img_url
         FROM USERS
         WHERE user_id = #{userId}
     </select>
@@ -46,7 +46,7 @@
         WHERE user_id = #{userId}
     </update>
 
-    <!--아이디 찾기-->
+    <!--아이디 찾기용-->
     <select id="findUserIdByNameAndPhone" parameterType="map" resultType="string">
         SELECT user_id
         FROM users
@@ -56,7 +56,7 @@
         LIMIT 1
     </select>
 
-    <!-- 비밀번호 재설정을 위한 사용자 확인 -->
+    <!-- 비밀번호 찾기용 -->
     <select id="verifyUserForPasswordReset" parameterType="map" resultType="int">
         SELECT COUNT(*)
         FROM USERS

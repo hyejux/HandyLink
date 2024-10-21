@@ -13,15 +13,18 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -53,7 +56,6 @@ public class UserAccountController {
                                          @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
                                          HttpSession session) {
         logger.info("Received UserDTO: {}", userDTO);
-        logger.info("Received ProfileImage: {}", (profileImage != null ? profileImage.getOriginalFilename() : "null"));
 
         try {
             // 카카오 로그인 사용자인지 확인
@@ -103,29 +105,18 @@ public class UserAccountController {
 
         // 파일 저장 경로 생성
         Path filePath = uploadPath.resolve(newFilename);
-        Files.copy(profileImage.getInputStream(), filePath);
+        try (InputStream inputStream = profileImage.getInputStream()) {
+            Files.copy(inputStream, filePath);
+        }
 
         System.out.println("파일이 저장되었습니다: " + filePath);
 
-        // 웹에서 접근 가능한 경로 반환
-        return "/static/uploads/" + newFilename;
+        // 파일명만 반환
+        return newFilename;
     }
 
-    // 일반 로그인
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody UserDTO userDTO, HttpSession session) {
-        try {
-            UserDetails userDetails = userAccountService.loadUserByUsername(userDTO.getUserId());
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDTO.getUserPw(), userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            UserDTO user = userAccountService.getUserById(userDTO.getUserId());
-            session.setAttribute("userId", user.getUserId());  // 세션에 사용자 정보 저장
-            return ResponseEntity.ok(user);
-        } catch (UsernameNotFoundException | BadCredentialsException e) {
-            return ResponseEntity.status(401).body("이메일 또는 비밀번호가 일치하지 않습니다.");
-        }
-    }
+
 
     // 카카오 로그인 처리
     @GetMapping("/login/oauth2/kakao")
@@ -133,11 +124,11 @@ public class UserAccountController {
         try {
             // 1. 카카오 인가 코드를 이용해 액세스 토큰을 요청
             String accessToken = userAccountService.getKakaoAccessToken(code);
-            System.out.println("로그 로그 Access Token: " + accessToken);  // 로그 추가
+            //System.out.println("로그 로그 Access Token: " + accessToken);
 
             // 2. 액세스 토큰을 이용해 사용자 정보를 요청
             UserDTO kakaoUser = userAccountService.getKakaoUserInfo(accessToken);
-            System.out.println("로그 로그 kakaoUser : " + kakaoUser );  // 로그 추가
+            //System.out.println("로그 로그 kakaoUser : " + kakaoUser );
 
             // 3. DB에서 사용자 확인 (이미 회원인지 확인)
             UserDTO existingUser = userAccountService.getUserById(kakaoUser.getUserId());
@@ -152,9 +143,27 @@ public class UserAccountController {
                 // 기존 사용자인 경우 자동 로그인 처리
                 Authentication authentication = new UsernamePasswordAuthenticationToken(existingUser.getUserId(), "KAKAO", AuthorityUtils.createAuthorityList("ROLE_USER"));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                //System.out.println("로그: SecurityContext에 저장된 인증 정보: " + SecurityContextHolder.getContext().getAuthentication());
+
+                // 세션에 SecurityContext 수동 저장
+                SecurityContext context = SecurityContextHolder.getContext();
+                session.setAttribute("SPRING_SECURITY_CONTEXT", context);
+
+                // 인증된 사용자 정보 확인
+                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                if (auth != null && auth.isAuthenticated()) {
+                    System.out.println("현재 인증된 사용자: " + auth.getName());
+                } else {
+                    System.out.println("인증되지 않은 사용자");
+                }
 
                 // 세션에 사용자 정보 저장
                 session.setAttribute("userId", existingUser.getUserId());
+                System.out.println("로그: 세션에 저장된 사용자 ID: " + session.getAttribute("userId"));
+
+                // 세션에 저장된 SecurityContext 확인 추가
+                SecurityContext contextInSession = (SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
+                //System.out.println("로그: 세션에 저장된 SecurityContext 인증 정보: " + contextInSession.getAuthentication());
 
                 // 로그인 성공 후 리다이렉트할 페이지 (예: 메인 페이지)
                 return ResponseEntity.status(HttpStatus.FOUND)
@@ -163,7 +172,6 @@ public class UserAccountController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("로그 로그 Detailed error: " + e.getMessage());  // 더 자세한 오류 메시지
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카카오 로그인 처리 중 오류 발생");
         }
     }
@@ -183,14 +191,20 @@ public class UserAccountController {
     public ResponseEntity<UserDTO> getUserProfile() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
-            String userId = auth.getName(); // 여기서 userId를 직접 가져옵니다.
+            String userId = auth.getName(); // 여기서 userId를 직접 가져옴
             UserDTO user = userAccountService.getUserById(userId);
             if (user != null) {
+                // 프로필 이미지 URL을 동적으로 생성 (파일명만 저장된 경우)
+                if (user.getUserImgUrl() != null && !user.getUserImgUrl().isEmpty()) {
+                    user.setUserImgUrl("/uploads/" + Paths.get(user.getUserImgUrl()).getFileName().toString());
+                }
                 return ResponseEntity.ok(user);
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+
 
     // 사용자 정보 수정 (비밀번호 포함)
     @PutMapping("/update")

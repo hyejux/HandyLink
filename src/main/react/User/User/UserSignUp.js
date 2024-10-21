@@ -76,6 +76,7 @@ function UserSignUp() {
         }
     };
 
+
     // 프로필 사진 업로드 및 미리보기 처리
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -143,17 +144,19 @@ function UserSignUp() {
 
         try {
             let response;
+            const formatPhonenum = formData.userPhonenum.replace(/[^0-9]/g, '');
+
             if (isKakaoSignUp) {
                 // 카카오 회원가입
                 const kakaoData = {
                     userId: formData.userId,
                     userName: formData.userName,
-                    userPhonenum: formData.userPhonenum,
+                    userPhonenum: formatPhonenum,
                     userBirth: formData.userBirth,
                     userGender: formData.userGender,
                     userImgUrl: formData.userImgUrl // 카카오에서 제공한 이미지 URL
                 };
-                response = await fetch('/user/signup', {
+                    response = await fetch('/user/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -166,7 +169,7 @@ function UserSignUp() {
                 data.append('userId', formData.userId);
                 data.append('userPw', formData.userPw);
                 data.append('userName', formData.userName);
-                data.append('userPhonenum', formData.userPhonenum);
+                data.append('userPhonenum', formatPhonenum);
                 data.append('userBirth', formData.userBirth);
                 data.append('userGender', formData.userGender);
 

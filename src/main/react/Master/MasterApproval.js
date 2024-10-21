@@ -51,13 +51,13 @@ function MasterApproval() {
     }
   };
 
-  const handleApprove = (storeId, currentStatus) => {
+  const handleApprove = (storeNo, currentStatus) => {
     const confirmationMessage = currentStatus === '대기'
       ? "승인 하시겠습니까?"
       : "활성화 하시겠습니까?";
 
     if (window.confirm(confirmationMessage)) {
-      fetch(`/store/${storeId}/approve`, {
+      fetch(`/store/${storeNo}/approve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -147,8 +147,8 @@ function MasterApproval() {
             const addrInfo = parseJson(store.storeAddr);
 
             return (
-              <tr key={store.storeId}>
-                <td>{store.storeId}</td>
+              <tr key={store.storeNo}>
+                <td>{store.storeNo}</td>
                 <td>{store.storeName}</td>
                 <td>{store.storeMaster || '-'}</td>
                 <td>{store.managerName || '-'}</td>
@@ -161,9 +161,9 @@ function MasterApproval() {
                 <td>{store.storeStatus}</td>
                 <td>
                   {store.storeStatus === '대기' ? (
-                    <button className="activate-button" onClick={() => handleApprove(store.storeId, '대기')}>승인</button>
+                    <button className="activate-button" onClick={() => handleApprove(store.storeNo, '대기')}>승인</button>
                   ) : (
-                    <button className="activate-button" onClick={() => handleApprove(store.storeId, '비활성화')}>활성화</button>
+                    <button className="activate-button" onClick={() => handleApprove(store.storeNo, '비활성화')}>활성화</button>
                   )}
                 </td>
               </tr>

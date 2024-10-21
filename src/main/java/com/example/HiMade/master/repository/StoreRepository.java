@@ -8,9 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 public interface StoreRepository extends JpaRepository<Store, String> {
     @Modifying
     @Transactional
-    @Query("UPDATE Store s SET s.storeStatus = :storeStatus WHERE s.storeId = :storeId")
-    void updateStoreStatus(@Param("storeId") String storeId, @Param("storeStatus") StoreStatus storeStatus);
+    @Query("UPDATE Store s SET s.storeStatus = :storeStatus WHERE s.storeNo = :storeNo") //
+    void updateStoreStatusByStoreNo(@Param("storeNo") Long storeNo, @Param("storeStatus") StoreStatus storeStatus);
+
+    @Query("SELECT s FROM Store s WHERE s.storeNo = :storeNo")
+    Optional<Store> findByStoreNo(@Param("storeNo") Long storeNo);
 }

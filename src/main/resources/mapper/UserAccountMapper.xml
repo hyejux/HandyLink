@@ -46,4 +46,31 @@
         WHERE user_id = #{userId}
     </update>
 
+    <!--아이디 찾기-->
+    <select id="findUserIdByNameAndPhone" parameterType="map" resultType="string">
+        SELECT user_id
+        FROM users
+        WHERE user_name = #{userName}
+        AND user_phonenum = #{phonenum}
+        AND user_pw != 'KAKAO' <!-- 카카오로 가입한 사용자 제외 -->
+        LIMIT 1
+    </select>
+
+    <!-- 비밀번호 재설정을 위한 사용자 확인 -->
+    <select id="verifyUserForPasswordReset" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM USERS
+        WHERE user_id = #{userId}
+          AND user_name = #{userName}
+          AND user_phonenum = #{phonenum}
+          AND user_pw != 'KAKAO'
+    </select>
+
+    <!-- 비밀번호 업데이트 -->
+    <update id="updatePassword" parameterType="map">
+        UPDATE USERS
+        SET user_pw = #{newPassword}
+        WHERE user_id = #{userId}
+    </update>
+
 </mapper>

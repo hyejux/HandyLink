@@ -153,6 +153,66 @@ body {
   margin: 10px;
 }
 
+
+/* 카테고리  */
+.user-category-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 20px; 
+}
+
+.user-category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: calc(20% - 16px); /* 한 줄에 5개 아이템을 배치 */
+  max-width: 80px; /* 아이템의 최대 너비 설정 */
+}
+
+.user-category-item img {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 8px;
+}
+
+.user-category-item p {
+  font-size: 14px;
+  color: #333;
+}
+
+
+/* 장소 추천 */
+.user-location-content {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 0 20px 30px 20px;
+}
+
+.user-location-item {
+  background-color: #f0f0f0;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.user-location-item:hover {
+  background-color: rgb(115, 139, 227);
+  color: white;
+}
+
+
+
+
+
+/*  */
+
 .user-main-list-wrap {
   display: flex;
   overflow-x: auto;
@@ -352,7 +412,7 @@ body {
 }
 
 .sub-content-img-box {
-  height: 200px;
+  height: 150px;
   border-radius: 10px;
   margin-bottom: 20px;
 
@@ -368,7 +428,7 @@ body {
 
 /* 가게명 */
 .sub-content-title {
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
   margin: 0 10px;
 }
@@ -376,12 +436,13 @@ body {
 /* 가게 카테고리 */
 .sub-content-category {
   margin-top: 5px;
+  font-size: 12px;  
 }
 
 /* 영업시간 */
 .sub-content-date {
   margin: 5px 10px 0 0;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .sub-content-date img {
@@ -394,7 +455,7 @@ body {
 
 /* 별점 */
 .sub-content-review {
-  font-size: 20px;
+  font-size: 16px;
   margin-left: 5px;
 }
 
@@ -409,7 +470,7 @@ body {
 /* 위치 */
 .sub-content-location {
   margin: 0 10px 5px 0;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .sub-content-location img {
@@ -422,7 +483,7 @@ body {
 
 /* 가격 */
 .sub-content-price {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   margin-left: 10px;
 }
@@ -458,4 +519,25 @@ body {
 
 .load-more-btn:hover {
   background-color: rgba(44, 52, 143, 0.30);
+}
+
+
+
+/* 광고 인디케이터 스타일 */
+.ad-indicator-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.ad-indicator {
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  background-color: #ccc; /* 기본 색상 */
+  border-radius: 50%;
+}
+
+.ad-indicator.active {
+  background-color: #007bff; /* 활성화된 인디케이터의 색상 */
 }

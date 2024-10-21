@@ -42,7 +42,7 @@ function StoreInfoModal({ isOpen, onClose, store }) {
 
           <div className="info-section">
             <h3>운영 정보</h3>
-            <p><strong>영업시간:</strong> {store.storeStartTime} - {store.storeCloseTime}</p>
+            <p><strong>영업시간:</strong> {store.storeOpenTime} - {store.storeCloseTime}</p>
             <p><strong>휴무일:</strong> {Array.isArray(dayOffInfo) && dayOffInfo.length > 0 ? (
               dayOffInfo.map((day, index) => (
                 <span key={index}>{day}{index < dayOffInfo.length - 1 ? ', ' : ''}</span>

@@ -210,18 +210,28 @@ function UserMain() {
     scrollToCurrentAd();
   }, [currentAdIndex]);
 
-  return (
-    <div className="user-main-container">
-      <div className="user-top-nav">
-        <logo className="logo">HandyLink!</logo>
-      </div>
 
-      <div className="store-search-bar">
+  const goToStoreDetail = (id) =>{
+    window.location.href = `/userStoreDetail.user/${id}`;
+  }
+
+
+  return (
+    <div>
+       <div className="user-main-container">
+
+     
+      <div className="user-top-nav">
+        <logo className="logo">gd</logo>
+        <div className="store-search-bar">
         <i className="bi bi-search"></i>
         <input type="text" placeholder="찾으시는 가게가 있나요?" />
       </div>
+      </div>
 
+      
 
+      <div className="user-main-content2">
       {/* 가게 카테고리 */}
       <div className="user-category-content">
         <div className="user-category-item">
@@ -294,7 +304,7 @@ function UserMain() {
               const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
 
               return (
-                <div className="user-main-list-container" key={store.storeNo}>
+                <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}> 
                   <div className="user-category-menu">
                     <div className="user-category-menu-img">
                       <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
@@ -327,7 +337,7 @@ function UserMain() {
               const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
 
               return (
-                <div className="user-main-list-container" key={store.storeNo}>
+                <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
                   <div className="user-category-menu">
                     <div className="user-category-menu-img">
                       <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
@@ -362,7 +372,7 @@ function UserMain() {
               const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
 
               return (
-                <div className="user-main-list-container" key={store.storeNo}>
+                <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
                   <div className="user-category-menu">
                     <div className="user-category-menu-img">
                       <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
@@ -489,15 +499,12 @@ function UserMain() {
 
 
 
-      <footer className="user-bottom-nav">
-        <a href="#"><span>메인</span></a>
-        <a href="#"><span>검색</span></a>
-        <a href="#"><span>예약</span></a>
-        <a href="#"><span>문의</span></a>
-        <a href="#"><span>MY</span></a>
-      </footer>
 
     </div>
+    </div>
+    </div>
+
+    
   );
 }
 

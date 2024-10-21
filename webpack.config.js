@@ -42,7 +42,7 @@ main: './Main.js', //여러페이지 설정이 가능함
         UserChatList : './User/Inquiry/UserChatList.js',
         UserReservationDate : './User/Reservation/UserReservationDate.js',
         UserMyReservationDetail : '/User/Reservation/UserMyReservationDetail.js',
-
+        AdminReserveSettingDetailSlot : '/Admin/AdminReserveSettingDetailSlot.js',
         MyStore: './Admin/MyStore.js'
 
     },

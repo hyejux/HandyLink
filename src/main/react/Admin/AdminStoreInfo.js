@@ -5,51 +5,36 @@ import { useState, useEffect, useRef } from 'react';
 import './AdminStoreInfo.css';
 
 function AdminStoreInfo() {
+    // 세션 스토리지에서 storeId 가져오기
+    const storeId = sessionStorage.getItem('storeId');
+    const storeNo = sessionStorage.getItem('storeNo');
+    console.log("세션에서 가져온 storeId: ", storeId);
+    console.log("세션에서 가져온 storeNo: ", storeNo);
 
     const [storeInfo, setStoreInfo] = useState({
-        storeId:'',
+        storeId,
+        storeNo,
         storePw:'',
         storeCate:'',
         storeName:'',
         storeMaster:'',
         managerName:'',
         managerPhone:'',
-        storeAddr: {
-            zipcode: '',
-            addr:'',
-            addrdetail:''
-        },
+        zipcode: '',
+        addr:'',
+        addrdetail:'',
         storeBusinessNo:'',
-        storeIntro: '',
-        storeNotice: '',
-        storeOpenTime: '',
-        storeCloseTime: '',
-        storeDayOff: [],
-        storeParkingYn: '',
-        storeSns: [
-            { snsLink: '', snsName: '' }, // 첫 번째 SNS 세트
-            { snsLink: '', snsName: '' }, // 두 번째 SNS 세트
-            { snsLink: '', snsName: '' }  // 세 번째 SNS 세트
-        ],
-        storeAccount: {
-            accountBank: '',
-            accountNumber: ''
-        },
-        imageUrl: [],
-        storeSignup:'',
-        storeStatus:''
+        storeSignup:''
     });
 
     useEffect(() => {
         const fetchStoreImages = async () => {
             try {
-                // 세션 스토리지에서 storeId 가져오기
-                const storeId = sessionStorage.getItem('storeId');
-                console.log("세션에서 가져온 storeId: ", storeId);
+
 
                 // sessionId가 null이 아닌 경우에만 API 요청
                 if (storeId) {
-                    const response = await axios.get(`/adminStore/storeInfo?storeId=${storeId}`);
+                    const response = await axios.get(`/adminStore/myStoreInfo?storeNo=${storeNo}`);
                     console.log("업체정보: ", response.data);
                     setStoreInfo(response.data); // 상태 업데이트
                 } else {
@@ -61,6 +46,7 @@ function AdminStoreInfo() {
         };
 
         fetchStoreImages();
+        console.log("마이페이지 확인 ", storeInfo);
 
     }, []);
 
@@ -73,7 +59,14 @@ function AdminStoreInfo() {
         console.log("수정",isDisabled);
     }
 
+    const handleChangeStoreInfo = (e) => {
+      const {id, value} = e.target;
 
+        setStoreInfo(prev => ({
+            ...prev,
+            [id]: value
+        }));
+    };
 
 
 
@@ -84,105 +77,71 @@ function AdminStoreInfo() {
     <div className="admin-store-info-container">
         <h1>My Store</h1>
 
-        <div className="store-img-box">
-            {storeInfo.imageUrl && storeInfo.imageUrl.length > 0 ? (
-                storeInfo.imageUrl.map((url, index) => (
-                    <div key={index} className="store-image">
-                        <img src={url} alt={`storeImg ${index + 1}`} />
-                    </div>
-                ))
-                ) : (
-                <p>이미지가 없습니다.</p>
-            )}
-        </div>
-
         <div className="form-cont">
             <div className="form-group">
                 <label htmlFor="store-name">상호명</label>
                 <div className="input-field">
-                    <input type="text" value={storeInfo.storeName} required={!isDisabled} disabled={isDisabled}/>
+                    <input type="text" id="storeName" value={storeInfo.storeName} onChange={handleChangeStoreInfo} disabled={isDisabled}/>
                 </div>
             </div>
 
             <div className="form-group">
                 <label htmlFor="username">아이디</label>
                 <div className="input-field">
-                    <input type="text" value={storeInfo.storeId} disabled={isDisabled}/>
+                    <input type="text" id="storeId" value={storeInfo.storeId} onChange={handleChangeStoreInfo} disabled={isDisabled}/>
                 </div>
             </div>
 
             <div className="form-group">
                 <label htmlFor="password">비밀번호</label>
                 <div className="input-field">
-                    <input type="text" value={storeInfo.storePw} disabled={isDisabled}/>
+                    <input type="text" id="storePw" value={storeInfo.storePw} onChange={handleChangeStoreInfo} disabled={isDisabled}/>
+                </div>
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="storeMaster">대표자</label>
+                <div className="input-field">
+                    <input type="text" id="storeMaster" value={storeInfo.storeMaster} onChange={handleChangeStoreInfo} disabled={isDisabled}/>
                 </div>
             </div>
 
             <div className="form-group">
                 <label htmlFor="manager">담당자명</label>
                 <div className="input-field">
-                    <input type="text" value={storeInfo.managerName} disabled={isDisabled}/>
+                    <input type="text" id="managerName" value={storeInfo.managerName} onChange={handleChangeStoreInfo} disabled={isDisabled}/>
                 </div>
             </div>
 
             <div className="form-group">
                 <label htmlFor="contact">연락처</label>
                 <div className="input-field">
-                    <input type="text" value={storeInfo.managerPhone} disabled={isDisabled}/>
+                    <input type="text" id="managerPhone" value={storeInfo.managerPhone} onChange={handleChangeStoreInfo} disabled={isDisabled}/>
                 </div>
             </div>
 
             <div className="form-group">
                 <label htmlFor="address">가게 주소</label>
                 <div className="input-field">
-                    <input type="text" value={storeInfo.storeAddr.addr} disabled/>
-                    <input type="text" value={storeInfo.storeAddr.addrdetail} disabled/>
+                    <input type="text" id="addr" value={storeInfo.addr} onChange={handleChangeStoreInfo} disabled/>
+                    <input type="text" id="addrdetail" value={storeInfo.addrdetail} onChange={handleChangeStoreInfo} disabled/>
                 </div>
             </div>
 
             <div className="form-group">
-                <label htmlFor="public">공개 여부</label>
-                <div className="input-field radio-group">
-                    <input type="radio" name="public" value="활성화" checked={storeInfo.storeStatus === '활성화'} disabled={isDisabled} /> <span> 공개 </span>
-                    <input type="radio" name="public" value="비활성화" checked={storeInfo.storeStatus === '비활성화'} disabled={isDisabled} /> <span> 비공개 </span>
-                </div>
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="description">소개</label>
+                <label htmlFor="storeBusinessNo">사업자등록번호</label>
                 <div className="input-field">
-                    <textarea rows="4" readOnly style={{ resize: 'none' }} value={storeInfo.storeIntro} disabled={isDisabled}/>
+                    <input type="text" id="storeBusinessNo" value={storeInfo.storeBusinessNo} onChange={handleChangeStoreInfo} disabled={isDisabled}/>
                 </div>
             </div>
 
             <div className="form-group">
-                <label htmlFor="parking">주차장 여부</label>
-                <div className="input-field radio-group">
-                    <input type="radio" name="parking"  value="Y" checked={storeInfo.storeParkingYn === 'Y'} disabled={isDisabled} /> O
-                    <input type="radio" name="parking" value="N" checked={storeInfo.storeParkingYn === 'N'} disabled={isDisabled} /> X
+                <label htmlFor="storeSignup">가입일</label>
+                <div className="input-field">
+                    <input type="text" id="storeSignup" value={storeInfo.storeSignup}/>
                 </div>
             </div>
 
-            <div className="form-group">
-                <label htmlFor="hours">영업 시간</label>
-                <div className="input-field hours-group">
-                    <div className="days-time-box">
-                        <label htmlFor="storeOpenTime"> 시작 <input type="time" value={storeInfo.storeOpenTime} disabled={isDisabled} /></label>
-                        <label htmlFor="storeCloseTime"> 마감 <input type="time" value={storeInfo.storeCloseTime} disabled={isDisabled} /></label>
-                    </div>
-                </div>
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="sns">SNS 링크</label>
-                <div className="input-field sns-links">
-                    {storeInfo.storeSns.map((sns, index) => (
-                        <a key={index} href={sns.snsLink} target="_blank" rel="noopener noreferrer">
-                            <span>{sns.snsName}</span>
-                        </a>
-                    ))}
-                </div>
-            </div>
         </div>
 
         <button type="button" className="modify-btn" onClick={toggleModify}>

@@ -1,8 +1,8 @@
 package com.example.HiMade.admin.controller;
 
-import com.example.HiMade.admin.dto.StoreAddr;
-import com.example.HiMade.admin.dto.StoreRegistDTO;
+import com.example.HiMade.admin.dto.*;
 import com.example.HiMade.admin.service.AdminStoreService;
+import com.example.HiMade.master.entity.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -38,17 +38,31 @@ public class AdminStoreController {
     @PostMapping("/registStore")
     public void registStore(@RequestBody StoreRegistDTO storeRegistDTO){
         System.out.println("업체정보 " + storeRegistDTO);
-
         adminStoreService.registStore(storeRegistDTO);
     }
 
-    //가게관리-업데이트
-    @PostMapping("/updateStoreSet")
-    public void updateStoreSet(@RequestBody StoreRegistDTO storeRegistDTO){
-        System.out.println("내가게수정 " + storeRegistDTO);
-
-        adminStoreService.updateStoreSet(storeRegistDTO);
+    //가게관리-보기
+    @GetMapping("/myStoreInfo")
+    public ResponseEntity<StoreRegistDTO> getMyStore(@RequestParam Integer storeNo){
+        StoreRegistDTO myStore = adminStoreService.getMyStore(storeNo);
+        System.out.println("내가게정보 "+myStore);
+        return ResponseEntity.ok(myStore);
     }
+
+    //가게관리-등록
+    @PostMapping("/updateStore")
+    public void updateStore(@RequestBody StoreRegistDTO storeRegistDTO){
+        System.out.println("내가게 " + storeRegistDTO);
+        adminStoreService.updateStore(storeRegistDTO);
+
+        //sns등록-insert
+        List<StoreSnsDTO> storeSnsList = storeRegistDTO.getStoreSns();
+        for (StoreSnsDTO storeSns : storeSnsList) {
+            adminStoreService.addStoreSns(storeSns);
+        }
+    }
+
+
 
 
     // 파일 업로드 메서드

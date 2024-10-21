@@ -16,7 +16,7 @@
     </select>
 
     <insert id="registStore" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
-        INSERT INTO store_admin (
+        insert into store_admin (
             store_id,
             store_pw,
             store_cate,
@@ -30,7 +30,7 @@
             zipcode,
             addr,
             addrdetail
-        ) VALUES (
+        ) values (
             #{storeId},
             #{storePw},
             #{storeCate},
@@ -47,7 +47,8 @@
         )
     </insert>
 
-    <update id="updateStoreSet" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
+<!--  가게관리  -->
+    <update id="updateStore" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
         update store_admin
         set
             store_intro = #{storeIntro},
@@ -56,41 +57,62 @@
             store_close_time = #{storeCloseTime},
             store_parking_yn = #{storeParkingYn},
             account_bank = #{accountBank},
-            account_number = #{accountNumber}
+            account_number = #{accountNumber},
+            store_status = #{storeStatus}
         where store_id = #{storeId}
     </update>
 
+    <insert id="addStoreSns" parameterType="com.example.HiMade.admin.dto.StoreSnsDTO">
+        insert into store_sns_link
+        values (#{snsLink}, #{snsName}, #{storeId}, #{storeNo})
+    </insert>
 
+    <update id="updateStoreSns" parameterType="com.example.HiMade.admin.dto.StoreSnsDTO">
+        update store_sns_link
+        set (sns_link = #{snsLink}, sns_name = #{snsName})
+        where store_id = #{storeId} and store_no = #{storeNo}
+    </update>
 
-
-    <select id="getStoreInfo" resultMap="storeRegistResultMap">
-        select
-            *
-        from store
-        where store_id = #{storeId}
-
+    <select id="getMyStore" resultMap="storeRegistResultMap">
+        SELECT
+        sa.*,
+        sns.*
+        FROM store_admin sa
+        LEFT JOIN store_sns_link sns ON sa.store_no = sns.store_no
+        WHERE sa.store_no = #{storeNo}
     </select>
 
     <resultMap id="storeRegistResultMap" type="com.example.HiMade.admin.dto.StoreRegistDTO">
         <result property="storeId" column="store_id"/>
+        <result property="storeNo" column="store_no"/>
         <result property="storePw" column="store_pw"/>
         <result property="storeCate" column="store_cate"/>
         <result property="storeName" column="store_name"/>
         <result property="storeMaster" column="store_master"/>
         <result property="managerName" column="manager_name"/>
         <result property="managerPhone" column="manager_phone"/>
-        <result property="storeAddr" column="store_addr"/>
+        <result property="zipcode" column="zipcode"/>
+        <result property="addr" column="addr"/>
+        <result property="addrdetail" column="addrdetail"/>
         <result property="storeBusinessNo" column="store_business_no"/>
-
-        <!-- StoreInfoDTO - 업체정보 -->
         <result property="storeIntro" column="store_intro"/>
         <result property="storeParkingYn" column="store_parking_yn"/>
         <result property="storeNotice" column="store_notice"/>
         <result property="storeOpenTime" column="store_open_time"/>
         <result property="storeCloseTime" column="store_close_time"/>
+        <result property="accountBank" column="account_bank"/>
+        <result property="accountNumber" column="account_number"/>
         <result property="storeSignup" column="store_signup"/>
         <result property="storeStatus" column="store_status"/>
-    </resultMap>
 
+        <!-- SNS 매핑 -->
+        <collection property="storeSns" ofType="com.example.HiMade.admin.dto.StoreSnsDTO">
+            <result property="storeSnsNo" column="store_sns_no"/>
+            <result property="snsLink" column="sns_link"/>
+            <result property="snsName" column="sns_name"/>
+            <result property="storeId" column="store_id"/>
+            <result property="storeNo" column="store_no"/>
+        </collection>
+    </resultMap>
 
 </mapper>

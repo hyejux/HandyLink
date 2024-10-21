@@ -39,10 +39,6 @@ module.exports = {
         UserAccountFind : './User/User/UserAccountFind.js',
         UserChatList : './User/Inquiry/UserChatList.js',
         UserReservationDate : './User/Reservation/UserReservationDate.js',
-
-
-
-
         MyStore: './Admin/MyStore.js'
 
     },
@@ -99,10 +95,6 @@ module.exports = {
             path: './.env', // .env 파일 경로
             systemvars: true,
             expand: true
-        }),
-        new webpack.DefinePlugin({
-            'process.env.REACT_APP_KAKAO_CLIENT_ID': JSON.stringify(process.env.REACT_APP_KAKAO_CLIENT_ID),
-            'process.env.REACT_APP_KAKAO_REDIRECT_URI': JSON.stringify(process.env.REACT_APP_KAKAO_REDIRECT_URI)
         })
     ],
 };

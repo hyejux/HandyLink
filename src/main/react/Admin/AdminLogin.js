@@ -30,8 +30,9 @@ function AdminLogin() {
                 pw: inputLogin.pw
             });
 
-            const storeId = response.data;
+            const {storeId, storeNo} = response.data;
             sessionStorage.setItem('storeId', storeId);
+            sessionStorage.setItem('storeNo', storeNo);
 
             if (response.status === 200 && storeId) { // storeId가 null 또는 빈 문자열이 아닌지 확인
                 alert(`로그인 성공 ${storeId}`);

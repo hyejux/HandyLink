@@ -36,12 +36,23 @@
 }
 
 .btn-modi {
+  height: 100%;
+  width: 100%;
   border: 2px solid #1d2830;
   color : #ffffff;
   font-weight: bold;
+
+ 
+}
+
+.btn-modi:nth-child(1){
+  background-color: #374249;
+  border-top-right-radius: 10px;
+}
+
+.btn-modi:nth-child(2){
   background-color: #2e3133;
   border-bottom-right-radius: 10px;
-  border-top-right-radius: 10px;
 }
 
 

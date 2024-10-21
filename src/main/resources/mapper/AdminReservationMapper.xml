@@ -51,22 +51,22 @@
 
     <!--  테스트   -->
     <insert id="setCategory">
-        INSERT INTO CATEGORY (category_level, parent_category_id, service_name, service_price, service_content, store_id)
-        VALUES (#{categoryLevel}, #{parentCategoryId}, #{serviceName}, #{servicePrice}, #{serviceContent}, 1)
+        INSERT INTO CATEGORY (category_level, parent_category_id, service_name, service_price, service_content, store_id, store_no)
+        VALUES (#{categoryLevel}, #{parentCategoryId}, #{serviceName}, #{servicePrice}, #{serviceContent}, 'bbb123' , '7')
     </insert>
 
 
     <!--  서비스 (대분류) 등록하기    -->
     <insert id="setMainCategory" parameterType="com.example.HiMade.admin.dto.adminReservationDTO" useGeneratedKeys="true" keyProperty="categoryId">
-        INSERT INTO category (category_level, service_name, service_price, service_content, store_id)
-        VALUES (1, #{serviceName}, #{servicePrice}, #{serviceContent}, 1)
+        INSERT INTO category (category_level, service_name, service_price, service_content, store_id, store_no)
+        VALUES (1, #{serviceName}, #{servicePrice}, #{serviceContent}, 'bbb123' , '7')
         RETURNING category_id
     </insert>
 
     <!--  서비스 (중분류) 등록하기    -->
     <insert id="setMainCategory2" parameterType="com.example.HiMade.admin.dto.adminRSDTO" useGeneratedKeys="true" keyProperty="middleId">
-        INSERT INTO category (category_level, parent_category_id, service_name, service_price, store_id)
-        VALUES (2, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 1)
+        INSERT INTO category (category_level, parent_category_id, service_name, service_price,  store_id, store_no)
+        VALUES (2, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 'bbb123' , '7')
         RETURNING category_id
     </insert>
 
@@ -78,8 +78,8 @@
 
     <!--  서비스 (소분류) 등록하기    -->
     <insert id="setMainCategory4" parameterType="com.example.HiMade.admin.dto.adminReservationDTO">
-        INSERT INTO category (category_level, parent_category_id, service_name, service_price, store_id)
-        VALUES (3, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 1)
+        INSERT INTO category (category_level, parent_category_id, service_name, service_price, store_id, store_no)
+        VALUES (3, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 'bbb123' , '7')
     </insert>
 
 

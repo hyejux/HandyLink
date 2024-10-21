@@ -28,6 +28,11 @@ public class UserReservationServiceImpl implements UserReservationService {
     return userReservationMapper.getDateTime(Date);
   }
 
+  @Override
+  public List<UserRSlotDTO> getAllDateTime() {
+    return userReservationMapper.getAllDateTime();
+  }
+
   @Transactional
   @Override
   public int setReservationForm(UserReservationDTO dto) {

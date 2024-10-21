@@ -27,6 +27,12 @@ public class UserReservationController {
     return userReservationService.getDateTime(date);
   }
 
+  @GetMapping("/getAllDateTime")
+  public List<UserRSlotDTO> getAllDateTime(){
+    System.out.println(userReservationService.getAllDateTime());
+    return userReservationService.getAllDateTime();
+  }
+
   @PostMapping("/setReservationForm")
   public int setReservationForm(@RequestBody UserReservationDTO dto) {
     System.out.println(dto);

@@ -21,16 +21,9 @@ body {
 
 }
 
-.user-top-nav {
-
-  padding: 10px;
-  text-align: center;
-  background-color: #ffffff;
-  border-bottom: 1px solid #ddd;
-  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
-}
 
 .user-bottom-nav {
+  z-index: 100;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -57,7 +50,7 @@ body {
   display: block;
   margin-top: 5px;
 }
-
+/* 
 .logo {
   color: transparent;
   -webkit-background-clip: text;
@@ -65,7 +58,7 @@ body {
   font-family: 'ghanachoco';
   font-size: 25px;
   margin-bottom: 20px;
-}
+} */
 
 
 .user-main-container {
@@ -231,7 +224,7 @@ body {
 /* ----------------------------------------- */
 
 /* 검색바 */
-.store-search-bar {
+/*.store-search-bar {
   margin: 30px;
   border-radius: 10px;
   border: 1px solid #e3e3e3;
@@ -256,7 +249,7 @@ body {
   margin: 10px;
 }
 
-/* ------- */
+ ------- */
 
 
 .user-main-list-wrap {

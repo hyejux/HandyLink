@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface UserStoreService {
 
-  public List<UserCateDTO> getStoreMainCategory(String storeId);
+  public List<UserCateDTO> getStoreMainCategory(int id);
 
 }

@@ -9,38 +9,52 @@ import "./UserStoreDetail.css";
 
 function UserStoreDetail() {
 
-  const [reservationList, setReservationList] = useState([]);
-
-  useEffect(() => {
-    axios.post('/UserStoreDetail/getStoreMainCategory',{StoreId : 'bbb123'})
-      .then(response => {
-        console.log(response.data);
-        setReservationList(response.data);
-      })
-      .catch(error => {
-        console.log('Error Category', error);
-      });
-  }, []);
-
+  const [activeSection, setActiveSection] = useState('home'); 
   const goToAdminPage = (id) => {
     window.location.href = `/UserReservationDate.user/${id}`;
   };
 
+  const [cateId, setCateId] = useState(0);
+  const [reservationList, setReservationList] = useState([]);
+  // ------------------------------------------------------
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    const pathSegments = path.split('/');
+    const categoryId = pathSegments[pathSegments.length - 1];
+    setCateId(categoryId);
+
+    axios.get(`/UserStoreDetail/getStoreMainCategory/${categoryId}`)
+    .then(response => {
+      console.log(response.data);
+      setReservationList(response.data);
+    })
+    .catch(error => {
+      console.log('Error Category', error);
+    });
+    
+
+// categoryId  << 로 요청 보내서 가게 정보 값  가져오세요 !
+
+  }, []);
+  
+  // ------------------------------------------------------
 
 
 
 
-  const [activeSection, setActiveSection] = useState('home'); 
+
+
+
+
+
 
   return (
     <div>
       <div className="user-main-container">
         <div className="user-top-nav">
-          <div className="user-top-btns">
-            <button type="button"> &lt; </button>
-            <div className="logo">HandyLink</div>
-            <button type="button"> &gt; </button>
-          </div>
+           <i className="bi bi-arrow-left"></i>
+        <logo className="logo"> 상단바 고민중 </logo>
         </div>
 
         <div className="user-main-content">
@@ -65,12 +79,12 @@ function UserStoreDetail() {
 
           <div className="store-detail-menu">
             <button type="button" onClick={() => setActiveSection('home')}>홈</button>
-            <button type="button" onClick={() => setActiveSection('info')}>정보</button>
+            <button type="button" onClick={() => setActiveSection('info')}>문의</button>
             <button type="button" onClick={() => setActiveSection('reservation')}>예약</button>
             <button type="button" onClick={() => setActiveSection('review')}>리뷰</button>
           </div>
 
-          {/* Section 1: Store Information */}
+          {/* 홈 */}
           {activeSection === 'home' && (
             <div>
 
@@ -91,7 +105,8 @@ function UserStoreDetail() {
             </div>
           )}
 
-          {/* Section 2: Reservation List */}
+
+          {/* 예약 */}
           {activeSection === 'reservation' && (
             <>
               {reservationList.map((value, index) => (

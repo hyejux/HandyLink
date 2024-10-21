@@ -37,6 +37,13 @@ function UserMyReservationList() {
     <div>
            <div className="user-main-content" >
 
+           <div className="user-top-nav">
+           {/* <i className="bi bi-arrow-left"></i> */}
+        <logo className="logo"> 내 예약 내역 (아이디 고정값으로 뿌리는 중) </logo>
+      
+      </div>
+
+
            {reservationList.map((value, index) => (
             <div className="user-content-container"  key={index} onClick={()=>{goToUserPage(value.reservationNo)}}>
               <div className="reservation-header">
@@ -50,11 +57,11 @@ function UserMyReservationList() {
 
                 <div className="reservation-info-box">
                     <div className="date">
-                    <i class="bi bi-calendar-check-fill"></i>
+                    <i className="bi bi-calendar-check-fill"></i>
                     <span>{value.reservationSlotDate} </span>
                     </div>
                 <div className="time">
-                <i class="bi bi-clock-fill"></i>
+                <i className="bi bi-clock-fill"></i>
                     <span>{value.reservationTime}</span>
                     </div>
                 </div>

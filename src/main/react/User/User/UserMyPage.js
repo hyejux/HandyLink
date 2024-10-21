@@ -95,7 +95,7 @@ function UserMyPage () {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('로그 Fetched user profile:', data); // 데이터 확인 로그 추가
+                    console.log('로그 Fetched user profile:', data);
                     setUserInfo({
                         ...userInfo,
                         userId: data.userId,
@@ -144,6 +144,10 @@ function UserMyPage () {
         <div>
             <div className="user-mypage-container">
                 <h2>마이 페이지</h2>
+                <div className="btn-list">
+                    <button className="logout-btn" onClick={() => window.location.href='./logout'}>로그아웃</button>
+                    <button className="del-btn">탈퇴하기</button>
+                </div>
                 <div className="profile-pic">
                     <img src={userInfo.profileImage} alt="Profile" id="profileImage"/>
                     <div className="edit-icon" onClick={() => document.getElementById('fileInput').click()}>

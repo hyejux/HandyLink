@@ -3,6 +3,8 @@ package com.example.HiMade.user.serviceImpl;
 import com.example.HiMade.user.dto.UserDTO;
 import com.example.HiMade.user.mapper.UserAccountMapper;
 import com.example.HiMade.user.service.UserAccountService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -13,6 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,19 +37,24 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
 
     // application-secret.properties 파일에서 값 가져오기
     private final Dotenv dotenv = Dotenv.load(); // .env 파일 로드
-
     private final String CLIENT_ID = dotenv.get("REACT_APP_KAKAO_CLIENT_ID");
     private final String REDIRECT_URI = dotenv.get("REACT_APP_KAKAO_REDIRECT_URI");
     private final String KAKAO_TOKEN_URL = dotenv.get("KAKAO_TOKEN_URL");
-
     private final String KAKAO_USERINFO_URL = "https://kapi.kakao.com/v2/user/me"; // 사용자 정보 요청 URL
 
+    private static final Logger logger = LoggerFactory.getLogger(UserAccountServiceImpl.class);
 
     @Autowired
     private UserAccountMapper userAccountMapper;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
+
+    // 생성자를 통해 의존성 주입
+    public UserAccountServiceImpl(BCryptPasswordEncoder passwordEncoder, UserAccountMapper userAccountMapper) {
+        this.passwordEncoder = passwordEncoder;
+        this.userAccountMapper = userAccountMapper;
+    }
 
     @Override
     @Transactional
@@ -67,37 +75,10 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         userAccountMapper.insertUser(userDTO);
     }
 
-    private String generateTemporaryPassword() {
-        // 임시 비밀번호 생성 로직
-        return UUID.randomUUID().toString();
-    }
-
     @Override
     public boolean checkId(String userId) {
         return userAccountMapper.checkId(userId) > 0; // 이메일 중복 시 true 반환
     }
-
-//    @Override
-//    public UserDTO loginUser(UserDTO userDTO) {
-//        // DB에서 사용자 정보 가져오기
-//        UserDTO storedUser = userAccountMapper.getUserById(userDTO.getUserId());
-//
-//        // 사용자가 존재하는지 확인
-//        if (storedUser == null) {
-//            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
-//        }
-//
-//        // 입력된 비밀번호와 DB에 저장된 암호화된 비밀번호 비교
-//        boolean passwordMatches = passwordEncoder.matches(userDTO.getUserPw(), storedUser.getUserPw());
-//
-//        if (passwordMatches) {
-//            // 비밀번호가 일치하면 사용자 정보를 반환
-//            return storedUser;
-//        } else {
-//            // 비밀번호가 일치하지 않으면 null 반환 또는 예외 처리
-//            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
-//        }
-//    }
 
     @Override
     public UserDTO getUserById(String userId) {
@@ -119,16 +100,23 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
     // 시큐리티 방식의 로그인 (사용자 인증)
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        logger.debug("loadUserByUsername 호출됨: {}", userId);
         UserDTO user = userAccountMapper.getUserById(userId);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with id: " + userId);
+            logger.error("유저를 찾을 수 없음: {}", userId);
+            throw new UsernameNotFoundException("찾을 수 없는 유저 : " + userId);
         }
+
+        // 인증 정보 확인 로그
+        logger.debug("인증된 사용자: {}", user.getUserId());
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
+        // 비밀번호가 암호화된 상태로 User 객체 생성
         return new User(user.getUserId(), user.getUserPw(), authorities);
     }
+
     @Override
     public String getKakaoAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
@@ -201,5 +189,10 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
     public void resetPassword(String userId, String newPassword) {
         String encodedPassword = passwordEncoder.encode(newPassword);
         userAccountMapper.updatePassword(userId, encodedPassword);
+    }
+
+    @Override
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }

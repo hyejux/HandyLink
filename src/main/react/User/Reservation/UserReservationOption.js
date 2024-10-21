@@ -6,6 +6,7 @@ import Calendar from 'react-calendar';
 import { useState, useEffect } from 'react';
 import { format, addHours } from 'date-fns';
 import './UserReservationOption.css';
+import { json } from 'react-router-dom';
 
 
 function UserReservationOption() {
@@ -16,6 +17,7 @@ function UserReservationOption() {
   
   const [reserveModi, setReserveModi] = useState('');
   const [categories, setCategories] = useState([{
+    categoryId: 0,
     serviceName: '',
     servicePrice: 0,
     isPaid: false,
@@ -50,6 +52,7 @@ function UserReservationOption() {
         console.log("get" + JSON.stringify(response.data));
   
         const transformedData = response.data.map(item => ({
+          categoryId: item.categoryId,
           serviceName: item.serviceName,
           servicePrice: item.servicePrice,
           isPaid: item.isPaid === 'Y',
@@ -71,32 +74,62 @@ function UserReservationOption() {
 
 // combinedInputs 상태 정의
 const [combinedInputs, setCombinedInputs] = useState([]); // 배열로 초기화
+const [formData, setFormData] = useState([]);
 
 // 입력값 변경 처리
   // 입력값 변경 처리
-  const handleCategoryInputChange = (index, value, servicePrice) => {
+  const handleCategoryInputChange = (index, value, servicePrice, categoryId) => {
     setCombinedInputs(prev => {
       const updatedInputs = [...prev];
       updatedInputs[index] = { 
         ...updatedInputs[index], 
+     
         inputValue: value, // 입력값 업데이트
-        servicePrice: servicePrice // 서비스 가격 업데이트
+        servicePrice: servicePrice ,// 서비스 가격 업데이트
+        categoryId : categoryId
       };
       return updatedInputs;
     });
+
+    setFormData(prev => {
+      const updatedFormDatas = [...prev];
+      updatedFormDatas[index] = {
+        ...updatedFormDatas[index],
+        mainCategoryId : reserveModi.categoryId,
+        middleCategoryId :  categoryId,
+        subCategoryId : null,
+        middleCategoryValue : value
+      };
+      return updatedFormDatas;
+    })
+
+
   };
 
 // 옵션 선택 처리 (단일 선택)
-const handleFlavorSelect1 = (subCategory, index) => {
+const handleFlavorSelect1 = (subCategory, index, categoryId) => {
   setCombinedInputs(prev => {
     const updatedInputs = [...prev];
     updatedInputs[index] = { ...updatedInputs[index], [index]: [subCategory] }; // 단일 선택 업데이트
     return updatedInputs;
   });
+
+  setFormData(prev => {
+    const updatedFormDatas = [...prev];
+      updatedFormDatas[index] = {
+        ...updatedFormDatas[index],
+        mainCategoryId : reserveModi.categoryId,
+        middleCategoryId : categoryId,
+        subCategoryId : subCategory.categoryId,
+        middleCategoryValue : null
+      };
+    return updatedFormDatas;
+  })
+
 };
 
-// 옵션 선택 처리 (다중 선택)
-const handleFlavorSelectN = (subCategory, index) => {
+// 옵션 선택 처리 (다중 선택) --> n 
+const handleFlavorSelectN = (subCategory, index, categoryId) => {
   setCombinedInputs(prev => {
     const updatedInputs = [...prev];
     const currentSelection = updatedInputs[index]?.[index] || [];
@@ -108,28 +141,77 @@ const handleFlavorSelectN = (subCategory, index) => {
     };
     return updatedInputs;
   });
+
+
+  setFormData(prev => {
+    const updatedFormDatas = [...prev];
+  
+    // 새로운 선택 항목을 생성
+    const newSelection = {
+      mainCategoryId: reserveModi.categoryId,  // mainCategoryId
+      middleCategoryId: categoryId,            // middleCategoryId
+      subCategoryId: subCategory.categoryId,   // subCategoryId
+      middleCategoryValue: subCategory.value || null,  // 값이 없으면 null
+    };
+  
+    // 이미 해당 항목이 있는지 확인
+    const existingIndex = updatedFormDatas.findIndex(item =>
+      item.mainCategoryId === reserveModi.categoryId &&
+      item.middleCategoryId === categoryId &&
+      item.subCategoryId === subCategory.categoryId
+    );
+  
+    if (existingIndex !== -1) {
+      // 항목이 이미 있으면 제거
+      updatedFormDatas.splice(existingIndex, 1);
+    } else {
+      // 항목이 없으면 추가
+      updatedFormDatas.splice(index + 1, 0, newSelection);
+    }
+  
+    return updatedFormDatas;
+  });
+};
+
+const goToAdminPage = (id) => {
+  sessionStorage.setItem('formData', JSON.stringify(formData));
+  sessionStorage.setItem('combinedInputs', JSON.stringify(combinedInputs));
+  window.location.href = `../UserReservationConfirm.user/${id}`;
+  
 };
 
 
 
 
+ 
 
+  // // 객체를 세션 스토리지에 저장하는 함수
+  // const saveToSessionStorage = () => {
+  //   // 객체를 JSON 문자열로 변환하여 저장
+  //   sessionStorage.setItem('categoryInputs', JSON.stringify(categoryInputs));
+  // };
 
-
+  // useEffect(() => {
+  //   saveToSessionStorage(); // 컴포넌트가 렌더링될 때 저장
+  //   loadFromSessionStorage(); // 저장된 데이터를 불러옴
+  // }, []);
 
 
    // 상태 변경 시 콘솔에 출력
    useEffect(() => {
+    console.log(categories);
     console.log('Category Inputs:', combinedInputs);
-}, [combinedInputs]);
+    console.log('formData 입니다 ' + JSON.stringify(formData));
+}, [combinedInputs,categories,formData]);
 
 //------------------------------------
     const slot = sessionStorage.getItem('selectSlot');
     const date = sessionStorage.getItem('formattedDate');
+    const reservationSlotKey = sessionStorage.getItem('reservationSlotKey');
 
     console.log('Slot:', slot);
     console.log('Date:', date);
-
+    console.log('reservationSlotKey:', reservationSlotKey);
 
 
  return (
@@ -144,24 +226,20 @@ const handleFlavorSelectN = (subCategory, index) => {
          </div>
 
          <div className="user-main-content">
-           <div className="store-detail-menu">
-             <button type="button">홈</button>
-             <button type="button">정보</button>
-             <button type="button">예약</button>
-             <button type="button">리뷰</button>
-           </div>
 
            <div className="user-content-container">
              <div className="user-reserve-menu">
                <div className="user-reserve-menu-img">
-               <img src="/img/user_basic_profile.jpg" />
+               <img src={`${reserveModi.imageUrl}`} alt="My Image" />
                </div>
                <div className="user-reserve-menu-content">
-                 <div>{reserveModi.serviceName} </div>
+                 <div>{reserveModi.serviceName} </div> 
                  <div>
                    {reserveModi.serviceContent}
-                   {reserveModi.servicePrice}
+                 
                  </div>
+                 <div> {reserveModi.servicePrice} 원 ~</div>
+                 
                </div>
              </div>
            </div>
@@ -215,7 +293,7 @@ const handleFlavorSelectN = (subCategory, index) => {
             className="input-text"
             type="text"
             value={combinedInputs[index]?.inputValue || ''}  // combinedInputs에서 value 가져오기
-            onChange={(e) => handleCategoryInputChange(index, e.target.value, category.servicePrice)}
+            onChange={(e) => handleCategoryInputChange(index, e.target.value, category.servicePrice, category.categoryId)}
           />
         </div>
       </div>
@@ -235,7 +313,7 @@ const handleFlavorSelectN = (subCategory, index) => {
             className="input-text2"
             type="number"
             value={combinedInputs[index]?.inputValue || ''}  // 통합된 상태에서 값 가져오기
-            onChange={(e) => handleCategoryInputChange(index, e.target.value, category.servicePrice)}
+            onChange={(e) => handleCategoryInputChange(index, e.target.value, category.servicePrice, category.categoryId)}
           />
         </div>
       </div>
@@ -255,8 +333,8 @@ const handleFlavorSelectN = (subCategory, index) => {
               className={`option-btn ${combinedInputs[index]?.[index]?.includes(subCategory) ? 'selected' : ''}`}
               onClick={() =>
                 category.subCategoryType === "SELECT1"
-                  ? handleFlavorSelect1(subCategory, index)
-                  : handleFlavorSelectN(subCategory, index)
+                  ? handleFlavorSelect1(subCategory, index,category.categoryId)
+                  : handleFlavorSelectN(subCategory, index,category.categoryId)
               }
             >
               {subCategory.serviceName} <div> +{subCategory.servicePrice}</div>
@@ -317,7 +395,7 @@ const handleFlavorSelectN = (subCategory, index) => {
 
 <div className="user-content-container6">
   <div className="user-content-last">
-    <button type="button">
+    <button type="button" onClick={() => goToAdminPage(cateId)}>
       다음 <i className="bi bi-chevron-right"></i>
     </button>
   </div>

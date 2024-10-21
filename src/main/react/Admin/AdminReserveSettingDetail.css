@@ -20,6 +20,21 @@
     border-radius: 3px;
   }
 
+  .main-slot {
+    display: flex;
+    margin-bottom: 30px;
+  }
+
+  .main-slot  > div {
+    margin-right: 30px;
+    font-weight: bold;
+  }
+
+  .main-slot > input {
+    border : 1px solid #ddd;
+    width: 150px;
+  }
+
   .reserve-content-text > textarea {
     width: 100%;
     overflow: auto;

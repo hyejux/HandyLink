@@ -3,6 +3,7 @@ package com.example.HiMade.admin.mapper;
 
 import com.example.HiMade.admin.dto.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface AdminReservationMapper {
 
   //예약 상태 변경
   void updateStatus(UpdateReservationStatusDTO dto);
+ // 서비스 별 사진 등록
+ public void setMainCategoryImg(AdminCategoryImgDTO dto) ;
 }

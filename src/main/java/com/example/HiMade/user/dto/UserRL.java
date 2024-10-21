@@ -3,8 +3,10 @@ package com.example.HiMade.user.dto;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +22,7 @@ public class UserRL {
 
   private String storeName; // 업체 이름
   private LocalDate reservationSlotDate; // 예약 일
-  private LocalDateTime reservationSlotTime; // 예약 시간
+  private LocalTime reservationTime; // 예약 시간
 
   private String ServiceName; //서비스 이름
 

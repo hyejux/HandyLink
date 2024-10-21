@@ -137,7 +137,8 @@ font-weight: 600;
 }
 
 
-.dropdown {
+.dropdown, 
+.dropdown2 {
 margin-bottom: 5px;
   text-decoration: none;
   color: #000;
@@ -146,7 +147,8 @@ margin-bottom: 5px;
 }
 
 
-.dropdown > a:nth-child(1){
+.dropdown > a:nth-child(1), 
+.dropdown2 > a:nth-child(1){
     border-top: 1px solid #ddd;
 }
 
@@ -160,14 +162,16 @@ letter-spacing : 3px;
 
 }
 
-.dropdown-btn > .bi-caret-down-fill {
+.dropdown-btn > .bi-caret-down-fill,
+.dropdown-btn2 > .bi-caret-down-fill {
     font-size: 15px;
     position: absolute;
     top: 3px;
     left: 102px;
 }
 
-.dropdown-btn > .bi2 {
+.dropdown-btn > .bi2 ,
+.dropdown-btn2 > .bi4{
   display: none;
   font-size: 15px;
       position: absolute;
@@ -175,7 +179,7 @@ letter-spacing : 3px;
       left: 102px;
 }
 
-.dropdown a {
+.dropdown a, .dropdown2 a {
   text-decoration: none;
   color:#000;
   display: block;
@@ -188,7 +192,7 @@ border-bottom: 1px solid #ddd;
 }
 
 
-.dropdown a  > .bi {
+.dropdown a  > .bi, .dropdown2 a  > .bi {
 margin-left : 5px;
 display : block;
 }
@@ -216,7 +220,7 @@ display : block;
 }
 
 
-.dropdown-btn {
+.dropdown-btn, .dropdown-btn2  {
   transition: opacity 0.3s ease; /* 부드러운 전환 효과 */
   cursor: pointer;
   text-decoration: none;
@@ -227,7 +231,7 @@ display : block;
   letter-spacing : 3px;
 }
 
-.dropdown-btn.active {
+.dropdown-btn.active, .dropdown-btn2.active {
   background-color: #c7ddea94; /* 드롭다운이 열릴 때 배경색 */
 }
 

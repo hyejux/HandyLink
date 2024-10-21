@@ -16,6 +16,11 @@ function UserLoginPage () {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!userId.trim() || !userPw.trim()) {
+            alert('아이디와 비밀번호를 입력해주세요.');
+            return;
+        }
+
         try {
             const response = await fetch('/user/login', {
                 method: 'POST',
@@ -30,8 +35,6 @@ function UserLoginPage () {
 
             if (response.ok) {
                 window.location.href = '/UserMyPage.user';  // 로그인 성공 시 이동
-            } else {
-                alert('로그인 실패');
             }
         } catch (error) {
             console.error('로그인 중 오류 발생:', error);

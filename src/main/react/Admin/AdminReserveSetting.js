@@ -41,6 +41,10 @@ const goToAdminPage = (id) => {
     window.location.href = `/AdminReserveSettingDetailModify.admin/${id}`;
 };
 
+const goToAdminPage2 = (id) => {
+  window.location.href = `/AdminReserveSettingDetailSlot.admin/${id}`;
+};
+
 
 //    const navigate = useNavigate();
 //
@@ -62,7 +66,7 @@ const goToAdminPage = (id) => {
 
           <div className="reserve-container" key={index}>
                   <div className="reserve-img">
-                   <img src={`http://localhost:8585/img/${value.imageUrl}`} alt="My Image" />
+                  <img src={`${value.imageUrl}`} alt="My Image" />
 
                    </div>
 
@@ -77,9 +81,16 @@ const goToAdminPage = (id) => {
                      </div>
                    </div>
 
-               <button  type="button" class="btn-modi" onClick={() => goToAdminPage(value.categoryId)}>
-                             <i className="bi bi-pencil-square">{value.categoryId}</i>
+                        <div className='btn-ali'>
+                        <button  type="button" class="btn-modi" onClick={() => goToAdminPage(value.categoryId)}>
+                            <i className="bi bi-pencil-square"></i>
+                        </button>
+                         <button  type="button" class="btn-modi" onClick={() => goToAdminPage2(value.categoryId)}>
+                         <i class="bi bi-clock-history"></i>
                          </button>
+  </div>
+
+           
                  </div>
              ))}
       </div>

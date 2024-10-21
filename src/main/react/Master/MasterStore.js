@@ -17,12 +17,13 @@ function MasterStore() {
             .then((data) => setStore(data))
             .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
     }, []);
+    
 
     const activeStores = store.filter((store) => store.storeStatus === '활성화');
 
-    const handleDeactivate = (storeId) => {
+    const handleDeactivate = (storeNo) => {
         if (window.confirm("업체를 비활성화 하시겠습니까?")) {
-            fetch(`/store/${storeId}/deactivate`, {
+            fetch(`/store/${storeNo}/deactivate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -131,8 +132,8 @@ function MasterStore() {
                         const addrInfo = parseJson(store.storeAddr);
 
                         return (
-                            <tr key={store.storeId}>
-                                <td>{store.storeId}</td>
+                            <tr key={store.storeNo}>
+                                <td>{store.storeNo}</td>
                                 <td>{store.storeName}</td>
                                 <td>{store.storeMaster || '-'}</td>
                                 <td>{store.managerName || '-'}</td>
@@ -144,7 +145,7 @@ function MasterStore() {
                                 </td>
                                 <td>{store.storeStatus}</td>
                                 <td>
-                                    <button className="deactivate-button" onClick={() => handleDeactivate(store.storeId)}>비활성화</button>
+                                    <button className="deactivate-button" onClick={() => handleDeactivate(store.storeNo)}>비활성화</button>
                                 </td>
                             </tr>
                         );

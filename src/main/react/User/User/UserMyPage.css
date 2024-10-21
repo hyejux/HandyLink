@@ -10,6 +10,28 @@ h2 {
     font-size: 30px;
     color: #333;
 }
+
+
+/*임시 로그아웃 및 탈퇴 버튼*/
+.btn-list {
+    display: flex;
+}
+
+.btn-list .logout-btn {
+    border: 0;
+    justify-content: flex-start;
+    cursor: pointer;
+    padding: 10px;
+    margin-right: 20px;
+}
+
+.btn-list .del-btn {
+    border: 0;
+    justify-content: flex-end;
+    cursor: pointer;
+    padding: 10px;
+}
+
 .profile-pic {
     display: flex;
     justify-content: center;

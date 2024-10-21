@@ -4,6 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.HiMade.admin.mapper.AdminReservationMapper">
+
+    <!-- 서비스 별 이미지 등록 -->
+    <insert id="setMainCategoryImg" parameterType="com.example.HiMade.admin.dto.AdminCategoryImgDTO">
+        insert into category_image (category_id, image_url) values (#{categoryId},#{imageUrl});
+    </insert>
+
+
+    <!--  서비스 (대분류) 가져오기   -->
     <select id="getList" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
         select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_id, ci.image_url
         from category c
@@ -13,10 +21,12 @@
         ORDER BY c.category_id DESC
     </select>
 
+    <!--    -->
     <select id="getManageList" resultType="com.example.HiMade.admin.dto.adminReserveMangeDTO">
         select * from reservation
     </select>
 
+    <!--  서비스 대분류 (상세 가져오기)  -->
     <select id="getListDetail" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
         select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_id, ci.image_url
         from category c
@@ -25,6 +35,7 @@
         where c.category_level = 1 AND  c.category_id = #{id}
     </select>
 
+    <!--   서비스 중분류 가져오기  -->
     <select id="getMiddleItem" resultType="com.example.HiMade.admin.dto.adminRSDTO">
         select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_id, sc.category_status, sc.category_id, sc.sub_category_type, sc.is_required, sc.is_paid
         from category c
@@ -32,39 +43,43 @@
         on c.category_id = sc.category_id
         WHERE c.parent_category_id = #{id}  AND c.category_level = 2
     </select>
-
+    <!--  서비스 소분류 가져오기   -->
     <select id="getSubItem" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
         select * from category c
         where parent_category_id = #{id} AND category_level = 3;
     </select>
 
+    <!--  테스트   -->
     <insert id="setCategory">
-        INSERT INTO CATEGORY (category_level, parent_category_id, service_name, service_price, service_content, store_id)
-        VALUES (#{categoryLevel}, #{parentCategoryId}, #{serviceName}, #{servicePrice}, #{serviceContent}, 1)
+        INSERT INTO CATEGORY (category_level, parent_category_id, service_name, service_price, service_content, store_id, store_no)
+        VALUES (#{categoryLevel}, #{parentCategoryId}, #{serviceName}, #{servicePrice}, #{serviceContent}, 'bbb123' , '7')
     </insert>
 
 
-
+    <!--  서비스 (대분류) 등록하기    -->
     <insert id="setMainCategory" parameterType="com.example.HiMade.admin.dto.adminReservationDTO" useGeneratedKeys="true" keyProperty="categoryId">
-        INSERT INTO category (category_level, service_name, service_price, service_content, store_id)
-        VALUES (1, #{serviceName}, #{servicePrice}, #{serviceContent}, 1)
+        INSERT INTO category (category_level, service_name, service_price, service_content, store_id, store_no)
+        VALUES (1, #{serviceName}, #{servicePrice}, #{serviceContent}, 'bbb123' , '7')
         RETURNING category_id
     </insert>
 
+    <!--  서비스 (중분류) 등록하기    -->
     <insert id="setMainCategory2" parameterType="com.example.HiMade.admin.dto.adminRSDTO" useGeneratedKeys="true" keyProperty="middleId">
-        INSERT INTO category (category_level, parent_category_id, service_name, service_price, store_id)
-        VALUES (2, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 1)
+        INSERT INTO category (category_level, parent_category_id, service_name, service_price,  store_id, store_no)
+        VALUES (2, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 'bbb123' , '7')
         RETURNING category_id
     </insert>
 
+    <!--  서비스 (중분류 상태값 ) 등록하기    -->
     <insert id="setMainCategory3" parameterType="com.example.HiMade.admin.dto.adminRSDTO">
         INSERT INTO sub_category_status (category_id, sub_category_type, is_required, is_paid)
         VALUES (#{middleId}, #{subCategoryType}, #{isRequired}, #{isPaid});
     </insert>
 
+    <!--  서비스 (소분류) 등록하기    -->
     <insert id="setMainCategory4" parameterType="com.example.HiMade.admin.dto.adminReservationDTO">
-        INSERT INTO category (category_level, parent_category_id, service_name, service_price, store_id)
-        VALUES (3, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 1)
+        INSERT INTO category (category_level, parent_category_id, service_name, service_price, store_id, store_no)
+        VALUES (3, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 'bbb123' , '7')
     </insert>
 
 

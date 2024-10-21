@@ -26,34 +26,42 @@ function UserSignUp() {
 
     // 카카오 회원가입 여부 상태
     const [isKakaoSignUp, setIsKakaoSignUp] = useState(false);
+    const [isKakaoLogin, setIsKakaoLogin] = useState(false);
+
 
     useEffect(() => {
-        // 카카오 사용자 정보가 세션에 저장된 경우 불러오기
-        fetch('/user/kakao-info')
-            .then(response => response.json())
-            .then(data => {
-                console.log("로그 Kakao user info:", data);
-
-                if (data.userName || data.userImgUrl) {
-                    // 카카오 회원가입 시
-                    setIsKakaoSignUp(true);  // 카카오 회원가입일 경우 true로 설정
-
-                    // 서버에서 받아온 값을 formData로 업데이트
-                    setFormData(prevFormData => ({
-                        ...prevFormData,
-                        userName: data.userName || '', // 서버에서 받은 userName을 formData에 설정
-                        userImgUrl: data.userImgUrl || '' // 서버에서 받은 프로필 이미지 URL을 formData에 설정
-                    }));
-
-                    // 프로필 이미지 미리보기 업데이트
-                    if (data.userImgUrl) {
-                        setPreviewImage(data.userImgUrl);  // 미리보기 이미지 업데이트
+        // 만약 카카오 로그인을 통해 접근한 경우에만 호출하도록 조건을 추가합니다.
+        if (isKakaoLogin) {  // isKakaoLogin 상태가 true일 때만 API를 호출
+            fetch('/user/kakao-info')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch Kakao user info");
                     }
-                }
-            })
-            .catch(error => console.error('Error fetching Kakao user info:', error));
-    }, []);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("로그 Kakao user info:", data);
 
+                    if (data.userName || data.userImgUrl) {
+                        // 카카오 회원가입 시
+                        setIsKakaoSignUp(true);  // 카카오 회원가입일 경우 true로 설정
+
+                        // 서버에서 받아온 값을 formData로 업데이트
+                        setFormData(prevFormData => ({
+                            ...prevFormData,
+                            userName: data.userName || '', // 서버에서 받은 userName을 formData에 설정
+                            userImgUrl: data.userImgUrl || '' // 서버에서 받은 프로필 이미지 URL을 formData에 설정
+                        }));
+
+                        // 프로필 이미지 미리보기 업데이트
+                        if (data.userImgUrl) {
+                            setPreviewImage(data.userImgUrl);  // 미리보기 이미지 업데이트
+                        }
+                    }
+                })
+                .catch(error => console.error('Error fetching Kakao user info:', error));
+        }
+    }, [isKakaoLogin]); // isKakaoLogin이 true일 때만 useEffect 실행
 
 
     // 입력값 변화 시 상태 업데이트
@@ -67,6 +75,7 @@ function UserSignUp() {
             setIdChecked(false); // 이메일이 변경될 때마다 중복 체크 초기화
         }
     };
+
 
     // 프로필 사진 업로드 및 미리보기 처리
     const handleFileChange = (e) => {
@@ -135,17 +144,19 @@ function UserSignUp() {
 
         try {
             let response;
+            const formatPhonenum = formData.userPhonenum.replace(/[^0-9]/g, '');
+
             if (isKakaoSignUp) {
                 // 카카오 회원가입
                 const kakaoData = {
                     userId: formData.userId,
                     userName: formData.userName,
-                    userPhonenum: formData.userPhonenum,
+                    userPhonenum: formatPhonenum,
                     userBirth: formData.userBirth,
                     userGender: formData.userGender,
                     userImgUrl: formData.userImgUrl // 카카오에서 제공한 이미지 URL
                 };
-                response = await fetch('/user/signup', {
+                    response = await fetch('/user/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -158,7 +169,7 @@ function UserSignUp() {
                 data.append('userId', formData.userId);
                 data.append('userPw', formData.userPw);
                 data.append('userName', formData.userName);
-                data.append('userPhonenum', formData.userPhonenum);
+                data.append('userPhonenum', formatPhonenum);
                 data.append('userBirth', formData.userBirth);
                 data.append('userGender', formData.userGender);
 

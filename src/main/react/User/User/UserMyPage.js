@@ -3,13 +3,12 @@ import ReactDOM from "react-dom/client";
 import React, {useState, useEffect} from "react";
 
 function UserMyPage () {
-    const [profileImage, setProfileImage] = useState("/img/user_basic_profile.jpg"); // 초기 프로필 이미지
     const [passwordVisible, setPasswordVisible] = useState(false); // 비밀번호
     const [repasswordVisible, setRepasswordVisible] = useState(false);
     const [isKakaoLogin, setIsKakaoLogin] = useState(false); // 카카오 로그인 여부 상태 추가
 
     const [userInfo, setUserInfo] = useState({
-        profileImage: "/img/user_basic_profile.jpg",
+        userImgUrl: '/img/user_basic_profile.jpg',
         userId: '',
         userName: '',
         userPhonenum: '',
@@ -55,6 +54,11 @@ function UserMyPage () {
         formData.append('userBirth', userInfo.userBirth);
         formData.append('userGender', userInfo.userGender);
 
+        // 비밀번호가 있는 경우만 FormData에 추가
+        if (userInfo.userPw) {
+            formData.append('userPw', userInfo.userPw); // 새 비밀번호 추가
+        }
+
         // 카카오 로그인 사용자는 파일 업로드를 처리하지 않음
         if (file) {
             formData.append('profileImage', file);
@@ -95,7 +99,7 @@ function UserMyPage () {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('로그 Fetched user profile:', data); // 데이터 확인 로그 추가
+                    console.log('Fetched user profile:', data);
                     setUserInfo({
                         ...userInfo,
                         userId: data.userId,
@@ -103,13 +107,8 @@ function UserMyPage () {
                         userPhonenum: data.userPhonenum,
                         userBirth: data.userBirth,
                         userGender: data.userGender,
-                        profileImage: data.userImgUrl || '/img/user_basic_profile.jpg',
+                        userImgUrl: data.userImgUrl || '/img/user_basic_profile.jpg',
                     });
-
-                    // 비밀번호가 'KAKAO'이면 카카오 로그인으로 간주
-                    if (data.userPw === 'KAKAO') {
-                        setIsKakaoLogin(true); // 카카오 로그인 여부 설정
-                    }
                 } else {
                     console.error('정보 가져오기 실패');
                 }
@@ -132,7 +131,7 @@ function UserMyPage () {
             reader.onload = (e) => {
                 setUserInfo({
                     ...userInfo,
-                    profileImage: e.target.result // 미리보기 이미지 설정
+                    userImgUrl: e.target.result // 미리보기 이미지 설정
                 });
             };
             reader.readAsDataURL(selectedFile);
@@ -140,12 +139,17 @@ function UserMyPage () {
         }
     };
 
+
     return (
         <div>
             <div className="user-mypage-container">
                 <h2>마이 페이지</h2>
+                <div className="btn-list">
+                    <button className="logout-btn" onClick={() => window.location.href='./logout'}>로그아웃</button>
+                    <button className="del-btn">탈퇴하기</button>
+                </div>
                 <div className="profile-pic">
-                    <img src={userInfo.profileImage} alt="Profile" id="profileImage"/>
+                    <img src={userInfo.userImgUrl} alt="Profile" id="profileImage"/>
                     <div className="edit-icon" onClick={() => document.getElementById('fileInput').click()}>
                         <i className="bi bi-pencil-square"></i>
                     </div>
@@ -177,6 +181,7 @@ function UserMyPage () {
                                 <input
                                     type={passwordVisible ? "text" : "password"}
                                     id="userPw"
+                                    name="userPw" // name 속성 추가
                                     placeholder="비밀번호 입력"
                                     value={userInfo.userPw}
                                     onChange={handleInputChange}
@@ -191,6 +196,7 @@ function UserMyPage () {
                                 <input
                                     type={repasswordVisible ? "text" : "password"}
                                     id="repassword"
+                                    name="repassword" // name 속성 추가
                                     placeholder="비밀번호 재입력"
                                     value={userInfo.repassword}
                                     onChange={handleInputChange}

@@ -11,4 +11,11 @@ public interface UserAccountMapper {
     UserDTO getUserById(@Param("userId") String userId);
     void updateUser(UserDTO userDTO);
     void updateUserWithPassword(UserDTO userDTO);
+    String findUserIdByNameAndPhone(@Param("userName") String userName, @Param("phonenum") String phonenum);
+    int verifyUserForPasswordReset(@Param("userId") String userId,
+                                   @Param("userName") String userName,
+                                   @Param("phonenum") String phonenum);
+
+    void updatePassword(@Param("userId") String userId,
+                        @Param("newPassword") String newPassword);
 }

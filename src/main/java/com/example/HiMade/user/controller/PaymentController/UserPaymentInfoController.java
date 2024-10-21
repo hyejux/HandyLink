@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/payment")
+@RequestMapping("/userPaymentInfo")
 public class UserPaymentInfoController {
 
     @Autowired
@@ -23,6 +23,13 @@ public class UserPaymentInfoController {
     @GetMapping
     public List<Payment> getAllPayments() {
         return paymentService.getAllPayments();
+    }
+
+    // reservation_no로 결제 정보 조회
+    @GetMapping("/getPaymentInfo/{reservationNo}")
+    public List<Payment> getPaymentInfo(@PathVariable Long reservationNo) {
+        return paymentService.getPaymentInfo(reservationNo);
+
     }
 
 

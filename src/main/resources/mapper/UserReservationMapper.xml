@@ -4,26 +4,75 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.HiMade.user.mapper.UserReservationMapper">
+
+    <select id="getMyReservationDetail" resultType="com.example.HiMade.user.dto.UserRD" parameterType="int">
+        SELECT rf.reservation_no, rf.reservation_form_key,  rf.middle_category_value,
+        main_c.service_name AS main_category_name,
+        main_c.service_price AS main_price,
+        middle_c.service_name AS middle_category_name,
+        middle_c.service_price AS middle_price,
+        sub_c.service_name AS sub_category_name,
+        sub_c.service_price AS sub_price
+        FROM reservation_form rf
+        LEFT JOIN
+        category main_c ON rf.main_category_id = main_c.category_id
+        LEFT JOIN
+        category middle_c ON rf.middle_category_id = middle_c.category_id
+        LEFT JOIN
+        category sub_c ON rf.sub_category_id = sub_c.category_id
+        where reservation_no = #{id}
+    </select>
+
+
+
+
     <select id="getMyReserveList" resultType="com.example.HiMade.user.dto.UserRL">
-        select s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name
+        select s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name, r.reservation_time
         from reservation r
-        JOIN store s
+        LEFT JOIN store s
         ON s.store_id = r.store_id
-        JOIN reservation_form rf
+        LEFT JOIN reservation_form rf
         ON r.reservation_no = rf.reservation_no
-        JOIN category c
+        LEFT JOIN category c
         ON c.category_id = rf.main_category_id
-        JOIN reservation_slot rs
+        LEFT JOIN reservation_slot rs
         ON rs.reservation_slot_key = r.reservation_slot_key
-        group by r.reservation_no,s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name;
+        LEFT JOIN users u
+        ON u.user_id = r.user_id
+        where r.user_id = 'hello@naver.com'
+        group by r.reservation_no,s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name
 
     </select>
 
     <select id="getDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">
         select * from reservation_slot where reservation_slot_date = #{date}
-        AND category_id = 118;
+        AND category_id = 118
     </select>
 
+    <select id="getAllDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">
+        select * from reservation_slot where
+        category_id = 118
+    </select>
+
+    <insert id="setReservationForm" parameterType="UserReservationDTO" useGeneratedKeys="true" keyProperty="reservationNo">
+        INSERT INTO reservation (reservation_status, reservation_time, reg_time, customer_request, reservation_price, store_id, user_id, reservation_slot_key)
+        VALUES ('대기', #{reservationTime}, CURRENT_TIMESTAMP, #{customerRequest}, #{reservationPrice}, 'bbb123', 'hello@naver.com', #{reservationSlotKey})
+        RETURNING reservation_no
+    </insert>
+
+    <insert id="setReservationFormDetail" parameterType="com.example.HiMade.user.dto.UserReservationFormDTO">
+        insert into reservation_form (main_category_id, middle_category_id, sub_category_id, middle_category_value, reservation_no )
+        values(#{mainCategoryId}, #{middleCategoryId}, #{subCategoryId}, #{middleCategoryValue}, #{reservationNo})
+
+    </insert>
+
+
+    <select id="getSlotTime" resultType="com.example.HiMade.user.dto.UserReservationDTO">
+        select reservation_time, count(*) AS reservation_time_status, reservation_slot_key
+        from reservation
+        where store_no = 7 AND reservation_slot_key = #{reservationSlotKey}
+        group by reservation_time,  reservation_slot_key;
+    </select>
 
 
 </mapper>

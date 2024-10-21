@@ -5,7 +5,9 @@ import com.example.HiMade.admin.dto.*;
 import com.example.HiMade.admin.service.AdminMainService;
 import com.example.HiMade.admin.service.AdminReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -44,7 +46,8 @@ public class AdminReservationController {
   }
 
   @PostMapping("/setMainCategory")
-  public void setMainCategory(@RequestBody adminReserveAdd dto) {
+  public int setMainCategory(@RequestBody adminReserveAdd dto) {
+
     System.out.println(dto);
 
     adminReservationDTO dto2 = new adminReservationDTO();
@@ -65,12 +68,14 @@ public class AdminReservationController {
       System.out.println("중분류 카테고리 삽입 후 " + serviceId2);
       adminReservationService.setMainCategory3(category); // 중분류 상태 insert 
 
+      System.out.println(category.getSubCategories());
       List<adminReservationDTO> subCategories = category.getSubCategories();
       //subCategory 배열 들어감
 
       System.out.println(subCategories);
 
       for (adminReservationDTO subcategory : subCategories) {
+        System.out.println(subcategory);
         subcategory.setParentCategoryId(serviceId2); // 삽입된 중분류 아이디를 부모 아이디로 가지고 감
         adminReservationService.setMainCategory4(subcategory); // 소분류 insert
         System.out.println("중분류 삽입됨");
@@ -78,10 +83,10 @@ public class AdminReservationController {
 
     }
 
-    System.out.println();
+
     // 소분류 카테고리
 
-
+    return serviceId;
 
   }
 
@@ -98,5 +103,10 @@ public class AdminReservationController {
     adminReservationService.updateStatus(dto);
   }
 
+  //사진등록
+  @PostMapping("/setMainCategoryImg")
+    public void setMainCategoryImg(@RequestParam("file") MultipartFile file,  @RequestParam("category_id") int categoryId) {
+      adminReservationService.setMainCategoryImg(file, categoryId);
+    }
 
 }

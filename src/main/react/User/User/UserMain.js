@@ -25,31 +25,19 @@ function UserMain() {
   const btnRightStoreRef3 = useRef(null);
   const btnRightStoreRef4 = useRef(null);
 
-  const setupScrollControls = (listWrap, btnLeft, btnRight, isFourth = false) => {
+  const setupScrollControls = (listWrap, btnLeft, btnRight) => {
     btnLeft.addEventListener('click', () => {
-      // 4번째 버튼일 경우 다르게 스크롤
-      if (isFourth) {
-        // 원하는 동작으로 스크롤 조정 (예: 100px씩 스크롤)
-        listWrap.scrollBy({ left: -600, behavior: 'smooth' });
-      } else {
-        listWrap.scrollBy({ left: -200, behavior: 'smooth' });
-      }
+      listWrap.scrollBy({ left: -200, behavior: 'smooth' });
     });
-  
+
     btnRight.addEventListener('click', () => {
-      // 4번째 버튼일 경우 다르게 스크롤
-      if (isFourth) {
-        // 원하는 동작으로 스크롤 조정 (예: 100px씩 스크롤)
-        listWrap.scrollBy({ left: 600, behavior: 'smooth' });
-      } else {
-        listWrap.scrollBy({ left: 200, behavior: 'smooth' });
-      }
+      listWrap.scrollBy({ left: 200, behavior: 'smooth' });
     });
-  
+
     listWrap.addEventListener('scroll', () => {
       updateButtonVisibility(listWrap, btnLeft, btnRight);
     });
-  
+
     updateButtonVisibility(listWrap, btnLeft, btnRight);
   };
 
@@ -66,7 +54,7 @@ function UserMain() {
     setupScrollControls(storeListRef1.current, btnLeftStoreRef1.current, btnRightStoreRef1.current);
     setupScrollControls(storeListRef2.current, btnLeftStoreRef2.current, btnRightStoreRef2.current);
     setupScrollControls(storeListRef3.current, btnLeftStoreRef3.current, btnRightStoreRef3.current);
-    setupScrollControls(storeListRef4.current, btnLeftStoreRef4.current, btnRightStoreRef4.current, true);
+    setupScrollControls(storeListRef4.current, btnLeftStoreRef4.current, btnRightStoreRef4.current);
   }, [store]);
 
 
@@ -151,7 +139,7 @@ function UserMain() {
             );
             setDistances((prevDistances) => ({
               ...prevDistances,
-              [storeAddr]: distance.toFixed(2), // addr 또는 storeId로 거리 저장
+              [storeAddr]: distance.toFixed(2),
             }));
           } else {
             console.error(`거리 계산 불가: ${addrOnly} - ${status}`);
@@ -194,18 +182,114 @@ function UserMain() {
     }
   };
 
+  const [currentAdIndex, setCurrentAdIndex] = useState(0);
+  const totalAds = 5; // 광고 배너의 개수
+  const ads = ['./img/event1.jpg', './img/event4.jpg', './img/event2.jpg', './img/event3.jpg', './img/event4.jpg'];
+
+
+  const handlePrev = () => {
+    setCurrentAdIndex((prevIndex) => (prevIndex === 0 ? totalAds - 1 : prevIndex - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentAdIndex((prevIndex) => (prevIndex === totalAds - 1 ? 0 : prevIndex + 1));
+  };
+
+  useEffect(() => {
+    const listWrap = storeListRef4.current;
+
+    // 광고 배너 인덱스에 맞춰 스크롤 위치를 설정
+    const scrollToCurrentAd = () => {
+      const scrollAmount = listWrap.clientWidth * currentAdIndex;
+      listWrap.scrollTo({
+        left: scrollAmount,
+        behavior: 'smooth',
+      });
+    };
+
+    scrollToCurrentAd();
+  }, [currentAdIndex]);
+
+
+  const goToStoreDetail = (id) =>{
+    window.location.href = `/userStoreDetail.user/${id}`;
+  }
 
 
   return (
-    <div className="user-main-container">
-      <div className="user-top-nav">
-        <logo className="logo">HandyLink!</logo>
-      </div>
+    <div>
+       <div className="user-main-content2">
 
-      <div className="store-search-bar">
+     
+      <div className="user-top-nav">
+        <logo className="logo">gd</logo>
+        <div className="store-search-bar">
         <i className="bi bi-search"></i>
         <input type="text" placeholder="찾으시는 가게가 있나요?" />
       </div>
+      </div>
+
+      
+
+      <div className="user-main-content2">
+      {/* 가게 카테고리 */}
+      <div className="user-category-content">
+        <div className="user-category-item">
+          <img src="./img/free-icon-fruits-7416631.png" alt="레터링케이크" />
+          <p>레터링케이크</p>
+        </div>
+        <div className="user-category-item">
+          <img src="./img/free-icon-makeup-5732023.png" alt="도자기" />
+          <p>도자기</p>
+        </div>
+        <div className="user-category-item">
+          <img src="./img/free-icon-flower-bouquet-7359059.png" alt="꽃선물" />
+          <p>꽃선물</p>
+        </div>
+        <div className="user-category-item">
+          <img src="./img/free-icon-strawberry-cake-9997743.png" alt="주문제작" />
+          <p>주문제작</p>
+        </div>
+        <div className="user-category-item">
+          <img src="./img/free-icon-donut-3272772.png" alt="케이크" />
+          <p>케이크</p>
+        </div>
+        <div className="user-category-item">
+          <img src="./img/free-icon-fruits-7416631.png" alt="레터링케이크" />
+          <p>레터링케이크</p>
+        </div>
+        <div className="user-category-item">
+          <img src="./img/free-icon-makeup-5732023.png" alt="도자기" />
+          <p>도자기</p>
+        </div>
+        <div className="user-category-item">
+          <img src="./img/free-icon-flower-bouquet-7359059.png" alt="꽃선물" />
+          <p>꽃선물</p>
+        </div>
+        <div className="user-category-item">
+          <img src="./img/free-icon-strawberry-cake-9997743.png" alt="주문제작" />
+          <p>주문제작</p>
+        </div>
+        <div className="user-category-item">
+          <img src="./img/free-icon-donut-3272772.png" alt="케이크" />
+          <p>케이크</p>
+        </div>
+      </div>
+
+      {/* 위치 카테고리 */}
+      <h3>어디로 가시나요?</h3>
+      <div className="user-location-content">
+        <div className="user-location-item">내주변</div>
+        <div className="user-location-item">압구정 청담</div>
+        <div className="user-location-item">부산</div>
+        <div className="user-location-item">잠실 송파</div>
+        <div className="user-location-item">이태원 한남</div>
+        <div className="user-location-item">성수</div>
+      </div>
+
+
+
+
 
       {/* 내 주변 가게 */}
       <div className="user-main-content">
@@ -220,7 +304,7 @@ function UserMain() {
               const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
 
               return (
-                <div className="user-main-list-container" key={store.storeId}>
+                <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}> 
                   <div className="user-category-menu">
                     <div className="user-category-menu-img">
                       <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
@@ -253,7 +337,7 @@ function UserMain() {
               const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
 
               return (
-                <div className="user-main-list-container" key={store.storeId}>
+                <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
                   <div className="user-category-menu">
                     <div className="user-category-menu-img">
                       <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
@@ -288,7 +372,7 @@ function UserMain() {
               const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
 
               return (
-                <div className="user-main-list-container" key={store.storeId}>
+                <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
                   <div className="user-category-menu">
                     <div className="user-category-menu-img">
                       <button className="button bookmark-btn" aria-label="북마크 추가"><i className="bi bi-heart"></i></button>
@@ -325,7 +409,7 @@ function UserMain() {
             const storeDistance = distances[store.storeAddr] ? formatDistance(distances[store.storeAddr]) : '정보 없음';
 
             return (
-              <div className="user-main-list-sub-content" key={store.storeId}>
+              <div className="user-main-list-sub-content" key={store.storeNo}>
                 <i className="bi bi-heart"></i>
                 <div className="sub-content-img-box">
                   <img src={imageUrl} alt={store.storeName} />
@@ -374,44 +458,53 @@ function UserMain() {
         <button onClick={handleLoadMore} className="load-more-btn">추천 가게 더 보기</button>
       </div>
 
-      
+
 
       {/* 광고 배너 */}
       <div className="user-main-content last-content">
-        <button className="nav-button left" ref={btnLeftStoreRef4} aria-label="왼쪽으로 이동">‹</button>
-        <button className="nav-button right" ref={btnRightStoreRef4} aria-label="오른쪽으로 이동">›</button>
+        <button className="nav-button left" onClick={handlePrev} ref={btnLeftStoreRef4} aria-label="왼쪽으로 이동">‹</button>
+        <button className="nav-button right" onClick={handleNext} ref={btnRightStoreRef4} aria-label="오른쪽으로 이동">›</button>
         <h3>광고</h3>
 
+        {/* 광고 리스트 */}
         <div className="user-main-list-wrap" ref={storeListRef4}>
-          {/* 광고 이미지 배열 (로컬 이미지 경로를 사용하세요) */}
-          {['./img/event1.jpg', './img/event4.jpg', './img/event2.jpg', './img/event3.jpg', './img/event4.jpg',]
-            .map((image, index) => (
-              <div className="user-main-list-container event-container" key={index}>
-                <div className="user-category-menu">
-                  <div className="user-category-menu-img event-img">
-                    <img src={image} alt={`광고 배너 ${index + 1}`} />
-                  </div>
-                  <div className="ad-title">특가 상품 안내</div>
-                  <div className="ad-description">
-                    <span>50% 할인 중!</span>
-                  </div>
+          {ads.map((image, index) => (
+            <div
+              className="user-main-list-container event-container"
+              key={index}
+            >
+              <div className="user-category-menu">
+                <div className="user-category-menu-img event-img">
+                  <img src={image} alt={`광고 배너 ${index + 1}`} />
+                </div>
+                <div className="ad-title">특가 상품 안내</div>
+                <div className="ad-description">
+                  <span>50% 할인 중!</span>
                 </div>
               </div>
-            ))}
+            </div>
+          ))}
+        </div>
+
+        {/* 인디케이터 */}
+        <div className="ad-indicator-container">
+          {ads.map((_, index) => (
+            <div
+              key={index}
+              className={`ad-indicator ${index === currentAdIndex ? 'active' : ''}`}
+            />
+          ))}
         </div>
       </div>
 
 
 
-      <footer className="user-bottom-nav">
-        <a href="#"><span>메인</span></a>
-        <a href="#"><span>검색</span></a>
-        <a href="#"><span>예약</span></a>
-        <a href="#"><span>문의</span></a>
-        <a href="#"><span>MY</span></a>
-      </footer>
 
     </div>
+    </div>
+    </div>
+
+    
   );
 }
 

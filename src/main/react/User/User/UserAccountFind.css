@@ -190,3 +190,22 @@ input:focus ~ .highlight {
     cursor: pointer;
 }
 
+.password-group {
+    position: relative;
+}
+
+.password-group .invisible-icon1 {
+    position: absolute;
+    top: 50%;
+    left:75%;
+}
+
+.password-group .invisible-icon2 {
+    position: absolute;
+    top: 50%;
+    left:75%;
+}
+
+#reset-password-form {
+    margin: -100px;
+}

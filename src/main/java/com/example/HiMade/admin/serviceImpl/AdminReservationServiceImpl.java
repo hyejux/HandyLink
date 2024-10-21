@@ -2,12 +2,14 @@ package com.example.HiMade.admin.serviceImpl;
 
 import com.example.HiMade.admin.dto.*;
 import com.example.HiMade.admin.mapper.AdminReservationMapper;
-import com.example.HiMade.admin.service.AdminMainService;
 import com.example.HiMade.admin.service.AdminReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
+import java.awt.*;
+import java.io.File;
 import java.util.List;
 
 @Service("AdminReservationService")
@@ -15,6 +17,9 @@ public class AdminReservationServiceImpl implements AdminReservationService {
 
   @Autowired
   AdminReservationMapper adminReservationMapper;
+
+  @Autowired
+  private ServletContext servletContext;
 
   @Override
   public List<adminReservationDTO> getList() {
@@ -79,6 +84,37 @@ public class AdminReservationServiceImpl implements AdminReservationService {
     adminReservationMapper.updateStatus(dto);
   }
 
+  @Override
+  public void setMainCategoryImg(MultipartFile file, int categoryId) {
+
+      String imageUrl = null;
+
+      try {
+        String uploadDir = "C:/Users/user/Desktop/HiMade/src/main/resources/static/uploads";
+
+// 원하는 경로로 변경
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+          dir.mkdirs(); // 디렉토리가 존재하지 않으면 생성
+        }
+
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        File uploadFile = new File(uploadDir + "/" + fileName); // 파일 경로 설정
+        file.transferTo(uploadFile); // 파일 저장
+
+        // URL 반환
+        imageUrl = "http://localhost:8585/uploads/" + fileName; // 로컬 개발 환경
+        // imageUrl = "https://example.com/uploads/" + fileName; // 운영 환경
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+
+      AdminCategoryImgDTO dto = new AdminCategoryImgDTO();
+      dto.setImageUrl(imageUrl);
+      dto.setCategoryId(categoryId);
+
+      adminReservationMapper.setMainCategoryImg(dto);
+  }
 
 
 }

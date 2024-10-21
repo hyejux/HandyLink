@@ -30,5 +30,10 @@ public class PaymentService {
         return paymentRepository.findAll();
     }
 
+    // reservation_no로 결제 정보 조회
+    public List<Payment> getPaymentInfo(Long reservationNo) {
+        return paymentRepository.findByReservationNo(reservationNo);
+    }
+
 
 }

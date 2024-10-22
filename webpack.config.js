@@ -18,6 +18,7 @@ module.exports = {
         AdminLogin: './Admin/AdminLogin.js',
         AdminStoreInfo: './Admin/AdminStoreInfo.js',
         adminReservation : './Admin/AdminReservation.js',
+        payment: './User/Payment/Payment.js',
         paymentInfo: './User/Payment/PaymentInfo.js',
         UserChatRoom : './User/Inquiry/UserChatRoom.js',
         master: './Master/Master.js',

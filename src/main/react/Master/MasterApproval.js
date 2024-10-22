@@ -13,7 +13,7 @@ function MasterApproval() {
   const [selectedStore, setSelectedStore] = useState(null);
 
   useEffect(() => {
-    fetch('/store')
+    fetch('/getStoreInfo')
       .then((response) => response.json())
       .then((data) => {
         setStore(data);
@@ -57,7 +57,7 @@ function MasterApproval() {
       : "활성화 하시겠습니까?";
 
     if (window.confirm(confirmationMessage)) {
-      fetch(`/store/${storeNo}/approve`, {
+      fetch(`/getStoreInfo/${storeNo}/approve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ function MasterApproval() {
         .then((response) => {
           if (response.ok) {
             alert(currentStatus === '대기' ? "승인이 완료되었습니다." : "업체가 활성화 되었습니다.");
-            return fetch('/store');
+            return fetch('/getStoreInfo');
           }
           throw new Error('업체 상태 업데이트에 실패했습니다.');
         })
@@ -89,15 +89,6 @@ function MasterApproval() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedStore(null);
-  };
-
-  const parseJson = (jsonString) => {
-    try {
-      return JSON.parse(jsonString);
-    } catch (error) {
-      console.error("JSON 파싱 오류:", error);
-      return {};
-    }
   };
 
   return (
@@ -130,7 +121,7 @@ function MasterApproval() {
       <table>
         <thead>
           <tr>
-            <th>업체ID</th>
+            <th>업체번호</th>
             <th>업체명</th>
             <th>대표자</th>
             <th>담당자</th>
@@ -139,13 +130,12 @@ function MasterApproval() {
             <th>사업자 번호</th>
             <th>업체정보</th>
             <th>상태</th>
-            <th>비활성화</th>
+            <th>승인</th>
           </tr>
         </thead>
         <tbody>
           {searchFilteredStores.map((store) => {
-            const addrInfo = parseJson(store.storeAddr);
-
+            
             return (
               <tr key={store.storeNo}>
                 <td>{store.storeNo}</td>
@@ -153,7 +143,7 @@ function MasterApproval() {
                 <td>{store.storeMaster || '-'}</td>
                 <td>{store.managerName || '-'}</td>
                 <td>{store.managerPhone || '-'}</td>
-                <td>{addrInfo.addr} {addrInfo.addrdetail}</td>
+                <td>{store.addr} {store.addrdetail}</td>
                 <td>{store.storeBusinessNo || '-'}</td>
                 <td>
                   <button className="details-button" onClick={() => handleShowModal(store)}>상세보기</button>

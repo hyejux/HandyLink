@@ -12,7 +12,7 @@ function MasterStore() {
     const [isSearched, setIsSearched] = useState(false);  // 검색 트리거 상태
 
     useEffect(() => {
-        fetch('/store')
+        fetch('/getStoreInfo')
             .then((response) => response.json())
             .then((data) => setStore(data))
             .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
@@ -23,7 +23,7 @@ function MasterStore() {
 
     const handleDeactivate = (storeNo) => {
         if (window.confirm("업체를 비활성화 하시겠습니까?")) {
-            fetch(`/store/${storeNo}/deactivate`, {
+            fetch(`/getStoreInfo/${storeNo}/deactivate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ function MasterStore() {
                 .then((response) => {
                     if (response.ok) {
                         alert("업체가 비활성화 되었습니다.");
-                        return fetch('/store');
+                        return fetch('/getStoreInfo');
                     } else {
                         return response.text().then((errorText) => {
                             throw new Error(`업체 상태 업데이트에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
@@ -60,14 +60,6 @@ function MasterStore() {
         setSelectedStore(null);
     };
 
-    const parseJson = (jsonString) => {
-        try {
-            return JSON.parse(jsonString);
-        } catch (error) {
-            console.error("JSON 파싱 오류:", error);
-            return {};
-        }
-    };
 
     // 검색어 변경 핸들러
     const handleSearchInputChange = (event) => {
@@ -129,8 +121,6 @@ function MasterStore() {
                 </thead>
                 <tbody>
                     {displayedStores.map((store) => {
-                        const addrInfo = parseJson(store.storeAddr);
-
                         return (
                             <tr key={store.storeNo}>
                                 <td>{store.storeNo}</td>
@@ -138,7 +128,7 @@ function MasterStore() {
                                 <td>{store.storeMaster || '-'}</td>
                                 <td>{store.managerName || '-'}</td>
                                 <td>{store.managerPhone || '-'}</td>
-                                <td>{addrInfo.addr} {addrInfo.addrdetail}</td>
+                                <td>{store.addr} {store.addrdetail}</td>
                                 <td>{store.storeBusinessNo || '-'}</td>
                                 <td>
                                     <button className="details-button" onClick={() => handleShowModal(store)}>상세보기</button>

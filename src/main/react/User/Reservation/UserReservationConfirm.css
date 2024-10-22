@@ -498,3 +498,47 @@ body {
     font-size: 20px;
     font-weight: bold;
   }
+
+
+
+
+
+  /* ----------------------- 결제 수단 부분 ----------------------- */
+  .user-payment-title {
+    margin-bottom: 10px;
+  }
+  
+  .user-payment-title h3 {
+    font-size: 24px;
+  }
+  
+  .user-content-payment {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+  }
+  
+  .user-payment-method {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-payment-method input[type="radio"] {
+    margin-right: 10px;
+  }
+
+  .user-payment-method label {
+    font-size: 20px;;
+  }
+  
+  .payment-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #2C348F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }

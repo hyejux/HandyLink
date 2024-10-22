@@ -64,12 +64,14 @@ function UserAccountFind () {
 
     // 아이디 찾기 함수
     const handleFindId = async () => {
+        setFoundId(null);
+        setMessage("");
+
         try {
             const response = await fetch(`/user/find-id?userName=${userName}&phonenum=${phonenum}`);
             if (response.ok) {
                 const data = await response.text();
                 setFoundId(data);
-                setMessage("");
             } else {
                 setMessage("사용자 정보를 찾을 수 없습니다.");
             }
@@ -219,17 +221,9 @@ function UserAccountFind () {
 
 
                 {/* 아이디 찾기 결과 표시 */}
-                {foundId && (
-                    <div className="found-id">
-                        찾은 아이디: {foundId}
-                    </div>
-                )}
-
-                {message && (
-                    <div className="message">
-                        {message}
-                    </div>
-                )}
+                <div className="message">
+                    {foundId ? `찾은 아이디: ${foundId}` : message}
+                </div>
 
                 {/* 사용자 검증 완료 시 새 비밀번호 입력 폼 표시 */}
                 {isUserVerified && (

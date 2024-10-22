@@ -26,6 +26,7 @@ function UserLoginPage () {
 
     // 카카오
     const handleKakaoLogin = () => {
+
         // .env에서 REST API 키 가져오기
         const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
         const REST_API_KEY = process.env.REACT_APP_KAKAO_CLIENT_ID;

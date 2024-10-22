@@ -9,24 +9,24 @@
     justify-content: space-between;
 }
 
-.header {
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-}
+/*.header {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    padding: 10px 0;*/
+/*}*/
 
-.header h1 {
-    font-size: 20px;
-    margin: 0;
-    flex-grow: 1;
-    text-align: center;
-}
+/*.header h1 {*/
+/*    font-size: 20px;*/
+/*    margin: 0;*/
+/*    flex-grow: 1;*/
+/*    text-align: center;*/
+/*}*/
 
-.header img {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-}
+/*.header img {*/
+/*    width: 24px;*/
+/*    height: 24px;*/
+/*    cursor: pointer;*/
+/*}*/
 
 .shop-name {
     margin-bottom: 10px;
@@ -47,11 +47,11 @@
     align-items: flex-start;
 }
 
-.message.user {
+.message.sender {
     align-items: flex-end;
 }
 
-.message .bubble {
+.message.receiver .bubble {
     background-color: #434EBD;
     color: #fff;
     padding: 15px 25px;
@@ -61,11 +61,14 @@
     word-break: break-word;
 }
 
-.message.user .bubble {
+.message.sender .bubble {
     background-color: #eee;
     color: #000;
+    padding: 15px 25px;
     border-radius: 15px;
     border-bottom-right-radius: 0px;
+    max-width: 70%;
+    word-break: break-word;
 }
 
 .timestamp {
@@ -85,7 +88,7 @@
     height: 25px;
     flex-grow: 1;
     padding: 10px;
-    margin: 10px;
+    margin-bottom: 60px;
     border: 1px solid #ccc;
     border-radius: 10px;
     outline: none;
@@ -101,5 +104,5 @@
     color : #434EBD;
     position: absolute;
     left: 88%;
-    top: 30%;
+    top: 15%;
 }

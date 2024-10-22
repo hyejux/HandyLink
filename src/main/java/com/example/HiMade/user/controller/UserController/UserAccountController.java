@@ -6,23 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -53,30 +42,20 @@ public class UserAccountController {
     // 회원 가입 및 이미지 파일 저장
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@ModelAttribute UserDTO userDTO,
-                                         @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
-                                         HttpSession session) {
-        logger.info("Received UserDTO: {}", userDTO);
-
+                                         @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
         try {
-            // 카카오 로그인 사용자인지 확인
-            UserDTO kakaoUser = (UserDTO) session.getAttribute("kakaoUser");
-            if (kakaoUser != null) {
-                // 카카오 사용자 정보와 추가 입력 정보를 합침
-                userDTO.setUserId(kakaoUser.getUserId());
-                userDTO.setUserName(kakaoUser.getUserName());
-                userDTO.setUserImgUrl(kakaoUser.getUserImgUrl());
-                // 카카오 로그인 사용자는 비밀번호 필드를 "KAKAO"로 설정
-                userDTO.setUserPw("KAKAO");
-            } else if (profileImage != null && !profileImage.isEmpty()) {
-                // 일반 회원가입의 경우 프로필 이미지 처리
+            userDTO.setLoginType("GENERAL");
+
+            // 프로필 이미지 처리
+            if (profileImage != null && !profileImage.isEmpty()) {
                 String filePath = saveProfileImage(profileImage);
                 userDTO.setUserImgUrl(filePath);
             }
 
+            // 유저 등록
             userAccountService.insertUser(userDTO);
             return ResponseEntity.ok("회원 가입이 성공적으로 완료되었습니다.");
         } catch (Exception e) {
-            logger.error("회원가입 중 오류 발생", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원가입 중 오류 발생: " + e.getMessage());
         }
     }
@@ -114,78 +93,7 @@ public class UserAccountController {
         return newFilename;
     }
 
-
-
-
-    // 카카오 로그인 처리
-    @GetMapping("/login/oauth2/kakao")
-    public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpSession session) {
-        try {
-            // 1. 카카오 인가 코드를 이용해 액세스 토큰을 요청
-            String accessToken = userAccountService.getKakaoAccessToken(code);
-            //System.out.println("로그 로그 Access Token: " + accessToken);
-
-            // 2. 액세스 토큰을 이용해 사용자 정보를 요청
-            UserDTO kakaoUser = userAccountService.getKakaoUserInfo(accessToken);
-            //System.out.println("로그 로그 kakaoUser : " + kakaoUser );
-
-            // 3. DB에서 사용자 확인 (이미 회원인지 확인)
-            UserDTO existingUser = userAccountService.getUserById(kakaoUser.getUserId());
-
-            if (existingUser == null) {
-                // 신규 사용자인 경우 회원가입 페이지로 리다이렉트
-                session.setAttribute("kakaoUser", kakaoUser);
-                return ResponseEntity.status(HttpStatus.FOUND)
-                        .header("Location", "/UserSignUp.user")
-                        .build();
-            } else {
-                // 기존 사용자인 경우 자동 로그인 처리
-                Authentication authentication = new UsernamePasswordAuthenticationToken(existingUser.getUserId(), "KAKAO", AuthorityUtils.createAuthorityList("ROLE_USER"));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                //System.out.println("로그: SecurityContext에 저장된 인증 정보: " + SecurityContextHolder.getContext().getAuthentication());
-
-                // 세션에 SecurityContext 수동 저장
-                SecurityContext context = SecurityContextHolder.getContext();
-                session.setAttribute("SPRING_SECURITY_CONTEXT", context);
-
-                // 인증된 사용자 정보 확인
-                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                if (auth != null && auth.isAuthenticated()) {
-                    System.out.println("현재 인증된 사용자: " + auth.getName());
-                } else {
-                    System.out.println("인증되지 않은 사용자");
-                }
-
-                // 세션에 사용자 정보 저장
-                session.setAttribute("userId", existingUser.getUserId());
-                System.out.println("로그: 세션에 저장된 사용자 ID: " + session.getAttribute("userId"));
-
-                // 세션에 저장된 SecurityContext 확인 추가
-                SecurityContext contextInSession = (SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
-                //System.out.println("로그: 세션에 저장된 SecurityContext 인증 정보: " + contextInSession.getAuthentication());
-
-                // 로그인 성공 후 리다이렉트할 페이지 (예: 메인 페이지)
-                return ResponseEntity.status(HttpStatus.FOUND)
-                        .header("Location", "/UserMyPage.user")
-                        .build();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카카오 로그인 처리 중 오류 발생");
-        }
-    }
-
-    // 카카오 가입자 정보 조회
-    @GetMapping("/kakao-info")
-    public ResponseEntity<UserDTO> getKakaoUserInfo(HttpSession session) {
-        UserDTO kakaoUser = (UserDTO) session.getAttribute("kakaoUser");
-        if (kakaoUser != null) {
-            return ResponseEntity.ok(kakaoUser);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-    // 일반 가입자 정보 조회
+    // 정보 조회
     @GetMapping("/profile")
     public ResponseEntity<UserDTO> getUserProfile() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -202,8 +110,6 @@ public class UserAccountController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-
-
 
     // 사용자 정보 수정 (비밀번호 포함)
     @PutMapping("/update")

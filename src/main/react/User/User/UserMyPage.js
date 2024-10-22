@@ -3,9 +3,9 @@ import ReactDOM from "react-dom/client";
 import React, {useState, useEffect} from "react";
 
 function UserMyPage () {
-    const [passwordVisible, setPasswordVisible] = useState(false); // 비밀번호
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const [repasswordVisible, setRepasswordVisible] = useState(false);
-    const [isKakaoLogin, setIsKakaoLogin] = useState(false); // 카카오 로그인 여부 상태 추가
+    const [isKakaoLogin, setIsKakaoLogin] = useState(false);
 
     const [userInfo, setUserInfo] = useState({
         userImgUrl: '/img/user_basic_profile.jpg',
@@ -42,7 +42,7 @@ function UserMyPage () {
         e.preventDefault();
 
         // 비밀번호 확인 로직
-        if (userInfo.userPw && userInfo.userPw !== userInfo.repassword) {
+        if (!isKakaoLogin && userInfo.userPw && userInfo.userPw !== userInfo.repassword) {
             alert("비밀번호가 일치하지 않습니다.");
             return;
         }
@@ -55,16 +55,15 @@ function UserMyPage () {
         formData.append('userGender', userInfo.userGender);
 
         // 비밀번호가 있는 경우만 FormData에 추가
-        if (userInfo.userPw) {
+        if (!isKakaoLogin && userInfo.userPw) {
             formData.append('userPw', userInfo.userPw); // 새 비밀번호 추가
         }
 
         // 카카오 로그인 사용자는 파일 업로드를 처리하지 않음
-        if (file) {
+        if (!isKakaoLogin && file) {
             formData.append('profileImage', file);
-        } else if (userInfo.profileImage) {
-            // 파일이 없을 때는 기존의 이미지 URL을 유지
-            formData.append('userImgUrl', userInfo.profileImage);
+        } else if (userInfo.userImgUrl) {
+            formData.append('userImgUrl', userInfo.userImgUrl);
         }
 
         try {
@@ -109,7 +108,7 @@ function UserMyPage () {
                         userImgUrl: data.userImgUrl || '/img/user_basic_profile.jpg',
                     });
 
-                    if (data.userPw === 'KAKAO') {
+                    if (data.loginType === 'KAKAO') {
                         setIsKakaoLogin(true);
                     }
 

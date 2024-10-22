@@ -7,6 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface UserChatRoomMapper {
-    List<UserChatDTO> selectTest();
-    void insertTest(UserChatDTO userChatDTO);
+
 }

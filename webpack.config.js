@@ -44,7 +44,8 @@ module.exports = {
         UserReservationDate : './User/Reservation/UserReservationDate.js',
         UserMyReservationDetail : '/User/Reservation/UserMyReservationDetail.js',
         AdminReserveSettingDetailSlot : '/Admin/AdminReserveSettingDetailSlot.js',
-        MyStore: './Admin/MyStore.js'
+        MyStore: './Admin/MyStore.js',
+        StoreDayOff: './Admin/StoreDayOff.js'
 
     },
     devtool: 'sourcemaps',

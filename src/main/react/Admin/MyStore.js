@@ -25,6 +25,8 @@ function TestMyStore() {
         storeSns: [{ snsLink: '', snsName: ''}]
     });
 
+    const [initialMyStore, setInitialMyStore] = useState(myStoreInfo);
+
     //해당가게정보가져오기
     useEffect(() => {
         const fetchMyStoreInfo = async() => {
@@ -33,6 +35,7 @@ function TestMyStore() {
                     const resp = await axios.get(`/adminStore/myStoreInfo?storeNo=${storeNo}`);
                     console.log("불러온 데이터 이거 ", resp.data);
                     setMyStoreInfo(resp.data);
+                    setInitialMyStore(resp.data);
                 } else{
                     console.log("세션에 아이디정보가 없습니다.");
                 }
@@ -45,13 +48,8 @@ function TestMyStore() {
 //        console.log("불러온 데이터 ",myStoreInfo);
     },[]);
 
-
     const [isDisabled, setIsDisabled] = useState(true);
 
-//    const toggleModify = () => {
-//        setIsDisabled(!isDisabled);
-//        console.log("수정", isDisabled);
-//    }
 
     const handleChangeInfo = (e) => {
         const { id, value } = e.target;
@@ -168,7 +166,14 @@ function TestMyStore() {
             console.log("error발생 ", error);
         }
     };
-    
+
+
+    //수정취소
+    const handleCancel = () => {
+        setMyStoreInfo(initialMyStore);
+        setIsDisabled(true);
+    };
+
     
 
     return (
@@ -292,13 +297,47 @@ function TestMyStore() {
             </div>
         </div>
 
+{/*<div className="photo-upload">
+<label htmlFor="photos">사진
+<span className="small-text">* 최대 8장</span>
+</label>
+<label htmlFor="file-upload" className="custom-file-upload">
+파일 업로드
+</label>
+<input
+    id="file-upload"
+    type="file"
+    multiple // 여러 파일 선택 가능
+    onChange={onSelectFile}
+    accept=".png, .jpg, image/*"
+    style={{ display: 'none', marginTop: '10px' }} // 항상 보이도록 설정
+/>
+{selectedImages.length ? (
+<div className="photo-grid">
+    {selectedImages.map((url, index) => (
+        <div key={index} className="photo-item">
+            <img src={url} alt={`첨부파일 ${index + 1}`} />
+            <i className="bi bi-x-circle-fill" onClick={() => removeImage(index)}></i>
+        </div>
+    ))}
+</div>
+) : (
+<div className="photo-grid">파일을 첨부할 수 있습니다.</div>
+)}
+
+</div>
+*/}
+
+
         <button type="button" className="modify-btn" onClick={handleClickSet}>
             {isDisabled ? '수정하기' : '수정완료'}
         </button>
 
-{/*<button type="button" className="set-btn" onClick={handleClickSet}>
-입력하기
-</button>*/}
+        {!isDisabled && (
+            <button type="button" className="cancel-btn" onClick={handleCancel}>
+            취소
+            </button>
+        )}
 
     </div>
 );

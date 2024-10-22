@@ -138,12 +138,11 @@ function PaymentInfo() {
 
             <div className="user-content-container">
                 <div className="header">예약 정보</div>
-                <div className="reservation-date">2024.10.3(목) 오후 2:30</div>
+                <div className="reservation-date">2024.10.3(목) 오후 2:30 (픽업날짜 가져오기)</div>
                 <div className="reservation-info">
                     <img src="../img/cake001.jpg" alt="예약 이미지" />
                     <div className="reservation-details">
-                        <div className="store-name">오늘도 케이크</div>
-
+                        <div className="store-name">오늘도 케이크 (업체명 가져오기)</div>
 
                         {/* 대분류와 중분류 출력 */}
                         {reservationList.map((item, resIndex) => {
@@ -205,29 +204,27 @@ function PaymentInfo() {
 
                                     return (
                                         <div key={resIndex}>
+                                            {/* 대분류 출력 */}
                                             {isFirstInGroup && (
                                                 <div className="info-row">
                                                     <div className="left"><i className="bi bi-dot"></i> {item.mainCategoryName}</div>
                                                     <div className="right">(+{item.mainPrice}원)</div>
                                                 </div>
                                             )}
-                                            {isMiddleCategoryDifferent &&
-                                                null
-                                            }
-                                            {item.middleCategoryValue ? (
-                                                <div className="info-row info-row2">
-                                                    <div className="left"><i className="bi bi-dash"></i> {item.middleCategoryName}</div>
-                                                    <div className="right">{item.middleCategoryValue + '개'} (+{item.middlePrice}원)</div>
-                                                </div>
-                                            ) : (
-                                                <div className="info-row info-row2">
-                                                    <div className="left"><i className="bi bi-dash"></i> {item.subCategoryName}</div>
-                                                    <div className="right">(+{item.subPrice}원)</div>
-                                                </div>
-                                            )}
+
+                                            {/* 중분류 출력 (첫 번째 항목에만) */}
+                                            <div className="info-row info-row2">
+                                                {isMiddleCategoryDifferent && (
+                                                    <div className="left"> <i class="bi bi-check2"></i> {item.middleCategoryName}</div>
+                                                )}
+                                                {/* 서브카테고리 출력 */}
+                                                <div className="right">{item.subCategoryName} (+{item.subPrice}원)</div>
+                                            </div>
+
                                         </div>
                                     );
                                 })}
+
                             </div>
                         ))
                     ) : (

@@ -29,7 +29,7 @@
 }
 .main-contents{
   border-radius: 10px;
-  width: 70%;
+  width: 100%;
 }
 
 
@@ -109,7 +109,7 @@
 
 .reserve-img {
   margin: 20px;
-  width: 50%;
+  width: 40%;
   height: 80%;
   position: relative;
 }

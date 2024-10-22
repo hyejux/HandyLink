@@ -9,7 +9,8 @@ module.exports = {
     mode: 'development',
     context: path.resolve(__dirname, 'src/main/react'),
     entry: {
-main: './Main.js', //여러페이지 설정이 가능함
+
+        main: './Main.js', //여러페이지 설정이 가능함
         user: './User/User/User.js',
         userMain: './User/User/UserMain.js',
         admin: './Admin/Admin.js',
@@ -43,7 +44,8 @@ main: './Main.js', //여러페이지 설정이 가능함
         UserReservationDate : './User/Reservation/UserReservationDate.js',
         UserMyReservationDetail : '/User/Reservation/UserMyReservationDetail.js',
         AdminReserveSettingDetailSlot : '/Admin/AdminReserveSettingDetailSlot.js',
-        MyStore: './Admin/MyStore.js'
+        MyStore: './Admin/MyStore.js',
+        StoreDayOff: './Admin/StoreDayOff.js'
 
     },
     devtool: 'sourcemaps',

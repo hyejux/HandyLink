@@ -1,11 +1,13 @@
 package com.example.HiMade.admin.serviceImpl;
 
 import com.example.HiMade.admin.dto.StoreRegistDTO;
+import com.example.HiMade.admin.dto.StoreSnsDTO;
 import com.example.HiMade.admin.mapper.AdminStoreMapper;
 import com.example.HiMade.admin.service.AdminStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -30,8 +32,23 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
-    public void updateStoreSet(StoreRegistDTO storeRegistDTO) {
-        adminStoreMapper.updateStoreSet(storeRegistDTO);
+    public void addStoreSns(StoreSnsDTO storeSns) {
+        adminStoreMapper.addStoreSns(storeSns);
+    }
+
+    @Override
+    public void updateStore(StoreRegistDTO storeRegistDTO) {
+        adminStoreMapper.updateStore(storeRegistDTO);
+    }
+
+    @Override
+    public void updateStoreSns(StoreSnsDTO storeSns) {
+        adminStoreMapper.updateStoreSns(storeSns);
+    }
+
+    @Override
+    public StoreRegistDTO getMyStore(Integer storeNo) {
+        return adminStoreMapper.getMyStore(storeNo);
     }
 
     @Override

@@ -138,9 +138,14 @@ function StoreSignUp() {
     //등록하기
     const handleStoreRegist = async() => {
         try {
+            if(isDuplicate === true){
+                alert('아이디를 확인해주세요');
+                return;
+            }
             const response = await axios.post('/adminStore/registStore',{
                 ...storeInfoData
             });
+
             if (currentStep < 4) {
                 setCurrentStep(currentStep + 1);
             }

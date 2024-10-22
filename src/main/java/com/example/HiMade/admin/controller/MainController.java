@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -83,22 +84,30 @@ public class MainController {
   }
 
   @PostMapping("/loginForm")
-  public ResponseEntity<String> loginForm(@RequestBody Map<String, String> loginData, HttpSession session) {
+  public ResponseEntity<Map<String, Object>> loginForm(@RequestBody Map<String, String> loginData, HttpSession session) {
     String id = loginData.get("id");
     String pw = loginData.get("pw");
 
     System.out.println("입력" + id + pw);
     StoreRegistDTO store = adminStoreService.loginCheck(id, pw);
-    String storeId = store.getStoreId();
     System.out.println("해당업체정보 "+ store);
+
+    String storeId = store.getStoreId();
+    Long storeNo = store.getStoreNo();
 
     if(storeId != null && !storeId.isEmpty()){
       session.setAttribute("storeId", storeId);
+      session.setAttribute("storeNo", storeNo);
       session.setAttribute("storeName", store.getStoreName());
 
-      return ResponseEntity.ok(storeId);
+      //두개를 리턴하기 위해 Map사용
+      Map<String, Object> response = new HashMap<>();
+      response.put("storeId",storeId);
+      response.put("storeNo",storeNo);
+
+      return ResponseEntity.ok(response);
     } else {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인실패"); //401반환
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);//401반환
     }
   }
 

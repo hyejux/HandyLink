@@ -20,25 +20,8 @@ function UserLoginPage () {
             alert('아이디와 비밀번호를 입력해주세요.');
             return;
         }
-
-        try {
-            const response = await fetch('/user/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    userId: userId,
-                    userPw: userPw
-                }),
-            });
-
-            if (response.ok) {
-                window.location.href = '/UserMyPage.user';  // 로그인 성공 시 이동
-            }
-        } catch (error) {
-            console.error('로그인 중 오류 발생:', error);
-        }
+        const form = e.target;
+        form.submit();
     };
 
     // 카카오
@@ -55,15 +38,14 @@ function UserLoginPage () {
         // Kakao 인증 URL 생성
         const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
 
-        console.log("Kakao Auth URL:", KAKAO_AUTH_URL); // 확인용 콘솔 출력
-
         // 카카오 인증 페이지로 리다이렉트
         window.location.href = KAKAO_AUTH_URL;
     };
+
     return (
         <div>
             <div className="user-login-container">
-                <form className="login-form" onSubmit={handleSubmit}>
+                <form className="login-form" onSubmit={handleSubmit} method="POST" action="/login">
                     <h2>로그인</h2>
                     <div className="form-group">
                         <input

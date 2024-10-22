@@ -191,9 +191,10 @@ function UserReservationConfirm() {
   };
 
 
-  // ----------------------- 결제 부분 -----------------------
 
-  const requestPayment = () => {
+
+  // ----------------------- 결제 부분 -----------------------
+  const requestPayment = (paymentMethod) => {
     const { IMP } = window;
     if (!IMP) {
       console.error("IMP 객체가 정의되지 않았습니다. 아임포트 스크립트를 확인하세요.");
@@ -203,10 +204,10 @@ function UserReservationConfirm() {
     IMP.init("imp14516351"); // 아임포트에서 발급받은 가맹점 식별코드
 
     const data = {
-      pg: "html5_inicis",
-      pay_method: "card",
+      pg: "html5_inicis", // 사용할 PG사
+      pay_method: paymentMethod, // 결제 수단: 카드(card), 계좌이체(trans)
       merchant_uid: `mid_${new Date().getTime()}`,
-      amount: totalPrice, // 결제 금액 (테스트 금액)
+      amount: totalPrice, // 결제 금액
       name: "테스트 상품",
       buyer_email: "buyer@example.com",
       buyer_name: "테스트 구매자",
@@ -223,14 +224,14 @@ function UserReservationConfirm() {
 
         // 결제 성공 후 DB에 저장
         await storePaymentInfo({
-          paymentMethod: "신용카드",
+          paymentMethod: paymentMethod === "card" ? "신용카드" : "계좌이체",
           paymentAmount: totalPrice,
-          paymentStatus: "Y",
-          reservationNo: 47,
+          paymentStatus: paymentMethod === "card" ? "Y" : "N",
+          reservationNo: 48, // 예약 번호
         });
 
         // fetchPaymentInfo(); // 결제 성공 후 결제 정보 조회
-        
+
       } else {
         console.log("결제 실패:", response);
         alert(`결제 실패! 에러 코드: ${response.error_code}, 에러 메시지: ${response.error_msg}`);
@@ -439,19 +440,20 @@ function UserReservationConfirm() {
 
           {/* 결제 부분 */}
           <div className="user-content-container6">
-            <div className='"user-payment-title"'>
+            <div className="user-payment-title">
               <h3>결제수단</h3>
             </div>
             <div className="user-content-payment">
               <div className='user-payment-method'>
-                <i class="bi bi-credit-card"></i> <button onClick={requestPayment}>카드결제(테스트)</button>
+                <i className="bi bi-credit-card"></i>
+                <button onClick={() => requestPayment("card")}>카드결제(테스트)</button>
               </div>
               <div className='user-payment-method'>
-                <i class="bi bi-cash-coin"></i> <button>계좌이체</button>
+                <i className="bi bi-cash-coin"></i>
+                <button onClick={() => requestPayment("trans")}>계좌이체</button>
               </div>
             </div>
           </div>
-
 
 
         </div>

@@ -36,44 +36,17 @@ public class SecurityConfig {
                 .and()
                 .formLogin()
                     .loginPage("/UserLoginPage.user")
-                    .loginProcessingUrl("/user/login")
+                    .loginProcessingUrl("/login")
                     .usernameParameter("userId")
                     .passwordParameter("userPw")
-                    .successHandler((request, response, authentication) -> {
-                        // 로그인 성공 후 인증 정보 확인
-                        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                        if (auth != null && auth.isAuthenticated()) {
-                            System.out.println("로그인 성공: 사용자 = " + auth.getName());
-                        } else {
-                            System.out.println("로그인 실패: 인증되지 않은 사용자");
-                        }
-                        response.sendRedirect("/UserMyPage.user");
-                    })
                     .defaultSuccessUrl("/UserMyPage.user", true)
                     .failureUrl("/UserLoginPage.user?error=true") // 로그인 실패 시 이동할 URL
                 .and()
                 .logout()
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/UserLoginPage.user")
-                    .addLogoutHandler((request, response, authentication) -> {
-                        HttpSession session = request.getSession(false);
-                        if (session != null) {
-                            System.out.println("세션 ID: " + session.getId() + " 가 무효화된다리");
-                        }
-                    })
-                    .logoutSuccessHandler((request, response, authentication) -> {
-                        System.out.println("로그아웃 성공: 사용자 = " + (authentication != null ? authentication.getName() : "Anonymous"));
-                        response.sendRedirect("/UserLoginPage.user");
-                    })
                     .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID")
-                .and()
-                .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                    .invalidSessionUrl("/UserLoginPage.user?sessionExpired=true")
-                    .maximumSessions(1)
-                    .maxSessionsPreventsLogin(true);
-
+                    .deleteCookies("JSESSIONID");
         return http.build();
     }
 

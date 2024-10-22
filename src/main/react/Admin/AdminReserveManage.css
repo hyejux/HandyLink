@@ -31,6 +31,9 @@
   background-color: #c8d6e570;
   cursor: pointer;
 }
+.management-table thead th {
+
+}
 
 
 /* ------------------------------------------ */
@@ -79,23 +82,45 @@
   color: white;
 } */
 
+.header-title {
+  font-size: 36px;
+  font-weight: bold;
+}
+
 .management-table {
   width: 100%;
   /* border: 1px solid #ddd; */
   border-collapse: collapse;
+  font-size: 17px;
+
 
 }
 
 .management-table thead {
-  background-color: #f5f5f5;
+  /* background: linear-gradient(360deg, rgb(230 230 230) 0%, #f4f4f5 100%); */
+  background: #e7eaef69;
+  box-shadow: unset;
+  color: #38414a;
+  border-top: 2px solid #38414a;
+  border-bottom: 2px solid #ddd;
+
 }
+
+
 
 .management-table th,
 .management-table td {
   padding: 10px;
   border-bottom: 1px solid #ddd;
   text-align: left;
+  border-right: 1px solid #ddd;
 }
+.management-table th:last-child,
+.management-table td:last-child{
+  border-right: none;
+  /* color : red; */
+}
+
 
 .management-table th {
   font-weight: bold;
@@ -152,14 +177,7 @@
 
 
 
-/* 상단 예약 관리, 캘린더 리스트 버튼 */
-.main-content-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 24px;
-  margin-bottom: 20px;
-}
+
 
 .icon-buttons {
   display: flex;
@@ -183,7 +201,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .icon-buttons {

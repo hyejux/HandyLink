@@ -149,7 +149,8 @@ function AdminReserveManage() {
     return (
         <div>
             <div className="main-content-title">
-                예약 관리
+                <div className='header-title'> 예약 관리 </div>
+                <hr/>
                 <div className="icon-buttons">
                     <button className="icon-button calendar-button" onClick={() => setViewMode('calendar')}>
                         <span className="material-symbols-outlined">calendar_today</span>
@@ -179,6 +180,7 @@ function AdminReserveManage() {
             )} */}
 
             <div className="main-contents">
+            <input type='text' placeholder='검색할 내용을 입력해주세요'/>
                 {viewMode === 'list' ? (
                     <div className="management-container">
                         <table className="management-table">

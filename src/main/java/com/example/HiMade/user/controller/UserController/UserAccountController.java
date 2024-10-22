@@ -98,7 +98,7 @@ public class UserAccountController {
             System.out.println("업로드 폴더가 생성되었습니다: " + uploadPath);
         }
 
-        // 간결한 파일명 생성 (타임스탬프 기반)
+        // 파일명 생성 (타임스탬프 기반)
         String originalFilename = profileImage.getOriginalFilename();
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String newFilename = System.currentTimeMillis() + fileExtension; // 타임스탬프를 파일명으로 사용
@@ -111,7 +111,6 @@ public class UserAccountController {
 
         System.out.println("파일이 저장되었습니다: " + filePath);
 
-        // 파일명만 반환
         return newFilename;
     }
 
@@ -194,7 +193,7 @@ public class UserAccountController {
             String userId = auth.getName(); // 여기서 userId를 직접 가져옴
             UserDTO user = userAccountService.getUserById(userId);
             if (user != null) {
-                // 프로필 이미지 URL을 동적으로 생성 (파일명만 저장된 경우)
+                // 프로필 이미지 URL (파일명만 저장된 경우)
                 if (user.getUserImgUrl() != null && !user.getUserImgUrl().isEmpty()) {
                     user.setUserImgUrl("/uploads/" + Paths.get(user.getUserImgUrl()).getFileName().toString());
                 }
@@ -227,7 +226,7 @@ public class UserAccountController {
         }
     }
 
-    // 아이디 찾기
+    // 아이디 찾기 인증
     @GetMapping("/find-id")
     public ResponseEntity<String> findUserId(@RequestParam String userName, @RequestParam String phonenum) {
         String userId = userAccountService.findUserId(userName, phonenum);
@@ -240,6 +239,7 @@ public class UserAccountController {
         }
     }
 
+    // 아이디 찾기 결과에 * 마스킹 처리
     private String maskUserId(String userId) {
         int atIndex = userId.indexOf('@');
         if (atIndex > 2) { // 아이디가 3자리 이상인 경우
@@ -253,6 +253,7 @@ public class UserAccountController {
         return userId;
     }
 
+    // 비밀번호 찾기 인증
     @PostMapping("/verify-reset-password")
     public ResponseEntity<?> verifyUserForPasswordReset(@RequestBody Map<String, String> payload) {
         String userId = payload.get("userId");
@@ -268,6 +269,7 @@ public class UserAccountController {
         }
     }
 
+    // 비밀번호 찾기를 통한 수정
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> payload) {
         String userId = payload.get("userId");

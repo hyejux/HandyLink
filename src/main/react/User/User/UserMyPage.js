@@ -88,7 +88,6 @@ function UserMyPage () {
         }
     };
 
-
     // 사용자 정보 가져오기
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -109,6 +108,11 @@ function UserMyPage () {
                         userGender: data.userGender,
                         userImgUrl: data.userImgUrl || '/img/user_basic_profile.jpg',
                     });
+
+                    if (data.userPw === 'KAKAO') {
+                        setIsKakaoLogin(true);
+                    }
+
                 } else {
                     console.error('정보 가져오기 실패');
                 }

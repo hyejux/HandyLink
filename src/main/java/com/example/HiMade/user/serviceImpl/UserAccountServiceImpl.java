@@ -43,6 +43,7 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
     private final String KAKAO_TOKEN_URL = dotenv.get("KAKAO_TOKEN_URL");
     private final String KAKAO_USERINFO_URL = "https://kapi.kakao.com/v2/user/me"; // 사용자 정보 요청 URL
 
+    // 디버그
     private static final Logger logger = LoggerFactory.getLogger(UserAccountServiceImpl.class);
 
     @Autowired
@@ -50,8 +51,6 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-    @Autowired
-    private ThymeleafProperties thymeleafProperties;
 
     // 생성자를 통해 의존성 주입
     public UserAccountServiceImpl(BCryptPasswordEncoder passwordEncoder, UserAccountMapper userAccountMapper) {
@@ -78,16 +77,19 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         userAccountMapper.insertUser(userDTO);
     }
 
+    // 중복 체크
     @Override
     public boolean checkId(String userId) {
         return userAccountMapper.checkId(userId) > 0; // 이메일 중복 시 true 반환
     }
 
+    // 유저 조회
     @Override
     public UserDTO getUserById(String userId) {
         return userAccountMapper.getUserById(userId);
     }
 
+    // 유저 수정
     @Override
     public void updateUser(UserDTO userDTO) {
         // 비밀번호가 제공되었을 때는 비밀번호도 암호화하여 업데이트
@@ -100,7 +102,7 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         }
     }
 
-    // 시큐리티 방식의 로그인 (사용자 인증)
+    // 시큐리티 방식의 로그인
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         UserDTO user = userAccountMapper.getUserById(userId);
@@ -142,6 +144,7 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         return null;
     }
 
+    // 카카오 유저 조회
     @Override
     public UserDTO getKakaoUserInfo(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();

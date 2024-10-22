@@ -37,7 +37,7 @@ public class AdminStoreController {
 
     //가게관리-보기
     @GetMapping("/myStoreInfo")
-    public ResponseEntity<StoreRegistDTO> getMyStore(@RequestParam Integer storeNo){
+    public ResponseEntity<StoreRegistDTO> getMyStore(@RequestParam Long storeNo){
         StoreRegistDTO myStore = adminStoreService.getMyStore(storeNo);
         System.out.println("내가게정보 "+myStore);
         return ResponseEntity.ok(myStore);
@@ -55,6 +55,24 @@ public class AdminStoreController {
             adminStoreService.addStoreSns(storeSns);
         }
     }
+
+    //고정휴무-update
+    @PostMapping("/updateDay")
+    public void updateDay(@RequestBody StoreRegistDTO storeRegistDTO) {
+            adminStoreService.updateDay(storeRegistDTO);
+    }
+
+    //지정휴무 - insert
+    @PostMapping("/registDayOffSet")
+    public void registDayOffSet(@RequestBody StoreRegistDTO storeRegistDTO){
+        System.out.println("지정휴무 들어옴 "+ storeRegistDTO.getDayOffSetList());
+
+        for(DayOffSet dayOffSet : storeRegistDTO.getDayOffSetList()){
+            adminStoreService.registDayOffSet(dayOffSet);
+        }
+    }
+
+
 
 
 

@@ -39,6 +39,7 @@ public class StoreRegistDTO {
     //sns, img, dayOff
     private List<StoreSnsDTO> storeSns;
     private StoreImgDTO storeImg;
-    private DayOffDTO dayOff;
+    private List<DayOffDay> dayOffDayList;
+    private List<DayOffSet> dayOffSetList;
 
 }

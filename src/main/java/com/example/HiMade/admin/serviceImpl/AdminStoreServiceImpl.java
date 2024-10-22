@@ -1,7 +1,6 @@
 package com.example.HiMade.admin.serviceImpl;
 
-import com.example.HiMade.admin.dto.StoreRegistDTO;
-import com.example.HiMade.admin.dto.StoreSnsDTO;
+import com.example.HiMade.admin.dto.*;
 import com.example.HiMade.admin.mapper.AdminStoreMapper;
 import com.example.HiMade.admin.service.AdminStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 @Service("adminStoreService")
@@ -27,8 +27,27 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
+    @Transactional
     public void registStore(StoreRegistDTO storeRegistDTO) {
         adminStoreMapper.registStore(storeRegistDTO);
+
+        System.out.println("확인storeId "+storeRegistDTO.getStoreId());
+        System.out.println("확인storeNo "+storeRegistDTO.getStoreNo());
+
+        List<String> daysOfWeek = Arrays.asList("월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일");
+
+
+        for (String day : daysOfWeek) {
+            DayOffDay dayOff = new DayOffDay();
+            dayOff.setStoreId(storeRegistDTO.getStoreId());
+            dayOff.setStoreNo(storeRegistDTO.getStoreNo());
+            dayOff.setDayOffDay(day);
+            dayOff.setDayOffType("고정");
+            dayOff.setDayOffFixStatus("N");
+
+            adminStoreMapper.insertDay(dayOff);
+        }
+
     }
 
     @Override
@@ -47,8 +66,19 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
-    public StoreRegistDTO getMyStore(Integer storeNo) {
+    public StoreRegistDTO getMyStore(Long storeNo) {
         return adminStoreMapper.getMyStore(storeNo);
+    }
+
+    @Override
+    public void updateDay(StoreRegistDTO storeRegistDTO) {
+
+        adminStoreMapper.updateDay(storeRegistDTO);
+    }
+
+    @Override
+    public void registDayOffSet(DayOffSet dayOffSet) {
+        adminStoreMapper.registDayOffSet(dayOffSet);
     }
 
     @Override

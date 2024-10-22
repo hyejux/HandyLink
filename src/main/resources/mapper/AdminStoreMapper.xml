@@ -15,7 +15,7 @@
         where store_id = #{storeId}
     </select>
 
-    <insert id="registStore" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
+    <insert id="registStore" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO" useGeneratedKeys="true" keyProperty="storeNo">
         insert into store_admin (
             store_id,
             store_pw,
@@ -45,6 +45,12 @@
             #{addr},
             #{addrdetail}
         )
+        returning store_no as storeNo
+    </insert>
+
+    <insert id="insertDay" parameterType="com.example.HiMade.admin.dto.DayOffDay">
+        insert into day_off_day(day_off_type, store_id, store_no, day_off_fix_status, day_off_day)
+        values (#{dayOffType}, #{storeId}, #{storeNo}, #{dayOffFixStatus}, #{dayOffDay});
     </insert>
 
 <!--  가게관리  -->
@@ -114,5 +120,32 @@
             <result property="storeNo" column="store_no"/>
         </collection>
     </resultMap>
+
+    <update id="updateDay" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
+        <!-- 휴무가 아닌 경우 상태를 'N'으로 업데이트 -->
+        update day_off_day
+        set day_off_fix_status = 'N'
+        where store_id = #{storeId}
+        and store_no = #{storeNo}
+        and day_off_day NOT IN
+        <foreach item="dayOffDay" collection="dayOffDayList" open="(" separator="," close=")">
+            #{dayOffDay.dayOffDay}
+        </foreach>;
+
+        <!-- 휴무인 경우 상태를 'Y'로 업데이트 -->
+        <foreach item="dayOffDay" collection="dayOffDayList">
+            update day_off_day
+            set day_off_fix_status = 'Y'
+            where store_id = #{storeId}
+            and store_no = #{storeNo}
+            and day_off_day = #{dayOffDay.dayOffDay};
+        </foreach>
+    </update>
+
+    <insert id="registDayOffSet" parameterType="com.example.HiMade.admin.dto.DayOffSet">
+        insert into day_off_set(day_off_start, day_off_end, store_id, store_no)
+        values(#{dayOffStart}, #{dayOffEnd}, #{storeId}, #{storeNo})
+    </insert>
+
 
 </mapper>

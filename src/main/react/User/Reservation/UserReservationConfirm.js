@@ -193,7 +193,9 @@ function UserReservationConfirm() {
 
 
 
-  // ----------------------- 결제 부분 -----------------------
+  // ----------------------- 결제 수단 부분 -----------------------
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(""); // 결제수단
+
   const requestPayment = (paymentMethod) => {
     const { IMP } = window;
     if (!IMP) {
@@ -204,8 +206,8 @@ function UserReservationConfirm() {
     IMP.init("imp14516351"); // 아임포트에서 발급받은 가맹점 식별코드
 
     const data = {
-      pg: "html5_inicis", // 사용할 PG사
-      pay_method: paymentMethod, // 결제 수단: 카드(card), 계좌이체(trans)
+      pg: "html5_inicis",
+      pay_method: paymentMethod,
       merchant_uid: `mid_${new Date().getTime()}`,
       amount: totalPrice, // 결제 금액
       name: "테스트 상품",
@@ -227,11 +229,8 @@ function UserReservationConfirm() {
           paymentMethod: paymentMethod === "card" ? "신용카드" : "계좌이체",
           paymentAmount: totalPrice,
           paymentStatus: paymentMethod === "card" ? "Y" : "N",
-          reservationNo: 48, // 예약 번호
+          reservationNo: 45,
         });
-
-        // fetchPaymentInfo(); // 결제 성공 후 결제 정보 조회
-
       } else {
         console.log("결제 실패:", response);
         alert(`결제 실패! 에러 코드: ${response.error_code}, 에러 메시지: ${response.error_msg}`);
@@ -439,21 +438,43 @@ function UserReservationConfirm() {
 
 
           {/* 결제 부분 */}
-          <div className="user-content-container6">
+          <div className="user-content-container3">
             <div className="user-payment-title">
               <h3>결제수단</h3>
             </div>
             <div className="user-content-payment">
               <div className='user-payment-method'>
-                <i className="bi bi-credit-card"></i>
-                <button onClick={() => requestPayment("card")}>카드결제(테스트)</button>
+                <input
+                  type="radio"
+                  id="card"
+                  name="paymentMethod"
+                  value="card"
+                  checked={selectedPaymentMethod === "card"}
+                  onChange={() => setSelectedPaymentMethod("card")}
+                />
+                <label htmlFor="card">
+                  <i className="bi bi-credit-card"></i> 카드결제
+                </label>
               </div>
               <div className='user-payment-method'>
-                <i className="bi bi-cash-coin"></i>
-                <button onClick={() => requestPayment("trans")}>계좌이체</button>
+                <input
+                  type="radio"
+                  id="trans"
+                  name="paymentMethod"
+                  value="trans"
+                  checked={selectedPaymentMethod === "trans"}
+                  onChange={() => setSelectedPaymentMethod("trans")}
+                />
+                <label htmlFor="trans">
+                  <i className="bi bi-cash-coin"></i> 계좌이체
+                </label>
               </div>
             </div>
+            <button className="payment-button" onClick={() => requestPayment(selectedPaymentMethod)}>
+              {totalPrice}원 결제하기
+            </button>
           </div>
+
 
 
         </div>

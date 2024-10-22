@@ -146,7 +146,6 @@ function UserMyPage () {
                 <h2>마이 페이지</h2>
                 <div className="btn-list">
                     <button className="logout-btn" onClick={() => window.location.href='./logout'}>로그아웃</button>
-                    <button className="del-btn">탈퇴하기</button>
                 </div>
                 <div className="profile-pic">
                     <img src={userInfo.userImgUrl} alt="Profile" id="profileImage"/>

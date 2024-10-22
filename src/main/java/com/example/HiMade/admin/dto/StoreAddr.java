@@ -10,7 +10,7 @@ import lombok.*;
 @ToString
 @Builder
 public class StoreAddr {
-
+//지울예정인 dto
     private String zipcode; //우편번호
     private String addr; //주소
     private String addrdetail; //상세주소

@@ -8,8 +8,11 @@ import lombok.*;
 @Setter
 @ToString
 @Builder
-public class StoreSns {
+public class StoreSnsDTO {
 
+    private Integer storeSnsNo; //pk
     private String snsLink;
     private String snsName;
+    private String storeId;
+    private Long storeNo;
 }

@@ -10,7 +10,7 @@ function Master() {
 
     // 모든 업체 정보 불러옴
     useEffect(() => {
-        fetch('/store')
+        fetch('/getStoreInfo')
             .then((response) => response.json())
             .then((data) => {
                 setStore(data);

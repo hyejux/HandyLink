@@ -11,31 +11,27 @@ function StoreDayOff(){
     console.log("세션 storeId: ", storeId);
     console.log("세션 storeNo: ", storeNo);
 
-    const [dayOffFixList, setDayOffFixList] = useState({
-        dayOffType:'고정',
-        dayOffFixStatus:'',
-        dayOffFix:[]
-    });
-
-    const [dayOffSetList, setDayOffSetList] = useState([]);
+    const [dayOffDayList, setDayOffDayList] = useState([]);
 
     const [dayOffSet, setDayOffSet] = useState({
         dayOffType:'지정',
-        //        dayOffFix:[],
         dayOffStart:'',
         dayOffEnd:''
     });
 
+    const [dayOffSetList, setDayOffSetList] = useState([]);
+
+
     // 고정
     const handleChangeDayOff = (e) => {
         const { value, checked } = e.target;
-        setDayOffFixList(prev => ({
-            ...prev,
-            dayOffFix: checked
-            ? [...prev.dayOffFix, value]  // Add day if checked
-            : prev.dayOffFix.filter(day => day !== value) // Remove if unchecked
-        }));
+        setDayOffDayList(prev =>
+            checked
+            ? [...prev, value]  // 체크
+            : prev.filter(day => day !== value) // 체크삭제
+        );
     };
+
 
     const handleSetChange = (e) => {
         const {name, value} = e.target;
@@ -51,10 +47,15 @@ function StoreDayOff(){
 
         // 시작일과 종료일이 유효하면 리스트에 추가
         if (dayOffStart && dayOffEnd) {
+            if (new Date(dayOffStart) > new Date(dayOffEnd)) {
+                alert('종료일이 시작일보다 이전일 수 없습니다.');
+                return;
+            }
             setDayOffSetList(prevList => [...prevList, { dayOffStart, dayOffEnd }]);
 
             // 날짜 추가 후, 입력 필드 초기화
             setDayOffSet({
+                dayOffType: '지정', // 초기값 복원
                 dayOffStart: '',
                 dayOffEnd: ''
             });
@@ -63,30 +64,74 @@ function StoreDayOff(){
         }
     };
 
-    console.log("고정휴무 ", dayOffFixList);
-    console.log("지정휴무 ", dayOffSetList)
+    const handleDeleteList = (index) => {
+        const updatedList = dayOffSetList.filter((_, idx) => idx !== index);
+        setDayOffSetList(updatedList); // Just update dayOffSetList directly
+    };
+
+
+    console.log("고정휴무 ", dayOffDayList);
+    console.log("지정휴무 ", dayOffSetList);
+
+    const handleRegistDay = async() => {
+      try{
+          const dayOffDayObjects = dayOffDayList.map(day => ({
+              dayOffDay: day,
+              dayOffType: '고정',
+              dayOffFixStatus: 'Y',
+              storeId,
+              storeNo
+          }));
+
+          const resp = await axios.post('/adminStore/updateDay', {
+              dayOffDayList: dayOffDayObjects
+          });
+          console.log("고정휴무등록성공");
+      }catch (error){
+          console.log("고정휴무등록 중 error ", error);
+      }
+    };
+
+    const handleRegistSet = async() => {
+        try{
+            const resp = await axios.post('/adminStore/registDayOffSet', {
+                dayOffSetList: dayOffSetList.map(day => ({
+                    dayOffStart: day.dayOffStart,
+                    dayOffEnd: day.dayOffEnd,
+                    storeId,
+                    storeNo,
+                }))
+            });
+            console.log("지정휴무등록성공");
+        }catch (error){
+            console.log("지정휴무등록 중 error ", error);
+        }
+    };
 
     return(
 
         <div className="store-day-off-container">
             <div className="day-off fix">
                 <label htmlFor="">고정휴무</label>
-                <div className="day-off-day">
-                    <label htmlFor="mon"><input type="checkbox" name="dayOffFix" id="mon" value="월요일" onChange={handleChangeDayOff}/> 월요일</label>
-                    <label htmlFor="tue"><input type="checkbox" name="dayOffFix" id="tue" value="화요일" onChange={handleChangeDayOff} /> 화요일</label>
-                    <label htmlFor="wed"><input type="checkbox" name="dayOffFix" id="wed" value="수요일" onChange={handleChangeDayOff} /> 수요일</label>
-                    <label htmlFor="thu"><input type="checkbox" name="dayOffFix" id="thu" value="목요일" onChange={handleChangeDayOff} /> 목요일</label>
-                    <label htmlFor="fri"><input type="checkbox" name="dayOffFix" id="fri" value="금요일" onChange={handleChangeDayOff} /> 금요일</label>
-                    <label htmlFor="sat"><input type="checkbox" name="dayOffFix" id="sat" value="토요일" onChange={handleChangeDayOff} /> 토요일</label>
-                    <label htmlFor="sun"><input type="checkbox" name="dayOffFix" id="sun" value="일요일" onChange={handleChangeDayOff} /> 일요일</label>
-                </div>
+
+                {['월요일','화요일','수요일','목요일','금요일','토요일','일요일'].map(day => (
+                    <div key={day}>
+                        <label>
+                            <input type="checkbox" name="dayOffDay" value={day} onChange={handleChangeDayOff}/> {day}
+                        </label>
+                    </div>
+                ))}
+
+                <button type="button" className="day-off-btn" onClick={handleRegistDay}>
+                    고정휴무등록
+                </button>
             </div>
 
             <div className="day-off set">
                 <label htmlFor="">지정휴무</label>
                 <div className="day-off-period">
-                    <label htmlFor="dayOffStart"><input type="date" name="dayOffStart" value={dayOffSet.dayOffStart} onChange={handleChangeDayOff}/></label>
-                    <label htmlFor="dayOffEnd"><input type="date" name="dayOffEnd" value={dayOffSet.dayOffEnd} onChange={handleChangeDayOff}/></label>
+                    <label htmlFor="dayOffStart"><input type="date" name="dayOffStart" value={dayOffSet.dayOffStart} onChange={handleSetChange}/></label>
+                    <label htmlFor="dayOffEnd"><input type="date" name="dayOffEnd" value={dayOffSet.dayOffEnd} onChange={handleSetChange}/></label>
                 </div>
                 <button type="button" className="day-off add" onClick={handleAddList}>
                     추가
@@ -101,10 +146,20 @@ function StoreDayOff(){
                     {dayOffSetList.map((dayOff, index) => (
                         <li key={index}>
                             {dayOff.dayOffStart} ~ {dayOff.dayOffEnd}
+
+                            <button type="button" onClick={() => handleDeleteList(index)}>
+                            삭제
+                            </button>
                         </li>
+
                     ))}
                 </ul>
+                <button type="button" className="day-off add" onClick={handleRegistSet}>
+                    등록하기
+                </button>
             </div>
+
+
 
         </div>
 

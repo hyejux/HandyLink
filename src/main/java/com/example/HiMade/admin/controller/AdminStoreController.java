@@ -2,20 +2,14 @@ package com.example.HiMade.admin.controller;
 
 import com.example.HiMade.admin.dto.*;
 import com.example.HiMade.admin.service.AdminStoreService;
-import com.example.HiMade.master.entity.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +37,7 @@ public class AdminStoreController {
 
     //가게관리-보기
     @GetMapping("/myStoreInfo")
-    public ResponseEntity<StoreRegistDTO> getMyStore(@RequestParam Integer storeNo){
+    public ResponseEntity<StoreRegistDTO> getMyStore(@RequestParam Long storeNo){
         StoreRegistDTO myStore = adminStoreService.getMyStore(storeNo);
         System.out.println("내가게정보 "+myStore);
         return ResponseEntity.ok(myStore);
@@ -61,6 +55,24 @@ public class AdminStoreController {
             adminStoreService.addStoreSns(storeSns);
         }
     }
+
+    //고정휴무-update
+    @PostMapping("/updateDay")
+    public void updateDay(@RequestBody StoreRegistDTO storeRegistDTO) {
+            adminStoreService.updateDay(storeRegistDTO);
+    }
+
+    //지정휴무 - insert
+    @PostMapping("/registDayOffSet")
+    public void registDayOffSet(@RequestBody StoreRegistDTO storeRegistDTO){
+        System.out.println("지정휴무 들어옴 "+ storeRegistDTO.getDayOffSetList());
+
+        for(DayOffSet dayOffSet : storeRegistDTO.getDayOffSetList()){
+            adminStoreService.registDayOffSet(dayOffSet);
+        }
+    }
+
+
 
 
 

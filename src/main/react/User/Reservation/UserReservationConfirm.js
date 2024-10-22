@@ -9,7 +9,7 @@ import './UserReservationConfirm.css';
 
 
 function UserReservationConfirm() {
-  
+
   const [reserveModi, setReserveModi] = useState('');
   const [categories, setCategories] = useState([{
     serviceName: '',
@@ -19,16 +19,16 @@ function UserReservationConfirm() {
     subCategoryType: 'SELECT1',
     subCategories: [{ serviceName: '', servicePrice: '' }]
   }]);
-  
+
   const [cateId, setCateId] = useState(0);
-  
+
   useEffect(() => {
     const path = window.location.pathname;
     const pathSegments = path.split('/');
     const categoryId = pathSegments[pathSegments.length - 1];
     setCateId(categoryId);
   }, []);
-  
+
   useEffect(() => {
     axios
       .get(`/adminReservation/getListDetail/${cateId}`)
@@ -39,12 +39,12 @@ function UserReservationConfirm() {
       .catch(error => {
         console.log('Error Category', error);
       });
-  
+
     axios
       .get(`/adminReservation/getMiddleItem/${cateId}`)
       .then(response => {
         console.log("get" + JSON.stringify(response.data));
-  
+
         const transformedData = response.data.map(item => ({
           categoryId: item.categoryId,
           serviceName: item.serviceName,
@@ -68,13 +68,13 @@ function UserReservationConfirm() {
   const [requestText, setRequestText] = useState(''); // 요청사항 입력값
   const [totalPrice, setTotalPrice] = useState(300000); // 총액 값 (임의로 설정)
 
-    // 요청사항 입력값 관리
-    const handleRequestChange = (e) => {
-      setRequestText(e.target.value);
-    };
-  
+  // 요청사항 입력값 관리
+  const handleRequestChange = (e) => {
+    setRequestText(e.target.value);
+  };
 
-  
+
+
   // 주문 등록 
 
   const submitBtn = () => {
@@ -87,68 +87,68 @@ function UserReservationConfirm() {
 
     console.log('최종 예약 데이터:', reservationData);
     axios
-  .post(`/userReservation/setReservationForm`, reservationData)
-  .then(response => {
-    const reservation_id = response.data;  // 예약 번호를 받아옴
-    console.log("reservation_no 주문번호 ! : : ", reservation_id);
+      .post(`/userReservation/setReservationForm`, reservationData)
+      .then(response => {
+        const reservation_id = response.data;  // 예약 번호를 받아옴
+        console.log("reservation_no 주문번호 ! : : ", reservation_id);
 
-    // reservation_id가 설정된 후에 배열을 업데이트
-    const updatedArray = formData.map(item => ({
-      ...item,  // 기존 객체의 모든 속성 복사
-      reservationNo: reservation_id  // reservationNo 추가
-    }));
+        // reservation_id가 설정된 후에 배열을 업데이트
+        const updatedArray = formData.map(item => ({
+          ...item,  // 기존 객체의 모든 속성 복사
+          reservationNo: reservation_id  // reservationNo 추가
+        }));
 
-    console.log('업데이트된 배열:', updatedArray);
+        console.log('업데이트된 배열:', updatedArray);
 
-    // 필요시 여기서 두 번째 요청을 진행
-    return axios.post(`/userReservation/setReservationFormDetail`, updatedArray);
-  })
-  .then(response => {
-    console.log("두 번째 요청 성공! ", response.data);
-  })
-  .catch(error => {
-    console.log('Error Category', error);
-  });
-  
+        // 필요시 여기서 두 번째 요청을 진행
+        return axios.post(`/userReservation/setReservationFormDetail`, updatedArray);
+      })
+      .then(response => {
+        console.log("두 번째 요청 성공! ", response.data);
+      })
+      .catch(error => {
+        console.log('Error Category', error);
+      });
+
   };
- 
-  
-  
+
+
+
   const calculateTotalPrice = () => {
     return combinedInputs.reduce((acc, item) => {
       if (typeof item === 'object' && item !== null) {
-          console.log('Processing object:', item);
-          // 객체의 각 값이 배열인 경우
-          for (const key in item) {
-              if (Array.isArray(item[key])) {
-                  console.log(`Processing array at key ${key}:`, item[key]);
-                  return acc + item[key].reduce((sum, innerItem) => {
-                      // innerItem이 객체인지 확인하고 servicePrice 합산
-                      return sum + (innerItem.servicePrice || 0);
-                  }, 0);
-              } else {
-                  // 값이 배열이 아닐 경우 servicePrice 합산
-                  return acc + (item.servicePrice || 0);
-              }
+        console.log('Processing object:', item);
+        // 객체의 각 값이 배열인 경우
+        for (const key in item) {
+          if (Array.isArray(item[key])) {
+            console.log(`Processing array at key ${key}:`, item[key]);
+            return acc + item[key].reduce((sum, innerItem) => {
+              // innerItem이 객체인지 확인하고 servicePrice 합산
+              return sum + (innerItem.servicePrice || 0);
+            }, 0);
+          } else {
+            // 값이 배열이 아닐 경우 servicePrice 합산
+            return acc + (item.servicePrice || 0);
           }
+        }
       }
     }, 0);
   };
 
 
-//   
-    const [formData, setFormData] = useState([]);
-    const [combinedInputs, setCombinedInputs] = useState([]); // 배열로 초기화
-    console.log(combinedInputs);
-    console.log(formData);
+  //   
+  const [formData, setFormData] = useState([]);
+  const [combinedInputs, setCombinedInputs] = useState([]); // 배열로 초기화
+  console.log(combinedInputs);
+  console.log(formData);
 
 
 
-    // useEffect를 사용하여 combinedInputs나 reserveModi가 업데이트될 때마다 총 가격을 계산
-    useEffect(() => {
-      const newTotalPrice = calculateTotalPrice() + (reserveModi.servicePrice || 0);
-      setTotalPrice(newTotalPrice); // 총 가격 업데이트
-      console.log(`Total Price: ${newTotalPrice}`); // 업데이트된 가격 로그
+  // useEffect를 사용하여 combinedInputs나 reserveModi가 업데이트될 때마다 총 가격을 계산
+  useEffect(() => {
+    const newTotalPrice = calculateTotalPrice() + (reserveModi.servicePrice || 0);
+    setTotalPrice(newTotalPrice); // 총 가격 업데이트
+    console.log(`Total Price: ${newTotalPrice}`); // 업데이트된 가격 로그
   }, [combinedInputs, reserveModi]); // reserveModi 추가
 
 
@@ -176,125 +176,196 @@ function UserReservationConfirm() {
   }, []);
 
 
-//------------------------------------
-    const slot = sessionStorage.getItem('selectSlot');
-    const date = sessionStorage.getItem('formattedDate');
-    const reservationSlotKey = sessionStorage.getItem('reservationSlotKey');
+  //------------------------------------
+  const slot = sessionStorage.getItem('selectSlot');
+  const date = sessionStorage.getItem('formattedDate');
+  const reservationSlotKey = sessionStorage.getItem('reservationSlotKey');
 
-    console.log('Slot:', slot);
-    console.log('Date:', date);
-    console.log('reservationSlotKey:', reservationSlotKey);
+  console.log('Slot:', slot);
+  console.log('Date:', date);
+  console.log('reservationSlotKey:', reservationSlotKey);
 
-    const goToAdminPage = () => {
+  const goToAdminPage = () => {
 
-      window.location.href = `../UserReservationComplete.user`;
+    window.location.href = `../UserReservationComplete.user`;
+  };
+
+
+  // ----------------------- 결제 부분 -----------------------
+
+  const requestPayment = () => {
+    const { IMP } = window;
+    if (!IMP) {
+      console.error("IMP 객체가 정의되지 않았습니다. 아임포트 스크립트를 확인하세요.");
+      return;
+    }
+
+    IMP.init("imp14516351"); // 아임포트에서 발급받은 가맹점 식별코드
+
+    const data = {
+      pg: "html5_inicis",
+      pay_method: "card",
+      merchant_uid: `mid_${new Date().getTime()}`,
+      amount: totalPrice, // 결제 금액 (테스트 금액)
+      name: "테스트 상품",
+      buyer_email: "buyer@example.com",
+      buyer_name: "테스트 구매자",
+      buyer_tel: "010-1234-5678",
+      buyer_addr: "구매자 주소",
+      buyer_postcode: "우편번호",
+      m_redirect_url: window.location.href,
     };
 
- return (
-   <div>
-   <div className="user-main-container">
-         <div className="user-top-nav">
-           <div className="user-top-btns">
-             <button type="button">{"<"}</button>
-             <logo className="logo">HandyLink</logo>
-             <button type="button">{">"}</button>
-           </div>
-         </div>
+    IMP.request_pay(data, async function (response) {
+      if (response.success) {
+        console.log("결제 성공:", response);
+        alert(`결제 성공! 결제 ID: ${response.imp_uid}`);
 
-         <div className="user-main-content">
+        // 결제 성공 후 DB에 저장
+        await storePaymentInfo({
+          paymentMethod: "신용카드",
+          paymentAmount: totalPrice,
+          paymentStatus: "Y",
+          reservationNo: 47,
+        });
 
+        // fetchPaymentInfo(); // 결제 성공 후 결제 정보 조회
+        
+      } else {
+        console.log("결제 실패:", response);
+        alert(`결제 실패! 에러 코드: ${response.error_code}, 에러 메시지: ${response.error_msg}`);
+      }
+    });
+  };
 
-         <div className="user-content-container2">
-             <div className="user-reserve-title">예약자 정보</div>
-             <div className="user-content-container3">
-               <div className="sub-container3">
-                 <div className="bold-text">예약자 성함</div>
-                 <div>세션 이름</div>
-               </div>
+  const storePaymentInfo = async (paymentData) => {
+    try {
+      const response = await fetch('/userPayment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(paymentData),
+      });
 
-               <div className="sub-container3">
-                 <div className="bold-text">예약자 전화번호</div>
-                 <div>세션 번호</div>
-               </div>
-             </div>
-           </div>
-           <hr />
-
-
-           <div className="user-content-container">
-             <div className="user-reserve-menu">
-               <div className="user-reserve-menu-img">
-               <img src={`${reserveModi.imageUrl}`} alt="My Image" />
-               </div>
-               <div className="user-reserve-menu-content">
-                 <div>{reserveModi.serviceName} </div> 
-                 <div>
-                   {reserveModi.serviceContent}
-                 
-                 </div>
-                 <div> {reserveModi.servicePrice} 원 ~</div>
-                 
-               </div>
-             </div>
-           </div>
-           <hr />
+      if (response.ok) {
+        const result = await response.json();
+        console.log("결제 정보 저장 성공:", result);
+      } else {
+        console.error("결제 정보 저장 실패:", response.statusText);
+      }
+    } catch (error) {
+      console.error("결제 정보 저장 중 오류 발생:", error);
+    }
+  };
 
 
-           <div className="user-content-container2">
-           <div className="user-reserve-title">예약일자</div>
-             <div className="user-reserve-data">
-               <div>
-                 <i className="bi bi-calendar-check-fill"></i> {date}
-               </div>
-               <div>
-                 <i className="bi bi-clock-fill"></i> {slot}
-               </div>
-             </div>
-           </div>
-           <hr />
 
-           <div className="user-content-container6">
-              <div className="user-reserve-title2">예약 정보</div>
+  return (
+    <div>
+      <div className="user-main-container">
+        <div className="user-top-nav">
+          <div className="user-top-btns">
+            <button type="button">{"<"}</button>
+            <logo className="logo">HandyLink</logo>
+            <button type="button">{">"}</button>
+          </div>
+        </div>
+
+        <div className="user-main-content">
+
+
+          <div className="user-content-container2">
+            <div className="user-reserve-title">예약자 정보</div>
+            <div className="user-content-container3">
+              <div className="sub-container3">
+                <div className="bold-text">예약자 성함</div>
+                <div>세션 이름</div>
+              </div>
+
+              <div className="sub-container3">
+                <div className="bold-text">예약자 전화번호</div>
+                <div>세션 번호</div>
+              </div>
             </div>
+          </div>
+          <hr />
+
+
+          <div className="user-content-container">
+            <div className="user-reserve-menu">
+              <div className="user-reserve-menu-img">
+                <img src={`${reserveModi.imageUrl}`} alt="My Image" />
+              </div>
+              <div className="user-reserve-menu-content">
+                <div>{reserveModi.serviceName} </div>
+                <div>
+                  {reserveModi.serviceContent}
+
+                </div>
+                <div> {reserveModi.servicePrice} 원 ~</div>
+
+              </div>
+            </div>
+          </div>
+          <hr />
+
+
+          <div className="user-content-container2">
+            <div className="user-reserve-title">예약일자</div>
+            <div className="user-reserve-data">
+              <div>
+                <i className="bi bi-calendar-check-fill"></i> {date}
+              </div>
+              <div>
+                <i className="bi bi-clock-fill"></i> {slot}
+              </div>
+            </div>
+          </div>
+          <hr />
+
+          <div className="user-content-container6">
+            <div className="user-reserve-title2">예약 정보</div>
+          </div>
           <div className="user-content-container2">
             <div className="user-content-container3">
-            <div>기본 가격 :  {reserveModi.serviceName} (+  {reserveModi.servicePrice} ) </div>
-            <div>
+              <div>기본 가격 :  {reserveModi.serviceName} (+  {reserveModi.servicePrice} ) </div>
+              <div>
                 {categories.map((category, index) => (
                   <div key={index}>
 
                     <span>
                       <span>  {category.serviceName} :  {category.servicePrice > 0 && ( // 가격이 0보다 큰 경우에만 출력
-                  <span>  (+ {category.servicePrice} )</span>
-                )}  </span>
-                      
+                        <span>  (+ {category.servicePrice} )</span>
+                      )}  </span>
+
                     </span>
 
                     <span>
-                    {combinedInputs[index] && (
-                      <span>
-                        {Object.entries(combinedInputs[index]).map(([key, value]) => {
-                        
-                          if (Array.isArray(value)) {
-                            return value.map((item, itemIndex) => (
-                              <span key={itemIndex}>
-                                {item.serviceName} (+{item.servicePrice}) 
-                              </span>
-                            ));
-                          } 
-                     
-                        else if (typeof value === 'string') {
-                          return (
-                            <span key={key}>
-                              {value}
-                            </span>
-                          );
-                        }
-              
-                return null;
-              })}
-            </span>
-          )}
+                      {combinedInputs[index] && (
+                        <span>
+                          {Object.entries(combinedInputs[index]).map(([key, value]) => {
+
+                            if (Array.isArray(value)) {
+                              return value.map((item, itemIndex) => (
+                                <span key={itemIndex}>
+                                  {item.serviceName} (+{item.servicePrice})
+                                </span>
+                              ));
+                            }
+
+                            else if (typeof value === 'string') {
+                              return (
+                                <span key={key}>
+                                  {value}
+                                </span>
+                              );
+                            }
+
+                            return null;
+                          })}
+                        </span>
+                      )}
 
                     </span>
                   </div>
@@ -302,37 +373,37 @@ function UserReservationConfirm() {
               </div>
             </div>
           </div>
-          <hr/>
-
-          <div className="user-content-container2">
-         
-  
-           <div className="user-content-container3">
-               <div className="sub-container5">
-                  <div> 총액 </div>
-                 <div> {totalPrice} </div>
-               </div>
-             </div>
-           </div>
-           <hr />
+          <hr />
 
           <div className="user-content-container2">
 
 
-      <div className="user-content-container3">
-        <div className="sub-title">
+            <div className="user-content-container3">
+              <div className="sub-container5">
+                <div> 총액 </div>
+                <div> {totalPrice} </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+
+          <div className="user-content-container2">
+
+
+            <div className="user-content-container3">
+              <div className="sub-title">
                 요청사항
-        </div>
-        <div className="sub-container3">
-          <input
-            className="input-text"
-            type="text"
-            value={requestText}
-            onChange={handleRequestChange}
-          />
-        </div>
-      </div>
-             {/* <div className="user-reserve-title"></div>
+              </div>
+              <div className="sub-container3">
+                <input
+                  className="input-text"
+                  type="text"
+                  value={requestText}
+                  onChange={handleRequestChange}
+                />
+              </div>
+            </div>
+            {/* <div className="user-reserve-title"></div>
              <div className="user-content-container3">
                 <div> 요청사항 </div>
                  <div>  <input
@@ -341,41 +412,60 @@ function UserReservationConfirm() {
               onChange={handleRequestChange}
             /> </div> 
              </div> */}
-           </div>
-           <hr/>
+          </div>
+          <hr />
 
-           <div className="user-content-container2">
-           <div className="user-reserve-title">주의사항</div>
-        
-           </div>
-           <hr />
+          <div className="user-content-container2">
+            <div className="user-reserve-title">주의사항</div>
 
-           <div className="user-content-container2">
-           <div className="user-reserve-title">취소 환불 규정 </div>
-        
-           </div>
-           <hr />
+          </div>
+          <hr />
 
-<div className="user-content-container6">
-  <div className="user-content-last">
-    <button type="button"  onClick={() => {submitBtn(); goToAdminPage(); }}>
-      다음 <i className="bi bi-chevron-right"></i>
-    </button>
-  </div>
-</div>
+          <div className="user-content-container2">
+            <div className="user-reserve-title">취소 환불 규정 </div>
 
-         </div>
-       </div>
+          </div>
+          <hr />
+
+          <div className="user-content-container6">
+            <div className="user-content-last">
+              <button type="button" onClick={() => { submitBtn(); goToAdminPage(); }}>
+                다음 <i className="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
 
 
-     </div>
+
+          {/* 결제 부분 */}
+          <div className="user-content-container6">
+            <div className='"user-payment-title"'>
+              <h3>결제수단</h3>
+            </div>
+            <div className="user-content-payment">
+              <div className='user-payment-method'>
+                <i class="bi bi-credit-card"></i> <button onClick={requestPayment}>카드결제(테스트)</button>
+              </div>
+              <div className='user-payment-method'>
+                <i class="bi bi-cash-coin"></i> <button>계좌이체</button>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+
+
+    </div>
   )
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-    <UserReservationConfirm />
+  <UserReservationConfirm />
 );
 
 

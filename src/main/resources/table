@@ -81,10 +81,10 @@ CREATE TABLE RESERVATION (
 -- PAYMENT 테이블
 CREATE TABLE PAYMENT (
     payment_id BIGINT NOT NULL DEFAULT nextval('payment_seq'),
-    payment_method VARCHAR(20) NULL CHECK (payment_method IN ('신용카드', '직불카드', '모바일결제')),
+    payment_method VARCHAR(20) NULL CHECK (payment_method IN IN ('간편결제', '일반결제', '계좌이체'));
     payment_amount BIGINT NULL,
     payment_date TIMESTAMP NULL,
-    payment_status VARCHAR(1) NULL CHECK (payment_status IN ('Y', 'N')),
+    payment_status VARCHAR(10) NULL CHECK (payment_status IN ('Y', '입금대기', 'N')),
     reservation_no BIGINT NULL,
     PRIMARY KEY (payment_id)
 );
@@ -196,10 +196,9 @@ CREATE TABLE RESERVATION_SLOT (
 -- REFUND 테이블
 CREATE TABLE REFUND (
     refund_id BIGINT NOT NULL DEFAULT nextval('refund_seq'),
-    refund_method VARCHAR(20) NULL CHECK (refund_method IN ('신용카드', '계좌이체')),
+    refund_method VARCHAR(20) NULL CHECK (refund_method IN ('간편결제', '일반결제', '계좌이체'));
     refund_amount BIGINT NULL,
     refund_date TIMESTAMP NULL,
-    refund_status VARCHAR(20) NULL CHECK (refund_status IN ('대기', '완료', '취소')),
     payment_id BIGINT NOT NULL,
     PRIMARY KEY (refund_id)
 );

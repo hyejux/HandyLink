@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/userReservation")
@@ -60,5 +61,17 @@ public class UserReservationController {
     System.out.println(userReservationService.getNoSlot());
     return userReservationService.getNoSlot();
   }
+
+  @PostMapping("/updateSlotStatus")
+  public void updateSlotStatus(@RequestBody Map<String, Object> slotUpdate) {
+    int categoryId = (int) slotUpdate.get("categoryId");
+    LocalDate reservationDate = LocalDate.parse((String) slotUpdate.get("reservationDate"));
+    int storeNo = (int) slotUpdate.get("storeNo");
+
+    userReservationService.updateSlotStatus(categoryId, reservationDate, storeNo);
+  }
+
+
+
 
 }

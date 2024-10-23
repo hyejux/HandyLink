@@ -67,5 +67,17 @@ public class UserReservationServiceImpl implements UserReservationService {
     return userReservationMapper.getNoSlot();
   }
 
+  @Override
+  @Transactional
+  public void updateReservationStatus(int reservationNo, String status) {
+    userReservationMapper.updateReservationStatus(reservationNo, status);
+  }
+
+  @Transactional
+  @Override
+  public void updateSlotStatus(int categoryId, LocalDate reservationDate, int storeNo) {
+    userReservationMapper.updateSlotStatus(categoryId, reservationDate, storeNo);
+  }
+
 
 }

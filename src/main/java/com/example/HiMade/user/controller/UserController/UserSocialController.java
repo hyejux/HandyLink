@@ -40,7 +40,7 @@ public class UserSocialController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("카카오 사용자 정보가 없습니다.");
             }
 
-            // 카카오 사용자 정보로 UserDTO 세팅
+            // 카카오에서 넘겨준 사용자 정보로 UserDTO 일부 세팅
             userDTO.setUserId(kakaoUser.getUserId());
             userDTO.setUserName(kakaoUser.getUserName());
             userDTO.setUserImgUrl(kakaoUser.getUserImgUrl());
@@ -94,6 +94,7 @@ public class UserSocialController {
                         .build();
             }
         } catch (Exception e) {
+            logger.error("카카오 로그인 처리 중 오류 발생: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카카오 로그인 처리 중 오류 발생");
         }
     }

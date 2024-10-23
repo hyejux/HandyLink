@@ -3,7 +3,7 @@ import React, {useEffect, useState, useRef} from "react";
 import './UserChatRoom.css';
 
 function UserChatRoom() {
-/*    const [message, setMessage] = useState([]);
+    const [message, setMessage] = useState([]);
     const [messageInput, setMessageInput] = useState("");
     const websocket = useRef(null);
 
@@ -29,10 +29,10 @@ function UserChatRoom() {
           websocket.current.send(JSON.stringify(message));
           setMessageInput("");
       }
-    };*/
+    };
 
     return (
-        {/*<div>
+        <div>
             <div className="user-chat-room-container">
                 <div className="user-top-nav">
                     <div className="shop-name">우리케이크</div>
@@ -68,7 +68,7 @@ function UserChatRoom() {
                     </button>
                 </div>
             </div>
-        </div>*/}
+        </div>
     );
 }
 

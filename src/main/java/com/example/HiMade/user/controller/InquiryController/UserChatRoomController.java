@@ -10,8 +10,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/chat")
 public class UserChatRoomController {
-//    @Autowired
-//    private UserChatRoomService userChatRoomService;
+    @Autowired
+    private UserChatRoomService userChatRoomService;
 
 
 }

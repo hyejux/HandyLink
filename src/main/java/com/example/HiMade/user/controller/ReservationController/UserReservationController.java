@@ -55,6 +55,10 @@ public class UserReservationController {
     return userReservationService.getSlotTime(slotkey);
   }
 
-
+  @GetMapping("/getNoSlot")
+  public List<LocalDate> getNoSlot(){
+    System.out.println(userReservationService.getNoSlot());
+    return userReservationService.getNoSlot();
+  }
 
 }

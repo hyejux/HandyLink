@@ -53,7 +53,7 @@ const goToAdminPage2 = (id) => {
 //    };
   return (
     <div>
-      <div className="main-content-title">예약 설정</div>
+      <div className="main-content-title"> <div className='header-title'> 예약 설정 </div></div>
 
       <div className="main-btns">
           <button type="button" className="btn-st" onClick={handleAddClick}>
@@ -76,9 +76,12 @@ const goToAdminPage2 = (id) => {
                        <div>{value.servicePrice} 원 ~</div>
                      </div>
 
-                     <div className="reserve-content-text">
-                       {value.serviceContent}
-                     </div>
+                        <div className='reserve-content-text-box'>
+                        <div className="reserve-content-text">
+                                              {value.serviceContent}
+                                            </div>
+                          </div>
+                                          
                    </div>
 
                         <div className='btn-ali'>

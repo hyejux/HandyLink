@@ -11,11 +11,14 @@ function UserStoreDetail() {
 
   const [activeSection, setActiveSection] = useState('home'); 
   const goToAdminPage = (id) => {
+    sessionStorage.setItem('storeCloseTime',storeInfo.storeCloseTime);
+    sessionStorage.setItem('storeOpenTime', storeInfo.storeOpenTime);
     window.location.href = `/UserReservationDate.user/${id}`;
   };
 
   const [cateId, setCateId] = useState(0);
   const [reservationList, setReservationList] = useState([]);
+  const [storeInfo, setStoreInfo] = useState([]);
   // ------------------------------------------------------
 
   useEffect(() => {
@@ -32,6 +35,14 @@ function UserStoreDetail() {
     .catch(error => {
       console.log('Error Category', error);
     });
+    axios.get(`/UserStoreDetail/getStoreInfo/${categoryId}`)
+    .then(response => {
+      console.log(response.data);
+      setStoreInfo(response.data);
+    })
+    .catch(error => {
+      console.log('Error Category', error);
+    });
     
 
 // categoryId  << 로 요청 보내서 가게 정보 값  가져오세요 !
@@ -41,8 +52,27 @@ function UserStoreDetail() {
   // ------------------------------------------------------
 
 
+  const [currentSlide, setCurrentSlide] = useState(0);
 
+  useEffect(() => {
+    if (storeInfo && storeInfo.storeImg && storeInfo.storeImg.length > 0) {
+      const totalSlides = storeInfo.storeImg.length;
 
+      const slideInterval = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % totalSlides);
+      }, 5000); // 3초마다 슬라이드 변경
+
+      return () => clearInterval(slideInterval); // 컴포넌트 언마운트 시 클리어
+    }
+  }, [storeInfo]);
+
+  const handleNextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % storeInfo.storeImg.length);
+  };
+
+  const handlePrevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + storeInfo.storeImg.length) % storeInfo.storeImg.length);
+  };
 
 
 
@@ -59,21 +89,37 @@ function UserStoreDetail() {
 
         <div className="user-main-content">
           <div className="user-content-first">
-            <div className="user-content-first-img">
-              {/* 이미지 부분에 필요한 경우 src 설정 */}
-             <img src="/img/store001.jpeg" alt="가게 이미지" width="100%" height="300px" />
-            </div>
+          <div className="user-content-first-img">
+      {storeInfo && storeInfo.storeImg && storeInfo.storeImg.length > 0 ? (
+        <>
+          <div className="slides">
+            {storeInfo.storeImg.map((store, index) => (
+              <div
+                key={index}
+                className={`slide ${index === currentSlide ? 'active' : ''}`}
+              >
+                <img src={store.storeImgLocation} alt="가게 이미지" width="100%" height="300px" />
+              </div>
+            ))}
+          </div>
+          <button onClick={handlePrevSlide} className="slide-button prev-button">❮</button>
+          <button onClick={handleNextSlide} className="slide-button next-button">❯</button>
+        </>
+      ) : (
+        <p>이미지를 불러올 수 없습니다.</p>
+      )}
+    </div>
             <div className="user-content-first-img-num"></div>
 
             <div className="user-content-first-content">
               <div className="store-name">
-                <div>팬케이크샵 가로수길점</div>
+                <div>{storeInfo.storeName}</div>
                 <button type="button"><i className="bi bi-star"></i></button>
               </div>
-              <div><i className="bi bi-shop"></i> 서울 강남구 강남대로162길 21 1층 </div>
+              <div><i className="bi bi-shop"></i> {storeInfo.addr}   {storeInfo.addrdetail} </div>
               <hr />
-              <div><i className="bi bi-alarm-fill"></i> 09:00 ~ 21:00 </div>
-              <div><i className="bi bi-telephone-fill"></i> 070 - 1236 -7897</div>
+              <div><i className="bi bi-alarm-fill"></i> {storeInfo.storeOpenTime} ~ {storeInfo.storeCloseTime}</div>
+              <div><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
             </div>
           </div>
 
@@ -90,16 +136,16 @@ function UserStoreDetail() {
 
               <div className="user-content-container">
               <div>
-                매장정보 자세히 뿌려줌
+             
               </div>
             </div>
             
             <div className="user-content-container">
               <div>
-                <i className="bi bi-emoji-smile"></i> 팬케이크샵 가로수길점
+                <i className="bi bi-emoji-smile"></i>{storeInfo.storeName}
               </div>
               <div>
-                안녕하세요 팬케이크샵입니다 팬케이크 반죽, 버터 크림, 시럽 등은 엄선된 재료로 자체 제작하며 맛, 유통 기한, 위생 관리를 위해 매일 소량 생산 중으로 반죽이나 부재료 등이 품절될 수 있는 점 양해 부탁드립니다 항상 팬케이크처럼 달콤한 일들만 가득하시길 바라요!
+                
               </div>
             </div>
             </div>
@@ -138,3 +184,4 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <UserStoreDetail />
 );
+

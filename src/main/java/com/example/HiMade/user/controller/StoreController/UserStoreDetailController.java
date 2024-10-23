@@ -1,5 +1,6 @@
 package com.example.HiMade.user.controller.StoreController;
 
+import com.example.HiMade.admin.dto.StoreRegistDTO;
 import com.example.HiMade.user.dto.UserCateDTO;
 import com.example.HiMade.user.dto.UserRL;
 import com.example.HiMade.user.service.UserReservationService;
@@ -23,6 +24,11 @@ public class UserStoreDetailController {
     return userStoreService.getStoreMainCategory(id);
   }
 
+  @GetMapping("/getStoreInfo/{id}")
+  public StoreRegistDTO getStoreInfo(@PathVariable int id){
+    System.out.println( "출력값" + userStoreService.getStoreInfo(id));
+    return userStoreService.getStoreInfo(id);
+  }
 
 }
 

@@ -27,6 +27,7 @@ public class UserMyReservationController {
 
   @GetMapping("/getMyReservationDetail/{id}")
   public List<UserRD> getMyReservationDetail(@PathVariable int id){
+    
     return userReservationService.getMyReservationDetail(id);
   }
 

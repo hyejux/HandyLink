@@ -18,4 +18,5 @@ public interface UserReservationMapper {
   public void setMainCategoryImg(AdminCategoryImgDTO dto);
   public void setReservationFormDetail(UserReservationFormDTO dto);
   public List<UserRD> getMyReservationDetail(int id);
+  public List<LocalDate> getNoSlot();
 }

@@ -1,6 +1,7 @@
 package com.example.HiMade.user.serviceImpl;
 
 
+import com.example.HiMade.admin.dto.StoreRegistDTO;
 import com.example.HiMade.user.dto.UserCateDTO;
 import com.example.HiMade.user.mapper.UserReservationMapper;
 import com.example.HiMade.user.mapper.UserStoreMapper;
@@ -20,5 +21,10 @@ public class UserStoreServiceImpl implements UserStoreService {
   public List<UserCateDTO> getStoreMainCategory(int id) {
 
     return userStoreMapper.getStoreMainCategory(id);
+  }
+
+  @Override
+  public StoreRegistDTO getStoreInfo(int id) {
+    return userStoreMapper.getStoreInfo(id);
   }
 }

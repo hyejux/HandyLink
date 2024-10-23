@@ -62,5 +62,10 @@ public class UserReservationServiceImpl implements UserReservationService {
     return userReservationMapper.getMyReservationDetail(id);
   }
 
+  @Override
+  public List<LocalDate> getNoSlot() {
+    return userReservationMapper.getNoSlot();
+  }
+
 
 }

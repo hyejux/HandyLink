@@ -9,12 +9,37 @@ import "./UserReservationDate.css";
 function UserReservationDate() {
   const [cateId, setCateId] = useState(0);
 
+  const [storeOpenTime, setStoreOpenTime] = useState('');
+  const [storeCloseTime, setStoreCloseTime] = useState('');
+
+  const loadFromSessionStorage = () => {
+    const storedCloseTime = sessionStorage.getItem('storeCloseTime');
+    const storedOpenTime = sessionStorage.getItem('storeOpenTime');
+
+    // null 체크 후 기본값 설정
+    setStoreCloseTime(storedCloseTime || '00:00'); // 기본값 설정
+    setStoreOpenTime(storedOpenTime || '00:00'); // 기본값 설정
+
+    // 로드한 값 확인
+    console.log(`Loaded Open Time: ${storedOpenTime}, Loaded Close Time: ${storedCloseTime}`);
+  };
+
+  useEffect(() => {
+    loadFromSessionStorage(); // 저장된 데이터를 불러옴
+  }, []);
+
+
+
   useEffect(() => {
     const path = window.location.pathname;
     const pathSegments = path.split('/');
     const categoryId = pathSegments[pathSegments.length - 1];
     setCateId(categoryId);
   }, []);
+
+
+
+
 
   const [date, setDate] = useState(new Date());
   const [dateTime, setDateTime] = useState([]);
@@ -38,6 +63,7 @@ function UserReservationDate() {
       // reservationSlotKey를 받아온 후에 두 번째 API 호출
       return axios.post('/userReservation/getSlotTime', { reservationSlotKey: reservationSlotKey });
     })
+  
     .then(response => {
       const reservedTimes = response.data.map(slot => slot.reservationTime);
       // 모든 시간 변환
@@ -69,8 +95,9 @@ function UserReservationDate() {
 
   const generateTimeSlots = (startTime, endTime) => {
     const slots = [];
-    const start = new Date(`1970-01-01T${startTime}`);
-    const end = new Date(`1970-01-01T${endTime}`);
+    
+    const start = new Date(`1970-01-01T${startTime}:00`);
+    const end = new Date(`1970-01-01T${endTime}:00`);
   
   
 
@@ -91,10 +118,16 @@ function UserReservationDate() {
     
     return slots;
   };
+
+  // 시간 문자열에서 HH:MM 형식으로 잘라내기
+
+
+  const storeOpenTime2 = storeOpenTime.slice(0, 5); // '17:00'
+  const storeCloseTime2 = storeCloseTime.slice(0, 5); // '20:00'
   
   // 시간 슬롯을 렌더링하는 부분
-  const timeSlots = generateTimeSlots('09:00', '17:00'); // 시작 및 종료 시간 설정
-  
+  const timeSlots = generateTimeSlots(storeOpenTime2, storeCloseTime2); // 시작 및 종료 시간 설정
+
 
   // 선택된 슬롯의 인덱스를 저장
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -115,13 +148,16 @@ function UserReservationDate() {
   };
 
   const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-  
+
+
   const goToAdminPage = (id) => {
     sessionStorage.setItem('reservationSlotKey',rSloyKey);
     sessionStorage.setItem('selectSlot', selectSlot3);
     sessionStorage.setItem('formattedDate', formattedDate);
     window.location.href = `../UserReservationOption.user/${id}`;
   };
+
+
 
   const [selectSlot3, setSelectSlot3] = useState('00:00');
 
@@ -159,7 +195,42 @@ function UserReservationDate() {
         console.log('Error Category', error);
       });
 
+      axios
+      .get(`/userReservation/getNoSlot`)
+      .then(response => {
+      
+        // 상태 업데이트
+        setDisabledDates(response.data);
+        console.log('비활성화할 날짜:', response.data); // 비활성화할 날짜 확인
+      })
+
+
     }, [cateId]);
+
+
+
+
+
+  // 비활성화할 날짜 리스트 예시 (YYYY-MM-DD 형식)
+  // const disabledDates = ['2024-10-23', '2024-10-24'];
+  const [disabledDates, setDisabledDates] = useState([]);
+
+
+
+  const tileDisabled = ({ date, view }) => {
+    // 날짜가 비활성화할 날짜 리스트에 포함되어 있으면 true 반환
+    const formattedDate = date.toISOString().split('T')[0];
+    return disabledDates.includes(formattedDate);
+  };
+
+
+    // const isDateDisabled = (date) => {
+    //   // 선택한 날짜의 슬롯을 확인하여 disabled 여부를 반환
+    //   const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+    //   const slot = dateTime.find(slot => slot.date === formattedDate); // 해당 날짜의 슬롯 찾기
+    //   return slot && slot.slotStatusCount === slot.slotCount; // 슬롯이 모두 채워졌다면 true 반환
+    // };
+  
 
   return (
     <div className="user-main-container">
@@ -208,20 +279,21 @@ function UserReservationDate() {
           <hr/>
          
           <div className="user-reserve-date-calender">
-            <Calendar
-              onChange={handleDateChange}
-              value={date}
-            />
+          <Calendar
+        onChange={handleDateChange}
+        value={date}
+        tileDisabled={tileDisabled} 
+      />
           </div>
-          {dateTime.map((slot) => (
-  <div key={slot.reservationSlotKey}> {/* slot.key 대신 slot.reservationSlotKey 사용 */}
-    <button type="button">
-      <div> 임시 ) 해당 날짜 슬롯 상태: ({slot.slotStatusCount} / {slot.slotCount})</div>
-    </button>
+ {dateTime.map((slot) => (
+  slot.slotStatusCount !== slot.slotCount ? (
+    <div key={slot.reservationSlotKey}>
+      <button type="button">
+        <div>임시) 해당 날짜 슬롯 상태: ({slot.slotStatusCount} / {slot.slotCount})</div>
+      </button>
 
-    <div className="user-reserve-date-time">
-      {timeSlots.map((timeSlot, index) => (
-        slot.slotStatusCount !== slot.slotCount ? (
+      <div className="user-reserve-date-time">
+        {timeSlots.map((timeSlot, index) => (
           <button
             key={index}
             type="button"
@@ -239,12 +311,12 @@ function UserReservationDate() {
           >
             {timeSlot.time} {/* 슬롯 시간 표시 */}
           </button>
-        ) : (
-          <div key={index} style={{ display: 'none' }} /> // 예약이 가득 차면 숨김
-        )
-      ))}
+        ))}
+      </div>
     </div>
-  </div>
+  ) : (
+    <div key={slot.reservationSlotKey} style={{ display: 'none' }} /> // 예약이 가득 차면 숨김
+  )
 ))}
 
         </div>

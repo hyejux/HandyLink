@@ -96,7 +96,7 @@ const [noticeList, setNoticeList] = useState([]);
                 <tr onDoubleClick={() => goToDetail(value.reservationNo)}>
                   <td><input type="checkbox" /></td>
                   <td>{value.noticeType}</td>
-                  <td>
+                  <td  onClick={() => handleToggleRow(index)}>
                   {value.noticeContent.slice(0, 50)}
                     <i class="bi bi-chevron-down" onClick={() => handleToggleRow(index)}></i>
                   </td>

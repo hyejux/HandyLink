@@ -38,7 +38,6 @@ function UserMyReservationDetail() {
   }, []);
 
 
-
   const [category, setCategory] = useState({
     categoryLevel: 0,
     parentCategoryLevel: 0,
@@ -53,6 +52,24 @@ function UserMyReservationDetail() {
     const formattedDate = date.replace(/-/g, '.'); // '-'을 '/'로 변경
     return `${formattedDate} ${time.substring(0, 8)}`; // 'YYYY/MM/DD HH:MM:SS' 형식으로 반환
   };
+
+
+  // 예약 취소 버튼 클릭 시 결제 상태 업데이트
+  const cancelReservation = async () => {
+    try {
+      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${cateId}`, { paymentStatus: "N" });
+      console.log("예약 취소 성공:", response.data);
+      alert("예약이 취소되었습니다.");
+      
+      // 페이지를 새로 고침하거나 다른 작업 수행
+      window.location.reload();
+    } catch (error) {
+      console.error("예약 취소 중 오류 발생:", error);
+      alert("예약 취소에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+  
+
 
 
   return (
@@ -135,6 +152,14 @@ function UserMyReservationDetail() {
           ))}
         </div>
       </div>
+
+      <div className="user-payment-info-container">
+        <button onClick={cancelReservation}>예약취소</button>
+      </div>
+
+
+
+
 
       <hr />
 

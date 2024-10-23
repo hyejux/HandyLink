@@ -289,11 +289,11 @@ display : block;
 width : 110px;
 }
 .layout-content {
-     margin: 50px 50px;
-     padding: 20px;
+  margin: 32px 37px;
+  padding: 22px;
   background-color: #fff;
   /* border: 1px solid red; */
-  border-radius: 20px;
+  border-radius: 8px;
   min-height: 100vh;
 }
 

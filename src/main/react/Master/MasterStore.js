@@ -18,6 +18,7 @@ function MasterStore() {
             .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
     }, []);
     
+    
 
     const activeStores = store.filter((store) => store.storeStatus === '활성화');
 

@@ -17,8 +17,6 @@ public class DayOffDay {
     @Id
     private String dayNo;
 
-    private String dayOffType;
-
     @ManyToOne
     @JoinColumn(name = "store_no")
     @JsonBackReference

@@ -16,12 +16,12 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
     private final UserChatRoomMapper userChatRoomMapper;
 
     @Override
-    public void insertChat(UserChatDTO dto) {
-
+    public void createChatRoom(String storeId, String userId) {
+        userChatRoomMapper.insertChatRoom(storeId, userId);
     }
 
     @Override
-    public List<UserChatDTO> getChat(String storeId, String userId) {
-        return List.of();
+    public List<UserChatDTO> getChatRoomByUser(String userId) {
+        return userChatRoomMapper.selectChatRoomByUser(userId);
     }
 }

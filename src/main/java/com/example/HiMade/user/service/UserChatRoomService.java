@@ -7,6 +7,6 @@ import com.example.HiMade.user.dto.UserChatDTO;
 import java.util.List;
 
 public interface UserChatRoomService {
-    void insertChat(UserChatDTO dto);
-    List<UserChatDTO> getChat(String storeId, String userId);
+    void createChatRoom(String storeId, String userId);  // 채팅방 생성
+    List<UserChatDTO> getChatRoomByUser(String userId);  // 유저 ID로 채팅방 조회
 }

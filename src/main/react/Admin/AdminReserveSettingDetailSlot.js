@@ -12,8 +12,17 @@ function AdminReserveSettingDetailSlot() {
     const [selectedDates, setSelectedDates] = useState([]);
     const [startMonth] = useState(new Date());
 
+    const [cateId, setCateId] = useState(0);
     useEffect(() => {
-        axios.get('/userReservation/getAllDateTime')
+      const path = window.location.pathname;
+      const pathSegments = path.split('/');
+      const categoryId = pathSegments[pathSegments.length - 1];
+      setCateId(categoryId);
+    }, []);
+  
+
+    useEffect(() => {
+        axios.get(`/userReservation/getAllDateTime/${cateId}`)
             .then(response => {
                 console.log(response.data);
                 setReservationList(response.data);

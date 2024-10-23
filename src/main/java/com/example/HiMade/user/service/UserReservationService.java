@@ -9,7 +9,7 @@ public interface UserReservationService {
 
   public List<UserRL> getMyReserveList();
   public List<UserRSlotDTO> getDateTime(LocalDate Date);
-  public List<UserRSlotDTO> getAllDateTime();
+  public List<UserRSlotDTO> getAllDateTime(int id);
 
   public int setReservationForm(UserReservationDTO dto);
   public List<UserReservationDTO> getSlotTime(int slotkey);

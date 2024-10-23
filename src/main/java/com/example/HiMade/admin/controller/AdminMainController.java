@@ -10,12 +10,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 public class AdminMainController {
+//
+//  @Autowired
+//  private AdminMainService adminMainService;
 
-  @Autowired
-  private AdminMainService adminMainService;
-
-  @GetMapping("test")
-  public void test(){
-    System.out.println(adminMainService.test());
-  }
+//  @GetMapping("test")
+//  public void test(){
+//    System.out.println(adminMainService.test());
+//  }
 }

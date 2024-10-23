@@ -38,6 +38,15 @@ function UserReservationDate() {
   }, []);
 
 
+// 날짜 비활성화 
+  const tileDisabled = ({ date }) => {
+      const today = new Date();
+      const threeMonthsLater = new Date();
+      threeMonthsLater.setMonth(today.getMonth() + 3);
+
+      // 오늘과 3개월 후의 날짜 사이의 날짜는 비활성화 하지 않음
+      return date < today || date > threeMonthsLater;
+  };
 
 
 
@@ -208,7 +217,12 @@ function UserReservationDate() {
     }, [cateId]);
 
 
-
+  //   const tileContent = ({ date }) => {
+  //      // 타일 내용이 필요 없으므로 빈 div를 반환
+  // const tileContent = () => {
+  //   return <div style={{ visibility: 'hidden' }}></div>; // 보이지 않도록 설정
+  // };
+  //   };
 
 
   // 비활성화할 날짜 리스트 예시 (YYYY-MM-DD 형식)
@@ -217,11 +231,11 @@ function UserReservationDate() {
 
 
 
-  const tileDisabled = ({ date, view }) => {
-    // 날짜가 비활성화할 날짜 리스트에 포함되어 있으면 true 반환
-    const formattedDate = date.toISOString().split('T')[0];
-    return disabledDates.includes(formattedDate);
-  };
+  // const tileDisabled = ({ date, view }) => {
+  //   // 날짜가 비활성화할 날짜 리스트에 포함되어 있으면 true 반환
+  //   const formattedDate = date.toISOString().split('T')[0];
+  //   return disabledDates.includes(formattedDate);
+  // };
 
 
     // const isDateDisabled = (date) => {
@@ -281,8 +295,13 @@ function UserReservationDate() {
           <div className="user-reserve-date-calender">
           <Calendar
         onChange={handleDateChange}
+           locale="en"
         value={date}
-        tileDisabled={tileDisabled} 
+        next2Label={null}
+        prev2Label={null}
+        tileDisabled={tileDisabled} // 비활성화 로직 적용
+
+        // formatDay={(locale, date) => moment(date).format('D')}
       />
           </div>
  {dateTime.map((slot) => (

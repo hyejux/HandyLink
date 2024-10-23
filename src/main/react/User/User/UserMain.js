@@ -309,8 +309,8 @@ function UserMain() {
             </div>
           </div>
 
-          
-          
+
+
 
 
           {/* 인기 서비스/트렌드 */}
@@ -455,7 +455,7 @@ function UserMain() {
               <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
             )}
           </div>
-          
+
 
           <div className='load-more-btn-wrap'>
             <button onClick={handleLoadMore} className="load-more-btn">추천 가게 더 보기</button>
@@ -498,7 +498,7 @@ function UserMain() {
                 />
               ))}
             </div>
-            
+
           </div>
 
 

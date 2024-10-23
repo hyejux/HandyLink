@@ -43,6 +43,7 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
     private final String KAKAO_TOKEN_URL = dotenv.get("KAKAO_TOKEN_URL");
     private final String KAKAO_USERINFO_URL = "https://kapi.kakao.com/v2/user/me"; // 사용자 정보 요청 URL
 
+    // 디버그
     private static final Logger logger = LoggerFactory.getLogger(UserAccountServiceImpl.class);
 
     @Autowired
@@ -50,22 +51,20 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-    @Autowired
-    private ThymeleafProperties thymeleafProperties;
 
-    // 생성자를 통해 의존성 주입
+    // 의존성
     public UserAccountServiceImpl(BCryptPasswordEncoder passwordEncoder, UserAccountMapper userAccountMapper) {
         this.passwordEncoder = passwordEncoder;
         this.userAccountMapper = userAccountMapper;
     }
 
+    // 가입
     @Override
     @Transactional
     public void insertUser(UserDTO userDTO) {
         if (userDTO.getUserPw() != null && !userDTO.getUserPw().isEmpty()) {
-            if ("KAKAO".equals(userDTO.getUserPw())) {
-                // 카카오 로그인 사용자의 경우 비밀번호를 그대로 "KAKAO"로 저장시킴 -> 비밀번호 쓸 일 없어서 구분 용도로
-                userDTO.setUserPw("KAKAO");
+            if ("KAKAO".equals(userDTO.getLoginType())) {
+                userDTO.setUserPw(null);  // 아니면 임의로 값 넣거나?
             } else {
                 // 일반 사용자의 경우 비밀번호 암호화
                 String encodedPassword = passwordEncoder.encode(userDTO.getUserPw());
@@ -78,29 +77,32 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         userAccountMapper.insertUser(userDTO);
     }
 
+    // 중복 체크
     @Override
     public boolean checkId(String userId) {
         return userAccountMapper.checkId(userId) > 0; // 이메일 중복 시 true 반환
     }
 
+    // 유저 조회
     @Override
     public UserDTO getUserById(String userId) {
         return userAccountMapper.getUserById(userId);
     }
 
+    // 유저 수정
     @Override
     public void updateUser(UserDTO userDTO) {
-        // 비밀번호가 제공되었을 때는 비밀번호도 암호화하여 업데이트
+        // 비밀번호가 있는 경우 암호화
         if (userDTO.getUserPw() != null && !userDTO.getUserPw().isEmpty()) {
             String encodedPassword = passwordEncoder.encode(userDTO.getUserPw());
             userDTO.setUserPw(encodedPassword);
-            userAccountMapper.updateUserWithPassword(userDTO);  // 비밀번호 포함한 업데이트
-        } else {
-            userAccountMapper.updateUser(userDTO);  // 비밀번호 없이 업데이트
         }
+
+        userAccountMapper.updateUser(userDTO);
     }
 
-    // 시큐리티 방식의 로그인 (사용자 인증)
+
+    // 시큐리티 통한 사용자 인증 및 권한 부여
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         UserDTO user = userAccountMapper.getUserById(userId);
@@ -117,6 +119,7 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         return new User(user.getUserId(), user.getUserPw(), authorities);
     }
 
+    // 카카오 토큰 발행
     @Override
     public String getKakaoAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
@@ -142,6 +145,7 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         return null;
     }
 
+    // 카카오 유저 조회
     @Override
     public UserDTO getKakaoUserInfo(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
@@ -155,6 +159,9 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
             Map<String, Object> responseBody = response.getBody();
             Map<String, Object> kakaoAccount = (Map<String, Object>) responseBody.get("kakao_account");
             Map<String, Object> properties = (Map<String, Object>) responseBody.get("properties");
+
+            logger.info("카카오 사용자 정보 응답: {}", responseBody);
+
 
             // 카카오에서 제공하는 사용자 정보
             String kakaoId = String.valueOf(responseBody.get("id"));
@@ -171,25 +178,23 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         return null;
     }
 
+    // 아이디 찾기
     @Override
     public String findUserId(String userName, String phonenum) {
         return userAccountMapper.findUserIdByNameAndPhone(userName, phonenum);
     }
 
+    // 비밀번호 찾기
     @Override
     public boolean verifyUserForPasswordReset(String userId, String userName, String phonenum) {
         return userAccountMapper.verifyUserForPasswordReset(userId, userName, phonenum) > 0;
     }
 
+    // 비밀번호 찾기를 통한 변경
     @Override
     @Transactional
     public void resetPassword(String userId, String newPassword) {
         String encodedPassword = passwordEncoder.encode(newPassword);
         userAccountMapper.updatePassword(userId, encodedPassword);
-    }
-
-    @Override
-    public boolean checkPassword(String rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }

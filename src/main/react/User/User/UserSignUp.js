@@ -28,11 +28,19 @@ function UserSignUp() {
     const [isKakaoSignUp, setIsKakaoSignUp] = useState(false);
     const [isKakaoLogin, setIsKakaoLogin] = useState(false);
 
-
+    // 카카오 회원가입 폼 태우기
     useEffect(() => {
-        // 만약 카카오 로그인을 통해 접근한 경우에만 호출하도록 조건을 추가합니다.
-        if (isKakaoLogin) {  // isKakaoLogin 상태가 true일 때만 API를 호출
-            fetch('/user/kakao-info')
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('kakao') === 'true') {
+            setIsKakaoLogin(true);  // 카카오 로그인일 경우 true로 설정
+        }
+    }, []);
+
+
+    // 카카오 회원가입 시 동의된 항목 값 미리 채워 넣기
+    useEffect(() => {
+        if (isKakaoLogin) {
+            fetch('/kakao/info')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error("Failed to fetch Kakao user info");
@@ -61,7 +69,7 @@ function UserSignUp() {
                 })
                 .catch(error => console.error('Error fetching Kakao user info:', error));
         }
-    }, [isKakaoLogin]); // isKakaoLogin이 true일 때만 useEffect 실행
+    }, [isKakaoLogin]);
 
 
     // 입력값 변화 시 상태 업데이트
@@ -156,7 +164,7 @@ function UserSignUp() {
                     userGender: formData.userGender,
                     userImgUrl: formData.userImgUrl // 카카오에서 제공한 이미지 URL
                 };
-                    response = await fetch('/user/signup', {
+                    response = await fetch('/kakao/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

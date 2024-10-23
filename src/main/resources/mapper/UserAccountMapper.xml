@@ -12,61 +12,53 @@
 
     <!-- 유저 등록 -->
     <insert id="insertUser" parameterType="UserDTO">
-        INSERT INTO USERS (user_id, user_pw, user_name, user_birth, user_gender, user_phonenum, user_signup, user_img_url, refund_account_number)
-        VALUES (#{userId}, #{userPw}, #{userName}, #{userBirth}, #{userGender}, #{userPhonenum}, CURRENT_DATE, #{userImgUrl}, #{refundAccountNumber})
+        INSERT INTO USERS (user_id, user_pw, user_name, user_birth, user_gender, user_phonenum, user_signup, user_img_url, refund_account_number, login_type)
+        VALUES (#{userId}, #{userPw}, #{userName}, #{userBirth}, #{userGender}, #{userPhonenum}, CURRENT_DATE, #{userImgUrl}, #{refundAccountNumber}, #{loginType})
     </insert>
 
     <!-- 유저 정보 조회 -->
     <select id="getUserById" parameterType="String" resultType="com.example.HiMade.user.dto.UserDTO">
-        SELECT user_id, user_pw, user_name, user_birth, user_phonenum, user_gender, user_signup, user_img_url
+        SELECT user_id, user_pw, user_name, user_birth, user_phonenum, user_gender, user_signup, user_img_url, login_type
         FROM USERS
         WHERE user_id = #{userId}
     </select>
 
-    <!-- 일반 정보와 비밀번호 포함 업데이트 -->
-    <update id="updateUserWithPassword" parameterType="UserDTO">
+    <!-- 사용자 정보 업데이트 -->
+    <update id="updateUser" parameterType="UserDTO">
         UPDATE USERS
-        SET user_pw = #{userPw},
+        SET
         user_name = #{userName},
         user_phonenum = #{userPhonenum},
         user_birth = #{userBirth},
         user_gender = #{userGender},
         user_img_url = #{userImgUrl}
+        <if test="userPw != null and userPw != ''">
+            , user_pw = #{userPw}
+        </if>
         WHERE user_id = #{userId}
     </update>
 
-    <!-- 비밀번호 없이 일반 정보만 업데이트 -->
-    <update id="updateUser" parameterType="UserDTO">
-        UPDATE USERS
-        SET user_name = #{userName},
-            user_phonenum = #{userPhonenum},
-            user_birth = #{userBirth},
-            user_gender = #{userGender},
-            user_img_url = #{userImgUrl}
-        WHERE user_id = #{userId}
-    </update>
-
-    <!--아이디 찾기용-->
+    <!-- 아이디 찾기용 유저 조회 -->
     <select id="findUserIdByNameAndPhone" parameterType="map" resultType="string">
         SELECT user_id
-        FROM users
+        FROM USERS
         WHERE user_name = #{userName}
         AND user_phonenum = #{phonenum}
-        AND user_pw != 'KAKAO' <!-- 카카오로 가입한 사용자 제외 -->
+        AND login_type = 'GENERAL'
         LIMIT 1
     </select>
 
-    <!-- 비밀번호 찾기용 -->
+    <!-- 비밀번호 찾기용 유저 조회 -->
     <select id="verifyUserForPasswordReset" parameterType="map" resultType="int">
         SELECT COUNT(*)
         FROM USERS
         WHERE user_id = #{userId}
-          AND user_name = #{userName}
-          AND user_phonenum = #{phonenum}
-          AND user_pw != 'KAKAO'
+        AND user_name = #{userName}
+        AND user_phonenum = #{phonenum}
+        AND login_type = 'GENERAL'
     </select>
 
-    <!-- 비밀번호 업데이트 -->
+    <!-- 비밀번호 찾기를 통한 변경 -->
     <update id="updatePassword" parameterType="map">
         UPDATE USERS
         SET user_pw = #{newPassword}

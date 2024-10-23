@@ -13,14 +13,13 @@ public class RefundService {
     @Autowired
     private RefundRepository refundRepository;
 
-    public Refund createRefund(String method, Long amount, Long reservationNo) {
+    public void createRefund(Long paymentId, String refundMethod, Long refundAmount) {
         Refund refund = new Refund();
-        refund.setRefundMethod(method);
-        refund.setRefundAmount(amount);
+        refund.setPaymentId(paymentId);
+        refund.setRefundMethod(refundMethod);
+        refund.setRefundAmount(refundAmount);
         refund.setRefundDate(LocalDateTime.now());
-        refund.setReservationNo(reservationNo);
-        return refundRepository.save(refund);
+
+        refundRepository.save(refund);
     }
-
-
 }

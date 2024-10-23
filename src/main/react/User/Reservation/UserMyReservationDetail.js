@@ -60,7 +60,7 @@ function UserMyReservationDetail() {
       const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${cateId}`, { paymentStatus: "N" });
       console.log("예약 취소 성공:", response.data);
       alert("예약이 취소되었습니다.");
-      
+
       // 페이지를 새로 고침하거나 다른 작업 수행
       window.location.reload();
     } catch (error) {
@@ -68,7 +68,6 @@ function UserMyReservationDetail() {
       alert("예약 취소에 실패했습니다. 다시 시도해주세요.");
     }
   };
-  
 
 
 

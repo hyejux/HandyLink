@@ -28,7 +28,7 @@ public class Refund {
     @Column(name = "refund_date")
     private LocalDateTime refundDate;
 
-    @Column(name = "reservation_no")
-    private Long reservationNo;
+    @Column(name = "payment_id")
+    private Long paymentId;
 
 }

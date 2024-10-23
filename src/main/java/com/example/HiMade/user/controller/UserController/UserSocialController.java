@@ -28,22 +28,26 @@ public class UserSocialController {
 
     // 카카오 회원가입 처리
     @PostMapping("/signup")
-    public ResponseEntity<String> kakaoSignUp(HttpSession session) {
+    public ResponseEntity<String> kakaoSignUp(@RequestBody UserDTO userDTO, HttpSession session) {
         try {
+            //logger.info("컨트롤러로 넘어온 userDTO: {}", userDTO);
+
             // 세션에서 카카오 사용자 정보 가져오기
             UserDTO kakaoUser = (UserDTO) session.getAttribute("kakaoUser");
+            //logger.info("세션에서 가져온 카카오 사용자 정보: {}", kakaoUser); // 아이디, 이름, 프로필 넘어옴
+
             if (kakaoUser == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("카카오 사용자 정보가 없습니다.");
             }
 
             // 카카오 사용자 정보로 UserDTO 세팅
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUserId(kakaoUser.getUserId());  // 카카오 ID로 설정
-            userDTO.setUserName(kakaoUser.getUserName());  // 카카오 이름으로 설정
-            userDTO.setUserImgUrl(kakaoUser.getUserImgUrl());  // 카카오 이미지 URL 설정
+            userDTO.setUserId(kakaoUser.getUserId());
+            userDTO.setUserName(kakaoUser.getUserName());
+            userDTO.setUserImgUrl(kakaoUser.getUserImgUrl());
             userDTO.setLoginType("KAKAO");  // 카카오 로그인 타입 설정
 
             // 유저 등록
+            logger.info("등록할 사용자 정보: {}", userDTO);
             userAccountService.insertUser(userDTO);
 
             // 세션에서 카카오 사용자 정보 제거
@@ -51,6 +55,7 @@ public class UserSocialController {
 
             return ResponseEntity.ok("카카오 회원가입이 성공적으로 완료되었습니다.");
         } catch (Exception e) {
+            logger.error("카카오 회원가입 중 오류 발생: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카카오 회원가입 중 오류 발생");
         }
     }

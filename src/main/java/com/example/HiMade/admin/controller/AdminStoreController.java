@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Map;
 
@@ -115,5 +116,16 @@ public class AdminStoreController {
         return ResponseEntity.ok(storeAddr);
     }
 
+
+    @GetMapping("getNoticeList")
+    public List<storeNoticeDTO> getNoticeList(){
+        return adminStoreService.getNoticeList();
+    }
+
+    @PostMapping("setNotice")
+    public void setNotice(@RequestBody storeNoticeDTO dto){
+        System.out.println(dto);
+        adminStoreService.setNotice(dto);
+    }
 
 }

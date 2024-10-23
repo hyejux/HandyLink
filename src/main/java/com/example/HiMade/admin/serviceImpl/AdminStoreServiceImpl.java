@@ -114,4 +114,14 @@ public class AdminStoreServiceImpl implements AdminStoreService {
         return adminStoreMapper.getStoreInfo(storeId);
     }
 
+    @Override
+    public List<storeNoticeDTO> getNoticeList() {
+        return adminStoreMapper.getNoticeList();
+    }
+
+    @Override
+    public void setNotice(storeNoticeDTO dto) {
+       adminStoreMapper.setNotice(dto);
+    }
+
 }

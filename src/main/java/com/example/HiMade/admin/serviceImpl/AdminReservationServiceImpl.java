@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import java.awt.*;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service("AdminReservationService")
@@ -71,6 +72,20 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   @Override
   public void setMainCategory4(adminReservationDTO dto) {
     adminReservationMapper.setMainCategory4(dto);
+  }
+
+  @Override
+  public void setSlotAll(adminReserveAdd dto) {
+
+      LocalDate startDate = LocalDate.now();
+      LocalDate endDate = LocalDate.of(2029, 12, 31);
+
+      while (!startDate.isAfter(endDate)) {
+        System.out.println(startDate);
+        dto.setReservationSlotDate(startDate);
+        adminReservationMapper.setSlotAll(dto);
+        startDate = startDate.plusDays(1);
+      }
   }
 
   @Override

@@ -176,6 +176,8 @@ const handleFlavorSelectN = (subCategory, index, categoryId) => {
 const goToAdminPage = (id) => {
   sessionStorage.setItem('formData', JSON.stringify(formData));
   sessionStorage.setItem('combinedInputs', JSON.stringify(combinedInputs));
+  sessionStorage.setItem('formattedDate', date);
+  sessionStorage.setItem('storeNo', storeNo);
   window.location.href = `../UserReservationConfirm.user/${id}`;
   
 };
@@ -208,10 +210,13 @@ const goToAdminPage = (id) => {
     const slot = sessionStorage.getItem('selectSlot');
     const date = sessionStorage.getItem('formattedDate');
     const reservationSlotKey = sessionStorage.getItem('reservationSlotKey');
+    const storeNo = sessionStorage.getItem('storeNo');
 
     console.log('Slot:', slot);
     console.log('Date:', date);
     console.log('reservationSlotKey:', reservationSlotKey);
+    console.log('storeNo: ' + storeNo);
+    
 
 
  return (

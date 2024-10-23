@@ -140,10 +140,14 @@ function UserReservationConfirm() {
   const slot = sessionStorage.getItem('selectSlot');
   const date = sessionStorage.getItem('formattedDate');
   const reservationSlotKey = sessionStorage.getItem('reservationSlotKey');
-
+  const sessionSestoreNo = sessionStorage.getItem('storeNo');
+  
   console.log('Slot:', slot);
   console.log('Date:', date);
   console.log('reservationSlotKey:', reservationSlotKey);
+  console.log(sessionSestoreNo);
+  console.log(cateId);
+  
 
   const goToAdminPage = () => {
     
@@ -152,11 +156,9 @@ function UserReservationConfirm() {
   
   
   
-  
-  
   // ----------------------- 주문등록, 결제 부분 -----------------------
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(""); // 결제수단
-  console.log("카테고리 아이디" +cateId);
+  
 
   const requestPayment = (paymentMethod) => {
 
@@ -190,24 +192,24 @@ function UserReservationConfirm() {
       })
       .then(response => {
         console.log("슬롯 상태 업데이트 요청 성공! ", response.data);
-        // 슬롯 상태 업데이트 요청
         const categoryId = cateId;
-        const storeNo = 7; // 예시 store_no
-        const reservationDate = slot; // 예시 날짜, 적절히 수정
-        
+        const storeNo = sessionSestoreNo;
+        const reservationDate = date; 
+    
+        console.log("전송될 데이터:", { categoryId, reservationDate, storeNo });
+    
         return axios.post(`/userReservation/updateSlotStatus`, {
             categoryId,
             reservationDate,
             storeNo
         });
     })
-      .then(response => {
+    .then(response => {
         console.log("두 번째 요청 성공! ", response.data);
-      })
-      
-      .catch(error => {
-        console.log('Error Category', error);
-      })
+    })
+    .catch(error => {
+        console.error('Error during slot status update', error);
+    });
 
     // ---------------------------------------------------------------------------
 
@@ -531,7 +533,7 @@ function UserReservationConfirm() {
                   });
 
                   // 결제 성공 후 리다이렉트
-                  window.location.href = `../UserMyReservationDetail.user/${reservationNum}`;
+                  // window.location.href = `../UserMyReservationDetail.user/${reservationNum}`;
 
                 } catch (error) {
                   console.error("계좌이체 주문 등록 중 오류 발생:", error);

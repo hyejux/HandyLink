@@ -10,15 +10,19 @@ import "./UserStoreDetail.css";
 function UserStoreDetail() {
 
   const [activeSection, setActiveSection] = useState('home'); 
-  const goToAdminPage = (id) => {
-    sessionStorage.setItem('storeCloseTime',storeInfo.storeCloseTime);
-    sessionStorage.setItem('storeOpenTime', storeInfo.storeOpenTime);
-    window.location.href = `/UserReservationDate.user/${id}`;
-  };
-
   const [cateId, setCateId] = useState(0);
   const [reservationList, setReservationList] = useState([]);
   const [storeInfo, setStoreInfo] = useState([]);
+
+  const goToAdminPage = (id) => {
+    sessionStorage.setItem('storeCloseTime',storeInfo.storeCloseTime);
+    sessionStorage.setItem('storeOpenTime', storeInfo.storeOpenTime);
+    sessionStorage.setItem('storeNo', storeInfo.storeNo);
+    window.location.href = `/UserReservationDate.user/${id}`;
+  };
+
+  console.log(storeInfo.storeNo);
+  
   // ------------------------------------------------------
 
   useEffect(() => {

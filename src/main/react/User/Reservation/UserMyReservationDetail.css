@@ -1,5 +1,3 @@
-
-/* 결제정보 */
 .user-payment-info-container {
   background-color: white;
   border-radius: 10px;
@@ -15,6 +13,40 @@
   margin: 10px 0;
 }
 
+/* ------------------ 입금 정보 ------------------ */
+/* 입금기한 */
+.deposit-date {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.account-left {
+  font-size: 20px;
+  margin-bottom: 15px;
+  text-align: left;
+  flex: 1;
+}
+
+.account-right {
+  font-size: 20px;
+  margin-bottom: 15px;
+  text-align: right;
+  flex: 1;
+}
+
+/* 계좌 복사 버튼 */
+.account-number-copy-btn {
+  border: none;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.account-number-copy-btn .bi-copy {
+  font-size: 15px;
+}
+
+/* ------------------ 결제 정보 ------------------ */
 .payment-left {
   font-size: 20px;
   font-weight: bold;
@@ -55,11 +87,3 @@
   text-align: right;
   flex: 1;
 }
-
-
-
-
-
-
-
-

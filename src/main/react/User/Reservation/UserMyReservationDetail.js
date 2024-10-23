@@ -69,14 +69,39 @@ function UserMyReservationDetail() {
     }
   };
 
+  // sessionStorage에서 데이터 가져오기
+  const storedData = sessionStorage.getItem('storeInfo');
+  // 가져온 데이터를 변환하여 바로 사용
+  const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
+  console.log(storeInfo);
 
 
   return (
     <div>
 
-      <h1> 예약 정보 (가게이름이나 주문일시, 상태 등등) </h1>
-      <button type="button" > 예약 취소 </button>
+      <h1> {storeInfo.storeName} </h1>
       <hr />
+
+      <div className="user-payment-info-container">
+        <div className='payment-info-top'>
+          <div className='deposit-date'>
+            2024.10.04 23:59 까지 입금해주세요.
+          </div>
+        </div>
+        <div className="payment-info-top">
+          <div className="account-left">입금 대기금액</div>
+          <div className="account-right">52,000 원</div>
+        </div>
+        <div className="payment-info-top">
+          <div className="account-left">입금 계좌</div>
+          <div className="account-right">
+            {storeInfo.accountBank} {storeInfo.accountNumber} <button className='account-number-copy-btn'><i class="bi bi-copy"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
       <h1> 예약자 정보 </h1>
 
       <hr />

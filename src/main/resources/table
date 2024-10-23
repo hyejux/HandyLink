@@ -80,7 +80,7 @@ CREATE TABLE RESERVATION (
 -- PAYMENT 테이블
 CREATE TABLE PAYMENT (
     payment_id BIGINT NOT NULL DEFAULT nextval('payment_seq'),
-    payment_method VARCHAR(20) NULL CHECK (payment_method IN ('신용카드', '직불카드', '모바일결제')),
+    payment_method VARCHAR(20) NULL CHECK (payment_method IN IN ('간편결제', '일반결제', '계좌이체'));
     payment_amount BIGINT NULL,
     payment_date TIMESTAMP NULL,
     payment_status VARCHAR(1) NULL CHECK (payment_status IN ('Y', 'N')),

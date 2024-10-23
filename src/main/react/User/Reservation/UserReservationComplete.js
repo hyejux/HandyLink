@@ -9,28 +9,76 @@ import './UserReservationComplete.css';
 
 
 function UserReservationComplete() {
-  
-
-
-//------------------------------------
 
 
 
- return (
-   <div>   
-          결제가 완료되었습니다 !
+  //------------------------------------
 
 
-          <a href='/UserMain.user'> 홈으로 가기 </a>
-          주문내역으로 가기 이런것도 ㄱㅊ을듯
-     </div>
+
+  return (
+    <div>
+      <div class="user-main-content">
+
+
+        <div class="user-content-container">
+          <div class="header">결제 완료</div>
+          <div class="payment-amount">56,000원</div>
+        </div>
+
+        <div class="user-content-container">
+          <div class="header">예약 정보</div>
+          <div class="reservation-date">2024.10.3(목) 오후 2:30</div>
+          <div class="reservation-info">
+            <img src="../img1.jpg" alt="예약 이미지" />
+            <div class="reservation-details">
+              <div class="store-name">오늘도 케이크</div>
+              <div class="menu">레터링 케이크</div>
+              <div class="option">• 사이즈: 1호</div>
+              <div class="option">• 디자인 옵션: 쇼핑몰추천</div>
+              <div class="option">• 발송옵션: O</div>
+            </div>
+          </div>
+          <div class="button-group">
+            <button class="button btn-left">가게 정보</button>
+            <button class="button btn-right">예약 상세</button>
+          </div>
+        </div>
+
+        <div class="user-content-container">
+          <div class="payment-info-top">
+            <div class="payment-left">결제 정보</div>
+            <div class="payment-right"><a href="#">결제 상세</a></div>
+          </div>
+          <div class="payment-info">
+            <div class="info-row">
+              <div class="left">결제 일시</div>
+              <div class="right">2024/10/01 15:37:35</div>
+            </div>
+            <div class="info-row">
+              <div class="left">결제수단</div>
+              <div class="right">카카오페이</div>
+            </div>
+          </div>
+          <div class="footer">
+          </div>
+        </div>
+
+      </div>
+
+      결제가 완료되었습니다 !
+
+
+      <a href='/UserMain.user'> 홈으로 가기 </a>
+      주문내역으로 가기 이런것도 ㄱㅊ을듯
+    </div>
   )
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-    <UserReservationComplete />
+  <UserReservationComplete />
 );
 
 

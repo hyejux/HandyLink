@@ -196,7 +196,7 @@ function UserReservationConfirm() {
 
     // ---------------------------------------------------------------------------
 
-    // 결제
+    //결제
     const { IMP } = window;
     if (!IMP) {
       console.error("IMP 객체가 정의되지 않았습니다. 아임포트 스크립트를 확인하세요.");
@@ -228,11 +228,15 @@ function UserReservationConfirm() {
 
         // 결제 성공 후 DB에 저장
         await storePaymentInfo({
-          paymentMethod: paymentMethod === "card" ? "신용카드" : "계좌이체",
+          paymentMethod: paymentMethod === "card" ? "간편결제" : "일반결제",
           paymentAmount: totalPrice,
-          paymentStatus: paymentMethod === "card" ? "Y" : "N",
+          paymentStatus: "Y",
           reservationNo: reservationNum,
         });
+
+         // 결제 성공 후 리다이렉트
+         window.location.href = `../UserReservationComplete.user`;
+         
       } else {
         console.log("결제 실패:", response);
         alert(`결제 실패! 에러 코드: ${response.error_code}, 에러 메시지: ${response.error_msg}`);
@@ -429,13 +433,13 @@ function UserReservationConfirm() {
           </div>
           <hr />
 
-          <div className="user-content-container6">
+          {/* <div className="user-content-container6">
             <div className="user-content-last">
               <button type="button" onClick={() => { submitBtn(); goToAdminPage(); }}>
                 다음 <i className="bi bi-chevron-right"></i>
               </button>
             </div>
-          </div>
+          </div> */}
 
 
 
@@ -455,7 +459,7 @@ function UserReservationConfirm() {
                   onChange={() => setSelectedPaymentMethod("card")}
                 />
                 <label htmlFor="card">
-                  <i className="bi bi-credit-card"></i> 카드결제
+                  <i className="bi bi-credit-card"></i> 간편결제
                 </label>
               </div>
               <div className='user-payment-method'>
@@ -468,7 +472,7 @@ function UserReservationConfirm() {
                   onChange={() => setSelectedPaymentMethod("trans")}
                 />
                 <label htmlFor="trans">
-                  <i className="bi bi-cash-coin"></i> 계좌이체
+                  <i className="bi bi-cash-coin"></i> 일반결제
                 </label>
               </div>
             </div>

@@ -74,46 +74,6 @@ function UserReservationConfirm() {
   };
 
 
-
-  // 주문 등록 
-
-  const submitBtn = () => {
-    const reservationData = {
-      reservationTime: slot,  // 세션 데이터에서 가져옴
-      reservationSlotKey: reservationSlotKey,  // 세션 데이터에서 가져옴
-      customerRequest: requestText,  // 사용자 입력 요청사항
-      reservationPrice: totalPrice  // 총액 정보
-    };
-
-    console.log('최종 예약 데이터:', reservationData);
-    axios
-      .post(`/userReservation/setReservationForm`, reservationData)
-      .then(response => {
-        const reservation_id = response.data;  // 예약 번호를 받아옴
-        console.log("reservation_no 주문번호 ! : : ", reservation_id);
-
-        // reservation_id가 설정된 후에 배열을 업데이트
-        const updatedArray = formData.map(item => ({
-          ...item,  // 기존 객체의 모든 속성 복사
-          reservationNo: reservation_id  // reservationNo 추가
-        }));
-
-        console.log('업데이트된 배열:', updatedArray);
-
-        // 필요시 여기서 두 번째 요청을 진행
-        return axios.post(`/userReservation/setReservationFormDetail`, updatedArray);
-      })
-      .then(response => {
-        console.log("두 번째 요청 성공! ", response.data);
-      })
-      .catch(error => {
-        console.log('Error Category', error);
-      });
-
-  };
-
-
-
   const calculateTotalPrice = () => {
     return combinedInputs.reduce((acc, item) => {
       if (typeof item === 'object' && item !== null) {
@@ -193,10 +153,50 @@ function UserReservationConfirm() {
 
 
 
-  // ----------------------- 결제 수단 부분 -----------------------
+
+  // ----------------------- 주문등록, 결제 부분 -----------------------
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(""); // 결제수단
 
   const requestPayment = (paymentMethod) => {
+
+    let reservationNum = 0;
+
+    const reservationData = {
+      reservationTime: slot,  // 세션 데이터에서 가져옴
+      reservationSlotKey: reservationSlotKey,  // 세션 데이터에서 가져옴
+      customerRequest: requestText,  // 사용자 입력 요청사항
+      reservationPrice: totalPrice  // 총액 정보
+    };
+
+    console.log('최종 예약 데이터:', reservationData);
+    axios
+      .post(`/userReservation/setReservationForm`, reservationData)
+      .then(response => {
+        const reservation_id = response.data;
+        reservationNum = response.data;  // 예약 번호를 받아옴
+        console.log("reservation_no 주문번호 ! : : ", reservation_id);
+
+        // reservation_id가 설정된 후에 배열을 업데이트
+        const updatedArray = formData.map(item => ({
+          ...item,  // 기존 객체의 모든 속성 복사
+          reservationNo: reservation_id  // reservationNo 추가
+        }));
+
+        console.log('업데이트된 배열:', updatedArray);
+
+        // 필요시 여기서 두 번째 요청을 진행
+        return axios.post(`/userReservation/setReservationFormDetail`, updatedArray);
+      })
+      .then(response => {
+        console.log("두 번째 요청 성공! ", response.data);
+      })
+      .catch(error => {
+        console.log('Error Category', error);
+      })
+
+    // ---------------------------------------------------------------------------
+
+    // 결제
     const { IMP } = window;
     if (!IMP) {
       console.error("IMP 객체가 정의되지 않았습니다. 아임포트 스크립트를 확인하세요.");
@@ -224,12 +224,14 @@ function UserReservationConfirm() {
         console.log("결제 성공:", response);
         alert(`결제 성공! 결제 ID: ${response.imp_uid}`);
 
+        console.log("예약번호: " + reservationNum);
+
         // 결제 성공 후 DB에 저장
         await storePaymentInfo({
           paymentMethod: paymentMethod === "card" ? "신용카드" : "계좌이체",
           paymentAmount: totalPrice,
           paymentStatus: paymentMethod === "card" ? "Y" : "N",
-          reservationNo: 45,
+          reservationNo: reservationNum,
         });
       } else {
         console.log("결제 실패:", response);
@@ -474,7 +476,6 @@ function UserReservationConfirm() {
               {totalPrice}원 결제하기
             </button>
           </div>
-
 
 
         </div>

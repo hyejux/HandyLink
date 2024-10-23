@@ -10,13 +10,11 @@ import java.time.LocalDate;
 @Setter
 @ToString
 @Builder
-public class DayOffDTO {
+public class DayOffSet {
 
-    private Long dayId; //업체휴무pk
-
-    private DayOffDay dayOffDay; //고정
-    private DayOffSet dayOffSet; //지정
-
+    private Long setId; //업체휴무pk
+    private LocalDate dayOffStart; //지정휴무시작일
+    private LocalDate dayOffEnd; //지정휴무종료일
     private String storeId; //업체아이디
     private Long storeNo; //업체번호
 }

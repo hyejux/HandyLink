@@ -17,6 +17,7 @@ main: './Main.js', //여러페이지 설정이 가능함
         AdminLogin: './Admin/AdminLogin.js',
         AdminStoreInfo: './Admin/AdminStoreInfo.js',
         adminReservation : './Admin/AdminReservation.js',
+        payment: './User/Payment/Payment.js',
         paymentInfo: './User/Payment/PaymentInfo.js',
         UserChatRoom : './User/Inquiry/UserChatRoom.js',
         master: './Master/Master.js',

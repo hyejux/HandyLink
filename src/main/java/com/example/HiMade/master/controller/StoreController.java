@@ -1,7 +1,8 @@
 package com.example.HiMade.master.controller;
 
-import com.example.HiMade.master.entity.Store;
+import com.example.HiMade.master.entity.StoreAdmin;
 import com.example.HiMade.master.entity.StoreStatus;
+import com.example.HiMade.master.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.HiMade.master.repository.StoreRepository;
 import org.springframework.web.bind.annotation.*;
@@ -9,31 +10,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/store")
+@RequestMapping("/getStoreInfo")
 public class StoreController {
 
     @Autowired
-    private StoreRepository storeRepository;
+    private StoreService storeService;
 
     @GetMapping
-    public List<Store> getAllStores() {
-        return storeRepository.findAll();
+    public List<StoreAdmin> getAllStores() {
+        return storeService.getAllStores();
     }
 
     @GetMapping("/{storeNo}")
-    public Store getStoreById(@PathVariable Long storeNo) { //
-        return storeRepository.findByStoreNo(storeNo).orElse(null);
+    public StoreAdmin getStoreById(@PathVariable Long storeNo) {
+        return storeService.getStoreDetails(storeNo);
     }
 
-    @PostMapping("/{storeNo}/approve") // storeNo로 변경
-    public Store approveStore(@PathVariable Long storeNo) { //
-        storeRepository.updateStoreStatusByStoreNo(storeNo, StoreStatus.활성화);
-        return storeRepository.findByStoreNo(storeNo).orElse(null);
+    @PostMapping("/{storeNo}/approve")
+    public StoreAdmin approveStore(@PathVariable Long storeNo) {
+        return storeService.approveStore(storeNo);
     }
 
-    @PostMapping("/{storeNo}/deactivate") // storeNo로 변경
-    public Store deactivateStore(@PathVariable Long storeNo) { //
-        storeRepository.updateStoreStatusByStoreNo(storeNo, StoreStatus.비활성화);
-        return storeRepository.findByStoreNo(storeNo).orElse(null);
+    @PostMapping("/{storeNo}/deactivate")
+    public StoreAdmin deactivateStore(@PathVariable Long storeNo) {
+        return storeService.deactivateStore(storeNo);
     }
 }

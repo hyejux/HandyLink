@@ -3,6 +3,7 @@ package com.example.HiMade.user.service;
 import com.example.HiMade.user.dto.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserReservationService {
@@ -17,6 +18,7 @@ public interface UserReservationService {
   public List<UserRD> getMyReservationDetail(int id);
 
   public List<LocalDate> getNoSlot();
+  void setUpdateStart(UserRSlotDTO dto);
 
 
 

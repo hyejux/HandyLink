@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -29,8 +30,15 @@ public class UserReservationController {
 
   @GetMapping("/getAllDateTime/{id}")
   public List<UserRSlotDTO> getAllDateTime(@PathVariable int id){
-    System.out.println(userReservationService.getAllDateTime(id));
+    System.out.println(id);
+//    System.out.println(userReservationService.getAllDateTime(id));
     return userReservationService.getAllDateTime(id);
+  }
+
+  @PostMapping("/setUpdateStart")
+  public void setUpdateStart(@RequestBody UserRSlotDTO dto){
+    System.out.println("기록"+dto);
+    userReservationService.setUpdateStart(dto);
   }
 
   @PostMapping("/setReservationForm")

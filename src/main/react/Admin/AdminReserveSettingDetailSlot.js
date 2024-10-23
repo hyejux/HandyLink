@@ -12,25 +12,38 @@ function AdminReserveSettingDetailSlot() {
     const [selectedDates, setSelectedDates] = useState([]);
     const [startMonth] = useState(new Date());
 
+    const [serviceDate, setServiceDate] = useState(''); // 날짜 상태
+    const [serviceHour, setServiceHour] = useState(''); // 시간 상태
+
+
     const [cateId, setCateId] = useState(0);
     useEffect(() => {
       const path = window.location.pathname;
       const pathSegments = path.split('/');
       const categoryId = pathSegments[pathSegments.length - 1];
       setCateId(categoryId);
+      axios.get(`/userReservation/getAllDateTime/${categoryId}`)
+      .then(response => {
+          console.log(response.data);
+          let startDate = '';
+          if (response.data.length > 0) {
+            const firstServiceStart = response.data[0].serviceStart; // 첫 번째 객체의 serviceStart
+            startDate = firstServiceStart; // 상태 업데이트
+        }
+          const serviceStart = new Date(startDate);
+          const formattedDate = `${serviceStart.getFullYear()}-${String(serviceStart.getMonth() + 1).padStart(2, '0')}-${String(serviceStart.getDate()).padStart(2, '0')}`; // YYYY-MM-DD 형식
+          const formattedHour = `${String(serviceStart.getHours()).padStart(2, '0')}`; // HH 형식만 설정
+            console.log(formattedDate, formattedHour);
+          setServiceDate(formattedDate); // 날짜 상태 설정
+          setServiceHour(formattedHour); // 시간 상태 설정
+          setReservationList(response.data);
+      })
+      .catch(error => {
+          console.log('Error fetching reservation list', error);
+      });
     }, []);
   
 
-    useEffect(() => {
-        axios.get(`/userReservation/getAllDateTime/${cateId}`)
-            .then(response => {
-                console.log(response.data);
-                setReservationList(response.data);
-            })
-            .catch(error => {
-                console.log('Error fetching reservation list', error);
-            });
-    }, []);
 
     // 예약을 날짜에 맞춰 반환하는 함수
     const getReservationsForDate = (date) => {
@@ -90,18 +103,70 @@ function AdminReserveSettingDetailSlot() {
         }));
     };
 
+    
+
+    const btnUpdateStart = () => {
+        const localDateTimeString = `${serviceDate}T${serviceHour}:00:00`; // YYYY-MM-DDTHH:MM:SS 형식
+
+        console.log(localDateTimeString);
+        axios.post('/userReservation/setUpdateStart', { serviceStart :  localDateTimeString , categoryId : cateId} )
+        .then(response => {
+            console.log(response.data);
+            
+        }).catch(error => {
+            console.log('Error fetching reservation list', error);
+        });
+        axios.get(`/userReservation/getAllDateTime/${cateId}`)
+        .then(response => {
+            console.log(response.data);
+            let startDate = '';
+            if (response.data.length > 0) {
+              const firstServiceStart = response.data[0].serviceStart; // 첫 번째 객체의 serviceStart
+              startDate = firstServiceStart; // 상태 업데이트
+          }
+            const serviceStart = new Date(startDate);
+            const formattedDate = `${serviceStart.getFullYear()}-${String(serviceStart.getMonth() + 1).padStart(2, '0')}-${String(serviceStart.getDate()).padStart(2, '0')}`; // YYYY-MM-DD 형식
+            const formattedHour = `${String(serviceStart.getHours()).padStart(2, '0')}`; // HH 형식만 설정
+              console.log(formattedDate, formattedHour);
+            setServiceDate(formattedDate); // 날짜 상태 설정
+            setServiceHour(formattedHour); // 시간 상태 설정
+            setReservationList(response.data);
+        })
+        .catch(error => {
+            console.log('Error fetching reservation list', error);
+        });
+        
+    }
+
+
+
+
     return (
         <div>
             <div className="main-content-title">
                 <h1> 서비스 시간 슬롯 관리 </h1>
               
             </div>
-            <div className="icon-buttons">
-                  <div> 서비스 시작일 </div>
-                 <input type="date" /> 
-                </div>
+            <div className="main-slot">
+        <div> 서비스 시작일 </div>
+       {/* 날짜 입력 필드 */}
+       <input 
+                type="date" 
+                value={serviceDate} 
+                onChange={(e) => setServiceDate(e.target.value)} 
+            />
 
-              
+            {/* 시간 입력을 위한 드롭다운 */}
+            <select id="time-select" value={serviceHour} onChange={(e) => setServiceHour(e.target.value)} >
+                <option value="">시간 선택</option> {/* 기본 옵션 */}
+                {[...Array(24)].map((_, index) => (
+                    <option key={index} value={String(index).padStart(2, '0')}>
+                        {String(index).padStart(2, '0')}:00 {/* 두 자리로 표현 */}
+                    </option>
+                ))}
+            </select>
+            <button onClick={btnUpdateStart}> 수정 완료 </button>
+            </div>
 
             <div className="main-contents">
                 <div className="calendar-and-reservation-info">
@@ -139,6 +204,7 @@ function AdminReserveSettingDetailSlot() {
                                 }
                                 return null;
                             }}
+                           
                             onClickDay={handleDateClick}
                         />
                     </div>

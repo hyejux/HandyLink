@@ -5,6 +5,7 @@ import com.example.HiMade.user.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -19,4 +20,5 @@ public interface UserReservationMapper {
   public void setReservationFormDetail(UserReservationFormDTO dto);
   public List<UserRD> getMyReservationDetail(int id);
   public List<LocalDate> getNoSlot();
+  void setUpdateStart(UserRSlotDTO dto);
 }

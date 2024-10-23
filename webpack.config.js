@@ -44,7 +44,8 @@ main: './Main.js', //여러페이지 설정이 가능함
         UserMyReservationDetail : '/User/Reservation/UserMyReservationDetail.js',
         AdminReserveSettingDetailSlot : '/Admin/AdminReserveSettingDetailSlot.js',
         MyStore: './Admin/MyStore.js',
-        StoreDayOff: './Admin/StoreDayOff.js'
+        StoreDayOff: './Admin/StoreDayOff.js',
+        AdminStoreNotice : './Admin/AdminStoreNotice.js'
 
     },
     devtool: 'sourcemaps',

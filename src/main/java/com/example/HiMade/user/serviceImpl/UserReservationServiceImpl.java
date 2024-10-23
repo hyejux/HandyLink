@@ -78,5 +78,11 @@ public class UserReservationServiceImpl implements UserReservationService {
 //    LocalDateTime result = resultDto.get(1).getServiceStart();
   }
 
+  @Override
+  public void setUpdateSlot(UserUSlotDTO dto) {
+
+    userReservationMapper.setUpdateSlot(dto);
+  }
+
 
 }

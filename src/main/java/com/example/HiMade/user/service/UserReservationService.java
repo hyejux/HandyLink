@@ -1,6 +1,7 @@
 package com.example.HiMade.user.service;
 
 import com.example.HiMade.user.dto.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ public interface UserReservationService {
 
   public List<LocalDate> getNoSlot();
   void setUpdateStart(UserRSlotDTO dto);
-
+  void setUpdateSlot(@RequestBody UserUSlotDTO dto);
 
 
 }

@@ -60,6 +60,13 @@
         update category set service_start = #{serviceStart} WHERE category_id = #{categoryId}
     </update>
 
+    <update id="setUpdateSlot" parameterType="com.example.HiMade.user.dto.UserUSlotDTO">
+        UPDATE reservation_slot
+        SET slot_status_count = #{slot_status_count} , limit_time = #{limitTime}
+        WHERE  category_id = #{categoryId} AND reservation_slot_date = #{reservationSlotDate}
+    </update>
+
+
     <insert id="setReservationForm" parameterType="UserReservationDTO" useGeneratedKeys="true" keyProperty="reservationNo">
         INSERT INTO reservation (reservation_status, reservation_time, reg_time, customer_request, reservation_price, store_id, user_id, reservation_slot_key)
         VALUES ('대기', #{reservationTime}, CURRENT_TIMESTAMP, #{customerRequest}, #{reservationPrice}, 'bbb123', 'hello@naver.com', #{reservationSlotKey})

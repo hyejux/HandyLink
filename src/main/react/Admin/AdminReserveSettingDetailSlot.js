@@ -5,8 +5,22 @@ import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './AdminReserveSettingDetailSlot.css';
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // 기본 스타일
+import 'react-date-range/dist/theme/default.css'; // 기본 테마
 
 function AdminReserveSettingDetailSlot() {
+    const [selectionRange, setSelectionRange] = useState({
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection',
+      });
+      const handleSelect = (ranges) => {
+        // 선택된 범위를 설정
+        setSelectionRange(ranges.selection);
+        console.log(selectionRange);
+      };
+
     const [viewMode, setViewMode] = useState('calendar');
     const [reservationList, setReservationList] = useState([]);
     const [selectedDates, setSelectedDates] = useState([]);
@@ -138,6 +152,44 @@ function AdminReserveSettingDetailSlot() {
         
     }
 
+    const btnUpdateSlot = () => {
+      
+        // console.log(localDateTimeString);
+        // axios.post('/userReservation/setUpdateStart', { 
+        //     startSlotDate: ,
+        //     endSlotDate: ,
+          
+        //     slotCount: ,
+        //     limitTime: ,
+        //     ,categoryId : cateId} )
+        // .then(response => {
+        //     console.log(response.data);
+            
+        // }).catch(error => {
+        //     console.log('Error fetching reservation list', error);
+        // });
+        // axios.get(`/userReservation/getAllDateTime/${cateId}`)
+        // .then(response => {
+        //     console.log(response.data);
+        //     let startDate = '';
+        //     if (response.data.length > 0) {
+        //       const firstServiceStart = response.data[0].serviceStart; // 첫 번째 객체의 serviceStart
+        //       startDate = firstServiceStart; // 상태 업데이트
+        //   }
+        //     const serviceStart = new Date(startDate);
+        //     const formattedDate = `${serviceStart.getFullYear()}-${String(serviceStart.getMonth() + 1).padStart(2, '0')}-${String(serviceStart.getDate()).padStart(2, '0')}`; // YYYY-MM-DD 형식
+        //     const formattedHour = `${String(serviceStart.getHours()).padStart(2, '0')}`; // HH 형식만 설정
+        //       console.log(formattedDate, formattedHour);
+        //     setServiceDate(formattedDate); // 날짜 상태 설정
+        //     setServiceHour(formattedHour); // 시간 상태 설정
+        //     setReservationList(response.data);
+        // })
+        // .catch(error => {
+        //     console.log('Error fetching reservation list', error);
+        // });
+        
+    }
+
 
 
 
@@ -150,6 +202,7 @@ function AdminReserveSettingDetailSlot() {
             <div className="main-slot">
         <div> 서비스 시작일 </div>
        {/* 날짜 입력 필드 */}
+       
        <input 
                 type="date" 
                 value={serviceDate} 
@@ -210,6 +263,10 @@ function AdminReserveSettingDetailSlot() {
                     </div>
                     <div className="reservation-info-container">
                         <h3>예약 정보</h3>
+                        <DateRangePicker
+                        ranges={[selectionRange]}
+                        onChange={handleSelect}
+                        />
                         <div className="icon-buttons">
                             <div> 기간 지정 변경 </div>
                           <input type="date" />  ~    <input type="date" /> 
@@ -224,6 +281,7 @@ function AdminReserveSettingDetailSlot() {
                               <input type="number" /> 
                         </div>
                             </div>
+                            <button onClick={btnUpdateSlot}> 수정 완료 </button>
                           
                          
                         {selectedDates.map((dateString, index) => (

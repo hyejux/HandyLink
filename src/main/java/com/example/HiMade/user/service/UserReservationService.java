@@ -18,6 +18,9 @@ public interface UserReservationService {
 
   public List<LocalDate> getNoSlot();
 
+  void updateReservationStatus(int reservationNo, String status);
+  void updateSlotStatus(int categoryId, LocalDate reservationDate, int storeNo);
+
 
 
 }

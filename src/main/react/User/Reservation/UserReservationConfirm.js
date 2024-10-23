@@ -146,16 +146,17 @@ function UserReservationConfirm() {
   console.log('reservationSlotKey:', reservationSlotKey);
 
   const goToAdminPage = () => {
-
+    
     window.location.href = `../UserReservationComplete.user`;
   };
-
-
-
-
-
+  
+  
+  
+  
+  
   // ----------------------- 주문등록, 결제 부분 -----------------------
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(""); // 결제수단
+  console.log("카테고리 아이디" +cateId);
 
   const requestPayment = (paymentMethod) => {
 
@@ -188,8 +189,22 @@ function UserReservationConfirm() {
         return axios.post(`/userReservation/setReservationFormDetail`, updatedArray);
       })
       .then(response => {
+        console.log("슬롯 상태 업데이트 요청 성공! ", response.data);
+        // 슬롯 상태 업데이트 요청
+        const categoryId = cateId;
+        const storeNo = 7; // 예시 store_no
+        const reservationDate = slot; // 예시 날짜, 적절히 수정
+        
+        return axios.post(`/userReservation/updateSlotStatus`, {
+            categoryId,
+            reservationDate,
+            storeNo
+        });
+    })
+      .then(response => {
         console.log("두 번째 요청 성공! ", response.data);
       })
+      
       .catch(error => {
         console.log('Error Category', error);
       })

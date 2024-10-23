@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import './MyStore.css';
 
-function TestMyStore() {
+function MyStore() {
     // 세션 스토리지에서 storeId 가져오기
     const storeId = sessionStorage.getItem('storeId');
     const storeNo = sessionStorage.getItem('storeNo');
@@ -22,7 +22,8 @@ function TestMyStore() {
         accountBank: '',
         accountNumber: '',
         storeStatus: '',
-        storeSns: [{ snsLink: '', snsName: ''}]
+        storeSns: [{ snsLink: '', snsName: ''}],
+        storeImgList:[]
     });
 
     const [initialMyStore, setInitialMyStore] = useState(myStoreInfo);
@@ -64,16 +65,6 @@ function TestMyStore() {
         setMyStoreInfo(prevState => ({
             ...prevState,
             [name]: value
-        }));
-    };
-
-    const handleChangeDayOff = (e) => {
-        const { value, checked } = e.target;
-        setMyStoreInfo(prevState => ({
-            ...prevState,
-            storeDayOff: checked
-            ? [...prevState.storeDayOff, value]
-            : prevState.storeDayOff.filter(day => day !== value)
         }));
     };
 
@@ -119,9 +110,100 @@ function TestMyStore() {
             storeSns: updatedSns
         }));
     };
-    
-//    console.log("확인 ", myStoreInfo);
-    
+
+
+    //step03 사진 업로드
+    const [selectedImages, setSelectedImages] = useState([]); // 화면에 보여질 파일 리스트 (미리보기 URL)
+    const [uploadedImageUrls, setUploadedImageUrls] = useState([]); // 서버에서 반환된 실제 이미지 URL들
+    const onSelectFile = async (e) => {
+        e.preventDefault();
+        const files = Array.from(e.target.files); // 선택된 파일들 배열로 변환
+
+        // 이미지는 8장 이하일 때만 추가
+        if (selectedImages.length + files.length <= 8) {
+
+            // 미리보기
+            const selectImgs = files.map(file => URL.createObjectURL(file));
+            setSelectedImages(prev => [...prev, ...selectImgs]);
+
+            // 파일 업로드
+            const uploadPromises = files.map(async (file) => {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    // 서버에 파일 업로드
+                    const response = await axios.post('/adminStore/uploadImageToServer', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    });
+
+                    // 서버에서 반환된 URL
+                    return response.data; // imageUrl만 반환해야 합니다.
+                } catch (error) {
+                    console.error("파일 업로드 오류: ", error); // 오류 로그 추가
+                    alert("파일 업로드에 실패했습니다. 다시 시도해 주세요."); // 사용자에게 오류 알림
+                    return null; // 오류가 발생할 경우 null 반환
+                }
+            });
+
+            // 모든 URL을 받아서 상태 업데이트
+            const imageUrls = await Promise.all(uploadPromises);
+            console.log("업로드된 이미지 URL들: ", imageUrls); // 확인 로그 추가
+
+            // null 값 필터링
+            const filteredUrls = imageUrls.filter(url => url !== null);
+
+            // 필터링된 URL이 있는 경우에만 상태 업데이트
+            if (filteredUrls.length > 0) {
+                // 실제 서버 URL 배열 업데이트
+                setUploadedImageUrls(prev => [...prev, ...filteredUrls]);
+
+                // Store 정보 업데이트
+                setMyStoreInfo(prev => ({
+                    ...prev,
+                    storeImgList: [...(prev.storeImgList || []), ...filteredUrls], // URL 배열로 업데이트
+                }));
+            } else {
+                alert("모든 파일의 업로드에 실패했습니다. 다시 확인해 주세요."); // 모든 업로드가 실패했을 경우 알림
+            }
+        } else {
+            alert('이미지는 최대 8장까지 업로드 가능합니다.');
+        }
+    };
+
+
+    const removeImage = async (index) => {
+        // 미리보기와 서버 URL이 각각 동기화되어야 함
+        const imageUrlToRemove = uploadedImageUrls[index];
+
+        try {
+            // 서버에 삭제 요청
+            await axios.delete('/adminStore/deleteImage', { data: { imageUrl: imageUrlToRemove } });
+
+            // 미리보기 이미지 상태 업데이트
+            setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
+
+            // 서버에서 저장된 실제 URL 상태 업데이트
+            setUploadedImageUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
+
+            // Store 정보 업데이트
+            setMyStoreInfo((prev) => ({
+                ...prev,
+                storeImgList: prev.storeImgList.filter((_, i) => i !== index), // URL 배열에서 삭제
+            }));
+
+        } catch (error) {
+            console.error("이미지 삭제 오류: ", error); // 오류 로그 추가
+        }
+    };
+
+    //사진업로드
+
+    console.log("myStoreInfo ",myStoreInfo);
+
+
     //입력하기
     const handleClickSet = async() => {
         if(isDisabled == true){
@@ -297,36 +379,37 @@ function TestMyStore() {
             </div>
         </div>
 
-{/*<div className="photo-upload">
-<label htmlFor="photos">사진
-<span className="small-text">* 최대 8장</span>
-</label>
-<label htmlFor="file-upload" className="custom-file-upload">
-파일 업로드
-</label>
-<input
-    id="file-upload"
-    type="file"
-    multiple // 여러 파일 선택 가능
-    onChange={onSelectFile}
-    accept=".png, .jpg, image/*"
-    style={{ display: 'none', marginTop: '10px' }} // 항상 보이도록 설정
-/>
-{selectedImages.length ? (
-<div className="photo-grid">
-    {selectedImages.map((url, index) => (
-        <div key={index} className="photo-item">
-            <img src={url} alt={`첨부파일 ${index + 1}`} />
-            <i className="bi bi-x-circle-fill" onClick={() => removeImage(index)}></i>
-        </div>
-    ))}
-</div>
-) : (
-<div className="photo-grid">파일을 첨부할 수 있습니다.</div>
-)}
 
-</div>
-*/}
+
+        <div className="section-container">
+            <h2>사진 관리</h2>
+            <label htmlFor="file-upload" className="custom-file-upload">
+                파일 업로드
+            </label>
+            <input
+                id="file-upload"
+                type="file"
+                multiple // 여러 파일 선택 가능
+                onChange={onSelectFile}
+                accept=".png, .jpg, image/*"
+                style={{ display: 'none', marginTop: '10px' }} // 항상 보이도록 설정
+            />
+            {selectedImages.length ? (
+                <div className="photo-grid">
+                    {selectedImages.map((url, index) => (
+                        <div key={index} className="photo-item">
+                            <img src={url} alt={`첨부파일 ${index + 1}`} />
+                            <i className="bi bi-x-circle-fill" onClick={() => removeImage(index)}></i>
+                        </div>
+                    ))}
+                </div>
+                ) : (
+                    <div className="photo-grid">파일을 첨부할 수 있습니다.</div>
+            )}
+
+        </div>
+
+
 
 
         <button type="button" className="modify-btn" onClick={handleClickSet}>
@@ -335,13 +418,12 @@ function TestMyStore() {
 
         {!isDisabled && (
             <button type="button" className="cancel-btn" onClick={handleCancel}>
-            취소
+                취소
             </button>
         )}
-
     </div>
 );
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<TestMyStore />);
+root.render(<MyStore />);

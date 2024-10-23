@@ -59,7 +59,9 @@ public class AdminStoreController {
     //고정휴무-update
     @PostMapping("/updateDay")
     public void updateDay(@RequestBody StoreRegistDTO storeRegistDTO) {
-            adminStoreService.updateDay(storeRegistDTO);
+        System.out.println("고정휴무 들어옴 "+ storeRegistDTO.getDayOffDayList());
+
+        adminStoreService.updateDay(storeRegistDTO);
     }
 
     //지정휴무 - insert

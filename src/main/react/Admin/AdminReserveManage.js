@@ -180,7 +180,11 @@ function AdminReserveManage() {
             )} */}
 
             <div className="main-contents">
-            <input type='text' placeholder='검색할 내용을 입력해주세요'/>
+                <div className="search-bar-box">
+                        <input type='text' placeholder='검색할 내용을 입력해주세요'/> 
+                        <button>  <i class="bi bi-search"></i> </button>
+                </div>
+
                 {viewMode === 'list' ? (
                     <div className="management-container">
                         <table className="management-table">

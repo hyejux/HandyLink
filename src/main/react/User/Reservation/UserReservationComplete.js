@@ -18,12 +18,14 @@ function UserReservationComplete() {
 
   return (
     <div>
+
       <div class="user-main-content">
 
-
         <div class="user-content-container">
-          <div class="header">결제 완료</div>
-          <div class="payment-amount">56,000원</div>
+          <div>가게 이름</div>
+          <div class="header">예약 완료</div>
+          
+          <div><a href='/UserMain.user'> 홈으로 가기 </a></div>
         </div>
 
         <div class="user-content-container">
@@ -64,13 +66,9 @@ function UserReservationComplete() {
           </div>
         </div>
 
+
       </div>
 
-      결제가 완료되었습니다 !
-
-
-      <a href='/UserMain.user'> 홈으로 가기 </a>
-      주문내역으로 가기 이런것도 ㄱㅊ을듯
     </div>
   )
 };

@@ -20,4 +20,7 @@ public interface AdminStoreService {
     String uploadImage(MultipartFile file); // 이미지 업로드
     Integer duplicatedId(String storeId); //아이디 중복검사
     StoreRegistDTO getStoreInfo(String storeId); //이미지 불러오기
+
+    List<storeNoticeDTO> getNoticeList(); // 가게소식
+    void setNotice(storeNoticeDTO dto); // 가게 소식 등록
 }

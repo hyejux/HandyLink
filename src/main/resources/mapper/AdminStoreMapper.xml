@@ -5,6 +5,27 @@
 
 <mapper namespace="com.example.HiMade.admin.mapper.AdminStoreMapper">
 
+    <select id="getNoticeList" resultType="com.example.HiMade.admin.dto.storeNoticeDTO">
+        select * from store_notice
+    </select>
+
+    <insert id="setNotice" parameterType="com.example.HiMade.admin.dto.storeNoticeDTO">
+        INSERT INTO store_notice (
+        notice_regdate,
+        notice_content,
+        notice_type,
+        store_no,
+        store_id
+        ) VALUES (
+        NOW(),
+        #{noticeContent},
+        #{noticeType},
+        1,
+        'store123'
+        );
+    </insert>
+
+
     <select id="loginCheck" resultType="com.example.HiMade.admin.dto.StoreRegistDTO">
         select * from store_admin
         where store_id = #{id} and store_pw = #{pw}

@@ -459,3 +459,18 @@
   background-color: #e9f5ff; /* 호버 시 배경색 변화 */
   cursor: pointer; /* 커서 포인터로 변경 */
 }
+
+.expanded-content {
+  border : 1px solid #ddd;
+}
+
+.bi-chevron-down {
+ cursor: pointer;
+ float: right;
+}
+
+
+/* .management-table td:nth-child(2){
+  display: flex;
+  justify-content: space-between;
+} */

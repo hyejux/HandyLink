@@ -180,20 +180,24 @@ function AdminReserveManage() {
             )} */}
 
             <div className="main-contents">
-            <input type='text' placeholder='검색할 내용을 입력해주세요'/>
+                <div className="search-bar-box">
+                        <input type='text' placeholder='검색할 내용을 입력해주세요'/> 
+                        <button>  <i class="bi bi-search"></i> </button>
+                </div>
+
                 {viewMode === 'list' ? (
                     <div className="management-container">
                         <table className="management-table">
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>예약 번호</th>
-                                    <th>고객 명</th>
-                                    <th>예약일</th>
-                                    <th>총액</th>
-                                    <th>요청사항</th>
+                                    <th>예약 번호 <i class="bi bi-chevron-expand"></i></th>
+                                    <th>고객 명 <i class="bi bi-chevron-expand"></i></th>
+                                    <th>예약일 <i class="bi bi-chevron-expand"></i></th>
+                                    <th>총액 <i class="bi bi-chevron-expand"></i></th>
+                                    <th>요청사항 <i class="bi bi-chevron-expand"></i></th>
                                     {/* <th>예약 상태</th> */}
-                                    <th>상태 변경</th>
+                                    <th>상태 변경 <i class="bi bi-chevron-expand"></i></th>
                                 </tr>
                             </thead>
                             <tbody>

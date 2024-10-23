@@ -4,14 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.HiMade.user.mapper.UserChatRoomMapper">
-<!--    <insert id="insertChat" parameterType="com.example.HiMade.user.dto.UserChatDTO">-->
-<!--        INSERT INTO CHAT (chat_content, chat_time, store_id, user_id)-->
-<!--        VALUES (#{chatContent}, CURRENT_TIMESTAMP, #{storeId}, #{userId})-->
-<!--    </insert>-->
+    <insert id="insertChat" parameterType="com.example.HiMade.user.dto.UserChatDTO">
+        INSERT INTO CHAT (chat_content, chat_time, store_id, user_id, sender_type)
+        VALUES (#{chatContent}, CURRENT_TIMESTAMP, #{storeId}, #{userId}, #{senderType})
+    </insert>
 
-<!--    <select id="getChat" resultMap="com.example.HiMade.user.dto.UserChatDTO">-->
-<!--        SELECT * FROM CHAT-->
-<!--        WHERE (#{storeId} = store_id AND #{userId} = user_id)-->
-<!--        ORDER BY send_time-->
-<!--    </select>-->
+    <select id="getChat" resultType="com.example.HiMade.user.dto.UserChatDTO">
+        SELECT * FROM CHAT
+        WHERE (#{storeId} = store_id AND #{userId} = user_id)
+        ORDER BY send_time
+    </select>
 </mapper>

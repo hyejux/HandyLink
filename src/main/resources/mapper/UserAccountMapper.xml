@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.HiMade.user.mapper.UserAccountMapper">
 
-    <!-- 아이디 중복 확인 쿼리 -->
+    <!-- 아이디 중복 확인 -->
     <select id="checkId" parameterType="String" resultType="int">
         SELECT COUNT(*) FROM USERS WHERE user_id = #{userId}
     </select>
@@ -23,7 +23,7 @@
         WHERE user_id = #{userId}
     </select>
 
-    <!-- 사용자 정보 업데이트 -->
+    <!-- 유저 정보 업데이트 -->
     <update id="updateUser" parameterType="UserDTO">
         UPDATE USERS
         SET

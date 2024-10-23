@@ -142,19 +142,42 @@ function UserMyPage () {
         }
     };
 
+    // 로그아웃
+    const handleLogout = () => {
+        if (isKakaoLogin) {
+            // 카카오 로그아웃 처리
+            const REST_API_KEY = process.env.REACT_APP_KAKAO_CLIENT_ID;
+            const LOGOUT_REDIRECT_URI = 'http://localhost:8585/UserLoginPage.user';
+
+            // 카카오 로그아웃 URL
+            const logoutUrl = `https://kauth.kakao.com/oauth/logout?client_id=${REST_API_KEY}&logout_redirect_uri=${encodeURIComponent(LOGOUT_REDIRECT_URI)}`
+
+            // 로컬 스토리지에서 사용자 정보 제거
+            localStorage.removeItem('token');
+
+            // 카카오 로그아웃 요청
+            window.location.href = logoutUrl; // 카카오 로그아웃 페이지로 이동
+        } else {
+            // 일반 회원 로그아웃 처리
+            window.location.href = '/logout'; // 시큐리티 로그아웃 경로
+        }
+    };
 
     return (
         <div>
             <div className="user-mypage-container">
                 <h2>마이 페이지</h2>
                 <div className="btn-list">
-                    <button className="logout-btn" onClick={() => window.location.href='./logout'}>로그아웃</button>
+                    <button className="logout-btn" onClick={handleLogout}>로그아웃</button>
                 </div>
                 <div className="profile-pic">
                     <img src={userInfo.userImgUrl} alt="Profile" id="profileImage"/>
-                    <div className="edit-icon" onClick={() => document.getElementById('fileInput').click()}>
-                        <i className="bi bi-pencil-square"></i>
-                    </div>
+                    {!isKakaoLogin && (
+                        <div className="edit-icon" onClick={() => document.getElementById('fileInput').click()}>
+                            <i className="bi bi-pencil-square"></i>
+                        </div>
+                    )}
+
                     <input
                         type="file"
                         id="fileInput"

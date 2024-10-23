@@ -1,6 +1,6 @@
 package com.example.HiMade.user.service;
 
-import com.example.HiMade.user.dto.UserChatDTO;
+//import com.example.HiMade.user.dto.UserChatDTO;
 
 import java.util.List;
 

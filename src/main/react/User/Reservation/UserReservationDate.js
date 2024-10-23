@@ -208,7 +208,12 @@ function UserReservationDate() {
     }, [cateId]);
 
 
-
+    const tileContent = ({ date }) => {
+       // 타일 내용이 필요 없으므로 빈 div를 반환
+  const tileContent = () => {
+    return <div style={{ visibility: 'hidden' }}></div>; // 보이지 않도록 설정
+  };
+    };
 
 
   // 비활성화할 날짜 리스트 예시 (YYYY-MM-DD 형식)
@@ -281,8 +286,11 @@ function UserReservationDate() {
           <div className="user-reserve-date-calender">
           <Calendar
         onChange={handleDateChange}
+           locale="en"
         value={date}
-        tileDisabled={tileDisabled} 
+        next2Label={null}
+        prev2Label={null}
+        // formatDay={(locale, date) => moment(date).format('D')}
       />
           </div>
  {dateTime.map((slot) => (

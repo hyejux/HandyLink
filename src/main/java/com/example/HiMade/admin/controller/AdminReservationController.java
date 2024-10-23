@@ -54,11 +54,19 @@ public class AdminReservationController {
     dto2.setServiceName(dto.getServiceName());
     dto2.setServicePrice(dto.getServicePrice());
     dto2.setServiceContent(dto.getServiceContent());
+    dto2.setServiceStart(dto.getServiceStart());
 
     // 대분류 카테고리
     int serviceId = adminReservationService.setMainCategory(dto2); // 대분류 insert
     System.out.println("메인 카테고리 삽입 후 아이디  : " + serviceId);
-//    System.out.println(dto.getCategories());
+
+    adminReserveAdd dtoSlot = new adminReserveAdd();
+    dtoSlot = dto;
+    dtoSlot.setCategoryId(serviceId);
+    System.out.println(dtoSlot);
+
+    adminReservationService.setSlotAll(dtoSlot); // 서비스 슬롯 삽입
+
 
     // 중분류 카테고리
     List<adminRSDTO> categories = dto.getCategories();
@@ -80,12 +88,8 @@ public class AdminReservationController {
         adminReservationService.setMainCategory4(subcategory); // 소분류 insert
         System.out.println("중분류 삽입됨");
       }
-
     }
-
-
     // 소분류 카테고리
-
     return serviceId;
 
   }

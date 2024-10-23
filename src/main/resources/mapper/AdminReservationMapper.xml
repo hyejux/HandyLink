@@ -58,8 +58,8 @@
 
     <!--  서비스 (대분류) 등록하기    -->
     <insert id="setMainCategory" parameterType="com.example.HiMade.admin.dto.adminReservationDTO" useGeneratedKeys="true" keyProperty="categoryId">
-        INSERT INTO category (category_level, service_name, service_price, service_content, store_id, store_no)
-        VALUES (1, #{serviceName}, #{servicePrice}, #{serviceContent}, 'bbb123' , '7')
+        INSERT INTO category (category_level, service_name, service_price, service_content, store_id, store_no, service_start)
+        VALUES (1, #{serviceName}, #{servicePrice}, #{serviceContent}, 'bbb123' , '7', #{serviceStart})
         RETURNING category_id
     </insert>
 
@@ -89,6 +89,31 @@
         SET reservation_status = #{newStatus}
         WHERE reservation_no = #{reservationId}
     </update>
+
+    <insert id="setSlotAll" parameterType="com.example.HiMade.admin.dto.adminReserveAdd">
+        INSERT INTO reservation_slot(
+        reservation_slot_date,
+        slot_count,
+        slot_status_count,
+        reservation_active,
+        store_id,
+        category_id,
+        store_no,
+        limit_time
+        ) VALUES (
+        #{reservationSlotDate},
+        #{DateNumCase, jdbcType=INTEGER},
+        0,
+        'Y',
+        #{StoreId, jdbcType=INTEGER},
+        #{categoryId, jdbcType=INTEGER},
+        #{StoreNo, jdbcType=INTEGER},
+        #{TimeNumCase, jdbcType=INTEGER}
+        );
+    </insert>
+
+
+
 
 
 </mapper>

@@ -51,7 +51,7 @@
 
     <select id="getAllDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">
         select * from reservation_slot where
-        category_id = 118
+        category_id = #{id}
     </select>
 
     <insert id="setReservationForm" parameterType="UserReservationDTO" useGeneratedKeys="true" keyProperty="reservationNo">

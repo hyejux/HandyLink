@@ -9,16 +9,19 @@ import "./UserStoreDetail.css";
 
 function UserStoreDetail() {
 
-  const [activeSection, setActiveSection] = useState('home'); 
-  const goToAdminPage = (id) => {
-    sessionStorage.setItem('storeCloseTime',storeInfo.storeCloseTime);
-    sessionStorage.setItem('storeOpenTime', storeInfo.storeOpenTime);
-    window.location.href = `/UserReservationDate.user/${id}`;
-  };
-
+  const [activeSection, setActiveSection] = useState('home');
   const [cateId, setCateId] = useState(0);
   const [reservationList, setReservationList] = useState([]);
   const [storeInfo, setStoreInfo] = useState([]);
+
+  const goToAdminPage = (id) => {
+    sessionStorage.setItem('storeCloseTime', storeInfo.storeCloseTime);
+    sessionStorage.setItem('storeOpenTime', storeInfo.storeOpenTime);
+    sessionStorage.setItem('storeNo', storeInfo.storeNo);
+    sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
+    window.location.href = `/UserReservationDate.user/${id}`;
+  };
+
   // ------------------------------------------------------
 
   useEffect(() => {
@@ -28,27 +31,36 @@ function UserStoreDetail() {
     setCateId(categoryId);
 
     axios.get(`/UserStoreDetail/getStoreMainCategory/${categoryId}`)
-    .then(response => {
-      console.log(response.data);
-      setReservationList(response.data);
-    })
-    .catch(error => {
-      console.log('Error Category', error);
-    });
+      .then(response => {
+        console.log(response.data);
+        setReservationList(response.data);
+      })
+      .catch(error => {
+        console.log('Error Category', error);
+      });
     axios.get(`/UserStoreDetail/getStoreInfo/${categoryId}`)
-    .then(response => {
-      console.log(response.data);
-      setStoreInfo(response.data);
-    })
-    .catch(error => {
-      console.log('Error Category', error);
-    });
-    
+      .then(response => {
+        console.log(response.data);
+        setStoreInfo(response.data);
+      })
+      .catch(error => {
+        console.log('Error Category', error);
+      });
 
-// categoryId  << 로 요청 보내서 가게 정보 값  가져오세요 !
+
+    // categoryId  << 로 요청 보내서 가게 정보 값  가져오세요 !
 
   }, []);
-  
+  const formatServiceStartDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+
+    return `${year}/${month}/${day} ${hours}시 `;
+  };
+
   // ------------------------------------------------------
 
 
@@ -74,41 +86,125 @@ function UserStoreDetail() {
     setCurrentSlide((prev) => (prev - 1 + storeInfo.storeImg.length) % storeInfo.storeImg.length);
   };
 
+  // ---------------------------------
+
+  // 남은 시간을 계산하는 함수
+  const calculateRemainingTime = (serviceStart) => {
+    const serviceStartDate = new Date(serviceStart);
+    const today = new Date();
+
+
+    // 두 날짜 간의 차이 계산
+    const timeDifference = serviceStartDate - today;
+
+    // 남은 시간, 일, 시간, 분, 초 계산
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+    // 음수인 경우 0으로 설정
+    return {
+      days: Math.max(days, 0),
+      hours: Math.max(hours, 0),
+      minutes: Math.max(minutes, 0),
+      seconds: Math.max(seconds, 0),
+    };
+  };
 
 
 
+  // 날짜 포맷 변환 함수
+  const convertDateFormat2 = (dateString, format) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    switch (format) {
+      case 'YYYY/MM/DD':
+        return `${year}/${month}/${day}`;
+      case 'DD-MM-YYYY':
+        return `${day}-${month}-${year}`;
+      case 'MM-DD-YYYY':
+        return `${month}-${day}-${year}`;
+      case 'YYYY/MM/DD HH:mm':
+        return `${year}/${month}/${day} ${hours}:${minutes}`; // 연/월/일 시:분
+      default:
+        return dateString; // 기본적으로 원본 반환
+    }
+  };
+
+  // ===============================
+
+  const calculateDaysUntilServiceStart = (serviceStart) => {
+    const serviceStartDate = new Date(serviceStart);
+    const today = new Date();
+
+    // 오늘 날짜의 시간을 00:00:00으로 설정
+    today.setHours(0, 0, 0, 0);
+
+    // 두 날짜 간의 차이 계산
+    const timeDifference = serviceStartDate - today;
+
+    // 차이를 일로 변환
+    const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+    // 음수인 경우 0으로 설정
+    return Math.max(daysDifference, 0);
+  };
+
+  const convertDateFormat = (dateString, format) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    switch (format) {
+      case 'YYYY/MM/DD':
+        return `${year}/${month}/${day}`;
+      case 'DD-MM-YYYY':
+        return `${day}-${month}-${year}`;
+      case 'MM-DD-YYYY':
+        return `${month}-${day}-${year}`;
+      default:
+        return dateString; // 기본적으로 원본 반환
+    }
+  };
 
 
   return (
     <div>
       <div className="user-main-container">
         <div className="user-top-nav">
-           <i className="bi bi-arrow-left"></i>
-        <logo className="logo"> 상단바 고민중 </logo>
+          <i className="bi bi-arrow-left"></i>
+          <logo className="logo"> 상단바 고민중 </logo>
         </div>
 
         <div className="user-main-content">
           <div className="user-content-first">
-          <div className="user-content-first-img">
-      {storeInfo && storeInfo.storeImg && storeInfo.storeImg.length > 0 ? (
-        <>
-          <div className="slides">
-            {storeInfo.storeImg.map((store, index) => (
-              <div
-                key={index}
-                className={`slide ${index === currentSlide ? 'active' : ''}`}
-              >
-                <img src={store.storeImgLocation} alt="가게 이미지" width="100%" height="300px" />
-              </div>
-            ))}
-          </div>
-          <button onClick={handlePrevSlide} className="slide-button prev-button">❮</button>
-          <button onClick={handleNextSlide} className="slide-button next-button">❯</button>
-        </>
-      ) : (
-        <p>이미지를 불러올 수 없습니다.</p>
-      )}
-    </div>
+            <div className="user-content-first-img">
+              {storeInfo && storeInfo.storeImg && storeInfo.storeImg.length > 0 ? (
+                <>
+                  <div className="slides">
+                    {storeInfo.storeImg.map((store, index) => (
+                      <div
+                        key={index}
+                        className={`slide ${index === currentSlide ? 'active' : ''}`}
+                      >
+                        <img src={store.storeImgLocation} alt="가게 이미지" width="100%" height="300px" />
+                      </div>
+                    ))}
+                  </div>
+                  <button onClick={handlePrevSlide} className="slide-button prev-button">❮</button>
+                  <button onClick={handleNextSlide} className="slide-button next-button">❯</button>
+                </>
+              ) : (
+                <p>이미지를 불러올 수 없습니다.</p>
+              )}
+            </div>
             <div className="user-content-first-img-num"></div>
 
             <div className="user-content-first-content">
@@ -135,19 +231,19 @@ function UserStoreDetail() {
             <div>
 
               <div className="user-content-container">
-              <div>
-             
+                <div>
+
+                </div>
               </div>
-            </div>
-            
-            <div className="user-content-container">
-              <div>
-                <i className="bi bi-emoji-smile"></i>{storeInfo.storeName}
+
+              <div className="user-content-container">
+                <div>
+                  <i className="bi bi-emoji-smile"></i>{storeInfo.storeName}
+                </div>
+                <div>
+
+                </div>
               </div>
-              <div>
-                
-              </div>
-            </div>
             </div>
           )}
 
@@ -155,21 +251,42 @@ function UserStoreDetail() {
           {/* 예약 */}
           {activeSection === 'reservation' && (
             <>
-              {reservationList.map((value, index) => (
-                <div className="user-content-container" key={index} onClick={() => goToAdminPage(value.categoryId)}>
-                  <div className="user-reserve-menu">
-                    <div className="user-reserve-menu-img">
-                    <img src={`${value.imageUrl}`} alt="My Image" />
+              {reservationList.map((value, index) => {
+                const remainingTime = calculateRemainingTime(value.serviceStart);
+                // const formattedDate = convertDateFormat(serviceStart, 'YYYY/MM/DD HH:mm');
+                const daysUntilServiceStart = calculateDaysUntilServiceStart(value.serviceStart);
+                const serviceStartDate = new Date(value.serviceStart);
+                const isServiceStarted = serviceStartDate <= new Date(); // 현재 시간이 시작일보다 큰지 체크
 
-                    </div>
-                    <div className="user-reserve-menu-content">
-                      <div>{value.serviceName}</div>
-                      <div>{value.serviceContent}</div>
-                      <div>{value.servicePrice} 원 ~</div>
+                return (
+                  <div
+                    className={`user-content-container ${isServiceStarted ? '' : 'disabled'}`}
+                    key={index}
+                    onClick={() => {
+                      if (isServiceStarted) {
+                        goToAdminPage(value.categoryId);
+                      }
+                    }}
+                  >
+                    <div className="user-reserve-menu">
+                      <div className="user-reserve-menu-img">
+                        <img src={`${value.imageUrl}`} alt="My Image" />
+                      </div>
+                      <div className="user-reserve-menu-content">
+                        {/* 남은 일수 계산 및 표시 */}
+                        {remainingTime.days !== 0 && remainingTime.hours !== 0 && remainingTime.minutes !== 0 && remainingTime.seconds !== 0 && (
+                          <> 남은 시간: {remainingTime.days}일 {remainingTime.hours}시간 {remainingTime.minutes}분 {remainingTime.seconds}초
+                            (실시간 반영할 예정)</>
+                        )}
+                        {/* 오픈까지 {daysUntilServiceStart}일 남음 ( {formatServiceStartDate(value.serviceStart)} ) */}
+                        <div>{value.serviceName}</div>
+                        <div>{value.serviceContent}</div>
+                        <div>{value.servicePrice} 원 ~</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </>
           )}
         </div>

@@ -12,6 +12,16 @@
     font-style: normal;
   }
 
+  .user-content-container {
+    cursor: pointer; /* 기본적으로 포인터 커서 설정 */
+}
+
+.disabled {
+    opacity: 0.5; /* 반투명으로 표시 */
+    pointer-events: none; /* 클릭 이벤트 무시 */
+}
+
+
 body {
   font-family: 'Pretendard-Regular';
     margin: 0px;

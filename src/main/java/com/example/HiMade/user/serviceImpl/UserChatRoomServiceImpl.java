@@ -1,5 +1,6 @@
 package com.example.HiMade.user.serviceImpl;
 
+import com.example.HiMade.user.dto.UserChatDTO;
 import com.example.HiMade.user.mapper.UserChatRoomMapper;
 import com.example.HiMade.user.service.UserChatRoomService;
 import lombok.RequiredArgsConstructor;
@@ -12,15 +13,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserChatRoomServiceImpl implements UserChatRoomService {
 
-//    private final UserChatRoomMapper userChatRoomMapper;
+    private final UserChatRoomMapper userChatRoomMapper;
 
-//    @Override
-//    public void insertChat(UserChatDTO dto) {
-//
-//    }
-//
-//    @Override
-//    public List<UserChatDTO> getChat(String storeId, String userId) {
-//        return List.of();
-//    }
+    @Override
+    public void createChatRoom(String storeId, String userId) {
+        userChatRoomMapper.insertChatRoom(storeId, userId);
+    }
+
+    @Override
+    public List<UserChatDTO> getChatRoomByUser(String userId) {
+        return userChatRoomMapper.selectChatRoomByUser(userId);
+    }
 }

@@ -38,7 +38,6 @@ function UserMyReservationDetail() {
   }, []);
 
 
-
   const [category, setCategory] = useState({
     categoryLevel: 0,
     parentCategoryLevel: 0,
@@ -54,13 +53,55 @@ function UserMyReservationDetail() {
     return `${formattedDate} ${time.substring(0, 8)}`; // 'YYYY/MM/DD HH:MM:SS' 형식으로 반환
   };
 
+  // sessionStorage에서 데이터 가져오기
+  const storedData = sessionStorage.getItem('storeInfo');
+  // 가져온 데이터를 변환하여 바로 사용
+  const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
+  console.log(storeInfo);
+
+  // 예약 취소 버튼 클릭 시 결제 상태 업데이트
+  const cancelReservation = async () => {
+    try {
+      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${cateId}`, { paymentStatus: "N", storeName: storeInfo.storeName });
+      console.log("예약 취소 성공:", response.data);
+      alert("예약이 취소되었습니다.");
+
+      // 페이지를 새로 고침하거나 다른 작업 수행
+      window.location.reload();
+    } catch (error) {
+      console.error("예약 취소 중 오류 발생:", error);
+      alert("예약 취소에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
+
 
   return (
     <div>
 
-      <h1> 예약 정보 (가게이름이나 주문일시, 상태 등등) </h1>
-      <button type="button" > 예약 취소 </button>
+      <h1> {storeInfo.storeName} </h1>
       <hr />
+
+      <div className="user-payment-info-container">
+        <div className='payment-info-top'>
+          <div className='deposit-date'>
+            2024.10.04 23:59 까지 입금해주세요.
+          </div>
+        </div>
+        <div className="payment-info-top">
+          <div className="account-left">입금 대기금액</div>
+          <div className="account-right">52,000 원</div>
+        </div>
+        <div className="payment-info-top">
+          <div className="account-left">입금 계좌</div>
+          <div className="account-right">
+            {storeInfo.accountBank} {storeInfo.accountNumber} <button className='account-number-copy-btn'><i class="bi bi-copy"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
       <h1> 예약자 정보 </h1>
 
       <hr />
@@ -135,6 +176,14 @@ function UserMyReservationDetail() {
           ))}
         </div>
       </div>
+
+      <div className="user-payment-info-container">
+        <button onClick={cancelReservation}>예약취소</button>
+      </div>
+
+
+
+
 
       <hr />
 

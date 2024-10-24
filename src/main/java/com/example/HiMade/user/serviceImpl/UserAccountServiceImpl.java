@@ -62,19 +62,20 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
     @Override
     @Transactional
     public void insertUser(UserDTO userDTO) {
-        if (userDTO.getUserPw() != null && !userDTO.getUserPw().isEmpty()) {
-            if ("KAKAO".equals(userDTO.getLoginType())) {
-                userDTO.setUserPw(null);  // 아니면 임의로 값 넣거나?
-            } else {
-                // 일반 사용자의 경우 비밀번호 암호화
-                String encodedPassword = passwordEncoder.encode(userDTO.getUserPw());
-                userDTO.setUserPw(encodedPassword);
-            }
+        if ("KAKAO".equals(userDTO.getLoginType())) {
+            String randomPassword = UUID.randomUUID().toString(); // 랜덤 값 생성
+            String encodedPassword = passwordEncoder.encode(randomPassword); // 암호화 처리
+            userDTO.setUserPw(encodedPassword); // 암호화된 비밀번호 설정
+        } else if (userDTO.getUserPw() != null && !userDTO.getUserPw().isEmpty()) {
+            // 일반 사용자의 경우 비밀번호가 제공되면 암호화
+            String encodedPassword = passwordEncoder.encode(userDTO.getUserPw());
+            userDTO.setUserPw(encodedPassword);
         } else {
             // 비밀번호가 제공되지 않은 경우 (예외 처리)
             throw new IllegalArgumentException("비밀번호가 제공되지 않았습니다.");
         }
-        userAccountMapper.insertUser(userDTO);
+
+        userAccountMapper.insertUser(userDTO); // 유저 등록
     }
 
     // 중복 체크

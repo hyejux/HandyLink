@@ -106,7 +106,22 @@ const removeImage = async (index) => {
 //사진업로드
 
 
+const [serviceStart, setServiceStart] = useState('');
+const [dateNumCase, setDateNumCase] = useState(0);
+const [timeNumCase, setTimeNumCase] = useState(0);
 
+// 입력값 변경 처리 함수
+const handleServiceStartChange = (e) => {
+  setServiceStart(e.target.value);
+};
+
+const handleDateNumChange = (e) => {
+  setDateNumCase(Number(e.target.value));
+};
+
+const handleTimeNumChange = (e) => {
+  setTimeNumCase(Number(e.target.value));
+};
 
   // -----------------------------------
   const [categories, setCategories] = useState([{
@@ -154,12 +169,23 @@ const removeImage = async (index) => {
       isPaid: category.isPaid ? 'Y' : 'N',
       isRequired: category.isRequired ? 'Y' : 'N'
     }));
+
+    // 날짜와 시간을 결합하여 "YYYY-MM-DDTHH:00:00" 형식으로 만들기
+    const combinedDateTime = `${serviceDate}T${serviceHour}:00`;
+    console.log(combinedDateTime); // 서버로 전송할 데이터
+
+
     console.log(transformedCategories);
     const requestData = {
       serviceName: reserveAdd.serviceName,
       servicePrice: reserveAdd.servicePrice,
       serviceContent: reserveAdd.serviceContent,
-      categories: transformedCategories
+      categories: transformedCategories,
+      ServiceStart: combinedDateTime,
+      DateNumCase: dateNumCase,
+      TimeNumCase: timeNumCase,
+      StoreNo : 7,
+      StoreId: 'bbb123'
     };
 
     console.log(requestData);
@@ -188,7 +214,7 @@ const removeImage = async (index) => {
         console.log('파일 업로드 성공:', response.data);
         console.log('파일 업로드 성공:', response.data);
         alert("서비스 등록이 완료되었습니다.");
-        window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
+        // window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
         
     })
     .catch(error => {
@@ -277,6 +303,12 @@ const handleChangeSubCategory = (categoryIndex, subCategoryIndex, field, value) 
   ));
 };
 
+const [serviceDate, setServiceDate] = useState(''); // 날짜 상태
+const [serviceHour, setServiceHour] = useState(''); // 시간 상태
+
+
+  
+
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -301,17 +333,35 @@ const handleChangeSubCategory = (categoryIndex, subCategoryIndex, field, value) 
         <button type="button" className="btn-st" onClick={handleComplete}>완료</button>
       </div>
       <div className="main-slot">
-                  <div> 서비스 시작일 </div>
-                 <input type="date" /> 
-          </div>
-          <div className="main-slot">
-                  <div> 일별 건수 </div>
-                 <input type="number" /> 
-          </div>
-          <div className="main-slot">
-                  <div> 시간별 예약 건수 </div>
-                 <input type="number" /> 
-          </div>
+        <div> 서비스 시작일 </div>
+       {/* 날짜 입력 필드 */}
+       <input 
+                type="date" 
+                value={serviceDate} 
+                onChange={(e) => setServiceDate(e.target.value)} 
+            />
+
+            {/* 시간 입력을 위한 드롭다운 */}
+            <select 
+                value={serviceHour} 
+                onChange={(e) => setServiceHour(e.target.value)}
+            >
+                <option value="">시간 선택</option>
+                {[...Array(24)].map((_, index) => (
+                    <option key={index} value={String(index).padStart(2, '0')}>
+                        {String(index).padStart(2, '0')}:00 {/* 두 자리로 표현 */}
+                    </option>
+                ))}
+            </select>
+      </div>
+      <div className="main-slot">
+        <div> 일별 건수 </div>
+        <input type="number" value={dateNumCase} onChange={handleDateNumChange} />
+      </div>
+      <div className="main-slot">
+        <div> 시간별 예약 건수 </div>
+        <input type="number" value={timeNumCase} onChange={handleTimeNumChange} />
+      </div>
       <div className="main-contents">
       <div className="reserve-container">
       <div className="reserve-img">

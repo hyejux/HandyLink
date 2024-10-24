@@ -24,7 +24,7 @@ function UserLoginPage () {
         form.submit();
     };
 
-    // 카카오
+    // 카카오 로그인 처리 함수
     const handleKakaoLogin = () => {
 
         // .env에서 REST API 키 가져오기

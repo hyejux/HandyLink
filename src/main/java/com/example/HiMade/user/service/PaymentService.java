@@ -35,5 +35,11 @@ public class PaymentService {
         return paymentRepository.findByReservationNo(reservationNo);
     }
 
+    // 예약 취소시 status "N" 으로 업데이트
+    public Payment updatePayment(Payment payment) {
+        return paymentRepository.save(payment);
+    }
+
+
 
 }

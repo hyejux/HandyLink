@@ -5,18 +5,20 @@
 
 <mapper namespace="com.example.HiMade.user.mapper.UserStoreMapper">
 
-<select id="getStoreMainCategory" resultType="com.example.HiMade.user.dto.UserCateDTO">
-    select *
-    from category c
-    left join category_image ci
-    on c.category_id = ci.category_id
-    where category_level = 1
-    AND store_no = #{id};
-</select>
+
+
+
+    <select id="getStoreMainCategory" resultType="com.example.HiMade.user.dto.UserCateDTO">
+        select *
+        from category c
+        left join category_image ci
+        on c.category_id = ci.category_id
+        where category_level = 1
+        AND store_no = #{id};
+    </select>
 
     <select id="getStoreInfo" resultMap="storeRegistResultMap">
-        SELECT
- *
+        SELECT *
         FROM store_admin sa
         LEFT JOIN store_sns_link sns ON sa.store_no = sns.store_no
         LEFT JOIN store_img si ON si.store_no = sa.store_no

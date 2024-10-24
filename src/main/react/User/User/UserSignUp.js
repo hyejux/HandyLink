@@ -164,7 +164,8 @@ function UserSignUp() {
                     userGender: formData.userGender,
                     userImgUrl: formData.userImgUrl // 카카오에서 제공한 이미지 URL
                 };
-                    response = await fetch('/kakao/signup', {
+                //console.log('전송될 데이터', kakaoData);
+                response = await fetch('/kakao/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

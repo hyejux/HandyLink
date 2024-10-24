@@ -12,6 +12,11 @@
     font-style: normal;
   }
 
+  .disabled-tile {
+    background-color: #d3d3d3; /* 회색 */
+    color: #946666;
+  }
+
 body {
   font-family: 'Pretendard-Regular';
     margin: 0px;
@@ -437,7 +442,7 @@ body {
   max-width: 50px;
       height: 54px;
       background-color : #fff;
-  border-radius: 5px; /* 타일의 부드러운 모서리 */
+  border-radius: 50%; /* 타일의 부드러운 모서리 */
   display: flex;
   justify-content: center;
   align-items: center;

@@ -2,6 +2,9 @@ package com.example.HiMade.user.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -18,7 +21,7 @@ public class UserCateDTO {
   private String serviceContent;
   private String storeId;
   private int storeNo;
-
+  private LocalDateTime ServiceStart;
   private int imageId;
 
   private String imageUrl;

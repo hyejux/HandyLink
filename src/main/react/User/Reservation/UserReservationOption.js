@@ -173,10 +173,11 @@ function UserReservationOption() {
     });
   };
 
+
   // sessionStorage에서 데이터 가져오기
   const storedData = sessionStorage.getItem('storeInfo');
   // 가져온 데이터를 변환하여 바로 사용
-  const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
+  const storeInfo = storedData ? JSON.parse(storedData) : null; 
   console.log(storeInfo);
 
   const goToAdminPage = (id) => {
@@ -188,8 +189,6 @@ function UserReservationOption() {
     window.location.href = `../UserReservationConfirm.user/${id}`;
 
   };
-
-
 
 
 
@@ -222,7 +221,6 @@ function UserReservationOption() {
   console.log('Slot:', slot);
   console.log('Date:', date);
   console.log('reservationSlotKey:', reservationSlotKey);
-  console.log('storeNo: ' + storeNo);
 
 
 

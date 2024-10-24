@@ -149,12 +149,16 @@ function UserReservationConfirm() {
 
 
 
+
   // sessionStorage에서 데이터 가져오기
   const storedData = sessionStorage.getItem('storeInfo');
   // 가져온 데이터를 변환하여 바로 사용
   const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
   console.log(storeInfo);
 
+  console.log(reserveModi);
+  console.log(categories);
+  
 
   // ----------------------- 주문등록, 결제 부분 -----------------------
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(""); // 결제수단
@@ -195,9 +199,9 @@ function UserReservationConfirm() {
         const categoryId = cateId;
         const storeNo = sessionSestoreNo;
         const reservationDate = date;
-
+        
         console.log("전송될 데이터:", { categoryId, reservationDate, storeNo });
-
+        
         return axios.post(`/userReservation/updateSlotStatus`, {
           categoryId,
           reservationDate,
@@ -210,68 +214,74 @@ function UserReservationConfirm() {
       .catch(error => {
         console.error('Error during slot status update', error);
       });
-
-    // ---------------------------------------------------------------------------
-
-    //결제
-    const { IMP } = window;
-    if (!IMP) {
-      console.error("IMP 객체가 정의되지 않았습니다. 아임포트 스크립트를 확인하세요.");
-      return;
-    }
-
-    IMP.init("imp14516351"); // 아임포트에서 발급받은 가맹점 식별코드
-
-    const data = {
-      pg: "html5_inicis",
-      pay_method: paymentMethod,
-      merchant_uid: `mid_${new Date().getTime()}`,
-      amount: totalPrice, // 결제 금액
-      name: "테스트 상품",
-      buyer_email: "buyer@example.com",
-      buyer_name: "테스트 구매자",
-      buyer_tel: "010-1234-5678",
-      buyer_addr: "구매자 주소",
-      buyer_postcode: "우편번호",
-      m_redirect_url: window.location.href,
-    };
-
-    IMP.request_pay(data, async function (response) {
-      if (response.success) {
-        console.log("결제 성공:", response);
-        alert(`결제 성공! 결제 ID: ${response.imp_uid}`);
-
-        console.log("예약번호: " + reservationNum);
-
-        // 결제 성공 후 DB에 저장
-        await storePaymentInfo({
-          paymentMethod: paymentMethod === "card" ? "간편결제" : "일반결제",
-          paymentAmount: totalPrice,
-          paymentStatus: "Y",
-          reservationNo: reservationNum,
-        });
-
-        sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
-        // 결제 성공 후 리다이렉트
-        window.location.href = `../UserMyReservationList.user`;
-
-      } else {
-        console.log("결제 실패:", response);
-        alert(`결제 실패! 에러 코드: ${response.error_code}, 에러 메시지: ${response.error_msg}`);
+      
+      // ---------------------------------------------------------------------------
+      
+      //결제
+      const { IMP } = window;
+      if (!IMP) {
+        console.error("IMP 객체가 정의되지 않았습니다. 아임포트 스크립트를 확인하세요.");
+        return;
       }
-    });
-  };
+      
+      IMP.init("imp14516351"); // 아임포트에서 발급받은 가맹점 식별코드
+      
+      const data = {
+        pg: "html5_inicis",
+        pay_method: paymentMethod,
+        merchant_uid: `mid_${new Date().getTime()}`,
+        amount: totalPrice, // 결제 금액
+        name: "테스트 상품",
+        buyer_email: "buyer@example.com",
+        buyer_name: "테스트 구매자",
+        buyer_tel: "010-1234-5678",
+        buyer_addr: "구매자 주소",
+        buyer_postcode: "우편번호",
+        m_redirect_url: window.location.href,
+      };
+      
+      IMP.request_pay(data, async function (response) {
+        if (response.success) {
+          console.log("결제 성공:", response);
+          alert(`결제 성공! 결제 ID: ${response.imp_uid}`);
+          
+          console.log("예약번호: " + reservationNum);
+          
+          // 결제 성공 후 DB에 저장
+          await storePaymentInfo({
+            paymentMethod: paymentMethod === "card" ? "간편결제" : "일반결제",
+            paymentAmount: totalPrice,
+            paymentStatus: "Y",
+            reservationNo: reservationNum,
+          });
 
-  const storePaymentInfo = async (paymentData) => {
-    try {
-      const response = await fetch('/userPayment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(paymentData),
+          sessionStorage.setItem('slot', slot);
+          sessionStorage.setItem('date', date);
+          sessionStorage.setItem('requestText', requestText);
+          sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
+          sessionStorage.setItem('totalPrice', totalPrice);
+          sessionStorage.setItem('reserveModi', JSON.stringify(reserveModi));
+          sessionStorage.setItem('categories', JSON.stringify(categories));
+          
+          // 결제 성공 후 리다이렉트
+          window.location.href = `../UserMyReservationList.user`;
+          
+        } else {
+          console.log("결제 실패:", response);
+          alert(`결제 실패! 에러 코드: ${response.error_code}, 에러 메시지: ${response.error_msg}`);
+        }
       });
-
+    };
+    
+    const storePaymentInfo = async (paymentData) => {
+      try {
+        const response = await fetch('/userPayment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(paymentData),
+        });
       if (response.ok) {
         const result = await response.json();
         console.log("결제 정보 저장 성공:", result);

@@ -14,12 +14,12 @@ import java.util.List;
 public interface UserReservationMapper {
 
   public List<UserRL> getMyReserveList();
-  public List<UserRSlotDTO> getDateTime(LocalDate Date);
+  public List<UserRSlotDTO> getDateTime(UserRSlotDTO Date);
   public List<UserRSlotDTO> getAllDateTime(int id);
   public int setReservationForm(UserReservationDTO dto);
   public List<UserReservationDTO> getSlotTime(int slotkey);
   public void setMainCategoryImg(AdminCategoryImgDTO dto);
-  public void setReservationFormDetail(UserReservationFormDTO dto);
+  public int setReservationFormDetail(UserReservationFormDTO dto);
   public List<UserRD> getMyReservationDetail(int id);
   public List<LocalDate> getNoSlot(int id);
   void setUpdateStart(UserRSlotDTO dto);

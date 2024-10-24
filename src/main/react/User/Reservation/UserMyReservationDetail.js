@@ -54,15 +54,34 @@ function UserMyReservationDetail() {
   };
 
   // sessionStorage에서 데이터 가져오기
+  const slot = sessionStorage.getItem('slot');
+  const date = sessionStorage.getItem('date');
+  const requestText = sessionStorage.getItem('requestText');
   const storedData = sessionStorage.getItem('storeInfo');
+  const totalPrice = sessionStorage.getItem('totalPrice');
+  const reserveData = sessionStorage.getItem('reserveModi');
+  const cateData = sessionStorage.getItem('categories');
+  const paymentData = sessionStorage.getItem('paymentInfo');
+
   // 가져온 데이터를 변환하여 바로 사용
   const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
+  const reserveModi = storedData ? JSON.parse(reserveData) : null;
+  const categories = storedData ? JSON.parse(cateData) : null;
+
+  console.log("시간: " + slot);
+  console.log("date: " + date);
   console.log(storeInfo);
+  console.log("총액: " + totalPrice);
+  console.log(reserveModi);
+  console.log(categories);
+  console.log(paymentInfo);
+
 
   // 예약 취소 버튼 클릭 시 결제 상태 업데이트
   const cancelReservation = async () => {
+    const reservationNo = cateId;
     try {
-      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${cateId}`, { paymentStatus: "N", storeName: storeInfo.storeName });
+      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, { paymentStatus: "N", storeName: storeInfo.storeName });
       console.log("예약 취소 성공:", response.data);
       alert("예약이 취소되었습니다.");
 
@@ -74,76 +93,125 @@ function UserMyReservationDetail() {
     }
   };
 
+  const goToPaymentInfo = () => {
+    // 세션에 필요한 정보 저장
+    sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
+    sessionStorage.setItem('slot', slot);
+    sessionStorage.setItem('date', date);
+    sessionStorage.setItem('totalPrice', totalPrice);
+
+    // 결제 상세 페이지로 이동
+    window.location.href = `/paymentInfo.user/${cateId}`;
+  };
+
+
+  // 계좌번호 복사
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(storeInfo.accountNumber)
+  }
 
 
   return (
     <div>
+      <div className="user-content-container">
+        <div className='store-name'>{storeInfo.storeName}</div>
+        <div className='payment-date'>{paymentInfo[0] && formatDate(paymentInfo[0].paymentDate)}</div>
+      </div>
 
-      <h1> {storeInfo.storeName} </h1>
-      <hr />
-
-      <div className="user-payment-info-container">
+      {/* 입금정보 */}
+      <div className="user-content-container">
         <div className='payment-info-top'>
-          <div className='deposit-date'>
-            2024.10.04 23:59 까지 입금해주세요.
-          </div>
+          <div className='deposit-date'>{paymentInfo[0] && formatDate(paymentInfo[0].paymentDate)} 까지 입금해주세요.</div>
         </div>
         <div className="payment-info-top">
           <div className="account-left">입금 대기금액</div>
-          <div className="account-right">52,000 원</div>
+          <div className="account-right">{paymentInfo[0]?.paymentAmount}원</div>
         </div>
         <div className="payment-info-top">
           <div className="account-left">입금 계좌</div>
           <div className="account-right">
-            {storeInfo.accountBank} {storeInfo.accountNumber} <button className='account-number-copy-btn'><i class="bi bi-copy"></i></button>
+            {storeInfo.accountBank} {storeInfo.accountNumber} <button className='account-number-copy-btn' onClick={copyToClipboard} ><i class="bi bi-copy"></i></button>
           </div>
         </div>
       </div>
 
-      <hr />
+      <div className="user-content-container">
+        <div className="info-row">
+          <div className="left"><i class="bi bi-calendar-check-fill"></i> {date}</div>
+          <div className="right"><i class="bi bi-clock-fill"></i> {slot}</div>
+        </div>
+      </div>
 
-      <h1> 예약자 정보 </h1>
 
-      <hr />
-      <h1> 주문내역 </h1>
 
-      {reservationList.map((item, index) => {
-        // 현재 항목의 대분류가 이전 항목과 다른 경우만 출력
-        const isFirstInGroup = index === 0 || reservationList[index - 1].mainCategoryName !== item.mainCategoryName;
+      {/* 예약자정보 */}
+      <div className="user-content-container">
+        예약자 정보
+      </div>
 
-        // 현재 항목의 중분류가 이전 항목과 다른 경우만 출력
-        const isMiddleCategoryDifferent = index === 0 || reservationList[index - 1].middleCategoryName !== item.middleCategoryName;
-        return (
-          <div key={index} style={{ marginBottom: '20px' }}>
-            {/* 대분류 출력 */}
-            {isFirstInGroup && <h2>{item.mainCategoryName} (+{item.mainPrice}원)</h2>}
 
-            {/* 중분류 출력 */}
-            {isMiddleCategoryDifferent && <h3>{item.middleCategoryName}</h3>}
 
-            {/* middleCategoryValue가 있다면 출력 */}
-            {item.middleCategoryValue ? (
-              <span>{item.middleCategoryValue} (+{item.middlePrice}원)</span>
-            ) : (
-              // 없다면 subCategoryName 출력
-              <span>{item.subCategoryName} (+{item.subPrice} 원)</span>
-            )}
+      {/* 예약 정보 */}
+      <div className="user-content-container">
+        <div className="header">예약 정보</div>
+        <div className="payment-info">
+          {/* 대분류와 중분류 출력 */}
+          {reservationList.map((item, resIndex) => {
+            const isFirstInGroup = resIndex === 0 || reservationList[resIndex - 1].mainCategoryName !== item.mainCategoryName;
+            const isMiddleCategoryDifferent = resIndex === 0 || reservationList[resIndex - 1].middleCategoryName !== item.middleCategoryName;
+
+            return (
+              <div key={resIndex}>
+                {/* 대분류 출력 */}
+                {isFirstInGroup && (
+                  <div className="info-row">
+                    <div className="left"><i className="bi bi-dot"></i> {item.mainCategoryName}</div>
+                    <div className="right">(+{item.mainPrice}원)</div>
+                  </div>
+                )}
+
+                {/* 중분류 출력 (첫 번째 항목에만) */}
+                <div className="info-row info-row2">
+                  {isMiddleCategoryDifferent && (
+                    <div className="left"> <i class="bi bi-check2"></i> {item.middleCategoryName}</div>
+                  )}
+                  {/* 서브카테고리 출력 */}
+                  <div className="right">{item.subCategoryName} (+{item.subPrice}원)</div>
+                </div>
+
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+
+      {/* 결제금액 */}
+      <div className="user-content-container">
+        <div className='totalPrice'>
+          <div className="info-row">
+            <div className="left">결제금액</div>
+            <div className="right">{totalPrice}</div>
           </div>
-        );
-      })}
-      <h1> 총액 </h1>
+        </div>
+      </div>
 
-      <hr />
-      <h1> 요청사항 </h1>
 
-      <hr />
+      {/* 요청사항 */}
+      <div className="user-content-container">
+        <div className="info-row">
+          <div className="left">요청사항</div>
+          <div className="right">{requestText}</div>
+        </div>
+      </div>
 
-      {/* 결제 정보 */}
-      <div className="user-payment-info-container">
+
+      {/* 결제정보 */}
+      <div className="user-content-container">
         <div className="payment-info-top">
           <div className="payment-left">결제 정보</div>
           <div className="payment-right">
-            <a href="#" onClick={() => window.location.href = `/paymentInfo.user/${cateId}`}>
+            <a href="#" onClick={goToPaymentInfo}>
               결제 상세
             </a>
           </div>
@@ -177,7 +245,7 @@ function UserMyReservationDetail() {
         </div>
       </div>
 
-      <div className="user-payment-info-container">
+      <div className="user-content-container">
         <button onClick={cancelReservation}>예약취소</button>
       </div>
 

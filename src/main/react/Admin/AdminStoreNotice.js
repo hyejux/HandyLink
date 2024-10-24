@@ -29,9 +29,9 @@ const [noticeList, setNoticeList] = useState([]);
     };
 
 
-  const goToAdminPage2 = (id) => {
-    window.location.href = `/AdminReserveSettingDetailSlot.admin/${id}`;
-  };
+//  const goToAdminPage2 = (id) => {
+//    window.location.href = `/AdminReserveSettingDetailSlot.admin/${id}`;
+//  };
 
 
   const [showAllContent, setShowAllContent] = useState(false);

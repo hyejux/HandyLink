@@ -20,12 +20,25 @@ import slotShouldForwardProp from '@mui/material/styles/slotShouldForwardProp';
 
 function AdminReserveSettingDetailSlot() {
 
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  
+    // 이번 달의 마지막 날 설정
+    // const maxDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+
+    const disablePastDates = ({ date, view }) => {
+        // view가 "month"일 때만 비활성화 조건 적용
+        return view === "month" && date < new Date().setHours(0, 0, 0, 0);
+      };
+
 
     const [startDate, setStartDate] = useState(new Date()); // 시작일
     const [endDate, setEndDate] = useState(new Date()); // 종료일 
-    const [date, setDate] = useState(); // 시작일과 종료일 배열로 관리
+    const [date, setDate] = useState(today); // 시작일과 종료일 배열로 관리
 
-  
+
     const handleDateChange = (newDate) => {
         setDate(newDate);
         
@@ -41,19 +54,39 @@ function AdminReserveSettingDetailSlot() {
 
         
     // 수정 완료 핸들러
-    const handleSaveChanges = (reservationKey) => {
-        
-        axios.post(`/userReservation/updateSlotCount1/${cateId}`,{
-            reservationSlotDate : date,
-            slotCount :  slotCounts,
-            limitTime : limitTimes
-        })
+    const handleSaveChanges = (reservationSlotKey,index) => {
+        const kstDate = new Date(date.getTime() + (9 * 60 * 60 * 1000)); // KST로 변환
+const kstDateString = kstDate.toISOString().split('T')[0]; // "YYYY-MM-DD" 형식
+
+        const requestData = {
+            reservationSlotDate:  kstDateString, // 날짜 포맷팅
+            slotCount: slotCounts[reservationSlotKey] !== undefined
+            ? slotCounts[reservationSlotKey]
+            : reservationList[index].slotCount,
+            limitTime: limitTimes[reservationSlotKey] !== undefined
+                ? limitTimes[reservationSlotKey]
+                : reservationList[index].limitTime // limitTime 기본값 설정 (예: 0)
+        };
+        console.log(date,slotCounts[reservationSlotKey],limitTimes);
+        axios.post(`/userReservation/updateSlotCount1/${cateId}`,
+            requestData
+        )
         .then(response => {
                 console.log("성공");
+                axios.get(`/userReservation/getAllDateTime/${cateId}`)
+                .then(response => {
+                    console.log(response.data);
+                    setReservationList(response.data);
+                })
+              .catch(error => {
+                  console.log('Error fetching reservation list', error);
+              });
+                alert("업데이트 되었습니다.");
         })
         .catch(error => {
             console.log('Error fetching reservation list', error);
         });
+      
   
     };
 
@@ -75,6 +108,11 @@ function AdminReserveSettingDetailSlot() {
 
     const [cateId, setCateId] = useState(0);
     useEffect(() => {
+
+
+
+
+        
       const path = window.location.pathname;
       const pathSegments = path.split('/');
       const categoryId = pathSegments[pathSegments.length - 1];
@@ -110,6 +148,9 @@ function AdminReserveSettingDetailSlot() {
 
     }, []);
 
+    useEffect(() => {
+        
+    }, []);
 
     // 예약을 날짜에 맞춰 반환하는 함수
     const getReservationsForDate = (date) => {
@@ -127,6 +168,7 @@ function AdminReserveSettingDetailSlot() {
 
 
     const handleDateClick = (date) => {
+        setShowStartDate(false); // 날짜 변경 시, 선택된 날짜 보여주기
         if (date !== null){
 
             const dateString = date.toLocaleDateString();
@@ -175,8 +217,6 @@ function AdminReserveSettingDetailSlot() {
 
  
   
-    // 오늘 날짜 가져오기
-    const today = new Date();
     const formattedToday = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
   
     // 시간 비교를 위한 현재 시간 가져오기 (24시간 형식)
@@ -226,6 +266,83 @@ function AdminReserveSettingDetailSlot() {
     return `${year}/${month}/${day}`;
   };
 
+  const [showStartDate, setShowStartDate] = useState(true); // 시작일 표시 여부
+  const [showDates, setShowDates] = useState(false); // 날짜 표시 여부
+
+
+
+
+  const handleStartDateChange = (date) => {
+    // 시작일이 변경될 때
+    if (date) {
+        setStartDate(date);
+        
+        // 종료일이 시작일보다 이전이라면 종료일을 null로 설정
+        if (endDate && date > endDate) {
+            setEndDate(null);
+        }
+
+        // 시작일을 선택할 때 기존 선택된 날짜 초기화
+        setSelectedDates([date.toLocaleDateString()]); // 기존 날짜를 초기화하고 새로운 시작일 추가
+        setShowStartDate(true); // 시작 날짜가 변경되면 시작 날짜 보이기
+        setShowDates(false); // 종료 날짜가 선택되면 종료 날짜 숨기기
+    } else {
+        // 시작일이 null이면 초기화
+        setSelectedDates([]);
+        setStartDate(null);
+        setEndDate(null);
+        setShowStartDate(false);
+        setShowDates(false);
+    }
+};
+
+const handleEndDateChange = (date) => {
+    // 종료일이 변경될 때
+    if (date) {
+        setEndDate(date);
+
+        // 종료일을 선택할 때 기존 선택된 날짜 초기화
+        setSelectedDates((prev) => {
+            const startDateString = startDate ? startDate.toLocaleDateString() : null;
+            return [startDateString, date.toLocaleDateString()].filter(Boolean); // null 값을 제거
+        });
+
+        setShowStartDate(false); // 종료 날짜가 선택되면 시작 날짜 숨기기
+        setShowDates(true); // 종료 날짜가 선택되면 선택된 날짜 보이기
+    }
+};
+  const filteredReservations = reservationList.filter((reservation) => {
+    // date를 KST로 변환하여 문자열로 비교
+    const selectedDate = new Date(date);
+    const reservationDate = new Date(reservation.reservationSlotDate);
+
+    // KST로 변환하기 위해 9시간 더하기
+    selectedDate.setHours(selectedDate.getHours() + 9);
+    reservationDate.setHours(reservationDate.getHours() + 9);
+
+    return selectedDate.toISOString().split('T')[0] === reservationDate.toISOString().split('T')[0];
+});
+
+
+
+  const displayContent = startDate || endDate ? (
+        <div>
+            {showStartDate ? (
+                <>
+                    <div>{formattedStartDate}</div> 
+                    <div>{formattedEndDate}</div>
+                </>
+            ) : (
+                selectedDates.map((dateString, index) => (
+                    <h1 key={index}>{dateString}</h1>
+                ))
+            )}
+        </div>
+    ) : null;
+
+
+const formattedStartDate = startDate ? startDate.toLocaleDateString() : '시작 날짜 없음';
+const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜 없음';
 
     return (
         <div>
@@ -315,19 +432,17 @@ function AdminReserveSettingDetailSlot() {
                     <div className="custom-calendar">
                         <h3>{startMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</h3>
 
-                        <div className='date-range'>
-                        <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} 
-                  dateFormat="yyyy/MM/dd" // Set the desired date format
-                  placeholderText="날짜를 선택하세요"/>
-                         
-                        <DatePicker selected={endDate} onChange={(date) => setEndDate(date)}
-                  dateFormat="yyyy/MM/dd" // Set the desired date format
-                  placeholderText="날짜를 선택하세요" />
-                         </div>
-                      
+                    
                         <Calendar
+                        // minDate={startOfMonth}
+                        // maxDate={endOfMonth}
+                           showMonthDropdown={false}
+                        //    showYearDropdown={false}
                             value={date}
                             locale="en-US"
+                            // minDate={today} // 오늘 이후만 선택 가능
+                            // maxDate={maxDate} // 이번 달까지만 선택 가능
+                            tileDisabled={disablePastDates}
                             tileClassName={({ date, view }) => {
                                 if (view === 'month') {
                                     const dateString = date.toISOString().split('T')[0];
@@ -347,8 +462,8 @@ function AdminReserveSettingDetailSlot() {
                                                     <li key={reservation.reservationSlotKey} className={reservation.slotCount === reservation.slotStatusCount ? 'equal-slot-count' : ''}>
                                                         {/* {reservation.reservationSlotDate} <br />
                                                         {reservation.storeId} <br /> */}
-                                                      ( {reservation.slotStatusCount}  / {reservation.slotCount} )
-                                                       <p> <i class="bi bi-stopwatch"></i> {reservation.limitTime} </p>
+                                                        ( {reservation.slotStatusCount} / {reservation.slotCount} )
+                                                        <p> <i className="bi bi-stopwatch"></i> {reservation.limitTime} </p>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -366,53 +481,78 @@ function AdminReserveSettingDetailSlot() {
 
                     <div className="reservation-info-container">
                         <h3>예약 정보</h3>
-                        
+                        <div className='date-range'>
+                        <DatePicker
+                            selected={startDate}
+                            onChange={handleStartDateChange}
+                            dateFormat="yyyy/MM/dd"
+                            placeholderText="시작 날짜를 선택하세요"
+                            selectsStart
+                            startDate={startDate}
+                            endDate={endDate}
+                            minDate={startDate}
+                        />  
+                        <DatePicker
+                            selected={endDate}
+                            onChange={handleEndDateChange}
+                            dateFormat="yyyy/MM/dd"
+                            placeholderText="종료 날짜를 선택하세요"
+                            selectsEnd
+                            startDate={startDate}
+                            endDate={endDate}
+                            minDate={startDate} // 시작일 이후로만 선택 가능
+                        />
+                      </div>
                         
                         <h3>Selected Dates</h3>
                         {/* 화면에 포맷된 startDate와 endDate의 값을 출력 */}
-                        <div>Start Date: {formatDate(startDate)}</div>
-                        <div>End Date: {formatDate(endDate)}</div>
-                        
+                        {/* formatDate  */}
+                      
+                        {displayContent} 
+                              
                         {selectedDates.map((dateString, index) => (
-    <div key={index}>
-        <h1>{dateString}</h1>
+                                <div key={index}>
 
-        <ul>
-            {getReservationsForDate(new Date(dateString)).map(reservation => {
-                // Log the date and reservation details
-                console.log(`날짜: ${dateString}, 일별 예약 제한: ${reservation.slotCount}, 시간별 예약 제한: ${reservation.limitTime}`);
+                           
+     
+                                   
 
-                return (
-                    <li 
-                        key={reservation.reservationSlotKey} 
-                    >
-                       
+                                    <ul>
 
-                       <div className='slot-num-status'>
+{filteredReservations.map((reservation,index) => {
+    console.log(`날짜: ${date.toISOString().split('T')[0]}, 일별 예약 제한: ${reservation.slotCount}, 시간별 예약 제한: ${reservation.limitTime}`);
+
+    return (
+        <li key={reservation.reservationSlotKey}>
+            <div className='slot-num-status'>
                 <strong>일별 예약 제한</strong>
                 <input
                     type='number'
-                    value={slotCounts !== undefined 
-                        ? slotCounts // 상태에서 값을 가져옴
-                        : reservation.slotCount} // 기본값으로 reservation.slotCount 사용
-                    onChange={(e) => setSlotCounts(Number(e.target.value))} // 직접 slotCount 업데이트
+                    value={slotCounts[reservation.reservationSlotKey] || reservation.slotCount} // 기본값 설정
+                    onChange={(e) => setSlotCounts((prev) => ({
+                        ...prev,
+                        [reservation.reservationSlotKey]: Number(e.target.value) // 직접 slotCount 업데이트
+                    }))}
                 />
             </div>
             <br />
-            <strong>시간별 예약 제한</strong>
-            <input
-                type='number'
-                value={limitTimes !== undefined 
-                    ? limitTimes // limitTime 상태 값 사용
-                    : reservation.limitTimes} // 기본값으로 reservation.limitTime 사용
-                onChange={(e) => setLimitTimes(Number(e.target.value))} // 직접 limitTime 업데이트
-            />
-            <button type="button" onClick={() => handleSaveChanges(reservation.reservationSlotKey)}>
+            <div className='limit-time-status'>
+                <strong>시간별 예약 제한</strong>
+                <input
+                    type='number'
+                    value={limitTimes[reservation.reservationSlotKey] || reservation.limitTime} // 기본값 설정
+                    onChange={(e) => setLimitTimes((prev) => ({
+                        ...prev,
+                        [reservation.reservationSlotKey]: Number(e.target.value) // 직접 limitTime 업데이트
+                    }))}
+                />
+            </div>
+            <button type="button" onClick={() => handleSaveChanges(reservation.reservationSlotKey,index)}>
                 수정 완료
             </button>
         </li>
-                );
-            })}
+    );
+})}
         </ul>
     </div>
 ))}

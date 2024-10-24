@@ -31,13 +31,35 @@ function UserReservationDate() {
 
 
 
-
-
+  const [disabledDates, setDisabledDates] = useState([]);
   useEffect(() => {
     const path = window.location.pathname;
     const pathSegments = path.split('/');
     const categoryId = pathSegments[pathSegments.length - 1];
     setCateId(categoryId);
+
+
+    axios
+    .get(`/adminReservation/getListDetail/${cateId}`)
+    .then(response => {
+      console.log(response.data);
+      setReserveModi(response.data);
+    })
+    .catch(error => {
+      console.log('Error Category', error);
+    });
+
+  axios
+    .get(`/userReservation/getNoSlot/${categoryId}`)
+    .then(response => {
+
+      // 상태 업데이트
+      setDisabledDates(response.data);
+      console.log('비활성화할 날짜:', response.data); // 비활성화할 날짜 확인
+    })
+
+
+    
   }, []);
 
 
@@ -210,25 +232,7 @@ function UserReservationDate() {
   const [reserveModi, setReserveModi] = useState('');
 
   useEffect(() => {
-    axios
-      .get(`/adminReservation/getListDetail/${cateId}`)
-      .then(response => {
-        console.log(response.data);
-        setReserveModi(response.data);
-      })
-      .catch(error => {
-        console.log('Error Category', error);
-      });
-
-    axios
-      .get(`/userReservation/getNoSlot`)
-      .then(response => {
-
-        // 상태 업데이트
-        setDisabledDates(response.data);
-        console.log('비활성화할 날짜:', response.data); // 비활성화할 날짜 확인
-      })
-
+    
 
   }, [cateId]);
 
@@ -243,7 +247,7 @@ function UserReservationDate() {
 
   // 비활성화할 날짜 리스트 예시 (YYYY-MM-DD 형식)
   // const disabledDates = ['2024-10-23', '2024-10-24'];
-  const [disabledDates, setDisabledDates] = useState([]);
+  
 
 
 
@@ -315,8 +319,10 @@ function UserReservationDate() {
               value={date}
               next2Label={null}
               prev2Label={null}
-              tileDisabled={tileDisabled} // 비활성화 로직 적용
-
+              tileDisabled={tileDisabled}
+              
+               // 비활성화 로직 적용
+              
             // formatDay={(locale, date) => moment(date).format('D')}
             />
           </div>
@@ -324,7 +330,7 @@ function UserReservationDate() {
             slot.slotStatusCount !== slot.slotCount ? (
               <div key={slot.reservationSlotKey}>
                 <button type="button">
-                  <div>임시) 해당 날짜 슬롯 상태: ({slot.slotStatusCount} / {slot.slotCount})</div>
+                <div>임시) 해당 날짜 슬롯 상태: ({slot.slotStatusCount} / {slot.slotCount})</div>
                 </button>
 
                 <div className="user-reserve-date-time">
@@ -350,7 +356,12 @@ function UserReservationDate() {
                 </div>
               </div>
             ) : (
-              <div key={slot.reservationSlotKey} style={{ display: 'none' }} /> // 예약이 가득 차면 숨김
+              // <div key={slot.reservationSlotKey} style={{ display: 'none' }} > 
+              
+              <h3> 예약 가능한 시간이 없습니다. </h3>
+              
+              // </div> // 예약이 가득 차면 숨김
+              
             )
           ))}
 

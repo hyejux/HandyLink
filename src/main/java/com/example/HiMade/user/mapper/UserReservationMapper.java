@@ -22,7 +22,7 @@ public interface UserReservationMapper {
   public void setMainCategoryImg(AdminCategoryImgDTO dto);
   public void setReservationFormDetail(UserReservationFormDTO dto);
   public List<UserRD> getMyReservationDetail(int id);
-  public List<LocalDate> getNoSlot();
+  public List<LocalDate> getNoSlot(int id);
   void setUpdateStart(UserRSlotDTO dto);
   void setUpdateSlot(@RequestBody UserUSlotDTO dto);
   void updateReservationStatus(@Param("reservationNo") int reservationNo, @Param("status") String status);

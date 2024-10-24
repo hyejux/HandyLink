@@ -37,8 +37,6 @@
 .admin-store-info-container
 .btn-group {
     display: flex;
-    /* justify-content: space-between; */
-    /* align-items: baseline; */
     gap: 2%;
     width: 79%;
 }

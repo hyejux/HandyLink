@@ -36,7 +36,7 @@ function AdminLogin() {
 
             if (response.status === 200 && storeId) { // storeId가 null 또는 빈 문자열이 아닌지 확인
                 alert(`로그인 성공 ${storeId}`);
-                window.location.href = `/admin.admin?storeId=${storeId}`;
+                window.location.href = `/adminsignupapproval.admin?${storeNo}`;
             } else {
                 alert('해당 정보를 찾을 수 없습니다.');
             }

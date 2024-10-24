@@ -35,8 +35,15 @@ function AdminStoreInfo() {
                 // sessionId가 null이 아닌 경우에만 API 요청
                 if (storeId) {
                     const response = await axios.get(`/adminStore/myStoreInfo?storeNo=${storeNo}`);
-                    console.log("업체정보: ", response.data);
-                    setStoreInfo(response.data); // 상태 업데이트
+                    const data = response.data;
+
+                    // 가입일 (storeSignup) 시간을 제외하고 날짜만 표시
+                    const formattedSignupDate = new Date(data.storeSignup).toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+
+                    setStoreInfo({
+                        ...data,
+                        storeSignup: formattedSignupDate // 가입일을 변환된 날짜로 설정
+                    });
                 } else {
                     console.log("세션 ID가 없습니다.");
                 }
@@ -53,12 +60,6 @@ function AdminStoreInfo() {
     //수정하기
     const [isDisabled, setIsDisabled] = useState(true);
 
-    const toggleModify = () => {
-        setIsDisabled(!isDisabled);
-
-        console.log("수정",isDisabled);
-    }
-
     const handleChangeStoreInfo = (e) => {
       const {id, value} = e.target;
 
@@ -68,9 +69,82 @@ function AdminStoreInfo() {
         }));
     };
 
+    console.log("마이페이지 ", storeInfo);
 
+    //주소
+    const postcodeRef = useRef(null);
+    const addressRef = useRef(null);
+    const detailAddressRef = useRef(null);
 
+    // 우편번호 검색 기능
+    const openPostcode = () => {
+        if (window.daum && window.daum.Postcode) {
+            new window.daum.Postcode({
+                oncomplete: function(data) {
+                    let addr = data.userSelectedType === 'R' ? data.roadAddress : data.jibunAddress;
+                    let extraAddr = '';
 
+                    if (data.userSelectedType === 'R') {
+                        if (data.bname && /[동|로|가]$/g.test(data.bname)) {
+                            extraAddr += data.bname;
+                        }
+                        if (data.buildingName && data.apartment === 'Y') {
+                            extraAddr += (extraAddr ? ', ' : '') + data.buildingName;
+                        }
+                        extraAddr = extraAddr ? ` (${extraAddr})` : '';
+                    }
+
+                    setStoreInfo(prevData => ({
+                        ...prevData,
+                        zipcode: data.zonecode,
+                        addr: addr,
+                        addrdetail: ''
+                    }));
+
+                    detailAddressRef.current.focus();
+                }
+            }).open();
+        } else {
+            console.error("Postcode library is not loaded");
+        }
+    };
+
+    //수정하기
+    const toggleModify = async () => {
+        if (isDisabled) {
+            setIsDisabled(false);
+        } else {
+            try {
+                if(!isDisabled){
+                    const checkBlank = Object.values(storeInfo).some(info => info === ''); // 빈칸 있는지 확인
+                    if (checkBlank) {
+                        alert('정보를 입력해주세요.');
+                        return;
+                    }
+
+                    await axios.post('/adminStore/updateStoreInfo', {
+                        storeId,
+                        storeNo,
+                        storePw:storeInfo.storePw,
+                        storeCate: storeInfo.storeCate,
+                        storeName: storeInfo.storeName,
+                        storeMaster: storeInfo.storeMaster,
+                        managerName: storeInfo.managerName,
+                        managerPhone: storeInfo.managerPhone,
+                        zipcode:  storeInfo.zipcode,
+                        addr: storeInfo.addr,
+                        addrdetail: storeInfo.addrdetail,
+                        storeBusinessNo: storeInfo.storeBusinessNo
+                    });
+
+                    setIsDisabled(true);
+                }
+
+            } catch (error) {
+                console.log("Error updating store info: ", error);
+            }
+        }
+    };
 
 
     return(
@@ -120,13 +194,34 @@ function AdminStoreInfo() {
                 </div>
             </div>
 
-            <div className="form-group">
-                <label htmlFor="address">가게 주소</label>
-                <div className="input-field">
-                    <input type="text" id="addr" value={storeInfo.addr} onChange={handleChangeStoreInfo} disabled/>
-                    <input type="text" id="addrdetail" value={storeInfo.addrdetail} onChange={handleChangeStoreInfo} disabled/>
+            {!isDisabled ? (
+                <div className="form-group">
+                    <label htmlFor="address">사업자 주소</label>
+                    <div className="input-field">
+                        <div className="btn-group">
+                            <input type="text" id="zipcode" value={storeInfo.zipcode} ref={postcodeRef} placeholder="우편번호" style={{ width: '35%' }} placeholder="우편번호" readOnly />
+                            <input type="button" className="btn-postcode" onClick={openPostcode} style={{ width: '27%' }} value="주소검색" />
+                        </div>
+                        <input type="text" id="addr" value={storeInfo.addr} ref={addressRef} placeholder="주소" style={{ marginBottom: '5px' }} readOnly />
+                        <input type="text" id="addrdetail" value={storeInfo.addrdetail} ref={detailAddressRef} placeholder="상세주소"
+                        onChange={(e) =>
+                            setStoreInfo(prevData => ({
+                                ...prevData,
+                                addrdetail: e.target.value
+                            }))
+                            }
+                        />
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <div className="form-group">
+                    <label htmlFor="address">가게 주소</label>
+                    <div className="input-field">
+                        <input type="text" id="addr" value={storeInfo.addr} onChange={handleChangeStoreInfo} style={{marginBottom: '5px'}} disabled />
+                        <input type="text" id="addrdetail" value={storeInfo.addrdetail} onChange={handleChangeStoreInfo} disabled />
+                    </div>
+                </div>
+            )}
 
             <div className="form-group">
                 <label htmlFor="storeBusinessNo">사업자등록번호</label>
@@ -138,7 +233,7 @@ function AdminStoreInfo() {
             <div className="form-group">
                 <label htmlFor="storeSignup">가입일</label>
                 <div className="input-field">
-                    <input type="text" id="storeSignup" value={storeInfo.storeSignup}/>
+                    <input type="text" id="storeSignup" value={storeInfo.storeSignup} disabled/>
                 </div>
             </div>
 

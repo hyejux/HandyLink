@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import './MyStore.css';
 
-function TestMyStore() {
+function MyStore() {
     // 세션 스토리지에서 storeId 가져오기
     const storeId = sessionStorage.getItem('storeId');
     const storeNo = sessionStorage.getItem('storeNo');
@@ -22,7 +22,8 @@ function TestMyStore() {
         accountBank: '',
         accountNumber: '',
         storeStatus: '',
-        storeSns: [{ snsLink: '', snsName: ''}]
+        storeSns: [{ snsLink: '', snsName: ''}],
+        storeImg:[{storeImgLocation: ''}]
     });
 
     const [initialMyStore, setInitialMyStore] = useState(myStoreInfo);
@@ -34,7 +35,11 @@ function TestMyStore() {
                 if(storeId && storeNo){
                     const resp = await axios.get(`/adminStore/myStoreInfo?storeNo=${storeNo}`);
                     console.log("불러온 데이터 이거 ", resp.data);
-                    setMyStoreInfo(resp.data);
+                    setMyStoreInfo(info => ({
+                        ...resp.data,
+                        storeImg: resp.data.storeImg.map(img => ({ storeImgLocation: img.storeImgLocation })) // 배열로 수정
+                    }));
+
                     setInitialMyStore(resp.data);
                 } else{
                     console.log("세션에 아이디정보가 없습니다.");
@@ -45,7 +50,7 @@ function TestMyStore() {
             };
         }
         fetchMyStoreInfo();
-//        console.log("불러온 데이터 ",myStoreInfo);
+        //        console.log("불러온 데이터 ",myStoreInfo);
     },[]);
 
     const [isDisabled, setIsDisabled] = useState(true);
@@ -64,16 +69,6 @@ function TestMyStore() {
         setMyStoreInfo(prevState => ({
             ...prevState,
             [name]: value
-        }));
-    };
-
-    const handleChangeDayOff = (e) => {
-        const { value, checked } = e.target;
-        setMyStoreInfo(prevState => ({
-            ...prevState,
-            storeDayOff: checked
-            ? [...prevState.storeDayOff, value]
-            : prevState.storeDayOff.filter(day => day !== value)
         }));
     };
 
@@ -119,9 +114,94 @@ function TestMyStore() {
             storeSns: updatedSns
         }));
     };
-    
-//    console.log("확인 ", myStoreInfo);
-    
+
+
+    //step03 사진 업로드
+    const [selectedImages, setSelectedImages] = useState([]); // 화면에 보여질 파일 리스트 (미리보기 URL)
+    const [uploadedImageUrls, setUploadedImageUrls] = useState([]); // 서버에서 반환된 실제 이미지 URL들
+    const onSelectFile = async (e) => {
+        e.preventDefault();
+        const files = Array.from(e.target.files); // 선택된 파일들 배열로 변환
+
+        // 이미지는 8장 이하일 때만 추가
+        if (selectedImages.length + files.length < 8) {
+
+            // 미리보기
+            const selectImgs = files.map(file => URL.createObjectURL(file));
+            setSelectedImages(prev => [...prev, ...selectImgs]);
+
+            // 파일 업로드
+            const uploadPromises = files.map(async (file) => {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    // 서버에 파일 업로드
+                    const response = await axios.post('/adminStore/uploadImageToServer', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    });
+
+                    // 서버에서 반환된 URL
+                    return response.data; // imageUrl만 반환해야 합니다.
+                } catch (error) {
+                    console.error("파일 업로드 오류: ", error); // 오류 로그 추가
+                    alert("파일 업로드에 실패했습니다. 다시 시도해 주세요."); // 사용자에게 오류 알림
+                    return null; // 오류가 발생할 경우 null 반환
+                }
+            });
+
+            // 모든 URL을 받아서 상태 업데이트
+            const imageUrls = await Promise.all(uploadPromises);
+            console.log("업로드된 이미지 URL들: ", imageUrls); // 확인 로그 추가
+
+            // null 값 필터링
+            const filteredUrls = imageUrls.filter(url => url !== null);
+
+            if (filteredUrls.length > 0 && filteredUrls !== null) {
+                // 실제 서버 URL 배열 업데이트
+                setUploadedImageUrls(prev => [...prev, ...filteredUrls]);
+
+                setMyStoreInfo(prev => ({
+                    ...prev,
+                    storeImg: [
+                        ...(prev.storeImg || []),
+                        ...filteredUrls.map(url => ({ storeImgLocation: url })) // URL을 객체로 변환하여 추가
+                    ]
+                }));
+            } else {
+                alert("업로드된 파일 중 중복된 파일이 있습니다.");
+            }
+        } else {
+            alert('이미지는 최대 8장까지 업로드 가능합니다.');
+        }
+    };
+
+    const removeImage = (index, isUploadedImage) => {
+        // 이미지를 삭제할 때 서버 요청 없이 로컬 상태에서만 삭제
+        if (isUploadedImage) {
+            // 업로드된 이미지일 경우 (서버에서 가져온 이미지)
+            setUploadedImageUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
+
+            // Store 정보 업데이트 (서버에서 가져온 이미지 삭제)
+            setMyStoreInfo((prev) => ({
+                ...prev,
+                storeImg: prev.storeImg.filter((_, i) => i !== index),
+            }));
+        } else {
+            // 새로 선택된 이미지일 경우 (미리보기 상태)
+            setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
+        }
+    };
+
+
+
+    //사진업로드
+
+    console.log("myStoreInfo ",myStoreInfo);
+
+
     //입력하기
     const handleClickSet = async() => {
         if(isDisabled == true){
@@ -132,7 +212,7 @@ function TestMyStore() {
         try {
             if (!isDisabled){
                 // 저장되지 않은 SNS를 체크
-                const hasUnsavedSns = myStoreInfo.storeSns.some(sns => !sns.isDisabled); // 저장되지 않은 SNS가 있는지 확인
+                const hasUnsavedSns = myStoreInfo.storeSns.some(sns => sns.isDisabled); // 저장되지 않은 SNS가 있는지 확인
                 const hasEmptySnsLink = myStoreInfo.storeSns.some(sns => sns.snsLink === ''); // 링크가 비어있는지 확인
 
                 if (hasUnsavedSns || hasEmptySnsLink) {
@@ -156,6 +236,11 @@ function TestMyStore() {
                         snsLink: sns.snsLink,
                         snsName: sns.snsName
                     })),
+                    storeImg: myStoreInfo.storeImg.map(img => ({
+                        storeId: myStoreInfo.storeId,
+                        storeNo: myStoreInfo.storeNo,
+                        storeImgLocation: img.storeImgLocation
+                    })),
                     storeStatus: myStoreInfo.storeStatus
                 });
                 console.log("등록성공 ", response.data);
@@ -167,14 +252,6 @@ function TestMyStore() {
         }
     };
 
-
-    //수정취소
-    const handleCancel = () => {
-        setMyStoreInfo(initialMyStore);
-        setIsDisabled(true);
-    };
-
-    
 
     return (
     <div className="admin-store-info-container">
@@ -215,17 +292,17 @@ function TestMyStore() {
                 <div className="form-group">
                     <label htmlFor="storeIntro">소개</label>
                     <div className="input-field" >
-                        <textarea rows="4" id="storeIntro"  value={myStoreInfo.storeIntro} onChange={handleChangeInfo} disabled={isDisabled} style={{resize:'none', height: '150px'}} />
+                        <textarea rows="4" id="storeIntro"  value={myStoreInfo.storeIntro} onChange={handleChangeInfo} disabled={isDisabled} />
                     </div>
                 </div>
 
 
-                <div className="form-group">
-                    <label htmlFor="storeNotice">공지사항</label>
+                {/*<div className="form-group">
+                        <label htmlFor="storeNotice">공지사항</label>
                     <div className="input-field">
                         <textarea rows="4" id="storeNotice" value={myStoreInfo.storeNotice} onChange={handleChangeInfo} disabled={isDisabled} style={{resize:'none', height: '150px'}}/>
                     </div>
-                </div>
+                </div>*/}
             </div>
         </div>
 
@@ -236,7 +313,7 @@ function TestMyStore() {
                 {myStoreInfo.storeSns.length < 3 && !isDisabled && (
                     <button type="button" onClick={() => setMyStoreInfo(prevState => ({
                             ...prevState,
-                            storeSns: [...prevState.storeSns, { snsLink: ''}]
+                            storeSns: [...prevState.storeSns, { snsLink: '', isDisabled: true }]
                         }))}>
                         SNS 링크 추가
                     </button>
@@ -246,7 +323,7 @@ function TestMyStore() {
                         <div key={index} className="sns-row">
                             <label>SNS {index + 1}</label>
 
-                            {(sns.isDisabled || isDisabled) ? (
+                            {(!sns.isDisabled || isDisabled) ? (
                                 <div className="sns-fix">
                                     {sns.snsLink}
                                 </div>
@@ -257,16 +334,16 @@ function TestMyStore() {
                                 placeholder={`SNS ${index + 1} 링크를 입력하세요`}
                                 value={sns.snsLink}
                                 onChange={(e) => handleChangeSns(index, 'snsLink', e.target.value)}
-                                disabled={sns.isDisabled}
+                                disabled={!sns.isDisabled}
                                 />
                             )}
                             {!isDisabled && index > -1 && (
                                 <>
                                     <button type="button" onClick={() => handleFixSns(index)}>
-                                        {sns.isDisabled ? '수정':'저장'}
+                                        {!sns.isDisabled ? '수정':'저장'}
                                     </button>
-                                    <button type="button" onClick={() => handleDeleteSns(index)}>
-                                        삭제
+                                    <button type="button" className="snsDelete-btn" onClick={() => handleDeleteSns(index)}>
+                                        <i class="bi bi-x-square-fill"></i>
                                     </button>
                                 </>
                             )}
@@ -297,51 +374,61 @@ function TestMyStore() {
             </div>
         </div>
 
-{/*<div className="photo-upload">
-<label htmlFor="photos">사진
-<span className="small-text">* 최대 8장</span>
-</label>
-<label htmlFor="file-upload" className="custom-file-upload">
-파일 업로드
-</label>
-<input
-    id="file-upload"
-    type="file"
-    multiple // 여러 파일 선택 가능
-    onChange={onSelectFile}
-    accept=".png, .jpg, image/*"
-    style={{ display: 'none', marginTop: '10px' }} // 항상 보이도록 설정
-/>
-{selectedImages.length ? (
-<div className="photo-grid">
-    {selectedImages.map((url, index) => (
-        <div key={index} className="photo-item">
-            <img src={url} alt={`첨부파일 ${index + 1}`} />
-            <i className="bi bi-x-circle-fill" onClick={() => removeImage(index)}></i>
+
+
+        <div className="section-container">
+            <h2>사진 관리</h2>
+            <label htmlFor="file-upload" className="custom-file-upload">
+                파일 업로드
+            </label>
+            <input
+                id="file-upload"
+                type="file"
+                multiple // 여러 파일 선택 가능
+                onChange={onSelectFile}
+                accept=".png, .jpg, .jpeg, image/*"
+                style={{ display: 'none', marginTop: '10px' }}
+                disabled={isDisabled}
+            />
+            <div className="photo-grid">
+                {/* DB에서 가져온 이미지 */}
+                {myStoreInfo.storeImg.length > 0 && myStoreInfo.storeImg.map((imgurl, index) => (
+                    imgurl.storeImgLocation ? (
+                    <div key={imgurl.storeImgLocation} className="photo-item">
+                        <img src={imgurl.storeImgLocation} alt={`DB 이미지 ${index + 1}`} />
+                        {!isDisabled && (
+                            <i className="bi bi-x-circle-fill" onClick={() => removeImage(index, true)}></i>
+                        )}
+                    </div>
+                ) : null
+                ))}
+
+                {/* 선택된 이미지 */}
+                {!isDisabled && selectedImages.length > 0 && selectedImages.map((url, index) => (
+                    <div key={url} className="photo-item">
+                        <img src={url} alt={`첨부파일 ${index + 1}`} />
+                            <i className="bi bi-x-circle-fill" onClick={() => removeImage(index, false)}></i>
+                    </div>
+                ))}
+            </div>
         </div>
-    ))}
-</div>
-) : (
-<div className="photo-grid">파일을 첨부할 수 있습니다.</div>
-)}
-
-</div>
-*/}
 
 
-        <button type="button" className="modify-btn" onClick={handleClickSet}>
-            {isDisabled ? '수정하기' : '수정완료'}
-        </button>
 
-        {!isDisabled && (
-            <button type="button" className="cancel-btn" onClick={handleCancel}>
-            취소
+        <div className="btn-box">
+            <button type="button" className="modify-btn" onClick={handleClickSet}>
+                {isDisabled ? '수정하기' : '수정완료'}
             </button>
-        )}
 
+            {!isDisabled && (
+                <button type="button" className="cancel-btn" onClick={() => window.location.href = '/mystore.admin'}>
+                    취소
+                </button>
+            )}
+        </div>
     </div>
 );
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<TestMyStore />);
+root.render(<MyStore />);

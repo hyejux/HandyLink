@@ -1,0 +1,77 @@
+/*.store-day-off-container {*/
+/*    padding: 20px;*/
+/*    background-color: #f4f6f8;*/
+/*    font-family: 'Arial', sans-serif;*/
+/*}*/
+
+.day-off {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.calendar-wrapper {
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.day-off-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.day-off-list li {
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button.day-off-btn, button.day-off.add {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button.day-off-btn:hover, button.day-off.add:hover {
+    background-color: #0056b3;
+}
+
+button.day-off.add {
+    margin-top: 10px;
+}
+
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    /*    color: #ff6b6b;*/
+}
+
+button:hover {
+    color: #c20e0e;
+}
+
+/* Highlight the selected date range */
+.highlight {
+    background-color: #ddd;
+    color: #000;
+}
+

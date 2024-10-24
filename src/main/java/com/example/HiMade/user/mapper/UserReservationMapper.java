@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -27,5 +26,5 @@ public interface UserReservationMapper {
   void setUpdateSlot(@RequestBody UserUSlotDTO dto);
   void updateReservationStatus(@Param("reservationNo") int reservationNo, @Param("status") String status);
   void updateSlotStatus(@Param("categoryId") int categoryId, @Param("reservationDate") LocalDate reservationDate, @Param("storeNo") int storeNo);
-
+  void updateSlotCount1(UserRSlotDTO dto);
 }

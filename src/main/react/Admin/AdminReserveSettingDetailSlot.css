@@ -27,7 +27,36 @@
     background-color: #2e3133;
   
   }
-  
+
+
+  .main-slot {
+    width: 100%;
+  }
+
+  .main-slot2 {
+    display: flex;
+    gap: 20px;
+  }
+  .main-slot-input {
+    
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    padding: 10px;
+    gap: 10px;
+    color : #222222;
+    font-size: 15px;
+  }
+
+  .main-slot-input  > input ,   .main-slot-input  > select {
+    border: none;
+    background-color: #fff;
+  }
+
+  .main-slot-title {
+    font-size : 25px;
+    font-weight: bold;
+  }
   
   /* ------------------------------------------ */
   
@@ -226,11 +255,104 @@
     /* 배경 색상 */
   }
   
+  .reserve-content-text-box {
+    /* border : 1px solid red; */
+    overflow: auto;
+    height: 84px;
+  }
+  
+  .reserve-container {
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px 0 #eee, 0 3px 5px 0 #eee;
+    border-radius: 10px;
+    display: flex;
+    /* margin: 2% 10%; */
+    width: 100%;
+    margin-bottom: 30px;
+    height: 200px;
+  }
+  
+  .reserve-img {
+    margin: 20px;
+    width: 40%;
+    height: 80%;
+    position: relative;
+  }
+  
+  .reserve-img > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  
+  }
+  
+  .reserve-content{
+    /* border : 1px solid red; */
+    width: 100%;
+    margin: 30px 20px;
+    margin-right: 30px;
+  
+  }
+  .reserve-content-text {
+    font-size: 17px;
+  }
+  .reserve-content-title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    font-size: 25px;
+    font-weight: bold;
+    align-items: baseline;
+  }
+  
+  .reserve-content-title {
+    margin-bottom: 10px;
+}
+
+
+.reserve-content-text > textarea {
+  width: 100%;
+  overflow: auto;
+
+  resize: none;
+  font-size: 20px;
+  font-family: 'Pretendard-Regular';
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.btn-imgChg {
+  position: absolute;
+  top:0;
+  left: 0;
+
+}
+
+
+.reserve-content-title-name > input{
+    width: 100%;
+    font-size: 20px;
+     font-family: 'Pretendard-Regular';
+     border: 1px solid #ddd;
+     border-radius: 3px;
+  }
+
+  .reserve-content-title-price > input{
+    text-align: right;
+
+    width: 120px;
+    font-size: 20px;
+    font-family: 'Pretendard-Regular';
+    border: 1px solid #ddd;
+    border-radius: 3px;
+  }
+
   
   
   /* 캘린더 부분 */
   .custom-calendar {
-    max-width: 50%;
+    max-width: 65%;
     /* 캘린더 너비 */
     background-color: #fff;
     border: 1px solid #ccc;
@@ -381,15 +503,12 @@
     
 }
 
-  .reservation-list li:hover {
+  /* .reservation-list li:hover {
     background-color: #e6f7ff;
-    /* 호버 시 배경색 변경 */
     cursor: pointer;
-    /* 커서 포인터로 변경 */
     border-left: 4px solid #007bff;
-    /* 왼쪽 테두리 강조 */
   }
-  
+   */
   
   
   /* 캘린더 옆 예약정보 리스트 */

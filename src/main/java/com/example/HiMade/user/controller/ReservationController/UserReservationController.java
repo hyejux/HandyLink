@@ -1,6 +1,7 @@
 package com.example.HiMade.user.controller.ReservationController;
 
 
+import com.example.HiMade.admin.dto.adminReserveMangeDTO;
 import com.example.HiMade.user.dto.UserRSlotDTO;
 import com.example.HiMade.user.dto.UserReservationDTO;
 import com.example.HiMade.user.dto.UserReservationFormDTO;
@@ -102,7 +103,12 @@ public class UserReservationController {
     }
   }
 
-
+  @PostMapping("/updateSlotCount1/{id}")
+  public void updateSlotCount1(@RequestBody UserRSlotDTO dto, @PathVariable int id){
+    dto.setCategoryId(id);
+    System.out.println(dto + " dto ㅇ비니다 !! ");
+    userReservationService.updateSlotCount1(dto);
+  }
 
 
 

@@ -91,6 +91,11 @@
         select reservation_slot_date from reservation_slot where slot_count = slot_status_count AND category_id = #{id}
     </select>
 
+    <update id="updateSlotCount1" parameterType="com.example.HiMade.user.dto.UserRSlotDTO">
+        update reservation_slot
+        set slot_count = #{slotCount}, limit_time = #{limitTime}
+        where reservation_slot_date = #{reservationSlotDate} and  category_id = #{categoryId}
+    </update>
 
     <update id="updateReservationStatus">
         UPDATE reservation SET reservation_status = #{status} WHERE reservation_no = #{reservationNo}

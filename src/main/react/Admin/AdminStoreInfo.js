@@ -35,8 +35,15 @@ function AdminStoreInfo() {
                 // sessionId가 null이 아닌 경우에만 API 요청
                 if (storeId) {
                     const response = await axios.get(`/adminStore/myStoreInfo?storeNo=${storeNo}`);
-                    console.log("업체정보: ", response.data);
-                    setStoreInfo(response.data); // 상태 업데이트
+                    const data = response.data;
+
+                    // 가입일 (storeSignup) 시간을 제외하고 날짜만 표시
+                    const formattedSignupDate = new Date(data.storeSignup).toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+
+                    setStoreInfo({
+                        ...data,
+                        storeSignup: formattedSignupDate // 가입일을 변환된 날짜로 설정
+                    });
                 } else {
                     console.log("세션 ID가 없습니다.");
                 }
@@ -108,10 +115,31 @@ function AdminStoreInfo() {
             setIsDisabled(false);
         } else {
             try {
-                await axios.post('/adminStore/updateStoreInfo', {
-                    storeInfo
-                });
-                setIsDisabled(true);
+                if(!isDisabled){
+                    const checkBlank = Object.values(storeInfo).some(info => info === ''); // 빈칸 있는지 확인
+                    if (checkBlank) {
+                        alert('정보를 입력해주세요.');
+                        return;
+                    }
+
+                    await axios.post('/adminStore/updateStoreInfo', {
+                        storeId,
+                        storeNo,
+                        storePw:storeInfo.storePw,
+                        storeCate: storeInfo.storeCate,
+                        storeName: storeInfo.storeName,
+                        storeMaster: storeInfo.storeMaster,
+                        managerName: storeInfo.managerName,
+                        managerPhone: storeInfo.managerPhone,
+                        zipcode:  storeInfo.zipcode,
+                        addr: storeInfo.addr,
+                        addrdetail: storeInfo.addrdetail,
+                        storeBusinessNo: storeInfo.storeBusinessNo
+                    });
+
+                    setIsDisabled(true);
+                }
+
             } catch (error) {
                 console.log("Error updating store info: ", error);
             }
@@ -205,7 +233,7 @@ function AdminStoreInfo() {
             <div className="form-group">
                 <label htmlFor="storeSignup">가입일</label>
                 <div className="input-field">
-                    <input type="text" id="storeSignup" value={storeInfo.storeSignup}/>
+                    <input type="text" id="storeSignup" value={storeInfo.storeSignup} disabled/>
                 </div>
             </div>
 

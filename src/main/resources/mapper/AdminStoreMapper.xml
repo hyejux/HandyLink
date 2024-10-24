@@ -5,6 +5,7 @@
 
 <mapper namespace="com.example.HiMade.admin.mapper.AdminStoreMapper">
 
+
     <select id="getNoticeList" resultType="com.example.HiMade.admin.dto.storeNoticeDTO">
         select * from store_notice
     </select>
@@ -25,7 +26,7 @@
         );
     </insert>
 
-
+    <!-- 계정관리(가입,로그인,마이페이지)  -->
     <select id="loginCheck" resultType="com.example.HiMade.admin.dto.StoreRegistDTO">
         select * from store_admin
         where store_id = #{id} and store_pw = #{pw}
@@ -74,6 +75,23 @@
         values (#{dayOffType}, #{storeId}, #{storeNo}, #{dayOffFixStatus}, #{dayOffDay});
     </insert>
 
+    <update id="updateStoreInfo" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
+        update store_admin
+        set
+            store_pw = #{storePw},
+            store_cate = #{storeCate},
+            store_name = #{storeName},
+            store_master = #{storeMaster},
+            manager_name = #{managerName},
+            manager_phone = #{managerPhone},
+            zipcode = #{zipcode},
+            addr = #{addr},
+            addrdetail = #{addrdetail},
+            store_business_no = #{storeBusinessNo}
+        where store_id = #{storeId} and store_no = #{storeNo}
+    </update>
+
+
 <!--  가게관리  -->
     <update id="updateStore" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
         update store_admin
@@ -89,23 +107,57 @@
         where store_id = #{storeId}
     </update>
 
+<!-- sns입력 -->
+    <delete id="deleteStoreSns" parameterType="com.example.HiMade.admin.dto.StoreSnsDTO">
+        delete from store_sns_link
+        where store_id = #{storeId}
+        and sns_link not in
+        <foreach item="snsLink" collection="storeSns" open="(" separator="," close=")">
+            #{snsLink.snsLink}
+        </foreach>
+    </delete>
+
+    <select id="selectExistingSns" parameterType="string" resultType="string">
+        select sns_link
+        from store_sns_link
+        where store_id = #{storeId}
+    </select>
+
     <insert id="addStoreSns" parameterType="com.example.HiMade.admin.dto.StoreSnsDTO">
         insert into store_sns_link
         values (#{snsLink}, #{snsName}, #{storeId}, #{storeNo})
     </insert>
 
-    <update id="updateStoreSns" parameterType="com.example.HiMade.admin.dto.StoreSnsDTO">
-        update store_sns_link
-        set (sns_link = #{snsLink}, sns_name = #{snsName})
-        where store_id = #{storeId} and store_no = #{storeNo}
-    </update>
+<!-- img입력 -->
+<!-- data != DB면 (DB에서 delete & data insert) -->
+    <delete id="deleteStoreImg" parameterType="com.example.HiMade.admin.dto.StoreImgDTO">
+        DELETE FROM store_img
+        WHERE store_id = #{storeId}
+        AND store_img_location NOT IN
+        <foreach item="img" collection="storeImg" open="(" separator="," close=")">
+            #{img.storeImgLocation}
+        </foreach>
+    </delete>
+
+    <select id="selectExistingStoreImg" resultType="string" parameterType="string">
+        SELECT store_img_location
+        FROM store_img
+        WHERE store_id = #{storeId}
+    </select>
+
+    <insert id="addStoreImg" parameterType="com.example.HiMade.admin.dto.StoreImgDTO">
+        insert into store_img (store_img_location, store_id, store_no)
+        values (#{storeImgLocation}, #{storeId}, #{storeNo})
+    </insert>
 
     <select id="getMyStore" resultMap="storeRegistResultMap">
         SELECT
         sa.*,
-        sns.*
+        sns.*,
+        img.store_img_location
         FROM store_admin sa
         LEFT JOIN store_sns_link sns ON sa.store_no = sns.store_no
+        LEFT JOIN store_img img ON sa.store_no = img.store_no
         WHERE sa.store_no = #{storeNo}
     </select>
 
@@ -137,6 +189,14 @@
             <result property="storeSnsNo" column="store_sns_no"/>
             <result property="snsLink" column="sns_link"/>
             <result property="snsName" column="sns_name"/>
+            <result property="storeId" column="store_id"/>
+            <result property="storeNo" column="store_no"/>
+        </collection>
+
+        <!-- img 매핑 -->
+        <collection property="storeImg" ofType="com.example.HiMade.admin.dto.StoreImgDTO" javaType="java.util.List">
+            <result property="storeImgNo" column="store_img_no"/>
+            <result property="storeImgLocation" column="store_img_location"/>
             <result property="storeId" column="store_id"/>
             <result property="storeNo" column="store_no"/>
         </collection>

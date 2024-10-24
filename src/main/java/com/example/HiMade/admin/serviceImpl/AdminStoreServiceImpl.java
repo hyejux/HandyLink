@@ -11,7 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("adminStoreService")
 public class AdminStoreServiceImpl implements AdminStoreService {
@@ -47,22 +49,44 @@ public class AdminStoreServiceImpl implements AdminStoreService {
 
             adminStoreMapper.insertDay(dayOff);
         }
-
     }
 
     @Override
-    public void addStoreSns(StoreSnsDTO storeSns) {
-        adminStoreMapper.addStoreSns(storeSns);
+    public void updateStoreInfo(StoreRegistDTO storeRegistDTO) {
+        adminStoreMapper.updateStoreInfo(storeRegistDTO);
     }
 
     @Override
     public void updateStore(StoreRegistDTO storeRegistDTO) {
-        adminStoreMapper.updateStore(storeRegistDTO);
-    }
+        String storeId = storeRegistDTO.getStoreId();
+        List<StoreImgDTO> storeImgList = storeRegistDTO.getStoreImg();
+        List<StoreSnsDTO> storeSns = storeRegistDTO.getStoreSns();
 
-    @Override
-    public void updateStoreSns(StoreSnsDTO storeSns) {
-        adminStoreMapper.updateStoreSns(storeSns);
+        adminStoreMapper.updateStore(storeRegistDTO); // 가게정보 업데이트
+
+        // 1. 기존 이미지 삭제
+        adminStoreMapper.deleteStoreImg(storeId, storeImgList);
+
+        // 2. DB에 없는 이미지만 삽입
+        List<String> existingImgs = adminStoreMapper.selectExistingStoreImg(storeId);
+
+        for (StoreImgDTO storeImg : storeRegistDTO.getStoreImg()) {
+            if (!existingImgs.contains(storeImg.getStoreImgLocation())) {
+                adminStoreMapper.addStoreImg(storeImg);  // DB에 없는 이미지만 삽입
+            }
+        }
+
+        //sns링크 삭제
+        adminStoreMapper.deleteStoreSns(storeId,storeSns);
+
+        //db에 있는 sns링크 확인
+        List<String> existingSns = adminStoreMapper.selectExistingSns(storeId);
+
+        for(StoreSnsDTO sns : storeRegistDTO.getStoreSns()){
+            if(!existingSns.contains(sns.getSnsLink())){
+                adminStoreMapper.addStoreSns(sns);
+            }
+        }
     }
 
     @Override
@@ -85,7 +109,7 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     public String uploadImage(MultipartFile file) { //이미지 URL 변환해서 리턴
         String imageUrl = null;
         try {
-            String uploadDir = "C:/Users/admin/Desktop/HiMade/src/main/resources/static/uploads"; // 원하는 경로로 변경
+            String uploadDir = "C:/Users/admin/Desktop/HandyLink/src/main/resources/static/uploads"; // 원하는 경로로 변경
             File dir = new File(uploadDir);
             if (!dir.exists()) {
                 dir.mkdirs(); // 디렉토리가 존재하지 않으면 생성
@@ -104,14 +128,10 @@ public class AdminStoreServiceImpl implements AdminStoreService {
         return imageUrl; // 업로드된 파일의 URL 반환
     }
 
+
     @Override
     public Integer duplicatedId(String storeId) {
         return adminStoreMapper.duplicatedId(storeId);
-    }
-
-    @Override
-    public StoreRegistDTO getStoreInfo(String storeId) {
-        return adminStoreMapper.getStoreInfo(storeId);
     }
 
     @Override

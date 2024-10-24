@@ -32,15 +32,20 @@ public class AdminStoreController {
     //업체가입
     @PostMapping("/registStore")
     public void registStore(@RequestBody StoreRegistDTO storeRegistDTO){
-        System.out.println("업체정보 " + storeRegistDTO);
         adminStoreService.registStore(storeRegistDTO);
     }
 
-    //가게관리-보기
+    //마이페이지 - update
+    @PostMapping("/updateStoreInfo")
+    public void updateStoreInfo(@RequestBody StoreRegistDTO storeRegistDTO){
+        System.out.println("마이페이지 수정 "+storeRegistDTO);
+        adminStoreService.updateStoreInfo(storeRegistDTO);
+    }
+
+    //가게관리 & 마이페이지 - 정보 가져오기
     @GetMapping("/myStoreInfo")
     public ResponseEntity<StoreRegistDTO> getMyStore(@RequestParam Long storeNo){
         StoreRegistDTO myStore = adminStoreService.getMyStore(storeNo);
-        System.out.println("내가게정보 "+myStore);
         return ResponseEntity.ok(myStore);
     }
 
@@ -49,34 +54,21 @@ public class AdminStoreController {
     public void updateStore(@RequestBody StoreRegistDTO storeRegistDTO){
         System.out.println("내가게 " + storeRegistDTO);
         adminStoreService.updateStore(storeRegistDTO);
-
-        //sns등록-insert
-        List<StoreSnsDTO> storeSnsList = storeRegistDTO.getStoreSns();
-        for (StoreSnsDTO storeSns : storeSnsList) {
-            adminStoreService.addStoreSns(storeSns);
-        }
     }
 
     //고정휴무-update
     @PostMapping("/updateDay")
     public void updateDay(@RequestBody StoreRegistDTO storeRegistDTO) {
-            adminStoreService.updateDay(storeRegistDTO);
+        adminStoreService.updateDay(storeRegistDTO);
     }
 
     //지정휴무 - insert
     @PostMapping("/registDayOffSet")
     public void registDayOffSet(@RequestBody StoreRegistDTO storeRegistDTO){
-        System.out.println("지정휴무 들어옴 "+ storeRegistDTO.getDayOffSetList());
-
         for(DayOffSet dayOffSet : storeRegistDTO.getDayOffSetList()){
             adminStoreService.registDayOffSet(dayOffSet);
         }
     }
-
-
-
-
-
 
     // 파일 업로드 메서드
     @PostMapping("/uploadImageToServer")
@@ -90,9 +82,15 @@ public class AdminStoreController {
     // 이미지 삭제 메서드
     @DeleteMapping("/deleteImage")
     public ResponseEntity<String> deleteImage(@RequestBody Map<String, String> payload) {
+        System.out.println("Received payload: " + payload);
         String imageUrl = payload.get("imageUrl");
+
+        if (imageUrl == null) {
+            return ResponseEntity.badRequest().body("imageUrl is missing in the request");
+        }
+
         String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1); // 파일 이름 추출
-        String uploadDir = "C:/Users/admin/Desktop/HiMade/src/main/resources/static/uploads"; // 이미지 저장 경로
+        String uploadDir = "C:/Users/admin/Desktop/HandyLink/src/main/resources/static/uploads"; // 이미지 저장 경로
 
         File file = new File(uploadDir + "/" + fileName);
         if (file.exists()) {
@@ -104,16 +102,6 @@ public class AdminStoreController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이미지 파일을 찾을 수 없습니다.");
         }
-    }
-
-    //업체 마이페이지 정보가져오기
-    @GetMapping("/storeInfo")
-    public ResponseEntity<StoreRegistDTO> getStoreInfo(@RequestParam String storeId){
-
-        StoreRegistDTO storeAddr = adminStoreService.getStoreInfo(storeId);
-        System.out.println("admin마이페이지 "+storeAddr);
-
-        return ResponseEntity.ok(storeAddr);
     }
 
 

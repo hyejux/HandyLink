@@ -255,7 +255,9 @@ function UserReservationConfirm() {
             reservationNo: reservationNum,
           });
 
-          
+          sessionStorage.setItem('slot', slot);
+          sessionStorage.setItem('date', date);
+          sessionStorage.setItem('requestText', requestText);
           sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
           sessionStorage.setItem('totalPrice', totalPrice);
           sessionStorage.setItem('reserveModi', JSON.stringify(reserveModi));

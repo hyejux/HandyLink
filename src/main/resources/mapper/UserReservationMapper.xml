@@ -44,8 +44,8 @@
     </select>
 
     <select id="getDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">
-        select * from reservation_slot where reservation_slot_date = #{date}
-        AND category_id = 118
+        select * from reservation_slot where  CAST(reservation_slot_date AS date)  = #{reservationSlotDate}
+        AND category_id = #{categoryId}
     </select>
 
     <select id="getAllDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">

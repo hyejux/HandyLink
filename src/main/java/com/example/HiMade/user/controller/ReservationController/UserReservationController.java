@@ -21,13 +21,11 @@ public class UserReservationController {
   @Autowired
   private UserReservationService userReservationService;
 
-  @PostMapping("/getDateTime")
-  public List<UserRSlotDTO> getDateTime(@RequestBody UserRSlotDTO dto){
-    System.out.println( dto.getReservationSlotDate());
-    LocalDate date = dto.getReservationSlotDate();
-    System.out.println(date);
-    System.out.println(userReservationService.getDateTime(date));
-    return userReservationService.getDateTime(date);
+  @PostMapping("/getDateTime/{id}")
+  public List<UserRSlotDTO> getDateTime(@RequestBody UserRSlotDTO dto, @PathVariable int id){
+    dto.setCategoryId(id);
+    System.out.println(userReservationService.getDateTime(dto));
+    return userReservationService.getDateTime(dto);
   }
 
   @GetMapping("/getAllDateTime/{id}")

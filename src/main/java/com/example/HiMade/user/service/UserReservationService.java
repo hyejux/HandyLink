@@ -7,10 +7,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface UserReservationService {
+public interface
+UserReservationService {
 
   public List<UserRL> getMyReserveList();
-  public List<UserRSlotDTO> getDateTime(LocalDate Date);
+  public List<UserRSlotDTO> getDateTime(UserRSlotDTO Date);
   public List<UserRSlotDTO> getAllDateTime(int id);
 
   public int setReservationForm(UserReservationDTO dto);

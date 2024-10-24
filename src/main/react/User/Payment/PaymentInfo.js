@@ -63,6 +63,16 @@ function PaymentInfo() {
     }, []); // 컴포넌트가 마운트될 때 한 번만 실행됩니다.
 
 
+    // sessionStorage에서 데이터 가져오기
+    const storedData = sessionStorage.getItem('storeInfo');
+    const slot = sessionStorage.getItem('slot');
+    const date = sessionStorage.getItem('date');
+    const totalPrice = sessionStorage.getItem('totalPrice');
+
+    // 가져온 데이터를 변환하여 바로 사용
+    const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
+
+
 
     // 결제 일시 포맷 (년/월/일 시:분:초)
     const formatDate1 = (dateString) => {
@@ -80,7 +90,7 @@ function PaymentInfo() {
 
     return (
         <div>
-            
+
             <button onClick={toggleMap}>
                 {showMap ? "카카오맵 닫기" : "카카오맵 보기"}
             </button>
@@ -98,15 +108,16 @@ function PaymentInfo() {
                         {formatDate2(paymentInfo[0].paymentDate)}
                     </div>
                 )}
+                <div className="total-price">{totalPrice}</div>
             </div>
 
             <div className="user-content-container">
                 <div className="header">예약 정보</div>
-                <div className="reservation-date">2024.10.3(목) 오후 2:30 (픽업날짜 가져오기)</div>
+                <div className="reservation-date">{date} {slot}</div>
                 <div className="reservation-info">
                     <img src="../img/cake001.jpg" alt="예약 이미지" />
                     <div className="reservation-details">
-                        <div className="store-name">오늘도 케이크 (업체명 가져오기)</div>
+                        <div className="store-name">{storeInfo.storeName}</div>
 
                         {/* 대분류와 중분류 출력 */}
                         {reservationList.map((item, resIndex) => {
@@ -119,8 +130,8 @@ function PaymentInfo() {
                                     )}
                                     {item.middleCategoryValue ? (
                                         <div className="option">
-                                            <span><i className="bi bi-dot"></i>  {item.middleCategoryName}</span>
-                                            <span>({item.middleCategoryValue}개)  {/*(+{item.middlePrice}원)*/}</span>
+                                            <span><i className="bi bi-dot"></i> {item.middleCategoryName} </span>
+                                            <span>({item.middleCategoryValue})  {/*(+{item.middlePrice}원)*/}</span>
                                         </div>
                                     ) : (
                                         <div className="option">

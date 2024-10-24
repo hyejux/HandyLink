@@ -54,6 +54,9 @@ function UserMyReservationDetail() {
   };
 
   // sessionStorage에서 데이터 가져오기
+  const slot = sessionStorage.getItem('slot');
+  const date = sessionStorage.getItem('date');
+  const requestText = sessionStorage.getItem('requestText');
   const storedData = sessionStorage.getItem('storeInfo');
   const totalPrice = sessionStorage.getItem('totalPrice');
   const reserveData = sessionStorage.getItem('reserveModi');
@@ -65,19 +68,20 @@ function UserMyReservationDetail() {
   const reserveModi = storedData ? JSON.parse(reserveData) : null;
   const categories = storedData ? JSON.parse(cateData) : null;
 
+  console.log("시간: " + slot);
+  console.log("date: " + date);
   console.log(storeInfo);
   console.log("총액: " + totalPrice);
   console.log(reserveModi);
   console.log(categories);
   console.log(paymentInfo);
-  console.log(paymentInfo.paymentDate);
-  console.log(paymentInfo.paymentAmount);
 
 
   // 예약 취소 버튼 클릭 시 결제 상태 업데이트
   const cancelReservation = async () => {
+    const reservationNo = cateId;
     try {
-      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${cateId}`, { paymentStatus: "N", storeName: storeInfo.storeName });
+      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, { paymentStatus: "N", storeName: storeInfo.storeName });
       console.log("예약 취소 성공:", response.data);
       alert("예약이 취소되었습니다.");
 
@@ -89,42 +93,63 @@ function UserMyReservationDetail() {
     }
   };
 
+  const goToPaymentInfo = () => {
+    // 세션에 필요한 정보 저장
+    sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
+    sessionStorage.setItem('slot', slot);
+    sessionStorage.setItem('date', date);
+    sessionStorage.setItem('totalPrice', totalPrice);
 
+    // 결제 상세 페이지로 이동
+    window.location.href = `/paymentInfo.user/${cateId}`;
+  };
+
+
+  // 계좌번호 복사
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(storeInfo.accountNumber)
+  }
 
 
   return (
     <div>
       <div className="user-content-container">
         <div className='store-name'>{storeInfo.storeName}</div>
-        <div className='payment-date'>{paymentInfo.paymentDate}</div>
+        <div className='payment-date'>{paymentInfo[0] && formatDate(paymentInfo[0].paymentDate)}</div>
       </div>
 
+      {/* 입금정보 */}
       <div className="user-content-container">
         <div className='payment-info-top'>
-          <div className='deposit-date'>{paymentInfo.paymentDate}</div>
+          <div className='deposit-date'>{paymentInfo[0] && formatDate(paymentInfo[0].paymentDate)} 까지 입금해주세요.</div>
         </div>
         <div className="payment-info-top">
           <div className="account-left">입금 대기금액</div>
-          <div className="account-right">{paymentInfo.paymentAmount}</div>
+          <div className="account-right">{paymentInfo[0]?.paymentAmount}원</div>
         </div>
         <div className="payment-info-top">
           <div className="account-left">입금 계좌</div>
           <div className="account-right">
-            {storeInfo.accountBank} {storeInfo.accountNumber} <button className='account-number-copy-btn'><i class="bi bi-copy"></i></button>
+            {storeInfo.accountBank} {storeInfo.accountNumber} <button className='account-number-copy-btn' onClick={copyToClipboard} ><i class="bi bi-copy"></i></button>
           </div>
         </div>
       </div>
 
       <div className="user-content-container">
         <div className="info-row">
-          <div className="left">날짜</div>
-          <div className="right">시간</div>
+          <div className="left"><i class="bi bi-calendar-check-fill"></i> {date}</div>
+          <div className="right"><i class="bi bi-clock-fill"></i> {slot}</div>
         </div>
       </div>
 
-      <hr />
-      <h1> 예약자 정보 </h1>
-      <hr />
+
+
+      {/* 예약자정보 */}
+      <div className="user-content-container">
+        예약자 정보
+      </div>
+
+
 
       {/* 예약 정보 */}
       <div className="user-content-container">
@@ -160,6 +185,8 @@ function UserMyReservationDetail() {
         </div>
       </div>
 
+
+      {/* 결제금액 */}
       <div className="user-content-container">
         <div className='totalPrice'>
           <div className="info-row">
@@ -170,17 +197,21 @@ function UserMyReservationDetail() {
       </div>
 
 
-      <hr />
-      <h1> 요청사항 </h1>
+      {/* 요청사항 */}
+      <div className="user-content-container">
+        <div className="info-row">
+          <div className="left">요청사항</div>
+          <div className="right">{requestText}</div>
+        </div>
+      </div>
 
-      <hr />
 
-      {/* 결제 정보 */}
+      {/* 결제정보 */}
       <div className="user-content-container">
         <div className="payment-info-top">
           <div className="payment-left">결제 정보</div>
           <div className="payment-right">
-            <a href="#" onClick={() => window.location.href = `/paymentInfo.user/${cateId}`}>
+            <a href="#" onClick={goToPaymentInfo}>
               결제 상세
             </a>
           </div>

@@ -46,6 +46,10 @@
   font-size: 15px;
 }
 
+.account-number-copy-btn:active {
+  background-color: #ccc;
+}
+
 /* ------------------ 결제 정보 ------------------ */
 .payment-left {
   font-size: 20px;
@@ -87,9 +91,6 @@
   text-align: right;
   flex: 1;
 }
-
-
-
 
 
 

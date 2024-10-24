@@ -23,6 +23,7 @@ public class UserRSlotDTO {
   private Boolean reservationActive ;
   private String storeId;
   private int storeNo;
+
   private int categoryId;
   private int limitTime;
 

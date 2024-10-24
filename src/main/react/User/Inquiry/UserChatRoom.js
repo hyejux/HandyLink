@@ -6,15 +6,10 @@ function UserChatRoom() {
     const [message, setMessage] = useState([]);
     const [messageInput, setMessageInput] = useState("");
     const websocket = useRef(null);
-    const chatBoxRef = useRef(null);
+    const inputRef = useRef(null);
 
     useEffect(() => {
-        console.log("WebSocket 연결 시도...");
         websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
-
-        websocket.current.onopen = () => {
-            console.log("WebSocket이 성공적으로 연결되었습니다!");
-        };
 
         websocket.current.onmessage = (event) => {
             console.log("받은 메시지:", event.data);
@@ -22,12 +17,7 @@ function UserChatRoom() {
 
             // UserChatRoom의 경우
             if (received.senderId === '123@naver.com' || received.recipientId === '123@naver.com') {
-                setMessage(prev => [...prev, received]);
-            }
-
-            // StoreChatRoom의 경우
-            if (received.senderId === '1' || received.recipientId === '1') {
-                setMessage(prev => [...prev, received]);
+                setMessage(prevMessages => [...prevMessages, received]);  // 중복 체크 없이 메시지 추가
             }
         };
 
@@ -45,6 +35,7 @@ function UserChatRoom() {
             }
         };
     }, []);
+
 
     useEffect(() => {
         console.log("현재 메시지 목록:", message);
@@ -73,6 +64,20 @@ function UserChatRoom() {
         }
     };
 
+    // 엔터 키를 누르면 메시지를 전송하는 함수
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            sendMessage(e);
+        }
+    };
+
+    // 페이지가 로드되었을 때 input에 포커스 주는 함수
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();  // input에 자동 포커스
+        }
+    }, []);
+
     return (
         <div>
             <div className="user-chat-room-container">
@@ -92,8 +97,7 @@ function UserChatRoom() {
                                     hour: 'numeric',
                                     minute: '2-digit',
                                     hour12: true
-                                })}
-                            </div>
+                                })}</div>
                         </div>
                     ))}
                 </div>
@@ -103,6 +107,8 @@ function UserChatRoom() {
                         type="text"
                         value={messageInput}
                         onChange={(e) => setMessageInput(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        ref={inputRef}
                         placeholder="Message here..."
                     />
                     <button onClick={sendMessage}>

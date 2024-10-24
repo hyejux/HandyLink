@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service("UserReservationService")
@@ -30,6 +31,8 @@ public class UserReservationServiceImpl implements UserReservationService {
 
   @Override
   public List<UserRSlotDTO> getAllDateTime(int id) {
+
+//    System.out.println(userReservationMapper.getAllDateTime(id));
     return userReservationMapper.getAllDateTime(id);
   }
 
@@ -68,6 +71,18 @@ public class UserReservationServiceImpl implements UserReservationService {
   }
 
   @Override
+  public void setUpdateStart(UserRSlotDTO dto) {
+    userReservationMapper.setUpdateStart(dto);
+//    List<UserRSlotDTO> resultDto = userReservationMapper.getAllDateTime(dto.getCategoryId());
+//    System.out.println("gg" +resultDto.get(1).getServiceStart());
+//    LocalDateTime result = resultDto.get(1).getServiceStart();
+  }
+
+  @Override
+  public void setUpdateSlot(UserUSlotDTO dto) {
+
+    userReservationMapper.setUpdateSlot(dto);
+
   @Transactional
   public void updateReservationStatus(int reservationNo, String status) {
     userReservationMapper.updateReservationStatus(reservationNo, status);
@@ -77,6 +92,7 @@ public class UserReservationServiceImpl implements UserReservationService {
   @Override
   public void updateSlotStatus(int categoryId, LocalDate reservationDate, int storeNo) {
     userReservationMapper.updateSlotStatus(categoryId, reservationDate, storeNo);
+
   }
 
 

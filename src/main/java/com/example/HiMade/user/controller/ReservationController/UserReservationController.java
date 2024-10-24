@@ -4,11 +4,13 @@ package com.example.HiMade.user.controller.ReservationController;
 import com.example.HiMade.user.dto.UserRSlotDTO;
 import com.example.HiMade.user.dto.UserReservationDTO;
 import com.example.HiMade.user.dto.UserReservationFormDTO;
+import com.example.HiMade.user.dto.UserUSlotDTO;
 import com.example.HiMade.user.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -30,9 +32,23 @@ public class UserReservationController {
 
   @GetMapping("/getAllDateTime/{id}")
   public List<UserRSlotDTO> getAllDateTime(@PathVariable int id){
-    System.out.println(userReservationService.getAllDateTime(id));
+    System.out.println(id);
+//    System.out.println(userReservationService.getAllDateTime(id));
     return userReservationService.getAllDateTime(id);
   }
+
+  @PostMapping("/setUpdateStart")
+  public void setUpdateStart(@RequestBody UserRSlotDTO dto){
+    System.out.println("기록"+dto);
+    userReservationService.setUpdateStart(dto);
+  }
+
+  @PostMapping("/setUpdateSlot")
+  public void setUpdateSlot(@RequestBody UserUSlotDTO dto){
+    System.out.println("슬롯 기간별 업데이트 "+dto);
+    userReservationService.setUpdateSlot(dto);
+  }
+
 
   @PostMapping("/setReservationForm")
   public int setReservationForm(@RequestBody UserReservationDTO dto) {

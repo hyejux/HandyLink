@@ -349,7 +349,7 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
                 <option value="">시간 선택</option>
                 {[...Array(24)].map((_, index) => (
                     <option key={index} value={String(index).padStart(2, '0')}>
-                        {String(index).padStart(2, '0')}시
+                        {String(index).padStart(2, '0')}:00 {/* 두 자리로 표현 */}
                     </option>
                 ))}
             </select>

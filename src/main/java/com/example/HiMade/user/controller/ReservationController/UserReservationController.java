@@ -103,9 +103,11 @@ public class UserReservationController {
     }
   }
 
-  @PostMapping("/getSlotTime/updateSlotCount1/{id}")
-  public void getSlotTime(@RequestBody UserRSlotDTO dto, @PathVariable int id){
-
+  @PostMapping("/updateSlotCount1/{id}")
+  public void updateSlotCount1(@RequestBody UserRSlotDTO dto, @PathVariable int id){
+    dto.setCategoryId(id);
+    System.out.println(dto + " dto ㅇ비니다 !! ");
+    userReservationService.updateSlotCount1(dto);
   }
 
 

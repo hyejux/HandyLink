@@ -97,5 +97,10 @@ public class UserReservationServiceImpl implements UserReservationService {
 
   }
 
+  @Override
+  public void updateSlotCount1(UserRSlotDTO dto) {
+    userReservationMapper.updateSlotCount1(dto);
+  }
+
 
 }

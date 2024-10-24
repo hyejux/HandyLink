@@ -313,7 +313,7 @@ function MyStore() {
                 {myStoreInfo.storeSns.length < 3 && !isDisabled && (
                     <button type="button" onClick={() => setMyStoreInfo(prevState => ({
                             ...prevState,
-                            storeSns: [...prevState.storeSns, { snsLink: ''}]
+                            storeSns: [...prevState.storeSns, { snsLink: '', isDisabled: true }]
                         }))}>
                         SNS 링크 추가
                     </button>

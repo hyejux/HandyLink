@@ -49,11 +49,25 @@
     </select>
 
     <select id="getAllDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">
-        select * from reservation_slot  rs
-        join category c
-        on c.category_id = rs.category_id
-        where c.category_id = #{id}
+        <![CDATA[
+         SELECT *
+        FROM reservation_slot rs
+        JOIN category c ON c.category_id = rs.category_id
+        WHERE c.category_id = #{categoryId}
+        AND rs.reservation_slot_date >= (
+        SELECT MIN(reservation_slot_date)
+        FROM reservation_slot
+        WHERE category_id = #{categoryId}
+        )
+        AND rs.reservation_slot_date < (
+        SELECT MIN(reservation_slot_date) + INTERVAL '6 months'
+        FROM reservation_slot
+        WHERE category_id = #{categoryId}
+        )
+        AND rs.reservation_slot_date > CURRENT_DATE -- 오늘 이후의 날짜만 포함
+        ORDER BY rs.reservation_slot_date;  ]]>
     </select>
+
 
     <update id="setUpdateStart" parameterType="com.example.HiMade.user.dto.UserRSlotDTO">
         update category set service_start = #{serviceStart} WHERE category_id = #{categoryId}

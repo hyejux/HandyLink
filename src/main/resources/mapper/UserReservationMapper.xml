@@ -25,7 +25,6 @@
 
 
 
-
     <select id="getMyReserveList" resultType="com.example.HiMade.user.dto.UserRL">
         select s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name, r.reservation_time
         from reservation r
@@ -91,5 +90,19 @@
     <select id="getNoSlot" resultType="java.time.LocalDate">
         select reservation_slot_date from reservation_slot where slot_count = slot_status_count
     </select>
+
+
+    <update id="updateReservationStatus">
+        UPDATE reservation SET reservation_status = #{status} WHERE reservation_no = #{reservationNo}
+    </update>
+
+    <update id="updateSlotStatus">
+        UPDATE reservation_slot
+        SET slot_status_count = slot_status_count + 1
+        WHERE category_id = #{categoryId}
+        AND reservation_slot_date = #{reservationDate}
+        AND store_no = #{storeNo}
+    </update>
+
 
 </mapper>

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/userReservation")
@@ -76,5 +77,33 @@ public class UserReservationController {
     System.out.println(userReservationService.getNoSlot());
     return userReservationService.getNoSlot();
   }
+
+  @PostMapping("/updateSlotStatus")
+  public void updateSlotStatus(@RequestBody Map<String, Object> slotUpdate) {
+    try {
+      System.out.println("updateSlotStatus 호출됨");
+
+      // String에서 Integer로 변환
+      int categoryId = Integer.parseInt((String) slotUpdate.get("categoryId"));
+      LocalDate reservationDate = LocalDate.parse((String) slotUpdate.get("reservationDate"));
+      int storeNo = Integer.parseInt((String) slotUpdate.get("storeNo"));
+
+      // 로그 출력으로 받은 데이터 확인
+      System.out.println("categoryId: " + categoryId);
+      System.out.println("reservationDate: " + reservationDate);
+      System.out.println("storeNo: " + storeNo);
+
+      userReservationService.updateSlotStatus(categoryId, reservationDate, storeNo);
+    } catch (NumberFormatException e) {
+      System.err.println("숫자 형식 변환 오류: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("오류 발생: " + e.getMessage());
+      e.printStackTrace();
+    }
+  }
+
+
+
+
 
 }

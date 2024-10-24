@@ -82,6 +82,17 @@ public class UserReservationServiceImpl implements UserReservationService {
   public void setUpdateSlot(UserUSlotDTO dto) {
 
     userReservationMapper.setUpdateSlot(dto);
+
+  @Transactional
+  public void updateReservationStatus(int reservationNo, String status) {
+    userReservationMapper.updateReservationStatus(reservationNo, status);
+  }
+
+  @Transactional
+  @Override
+  public void updateSlotStatus(int categoryId, LocalDate reservationDate, int storeNo) {
+    userReservationMapper.updateSlotStatus(categoryId, reservationDate, storeNo);
+
   }
 
 

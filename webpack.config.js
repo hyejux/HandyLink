@@ -47,7 +47,8 @@ module.exports = {
         MyStore: './Admin/MyStore.js',
         StoreDayOff: './Admin/StoreDayOff.js',
         AdminStoreNotice : './Admin/AdminStoreNotice.js',
-        AdminStoreNoticeRegist : './Admin/AdminStoreNoticeRegist.js'
+        AdminStoreNoticeRegist : './Admin/AdminStoreNoticeRegist.js',
+        StoreChatRoom : './User/Inquiry/StoreChatRoom.js',
 
     },
     devtool: 'sourcemaps',

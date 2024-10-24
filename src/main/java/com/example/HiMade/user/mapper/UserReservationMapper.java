@@ -4,6 +4,8 @@ import com.example.HiMade.admin.dto.AdminCategoryImgDTO;
 import com.example.HiMade.user.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.apache.ibatis.annotations.Param;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,4 +25,7 @@ public interface UserReservationMapper {
   public List<LocalDate> getNoSlot();
   void setUpdateStart(UserRSlotDTO dto);
   void setUpdateSlot(@RequestBody UserUSlotDTO dto);
+  void updateReservationStatus(@Param("reservationNo") int reservationNo, @Param("status") String status);
+  void updateSlotStatus(@Param("categoryId") int categoryId, @Param("reservationDate") LocalDate reservationDate, @Param("storeNo") int storeNo);
+
 }

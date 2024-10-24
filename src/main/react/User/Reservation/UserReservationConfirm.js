@@ -140,22 +140,27 @@ function UserReservationConfirm() {
   const slot = sessionStorage.getItem('selectSlot');
   const date = sessionStorage.getItem('formattedDate');
   const reservationSlotKey = sessionStorage.getItem('reservationSlotKey');
+  const sessionSestoreNo = sessionStorage.getItem('storeNo');
 
   console.log('Slot:', slot);
   console.log('Date:', date);
   console.log('reservationSlotKey:', reservationSlotKey);
-
-  const goToAdminPage = () => {
-
-    window.location.href = `../UserReservationComplete.user`;
-  };
+  console.log(sessionSestoreNo);
+  console.log(cateId);
 
 
 
+
+  // sessionStorage에서 데이터 가져오기
+  const storedData = sessionStorage.getItem('storeInfo');
+  // 가져온 데이터를 변환하여 바로 사용
+  const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
+  console.log(storeInfo);
 
 
   // ----------------------- 주문등록, 결제 부분 -----------------------
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(""); // 결제수단
+
 
   const requestPayment = (paymentMethod) => {
 
@@ -188,11 +193,25 @@ function UserReservationConfirm() {
         return axios.post(`/userReservation/setReservationFormDetail`, updatedArray);
       })
       .then(response => {
+        console.log("슬롯 상태 업데이트 요청 성공! ", response.data);
+        const categoryId = cateId;
+        const storeNo = sessionSestoreNo;
+        const reservationDate = date;
+
+        console.log("전송될 데이터:", { categoryId, reservationDate, storeNo });
+
+        return axios.post(`/userReservation/updateSlotStatus`, {
+          categoryId,
+          reservationDate,
+          storeNo
+        });
+      })
+      .then(response => {
         console.log("두 번째 요청 성공! ", response.data);
       })
       .catch(error => {
-        console.log('Error Category', error);
-      })
+        console.error('Error during slot status update', error);
+      });
 
     // ---------------------------------------------------------------------------
 
@@ -234,6 +253,7 @@ function UserReservationConfirm() {
           reservationNo: reservationNum,
         });
 
+        sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
         // 결제 성공 후 리다이렉트
         window.location.href = `../UserMyReservationList.user`;
 
@@ -515,6 +535,7 @@ function UserReservationConfirm() {
                     reservationNo: reservationNum,
                   });
 
+                  sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
                   // 결제 성공 후 리다이렉트
                   window.location.href = `../UserMyReservationDetail.user/${reservationNum}`;
 

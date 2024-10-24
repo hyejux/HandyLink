@@ -1,6 +1,7 @@
 package com.example.HiMade.user.controller.ReservationController;
 
 
+import com.example.HiMade.admin.dto.adminReserveMangeDTO;
 import com.example.HiMade.user.dto.UserRSlotDTO;
 import com.example.HiMade.user.dto.UserReservationDTO;
 import com.example.HiMade.user.dto.UserReservationFormDTO;
@@ -102,7 +103,10 @@ public class UserReservationController {
     }
   }
 
+  @PostMapping("/getSlotTime/updateSlotCount1/{id}")
+  public void getSlotTime(@RequestBody UserRSlotDTO dto, @PathVariable int id){
 
+  }
 
 
 

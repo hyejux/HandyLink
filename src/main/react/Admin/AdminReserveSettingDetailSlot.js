@@ -8,18 +8,78 @@ import './AdminReserveSettingDetailSlot.css';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // 기본 스타일
 import 'react-date-range/dist/theme/default.css'; // 기본 테마
+// import { LocalizationProvider, DateRangePicker } from '@mui/x-date-pickers';
+// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import ko from 'date-fns/locale/ko'; // 한국어 로케일
+// import {DateRangePicker} from '@adobe/react-spectrum'
+// import { Provider } from '@adobe/react-spectrum';
+// import { DateRangePicker } from '@adobe/react-spectrum';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function AdminReserveSettingDetailSlot() {
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-        key: 'selection',
-      });
-      const handleSelect = (ranges) => {
-        // 선택된 범위를 설정
-        setSelectionRange(ranges.selection);
-        console.log(selectionRange);
-      };
+
+
+
+    // 수정 완료 핸들러
+    const handleSaveChanges = (reservationKey) => {
+         
+
+        let formattedDate = '';
+        let slotCount = 0;
+        let limitTime = 0;
+
+         selectedDates.map((dateString) => {
+                // Format the date as YYYY-MM-DD
+           formattedDate = dateObject.toISOString().split('T')[0]; // Extract the date part
+
+            console.log(formattedDate); // Log the formatted date
+            console.log(dateString);
+            getReservationsForDate(new Date(dateString)).map(reservation => {
+                console.log(`날짜: ${formattedDate}`);
+                console.log(`일별 예약 제한: ${reservation.slotCount}`);
+                slotCount = reservation.slotCount;
+                console.log(`시간별 예약 제한: ${reservation.limitTime}`);
+                limitTime = reservation.limitTime;
+                return null; 
+            });
+            return null; 
+        });
+        
+    
+
+        axios.post(`/adminReservation/updateSlotCount1/${cateId}`,{
+            reservationSlotDate : formattedDate,
+            slotCount :  slotCount,
+            limitTime : limitTime
+        })
+        .then(response => {
+            console.log(response.data);
+            let startDate = '';
+            if (response.data.length > 0) {
+              const firstServiceStart = response.data[0].serviceStart; // 첫 번째 객체의 serviceStart
+              startDate = firstServiceStart; // 상태 업데이트
+          }
+            const serviceStart = new Date(startDate);
+            const formattedDate = `${serviceStart.getFullYear()}-${String(serviceStart.getMonth() + 1).padStart(2, '0')}-${String(serviceStart.getDate()).padStart(2, '0')}`; // YYYY-MM-DD 형식
+            const formattedHour = `${String(serviceStart.getHours()).padStart(2, '0')}`; // HH 형식만 설정
+              console.log(formattedDate, formattedHour);
+            setServiceDate(formattedDate); // 날짜 상태 설정
+            setServiceHour(formattedHour); // 시간 상태 설정
+            setReservationList(response.data);
+        })
+        .catch(error => {
+            console.log('Error fetching reservation list', error);
+        });
+  
+    };
+
+
+    
+
+
+
+    // -----------------------------------------------------
 
     const [viewMode, setViewMode] = useState('calendar');
     const [reservationList, setReservationList] = useState([]);
@@ -55,8 +115,17 @@ function AdminReserveSettingDetailSlot() {
       .catch(error => {
           console.log('Error fetching reservation list', error);
       });
+      axios
+      .get(`/adminReservation/getListDetail/${categoryId}`)
+      .then(response => {
+        console.log(response.data);
+        setReserveModi(response.data);
+      })
+      .catch(error => {
+        console.log('Error Category', error);
+      });
+
     }, []);
-  
 
 
     // 예약을 날짜에 맞춰 반환하는 함수
@@ -75,12 +144,15 @@ function AdminReserveSettingDetailSlot() {
 
 
     const handleDateClick = (date) => {
-        const dateString = date.toLocaleDateString();
-        setSelectedDates(() => {
-  
-                return [ dateString];
-            
-        });
+        if (date !== null){
+
+            const dateString = date.toLocaleDateString();
+            setSelectedDates(() => {
+      
+                    return [dateString];
+                
+            });
+        }
     };
 
      // ... 다른 상태들 생략 ...
@@ -105,17 +177,6 @@ function AdminReserveSettingDetailSlot() {
         }
     };
 
-    // 수정 완료 핸들러
-    const handleSaveChanges = (reservationKey) => {
-        // 여기서 예약 정보를 서버에 저장하거나 상태를 업데이트하는 로직을 추가하세요.
-        console.log(`Saving changes for ${reservationKey}:`, editedValues[reservationKey]);
-        
-        // 편집 모드 종료
-        setEditModes(prev => ({
-            ...prev,
-            [reservationKey]: false,
-        }));
-    };
 
     
 
@@ -152,44 +213,7 @@ function AdminReserveSettingDetailSlot() {
         
     }
 
-    const btnUpdateSlot = () => {
-      
-        // console.log(localDateTimeString);
-        // axios.post('/userReservation/setUpdateStart', { 
-        //     startSlotDate: ,
-        //     endSlotDate: ,
-          
-        //     slotCount: ,
-        //     limitTime: ,
-        //     ,categoryId : cateId} )
-        // .then(response => {
-        //     console.log(response.data);
-            
-        // }).catch(error => {
-        //     console.log('Error fetching reservation list', error);
-        // });
-        // axios.get(`/userReservation/getAllDateTime/${cateId}`)
-        // .then(response => {
-        //     console.log(response.data);
-        //     let startDate = '';
-        //     if (response.data.length > 0) {
-        //       const firstServiceStart = response.data[0].serviceStart; // 첫 번째 객체의 serviceStart
-        //       startDate = firstServiceStart; // 상태 업데이트
-        //   }
-        //     const serviceStart = new Date(startDate);
-        //     const formattedDate = `${serviceStart.getFullYear()}-${String(serviceStart.getMonth() + 1).padStart(2, '0')}-${String(serviceStart.getDate()).padStart(2, '0')}`; // YYYY-MM-DD 형식
-        //     const formattedHour = `${String(serviceStart.getHours()).padStart(2, '0')}`; // HH 형식만 설정
-        //       console.log(formattedDate, formattedHour);
-        //     setServiceDate(formattedDate); // 날짜 상태 설정
-        //     setServiceHour(formattedHour); // 시간 상태 설정
-        //     setReservationList(response.data);
-        // })
-        // .catch(error => {
-        //     console.log('Error fetching reservation list', error);
-        // });
-        
-    }
-
+ 
   
     // 오늘 날짜 가져오기
     const today = new Date();
@@ -206,22 +230,55 @@ function AdminReserveSettingDetailSlot() {
     const isDisabled = isDatePastOrToday && isTimePast;
   
 
+
+    
+
+    const [startDate, setStartDate] = useState(new Date()); // 시작일
+    const [endDate, setEndDate] = useState(new Date()); // 종료일 
     const [date, setDate] = useState([new Date(), new Date()]); // 시작일과 종료일 배열로 관리
-    const [isRange, setIsRange] = useState(false); // 범위 선택 여부
+
   
     const handleDateChange = (newDate) => {
-      if (Array.isArray(newDate)) {
-        setDate(newDate); // 범위 선택 시 날짜 설정
-        setIsRange(true);
-        console.log(JOSN.stringify(date));
-      } else {
-        setDate([newDate, newDate]); // 단일 날짜 선택 시 배열로 변환
-        setIsRange(false);
-        console.log(date);
-      }
+        setDate(newDate);
+        // setIsRange(true);
+        console.log(newDate);
+        // console.log(JOSN.stringify(date));
+        handleDateClick(null);
+      
     };
+
+
+    
+  const setName = (value) => {
+    setReserveAdd((prevState) => ({
+      ...prevState,
+      serviceName: value
+    }));
+  };
+
+  const setPrice = (value) => {
+    setReserveAdd((prevState) => ({
+      ...prevState,
+      servicePrice: value
+    }));
+  };
+
+  const setDescription = (value) => {
+    setReserveAdd((prevState) => ({
+      ...prevState,
+      serviceContent: value
+    }));
+  };
+  const [reserveModi, setReserveModi] = useState('');
   
 
+ // 날짜를 'YYYY/MM/DD' 형식으로 변환하는 함수
+ const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더해줌
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}/${month}/${day}`;
+  };
 
 
     return (
@@ -230,173 +287,205 @@ function AdminReserveSettingDetailSlot() {
                 <h1> 서비스 시간 슬롯 관리 </h1>
               
             </div>
-            <div className="main-slot">
-        <div> 서비스 시작일 </div>
+            <div className="reserve-container">
+        <div className="reserve-img">
+            {/* <img src={http://localhost:8585/img/${reserveModi.imageUrl}} alt="My Image" /> */}
+            {/* <button type="button" className="btn-st btn-imgChg">사진 변경하기</button> */}
+          </div>
+          <div className="reserve-content">
+            <div className="reserve-content-title">
+              <div className="reserve-content-title-name">
+                <input
+                  type="text"
+                  value={reserveModi.serviceName}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder='서비스 명'
+                />
+              </div>
+              <div className="reserve-content-title-price">
+                <input
+                  type="number"
+                  value={reserveModi.servicePrice}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder='서비스 가격'
+                />
+              </div>
+            </div>
+            <div className="reserve-content-text">
+              <textarea
+                value={reserveModi.serviceContent}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder='서비스 설명'
+              />
+            </div>
+          </div>
+        </div>
 
-        {isRange ? (
-          <p>
-            선택된 날짜 범위: {date[0].toLocaleDateString()} ~ {date[1].toLocaleDateString()}
-          </p>
-        ) : (
-          <p>선택된 날짜: {date[0].toLocaleDateString()}</p>
-        )}
+{/* 서비스 변경 */}
+            <div className='main-slot-box'>
+                {/*  서비스 변경  */}
+            <div className="main-slot2">
 
-       <input 
-                type="date" 
-                value={serviceDate} 
-                onChange={(e) => setServiceDate(e.target.value)} 
-                disabled={isDatePastOrToday} // 이미 지난 날짜라면 비활성화
-            />
+                <div className='main-slot-title'>
+                <div>서비스 시작일 </div>
+                </div>
+                <div  className='main-slot-input'>
+                        <input 
+                        type="date" 
+                        value={serviceDate} 
+                        onChange={(e) => setServiceDate(e.target.value)} 
+                        disabled={isDatePastOrToday} // 이미 지난 날짜라면 비활성화
+                    />
 
-            {/* 시간 입력을 위한 드롭다운 */}
-            <select 
-            id="time-select" value={serviceHour} 
-            onChange={(e) => setServiceHour(e.target.value)} 
-            disabled={isDatePastOrToday}>
-                <option value="">시간 선택</option> {/* 기본 옵션 */}
-                {[...Array(24)].map((_, index) => (
-                    <option key={index} value={String(index).padStart(2, '0')}>
-                        {String(index).padStart(2, '0')}:00 {/* 두 자리로 표현 */}
-                    </option>
-                ))}
-            </select>
+                    {/* 시간 입력을 위한 드롭다운 */}
+                    <select 
+                    id="time-select" value={serviceHour} 
+                    onChange={(e) => setServiceHour(e.target.value)} 
+                    disabled={isDatePastOrToday}>
+                        <option value="">시간 선택</option> {/* 기본 옵션 */}
+                        {[...Array(24)].map((_, index) => (
+                            <option key={index} value={String(index).padStart(2, '0')}>
+                                {String(index).padStart(2, '0')}:00 {/* 두 자리로 표현 */}
+                            </option>
+                        ))}
+                    </select>
+                    {!isDatePastOrToday && (
+                                <button onClick={btnUpdateStart}>수정 완료</button>
+                            )}
+                </div>
 
+           
 
-            <button onClick={btnUpdateStart}   disabled={isDatePastOrToday}> 수정 완료 </button>
+          
+
+            </div>
+            <hr/>
             </div>
 
             <div className="main-contents">
                 <div className="calendar-and-reservation-info">
+
+                    {/* 빅 캘린더 */}
                     <div className="custom-calendar">
                         <h3>{startMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</h3>
-                        <Calendar
-                     
 
+                        <div className='date-range'>
+                        <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} 
+                  dateFormat="yyyy/MM/dd" // Set the desired date format
+                  placeholderText="날짜를 선택하세요"/>
+                         
+                        <DatePicker selected={endDate} onChange={(date) => setEndDate(date)}
+                  dateFormat="yyyy/MM/dd" // Set the desired date format
+                  placeholderText="날짜를 선택하세요" />
+                         </div>
+                      
+                        <Calendar
                             value={date}
                             locale="en-US"
-                            // tileClassName={({ date, view }) => {
-                            //     if (view === 'month') {
-                            //         const dateString = date.toISOString().split('T')[0];
-                            //         if (selectedDates.includes(dateString)) {
-                            //             return 'selected-date';
-                            //         }
-                            //     }
-                            //     return null;
-                            // }}
-                            // tileContent={({ date, view }) => {
-                            //     if (view === 'month') {
-                            //         const reservations = getReservationsForDate(date);
-                            //         if (reservations.length > 0) {
-                            //             return (
-                            //                 <ul className="reservation-list">
-                            //                     {reservations.map((reservation) => (
-                            //                         <li key={reservation.reservationSlotKey} className={reservation.slotCount === reservation.slotStatusCount ? 'equal-slot-count' : ''}>
-                            //                             {/* {reservation.reservationSlotDate} <br />
-                            //                             {reservation.storeId} <br /> */}
-                            //                           ( {reservation.slotStatusCount}  / {reservation.slotCount} )
-                            //                            <p> <i class="bi bi-stopwatch"></i> {reservation.limitTime} </p>
-                            //                         </li>
-                            //                     ))}
-                            //                 </ul>
-                            //             );
-                            //         }
-                            //     }
-                            //     return null;
-                            // }}
-                            // onClickDay={handleDateClick}
-                            selectRange={isRange}
+                            tileClassName={({ date, view }) => {
+                                if (view === 'month') {
+                                    const dateString = date.toISOString().split('T')[0];
+                                    if (selectedDates.includes(dateString)) {
+                                        return 'selected-date';
+                                    }
+                                }
+                                return null;
+                            }}
+                            tileContent={({ date, view }) => {
+                                if (view === 'month') {
+                                    const reservations = getReservationsForDate(date);
+                                    if (reservations.length > 0) {
+                                        return (
+                                            <ul className="reservation-list">
+                                                {reservations.map((reservation) => (
+                                                    <li key={reservation.reservationSlotKey} className={reservation.slotCount === reservation.slotStatusCount ? 'equal-slot-count' : ''}>
+                                                        {/* {reservation.reservationSlotDate} <br />
+                                                        {reservation.storeId} <br /> */}
+                                                      ( {reservation.slotStatusCount}  / {reservation.slotCount} )
+                                                       <p> <i class="bi bi-stopwatch"></i> {reservation.limitTime} </p>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        );
+                                    }
+                                }
+                                return null;
+                            }}
+                            onClickDay={handleDateClick}
+                            // selectRange={isRange}
+                            // selectRange={true} // 범위 선택을 허용
                             onChange={handleDateChange}
                         />
                     </div>
+
                     <div className="reservation-info-container">
                         <h3>예약 정보</h3>
-
-                        <DateRangePicker
-                        ranges={[selectionRange]}
-                        onChange={handleSelect}
-                        />
-
-                        <h3>선택된 날짜 범위:</h3>
-                            <p>시작일: {selectionRange.startDate.toLocaleDateString()}</p>
-                            <p>종료일: {selectionRange.endDate.toLocaleDateString()}</p>
-
-
-                
-                          <div>
-                          <div className="main-slot">
-                                <div> 일별 건수 </div>
-                              <input type="number" /> 
-                        </div>
-                        <div className="main-slot">
-                                <div> 시간별 예약 건수 </div>
-                              <input type="number" /> 
-                        </div>
-                            </div>
-                            <button onClick={btnUpdateSlot}> 수정 완료 </button>
-                          
-                         
+                        
+                        
+                        <h3>Selected Dates</h3>
+                        {/* 화면에 포맷된 startDate와 endDate의 값을 출력 */}
+                        <div>Start Date: {formatDate(startDate)}</div>
+                        <div>End Date: {formatDate(endDate)}</div>
+                        
                         {selectedDates.map((dateString, index) => (
-                            <div key={index}>
-                                <h1>{dateString}</h1>
-                                <ul>
-                            {getReservationsForDate(new Date(dateString)).map(reservation => (
+    <div key={index}>
+        <h1>{dateString}</h1>
 
-                                <li 
-                                    key={reservation.reservationSlotKey} 
-                                    onDoubleClick={() => handleEditToggle(reservation.reservationSlotKey, reservation)}
-                                >
-                {reservation.slotCount !== reservation.slotStatusCount && (
-             <div style={{fontSize: '12px', color: '#ddd',float: 'right'}} > <i class="bi bi-hand-index-thumb"> 더블클릭하여 수정 </i> </div>
-                )}
+        <ul>
+            {getReservationsForDate(new Date(dateString)).map(reservation => {
+                // Log the date and reservation details
+                console.log(`날짜: ${dateString}, 일별 예약 제한: ${reservation.slotCount}, 시간별 예약 제한: ${reservation.limitTime}`);
 
-                                    <div>일별 슬롯 개수 제한</div>
-                                    <div className='slot-num-status'>
-                                        <input 
-                                            type='number' 
-                                            value={reservation.slotStatusCount} 
-                                            disabled 
-                                        /> /
-                                        <input
-                                            type='number'
-                                            value={editModes[reservation.reservationSlotKey] ? editedValues[reservation.reservationSlotKey]?.slotCount : reservation.slotCount}
-                                            onChange={(e) => setEditedValues(prev => ({
-                                                ...prev,
-                                                [reservation.reservationSlotKey]: {
-                                                    ...prev[reservation.reservationSlotKey],
-                                                    slotCount: e.target.value,
-                                                },
-                                            }))}
-                                            disabled={!editModes[reservation.reservationSlotKey]}
-                                        />
-                                    </div>
-                                    <br />
-                                    <strong>시간별 슬롯 제한</strong>
-                                    <input
-                                        type='number'
-                                        value={editModes[reservation.reservationSlotKey] ? editedValues[reservation.reservationSlotKey]?.limitTime : reservation.limitTime}
-                                        onChange={(e) => setEditedValues(prev => ({
-                                            ...prev,
-                                            [reservation.reservationSlotKey]: {
-                                                ...prev[reservation.reservationSlotKey],
-                                                limitTime: e.target.value,
-                                            },
-                                        }))}
-                                        disabled={!editModes[reservation.reservationSlotKey]}
-                                    /><br />
-                                    
-                                    {/* 수정 완료 버튼 */}
-                                    {editModes[reservation.reservationSlotKey] && (
-                                        <button type="button" onClick={() => handleSaveChanges(reservation.reservationSlotKey)}>
-                                            수정 완료
-                                        </button>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
-
+                return (
+                    <li 
+                        key={reservation.reservationSlotKey} 
+                        onDoubleClick={() => handleEditToggle(reservation.reservationSlotKey, reservation)}
+                    >
+                        {reservation.slotCount !== reservation.slotStatusCount && (
+                            <div style={{fontSize: '12px', color: '#ddd', float: 'right'}}>
+                                <i className="bi bi-hand-index-thumb"> 더블클릭하여 수정 </i>
                             </div>
-                        ))}
+                        )}
+
+                        <div className='slot-num-status'>
+                            <strong>일별 예약 제한</strong>
+                            <input
+                                type='number'
+                                value={editModes[reservation.reservationSlotKey] ? editedValues[reservation.reservationSlotKey]?.slotCount : reservation.slotCount}
+                                onChange={(e) => setEditedValues(prev => ({
+                                    ...prev,
+                                    [reservation.reservationSlotKey]: {
+                                        ...prev[reservation.reservationSlotKey],
+                                        slotCount: e.target.value,
+                                    },
+                                }))}
+                            />
+                        </div>
+                        <br />
+                        <strong>시간별 예약 제한</strong>
+                        <input
+                            type='number'
+                            value={editModes[reservation.reservationSlotKey] ? editedValues[reservation.reservationSlotKey]?.limitTime : reservation.limitTime}
+                            onChange={(e) => setEditedValues(prev => ({
+                                ...prev,
+                                [reservation.reservationSlotKey]: {
+                                    ...prev[reservation.reservationSlotKey],
+                                    limitTime: e.target.value,
+                                },
+                            }))}
+                        /><br />
+                        
+                        <button type="button" onClick={() => handleSaveChanges(reservation.reservationSlotKey)}>
+                            수정 완료
+                        </button>
+                    </li>
+                );
+            })}
+        </ul>
+    </div>
+))}
                     </div>
+
                 </div>
             </div>
         </div>

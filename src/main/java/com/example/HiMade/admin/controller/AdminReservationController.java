@@ -113,4 +113,7 @@ public class AdminReservationController {
       adminReservationService.setMainCategoryImg(file, categoryId);
     }
 
+
+
+
 }

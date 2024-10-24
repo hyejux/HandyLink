@@ -90,7 +90,7 @@ public class AdminStoreController {
         }
 
         String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1); // 파일 이름 추출
-        String uploadDir = "C:/Users/admin/Desktop/HandyLink/src/main/resources/static/uploads"; // 이미지 저장 경로
+        String uploadDir = "C:/Users/admin/Desktop/HandyLink/src/main/resources/static/uploads/storeImg"; // 이미지 저장 경로
 
         File file = new File(uploadDir + "/" + fileName);
         if (file.exists()) {

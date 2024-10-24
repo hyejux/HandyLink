@@ -116,6 +116,7 @@ h1 {
     padding: 8px 12px;
     border-radius: 4px;
     transition: border-color 0.3s ease-in-out;
+    margin-bottom: 5px;
 }
 
 .input-field > input:disabled{
@@ -125,6 +126,28 @@ h1 {
 
 .input-field > input:focus{
     border-color: #007bff;
+}
+
+.password{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-pw {
+    width: 90%;
+}
+
+.small-text {
+    font-size: 12px;
+    color: red;
+    padding-left: 5px;
+    float: left;
+}
+
+.change-pw {
+    float: right;
+    height: 25px;
 }
 
 .modify-btn {

@@ -118,7 +118,6 @@ function MyStore() {
 
     //step03 사진 업로드
     const [selectedImages, setSelectedImages] = useState([]); // 화면에 보여질 파일 리스트 (미리보기 URL)
-    const [uploadedImageUrls, setUploadedImageUrls] = useState([]); // 서버에서 반환된 실제 이미지 URL들
     const onSelectFile = async (e) => {
         e.preventDefault();
         const files = Array.from(e.target.files); // 선택된 파일들 배열로 변환
@@ -160,8 +159,6 @@ function MyStore() {
             const filteredUrls = imageUrls.filter(url => url !== null);
 
             if (filteredUrls.length > 0 && filteredUrls !== null) {
-                // 실제 서버 URL 배열 업데이트
-                setUploadedImageUrls(prev => [...prev, ...filteredUrls]);
 
                 setMyStoreInfo(prev => ({
                     ...prev,
@@ -181,9 +178,6 @@ function MyStore() {
     const removeImage = (index, isUploadedImage) => {
         // 이미지를 삭제할 때 서버 요청 없이 로컬 상태에서만 삭제
         if (isUploadedImage) {
-            // 업로드된 이미지일 경우 (서버에서 가져온 이미지)
-            setUploadedImageUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
-
             // Store 정보 업데이트 (서버에서 가져온 이미지 삭제)
             setMyStoreInfo((prev) => ({
                 ...prev,
@@ -194,8 +188,6 @@ function MyStore() {
             setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
         }
     };
-
-
 
     //사진업로드
 

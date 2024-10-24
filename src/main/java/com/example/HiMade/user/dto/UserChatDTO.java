@@ -17,4 +17,5 @@ public class UserChatDTO {
     private String storeId;
     private String userId;
     private String senderType;
+    private Long storeNo;
 }

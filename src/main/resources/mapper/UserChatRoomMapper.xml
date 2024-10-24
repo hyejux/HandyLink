@@ -3,14 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.HiMade.user.mapper.UserChatMapper">
-    <insert id="insertChatRoom">
-        INSERT INTO chat_room (store_id, user_id)
-        VALUES (#{storeId}, #{userId})
+<mapper namespace="com.example.HiMade.user.mapper.UserChatRoomMapper">
+    <insert id="insertChat">
+        INSERT INTO chat (chat_message, send_time, store_id, user_id, store_no, sender_type)
+        VALUES (#{chatMessage}, #{sendTime}, #{storeId}, #{userId}, #{storeNo}, #{senderType})
     </insert>
 
-    <select id="selectChatRoomByUser" resultType="com.example.HiMade.user.dto.UserChatDTO">
-        SELECT * FROM chat_room
-        WHERE user_id = #{userId}
+    <select id="selectChat" resultType="com.example.HiMade.user.dto.UserChatDTO">
+        SELECT chat_no, chat_message, send_time, store_id, user_id, store_no, sender_type
+        FROM chat
+        WHERE user_id = #{userId} AND store_id = #{storeId}
+        ORDER BY send_time ASC
     </select>
 </mapper>

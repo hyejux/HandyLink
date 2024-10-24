@@ -46,7 +46,8 @@ CREATE TABLE STORE (
     store_close_time TIME NULL,  -- 추가
     store_day_off TEXT[] NULL,  -- 추가
     store_account JSONB NULL,  -- 추가
-    PRIMARY KEY (store_id)
+    store_no bigint NOT NULL DEFAULT nextval('store_no_seq')
+    PRIMARY KEY (store_id, store_no)
 );
 
 -- USERS 테이블

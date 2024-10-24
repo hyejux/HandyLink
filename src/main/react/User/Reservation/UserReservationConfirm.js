@@ -145,9 +145,7 @@ function UserReservationConfirm() {
   console.log('Slot:', slot);
   console.log('Date:', date);
   console.log('reservationSlotKey:', reservationSlotKey);
-  console.log(sessionSestoreNo);
-  console.log(cateId);
-
+  console.log("categoryId:" + cateId);
 
 
 

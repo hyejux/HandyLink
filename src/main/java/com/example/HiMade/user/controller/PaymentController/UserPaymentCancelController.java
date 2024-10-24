@@ -53,4 +53,18 @@ public class UserPaymentCancelController {
         }
         return ResponseEntity.ok("결제 상태 및 예약 상태가 업데이트되었습니다.");
     }
+
+
+    @PostMapping("/requestRefund/{reservationNo}")
+    public ResponseEntity<String> refund(@PathVariable Long reservationNo, @RequestBody Map<String, Object> refundRequest) {
+        Long paymentId = Long.valueOf((String) refundRequest.get("paymentId"));
+        String refundMethod = (String) refundRequest.get("refundMethod");
+        Long refundAmount = Long.valueOf((String) refundRequest.get("amount"));
+
+        // 여기서 환불 처리 로직을 추가합니다.
+        String result = refundService.processRefund(paymentId, refundMethod, refundAmount);
+        return ResponseEntity.ok(result);
+    }
+
+
 }

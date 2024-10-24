@@ -76,22 +76,63 @@ function UserMyReservationDetail() {
   console.log(categories);
   console.log(paymentInfo);
 
+    // 환불 요청 함수
+const requestRefund = async (paymentId, amount) => {
+  try {
+      const response = await axios.post('/userPaymentCancel/requestRefund', {
+          paymentId: paymentId,
+          amount: amount,
+      });
+      
+      if (response.data.success) {
+          console.log("환불 요청 성공:", response.data);
+          alert("환불이 완료되었습니다.");
+      } else {
+          console.error("환불 요청 실패:", response.data);
+          alert("환불 요청에 실패했습니다.");
+      }
+  } catch (error) {
+      console.error("환불 요청 중 오류 발생:", error);
+      alert("환불 요청 중 오류가 발생했습니다.");
+  }
+};
 
-  // 예약 취소 버튼 클릭 시 결제 상태 업데이트
   const cancelReservation = async () => {
     const reservationNo = cateId;
     try {
-      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, { paymentStatus: "N", storeName: storeInfo.storeName });
-      console.log("예약 취소 성공:", response.data);
-      alert("예약이 취소되었습니다.");
+        // 결제 정보를 가져오기 (paymentId 필요)
+        const paymentResponse = await axios.get(`/userPaymentCancel/getPaymentInfo/${reservationNo}`);
+        const paymentInfo = paymentResponse.data;
 
-      // 페이지를 새로 고침하거나 다른 작업 수행
-      window.location.reload();
+        if (!paymentInfo || paymentInfo.length === 0) {
+            throw new Error("결제 정보가 없습니다.");
+        }
+
+        const paymentId = paymentInfo[0].paymentId; // 첫 번째 결제 정보에서 ID 가져오기
+        const paymentAmount = paymentInfo[0].paymentAmount; // 환불할 금액 가져오기
+
+        // 환불 요청
+        await requestRefund(paymentId, paymentAmount);
+
+        // 결제 상태 업데이트
+        const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, {
+            paymentStatus: "N",
+            storeName: storeInfo.storeName
+        });
+        console.log("예약 취소 성공:", response.data);
+        alert("예약이 취소되었습니다.");
+
+        // 페이지를 새로 고침하거나 다른 작업 수행
+        window.location.reload();
     } catch (error) {
-      console.error("예약 취소 중 오류 발생:", error);
-      alert("예약 취소에 실패했습니다. 다시 시도해주세요.");
+        console.error("예약 취소 중 오류 발생:", error);
+        alert("예약 취소에 실패했습니다. 다시 시도해주세요.");
     }
-  };
+};
+
+
+
+
 
   const goToPaymentInfo = () => {
     // 세션에 필요한 정보 저장

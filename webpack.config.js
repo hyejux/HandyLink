@@ -27,6 +27,7 @@ module.exports = {
         adminReserveSettingDetail : './Admin/AdminReserveSettingDetail.js',
         AdminReserveSettingDetailModify : './Admin/AdminReserveSettingDetailModify.js',
         adminReserveManage : './Admin/AdminReserveManage.js',
+        adminReserveManageDetail : './Admin/AdminReserveManageDetail.js',
         UserMyReservationList : './User/Reservation/UserMyReservationList.js',
         UserReservationConfirm : './User/Reservation/UserReservationConfirm.js',
         UserReservationComplete : './User/Reservation/UserReservationComplete.js',

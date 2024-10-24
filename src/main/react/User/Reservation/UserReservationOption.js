@@ -176,6 +176,7 @@ function UserReservationOption() {
 
   // sessionStorage에서 데이터 가져오기
   const storedData = sessionStorage.getItem('storeInfo');
+  
   // 가져온 데이터를 변환하여 바로 사용
   const storeInfo = storedData ? JSON.parse(storedData) : null; 
   console.log(storeInfo);
@@ -187,7 +188,6 @@ function UserReservationOption() {
     sessionStorage.setItem('storeNo', storeNo);
     sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
     window.location.href = `../UserReservationConfirm.user/${id}`;
-
   };
 
 

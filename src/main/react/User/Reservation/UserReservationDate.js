@@ -78,13 +78,20 @@ function UserReservationDate() {
   const [date, setDate] = useState(new Date());
   const [dateTime, setDateTime] = useState([]);
 
-  const handleDateChange = (newDate) => {
+  const handleDateChange = (newDate) => { 
+    console.log("실행됨 ----------");
+    
     setDate(newDate);
     const adjustedDate = addHours(newDate, 9);
     const formattedDate = format(adjustedDate, 'yyyy-MM-dd');
     console.log(formattedDate);
 
-    axios.post('/userReservation/getDateTime', { reservationSlotDate: formattedDate })
+
+
+    const cateId2 = cateId
+    const intCateId = parseInt(cateId, 10);
+
+    axios.post(`/userReservation/getDateTime/${cateId}`, { reservationSlotDate: formattedDate  })
       .then(response => {
         console.log('첫 번째 API 응답 데이터:', response.data); // 응답 데이터 전체를 출력
         const firstItem = response.data[0];
@@ -95,25 +102,25 @@ function UserReservationDate() {
         console.log('reservationSlotKey:', reservationSlotKey); // reservationSlotKey 값을 확인
 
         // reservationSlotKey를 받아온 후에 두 번째 API 호출
-        return axios.post('/userReservation/getSlotTime', { reservationSlotKey: reservationSlotKey });
+        // return axios.post('/userReservation/getSlotTime', { reservationSlotKey: reservationSlotKey });
       })
 
-      .then(response => {
-        const reservedTimes = response.data.map(slot => slot.reservationTime);
-        // 모든 시간 변환
+      // .then(response => {
+      //   const reservedTimes = response.data.map(slot => slot.reservationTime);
+      //   // 모든 시간 변환
 
-        const formattedReservedTimes = reservedTimes.map(convertTo12HourFormat);
+      //   const formattedReservedTimes = reservedTimes.map(convertTo12HourFormat);
 
-        console.log('변환된 예약 시간:', formattedReservedTimes);
+      //   console.log('변환된 예약 시간:', formattedReservedTimes);
 
-        setDisabledTimes(formattedReservedTimes); // 상태로 저장
-        console.log('예약된 시간:', reservedTimes);
+      //   setDisabledTimes(formattedReservedTimes); // 상태로 저장
+      //   console.log('예약된 시간:', reservedTimes);
 
-        // console.log('Slot Time API 호출 성공:', response.data);
-      })
-      .catch(error => {
-        console.error('API 호출 실패:', error);
-      });
+      //   // console.log('Slot Time API 호출 성공:', response.data);
+      // })
+      // .catch(error => {
+      //   console.error('API 호출 실패:', error);
+      // });
 
   };
 
@@ -182,6 +189,8 @@ function UserReservationDate() {
   };
 
   const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  console.log("날짜:" + formattedDate);
+  
 
 
   const storeNo = sessionStorage.getItem('storeNo');
@@ -191,6 +200,40 @@ function UserReservationDate() {
   console.log(storeInfo);
 
 
+  
+  
+  const [selectSlot3, setSelectSlot3] = useState('00:00');
+  
+  useEffect(() => {
+    const formattedSlot = selectSlot2.replace(/오전\s+|오후\s+/g, '').trim();
+    
+    // "오후 03:00" 또는 "오전 03:00"에서 "15:00" 또는 "03:00"으로 변환
+    const timeParts = formattedSlot.split(':');
+    let hours = parseInt(timeParts[0]);
+    const isAfternoon = selectSlot2.includes('오후');
+    
+    if (isAfternoon && hours < 12) {
+      hours += 12; // 12시간 형식에서 24시간 형식으로 변환
+    } else if (!isAfternoon && hours === 12) {
+      hours = 0; // 12AM을 00으로 변환
+    }
+    
+    const resultSlot = `${String(hours).padStart(2, '0')}:${timeParts[1]}`;
+    
+    console.log(`Selected time slot: ${resultSlot}`);
+    setSelectSlot3(resultSlot);
+    sessionStorage.setItem('resultSlot', resultSlot);
+  }, [selectSlot2]);
+  
+  
+  const [reserveModi, setReserveModi] = useState('');
+  
+  useEffect(() => {
+    
+    
+  }, [cateId]);
+
+  
   const goToAdminPage = (id) => {
     sessionStorage.setItem('reservationSlotKey', rSloyKey);
     sessionStorage.setItem('selectSlot', selectSlot3);
@@ -200,64 +243,32 @@ function UserReservationDate() {
     window.location.href = `../UserReservationOption.user/${id}`;
   };
 
-
-
-  const [selectSlot3, setSelectSlot3] = useState('00:00');
-
-  useEffect(() => {
-    const formattedSlot = selectSlot2.replace(/오전\s+|오후\s+/g, '').trim();
-
-    // "오후 03:00" 또는 "오전 03:00"에서 "15:00" 또는 "03:00"으로 변환
-    const timeParts = formattedSlot.split(':');
-    let hours = parseInt(timeParts[0]);
-    const isAfternoon = selectSlot2.includes('오후');
-
-    if (isAfternoon && hours < 12) {
-      hours += 12; // 12시간 형식에서 24시간 형식으로 변환
-    } else if (!isAfternoon && hours === 12) {
-      hours = 0; // 12AM을 00으로 변환
-    }
-
-    const resultSlot = `${String(hours).padStart(2, '0')}:${timeParts[1]}`;
-
-    console.log(`Selected time slot: ${resultSlot}`);
-    setSelectSlot3(resultSlot);
-  }, [selectSlot2]);
-
-
-  const [reserveModi, setReserveModi] = useState('');
-
-  useEffect(() => {
-
-
-  }, [cateId]);
-
-
+  
   //   const tileContent = ({ date }) => {
-  //      // 타일 내용이 필요 없으므로 빈 div를 반환
-  // const tileContent = () => {
-  //   return <div style={{ visibility: 'hidden' }}></div>; // 보이지 않도록 설정
-  // };
-  //   };
-
-
-  // 비활성화할 날짜 리스트 예시 (YYYY-MM-DD 형식)
-  // const disabledDates = ['2024-10-23', '2024-10-24'];
-
-
-
-
-  // const tileDisabled = ({ date, view }) => {
-  //   // 날짜가 비활성화할 날짜 리스트에 포함되어 있으면 true 반환
-  //   const formattedDate = date.toISOString().split('T')[0];
-  //   return disabledDates.includes(formattedDate);
-  // };
-
-
-  // const isDateDisabled = (date) => {
-  //   // 선택한 날짜의 슬롯을 확인하여 disabled 여부를 반환
-  //   const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
-  //   const slot = dateTime.find(slot => slot.date === formattedDate); // 해당 날짜의 슬롯 찾기
+    //      // 타일 내용이 필요 없으므로 빈 div를 반환
+    // const tileContent = () => {
+      //   return <div style={{ visibility: 'hidden' }}></div>; // 보이지 않도록 설정
+      // };
+      //   };
+      
+      
+      // 비활성화할 날짜 리스트 예시 (YYYY-MM-DD 형식)
+      // const disabledDates = ['2024-10-23', '2024-10-24'];
+      
+      
+      
+      
+      // const tileDisabled = ({ date, view }) => {
+        //   // 날짜가 비활성화할 날짜 리스트에 포함되어 있으면 true 반환
+        //   const formattedDate = date.toISOString().split('T')[0];
+        //   return disabledDates.includes(formattedDate);
+        // };
+        
+        
+        // const isDateDisabled = (date) => {
+          //   // 선택한 날짜의 슬롯을 확인하여 disabled 여부를 반환
+          //   const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+          //   const slot = dateTime.find(slot => slot.date === formattedDate); // 해당 날짜의 슬롯 찾기
   //   return slot && slot.slotStatusCount === slot.slotCount; // 슬롯이 모두 채워졌다면 true 반환
   // };
 

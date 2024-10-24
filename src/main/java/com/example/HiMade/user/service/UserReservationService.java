@@ -1,16 +1,18 @@
 package com.example.HiMade.user.service;
 
 import com.example.HiMade.user.dto.*;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface UserReservationService {
+public interface
+UserReservationService {
 
   public List<UserRL> getMyReserveList();
-  public List<UserRSlotDTO> getDateTime(LocalDate Date);
+  public List<UserRSlotDTO> getDateTime(UserRSlotDTO Date);
   public List<UserRSlotDTO> getAllDateTime(int id);
 
   public int setReservationForm(UserReservationDTO dto);
@@ -27,6 +29,7 @@ public interface UserReservationService {
   void updateReservationStatus(int reservationNo, String status);
   void updateSlotStatus(int categoryId, LocalDate reservationDate, int storeNo);
 
+  void updateSlotCount1(UserRSlotDTO dto);
 
 
 

@@ -27,8 +27,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
         // 업체 세션 저장
         userSessions.computeIfAbsent(storeId, k -> ConcurrentHashMap.newKeySet()).add(session);
 
-        //System.out.println("New connection established: " + session.getId());
-        //System.out.println("Current user sessions: " + userSessions.keySet());
+        System.out.println("New connection established: " + session.getId());
+        System.out.println("Current user sessions: " + userSessions.keySet());
     }
 
     @Override
@@ -36,22 +36,22 @@ public class WebSocketHandler extends TextWebSocketHandler {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
 
-        String senderId = (String) payload.get("senderId");
-        String recipientId = (String) payload.get("recipientId");
+        String userId = (String) payload.get("userId");
+        String storeId = (String) payload.get("storeId");
 
-        //System.out.println("Sending message from " + senderId + " to " + recipientId);
+        System.out.println("메세지 보내기 from " + userId + " to " + storeId);
 
         // 중복 전송을 방지하기 위해 모든 세션을 Set에 모음
         Set<WebSocketSession> sessionsToSend = ConcurrentHashMap.newKeySet();
 
         // 발신자의 세션 추가
-        Set<WebSocketSession> senderSessions = userSessions.get(senderId);
+        Set<WebSocketSession> senderSessions = userSessions.get(userId);
         if (senderSessions != null) {
             sessionsToSend.addAll(senderSessions);
         }
 
         // 수신자의 세션 추가
-        Set<WebSocketSession> recipientSessions = userSessions.get(recipientId);
+        Set<WebSocketSession> recipientSessions = userSessions.get(storeId);
         if (recipientSessions != null) {
             sessionsToSend.addAll(recipientSessions);
         }
@@ -75,7 +75,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         // 빈 세션 셋 제거
         userSessions.entrySet().removeIf(entry -> entry.getValue().isEmpty());
 
-        //System.out.println("Connection closed: " + session.getId());
-        //System.out.println("Remaining sessions: " + userSessions.size());
+        System.out.println("Connection closed: " + session.getId());
+        System.out.println("Remaining sessions: " + userSessions.size());
     }
 }

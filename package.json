@@ -1,7 +1,15 @@
 {
   "dependencies": {
+    "@adobe/react-spectrum": "^3.37.1",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^6.1.5",
+    "@mui/x-date-pickers": "^7.21.0",
+    "@mui/x-date-pickers-pro": "^7.21.0",
+    "@react-spectrum/datepicker": "^3.10.3",
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "iamport-rest-client-nodejs": "^0.9.12",
     "path-browserify": "^1.0.1",

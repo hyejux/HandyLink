@@ -24,7 +24,7 @@ public class UserReservationServiceImpl implements UserReservationService {
   }
 
   @Override
-  public List<UserRSlotDTO> getDateTime(LocalDate Date) {
+  public List<UserRSlotDTO> getDateTime(UserRSlotDTO Date) {
     System.out.println(userReservationMapper.getDateTime(Date));
     return userReservationMapper.getDateTime(Date);
   }
@@ -55,7 +55,9 @@ public class UserReservationServiceImpl implements UserReservationService {
   public void setReservationFormDetail(List<UserReservationFormDTO> dto) {
     for (UserReservationFormDTO d : dto ){
       System.out.println("삽입 값" + d);
-      userReservationMapper.setReservationFormDetail(d);
+
+     int result = userReservationMapper.setReservationFormDetail(d);
+      System.out.println(result);
     }
   }
 
@@ -95,6 +97,11 @@ public class UserReservationServiceImpl implements UserReservationService {
   public void updateSlotStatus(int categoryId, LocalDate reservationDate, int storeNo) {
     userReservationMapper.updateSlotStatus(categoryId, reservationDate, storeNo);
 
+  }
+
+  @Override
+  public void updateSlotCount1(UserRSlotDTO dto) {
+    userReservationMapper.updateSlotCount1(dto);
   }
 
 

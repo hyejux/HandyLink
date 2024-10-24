@@ -51,15 +51,16 @@ function UserStoreDetail() {
     // categoryId  << 로 요청 보내서 가게 정보 값  가져오세요 !
 
   }, []);
-  const formatServiceStartDate = (dateString) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
 
-    return `${year}/${month}/${day} ${hours}시 `;
-  };
+  // const formatServiceStartDate = (dateString) => {
+  //   const date = new Date(dateString);
+  //   const year = date.getFullYear();
+  //   const month = String(date.getMonth() + 1).padStart(2, '0');
+  //   const day = String(date.getDate()).padStart(2, '0');
+  //   const hours = String(date.getHours()).padStart(2, '0');
+
+  //   return `${year}/${month}/${day} ${hours}시 `;
+  // };
 
   // ------------------------------------------------------
 
@@ -86,8 +87,6 @@ function UserStoreDetail() {
     setCurrentSlide((prev) => (prev - 1 + storeInfo.storeImg.length) % storeInfo.storeImg.length);
   };
 
-  // ---------------------------------
-
   // 남은 시간을 계산하는 함수
   const calculateRemainingTime = (serviceStart) => {
     const serviceStartDate = new Date(serviceStart);
@@ -113,31 +112,28 @@ function UserStoreDetail() {
   };
 
 
+  // // 날짜 포맷 변환 함수
+  // const convertDateFormat2 = (dateString, format) => {
+  //   const date = new Date(dateString);
+  //   const year = date.getFullYear();
+  //   const month = String(date.getMonth() + 1).padStart(2, '0');
+  //   const day = String(date.getDate()).padStart(2, '0');
+  //   const hours = String(date.getHours()).padStart(2, '0');
+  //   const minutes = String(date.getMinutes()).padStart(2, '0');
 
-  // 날짜 포맷 변환 함수
-  const convertDateFormat2 = (dateString, format) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-
-    switch (format) {
-      case 'YYYY/MM/DD':
-        return `${year}/${month}/${day}`;
-      case 'DD-MM-YYYY':
-        return `${day}-${month}-${year}`;
-      case 'MM-DD-YYYY':
-        return `${month}-${day}-${year}`;
-      case 'YYYY/MM/DD HH:mm':
-        return `${year}/${month}/${day} ${hours}:${minutes}`; // 연/월/일 시:분
-      default:
-        return dateString; // 기본적으로 원본 반환
-    }
-  };
-
-  // ===============================
+  //   switch (format) {
+  //     case 'YYYY/MM/DD':
+  //       return `${year}/${month}/${day}`;
+  //     case 'DD-MM-YYYY':
+  //       return `${day}-${month}-${year}`;
+  //     case 'MM-DD-YYYY':
+  //       return `${month}-${day}-${year}`;
+  //     case 'YYYY/MM/DD HH:mm':
+  //       return `${year}/${month}/${day} ${hours}:${minutes}`; // 연/월/일 시:분
+  //     default:
+  //       return dateString; // 기본적으로 원본 반환
+  //   }
+  // };
 
   const calculateDaysUntilServiceStart = (serviceStart) => {
     const serviceStartDate = new Date(serviceStart);
@@ -156,23 +152,55 @@ function UserStoreDetail() {
     return Math.max(daysDifference, 0);
   };
 
-  const convertDateFormat = (dateString, format) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+  // const convertDateFormat = (dateString, format) => {
+  //   const date = new Date(dateString);
+  //   const year = date.getFullYear();
+  //   const month = String(date.getMonth() + 1).padStart(2, '0');
+  //   const day = String(date.getDate()).padStart(2, '0');
 
-    switch (format) {
-      case 'YYYY/MM/DD':
-        return `${year}/${month}/${day}`;
-      case 'DD-MM-YYYY':
-        return `${day}-${month}-${year}`;
-      case 'MM-DD-YYYY':
-        return `${month}-${day}-${year}`;
-      default:
-        return dateString; // 기본적으로 원본 반환
-    }
-  };
+  //   switch (format) {
+  //     case 'YYYY/MM/DD':
+  //       return `${year}/${month}/${day}`;
+  //     case 'DD-MM-YYYY':
+  //       return `${day}-${month}-${year}`;
+  //     case 'MM-DD-YYYY':
+  //       return `${month}-${day}-${year}`;
+  //     default:
+  //       return dateString; // 기본적으로 원본 반환
+  //   }
+  // };
+
+  // --------------------------------------------------------- 소식
+
+  
+const [noticeList, setNoticeList] = useState([]);
+
+useEffect(() => {
+        axios.get('/adminStore/getNoticeList')
+            .then(response => {
+                console.log(response.data);
+                setNoticeList(response.data);
+            })
+            .catch(error => {
+                console.log('Error Category', error);
+            });
+    }, [])
+
+ // 각 공지의 토글 상태를 저장하는 상태 (행별로 관리)
+ const [expandedRows, setExpandedRows] = useState([]);
+
+ // 특정 행을 클릭했을 때 해당 행의 상세 내용을 표시하도록 토글
+ const handleToggleRow = (index) => {
+   if (expandedRows.includes(index)) {
+     setExpandedRows(expandedRows.filter((rowIndex) => rowIndex !== index));
+   } else {
+     setExpandedRows([...expandedRows, index]);
+   }
+ };
+
+
+
+
 
 
   return (
@@ -221,7 +249,7 @@ function UserStoreDetail() {
 
           <div className="store-detail-menu">
             <button type="button" onClick={() => setActiveSection('home')}>홈</button>
-            <button type="button" onClick={() => setActiveSection('info')}>문의</button>
+            <button type="button" onClick={() => setActiveSection('info')}>소식</button>
             <button type="button" onClick={() => setActiveSection('reservation')}>예약</button>
             <button type="button" onClick={() => setActiveSection('review')}>리뷰</button>
           </div>
@@ -244,9 +272,50 @@ function UserStoreDetail() {
 
                 </div>
               </div>
+
+              <div className="user-content-container">
+              {noticeList.map((notice, index) => (
+               <ul key={index} style={{listStyle:'none'}}>
+                <li> <i class="bi bi-bell"></i> {notice.noticeType}  | {notice.noticeContent.slice(0, 20)}...</li>
+                </ul>             
+                ))}
+            </div>
+
             </div>
           )}
 
+           {activeSection === 'info' && (
+
+              <div>
+              {noticeList.map((notice, index) => (
+                 <React.Fragment key={index}>
+                  <div key={index} className="user-content-container">
+                  <i class="bi bi-chevron-down" style={{float:'right'}} onClick={() => handleToggleRow(index)}></i>
+                  {expandedRows.includes(index) ? (
+                            <div>
+                                {/* 확장된 내용을 표시 */}
+                                <div className="expanded-content">
+                                    <p>카테고리: {notice.noticeType}</p>
+                                    <p>소식 내용: {notice.noticeContent}</p>
+                                    <p>등록일: {notice.noticeRegdate}</p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div>
+                                {/* 기본 내용, 확장되지 않았을 때 보이는 부분 */}
+                                <div>{notice.noticeType}</div>
+                                <div>{notice.noticeContent.slice(0, 50)}...</div>
+                                <div>{notice.noticeRegdate}</div>
+                            </div>
+                        )}
+                  </div>
+                    
+                </React.Fragment>
+              ))}
+             
+              </div>
+
+           )}
 
           {/* 예약 */}
           {activeSection === 'reservation' && (

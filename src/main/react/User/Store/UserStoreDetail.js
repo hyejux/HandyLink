@@ -22,12 +22,6 @@ function UserStoreDetail() {
     window.location.href = `/UserReservationDate.user/${id}`;
   };
 
-  console.log(storeInfo.storeNo);
-  console.log(storeInfo);
-
-
-
-
   // ------------------------------------------------------
 
   useEffect(() => {

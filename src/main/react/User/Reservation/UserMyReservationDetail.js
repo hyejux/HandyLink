@@ -53,11 +53,16 @@ function UserMyReservationDetail() {
     return `${formattedDate} ${time.substring(0, 8)}`; // 'YYYY/MM/DD HH:MM:SS' 형식으로 반환
   };
 
+  // sessionStorage에서 데이터 가져오기
+  const storedData = sessionStorage.getItem('storeInfo');
+  // 가져온 데이터를 변환하여 바로 사용
+  const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
+  console.log(storeInfo);
 
   // 예약 취소 버튼 클릭 시 결제 상태 업데이트
   const cancelReservation = async () => {
     try {
-      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${cateId}`, { paymentStatus: "N" });
+      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${cateId}`, { paymentStatus: "N", storeName: storeInfo.storeName });
       console.log("예약 취소 성공:", response.data);
       alert("예약이 취소되었습니다.");
 
@@ -69,11 +74,6 @@ function UserMyReservationDetail() {
     }
   };
 
-  // sessionStorage에서 데이터 가져오기
-  const storedData = sessionStorage.getItem('storeInfo');
-  // 가져온 데이터를 변환하여 바로 사용
-  const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
-  console.log(storeInfo);
 
 
   return (

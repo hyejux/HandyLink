@@ -57,7 +57,7 @@
     padding: 15px 25px;
     border-radius: 15px;
     border-bottom-left-radius: 0px;
-    max-width: 70%;
+    max-width: 50%;
     word-break: break-word;
 }
 
@@ -67,7 +67,7 @@
     padding: 15px 25px;
     border-radius: 15px;
     border-bottom-right-radius: 0px;
-    max-width: 70%;
+    max-width: 50%;
     word-break: break-word;
 }
 

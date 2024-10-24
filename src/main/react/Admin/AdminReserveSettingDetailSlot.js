@@ -190,6 +190,37 @@ function AdminReserveSettingDetailSlot() {
         
     }
 
+  
+    // 오늘 날짜 가져오기
+    const today = new Date();
+    const formattedToday = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+  
+    // 시간 비교를 위한 현재 시간 가져오기 (24시간 형식)
+    const currentHour = today.getHours();
+  
+    // 날짜와 시간을 비교하여 비활성화 조건 확인
+    const isDatePastOrToday = serviceDate && serviceDate <= formattedToday;
+    const isTimePast = serviceDate === formattedToday && serviceHour !== "" && parseInt(serviceHour) <= currentHour;
+  
+    // input과 select 비활성화 조건
+    const isDisabled = isDatePastOrToday && isTimePast;
+  
+
+    const [date, setDate] = useState([new Date(), new Date()]); // 시작일과 종료일 배열로 관리
+    const [isRange, setIsRange] = useState(false); // 범위 선택 여부
+  
+    const handleDateChange = (newDate) => {
+      if (Array.isArray(newDate)) {
+        setDate(newDate); // 범위 선택 시 날짜 설정
+        setIsRange(true);
+        console.log(JOSN.stringify(date));
+      } else {
+        setDate([newDate, newDate]); // 단일 날짜 선택 시 배열로 변환
+        setIsRange(false);
+        console.log(date);
+      }
+    };
+  
 
 
 
@@ -201,16 +232,27 @@ function AdminReserveSettingDetailSlot() {
             </div>
             <div className="main-slot">
         <div> 서비스 시작일 </div>
-       {/* 날짜 입력 필드 */}
-       
+
+        {isRange ? (
+          <p>
+            선택된 날짜 범위: {date[0].toLocaleDateString()} ~ {date[1].toLocaleDateString()}
+          </p>
+        ) : (
+          <p>선택된 날짜: {date[0].toLocaleDateString()}</p>
+        )}
+
        <input 
                 type="date" 
                 value={serviceDate} 
                 onChange={(e) => setServiceDate(e.target.value)} 
+                disabled={isDatePastOrToday} // 이미 지난 날짜라면 비활성화
             />
 
             {/* 시간 입력을 위한 드롭다운 */}
-            <select id="time-select" value={serviceHour} onChange={(e) => setServiceHour(e.target.value)} >
+            <select 
+            id="time-select" value={serviceHour} 
+            onChange={(e) => setServiceHour(e.target.value)} 
+            disabled={isDatePastOrToday}>
                 <option value="">시간 선택</option> {/* 기본 옵션 */}
                 {[...Array(24)].map((_, index) => (
                     <option key={index} value={String(index).padStart(2, '0')}>
@@ -218,7 +260,9 @@ function AdminReserveSettingDetailSlot() {
                     </option>
                 ))}
             </select>
-            <button onClick={btnUpdateStart}> 수정 완료 </button>
+
+
+            <button onClick={btnUpdateStart}   disabled={isDatePastOrToday}> 수정 완료 </button>
             </div>
 
             <div className="main-contents">
@@ -226,51 +270,58 @@ function AdminReserveSettingDetailSlot() {
                     <div className="custom-calendar">
                         <h3>{startMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</h3>
                         <Calendar
-                            value={startMonth}
+                     
+
+                            value={date}
                             locale="en-US"
-                            tileClassName={({ date, view }) => {
-                                if (view === 'month') {
-                                    const dateString = date.toISOString().split('T')[0];
-                                    if (selectedDates.includes(dateString)) {
-                                        return 'selected-date';
-                                    }
-                                }
-                                return null;
-                            }}
-                            tileContent={({ date, view }) => {
-                                if (view === 'month') {
-                                    const reservations = getReservationsForDate(date);
-                                    if (reservations.length > 0) {
-                                        return (
-                                            <ul className="reservation-list">
-                                                {reservations.map((reservation) => (
-                                                    <li key={reservation.reservationSlotKey} className={reservation.slotCount === reservation.slotStatusCount ? 'equal-slot-count' : ''}>
-                                                        {/* {reservation.reservationSlotDate} <br />
-                                                        {reservation.storeId} <br /> */}
-                                                      ( {reservation.slotStatusCount}  / {reservation.slotCount} )
-                                                       <p> <i class="bi bi-stopwatch"></i> {reservation.limitTime} </p>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        );
-                                    }
-                                }
-                                return null;
-                            }}
-                           
-                            onClickDay={handleDateClick}
+                            // tileClassName={({ date, view }) => {
+                            //     if (view === 'month') {
+                            //         const dateString = date.toISOString().split('T')[0];
+                            //         if (selectedDates.includes(dateString)) {
+                            //             return 'selected-date';
+                            //         }
+                            //     }
+                            //     return null;
+                            // }}
+                            // tileContent={({ date, view }) => {
+                            //     if (view === 'month') {
+                            //         const reservations = getReservationsForDate(date);
+                            //         if (reservations.length > 0) {
+                            //             return (
+                            //                 <ul className="reservation-list">
+                            //                     {reservations.map((reservation) => (
+                            //                         <li key={reservation.reservationSlotKey} className={reservation.slotCount === reservation.slotStatusCount ? 'equal-slot-count' : ''}>
+                            //                             {/* {reservation.reservationSlotDate} <br />
+                            //                             {reservation.storeId} <br /> */}
+                            //                           ( {reservation.slotStatusCount}  / {reservation.slotCount} )
+                            //                            <p> <i class="bi bi-stopwatch"></i> {reservation.limitTime} </p>
+                            //                         </li>
+                            //                     ))}
+                            //                 </ul>
+                            //             );
+                            //         }
+                            //     }
+                            //     return null;
+                            // }}
+                            // onClickDay={handleDateClick}
+                            selectRange={isRange}
+                            onChange={handleDateChange}
                         />
                     </div>
                     <div className="reservation-info-container">
                         <h3>예약 정보</h3>
+
                         <DateRangePicker
                         ranges={[selectionRange]}
                         onChange={handleSelect}
                         />
-                        <div className="icon-buttons">
-                            <div> 기간 지정 변경 </div>
-                          <input type="date" />  ~    <input type="date" /> 
-                          </div>
+
+                        <h3>선택된 날짜 범위:</h3>
+                            <p>시작일: {selectionRange.startDate.toLocaleDateString()}</p>
+                            <p>종료일: {selectionRange.endDate.toLocaleDateString()}</p>
+
+
+                
                           <div>
                           <div className="main-slot">
                                 <div> 일별 건수 </div>

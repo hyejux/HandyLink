@@ -72,10 +72,10 @@ public class UserReservationController {
     return userReservationService.getSlotTime(slotkey);
   }
 
-  @GetMapping("/getNoSlot")
-  public List<LocalDate> getNoSlot(){
-    System.out.println(userReservationService.getNoSlot());
-    return userReservationService.getNoSlot();
+  @GetMapping("/getNoSlot/{id}")
+  public List<LocalDate> getNoSlot(@PathVariable int id){
+    System.out.println(userReservationService.getNoSlot(id));
+    return userReservationService.getNoSlot(id);
   }
 
   @PostMapping("/updateSlotStatus")

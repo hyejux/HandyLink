@@ -18,7 +18,7 @@ public interface UserReservationService {
   public void setReservationFormDetail(List<UserReservationFormDTO> dto);
   public List<UserRD> getMyReservationDetail(int id);
 
-  public List<LocalDate> getNoSlot();
+  public List<LocalDate> getNoSlot(int id);
 
   void setUpdateStart(UserRSlotDTO dto);
   void setUpdateSlot(@RequestBody UserUSlotDTO dto);

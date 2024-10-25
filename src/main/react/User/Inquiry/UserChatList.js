@@ -17,7 +17,7 @@ function UserChatList () {
                     <li className="inquiry-item">
                         <img src='/img/user_basic_profile.jpg' alt="프라이들 앤 스위츠"/>
                         <div className="inquiry-content">
-                            <p className="inquiry-title">프라이들 앤 스위츠</p>
+                            <p className="inquiry-title">도레도레</p>
                             <p className="inquiry-message">안녕하세요?</p>
                         </div>
                         <span className="inquiry-time">09:20 PM</span>

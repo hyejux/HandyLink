@@ -51,6 +51,7 @@ module.exports = {
         AdminStoreNoticeRegist : './Admin/AdminStoreNoticeRegist.js',
         StoreChatRoom : './User/Inquiry/StoreChatRoom.js',
         AdminSignupApproval: './Admin/AdminSignupApproval.js',
+        AdminStoreReport: './Admin/AdminStoreReport.js',
         UserSearch : './User/User/UserSearch.js'
 
     },

@@ -109,7 +109,7 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     public String uploadImage(MultipartFile file) { //이미지 URL 변환해서 리턴
         String imageUrl = null;
         try {
-            String uploadDir = "C:/Users/admin/Desktop/HandyLink/src/main/resources/static/uploads"; // 원하는 경로로 변경
+            String uploadDir = "C:/Users/admin/Desktop/HandyLink/src/main/resources/static/uploads/storeImg"; // 원하는 경로로 변경
             File dir = new File(uploadDir);
             if (!dir.exists()) {
                 dir.mkdirs(); // 디렉토리가 존재하지 않으면 생성
@@ -120,7 +120,7 @@ public class AdminStoreServiceImpl implements AdminStoreService {
             file.transferTo(uploadFile); // 파일 저장
 
             // URL 반환
-            imageUrl = "http://localhost:8585/uploads/" + fileName; // 로컬 개발 환경
+            imageUrl = "http://localhost:8585/uploads/storeImg/" + fileName; // 로컬 개발 환경
             // imageUrl = "https://example.com/uploads/" + fileName; // 운영 환경
         } catch (Exception e) {
             e.printStackTrace();

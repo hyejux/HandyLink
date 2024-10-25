@@ -57,8 +57,20 @@ function AdminStoreInfo() {
 
     }, []);
 
-    //수정하기
+    const currentPwRef = useRef(null);
     const [isDisabled, setIsDisabled] = useState(true);
+    const [isPwDisabled, setIsPwDisabled] = useState(true); // 비밀번호 필드의 활성화/비활성화 상태 관리
+    const [show, setShow] = useState(false);
+
+    const [validationMessage, setValidationMessage] = useState(''); // 비밀번호 확인 상태 메시지
+
+
+    const [isMatch, setIsMatch] = useState(false);
+    const [storePwChange, setStorePwChange] = useState({
+       storePwCurrent: '', //현재비밀번호
+        storePwNew: '', //새로운 비밀번호
+        storePwCheck: '' //비밀번호 확인
+    });
 
     const handleChangeStoreInfo = (e) => {
       const {id, value} = e.target;
@@ -67,6 +79,77 @@ function AdminStoreInfo() {
             ...prev,
             [id]: value
         }));
+    };
+
+
+    // 비밀번호 확인 유효성 검사
+    useEffect(() => {
+        const { storePwNew, storePwCheck } = storePwChange;
+
+        if (!storePwNew || !storePwCheck) {
+            setValidationMessage(''); // 공백이면 메시지 숨김
+        } else if (storePwNew === storePwCheck) {
+            setValidationMessage(''); // 일치하면 메시지 숨김
+        } else {
+            setValidationMessage('비밀번호가 일치하지 않습니다.'); // 틀리면 오류 메시지
+        }
+    }, [storePwChange.storePwNew, storePwChange.storePwCheck]); // 해당 상태가 변경될 때마다 실행
+
+    const handleChangeStorePw = (e) => {
+        const { id, value } = e.target;
+        setStorePwChange((prev) => ({ ...prev, [id]: value }));
+    };
+
+
+    const handleClickPw = async() => {
+        if (isPwDisabled) {
+            setIsPwDisabled(false);
+        } else {
+            if (!storePwChange.storePwCurrent) {
+                alert('현재 비밀번호를 입력해 주십시오.'); // 현재 비밀번호가 비어있을 경우 알림
+                currentPwRef.current.focus(); // 현재 비밀번호 입력 필드로 포커스 이동
+                return; // 함수 종료
+            }
+
+            // 현재 비밀번호 확인
+            handleBlur();
+
+            if (show) {
+                return; // 현재 비밀번호가 일치하지 않으면 함수 종료
+            }
+
+            if (storePwChange.storePwNew === storePwChange.storePwCheck) {
+                const updatedStoreInfo = {
+                    ...storeInfo,
+                    storePw: storePwChange.storePwNew // storePwChange.storePwNew로 비밀번호 업데이트
+                };
+
+                try {
+                    const resp = await axios.post('/adminStore/updateStoreInfo', updatedStoreInfo);
+                    alert('비밀번호가 정상적으로 변경되었습니다. 재로그인이 필요합니다.');
+
+                    // 비밀번호 수정 모드 종료
+                    setIsPwDisabled(true);
+                    // 필요에 따라 페이지를 이동
+                     window.location.href = '/adminlogin.login';
+                } catch (error) {
+                    console.error('비밀번호 변경 중 오류 발생:', error);
+                    alert('비밀번호 변경에 실패했습니다. 다시 시도해 주세요.');
+                }
+            } else {
+                setValidationMessage('비밀번호가 일치하지 않습니다.'); // 일치하지 않을 경우 메시지
+            }
+        }
+    };
+
+    const handleBlur = () => {
+        // 현재 비밀번호와 비교하여 에러 상태 업데이트
+        if (storePwChange.storePwCurrent !== storeInfo.storePw) {
+            setShow(true); // 비밀번호가 일치하지 않으면 메시지를 표시
+            currentPwRef.current.focus();
+        } else {
+            setShow(false); // 비밀번호가 일치하면 메시지를 숨김
+        }
     };
 
     console.log("마이페이지 ", storeInfo);
@@ -168,10 +251,39 @@ function AdminStoreInfo() {
 
             <div className="form-group">
                 <label htmlFor="password">비밀번호</label>
-                <div className="input-field">
-                    <input type="text" id="storePw" value={storeInfo.storePw} onChange={handleChangeStoreInfo} disabled={isDisabled}/>
-                </div>
+                {isPwDisabled ? (
+                    <div className="input-field password">
+                        <input type="text" id="storePw" value={storeInfo.storePw} disabled style={{width: '70%'}}/>
+                        <button type="button" className="change-pw" onClick={handleClickPw}> 변경하기 </button>
+                    </div>
+                ) : (
+                    <div className="input-field">
+                        <input type="text" id="storePwCurrent" value={storePwChange.storePwCurrent} onBlur={handleBlur} onChange={handleChangeStorePw} placeholder="현재 비밀번호" ref={currentPwRef} disabled={isPwDisabled}/>
+                        <input type="text" id="storePwNew" value={storePwChange.storePwNew} onChange={handleChangeStorePw} placeholder="새로운 비밀번호" disabled={isPwDisabled}/>
+                        <input type="text" id="storePwCheck" value={storePwChange.storePwCheck} onChange={handleChangeStorePw} placeholder="비밀번호 확인" disabled={isPwDisabled}/>
+                        <div className="btn-pw">
+                            {show ? (
+                                <div className="small-text">
+                                    현재 비밀번호가 일치하지 않습니다.
+                                </div>
+                            ) : validationMessage ? (
+                                <div className="small-text">{validationMessage}</div>
+                            ) : (
+                                storePwChange.storePwNew && storePwChange.storePwCheck && (
+                                    <div className="small-text">
+                                        <i className="bi bi-check-circle" style={{color:'green'}}></i>
+                                    </div>
+                                )
+                            )}
+                            <button type="button" className="change-pw" onClick={handleClickPw}> 저장하기 </button>
+                        </div>
+                    </div>
+                )}
             </div>
+
+
+
+
 
             <div className="form-group">
                 <label htmlFor="storeMaster">대표자</label>

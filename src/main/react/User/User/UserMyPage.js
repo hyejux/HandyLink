@@ -147,7 +147,7 @@ function UserMyPage () {
         if (isKakaoLogin) {
             // 카카오 로그아웃 처리
             const REST_API_KEY = process.env.REACT_APP_KAKAO_CLIENT_ID;
-            const LOGOUT_REDIRECT_URI = 'http://localhost:8585/UserLoginPage.user';
+            const LOGOUT_REDIRECT_URI = 'http://172.30.1.99:8585/UserLoginPage.user';
 
             // 카카오 로그아웃 URL
             const logoutUrl = `https://kauth.kakao.com/oauth/logout?client_id=${REST_API_KEY}&logout_redirect_uri=${encodeURIComponent(LOGOUT_REDIRECT_URI)}`

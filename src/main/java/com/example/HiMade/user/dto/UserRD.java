@@ -24,5 +24,10 @@ public class UserRD {
   private int  subPrice;
   private String middleCategoryValue;
 
+  private String storeName;
+  private String accountBank;
+  private String accountNumber;
+
+
 
 }

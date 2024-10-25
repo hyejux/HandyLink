@@ -284,6 +284,9 @@ useEffect(() => {
             </div>
           )}
 
+
+  
+
            {activeSection === 'info' && (
 
               <div>
@@ -358,6 +361,17 @@ useEffect(() => {
               })}
             </>
           )}
+
+
+            {/* 리뷰 */}
+            {activeSection === 'review' && (
+            <>
+
+            리뷰 페이지 이다...
+            </>
+          )}
+
+
         </div>
       </div>
     </div>

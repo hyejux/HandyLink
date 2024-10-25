@@ -279,6 +279,15 @@ function UserMyPage () {
                         </select>
                     </div>
 
+                    <div className="account-delete">
+                        <span className="del-span">
+                            회원 정보를 삭제하시겠어요?
+                        </span>
+                        <button className="del-btn">
+                            탈퇴하기
+                        </button>
+                    </div>
+
                     <div className="btn-group">
                         <button type="button" className="btn cancel">
                             취소
@@ -287,6 +296,8 @@ function UserMyPage () {
                             수정
                         </button>
                     </div>
+
+
                 </form>
             </div>
         </div>

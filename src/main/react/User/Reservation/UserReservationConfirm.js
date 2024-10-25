@@ -155,7 +155,6 @@ function UserReservationConfirm() {
   // 가져온 데이터를 변환하여 바로 사용
   const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
   console.log(storeInfo);
-
   console.log(reserveModi);
   console.log(categories);
   
@@ -255,9 +254,6 @@ function UserReservationConfirm() {
             reservationNo: reservationNum,
           });
 
-          sessionStorage.setItem('slot', slot);
-          sessionStorage.setItem('date', date);
-          sessionStorage.setItem('requestText', requestText);
           sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
           sessionStorage.setItem('totalPrice', totalPrice);
           sessionStorage.setItem('reserveModi', JSON.stringify(reserveModi));
@@ -557,9 +553,10 @@ function UserReservationConfirm() {
             }}>
               {totalPrice}원 결제하기
             </button>
-
-
           </div>
+
+
+          
 
         </div>
       </div>

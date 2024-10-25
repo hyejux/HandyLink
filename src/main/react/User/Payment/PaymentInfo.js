@@ -63,16 +63,6 @@ function PaymentInfo() {
     }, []); // 컴포넌트가 마운트될 때 한 번만 실행됩니다.
 
 
-    // sessionStorage에서 데이터 가져오기
-    const storedData = sessionStorage.getItem('storeInfo');
-    const slot = sessionStorage.getItem('slot');
-    const date = sessionStorage.getItem('date');
-    const totalPrice = sessionStorage.getItem('totalPrice');
-
-    // 가져온 데이터를 변환하여 바로 사용
-    const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
-
-
 
     // 결제 일시 포맷 (년/월/일 시:분:초)
     const formatDate1 = (dateString) => {
@@ -108,16 +98,16 @@ function PaymentInfo() {
                         {formatDate2(paymentInfo[0].paymentDate)}
                     </div>
                 )}
-                <div className="total-price">{totalPrice}</div>
+                <div className="total-price"></div>
             </div>
 
             <div className="user-content-container">
                 <div className="header">예약 정보</div>
-                <div className="reservation-date">{date} {slot}</div>
+                <div className="reservation-date"></div>
                 <div className="reservation-info">
                     <img src="../img/cake001.jpg" alt="예약 이미지" />
                     <div className="reservation-details">
-                        <div className="store-name">{storeInfo.storeName}</div>
+                        <div className="store-name"></div>
 
                         {/* 대분류와 중분류 출력 */}
                         {reservationList.map((item, resIndex) => {

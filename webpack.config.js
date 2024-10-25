@@ -50,7 +50,8 @@ module.exports = {
         AdminStoreNotice : './Admin/AdminStoreNotice.js',
         AdminStoreNoticeRegist : './Admin/AdminStoreNoticeRegist.js',
         StoreChatRoom : './User/Inquiry/StoreChatRoom.js',
-        AdminSignupApproval: './Admin/AdminSignupApproval.js'
+        AdminSignupApproval: './Admin/AdminSignupApproval.js',
+        UserSearch : './User/User/UserSearch.js'
 
     },
     devtool: 'sourcemaps',

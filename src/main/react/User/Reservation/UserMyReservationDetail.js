@@ -8,35 +8,48 @@ import './UserMyReservationDetail.css';
 
 
 function UserMyReservationDetail() {
-  const [cateId, setCateId] = useState(0);
+ const [cateId, setCateId] = useState(0);
   const [reservationList, setReservationList] = useState([]);
   const [paymentInfo, setPaymentInfo] = useState([]);
+  const [reservationDetail, setReservationDetail] = useState(null);
 
   useEffect(() => {
     const path = window.location.pathname;
     const pathSegments = path.split('/');
     const categoryId = pathSegments[pathSegments.length - 1];
     setCateId(categoryId);
+
+    // 예약 정보 가져오기
     axios.get(`/userMyReservation/getMyReservationDetail/${categoryId}`)
       .then(response => {
         console.log(response.data);
         setReservationList(response.data);
       })
       .catch(error => {
-        console.log('Error Category', error);
+        console.log('Error fetching reservation list:', error);
       });
 
-    // 결제 정보 가져옴
+    // 결제 정보 가져오기
     axios.get(`/userPaymentInfo/getPaymentInfo/${categoryId}`)
       .then(response => {
         console.log(response.data);
         setPaymentInfo(response.data);
       })
       .catch(error => {
-        console.log('Error fetching payment info', error);
+        console.log('Error fetching payment info:', error);
+      });
+
+    // 예약 상세 정보 가져오기
+    axios.get(`/userReservation/getReservationDetail/${categoryId}`)
+      .then(response => {
+        console.log(response.data);
+        setReservationDetail(response.data);
+      })
+      .catch(error => {
+        console.log('Error fetching reservation detail:', error);
       });
   }, []);
-
+  
 
   const [category, setCategory] = useState({
     categoryLevel: 0,
@@ -116,13 +129,13 @@ function UserMyReservationDetail() {
     <div>
       <div className="user-content-container">
         <div className='store-name'>{storeInfo.storeName}</div>
-        <div className='payment-date'>{paymentInfo[0] && formatDate(paymentInfo[0].paymentDate)}</div>
+        <div className='payment-date'>{reservationDetail.regTime}</div>
       </div>
 
       {/* 입금정보 */}
       <div className="user-content-container">
         <div className='payment-info-top'>
-          <div className='deposit-date'>{paymentInfo[0] && formatDate(paymentInfo[0].paymentDate)} 까지 입금해주세요.</div>
+          <div className='deposit-date'>{reservationDetail.regTime}까지 입금해주세요.</div>
         </div>
         <div className="payment-info-top">
           <div className="account-left">입금 대기금액</div>
@@ -138,8 +151,8 @@ function UserMyReservationDetail() {
 
       <div className="user-content-container">
         <div className="info-row">
-          <div className="left"><i class="bi bi-calendar-check-fill"></i> {date}</div>
-          <div className="right"><i class="bi bi-clock-fill"></i> {slot}</div>
+          <div className="left"><i class="bi bi-calendar-check-fill"></i> {reservationDetail.regTime}</div>
+          <div className="right"><i class="bi bi-clock-fill"></i> {reservationDetail.reservationTime}</div>
         </div>
       </div>
 

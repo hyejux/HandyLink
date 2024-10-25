@@ -161,6 +161,7 @@ function UserSearch() {
   return (
     <div className="user-main-container">
       <div className="user-top-nav">
+        <logo className="logo">HandyLink!</logo>
       </div>
 
       <div className="store-search-bar">

@@ -88,35 +88,50 @@ function AdminReserveManageDetail() {
     //     setUpdatingReservationId(null);
     //     setNewStatus('');
     // };
+
     const [cateId, setCateId] = useState(0);
     const [reservationList, setReservationList] = useState([]);
     const [paymentInfo, setPaymentInfo] = useState([]);
-
-    useEffect(() => {
-        const path = window.location.pathname;
-        const pathSegments = path.split('/');
-        const categoryId = pathSegments[pathSegments.length - 1];
-        setCateId(categoryId);
-        axios.get(`/userMyReservation/getMyReservationDetail/${categoryId}`)
-          .then(response => {
-            console.log(response.data);
-            setReservationList(response.data);
-          })
-          .catch(error => {
-            console.log('Error Category', error);
-          });
+    const [reservationDetail, setReservationDetail] = useState({});
+  
     
-        // 결제 정보 가져옴
-        axios.get(`/userPaymentInfo/getPaymentInfo/${categoryId}`)
-          .then(response => {
-            console.log(response.data);
-            setPaymentInfo(response.data);
-          })
-          .catch(error => {
-            console.log('Error fetching payment info', error);
-          });
-      }, []);
-      console.log(paymentInfo);
+    useEffect(() => {
+      const path = window.location.pathname;
+      const pathSegments = path.split('/');
+      const categoryId = pathSegments[pathSegments.length - 1];
+      setCateId(categoryId);
+  
+      // 예약 정보 가져오기
+      axios.get(`/userMyReservation/getMyReservationDetail/${categoryId}`)
+        .then(response => {
+          console.log(response.data);
+          setReservationList(response.data);
+        })
+        .catch(error => {
+          console.log('Error fetching reservation list:', error);
+        });
+  
+      // 결제 정보 가져오기
+      axios.get(`/userPaymentInfo/getPaymentInfo/${categoryId}`)
+        .then(response => {
+          console.log(response.data);
+          setPaymentInfo(response.data);
+        })
+        .catch(error => {
+          console.log('Error fetching payment info:', error);
+        });
+  
+      // 예약 상세 정보 가져오기
+      axios.get(`/userReservation/getReservationDetail/${categoryId}`)
+        .then(response => {
+          console.log(response.data);
+          setReservationDetail(response.data);
+        })
+        .catch(error => {
+          console.log('Error fetching reservation detail:', error);
+        });
+    }, []);
+
 
     return (
         <div>

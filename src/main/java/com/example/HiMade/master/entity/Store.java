@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "store_admin")
+@Table(name = "store")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoreAdmin {
+public class Store {
     private String storePw;
     private String storeCate;
     private String storeName;
@@ -47,15 +47,19 @@ public class StoreAdmin {
     private Long storeNo; //
 
     // 연관관계 설정
-    @OneToMany(mappedBy = "storeAdmin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<StoreSnsLink> snsLinks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "storeAdmin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<StoreImg> storeImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "storeAdmin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<DayOffDay> dayOffs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<DayOffSet> dayOffSets = new ArrayList<>();
 }

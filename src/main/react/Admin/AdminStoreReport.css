@@ -1,0 +1,20 @@
+/*.admin-store-report-container h2 {*/
+/*    float: left;*/
+/*}*/
+
+.reservation-status{
+    border: 1px solid #ddd;
+    width: 80%;
+    height: 200px;
+    display: flex;
+}
+
+.reservation-field {
+    border-left: 1px solid #ddd;
+    width: 25%;
+    padding: 10px;
+}
+
+.reservation-field:nth-child(1){
+    border: none;
+}

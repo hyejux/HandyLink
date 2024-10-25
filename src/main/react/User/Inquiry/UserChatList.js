@@ -14,8 +14,8 @@ function UserChatList () {
                 </div>
 
                 <ul className="inquiry-list">
-                    <li className="inquiry-item">
-                        <img src='/img/user_basic_profile.jpg' alt="프라이들 앤 스위츠"/>
+                    <li className="inquiry-item" onClick={() => {window.location.href='/UserChatRoom.user'}}>
+                        <img src='/img/user_basic_profile.jpg' alt="도레도레"/>
                         <div className="inquiry-content">
                             <p className="inquiry-title">도레도레</p>
                             <p className="inquiry-message">안녕하세요?</p>

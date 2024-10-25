@@ -74,7 +74,8 @@ function MasterApproval() {
         .then((data) => setStore(data))
         .catch((error) => {
           alert(currentStatus === '대기' ? "승인에 실패했습니다." : "활성화에 실패했습니다.");
-          console.error('업체 상태 업데이트 중 오류 발생:', error);
+          
+          error('업체 상태 업데이트 중 오류 발생:', error);
         });
     }
   };

@@ -19,7 +19,7 @@ public class StoreSnsLink {
     @ManyToOne
     @JoinColumn(name = "store_no")
     @JsonBackReference
-    private StoreAdmin storeAdmin;
+    private Store store;
 
     @Id
     private Long storeSnsNo;

@@ -14,7 +14,7 @@ function UserMyReservationDetail() {
   const [reservationDetail, setReservationDetail] = useState({});
   const [storeInfo, setStoreInfo] = useState({});
 
-  
+
   useEffect(() => {
     const path = window.location.pathname;
     const pathSegments = path.split('/');
@@ -69,12 +69,12 @@ function UserMyReservationDetail() {
   };
 
 
-
   // 예약 취소 버튼 클릭 시 결제 상태 업데이트
   const cancelReservation = async () => {
     const reservationNo = cateId;
+    const storeName = reservationList.length > 0 ? reservationList[0].storeName : '정보 없음';
     try {
-      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, { paymentStatus: "N", storeName: storeInfo.storeName });
+      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, { paymentStatus: "N", storeName });
       console.log("예약 취소 성공:", response.data);
       alert("예약이 취소되었습니다.");
 
@@ -87,10 +87,20 @@ function UserMyReservationDetail() {
   };
 
 
+
   // 계좌번호 복사
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(storeInfo.accountNumber)
-  }
+    if (reservationList.length > 0) {
+      navigator.clipboard.writeText(reservationList[0].accountNumber)
+        .then(() => {
+          console.log('계좌번호가 복사되었습니다.');
+        })
+        .catch(err => {
+          console.error('계좌번호 복사에 실패했습니다:', err);
+        });
+    }
+  };
+
 
   // ------------
 

@@ -44,8 +44,8 @@
 }
 
 .profile-img {
-    width: 55px;
-    height: 55px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     object-fit: cover;
 }
@@ -74,13 +74,13 @@
 .message-wrapper.sent .bubble {
     background-color: #eee;
     color: #333;
-    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
 }
 
 .message-wrapper.received .bubble {
     background-color: #434EBD;
     color: #fff;
-    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
 }
 
 .timestamp {
@@ -96,6 +96,26 @@
 
 .message-wrapper.received .timestamp {
     text-align: left;
+}
+
+.toast-message {
+    position: fixed;
+    bottom: 135px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #444;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 14px;
+    transition: opacity 0.3s ease;
+}
+
+.toast-message:hover {
+    opacity: 0.9;
 }
 
 

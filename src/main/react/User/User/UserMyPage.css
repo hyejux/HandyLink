@@ -128,3 +128,30 @@ h2 {
     top: 50%;
     left:75%;
 }
+
+.account-delete {
+    margin: 0 auto;
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    width: 65%;
+}
+
+.account-delete .del-span {
+    color: #999;
+    font-size: 12px;
+}
+
+.account-delete .del-btn {
+    border: 0;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 11px;
+    color: #999;
+}
+
+.account-delete .del-btn:hover,
+.account-delete .del-btn:focus  {
+    color: red;
+}

@@ -8,11 +8,13 @@ import './UserMyReservationDetail.css';
 
 
 function UserMyReservationDetail() {
- const [cateId, setCateId] = useState(0);
+  const [cateId, setCateId] = useState(0);
   const [reservationList, setReservationList] = useState([]);
   const [paymentInfo, setPaymentInfo] = useState([]);
-  const [reservationDetail, setReservationDetail] = useState(null);
+  const [reservationDetail, setReservationDetail] = useState({});
+  const [storeInfo, setStoreInfo] = useState({});
 
+  
   useEffect(() => {
     const path = window.location.pathname;
     const pathSegments = path.split('/');
@@ -49,7 +51,7 @@ function UserMyReservationDetail() {
         console.log('Error fetching reservation detail:', error);
       });
   }, []);
-  
+
 
   const [category, setCategory] = useState({
     categoryLevel: 0,
@@ -66,28 +68,6 @@ function UserMyReservationDetail() {
     return `${formattedDate} ${time.substring(0, 8)}`; // 'YYYY/MM/DD HH:MM:SS' 형식으로 반환
   };
 
-  // sessionStorage에서 데이터 가져오기
-  const slot = sessionStorage.getItem('slot');
-  const date = sessionStorage.getItem('date');
-  const requestText = sessionStorage.getItem('requestText');
-  const storedData = sessionStorage.getItem('storeInfo');
-  const totalPrice = sessionStorage.getItem('totalPrice');
-  const reserveData = sessionStorage.getItem('reserveModi');
-  const cateData = sessionStorage.getItem('categories');
-  const paymentData = sessionStorage.getItem('paymentInfo');
-
-  // 가져온 데이터를 변환하여 바로 사용
-  const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
-  const reserveModi = storedData ? JSON.parse(reserveData) : null;
-  const categories = storedData ? JSON.parse(cateData) : null;
-
-  console.log("시간: " + slot);
-  console.log("date: " + date);
-  console.log(storeInfo);
-  console.log("총액: " + totalPrice);
-  console.log(reserveModi);
-  console.log(categories);
-  console.log(paymentInfo);
 
 
   // 예약 취소 버튼 클릭 시 결제 상태 업데이트
@@ -106,17 +86,6 @@ function UserMyReservationDetail() {
     }
   };
 
-  const goToPaymentInfo = () => {
-    // 세션에 필요한 정보 저장
-    sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
-    sessionStorage.setItem('slot', slot);
-    sessionStorage.setItem('date', date);
-    sessionStorage.setItem('totalPrice', totalPrice);
-
-    // 결제 상세 페이지로 이동
-    window.location.href = `/paymentInfo.user/${cateId}`;
-  };
-
 
   // 계좌번호 복사
   const copyToClipboard = () => {
@@ -128,41 +97,40 @@ function UserMyReservationDetail() {
   return (
     <div>
       <div className="user-content-container">
-        <div className='store-name'>{storeInfo.storeName}</div>
+        <div className='store-name'>{reservationList.length > 0 ? reservationList[0].storeName : '정보 없음'}</div>
         <div className='payment-date'>{reservationDetail.regTime}</div>
       </div>
 
       {/* 입금정보 */}
       <div className="user-content-container">
         <div className='payment-info-top'>
-          <div className='deposit-date'>{reservationDetail.regTime}까지 입금해주세요.</div>
+          <div className='deposit-date'></div>
         </div>
         <div className="payment-info-top">
           <div className="account-left">입금 대기금액</div>
-          <div className="account-right">{paymentInfo[0]?.paymentAmount}원</div>
+          <div className="account-right"> {paymentInfo.length > 0 ? paymentInfo[0].paymentAmount : '정보 없음'} 원</div>
         </div>
         <div className="payment-info-top">
           <div className="account-left">입금 계좌</div>
           <div className="account-right">
-            {storeInfo.accountBank} {storeInfo.accountNumber} <button className='account-number-copy-btn' onClick={copyToClipboard} ><i class="bi bi-copy"></i></button>
+            {reservationList.length > 0 ? reservationList[0].accountBank : '정보 없음'} {reservationList.length > 0 ? reservationList[0].accountNumber : '정보 없음'}
+            <button className='account-number-copy-btn' onClick={copyToClipboard} ><i class="bi bi-copy"></i></button>
           </div>
         </div>
       </div>
 
       <div className="user-content-container">
         <div className="info-row">
-          <div className="left"><i class="bi bi-calendar-check-fill"></i> {reservationDetail.regTime}</div>
-          <div className="right"><i class="bi bi-clock-fill"></i> {reservationDetail.reservationTime}</div>
+          <div className="left"><i class="bi bi-calendar-check-fill"></i> {reservationDetail.regTime} </div>
+          <div className="right"><i class="bi bi-clock-fill"></i> {reservationDetail.reservationTime} </div>
         </div>
       </div>
-
 
 
       {/* 예약자정보 */}
       <div className="user-content-container">
         예약자 정보
       </div>
-
 
 
       {/* 예약 정보 */}
@@ -205,7 +173,7 @@ function UserMyReservationDetail() {
         <div className='totalPrice'>
           <div className="info-row">
             <div className="left">결제금액</div>
-            <div className="right">{totalPrice}</div>
+            <div className="right">{paymentInfo.length > 0 ? paymentInfo[0].paymentAmount : '정보 없음'} 원</div>
           </div>
         </div>
       </div>
@@ -215,7 +183,7 @@ function UserMyReservationDetail() {
       <div className="user-content-container">
         <div className="info-row">
           <div className="left">요청사항</div>
-          <div className="right">{requestText}</div>
+          <div className="right"> {reservationDetail.customerRequest} </div>
         </div>
       </div>
 
@@ -225,9 +193,7 @@ function UserMyReservationDetail() {
         <div className="payment-info-top">
           <div className="payment-left">결제 정보</div>
           <div className="payment-right">
-            <a href="#" onClick={goToPaymentInfo}>
-              결제 상세
-            </a>
+            <a href={`/paymentInfo.user/${cateId}`}>결제 상세</a>
           </div>
 
         </div>

@@ -222,6 +222,8 @@ function UserReservationOption() {
   console.log('Date:', date);
   console.log('reservationSlotKey:', reservationSlotKey);
 
+  sessionStorage.setItem('storeNo', storeNo);
+
 
 
   return (

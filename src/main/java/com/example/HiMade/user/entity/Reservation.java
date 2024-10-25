@@ -35,16 +35,16 @@ public class Reservation {
     @Column(name = "reservation_price")
     private Long reservationPrice;
 
-    @Column(name = "store_id", nullable = false)
+    @Column(name = "store_id")
     private String storeId;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     private String userId;
 
     @Column(name = "reservation_slot_key")
     private Long reservationSlotKey;
 
-    @Column(name = "store_no", nullable = false)
+    @Column(name = "store_no")
     private String storeNo;
 
 }

@@ -110,6 +110,7 @@ function UserMyReservationDetail() {
     navigator.clipboard.writeText(storeInfo.accountNumber)
   }
 
+  // ------------
 
   return (
     <div>

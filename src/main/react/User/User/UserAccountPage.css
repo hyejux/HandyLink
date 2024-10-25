@@ -1,0 +1,105 @@
+
+.settings-container {
+    width: 90%;
+    margin: 50px auto;
+    background-color: #f0f4f8;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.profile-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-details h2 {
+    font-size: 18px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.user-details p {
+    font-size: 14px;
+    color: gray;
+    margin: 5px 0 0 0;
+}
+
+.arrow {
+    position: absolute;
+    right: 15px;
+    font-size: 20px;
+    color: gray;
+}
+
+.settings-menu, .settings-submenu {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.settings-menu ul, .settings-submenu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.settings-menu ul li, .settings-submenu ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settings-menu ul li:last-child, .settings-submenu ul li:last-child {
+    border-bottom: none;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.status {
+    color: gray;
+}
+
+.settings-submenu ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+}
+
+.general-settings {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.general-settings a {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+}

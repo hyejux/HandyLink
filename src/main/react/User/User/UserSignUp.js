@@ -215,8 +215,11 @@ function UserSignUp() {
                 <h2>회원 가입</h2>
                 <div className="profile-img">
                     <img src={previewImage} alt="Profile Picture" id="profileImage"/>
-                    <div className="edit-icon" onClick={() => document.getElementById('fileInput').click()}><i
-                        className="bi bi-pencil-square"></i></div>
+                    {!isKakaoSignUp && (
+                        <div className="edit-icon" onClick={() => document.getElementById('fileInput').click()}>
+                            <i className="bi bi-pencil-square"></i>
+                        </div>
+                    )}
                     <input type="file" id="fileInput" accept="image/*" onChange={handleFileChange}
                            style={{display: "none"}}/>
                 </div>

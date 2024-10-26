@@ -30,29 +30,31 @@ function MyStore() {
 
     //해당가게정보가져오기
     useEffect(() => {
-        const fetchMyStoreInfo = async() => {
-            try{
-                if(storeId && storeNo){
+        const fetchMyStoreInfo = async () => {
+            try {
+                if (storeId && storeNo) {
                     const resp = await axios.get(`/adminStore/myStoreInfo?storeNo=${storeNo}`);
                     console.log("불러온 데이터 이거 ", resp.data);
-                    setMyStoreInfo(info => ({
-                        ...resp.data,
-                        storeImg: resp.data.storeImg.map(img => ({ storeImgLocation: img.storeImgLocation })) // 배열로 수정
-                    }));
 
-                    setInitialMyStore(resp.data);
-                } else{
+                    const formattedOpenTime = new Date(`1970-01-01T${resp.data.storeOpenTime}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                    const formattedCloseTime = new Date(`1970-01-01T${resp.data.storeCloseTime}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+
+                    setMyStoreInfo(prevInfo => ({
+                        ...prevInfo,
+                        ...resp.data,
+                        storeOpenTime: formattedOpenTime,
+                        storeCloseTime: formattedCloseTime,
+                        storeImg: resp.data.storeImg.map(img => ({ storeImgLocation: img.storeImgLocation }))
+                    }));
+                } else {
                     console.log("세션에 아이디정보가 없습니다.");
                 }
-
-            }catch (error){
-                console.log("가게목록 부르는 중 error ",error);
-            };
+            } catch (error) {
+                console.log("가게목록 부르는 중 error ", error);
+            }
         }
         fetchMyStoreInfo();
-        //        console.log("불러온 데이터 ",myStoreInfo);
-    },[]);
-
+    }, []);
     const [isDisabled, setIsDisabled] = useState(true);
 
 
@@ -105,8 +107,6 @@ function MyStore() {
         }));
     };
 
-
-
     const handleDeleteSns = (index) => {
         const updatedSns = myStoreInfo.storeSns.filter((_, idx) => idx !== index);
         setMyStoreInfo(prevState => ({
@@ -115,6 +115,17 @@ function MyStore() {
         }));
     };
 
+    //영업시간 30분 단위로 입력
+    const generateTimeOptions = () => {
+        const times = [];
+        for (let hour = 0; hour < 24; hour++) {
+            for (let minute = 0; minute < 60; minute += 30) {
+                const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+                times.push(time);
+            }
+        }
+        return times;
+    };
 
     //step03 사진 업로드
     const [selectedImages, setSelectedImages] = useState([]); // 화면에 보여질 파일 리스트 (미리보기 URL)
@@ -275,11 +286,22 @@ function MyStore() {
 
                 <div className="form-group">
                     <label htmlFor="storeOpenTime">영업 시작 시간</label>
-                    <input type="time" id="storeOpenTime" value={myStoreInfo.storeOpenTime} onChange={handleChangeInfo} disabled={isDisabled} />
+                    <select id="storeOpenTime" value={myStoreInfo.storeOpenTime} onChange={handleChangeInfo}  disabled={isDisabled} className="time-select">
+                        <option value="" disabled>시간 선택</option>
+                        {generateTimeOptions().map((time) => (
+                            <option key={time} value={time}>{time}</option>
+                        ))}
+                    </select>
 
                     <label htmlFor="storeCloseTime">영업 종료 시간</label>
-                    <input type="time" id="storeCloseTime" value={myStoreInfo.storeCloseTime} onChange={handleChangeInfo} disabled={isDisabled} />
+                    <select id="storeCloseTime" value={myStoreInfo.storeCloseTime} onChange={handleChangeInfo} disabled={isDisabled} className="time-select">
+                        <option value="" disabled>시간 선택</option>
+                        {generateTimeOptions().map((time) => (
+                            <option key={time} value={time}>{time}</option>
+                        ))}
+                    </select>
                 </div>
+
 
                 <div className="form-group">
                     <label htmlFor="storeIntro">소개</label>
@@ -288,13 +310,6 @@ function MyStore() {
                     </div>
                 </div>
 
-
-                {/*<div className="form-group">
-                        <label htmlFor="storeNotice">공지사항</label>
-                    <div className="input-field">
-                        <textarea rows="4" id="storeNotice" value={myStoreInfo.storeNotice} onChange={handleChangeInfo} disabled={isDisabled} style={{resize:'none', height: '150px'}}/>
-                    </div>
-                </div>*/}
             </div>
         </div>
 

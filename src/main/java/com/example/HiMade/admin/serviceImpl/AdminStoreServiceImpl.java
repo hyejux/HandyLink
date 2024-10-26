@@ -101,8 +101,23 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
+    public List<DayOffDay> getOffDay(Integer storeNo) {
+        return adminStoreMapper.getOffDay(storeNo);
+    }
+
+    @Override
     public void registDayOffSet(DayOffSet dayOffSet) {
         adminStoreMapper.registDayOffSet(dayOffSet);
+    }
+
+    @Override
+    public List<DayOffSet> getOffSet(Integer storeNo) {
+        return adminStoreMapper.getOffSet(storeNo);
+    }
+
+    @Override
+    public Integer deleteOffSet(Integer storeNo, Integer setNo) {
+        return adminStoreMapper.deleteOffSet(storeNo, setNo);
     }
 
     @Override

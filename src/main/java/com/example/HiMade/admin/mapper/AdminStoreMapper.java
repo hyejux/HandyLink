@@ -27,7 +27,10 @@ public interface AdminStoreMapper {
     void addStoreSns(StoreSnsDTO storeSnsDTO); //가게img 추가
 
     void updateDay(StoreRegistDTO storeRegistDTO); //고정휴무-update
+    List<DayOffDay> getOffDay(Integer storeNo);//고정휴무-select
     void registDayOffSet(DayOffSet dayOffSet); //지정휴무
+    List<DayOffSet> getOffSet(Integer storeNo); //지정휴무-select
+    Integer deleteOffSet(@Param("storeNo") Integer storeNo, @Param("setNo") Integer setNo); //지정휴무-delete
 
     Integer duplicatedId(String storeId); //아이디 중복검사
 

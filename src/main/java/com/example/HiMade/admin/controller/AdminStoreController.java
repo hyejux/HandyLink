@@ -62,12 +62,35 @@ public class AdminStoreController {
         adminStoreService.updateDay(storeRegistDTO);
     }
 
+    //고정휴무-select
+    @GetMapping("/getOffDay")
+    public List<DayOffDay> getOffDay(@RequestParam Integer storeNo){
+        return adminStoreService.getOffDay(storeNo);
+    }
+
     //지정휴무 - insert
     @PostMapping("/registDayOffSet")
     public void registDayOffSet(@RequestBody StoreRegistDTO storeRegistDTO){
         for(DayOffSet dayOffSet : storeRegistDTO.getDayOffSetList()){
             adminStoreService.registDayOffSet(dayOffSet);
         }
+    }
+
+    //지정휴무 - delete
+    @DeleteMapping("/deleteOffSet")
+    public ResponseEntity<Integer> deleteOffSet(@RequestParam Integer storeNo, @RequestParam Integer setNo){
+        Integer result = adminStoreService.deleteOffSet(storeNo, setNo);
+        if(result > 0){
+            return ResponseEntity.ok(result);
+        }else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(0); //삭제 조건에 안맞음
+        }
+    }
+
+    //지정휴무-select
+    @GetMapping("/getOffSet")
+    public List<DayOffSet> getOffSet(@RequestParam Integer storeNo){
+        return adminStoreService.getOffSet(storeNo);
     }
 
     // 파일 업로드 메서드

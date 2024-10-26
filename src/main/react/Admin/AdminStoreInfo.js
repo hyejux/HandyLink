@@ -275,6 +275,7 @@ function AdminStoreInfo() {
                                     </div>
                                 )
                             )}
+                            <button type="button" className="cancel-pw" onClick={() => setIsPwDisabled(!isPwDisabled)}>취소</button>
                             <button type="button" className="change-pw" onClick={handleClickPw}> 저장하기 </button>
                         </div>
                     </div>
@@ -351,9 +352,17 @@ function AdminStoreInfo() {
 
         </div>
 
-        <button type="button" className="modify-btn" onClick={toggleModify}>
-            {isDisabled ? '수정하기' : '수정완료'}
-        </button>
+        <div className="btn-box">
+            <button type="button" className="modify-btn" onClick={toggleModify}>
+                {isDisabled ? '수정하기' : '수정완료'}
+            </button>
+
+            {!isDisabled && (
+                <button type="button" className="cancel-btn" onClick={() => window.location.href = '/adminstoreinfo.admin'}>
+                    취소
+                </button>
+            )}
+        </div>
     </div>
     );
 }

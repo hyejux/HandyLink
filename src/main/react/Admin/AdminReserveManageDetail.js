@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-// import './AdminReserveManageDetail.css';
+import './AdminReserveManageDetail.css';
 
 function AdminReserveManageDetail() {
 
@@ -88,35 +88,50 @@ function AdminReserveManageDetail() {
     //     setUpdatingReservationId(null);
     //     setNewStatus('');
     // };
+
     const [cateId, setCateId] = useState(0);
     const [reservationList, setReservationList] = useState([]);
     const [paymentInfo, setPaymentInfo] = useState([]);
-
-    useEffect(() => {
-        const path = window.location.pathname;
-        const pathSegments = path.split('/');
-        const categoryId = pathSegments[pathSegments.length - 1];
-        setCateId(categoryId);
-        axios.get(`/userMyReservation/getMyReservationDetail/${categoryId}`)
-          .then(response => {
-            console.log(response.data);
-            setReservationList(response.data);
-          })
-          .catch(error => {
-            console.log('Error Category', error);
-          });
+    const [reservationDetail, setReservationDetail] = useState({});
+  
     
-        // 결제 정보 가져옴
-        axios.get(`/userPaymentInfo/getPaymentInfo/${categoryId}`)
-          .then(response => {
-            console.log(response.data);
-            setPaymentInfo(response.data);
-          })
-          .catch(error => {
-            console.log('Error fetching payment info', error);
-          });
-      }, []);
-      console.log(paymentInfo);
+    useEffect(() => {
+      const path = window.location.pathname;
+      const pathSegments = path.split('/');
+      const categoryId = pathSegments[pathSegments.length - 1];
+      setCateId(categoryId);
+  
+      // 예약 정보 가져오기
+      axios.get(`/userMyReservation/getMyReservationDetail/${categoryId}`)
+        .then(response => {
+          console.log(response.data);
+          setReservationList(response.data);
+        })
+        .catch(error => {
+          console.log('Error fetching reservation list:', error);
+        });
+  
+      // 결제 정보 가져오기
+      axios.get(`/userPaymentInfo/getPaymentInfo/${categoryId}`)
+        .then(response => {
+          console.log(response.data);
+          setPaymentInfo(response.data);
+        })
+        .catch(error => {
+          console.log('Error fetching payment info:', error);
+        });
+  
+      // 예약 상세 정보 가져오기
+      axios.get(`/userReservation/getReservationDetail/${categoryId}`)
+        .then(response => {
+          console.log(response.data);
+          setReservationDetail(response.data);
+        })
+        .catch(error => {
+          console.log('Error fetching reservation detail:', error);
+        });
+    }, []);
+
 
     return (
         <div>
@@ -134,7 +149,146 @@ function AdminReserveManageDetail() {
 
 
             <div className="main-contents">
-               
+            <div>
+      <table className="reserve-table">
+        <tbody>
+          <tr>
+            <th>승인 상태</th>
+            <td>승인 대기 중</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <select>
+        <option value="vip">어찌고</option>
+        <option value="vip">저찌고</option>
+      </select>
+
+      <hr />
+
+      <table className="reserve-table">
+        <tbody>
+          <tr>
+            <th colSpan="2">예약자 정보</th>
+          </tr>
+          <tr>
+            <th>예약자 성함</th>
+            <td>임혜주</td>
+          </tr>
+          <tr>
+            <th>예약자 성함</th>
+            <td>101-1234-1324</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <hr />
+
+      <table className="reserve-table">
+        <tbody>
+          <tr>
+            <th colSpan="2">예약 정보</th>
+          </tr>
+          <tr>
+            <th>날짜</th>
+            <td>123123123</td>
+          </tr>
+          <tr>
+            <th>시간</th>
+            <td>10:033</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <hr />
+
+      <table className="reserve-table">
+        <tbody>
+          <tr>
+            <th colSpan="2">결제 정보</th>
+          </tr>
+          <tr>
+            <th>결제 일시</th>
+            <td>ㅂㄷㅈㄱ</td>
+          </tr>
+          <tr>
+            <th>결제 수단</th>
+            <td>1ㅈㄷㄱ</td>
+          </tr>
+          <tr>
+            <th>결제 상태</th>
+            <td>1ㅈㄷㄱ</td>
+          </tr>
+          <tr>
+            <th>결재 금액</th>
+            <td>1ㅈㄷㄱ</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <hr />
+
+      <table className="reserve-table">
+        <tbody>
+          <tr>
+            <th colSpan="2">예약 정보</th>
+          </tr>
+          <tr>
+            <th colSpan="2">미니 팬케이크 (대분류이름)</th>
+            <td colSpan="1">가격</td>
+          </tr>
+          <tr>
+            <th>케이크 맛</th>
+            <td>플레인</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <th></th>
+            <td>플레인</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <th>케이크 토핑</th>
+            <td>초코</td>
+            <td>1000</td>
+          </tr>
+          <tr>
+            <th>레터링 서비스</th>
+            <td>플레인</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <th colSpan="3">---------------------</th>
+          </tr>
+          <tr>
+            <th>요청사항</th>
+            <td colSpan="2">맛있게 잘 만들어주셈요 ~</td>
+          </tr>
+          <tr>
+            <th colSpan="2">총액</th>
+            <td colSpan="1">14500</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <hr />
+
+      <table className="reserve-table">
+        <tbody>
+          <tr>
+            <th colSpan="2">예약 정보</th>
+          </tr>
+          <tr>
+            <th>예약자 성함</th>
+            <td>임혜주</td>
+          </tr>
+          <tr>
+            <th>예약자 성함</th>
+            <td>101-1234-1324</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
             </div>
         </div>

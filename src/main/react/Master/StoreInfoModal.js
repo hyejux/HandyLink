@@ -2,10 +2,9 @@ import React from 'react';
 import './StoreInfoModal.css';
 
 function StoreInfoModal({ isOpen, onClose, store }) {
-  console.log("store:", store);
+  console.log(store);
   
   if (!isOpen || !store) return null;
-
 
   return (
     <div className="modal">
@@ -28,7 +27,7 @@ function StoreInfoModal({ isOpen, onClose, store }) {
             <p><strong>영업시간:</strong> {store.storeOpenTime} - {store.storeCloseTime}</p>
             <p><strong>휴무일:</strong> {store.dayOffs.length > 0 ? (
               store.dayOffs.map((day, index) => (
-                <span key={index}>{day}{index < store.dayOffs.length - 1 ? ', ' : ''}</span>
+                <span key={index}>{day.dayOffDay || day}{index < store.dayOffs.length - 1 ? ', ' : ''}</span>
               ))
             ) : (
               <span>정보 없음</span>
@@ -51,7 +50,6 @@ function StoreInfoModal({ isOpen, onClose, store }) {
             ) : (
               <p>정보 없음</p>
             )}
-
           </div>
         </div>
       </div>

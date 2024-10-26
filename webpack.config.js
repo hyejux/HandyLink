@@ -52,7 +52,8 @@ module.exports = {
         StoreChatRoom : './User/Inquiry/StoreChatRoom.js',
         AdminSignupApproval: './Admin/AdminSignupApproval.js',
         AdminStoreReport: './Admin/AdminStoreReport.js',
-        UserSearch : './User/User/UserSearch.js'
+        UserSearch : './User/User/UserSearch.js',
+        UserAccountPage: './User/User/UserAccountPage.js'
 
     },
     devtool: 'sourcemaps',

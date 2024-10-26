@@ -6,20 +6,21 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "store_img")
+@Table(name = "day_off_set")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoreImg {
+public class DayOffSet {
     @Id
-    private String storeImgNo;
-
-    private String storeImgLocation;
+    private String setNo;
 
     @ManyToOne
     @JoinColumn(name = "store_no")
     @JsonBackReference
     private Store store;
+
+    private String dayOffStart;
+    private String dayOffEnd;
 }

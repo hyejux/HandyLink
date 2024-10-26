@@ -30,29 +30,31 @@ function MyStore() {
 
     //해당가게정보가져오기
     useEffect(() => {
-        const fetchMyStoreInfo = async() => {
-            try{
-                if(storeId && storeNo){
+        const fetchMyStoreInfo = async () => {
+            try {
+                if (storeId && storeNo) {
                     const resp = await axios.get(`/adminStore/myStoreInfo?storeNo=${storeNo}`);
                     console.log("불러온 데이터 이거 ", resp.data);
-                    setMyStoreInfo(info => ({
-                        ...resp.data,
-                        storeImg: resp.data.storeImg.map(img => ({ storeImgLocation: img.storeImgLocation })) // 배열로 수정
-                    }));
 
-                    setInitialMyStore(resp.data);
-                } else{
+                    const formattedOpenTime = new Date(`1970-01-01T${resp.data.storeOpenTime}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                    const formattedCloseTime = new Date(`1970-01-01T${resp.data.storeCloseTime}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+
+                    setMyStoreInfo(prevInfo => ({
+                        ...prevInfo,
+                        ...resp.data,
+                        storeOpenTime: formattedOpenTime,
+                        storeCloseTime: formattedCloseTime,
+                        storeImg: resp.data.storeImg.map(img => ({ storeImgLocation: img.storeImgLocation }))
+                    }));
+                } else {
                     console.log("세션에 아이디정보가 없습니다.");
                 }
-
-            }catch (error){
-                console.log("가게목록 부르는 중 error ",error);
-            };
+            } catch (error) {
+                console.log("가게목록 부르는 중 error ", error);
+            }
         }
         fetchMyStoreInfo();
-        //        console.log("불러온 데이터 ",myStoreInfo);
-    },[]);
-
+    }, []);
     const [isDisabled, setIsDisabled] = useState(true);
 
 

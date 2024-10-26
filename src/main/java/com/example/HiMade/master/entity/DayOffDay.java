@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "day_off_day")
@@ -20,7 +19,7 @@ public class DayOffDay {
     @ManyToOne
     @JoinColumn(name = "store_no")
     @JsonBackReference
-    private StoreAdmin storeAdmin;
+    private Store store;
 
     private String dayOffFixStatus;
     private String dayOffDay;

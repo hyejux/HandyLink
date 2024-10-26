@@ -28,17 +28,17 @@
 
     <!-- 계정관리(가입,로그인,마이페이지)  -->
     <select id="loginCheck" resultType="com.example.HiMade.admin.dto.StoreRegistDTO">
-        select * from store_admin
+        select * from store
         where store_id = #{id} and store_pw = #{pw}
     </select>
 
     <select id="duplicatedId" resultType="Integer">
-        select count(*) from store_admin
+        select count(*) from store
         where store_id = #{storeId}
     </select>
 
     <insert id="registStore" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO" useGeneratedKeys="true" keyProperty="storeNo">
-        insert into store_admin (
+        insert into store (
             store_id,
             store_pw,
             store_cate,
@@ -71,12 +71,12 @@
     </insert>
 
     <insert id="insertDay" parameterType="com.example.HiMade.admin.dto.DayOffDay">
-        insert into day_off_day(day_off_type, store_id, store_no, day_off_fix_status, day_off_day)
-        values (#{dayOffType}, #{storeId}, #{storeNo}, #{dayOffFixStatus}, #{dayOffDay});
+        insert into day_off_day(store_id, store_no, day_off_fix_status, day_off_day)
+        values (#{storeId}, #{storeNo}, #{dayOffFixStatus}, #{dayOffDay});
     </insert>
 
     <update id="updateStoreInfo" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
-        update store_admin
+        update store
         set
             store_pw = #{storePw},
             store_cate = #{storeCate},
@@ -94,7 +94,7 @@
 
 <!--  가게관리  -->
     <update id="updateStore" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
-        update store_admin
+        update store
         set
             store_intro = #{storeIntro},
             store_notice = #{storeNotice},
@@ -155,7 +155,7 @@
         sa.*,
         sns.*,
         img.store_img_location
-        FROM store_admin sa
+        FROM store sa
         LEFT JOIN store_sns_link sns ON sa.store_no = sns.store_no
         LEFT JOIN store_img img ON sa.store_no = img.store_no
         WHERE sa.store_no = #{storeNo}
@@ -202,6 +202,18 @@
         </collection>
     </resultMap>
 
+    <select id="getOffDay" resultType="string">
+        select day_off_day
+        from day_off_day
+        where store_no = #{storeNo} and day_off_fix_status = 'Y'
+    </select>
+
+    <select id="getOffSet" resultType="com.example.HiMade.admin.dto.DayOffSet">
+        select day_off_start, day_off_end, set_no
+        from day_off_set
+        where store_no = #{storeNo}
+    </select>
+
     <update id="updateDay" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
         <!-- 휴무가 아닌 경우 상태를 'N'으로 업데이트 -->
         update day_off_day
@@ -228,5 +240,9 @@
         values(#{dayOffStart}, #{dayOffEnd}, #{storeId}, #{storeNo})
     </insert>
 
+    <delete id="deleteOffSet" parameterType="int">
+        delete from day_off_set
+        where store_no = #{storeNo} and set_no = #{setNo} and day_off_end &gt; now()
+    </delete>
 
 </mapper>

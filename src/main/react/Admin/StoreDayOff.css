@@ -18,6 +18,13 @@ input[type="checkbox"] {
     margin-right: 10px;
 }
 
+.day-off-set-list {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
 .calendar-wrapper {
     margin-bottom: 20px;
     background-color: #fff;

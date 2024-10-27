@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.apache.ibatis.annotations.Param;
 
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -32,6 +33,6 @@ public interface UserReservationMapper {
   //리뷰
   List<UserReviewDTO> getReviewList(int id);
   int setReview(UserReviewDTO dto);
-  void setReviewImg(UserReviewImgDTO dto);
+  void setReviewImg(String dto);
 
 }

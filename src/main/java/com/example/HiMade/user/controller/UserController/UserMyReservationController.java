@@ -4,8 +4,11 @@ import com.example.HiMade.user.dto.*;
 import com.example.HiMade.user.service.UserReservationService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,12 +40,21 @@ public class UserMyReservationController {
     userReservationService.setReview(dto);
   }
 
-  @PostMapping("setReviewImg")
-  public void setReviewImg(@RequestBody List<UserReviewImgDTO> dto){
+//  @PostMapping("setReviewImg")
+//  public void setReviewImg(@RequestParam("file") MultipartFile[] file){
+//
+//
+//      System.out.println(file);
+//
+////    userReservationService.setReviewImg(file,reviewNo);
+//  }
+
+  @PostMapping("/setReviewImg")
+  public void setReviewImg(@RequestBody List<String> dto) {
+
+    System.out.println(dto);
     userReservationService.setReviewImg(dto);
   }
-
-
 
 
 

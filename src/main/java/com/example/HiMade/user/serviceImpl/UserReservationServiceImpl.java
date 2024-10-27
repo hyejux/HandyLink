@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -120,11 +121,25 @@ public class UserReservationServiceImpl implements UserReservationService {
   }
 
   @Override
-  public void setReviewImg(List<UserReviewImgDTO> dto) {
-    System.out.println("리뷰이미지등록" + dto );
+  public void setReviewImg(List<String> dto) {
 
-    for (UserReviewImgDTO d : dto){
+    for (String d : dto){
       userReservationMapper.setReviewImg(d);
     }
+
   }
+
+//  @Override
+//  public void setReviewImg(File file, int reviewNo) {
+//
+//  }
+////
+//  @Override
+//  void setReviewImg(File file , int reviewNo){
+//    System.out.println("리뷰이미지등록" + file + reviewNo );
+//
+//    for (File f :file){
+//      userReservationMapper.setReviewImg();
+//    }
+//  }
 }

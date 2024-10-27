@@ -4,6 +4,7 @@ import com.example.HiMade.user.dto.*;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,7 +36,7 @@ UserReservationService {
   // 리뷰
   List<UserReviewDTO> getReviewList(int id);
   int setReview(UserReviewDTO dto);
-  void setReviewImg(List<UserReviewImgDTO> dto);
+  void setReviewImg(List<String> dto);
 
 
 }

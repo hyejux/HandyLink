@@ -145,8 +145,8 @@
         returning review_no as reviewNo
     </insert>
 
-    <insert id="setReviewImg" parameterType="com.example.HiMade.user.dto.UserReviewDTO">
-        insert into review_img (review_img_url , review_no) values(#{reviewImgUrl}, #{reviewNo});
+    <insert id="setReviewImg" parameterType="java.lang.String">
+        insert into review_img (review_img_url , review_no) values(#{dto}, 2);
     </insert>
 
 

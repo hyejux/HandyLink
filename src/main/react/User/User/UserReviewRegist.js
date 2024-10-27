@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { FaCalendar, FaClock } from 'react-icons/fa';
 import { Rating } from '@mui/material';
+import { SourceMapDevToolPlugin } from 'webpack';
 
 function UserReviewRegist () {
 
@@ -26,6 +27,7 @@ useEffect(() => {
   const [review, setReview] = useState('');
   const [charCount, setCharCount] = useState(0);
   const [images, setImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
 
   const handleStarClick = (value) => {
     setRating(value);
@@ -36,15 +38,24 @@ useEffect(() => {
     setCharCount(e.target.value.length);
   };
 
+  
+  // blob:http://172.30.1.15:8585/04e884bb-ec77-421b-bb1d-f5ad231f92bf
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
+      const newImages = [];
       const reader = new FileReader();
        const previewUrl = URL.createObjectURL(file);
+       console.log(previewUrl);
+
       reader.onload = (e) => {
-        setImages((prevImages) => [...prevImages, e.target.result]);
+        newImages.push(previewUrl);
+        setNewImages((prev) => [...prev,previewUrl]);
+        setImages((prevImages) => [...prevImages, previewUrl]);
       };
       reader.readAsDataURL(file);
+      
+      
     }
   };
 
@@ -70,6 +81,7 @@ useEffect(() => {
       reviewRating : rating,
       reviewContent : review,
       userReviewImg : images,
+      userImg : newImages
     }
     console.log(sumbitData);
   },[rating,review,charCount,images])
@@ -84,17 +96,33 @@ useEffect(() => {
       .then(response => {
         console.log('리뷰 등록 성공 !:', response.data);
 
+        const reviewNoId = response.data;
         // const formData = new FormData();
         // formData.append('file', selectedImage); // 'file'은 서버에서 기대하는 필드명입니다.
         // formData.append('category_id', response.data);
+
+        // const formData = new FormData();
+    
+        // Array.from(images).forEach((file) => {
+        //   console.log(file); // 각 파일의 정보를 출력
+        //   formData.append('files', file); // 'file'이라는 이름으로 추가
+        // });
+      
+        // // FormData에 올바르게 추가되었는지 확인
+        // console.log('FormData contents:');
+        // formData.forEach((value, key) => {
+        //   console.log(key, value);
+        // });
     
 
-          // 두 번째 요청: 카테고리 이미지 업로드
-          return axios.post('/userMyReservation/setReviewImg', images, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
+        // console.log(formData);
+        // 이미지 업로드 요청
+        return axios.post('/userMyReservation/setReviewImg', images , {
+          // headers: {
+          //   'Content-Type': 'multipart/form-data',
+          // },
         });
+     
 
 
       })
@@ -157,6 +185,7 @@ useEffect(() => {
             type="file"
             id="file-input"
             accept="image/*"
+            multiple
             style={{ display: 'none' }}
             onChange={handleFileUpload}
           />

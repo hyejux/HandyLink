@@ -111,10 +111,12 @@
     <delete id="deleteStoreSns" parameterType="com.example.HiMade.admin.dto.StoreSnsDTO">
         delete from store_sns_link
         where store_id = #{storeId}
-        and sns_link not in
-        <foreach item="snsLink" collection="storeSns" open="(" separator="," close=")">
-            #{snsLink.snsLink}
-        </foreach>
+        <if test="storeSns != null">
+            and sns_link not in
+            <foreach item="snsLink" collection="storeSns" open="(" separator="," close=")">
+                 #{snsLink.snsLink}
+            </foreach>
+        </if>
     </delete>
 
     <select id="selectExistingSns" parameterType="string" resultType="string">

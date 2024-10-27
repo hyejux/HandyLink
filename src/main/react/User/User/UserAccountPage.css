@@ -1,20 +1,18 @@
 
 .settings-container {
-    width: 90%;
-    margin: 50px auto;
     background-color: #f0f4f8;
-    border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
 }
 
 .user-info {
+    height: 65px;
     display: flex;
     align-items: center;
     background-color: white;
-    padding: 15px;
+    padding: 20px;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 65px;
     position: relative;
 }
 
@@ -49,11 +47,15 @@
     color: gray;
 }
 
+settings-submenu li {
+    margin-bottom: 20px;
+}
+
 .settings-menu, .settings-submenu {
     background-color: white;
     padding: 15px;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 .settings-menu ul, .settings-submenu ul {
@@ -63,7 +65,7 @@
 }
 
 .settings-menu ul li, .settings-submenu ul li {
-    padding: 10px 0;
+    padding: 15px 0;
     border-bottom: 1px solid #ddd;
     display: flex;
     justify-content: space-between;
@@ -79,6 +81,14 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+}
+
+.menu-delete {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 0px;
 }
 
 .status {

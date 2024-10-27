@@ -196,4 +196,24 @@ public class UserAccountController {
         }
     }
 
+    // 탈퇴
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteUser(@RequestBody Map<String, String> payload) {
+        String password = payload.get("password");
+
+        // 현재 로그인한 사용자 ID를 SecurityContext에서 가져오기
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userId = auth.getName(); // 인증된 사용자 ID 가져오기
+
+        System.out.println("Controller - deleteUser 호출, userId: " + userId + ", password: " + password);
+
+        boolean isDeleted = userAccountService.deleteUser(userId, password);
+        if (isDeleted) {
+            System.out.println("Controller - deleteUser 성공");
+            return ResponseEntity.ok("탈퇴가 성공적으로 완료되었습니다.");
+        } else {
+            System.out.println("Controller - deleteUser 실패");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
+        }
+    }
 }

@@ -40,7 +40,7 @@ function UserReservationDate() {
 
 
     axios
-      .get(`/adminReservation/getListDetail/${cateId}`)
+      .get(`/adminReservation/getListDetail/${categoryId}`)
       .then(response => {
         console.log(response.data);
         setReserveModi(response.data);

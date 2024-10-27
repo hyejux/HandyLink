@@ -13,6 +13,7 @@ function UserStoreDetail() {
   const [cateId, setCateId] = useState(0);
   const [reservationList, setReservationList] = useState([]);
   const [storeInfo, setStoreInfo] = useState([]);
+  const [reviewList, setReviewList] = useState({});
 
   const goToAdminPage = (id) => {
     sessionStorage.setItem('storeCloseTime', storeInfo.storeCloseTime);
@@ -46,11 +47,27 @@ function UserStoreDetail() {
       .catch(error => {
         console.log('Error Category', error);
       });
-
-
-    // categoryId  << 로 요청 보내서 가게 정보 값  가져오세요 !
+      axios.get('/adminStore/getNoticeList')
+      .then(response => {
+          console.log(response.data);
+          setNoticeList(response.data);
+      })
+      .catch(error => {
+          console.log('Error Category', error);
+      });
+      axios.get(`/userReservation/getReviewList/${categoryId}`)
+      .then(response => {
+        console.log(response.data);
+        setReviewList(response.data);
+      })
+      .catch(error => {
+        console.log("리뷰 쪽 에러 발생", error);
+      })
 
   }, []);
+
+
+
 
   // const formatServiceStartDate = (dateString) => {
   //   const date = new Date(dateString);
@@ -171,35 +188,7 @@ function UserStoreDetail() {
   // };
 
   // --------------------------------------------------------- 소식
-  const reviewsData = [
-    {
-      id: 1,
-      name: "장*영",
-      rating: "★★★★☆",
-      title: "팬케이크 대형",
-      date: "2025.10.10",
-      text: "너무 맛있고 사장님이 친절해서 늘 이용 중이에요 그리고 이 집은 레몬 케이크가 정말 맛있습니다! 그리고 이집은 레몬케이크가 제일 맛있어요!! 꼭 드셔보셨으면 좋겠습니다.",
-      photos: 4,
-    },
-    {
-      id: 2,
-      name: "백*민",
-      rating: "★★★★☆",
-      title: "캐릭터 케이크 주문제작",
-      date: "2025.10.10",
-      text: "농담곰 케이크 주문했는데 싱크로율 100퍼센트라 맘에 너무 들고 행복합니다. 이런 케이크가 많아져야한다고 생각합니다!",
-      photos: 0,
-    },
-    {
-      id: 3,
-      name: "임*주",
-      rating: "★★★☆☆",
-      title: "캐릭터 케이크 주문제작",
-      date: "2025.10.10",
-      text: "모양이 다 뭉개졌지만 맛있게 먹었습니다! 모양이 다 뭉개졌지만 맛있게 먹었습니다!",
-      photos: 2,
-    },
-  ];
+
 
   const [expandedReviews, setExpandedReviews] = useState({});
 
@@ -212,16 +201,6 @@ function UserStoreDetail() {
   
 const [noticeList, setNoticeList] = useState([]);
 
-useEffect(() => {
-        axios.get('/adminStore/getNoticeList')
-            .then(response => {
-                console.log(response.data);
-                setNoticeList(response.data);
-            })
-            .catch(error => {
-                console.log('Error Category', error);
-            });
-    }, [])
 
  // 각 공지의 토글 상태를 저장하는 상태 (행별로 관리)
  const [expandedRows, setExpandedRows] = useState([]);
@@ -419,42 +398,56 @@ useEffect(() => {
                   </div>
 
                   <div className="reviews">
-                    {reviewsData.map((review) => (
-                      <div key={review.id} className="review-item">
-                        {review.photos > 0 && (
+                    {reviewList.map((review) => (
+                      <div key={review.reviewNo} className="review-item">
+                        {review.userReviewImg > 0 && (
                           <div className="photo-review2">
-                            {Array.from({ length: review.photos }).map((_, index) => (
-                              <div key={index} className="photo-item2"></div>
+                            {Array.from({ length: review.userReviewImg }).map((_, index) => (
+                              <img key={index} className="photo-item2" src={userReviewImg}> </img>
                             ))}
                           </div>
                         )}
                         <div className="review-header">
-                          <span className="reviewer-name">{review.name}</span>
-                          <div className="review-rating">{review.rating}</div>
+                          <span className="reviewer-name">{review.userName}</span>
+                       
+                          <div className="review-rating">
+                          <div className="rating-section">
+                          {[...Array(review.reviewRating)].map((_, index) => (
+                              <span key={index} className='review-rating'>
+                                &#9733;
+                              </span>
+                            ))}
+
+                          
+                          </div>
+
+                          </div>
                         </div>
                         <div className="review-details">
-                          <span className="review-title">{review.title}</span>
-                          <span className="review-date">{review.date}</span>
+                          {/* <span className="review-title">{review.title}</span> */}
+                          <span className="review-date">{review.reviewDate}</span>
                         </div>
                         <p
-                          className={`review-text ${
-                            expandedReviews[review.id] ? "expanded" : ""
-                          }`}
+                          className={`review-text ${expandedReviews[review.reviewNo] ? "expanded" : ""}`}
                         >
-                          {expandedReviews[review.id]
-                            ? review.text
-                            : review.text.slice(0, 50)}
+                          {expandedReviews[review.reviewNo] ? review.reviewContent : review.reviewContent.slice(0, 50)}
                         </p>
-                        <a
-                          className="more-link"
-                          onClick={() => toggleText(review.id)}
-                          style={{ cursor: "pointer" }}
-                        >
-                          {expandedReviews[review.id] ? " 접기" : "...더보기"}
-                        </a>
+                   
+                         {review.reviewContent.length < 30 ? '' : (
+                            <a
+                              className="more-link" 
+                              onClick={() => toggleText(review.reviewNo)} 
+                              style={{ cursor: "pointer" }}
+                            >
+                              {expandedReviews[review.reviewNo] ? " 접기" : "...더보기"}
+                            </a>
+                          )}
+                          
+             
                       </div>
                     ))}
                   </div>
+
                 </div>
             </div>
           )}

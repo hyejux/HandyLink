@@ -32,5 +32,10 @@ UserReservationService {
   void updateSlotCount1(UserRSlotDTO dto);
 
 
+  // 리뷰
+  List<UserReviewDTO> getReviewList(int id);
+  int setReview(UserReviewDTO dto);
+  void setReviewImg(List<UserReviewImgDTO> dto);
+
 
 }

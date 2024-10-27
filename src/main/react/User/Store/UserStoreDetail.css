@@ -21,6 +21,146 @@
     pointer-events: none; /* 클릭 이벤트 무시 */
 }
 
+        .review-section {
+  /* width: 100%; */
+  padding: 20px;
+  background-color: #fff;
+  border-top: 1px solid #e5e5e5;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.photo-review {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.photo-item {
+  width: 100%;
+  height: 150px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+.photo-item.more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  background-color: #e5e5e5;
+  font-weight: bold;
+}
+
+
+.photo-review2 {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.photo-item2 {
+  width: 100px;
+  height: 100px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+
+.reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.review-item {
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 15px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reviewer-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.review-rating {
+  font-size: 14px;
+  color: #f4c150; /* Rating star color */
+}
+
+.review-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.review-title {
+  font-size: 14px;
+  color: #666;
+}
+
+.review-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.review-text {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.review-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Show only 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 3.2em; /* Adjust based on line height and number of lines */
+  line-height: 1.6em;
+}
+
+.review-text.expanded {
+  -webkit-line-clamp: unset;
+  max-height: none;
+}
+
+.more-link {
+  color: #999;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sort-reviews {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.sort-reviews label {
+  font-size: 16px;
+}
+
+.sort-reviews select {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+
 
 body {
   font-family: 'Pretendard-Regular';

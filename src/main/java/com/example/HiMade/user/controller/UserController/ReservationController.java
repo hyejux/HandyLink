@@ -19,4 +19,7 @@ public class ReservationController {
     public Reservation getReservationDetail(@PathVariable Long reservationNo) {
         return reservationService.getReservationDetailByNo(reservationNo);
     }
+
+
+
 }

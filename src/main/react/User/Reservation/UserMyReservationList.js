@@ -7,7 +7,8 @@ import './userMyReservationList.css';
 
 
 function UserMyReservationList() {
-    
+
+
     const [reservationList, setReservationList] = useState([]);
 
        useEffect(() => {
@@ -33,6 +34,10 @@ function UserMyReservationList() {
        window.location.href = `../UserMyReservationDetail.user/${id}`;
       };
 
+      const goToReview = (id) => {
+        window.location.href = `../UserReviewRegist.user/${id}`;
+       };
+
   return (
     <div>
            <div className="user-main-content" >
@@ -49,6 +54,10 @@ function UserMyReservationList() {
               <div className="reservation-header">
                 <span className="reservation-status">{value.reservationStatus}</span>
                 <div className="reservation-time">{value.regTime} </div>
+                <button onClick={(event) => {
+          event.stopPropagation(); // 클릭 이벤트의 버블링 방지
+          goToReview(value.reservationNo); // 리뷰 작성 함수 호출
+        }}> 리뷰 작성하기 </button>
               </div>
               <div className="store-name-title">{value.storeName} <i class="bi bi-chevron-right"></i> </div>
               <div className="product-details">{value.serviceName} | {value.reservationPrice} 원</div>

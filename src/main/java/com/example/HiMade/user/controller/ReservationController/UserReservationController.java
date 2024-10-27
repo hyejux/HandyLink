@@ -2,10 +2,7 @@ package com.example.HiMade.user.controller.ReservationController;
 
 
 import com.example.HiMade.admin.dto.adminReserveMangeDTO;
-import com.example.HiMade.user.dto.UserRSlotDTO;
-import com.example.HiMade.user.dto.UserReservationDTO;
-import com.example.HiMade.user.dto.UserReservationFormDTO;
-import com.example.HiMade.user.dto.UserUSlotDTO;
+import com.example.HiMade.user.dto.*;
 import com.example.HiMade.user.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -106,6 +103,15 @@ public class UserReservationController {
     dto.setCategoryId(id);
     System.out.println(dto + " dto ㅇ비니다 !! ");
     userReservationService.updateSlotCount1(dto);
+  }
+
+//  리뷰
+
+  @GetMapping("/getReviewList/{id}")
+  public List<UserReviewDTO> getReviewList(@PathVariable int id) {
+
+    System.out.println(userReservationService.getReviewList(id) + "리뷰 리스트");
+      return userReservationService.getReviewList(id);
   }
 
 

@@ -9,7 +9,7 @@
     <select id="getNoticeList" resultType="com.example.HiMade.admin.dto.storeNoticeDTO">
         select * from store_notice
     </select>
-
+<!-- 스토어 넘버 변경 -->
     <insert id="setNotice" parameterType="com.example.HiMade.admin.dto.storeNoticeDTO">
         INSERT INTO store_notice (
         notice_regdate,
@@ -21,8 +21,8 @@
         NOW(),
         #{noticeContent},
         #{noticeType},
-        1,
-        'store123'
+        7,
+        'bbb123'
         );
     </insert>
 

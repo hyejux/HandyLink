@@ -36,7 +36,7 @@
     </select>
 
 
-
+<!-- 수정 필요함 고정 값 뿌리는 중 -->
     <select id="getMyReserveList" resultType="com.example.HiMade.user.dto.UserRL">
         select s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name, r.reservation_time
         from reservation r
@@ -50,7 +50,7 @@
         ON rs.reservation_slot_key = r.reservation_slot_key
         LEFT JOIN users u
         ON u.user_id = r.user_id
-        where r.user_id = 'hello@naver.com'
+        where r.user_id = 'qwer@naver.com'
         group by r.reservation_no,s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name
 
     </select>
@@ -134,6 +134,34 @@
         AND reservation_slot_date = #{reservationDate}
         AND store_no = #{storeNo}
     </update>
+
+
+<!--     리뷰 -->
+<!--    insert into review (review_rating, review_content, review_date, reservation_no, store_no, user_id)-->
+<!--    values (#{reviewRating}, #{reviewContent}, now(), #{reservationNo}, #{storeNo}, #{userId})-->
+    <insert id="setReview" parameterType="com.example.HiMade.user.dto.UserReviewDTO" useGeneratedKeys="true" keyProperty="reviewNo">
+        insert into review (review_rating, review_content, review_date, reservation_no)
+        values (#{reviewRating}, #{reviewContent}, now(), #{reservationNo})
+        returning review_no as reviewNo
+    </insert>
+
+    <insert id="setReviewImg" parameterType="com.example.HiMade.user.dto.UserReviewDTO">
+        insert into review_img (review_img_url , review_no) values(#{reviewImgUrl}, #{reviewNo});
+    </insert>
+
+
+    <select id="getReviewList" resultType="com.example.HiMade.user.dto.UserReviewDTO" >
+        select rw.review_no, rw.review_rating, rw.review_content, rw.review_date, rw.reservation_no, rn.store_no, rwi.review_img_url, u.user_name
+        from review rw
+        left join review_img rwi
+        on rwi.review_no = rw.review_no
+        left join reservation rn
+        on rn.reservation_no = rw.reservation_no
+        left join users u
+        on rn.user_id = u.user_id
+        where store_no = #{id};
+
+    </select>
 
 
 </mapper>

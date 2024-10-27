@@ -17,6 +17,7 @@ const AdminReserveSettingDetailModify = () => {
       // 이미지 미리보기
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
+      console.log(previewUrl);
     }
   };
 
@@ -163,6 +164,12 @@ const handleTimeNumChange = (e) => {
 
 
   //--------------------------------------------------
+
+
+
+
+
+  //-------------------------------------------
   const handleComplete = () => {
     const transformedCategories = categories.map(category => ({
       ...category,

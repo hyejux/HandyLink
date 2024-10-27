@@ -13,6 +13,7 @@ function UserStoreDetail() {
   const [cateId, setCateId] = useState(0);
   const [reservationList, setReservationList] = useState([]);
   const [storeInfo, setStoreInfo] = useState([]);
+  const [reviewList, setReviewList] = useState({});
 
   const goToAdminPage = (id) => {
     sessionStorage.setItem('storeCloseTime', storeInfo.storeCloseTime);
@@ -46,11 +47,27 @@ function UserStoreDetail() {
       .catch(error => {
         console.log('Error Category', error);
       });
-
-
-    // categoryId  << 로 요청 보내서 가게 정보 값  가져오세요 !
+      axios.get('/adminStore/getNoticeList')
+      .then(response => {
+          console.log(response.data);
+          setNoticeList(response.data);
+      })
+      .catch(error => {
+          console.log('Error Category', error);
+      });
+      axios.get(`/userReservation/getReviewList/${categoryId}`)
+      .then(response => {
+        console.log(response.data);
+        setReviewList(response.data);
+      })
+      .catch(error => {
+        console.log("리뷰 쪽 에러 발생", error);
+      })
 
   }, []);
+
+
+
 
   // const formatServiceStartDate = (dateString) => {
   //   const date = new Date(dateString);
@@ -172,19 +189,18 @@ function UserStoreDetail() {
 
   // --------------------------------------------------------- 소식
 
+
+  const [expandedReviews, setExpandedReviews] = useState({});
+
+  const toggleText = (id) => {
+    setExpandedReviews((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
   
 const [noticeList, setNoticeList] = useState([]);
 
-useEffect(() => {
-        axios.get('/adminStore/getNoticeList')
-            .then(response => {
-                console.log(response.data);
-                setNoticeList(response.data);
-            })
-            .catch(error => {
-                console.log('Error Category', error);
-            });
-    }, [])
 
  // 각 공지의 토글 상태를 저장하는 상태 (행별로 관리)
  const [expandedRows, setExpandedRows] = useState([]);
@@ -197,8 +213,6 @@ useEffect(() => {
      setExpandedRows([...expandedRows, index]);
    }
  };
-
-
 
 
 
@@ -284,9 +298,7 @@ useEffect(() => {
             </div>
           )}
 
-
-  
-
+            {/* 소식 */}
            {activeSection === 'info' && (
 
               <div>
@@ -362,13 +374,82 @@ useEffect(() => {
             </>
           )}
 
+          {/* 리뷰 */}
 
-            {/* 리뷰 */}
-            {activeSection === 'review' && (
-            <>
 
-            리뷰 페이지 이다...
-            </>
+          {activeSection === 'review' && (
+            <div className="user-content-container5">
+             <div className="review-section">
+                  <h2>포토 리뷰</h2>
+                  <div className="photo-review">
+                    <div className="photo-item"></div>
+                    <div className="photo-item"></div>
+                    <div className="photo-item"></div>
+                    <div className="photo-item more">+더보기</div>
+                  </div>
+                  <div className="sort-reviews">
+                    <label htmlFor="sortSelect">정렬:</label>
+                    <select id="sortSelect">
+                      <option value="latest">최신순</option>
+                      <option value="oldest">오래된순</option>
+                      <option value="rating-high">별점높은순</option>
+                      <option value="rating-low">별점낮은순</option>
+                    </select>
+                  </div>
+
+                  <div className="reviews">
+                    {reviewList.map((review) => (
+                      <div key={review.reviewNo} className="review-item">
+                        {review.userReviewImg > 0 && (
+                          <div className="photo-review2">
+                            {Array.from({ length: review.userReviewImg }).map((_, index) => (
+                              <img key={index} className="photo-item2" src={userReviewImg}> </img>
+                            ))}
+                          </div>
+                        )}
+                        <div className="review-header">
+                          <span className="reviewer-name">{review.userName}</span>
+                       
+                          <div className="review-rating">
+                          <div className="rating-section">
+                          {[...Array(review.reviewRating)].map((_, index) => (
+                              <span key={index} className='review-rating'>
+                                &#9733;
+                              </span>
+                            ))}
+
+                          
+                          </div>
+
+                          </div>
+                        </div>
+                        <div className="review-details">
+                          {/* <span className="review-title">{review.title}</span> */}
+                          <span className="review-date">{review.reviewDate}</span>
+                        </div>
+                        <p
+                          className={`review-text ${expandedReviews[review.reviewNo] ? "expanded" : ""}`}
+                        >
+                          {expandedReviews[review.reviewNo] ? review.reviewContent : review.reviewContent.slice(0, 50)}
+                        </p>
+                   
+                         {review.reviewContent.length < 30 ? '' : (
+                            <a
+                              className="more-link" 
+                              onClick={() => toggleText(review.reviewNo)} 
+                              style={{ cursor: "pointer" }}
+                            >
+                              {expandedReviews[review.reviewNo] ? " 접기" : "...더보기"}
+                            </a>
+                          )}
+                          
+             
+                      </div>
+                    ))}
+                  </div>
+
+                </div>
+            </div>
           )}
 
 

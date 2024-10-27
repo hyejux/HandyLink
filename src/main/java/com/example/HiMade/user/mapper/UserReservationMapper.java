@@ -27,4 +27,11 @@ public interface UserReservationMapper {
   void updateReservationStatus(@Param("reservationNo") int reservationNo, @Param("status") String status);
   void updateSlotStatus(@Param("categoryId") int categoryId, @Param("reservationDate") LocalDate reservationDate, @Param("storeNo") int storeNo);
   void updateSlotCount1(UserRSlotDTO dto);
+
+
+  //리뷰
+  List<UserReviewDTO> getReviewList(int id);
+  int setReview(UserReviewDTO dto);
+  void setReviewImg(UserReviewImgDTO dto);
+
 }

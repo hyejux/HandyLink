@@ -19,7 +19,7 @@
 
     <select id="getStoreInfo" resultMap="storeRegistResultMap">
         SELECT *
-        FROM store_admin sa
+        FROM store sa
         LEFT JOIN store_sns_link sns ON sa.store_no = sns.store_no
         LEFT JOIN store_img si ON si.store_no = sa.store_no
         WHERE sa.store_no = #{id}
@@ -58,7 +58,7 @@
             <result property="storeNo" column="store_no"/>
         </collection>
 
-        <collection property="storeImg" ofType="com.example.HiMade.admin.dto.StoreImgDTO">
+        <collection property="storeImg" ofType="com.example.HiMade.admin.dto.StoreImgDTO" javaType="java.util.List">
             <result property="storeImgNo" column="store_img_no"/>
             <result property="storeImgLocation" column="store_img_location"/>
             <result property="storeId" column="store_id"/>

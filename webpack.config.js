@@ -56,6 +56,8 @@ module.exports = {
         UserAccountPage: './User/User/UserAccountPage.js',
         UserDelete: './User/User/UserDelete.js',
         AdminChat: './Admin/AdminChat.js',
+        AdminReviewList : './Admin/AdminReviewList.js',
+        UserReviewRegist : './User/User/UserReviewRegist.js'
 
     },
     devtool: 'sourcemaps',

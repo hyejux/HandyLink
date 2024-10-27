@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -104,5 +105,26 @@ public class UserReservationServiceImpl implements UserReservationService {
     userReservationMapper.updateSlotCount1(dto);
   }
 
+  @Override
+  public List<UserReviewDTO> getReviewList(int id) {
+    return userReservationMapper.getReviewList(id);
+  }
 
+  @Override
+  public int setReview(UserReviewDTO dto) {
+    userReservationMapper.setReview(dto);
+    int num = dto.getReviewNo();
+    System.out.println("리뷰 등록 번호 " + num);
+    return num;
+
+  }
+
+  @Override
+  public void setReviewImg(List<UserReviewImgDTO> dto) {
+    System.out.println("리뷰이미지등록" + dto );
+
+    for (UserReviewImgDTO d : dto){
+      userReservationMapper.setReviewImg(d);
+    }
+  }
 }

@@ -134,12 +134,12 @@ function StoreSignUp() {
     },[storeInfoData]);
 
 
-
     //등록하기
     const handleStoreRegist = async() => {
         try {
-            if(isDuplicate === true){
+            if(isDuplicate === true || isDuplicate === null){
                 alert('아이디를 확인해주세요');
+                inputRef.current.focus();
                 return;
             }
             const response = await axios.post('/adminStore/registStore',{

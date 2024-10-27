@@ -90,7 +90,7 @@ public class UserSocialController {
 
                 // 마이페이지로 리다이렉트
                 return ResponseEntity.status(HttpStatus.FOUND)
-                        .header("Location", "/UserMyPage.user")
+                        .header("Location", "/UserMain.user")
                         .build();
             }
         } catch (Exception e) {

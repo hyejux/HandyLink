@@ -53,7 +53,9 @@ module.exports = {
         AdminSignupApproval: './Admin/AdminSignupApproval.js',
         AdminStoreReport: './Admin/AdminStoreReport.js',
         UserSearch : './User/User/UserSearch.js',
-        UserAccountPage: './User/User/UserAccountPage.js'
+        UserAccountPage: './User/User/UserAccountPage.js',
+        UserDelete: './User/User/UserDelete.js',
+        AdminChat: './Admin/AdminChat.js',
 
     },
     devtool: 'sourcemaps',

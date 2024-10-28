@@ -1,6 +1,8 @@
 package com.example.HiMade.handler;
 
+import com.example.HiMade.user.service.UserAccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -9,35 +11,51 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.web.socket.CloseStatus;
 
+import java.security.Principal;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+    // 사용자 ID별로 여러 개의 WebSocket 세션을 관리하는 Map
 @Component
 public class WebSocketHandler extends TextWebSocketHandler {
-    // 사용자 ID별로 여러 개의 WebSocket 세션을 관리하는 Map
     private static final ConcurrentHashMap<String, Set<WebSocketSession>> userSessions = new ConcurrentHashMap<>();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Autowired
+    private UserAccountService userAccountService;
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        // 사용자 ID를 가져옴 (고객 또는 업체)
-        String userId = extractUserId(session);
-
-        // WebSocket 세션을 사용자 ID별로 저장
+        // Spring Security의 SecurityContext에서 인증 정보 가져오기
+        String userId = extractUserIdFromSession(session);
         if (userId != null) {
             userSessions.computeIfAbsent(userId, k -> ConcurrentHashMap.newKeySet()).add(session);
             System.out.println("New WebSocket connection established for user: " + userId);
+        } else {
+            session.close();  // 인증되지 않은 사용자는 연결 종료
         }
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
 
+        String userId = extractUserIdFromSession(session);
+        if (userId == null) {
+            session.close();
+            return;
+        }
+
+        Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
         // 메시지에서 userId와 storeId를 추출
-        String senderId = (String) payload.get("senderId"); // 보낸 사람 ID
+        String senderId = (String) payload.get("userId");
+
+        // 메시지 발신자 검증
+        if (!userId.equals(senderId)) {
+            return;  // 권한 없음
+        }
+
         String recipientId = (String) payload.get("recipientId"); // 받는 사람 ID
 
         System.out.println("Message received from: " + senderId + " to " + recipientId);
@@ -70,13 +88,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
         System.out.println("WebSocket connection closed: " + session.getId());
     }
 
-    // 현재 연결된 WebSocket 세션에서 사용자 ID 추출 (Spring Security 또는 세션 기반)
-    private String extractUserId(WebSocketSession session) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated()) {
-            return auth.getName(); // SecurityContext에서 로그인된 사용자 ID 반환
+    private String extractUserIdFromSession(WebSocketSession session) {
+        Map<String, Object> attributes = session.getAttributes();
+        Principal principal = session.getPrincipal();
+        if (principal != null) {
+            return principal.getName();  // UserDetailsService에서 설정한 username(userId) 반환
         }
-        // TODO: 업체의 경우 세션 또는 다른 인증 방식을 통해 userId를 추출하도록 수정 가능
         return null;
     }
 }
+

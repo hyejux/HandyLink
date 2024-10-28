@@ -3,7 +3,7 @@
 
 -- 시퀀스 생성
 
-CREATE SEQUENCE store_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE store_no_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE user_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE reservation_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE payment_seq START WITH 1 INCREMENT BY 1;
@@ -62,6 +62,7 @@ CREATE TABLE USERS (
     login_type VARCHAR(10) NULL,
     user_img_url VARCHAR(300) NULL,
     refund_account_number BIGINT NULL,
+    user_status VARCHAR(20) DEFAULT 'ACTIVE',
     PRIMARY KEY (user_id)
 );
 

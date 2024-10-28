@@ -12,13 +12,13 @@
 
     <!-- 유저 등록 -->
     <insert id="insertUser" parameterType="UserDTO">
-        INSERT INTO USERS (user_id, user_pw, user_name, user_birth, user_gender, user_phonenum, user_signup, user_img_url, refund_account_number, login_type)
-        VALUES (#{userId}, #{userPw}, #{userName}, #{userBirth}, #{userGender}, #{userPhonenum}, CURRENT_DATE, #{userImgUrl}, #{refundAccountNumber}, #{loginType})
+        INSERT INTO USERS (user_id, user_pw, user_name, user_birth, user_gender, user_phonenum, user_signup, user_img_url, refund_account_number, login_type, user_status)
+        VALUES (#{userId}, #{userPw}, #{userName}, #{userBirth}, #{userGender}, #{userPhonenum}, CURRENT_DATE, #{userImgUrl}, #{refundAccountNumber}, #{loginType}, 'Y')
     </insert>
 
     <!-- 유저 정보 조회 -->
     <select id="getUserById" parameterType="String" resultType="com.example.HiMade.user.dto.UserDTO">
-        SELECT user_id, user_pw, user_name, user_birth, user_phonenum, user_gender, user_signup, user_img_url, login_type
+        SELECT user_id, user_pw, user_name, user_birth, user_phonenum, user_gender, user_signup, user_img_url, login_type, user_status
         FROM USERS
         WHERE user_id = #{userId}
     </select>
@@ -63,6 +63,14 @@
         UPDATE USERS
         SET user_pw = #{newPassword}
         WHERE user_id = #{userId}
+    </update>
+
+    <!--탈퇴 처리-->
+    <update id="deleteUser" parameterType="map">
+        UPDATE USERS
+        SET user_id = #{newUserId},
+            user_status = 'N'
+        WHERE user_id = #{originalUserId}
     </update>
 
 </mapper>

@@ -30,23 +30,26 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/css/**", "/uploads/**", "/img/**", "/bundle/**").permitAll()
-                .antMatchers("/UserMyPage.user").authenticated()
+                .antMatchers("/UserAccountPage.user").authenticated() // 로그인 필요
                 .antMatchers("/**").permitAll()  // 모든 경로에 접근 허용 (임시 설정)
                 //.anyRequest().authenticated()  // 그 외 요청은 로그인 필요
                 .and()
                 .formLogin()
-                    .loginPage("/UserLoginPage.user")
-                    .loginProcessingUrl("/login")
-                    .usernameParameter("userId")
-                    .passwordParameter("userPw")
-                    .defaultSuccessUrl("/UserMyPage.user", true)
-                    .failureUrl("/UserLoginPage.user?error=true") // 로그인 실패 시 이동할 URL
+                .loginPage("/UserLoginPage.user")
+                .loginProcessingUrl("/login")
+                .usernameParameter("userId")
+                .passwordParameter("userPw")
+                .defaultSuccessUrl("/UserMain.user", true) // 로그인 성공 후 이동할 페이지
+                .failureUrl("/UserLoginPage.user?error=true")
                 .and()
                 .logout()
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/UserLoginPage.user")
                     .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID");
+                    .deleteCookies("JSESSIONID")
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS); // 기본 세션 관리 방식
         return http.build();
     }
 

@@ -22,4 +22,5 @@ public class UserDTO {
     private String userImgUrl;
     private Long refundAccountNumber;
     private String loginType;
+    private String userStatus;
 }

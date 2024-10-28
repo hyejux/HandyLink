@@ -6,6 +6,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,6 +19,7 @@ public class UserRSlotDTO {
 
   private int reservationSlotKey;
   private LocalDate reservationSlotDate;
+  private List<LocalDate> reservationSlotDates;
   private int slotCount;
   private int slotStatusCount;
   private Boolean reservationActive ;

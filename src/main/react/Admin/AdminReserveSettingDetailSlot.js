@@ -298,6 +298,7 @@ function AdminReserveSettingDetailSlot() {
 
   const handleStartDateChange = (date) => {
 
+    setSlotCounts(0);
     setSlotFlag(true);
     // setFilteredReservations([]);
     // 시작일이 변경될 때
@@ -326,7 +327,7 @@ function AdminReserveSettingDetailSlot() {
 };
 
 const handleEndDateChange = (date) => {
- 
+    setSlotCounts(0);
     setSlotFlag(true);
     // setFilteredReservations([]);
 

@@ -39,13 +39,27 @@ function MyStore() {
                     const formattedOpenTime = new Date(`1970-01-01T${resp.data.storeOpenTime}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
                     const formattedCloseTime = new Date(`1970-01-01T${resp.data.storeCloseTime}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 
+                    const storeImg = Array.isArray(resp.data.storeImg)
+                    ? resp.data.storeImg
+                        .filter(img => img.storeImgLocation !== null) // storeImgLocation이 null이 아닌 것만 필터링
+                        .map(img => ({ storeImgLocation: img.storeImgLocation }))
+                    : [];
+
+                    const storeSns = Array.isArray(resp.data.storeSns)
+                    ? resp.data.storeSns
+                        .filter(sns => sns.snsLink !== null) // storeImgLocation이 null이 아닌 것만 필터링
+                        .map(sns => ({ snsLink: sns.snsLink, snsName: sns.snsName }))
+                    : [];
+
                     setMyStoreInfo(prevInfo => ({
                         ...prevInfo,
                         ...resp.data,
                         storeOpenTime: formattedOpenTime,
                         storeCloseTime: formattedCloseTime,
-                        storeImg: resp.data.storeImg.map(img => ({ storeImgLocation: img.storeImgLocation }))
+                        storeSns: storeSns,
+                        storeImg: storeImg
                     }));
+
                 } else {
                     console.log("세션에 아이디정보가 없습니다.");
                 }
@@ -129,6 +143,8 @@ function MyStore() {
 
     //step03 사진 업로드
     const [selectedImages, setSelectedImages] = useState([]); // 화면에 보여질 파일 리스트 (미리보기 URL)
+    const [newImgUrls, setNewImgUrls] = useState([]); //업로드할 새 이미지
+
     const onSelectFile = async (e) => {
         e.preventDefault();
         const files = Array.from(e.target.files); // 선택된 파일들 배열로 변환
@@ -164,39 +180,30 @@ function MyStore() {
 
             // 모든 URL을 받아서 상태 업데이트
             const imageUrls = await Promise.all(uploadPromises);
-            console.log("업로드된 이미지 URL들: ", imageUrls); // 확인 로그 추가
 
             // null 값 필터링
             const filteredUrls = imageUrls.filter(url => url !== null);
+            console.log("업로드된 이미지 filteredUrls들: ", filteredUrls); // 확인 로그 추가
 
             if (filteredUrls.length > 0 && filteredUrls !== null) {
-
-                setMyStoreInfo(prev => ({
-                    ...prev,
-                    storeImg: [
-                        ...(prev.storeImg || []),
-                        ...filteredUrls.map(url => ({ storeImgLocation: url })) // URL을 객체로 변환하여 추가
-                    ]
-                }));
-            } else {
-                alert("업로드된 파일 중 중복된 파일이 있습니다.");
+                setNewImgUrls(filteredUrls); //새 이미지들 상태 저장
             }
+
         } else {
             alert('이미지는 최대 8장까지 업로드 가능합니다.');
         }
     };
 
-    const removeImage = (index, isUploadedImage) => {
-        // 이미지를 삭제할 때 서버 요청 없이 로컬 상태에서만 삭제
+    const removeImage = (url, isUploadedImage) => {
         if (isUploadedImage) {
-            // Store 정보 업데이트 (서버에서 가져온 이미지 삭제)
+            // 서버에서 가져온 이미지 삭제
             setMyStoreInfo((prev) => ({
                 ...prev,
-                storeImg: prev.storeImg.filter((_, i) => i !== index),
+                storeImg: prev.storeImg.filter(img => img.storeImgLocation !== url),
             }));
         } else {
-            // 새로 선택된 이미지일 경우 (미리보기 상태)
-            setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
+            // 미리보기 상태의 이미지 삭제
+            setSelectedImages((prevImages) => prevImages.filter(imageUrl => imageUrl !== url));
         }
     };
 
@@ -215,13 +222,26 @@ function MyStore() {
         try {
             if (!isDisabled){
                 // 저장되지 않은 SNS를 체크
-                const hasUnsavedSns = myStoreInfo.storeSns.some(sns => sns.isDisabled); // 저장되지 않은 SNS가 있는지 확인
+                const hasUnsavedSns = myStoreInfo.storeSns.some(sns => !sns.isDisabled); // 저장되지 않은 SNS가 있는지 확인
                 const hasEmptySnsLink = myStoreInfo.storeSns.some(sns => sns.snsLink === ''); // 링크가 비어있는지 확인
 
                 if (hasUnsavedSns || hasEmptySnsLink) {
                     alert("저장되지 않은 SNS 링크가 있습니다.");
                     return; // 저장되지 않은 SNS가 있을 경우 입력을 막음
                 }
+
+                const updatedImgs = [
+                    ...myStoreInfo.storeImg.map(img => ({
+                        storeId: myStoreInfo.storeId,
+                        storeNo: myStoreInfo.storeNo,
+                        storeImgLocation: img.storeImgLocation
+                    })),
+                    ...newImgUrls.map(url =>({
+                        storeId: myStoreInfo.storeId,
+                        storeNo: myStoreInfo.storeNo,
+                        storeImgLocation: url
+                    }))
+                ];
 
                 const response = await axios.post('/adminStore/updateStore',{ //update
                     storeId: myStoreInfo.storeId,
@@ -239,11 +259,7 @@ function MyStore() {
                         snsLink: sns.snsLink,
                         snsName: sns.snsName
                     })),
-                    storeImg: myStoreInfo.storeImg.map(img => ({
-                        storeId: myStoreInfo.storeId,
-                        storeNo: myStoreInfo.storeNo,
-                        storeImgLocation: img.storeImgLocation
-                    })),
+                    storeImg: updatedImgs,
                     storeStatus: myStoreInfo.storeStatus
                 });
                 console.log("등록성공 ", response.data);
@@ -320,18 +336,18 @@ function MyStore() {
                 {myStoreInfo.storeSns.length < 3 && !isDisabled && (
                     <button type="button" onClick={() => setMyStoreInfo(prevState => ({
                             ...prevState,
-                            storeSns: [...prevState.storeSns, { snsLink: '', isDisabled: true }]
+                            storeSns: [...prevState.storeSns, { snsLink: ''}]
                         }))}>
                         SNS 링크 추가
                     </button>
                 )}
                 {myStoreInfo.storeSns.map((sns, index) => (
-                    (sns.snsLink || !isDisabled) ? (
+                    (sns.snsLink || !isDisabled) ? ( //링크가 잇거나 수정상태
                         <div key={index} className="sns-row">
                             <label>SNS {index + 1}</label>
 
-                            {(!sns.isDisabled || isDisabled) ? (
-                                <div className="sns-fix">
+                            {(sns.isDisabled || isDisabled) ? ( //링크저장상태거나 수정완료상태
+                                <div className="sns-fix" >
                                     {sns.snsLink}
                                 </div>
                             ) : (
@@ -341,13 +357,13 @@ function MyStore() {
                                 placeholder={`SNS ${index + 1} 링크를 입력하세요`}
                                 value={sns.snsLink}
                                 onChange={(e) => handleChangeSns(index, 'snsLink', e.target.value)}
-                                disabled={!sns.isDisabled}
+                                disabled={sns.isDisabled}
                                 />
                             )}
-                            {!isDisabled && index > -1 && (
+                            {!isDisabled &&  index > -1 && (
                                 <>
                                     <button type="button" onClick={() => handleFixSns(index)}>
-                                        {!sns.isDisabled ? '수정':'저장'}
+                                        {sns.isDisabled ? '수정':'저장'}
                                     </button>
                                     <button type="button" className="snsDelete-btn" onClick={() => handleDeleteSns(index)}>
                                         <i class="bi bi-x-square-fill"></i>
@@ -400,21 +416,19 @@ function MyStore() {
             <div className="photo-grid">
                 {/* DB에서 가져온 이미지 */}
                 {myStoreInfo.storeImg.length > 0 && myStoreInfo.storeImg.map((imgurl, index) => (
-                    imgurl.storeImgLocation ? (
                     <div key={imgurl.storeImgLocation} className="photo-item">
                         <img src={imgurl.storeImgLocation} alt={`DB 이미지 ${index + 1}`} />
                         {!isDisabled && (
-                            <i className="bi bi-x-circle-fill" onClick={() => removeImage(index, true)}></i>
+                            <i className="bi bi-x-circle-fill" onClick={() => removeImage(imgurl.storeImgLocation, true)}></i>
                         )}
                     </div>
-                ) : null
                 ))}
 
                 {/* 선택된 이미지 */}
                 {!isDisabled && selectedImages.length > 0 && selectedImages.map((url, index) => (
                     <div key={url} className="photo-item">
                         <img src={url} alt={`첨부파일 ${index + 1}`} />
-                            <i className="bi bi-x-circle-fill" onClick={() => removeImage(index, false)}></i>
+                            <i className="bi bi-x-circle-fill" onClick={() => removeImage(url, false)}></i>
                     </div>
                 ))}
             </div>

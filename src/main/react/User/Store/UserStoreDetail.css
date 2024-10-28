@@ -446,9 +446,9 @@ body {
     border-radius: 10px;
     margin: 20px;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgb(0 0 0 / 5%);
     margin-bottom: 20px;
-    border: 1px solid #2C348F;
+    border: 1px solid #d3d3d3;
   }
 
 

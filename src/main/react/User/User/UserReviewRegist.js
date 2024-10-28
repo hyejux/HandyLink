@@ -116,7 +116,7 @@ useEffect(() => {
     return (
         <div>
           리뷰 작성 페이지 
-          <div className="user-content-container">
+          <div className="user-content-container2">
           <div className="review-container">
           <div className="rating-section">
             {[1, 2, 3, 4, 5].map((starValue) => (

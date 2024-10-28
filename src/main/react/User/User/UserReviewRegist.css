@@ -5,7 +5,7 @@
   padding: 20px;
   background-color: white;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
 }
 
 .rating-section {
@@ -76,7 +76,7 @@
 .submit-btn {
   width: 100%;
   padding: 10px 0;
-  background-color: #5367fc;
+  background-color: #2C348F;
   border: none;
   border-radius: 20px;
   color: white;
@@ -121,12 +121,9 @@
 }
 
 
-.user-content-container {
+.user-content-container2{
   background-color: white;
   border-radius: 10px;
   margin: 20px;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-  border: 1px solid #2C348F;
-}
+} 

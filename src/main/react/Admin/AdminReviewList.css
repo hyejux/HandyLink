@@ -29,7 +29,7 @@
 }
 .management-table tbody tr:hover {
   background-color: #c8d6e570;
-  cursor: pointer;
+
 }
 .management-table thead th {
 
@@ -478,4 +478,10 @@
 .review-rating {
   font-size: 14px;
   color: #f4c150; /* Rating star color */
+}
+
+.detail-serviceName {
+  color : #38414a;
+  cursor: pointer;
+  text-decoration: underline;
 }

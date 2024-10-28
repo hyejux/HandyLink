@@ -67,6 +67,10 @@ function AdminReviewList () {
 };
 
 
+const goToDetail = (no) => {
+    window.location.href = `/AdminReserveManageDetail.admin/${no}`;
+}
+
     return (
         <div>
           <div>
@@ -106,7 +110,7 @@ function AdminReviewList () {
                   <td>{index + 1}</td>
                   <td>{formatDate(value.reviewDate)}</td>
                   <td> {value.userName}</td>
-                  <td>{value.serviceName}</td>
+                  <td onClick={() => goToDetail(value.reservationNo)} className='detail-serviceName'> {value.serviceName} </td>
                   <td>   {value.userReviewImg.map((imgUrl, index) => {
                               const formattedUrl = imgUrl.replace('blob:', ''); 
                               return (

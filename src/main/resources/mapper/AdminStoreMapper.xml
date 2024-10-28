@@ -111,10 +111,12 @@
     <delete id="deleteStoreSns" parameterType="com.example.HiMade.admin.dto.StoreSnsDTO">
         delete from store_sns_link
         where store_id = #{storeId}
-        and sns_link not in
-        <foreach item="snsLink" collection="storeSns" open="(" separator="," close=")">
-            #{snsLink.snsLink}
-        </foreach>
+        <if test="storeSns != null and storeSns.size() > 0">
+            and sns_link not in
+            <foreach item="snsLink" collection="storeSns" open="(" separator="," close=")">
+                 #{snsLink.snsLink}
+            </foreach>
+        </if>
     </delete>
 
     <select id="selectExistingSns" parameterType="string" resultType="string">
@@ -133,10 +135,12 @@
     <delete id="deleteStoreImg" parameterType="com.example.HiMade.admin.dto.StoreImgDTO">
         DELETE FROM store_img
         WHERE store_id = #{storeId}
-        AND store_img_location NOT IN
-        <foreach item="img" collection="storeImg" open="(" separator="," close=")">
-            #{img.storeImgLocation}
-        </foreach>
+        <if test="storeImgList != null and storeImgList.size() > 0">
+            AND store_img_location NOT IN
+            <foreach item="img" collection="storeImgList" open="(" separator="," close=")">
+                #{img.storeImgLocation}
+            </foreach>
+        </if>
     </delete>
 
     <select id="selectExistingStoreImg" resultType="string" parameterType="string">

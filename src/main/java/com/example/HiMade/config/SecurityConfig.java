@@ -25,7 +25,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomAuthenticationProvider customAuthenticationProvider) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
@@ -49,7 +49,9 @@ public class SecurityConfig {
                     .deleteCookies("JSESSIONID")
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS); // 기본 세션 관리 방식
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 기본 세션 관리 방식
+                .and()
+                .authenticationProvider(customAuthenticationProvider);
         return http.build();
     }
 

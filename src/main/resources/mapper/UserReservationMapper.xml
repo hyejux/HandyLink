@@ -119,7 +119,7 @@
 
     <update id="updateSlotCount1" parameterType="com.example.HiMade.user.dto.UserRSlotDTO">
         update reservation_slot
-        set slot_count = #{slotCount}, limit_time = #{limitTime}
+        set slot_count = #{slotCount}
         where reservation_slot_date = #{reservationSlotDate} and  category_id = #{categoryId}
     </update>
 

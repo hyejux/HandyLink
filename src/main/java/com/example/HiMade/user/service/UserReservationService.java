@@ -32,6 +32,7 @@ UserReservationService {
   void updateSlotStatus(int categoryId, LocalDate reservationDate, int storeNo);
 
   void updateSlotCount1(UserRSlotDTO dto);
+  void updateSlotCount2(int slotCount , int categoryId, LocalDate date1 , LocalDate date2);
 
 
   // 리뷰

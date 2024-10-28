@@ -100,9 +100,21 @@ public class UserReservationController {
 
   @PostMapping("/updateSlotCount1/{id}")
   public void updateSlotCount1(@RequestBody UserRSlotDTO dto, @PathVariable int id){
-    dto.setCategoryId(id);
-    System.out.println(dto + " dto ㅇ비니다 !! ");
-    userReservationService.updateSlotCount1(dto);
+    if (dto.getReservationSlotDate() == null){
+      System.out.println("date 2개 값 " + dto.getReservationSlotDates().toString());
+      List<LocalDate> date = dto.getReservationSlotDates();
+      userReservationService.updateSlotCount2(dto.getSlotCount(), id , date.get(0), date.get(1));
+
+    }else {
+      System.out.println("date 1개 값 " + dto.getReservationSlotDate());
+      dto.setCategoryId(id);
+      userReservationService.updateSlotCount1(dto);
+
+    }
+
+    System.out.println(dto);
+//    userReservationService.updateSlotCount1(dto);
+
   }
 
 //  리뷰

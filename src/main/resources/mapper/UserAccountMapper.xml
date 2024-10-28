@@ -73,4 +73,14 @@
         WHERE user_id = #{originalUserId}
     </update>
 
+    <!-- 카카오 탈퇴 -->
+    <update id="deleteKakaoUser" parameterType="map">
+        UPDATE USERS
+        SET user_id = #{newUserId},
+            user_status = 'N'
+        WHERE user_id = #{originalUserId}
+          AND login_type = 'KAKAO'
+    </update>
+
+
 </mapper>

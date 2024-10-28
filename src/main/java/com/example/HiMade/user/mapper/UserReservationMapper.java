@@ -3,12 +3,16 @@ package com.example.HiMade.user.mapper;
 import com.example.HiMade.admin.dto.AdminCategoryImgDTO;
 import com.example.HiMade.user.dto.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UserReservationMapper {
@@ -30,8 +34,9 @@ public interface UserReservationMapper {
 
 
   //리뷰
-  List<UserReviewDTO> getReviewList(int id);
+  List<UserReviewDTO> getReviewList(@Param("id") int id);
+  List<UserReviewDTO> getReviewPhotoList(@Param("id") int id);
   int setReview(UserReviewDTO dto);
-  void setReviewImg(UserReviewImgDTO dto);
+  void setReviewImg(Map map);
 
 }

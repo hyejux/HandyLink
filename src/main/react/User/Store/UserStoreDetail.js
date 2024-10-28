@@ -14,6 +14,7 @@ function UserStoreDetail() {
   const [reservationList, setReservationList] = useState([]);
   const [storeInfo, setStoreInfo] = useState([]);
   const [reviewList, setReviewList] = useState({});
+  const [reviewPhotoList, setReviewPhotoList] =useState([]);
 
   const goToAdminPage = (id) => {
     sessionStorage.setItem('storeCloseTime', storeInfo.storeCloseTime);
@@ -59,6 +60,14 @@ function UserStoreDetail() {
       .then(response => {
         console.log(response.data);
         setReviewList(response.data);
+      })
+      .catch(error => {
+        console.log("리뷰 쪽 에러 발생", error);
+      })
+      axios.get(`/userReservation/getReviewPhotoList/${categoryId}`)
+      .then(response => {
+        console.log(response.data);
+        setReviewPhotoList(response.data);
       })
       .catch(error => {
         console.log("리뷰 쪽 에러 발생", error);
@@ -375,17 +384,24 @@ const [noticeList, setNoticeList] = useState([]);
           )}
 
           {/* 리뷰 */}
-
-
           {activeSection === 'review' && (
             <div className="user-content-container5">
              <div className="review-section">
                   <h2>포토 리뷰</h2>
                   <div className="photo-review">
-                    <div className="photo-item"></div>
-                    <div className="photo-item"></div>
-                    <div className="photo-item"></div>
-                    <div className="photo-item more">+더보기</div>
+                  {reviewPhotoList.slice(0, 4).map((photo, index) => (
+                             <div className="photo-item" key={index}>
+                             <img src={photo.reviewImgUrl} alt="Review Photo" />
+                             {index === 3 && (
+                               <div className="photo-item more" onClick={() => setActiveSection('photo')}>
+                                 +더보기
+                               </div>
+                             )}
+                           </div>
+            ))}
+
+
+          
                   </div>
                   <div className="sort-reviews">
                     <label htmlFor="sortSelect">정렬:</label>
@@ -400,13 +416,17 @@ const [noticeList, setNoticeList] = useState([]);
                   <div className="reviews">
                     {reviewList.map((review) => (
                       <div key={review.reviewNo} className="review-item">
-                        {review.userReviewImg > 0 && (
+               
                           <div className="photo-review2">
-                            {Array.from({ length: review.userReviewImg }).map((_, index) => (
-                              <img key={index} className="photo-item2" src={userReviewImg}> </img>
-                            ))}
+                        {review.userReviewImg.map((imgUrl, index) => {
+                              // 'blob:'를 제거한 URL 생성
+                              const formattedUrl = imgUrl.replace('blob:', ''); 
+                              return (
+                                <img key={index} className="photo-item2" src={formattedUrl} alt={`Review image ${index + 1}`} />
+                              );
+                            })}
                           </div>
-                        )}
+                        
                         <div className="review-header">
                           <span className="reviewer-name">{review.userName}</span>
                        
@@ -426,6 +446,7 @@ const [noticeList, setNoticeList] = useState([]);
                         <div className="review-details">
                           {/* <span className="review-title">{review.title}</span> */}
                           <span className="review-date">{review.reviewDate}</span>
+                          <span className="review-date">{review.serviceName}</span>
                         </div>
                         <p
                           className={`review-text ${expandedReviews[review.reviewNo] ? "expanded" : ""}`}
@@ -451,6 +472,27 @@ const [noticeList, setNoticeList] = useState([]);
                 </div>
             </div>
           )}
+
+
+          {/* 포토 리스트  */}
+          {activeSection === 'photo' && (
+            <div className="user-content-container5">
+             <div className="review-section">
+
+             <i class="bi bi-chevron-left" onClick={() => setActiveSection('review')}></i>
+                  <h2>포토 리뷰</h2>
+                  <div className="photo-review3">
+                {reviewPhotoList.map((photo,index) => (
+                    <div className="photo-item"> <img key={index} src={photo.reviewImgUrl} alt="Review Photo" /></div>
+             
+                  ))}
+                   
+                  </div>
+                
+            </div>
+            </div>
+          )}
+
 
 
         </div>

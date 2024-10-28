@@ -9,17 +9,16 @@ function UserChatRoom() {
     const [showToast, setShowToast] = useState(false);
     const [newMessageCount, setNewMessageCount] = useState(0);
     const [isAtBottom, setIsAtBottom] = useState(true);
+    const [userId, setUserId] = useState(null);
 
     const chatBoxRef = useRef(null);
     const websocket = useRef(null);
     const inputRef = useRef(null);
 
-    const userId = '123@naver.com'; // 임시 사용자 ID
-    const storeId = '1'; // 임시 업체 ID
+    const storeId = 'test1'; // 임시 업체 ID
     const senderType = 'USER';
-    const userName = '짱구';
-    const profileImg= '/img/cake001.jpg';
-    const storeNo = 3;
+    const profileImg= '/img/user_basic_profile.jpg';
+    const storeNo = 5;
 
     // 스크롤 위치 감지 추가
     const handleScroll = () => {
@@ -47,105 +46,114 @@ function UserChatRoom() {
         }
     }, [messages]);
 
+    // 현재 로그인된 사용자 정보 가져오기
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await axios.get('/chat/current');
+                setUserId(response.data.userId);
+            } catch (error) {
+                console.error('사용자 정보를 가져오는데 실패했습니다:', error);
+                window.location.href = '/UserLoginPage.user';  // 로그인 페이지로 리다이렉트
+            }
+        };
+        fetchUserInfo();
+    }, []);
+
+
     // 기존 채팅 기록 불러오기
     useEffect(() => {
         const loadChatHistory = async () => {
             try {
-                const response = await axios.get(`/chat/history?userId=${userId}&storeId=${storeId}&limit=15`); // 최근 15개만 로드
+                const response = await axios.get(`/chat/history?userId=${userId}&storeId=${storeId}`);
                 setMessages(response.data);
             } catch (error) {
-                console.error("채팅 기록을 불러오는 중 오류가 발생했습니다.", error);
+                console.error('채팅 기록을 불러오는 중 오류가 발생했습니다:', error);
             }
         };
-
         loadChatHistory();
-    }, []);
+    }, [userId, storeId]);
 
-    // WebSocket 연결
+    // WebSocket 연결 설정
     useEffect(() => {
-        websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
+        if (!userId) return;
 
-        websocket.current.onmessage = (event) => {
-            const received = JSON.parse(event.data);
-            console.log("WebSocket에서 받은 메시지:", received);
+        const connectWebSocket = () => {
+            websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
 
-            // 자신이 보낸 메시지는 무시 (이미 로컬에서 추가했으므로)
-            if (senderType === 'USER' && received.senderType === 'USER') {
-                return;
-            }
+            websocket.current.onopen = () => {
+                console.log('WebSocket 연결이 열렸습니다.');
+            };
 
-            if (received.userId === userId && received.storeId === storeId) {
-                setMessages(prevMessages => [...prevMessages, received]);
-            }
+            websocket.current.onmessage = (event) => {
+                const received = JSON.parse(event.data);
+                if (received.userId === userId && received.storeId === storeId) {
+                    setMessages((prevMessages) => [...prevMessages, received]);
+                }
+            };
+
+            websocket.current.onerror = (error) => {
+                console.error('WebSocket 에러 발생:', error);
+            };
+
+            websocket.current.onclose = (event) => {
+                console.log('WebSocket 연결이 종료되었습니다:', event);
+                // 일정 시간 후 재연결 시도
+                setTimeout(connectWebSocket, 3000); // 3초 후 재연결
+            };
         };
 
-        websocket.current.onerror = (error) => {
-            console.error("WebSocket 에러:", error);
-        };
-
-        websocket.current.onclose = () => {
-            console.log("WebSocket 연결이 종료되었습니다");
-        };
+        connectWebSocket();
 
         return () => {
             if (websocket.current) {
                 websocket.current.close();
             }
         };
+    }, [userId]);
 
-    }, [userId, storeId]);
 
-    // 메시지 전송 함수
-    const sendMessage = async (e) => {
-        e.preventDefault();
 
-        if (!messageInput.trim()) return;
 
-        // 전송할 메시지 로그 찍기
-        console.log("전송할 메시지:", {
-            senderType: senderType,
-            storeId: storeId,
-            userName: userName,
-            profileImg: profileImg,
-            userId: userId,
-            storeNo: storeNo,
-            chatMessage: messageInput.trim(),
-            sendTime: new Date().toISOString(),
-        });
+    // 메시지 전송
+    const sendMessage = async () => {
 
-        if (!websocket.current || websocket.current.readyState !== WebSocket.OPEN) {
-            console.error("WebSocket이 연결되지 않았습니다!");
+        if (!userId) {
+            window.location.href = '/UserLoginPage.user';
             return;
         }
 
-        const message = {
-            senderType,
-            storeId,
-            userName,
-            profileImg,
-            userId,
-            storeNo,
-            chatMessage: messageInput.trim(),
-            sendTime: new Date().toISOString(),
-        };
+        if (messageInput.trim()) {
+            const message = {
+                userId,  // 고객의 ID를 발신자로 설정
+                storeId,  // 업체의 ID를 수신자로 설정
+                senderType,
+                storeNo,
+                chatMessage: messageInput,
+                sendTime: Date.now(),
+            };
 
-        try {
-            // 먼저 로컬 상태 업데이트
-            setMessages(prevMessages => [...prevMessages, message]);
-
-            // WebSocket으로 메시지 전송
-            websocket.current.send(JSON.stringify(message));
-
-            // DB에 메시지 저장
-            await axios.post('/chat/save', message, {
-                headers: {
-                    'Content-Type': 'application/json',
+            try {
+                if (websocket.current && websocket.current.readyState === WebSocket.OPEN) {
+                    websocket.current.send(JSON.stringify(message));
+                } else {
+                    console.error('WebSocket이 연결되지 않았습니다!');
+                    return;
                 }
-            });
 
-            setMessageInput("");
-        } catch (error) {
-            console.error("메시지 전송 중 오류가 발생했습니다.", error);
+                // DB에 메시지 저장
+                await axios.post('/chat/save', message, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                // 로컬 상태 업데이트 및 입력 초기화
+                setMessages((prevMessages) => [...prevMessages, { ...message, type: 'sent' }]);
+                setMessageInput('');
+            } catch (error) {
+                console.error('메시지 전송 중 오류가 발생했습니다:', error);
+            }
         }
     };
 
@@ -188,6 +196,7 @@ function UserChatRoom() {
                                         hour: 'numeric',
                                         minute: '2-digit',
                                         hour12: true
+
                                     })}
                                 </div>
                             </div>

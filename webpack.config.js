@@ -5,6 +5,9 @@ const Dotenv = require('dotenv-webpack');
 
 
 module.exports = {
+  stats: {
+    errorDetails: true,
+  },
     watch: true, // 변경 사항을 감지하여 자동으로 재빌드
     mode: 'development',
     context: path.resolve(__dirname, 'src/main/react'),
@@ -54,11 +57,14 @@ module.exports = {
         AdminStoreReport: './Admin/AdminStoreReport.js',
         UserSearch : './User/User/UserSearch.js',
         UserAccountPage: './User/User/UserAccountPage.js',
+        UserDelete: './User/User/UserDelete.js',
+        AdminChat: './Admin/AdminChat.js',
         AdminReviewList : './Admin/AdminReviewList.js',
         UserReviewRegist : './User/User/UserReviewRegist.js'
 
     },
-    devtool: 'sourcemaps',
+
+    devtool: 'source-map',
     cache: true,
     output: { //파일이 생성되는 경로
         path: __dirname,

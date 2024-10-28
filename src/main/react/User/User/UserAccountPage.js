@@ -4,37 +4,25 @@ import React, {useState, useEffect} from "react";
 
 function UserAccountPage () {
     const [isKakaoLogin, setIsKakaoLogin] = useState(false);
-
     const [userInfo, setUserInfo] = useState({
         userImgUrl: '/img/user_basic_profile.jpg',
-        userId: '',
         userName: '',
-        userPhonenum: '',
-        userBirth: '',
-        userGender: 'M',
-        userPw: '',
-        repassword: '',
     });
 
-    // 사용자 정보 가져오기
+// 사용자 정보 가져오기
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
                 const response = await fetch('/user/profile', {
                     method: 'GET',
-                    credentials: 'include' // 세션 쿠키를 자동으로 포함
+                    credentials: 'include' // 세션 쿠키 자동 포함
                 });
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Fetched user profile:', data);
                     setUserInfo({
-                        ...userInfo,
-                        userId: data.userId,
-                        userName: data.userName,
-                        userPhonenum: data.userPhonenum,
-                        userBirth: data.userBirth,
-                        userGender: data.userGender,
                         userImgUrl: data.userImgUrl || '/img/user_basic_profile.jpg',
+                        userName: data.userName,
                     });
 
                     if (data.loginType === 'KAKAO') {
@@ -78,7 +66,7 @@ function UserAccountPage () {
             <div className="settings-container">
                 <div className="user-info">
                     <img className="profile-img" src={userInfo.userImgUrl} alt="Profile Image" id="profileImage"/>
-                    <div className="user-details">
+                    <div className="user-details" onClick={() =>  window.location.href = '/UserMyPage.user'}>
                         <h2>{userInfo.userName}</h2>
                         <p>프로필 편집</p>
                         <span className="arrow">></span>
@@ -117,7 +105,7 @@ function UserAccountPage () {
                 <div className="settings-menu">
                     <ul>
                         <li>
-                            <div className="menu-item">
+                            <div className="menu-delete" onClick={() =>  window.location.href = '/UserDelete.user'}>
                                 <span>탈퇴하기</span>
                             </div>
                         </li>

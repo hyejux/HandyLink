@@ -21,6 +21,17 @@
     pointer-events: none; /* 클릭 이벤트 무시 */
 }
 
+
+.photo-review3 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 3열로 배치 */
+  gap: 16px; /* 이미지 사이의 간격 */
+}
+
+.photo-item > img {
+  width: 100%;  
+  height: 100%;
+}
         .review-section {
   /* width: 100%; */
   padding: 20px;
@@ -45,16 +56,26 @@ h2 {
   height: 150px;
   background-color: #f0f0f0;
   border-radius: 8px;
+
+}
+
+.photo-item:nth-last-child(1){
+  position: relative;
 }
 
 .photo-item.more {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #888;
-  background-color: #e5e5e5;
+  color: #ffffff;
+  background-color: #0000003d;
   font-weight: bold;
+  position: absolute;
+  width: 136px;
+  top: 0px;
+
 }
+
 
 
 .photo-review2 {
@@ -425,9 +446,9 @@ body {
     border-radius: 10px;
     margin: 20px;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgb(0 0 0 / 5%);
     margin-bottom: 20px;
-    border: 1px solid #2C348F;
+    border: 1px solid #d3d3d3;
   }
 
 

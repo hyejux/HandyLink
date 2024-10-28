@@ -183,7 +183,17 @@ function UserSearch() {
   }, [store, currentPosition]);
 
 
-  const ads = ['./img/event1.jpg', './img/event4.jpg', './img/event2.jpg', './img/event3.jpg', './img/event4.jpg'];
+  // 카테고리 이미지
+  const cateImg = [
+    './img/advertisement/advertisement3.jpg',
+    './img/advertisement/advertisement4.jpg',
+    './img/advertisement/advertisement5.jpg',
+    './img/advertisement/advertisement6.jpg',
+    './img/advertisement/advertisement7.jpg',
+    './img/advertisement/advertisement8.jpg',
+    './img/advertisement/advertisement1.jpg',
+    './img/advertisement/advertisement2.jpg'
+  ];
 
 
   return (
@@ -211,7 +221,7 @@ function UserSearch() {
 
         <div className="list-header">어떤 가게를 찾으세요?</div>
         <div className="user-main-list-wrap store-cate-list" ref={storeListRef1}>
-          {ads.map((image, index) => (
+          {cateImg.map((image, index) => (
             <div className="user-main-list-container event-container" key={index}>
               <div className="user-category-menu" onClick={() => handleHashtagClick(store[index]?.storeCate)}>
                 <div className="user-category-menu-img">
@@ -245,7 +255,7 @@ function UserSearch() {
 
       {/* 이 달 인기가게 */}
       <div className="user-hit-search-list">
-        <h4> <img src='/img/icon-fire.png' /> 10월 인기 가게</h4>
+        <div className='list-header'>11월 인기 가게</div>
         <ol className="store-list">
           {store.map((store, index) => (
             <li key={store.storeId}> {/* 여기에 key 추가 */}

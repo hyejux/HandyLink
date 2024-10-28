@@ -50,7 +50,7 @@ function UserSearchResult() {
         const formattedData = data.map(([serviceName, storeNo, servicePrice]) => ({
           serviceName,
           storeNo,
-          servicePrice,
+          servicePrice, 
         }));
         setLevel1Categories(formattedData);
       })
@@ -239,7 +239,7 @@ function UserSearchResult() {
 
                 <div className="result-list-bottom">
                   <div className="result-list-option-container">
-                    {level1Categories.filter(category => category.storeNo === store.storeNo).map((category, index) => (
+                    {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category, index) => (
                       <div key={index}>
                         <span className="result-list-option">
                           <i className="bi bi-hash"></i>
@@ -256,7 +256,7 @@ function UserSearchResult() {
                     <span>({store.reviewCount || '10,959'})</span>
                   </div>
                   <div className="result-list-price">
-                    {level1Categories.filter(category => category.storeNo === store.storeNo).map((category, index) => (
+                    {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (
                       <div key={index}>
                         ₩ {category.servicePrice || '0,000'} ~
                       </div>

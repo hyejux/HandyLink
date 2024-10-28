@@ -291,6 +291,7 @@ body {
 
 .list-header {
   font-size: 14px;
+  font-weight: bold;
   margin: 10px;
 }
 
@@ -625,7 +626,7 @@ body {
 
 /* 인기 검색어 리스트 */
 .user-hit-search-list {
-  margin-bottom: 10px;
+  margin-bottom: 100px;
   padding: 10px;
   position: relative;
 }
@@ -639,7 +640,7 @@ body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(5, auto);
-  gap: 10px 15px;
+  gap: 15px 20px;
   list-style: none;
   padding: 0;
 }
@@ -647,7 +648,7 @@ body {
 
 .store-list li {
   padding: 10px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 0.5px solid #eee;
   color: #2C348F;
   text-align: left;
   font-size: 12px;

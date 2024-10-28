@@ -18,7 +18,7 @@ public interface AdminStoreMapper {
     StoreRegistDTO getMyStore(Long storeNo); //가게관리정보 불러오기
     void updateStore(StoreRegistDTO storeRegistDTO); //내가게 업데이트
 
-    void deleteStoreImg(@Param("storeId") String storeId, @Param("storeImg") List<StoreImgDTO> storeImgList); //이미지 삭제
+    void deleteStoreImg(@Param("storeId") String storeId, @Param("storeImgList") List<StoreImgDTO> storeImgList); //이미지 삭제
     List<String> selectExistingStoreImg(String storeId); // DB에 저장된 이미지 경로 확인
     void addStoreImg(StoreImgDTO storeImgDTO); //가게img 추가
 

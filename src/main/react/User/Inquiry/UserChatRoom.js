@@ -3,16 +3,22 @@ import axios from 'axios';
 import './UserChatRoom.css';
 import ReactDOM from "react-dom/client";
 
-function UserChatRoom({ userId, storeId }) {
+function UserChatRoom() {
     const [messages, setMessages] = useState([]); // 기존 메시지 목록
     const [messageInput, setMessageInput] = useState(""); // 입력한 메시지
     const [showToast, setShowToast] = useState(false);
     const [newMessageCount, setNewMessageCount] = useState(0);
     const [isAtBottom, setIsAtBottom] = useState(true);
+    const [userId, setUserId] = useState(null);
 
     const chatBoxRef = useRef(null);
     const websocket = useRef(null);
     const inputRef = useRef(null);
+
+    const storeId = 'test1'; // 임시 업체 ID
+    const senderType = 'USER';
+    const profileImg= '/img/user_basic_profile.jpg';
+    const storeNo = 5;
 
     // 스크롤 위치 감지 추가
     const handleScroll = () => {
@@ -40,6 +46,21 @@ function UserChatRoom({ userId, storeId }) {
         }
     }, [messages]);
 
+    // 현재 로그인된 사용자 정보 가져오기
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await axios.get('/chat/current');
+                setUserId(response.data.userId);
+            } catch (error) {
+                console.error('사용자 정보를 가져오는데 실패했습니다:', error);
+                window.location.href = '/UserLoginPage.user';  // 로그인 페이지로 리다이렉트
+            }
+        };
+        fetchUserInfo();
+    }, []);
+
+
     // 기존 채팅 기록 불러오기
     useEffect(() => {
         const loadChatHistory = async () => {
@@ -55,32 +76,59 @@ function UserChatRoom({ userId, storeId }) {
 
     // WebSocket 연결 설정
     useEffect(() => {
-        websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
+        if (!userId) return;
 
-        websocket.current.onmessage = (event) => {
-            const received = JSON.parse(event.data);
-            if (received.userId === userId && received.storeId === storeId) {
-                setMessages((prevMessages) => [...prevMessages, received]);
-            }
+        const connectWebSocket = () => {
+            websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
+
+            websocket.current.onopen = () => {
+                console.log('WebSocket 연결이 열렸습니다.');
+            };
+
+            websocket.current.onmessage = (event) => {
+                const received = JSON.parse(event.data);
+                if (received.userId === userId && received.storeId === storeId) {
+                    setMessages((prevMessages) => [...prevMessages, received]);
+                }
+            };
+
+            websocket.current.onerror = (error) => {
+                console.error('WebSocket 에러 발생:', error);
+            };
+
+            websocket.current.onclose = (event) => {
+                console.log('WebSocket 연결이 종료되었습니다:', event);
+                // 일정 시간 후 재연결 시도
+                setTimeout(connectWebSocket, 3000); // 3초 후 재연결
+            };
         };
 
-        websocket.current.onclose = () => {
-            console.log('WebSocket 연결이 종료되었습니다.');
-        };
+        connectWebSocket();
 
         return () => {
             if (websocket.current) {
                 websocket.current.close();
             }
         };
-    }, [userId, storeId]);
+    }, [userId]);
+
+
+
 
     // 메시지 전송
     const sendMessage = async () => {
+
+        if (!userId) {
+            window.location.href = '/UserLoginPage.user';
+            return;
+        }
+
         if (messageInput.trim()) {
             const message = {
                 userId,  // 고객의 ID를 발신자로 설정
                 storeId,  // 업체의 ID를 수신자로 설정
+                senderType,
+                storeNo,
                 chatMessage: messageInput,
                 sendTime: Date.now(),
             };
@@ -148,6 +196,7 @@ function UserChatRoom({ userId, storeId }) {
                                         hour: 'numeric',
                                         minute: '2-digit',
                                         hour12: true
+
                                     })}
                                 </div>
                             </div>

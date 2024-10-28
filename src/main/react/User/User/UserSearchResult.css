@@ -1,0 +1,250 @@
+.search-result-top {
+  overflow: hidden;
+}
+
+.back-btn-container {
+  float: left;
+  margin: 15px 5px 15px 5px;
+}
+
+.back-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+
+.search-top {
+  overflow: hidden;
+  padding: 10px;
+}
+
+.search-top .left {
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.search-top .right {
+  float: right;
+  font-size: 20px;
+}
+
+/* 검색바 */
+.store-search-bar {
+  float: right;
+  margin: 10px;
+  width: 78%;
+  height: 25px;
+  border-radius: 10px;
+  text-align: center;
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  position: relative;
+  background-color: #eee;
+}
+
+.store-search-bar img {
+  width: 20px;
+}
+
+.store-search-bar>input {
+  font-size: 14px;
+  width: 100%;
+  padding: 5px;
+  border: none;
+  outline: none;
+  background-color: #eee;
+}
+
+
+.store-search-bar>.bi {
+  font-size: 20px;
+  margin: 10px;
+}
+
+.search-btn {
+  border: none;
+  cursor: pointer;
+}
+
+/*  */
+
+
+
+.search-result-list-container {
+  padding: 10px;
+  position: relative;
+}
+
+
+.result-list-top,
+.result-list-mid,
+.result-list-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.sub-content-option {
+  margin-right: 10px;
+}
+
+.result-list-container {
+  display: flex;
+  align-items: center;
+}
+
+.user-main-list-sub-part {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+
+}
+
+.bi-list {
+  color: #000;
+  font-size: 25px;
+}
+
+.search-result-list-content {
+  padding: 5px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border: 1px solid #2C348F;
+  cursor: pointer;
+}
+
+.search-result-list-content:last-child {
+  margin-bottom: 100px;
+}
+
+.search-result-list-content>.bi {
+  position: absolute;
+  font-size: 25px;
+  color: #ffffff;
+  top: 20px;
+  left: 510px;
+}
+
+.result-list-content-img-box {
+  height: 150px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+
+}
+
+.result-list-content-img-box img {
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover
+}
+
+
+/* 가게명 */
+.result-list-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 5px;
+  white-space: nowrap;
+}
+
+/* 가게 카테고리 */
+.result-list-category {
+  margin: 4px 0 0 5px;
+  font-size: 12px;
+  color: #999;
+}
+
+/* 영업시간 */
+.result-list-date {
+  margin-left: 5px;
+  font-size: 10px;
+}
+
+.result-list-date img {
+  width: 16px;
+}
+
+.bi-clock-fill {
+  margin-right: 5px;
+}
+
+/* 별점 */
+.result-list-review {
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.bi-star-fill {
+  color: #FFD700;
+}
+
+.result-list-review>span:nth-child(2) {
+  color: #FFD700;
+}
+
+.result-list-review>span:nth-child(3) {
+  color: #999;
+}
+
+/* 위치 */
+.result-list-location {
+  margin-left: 10px;
+  font-size: 10px;
+}
+
+.result-list-location img {
+  width: 16px;
+}
+
+.bi-geo-alt-fill {
+  margin-right: 5px;
+}
+
+/* 가격 */
+.result-list-price {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* 해시태그(메뉴명) */
+.result-list-option-container img {
+  width: 12px;
+}
+
+.result-list-option {
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+
+/* 더 보기 버튼 */
+.load-more-btn-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 100px 0;
+}
+
+.load-more-btn {
+  background-color: rgba(44, 52, 143, 0.16);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  width: 400px;
+  height: 50px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.load-more-btn:hover {
+  background-color: rgba(44, 52, 143, 0.30);
+}

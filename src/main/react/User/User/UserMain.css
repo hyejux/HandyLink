@@ -18,8 +18,8 @@
 
 /* ------------------------- */
 .user-main-list-container:hover {
- box-shadow: 1px -1px 12px 0px rgba(0, 0, 0, 0.1);
- cursor: pointer;
+  box-shadow: 1px -1px 12px 0px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 /* --------------------------- */
@@ -61,7 +61,7 @@
 
 
 .user-main-content {
-  margin-bottom: 30px;
+  margin-bottom: -20px;
   position: relative;
 }
 
@@ -71,15 +71,8 @@
   /* border : 1px solid blue; */
 }
 
-
-
-.last-content {
-  margin-bottom: 100px;
-  position: relative;
-}
-
 .user-main-content h3 {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: bold;
   margin-left: 5px;
 }
@@ -95,18 +88,38 @@
 
 /* ----------------------------------------- */
 
+.search-top {
+  overflow: hidden;
+  padding: 10px;
+}
+
+.search-top .left {
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.search-top .right {
+  float: right;
+  font-size: 20px;
+}
+
 /* 검색바 */
 .store-search-bar {
-  width: 100%;
   margin: 10px;
-  /* margin: 30px 30px 50px 30px; */
-  border: 2px solid #2C348F;
-  border-radius: 20px;
+  height: 25px;
+  border-radius: 10px;
   text-align: center;
   display: flex;
-  padding: 0px 15px;
-  align-items: baseline;
-  background-color: #ffffff;
+  padding: 10px;
+  align-items: center;
+  position: relative;
+  background-color: #eee;
+}
+
+.search-btn {
+  border: none;
+  cursor: pointer;
 }
 
 .store-search-bar img {
@@ -114,12 +127,12 @@
 }
 
 .store-search-bar>input {
-  font-size: 18px;
+  font-size: 14px;
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   border: none;
   outline: none;
-  background-color: #ffffff;
+  background-color: #eee;
 }
 
 
@@ -129,33 +142,38 @@
 }
 
 
+
 /* 카테고리  */
 .user-category-content {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 20px;
-  margin: 20px; 
+  gap: 25px;
+  margin: 25px;
 }
 
-.user-category-item {
+.store-category-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  width: calc(20% - 16px); /* 한 줄에 5개 아이템을 배치 */
-  max-width: 80px; /* 아이템의 최대 너비 설정 */
+  width: calc(20% - 25px);
+  /* 한 줄에 5개 아이템을 배치 */
+  max-width: 80px;
+  /* 아이템의 최대 너비 설정 */
+  cursor: pointer;
 }
 
-.user-category-item img {
-  width: 30px;
-  height: 30px;
+.store-category-item img {
+  width: 25px;
+  height: 25px;
   margin-bottom: 8px;
 }
 
-.user-category-item p {
-  font-size: 14px;
+.store-category-item p {
+  font-size: 12px;
   color: #333;
+  white-space: nowrap;
 }
 
 
@@ -195,7 +213,7 @@
 }
 
 .user-main-list-container {
-  width: 185px;
+  width: 120px;
   background-color: white;
   margin: 5px;
   flex-shrink: 0;
@@ -213,8 +231,8 @@
 }
 
 .user-category-menu-img {
-  width: 100%;
-  height: 185px;
+  width: 120px;
+  height: 120px;
   gap: 3%;
   position: relative;
 }
@@ -226,12 +244,12 @@
   position: relative;
 }
 
-.user-category-menu-img>.bookmark-btn {
+.user-category-menu-img .bookmark-btn {
   position: absolute;
   font-size: 20px;
   color: #ff4d4d;
   top: 5px;
-  left: 150px;
+  left: 85px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -242,6 +260,7 @@
   height: 100%;
   background-size: cover;
   border-radius: 10px;
+  object-fit: cover;
 }
 
 .event-img img {
@@ -249,38 +268,45 @@
   height: 100%;
   background-size: cover;
   border-radius: 0;
+  object-fit: cover;
 }
 
 .store-title-1 {
-  font-size: 18px;
+  font-size: 12px;
   text-align: center;
   margin-top: 5px;
 }
 
 .store-category {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   text-align: center;
 }
 
 .store-distance {
-  font-size: 16px;
+  font-size: 10px;
   text-align: center;
   color: #bbb;
 }
 
 .store-title-2 {
-  font-size: 18px;
+  font-size: 12px;
   margin-top: 5px;
 }
 
 .store-review {
   color: #FFD700;
-  font-size: 16px;
+  font-size: 12px;
+}
+
+.bi-star-fill {
+  color: #FFD700;
+  font-size: 12px;
 }
 
 .store-option {
-  font-size: 12px;
+  font-size: 10px;
+  margin-left: 5px;
 }
 
 .event-box {
@@ -358,7 +384,7 @@
   margin: 20px 0;
 }
 
-.user-main-list-wrap3-header > h3 {
+.user-main-list-wrap3-header>h3 {
   font-size: 24px;
   font-weight: bold;
   margin-left: 5px;
@@ -379,13 +405,6 @@
   border: 2px solid #2C348F;
 }
 
-.user-main-list-sub-content>.bi {
-  position: absolute;
-  font-size: 25px;
-  color: #fff;
-  top: 20px;
-  left: 510px;
-}
 
 .sub-content-img-box {
   height: 150px;
@@ -412,7 +431,7 @@
 /* 가게 카테고리 */
 .sub-content-category {
   margin-top: 5px;
-  font-size: 12px;  
+  font-size: 12px;
 }
 
 /* 영업시간 */
@@ -499,21 +518,234 @@
 
 
 
-/* 광고 인디케이터 스타일 */
-.ad-indicator-container {
+/* 광고 슬라이더 */
+.slider {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  height: 220px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.indicator-container {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.indicator {
+  width: 7px;
+  height: 7px;
+  background-color: gray;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.indicator.active {
+  background-color: rgb(115, 139, 227);
+}
+
+
+
+
+
+/*  */
+.search-result-list-container {
+  padding: 10px;
+  position: relative;
+}
+
+
+.result-list-top,
+.result-list-mid,
+.result-list-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.sub-content-option {
+  margin-right: 10px;
+}
+
+.result-list-container {
+  display: flex;
+  align-items: center;
+}
+
+.user-main-list-sub-part {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+
+}
+
+.bi-list {
+  color: #000;
+  font-size: 25px;
+}
+
+.search-result-list-content {
+  padding: 5px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border: 1px solid #2C348F;
+  cursor: pointer;
+}
+
+.search-result-list-content:last-child {
+  margin-bottom: 100px;
+}
+
+.search-result-list-content>.bi {
+  position: absolute;
+  font-size: 25px;
+  color: #ffffff;
+  top: 20px;
+  left: 510px;
+}
+
+.result-list-content-img-box {
+  height: 150px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+
+}
+
+.result-list-content-img-box img {
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover
+}
+
+
+/* 가게명 */
+.result-list-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 5px;
+  white-space: nowrap;
+}
+
+/* 가게 카테고리 */
+.result-list-category {
+  margin: 4px 0 0 5px;
+  font-size: 12px;
+  color: #999;
+}
+
+/* 영업시간 */
+.result-list-date {
+  margin-left: 5px;
+  font-size: 10px;
+}
+
+.result-list-date img {
+  width: 16px;
+}
+
+.bi-clock-fill {
+  margin-right: 5px;
+}
+
+/* 별점 */
+.result-list-review {
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.bi-star-fill {
+  color: #FFD700;
+}
+
+.result-list-review>span:nth-child(2) {
+  color: #FFD700;
+}
+
+.result-list-review>span:nth-child(3) {
+  color: #999;
+}
+
+/* 위치 */
+.result-list-location {
+  margin-left: 10px;
+  font-size: 10px;
+}
+
+.result-list-location img {
+  width: 16px;
+}
+
+.bi-geo-alt-fill {
+  margin-right: 5px;
+}
+
+/* 가격 */
+.result-list-price {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* 해시태그(메뉴명) */
+.result-list-option-container img {
+  width: 12px;
+}
+
+.result-list-option {
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+
+/* 더 보기 버튼 */
+.load-more-btn-wrap {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+  margin: 0 0 100px 0;
 }
 
-.ad-indicator {
-  width: 10px;
-  height: 10px;
-  margin: 0 5px;
-  background-color: #ccc; /* 기본 색상 */
-  border-radius: 50%;
+.load-more-btn {
+  background-color: rgba(44, 52, 143, 0.16);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  width: 400px;
+  height: 50px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.ad-indicator.active {
-  background-color: #007bff; /* 활성화된 인디케이터의 색상 */
+.load-more-btn:hover {
+  background-color: rgba(44, 52, 143, 0.30);
+}
+
+
+/* 배너 */
+.advertisement-banner {
+  width: 100%;
+  height: 70px;
+  margin: 15px 0;
+}
+
+.advertisement-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

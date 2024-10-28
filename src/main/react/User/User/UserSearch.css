@@ -94,10 +94,11 @@ body {
 
 }
 
-.user-main-content {
-  /* padding : 15px; */
-  margin-bottom: 100px;
-  /* border : 1px solid blue; */
+
+
+.user-search-content h3 {
+  font-size: 16px;
+  margin-left: 10px;
 }
 
 
@@ -231,17 +232,39 @@ body {
 
 /* ----------------------------------------- */
 
+.search-top {
+  overflow: hidden;
+  padding: 10px;
+}
+
+.search-top .left {
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.search-top .right {
+  float: right;
+  font-size: 20px;
+}
+
+
 /* 검색바 */
 .store-search-bar {
-  margin: 30px;
-  border: 2px solid #2C348F;
-  border-radius: 20px;
+  margin: 10px;
+  height: 25px;
+  border-radius: 10px;
   text-align: center;
   display: flex;
   padding: 10px;
-  align-items: baseline;
+  align-items: center;
   position: relative;
-  background-color: #ffffff;
+  background-color: #eee;
+}
+
+.search-btn {
+  border: none;
+  cursor: pointer;
 }
 
 .store-search-bar img {
@@ -249,12 +272,12 @@ body {
 }
 
 .store-search-bar>input {
-  font-size: 18px;
+  font-size: 14px;
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   border: none;
   outline: none;
-  background-color: #ffffff;
+  background-color: #eee;
 }
 
 
@@ -265,16 +288,25 @@ body {
 
 /* ------- */
 
+.list-header {
+  font-size: 14px;
+  margin: 10px;
+}
+
 
 .user-main-list-wrap {
   display: flex;
   overflow-x: auto;
-  margin-bottom: 50px;
+
+}
+
+.store-cate-list {
+  margin: 0
 }
 
 .user-main-list-container {
   background-color: white;
-  margin: 18px;
+  margin: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -283,9 +315,19 @@ body {
 }
 
 .user-category-menu-img {
-  width: 150px;
-  height: 180px;
+  width: 120px;
+  height: 120px;
   gap: 3%;
+  position: relative;
+  cursor: pointer;
+}
+
+.store-category-name {
+  position: absolute;
+  left: 5px;
+  bottom: 7px;
+  color: #ffffff;
+  font-size: 14px;
 }
 
 .user-category-menu img {
@@ -293,7 +335,10 @@ body {
   height: 100%;
   background-size: cover;
   border-radius: 10px;
+  object-fit: cover;
 }
+
+
 
 .user-category-name {
   position: absolute;
@@ -479,7 +524,7 @@ body {
   position: relative;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-  border: 2px solid #2C348F;
+  border: 1px solid #2C348F;
 }
 
 .user-main-list-sub-content>.bi {
@@ -580,7 +625,7 @@ body {
 /* 인기 검색어 리스트 */
 .user-hit-search-list {
   margin-bottom: 10px;
-  padding: 20px;
+  padding: 10px;
   position: relative;
 }
 
@@ -593,26 +638,26 @@ body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(5, auto);
-  gap: 20px 30px;
+  gap: 10px 15px;
   list-style: none;
   padding: 0;
 }
 
 
 .store-list li {
-  padding: 15px;
+  padding: 10px;
   border-bottom: 1px solid #ddd;
   color: #2C348F;
   text-align: left;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: bold;
 }
 
 .store-list li a {
   text-decoration: none;
   color: #000000;
-  font-size: 14px;
-  margin-left: 10px;
+  font-size: 12px;
+  margin-left: 15px;
 }
 
 /* 그리드 배치 조정 */
@@ -677,7 +722,6 @@ body {
 
 .user-hashtag-list-wrap {
   overflow-x: auto;
-  margin-bottom: 10px;
 }
 
 .user-hashtag-list-wrap::-webkit-scrollbar {
@@ -687,7 +731,7 @@ body {
 .user-hashtag-list {
   height: 50px;
   display: inline-flex;
-  margin-left: 20px;
+  margin-left: 10px;
 }
 
 .user-hashtag-list img {
@@ -696,7 +740,7 @@ body {
 
 .btn-hashtag {
   height: 40px;
-  border: 2px solid #738BE3;
+  border: 1px solid #738BE3;
   border-radius: 40px;
   background-color: #fff;
   font-size: 14px;
@@ -704,49 +748,13 @@ body {
   padding: 0 15px;
   display: inline-flex;
   align-items: center;
+  cursor: pointer;
+  color: #333333;
+  white-space: nowrap;
 }
 
 .btn-hashtag a {
   text-decoration: none;
   color: #333333;
   white-space: nowrap;
-}
-
-
-
-/* PC 환경에서 버튼 추가, 모바일에서는 숨김 */
-@media (min-width: 768px) {
-  .nav-button {
-    display: inline-block;
-    /* PC에서는 버튼 보이기 */
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 1000;
-  }
-
-  .nav-button.left {
-    left: 0px;
-  }
-
-  .nav-button.right {
-    right: 0px;
-  }
-
-  .user-hashtag-list-wrap {
-    overflow-x: hidden;
-    /* PC에서는 가로 스크롤 숨김 */
-  }
-}
-
-/* 모바일 환경에서 버튼 숨김 */
-@media (max-width: 767px) {
-  .nav-button {
-    display: none !important;
-  }
 }

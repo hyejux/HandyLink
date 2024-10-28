@@ -213,9 +213,8 @@ function UserMain() {
           </div>
         </div>
 
-
-
         <div className="user-main-content2">
+          
           {/* 가게 카테고리 */}
           <div className="user-category-content">
             <div className="user-category-item">
@@ -400,13 +399,8 @@ function UserMain() {
           <div className="user-main-list-wrap3">
             {store.length > 0 ? (
               store.slice(0, visibleCount).map((store) => {
-                const imageUrl = store.storeImages.length > 0
-                  ? store.storeImages[0].storeImgLocation
-                  : "../img3.jpg"; // 기본 이미지 설정
-
-                const storeDistance = distances[store.addr]
-                  ? formatDistance(distances[store.addr])
-                  : '정보 없음';
+                const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg"; // 기본 이미지 설정
+                const storeDistance = distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음';
 
                 return (
                   <div className="user-main-list-sub-content" key={store.storeNo}>

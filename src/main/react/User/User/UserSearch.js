@@ -91,7 +91,7 @@ function UserSearch() {
       })
       .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
   }, []);
-  
+
   useEffect(() => {
     fetch('/userSearch/categories/level1')
       .then((response) => {
@@ -105,14 +105,12 @@ function UserSearch() {
         const formattedData = data.map(([serviceName, storeNo, servicePrice]) => ({
           serviceName,
           storeNo,
-          servicePrice, // servicePrice 추가
+          servicePrice,
         }));
         setLevel1Categories(formattedData);
       })
       .catch((error) => console.error('카테고리를 가져오는 중 오류 발생:', error));
   }, []);
-  
-
 
 
   // 현재 위치 가져오기

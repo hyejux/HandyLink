@@ -50,7 +50,7 @@ function UserSearchResult() {
         const formattedData = data.map(([serviceName, storeNo, servicePrice]) => ({
           serviceName,
           storeNo,
-          servicePrice, // servicePrice 추가
+          servicePrice,
         }));
         setLevel1Categories(formattedData);
       })

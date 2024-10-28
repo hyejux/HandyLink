@@ -95,18 +95,38 @@
 
 /* ----------------------------------------- */
 
+.search-top {
+  overflow: hidden;
+  padding: 10px;
+}
+
+.search-top .left {
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.search-top .right {
+  float: right;
+  font-size: 20px;
+}
+
 /* 검색바 */
 .store-search-bar {
-  width: 100%;
   margin: 10px;
-  /* margin: 30px 30px 50px 30px; */
-  border: 2px solid #2C348F;
-  border-radius: 20px;
+  height: 25px;
+  border-radius: 10px;
   text-align: center;
   display: flex;
-  padding: 0px 15px;
-  align-items: baseline;
-  background-color: #ffffff;
+  padding: 10px;
+  align-items: center;
+  position: relative;
+  background-color: #eee;
+}
+
+.search-btn {
+  border: none;
+  cursor: pointer;
 }
 
 .store-search-bar img {
@@ -114,12 +134,12 @@
 }
 
 .store-search-bar>input {
-  font-size: 18px;
+  font-size: 14px;
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   border: none;
   outline: none;
-  background-color: #ffffff;
+  background-color: #eee;
 }
 
 
@@ -127,6 +147,7 @@
   font-size: 20px;
   margin: 10px;
 }
+
 
 
 /* 카테고리  */

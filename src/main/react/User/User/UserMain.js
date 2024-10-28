@@ -9,6 +9,26 @@ function UserMain() {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [visibleCount, setVisibleCount] = useState(2); // 가게 표시 개수 상태
   const LOAD_MORE_COUNT = 1; // 더 볼 가게 수
+  const [level1Categories, setLevel1Categories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // 검색어 입력 핸들러
+  const handleInputChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // 검색 URL 생성 함수
+  const generateSearchUrl = (term) => {
+    return `/userSearchResult.user?searchTerm=${encodeURIComponent(term)}`;
+  };
+
+
+  // 검색 버튼 클릭 시 검색어를 쿼리 파라미터로 전달하며 페이지 이동
+  const handleSearch = () => {
+    if (searchTerm) {
+      window.location.href = generateSearchUrl(searchTerm);
+    }
+  };
 
   // 각 섹션마다 다른 ref를 사용
   const storeListRef1 = useRef(null);
@@ -77,6 +97,27 @@ function UserMain() {
       })
       .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
   }, []);
+
+  useEffect(() => {
+    fetch('/userSearch/categories/level1')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('카테고리를 가져오는 중 오류 발생');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        const formattedData = data.map(([serviceName, storeNo, servicePrice]) => ({
+          serviceName,
+          storeNo,
+          servicePrice,
+        }));
+        setLevel1Categories(formattedData);
+      })
+      .catch((error) => console.error('카테고리를 가져오는 중 오류 발생:', error));
+  }, []);
+  
 
   // 현재 위치 가져오기
   useEffect(() => {
@@ -205,13 +246,20 @@ function UserMain() {
       <div className="user-main-content2">
 
 
-        <div className="user-top-nav">
-          <logo className="logo">gd</logo>
-          <div className="store-search-bar">
-            <i className="bi bi-search"></i>
-            <input type="text" placeholder="찾으시는 가게가 있나요?" />
-          </div>
-        </div>
+      <div className="search-top">
+        <div className='left'>뭐 넣지</div>
+        <div className='right'><i className="bi bi-bell-fill"></i></div>
+      </div>
+
+      <div className="store-search-bar">
+        <button className="search-btn" onClick={handleSearch}><i className="bi bi-search"></i></button>
+        <input type="text" placeholder="찾으시는 가게가 있나요?" value={searchTerm} onChange={handleInputChange}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              handleSearch();
+            }
+          }} />
+      </div>
 
         <div className="user-main-content2">
           

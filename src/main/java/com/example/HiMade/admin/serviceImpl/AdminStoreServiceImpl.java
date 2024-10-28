@@ -67,24 +67,30 @@ public class AdminStoreServiceImpl implements AdminStoreService {
         // 1. 기존 이미지 삭제
         adminStoreMapper.deleteStoreImg(storeId, storeImgList);
 
-        // 2. DB에 없는 이미지만 삽입
-        List<String> existingImgs = adminStoreMapper.selectExistingStoreImg(storeId);
 
-        for (StoreImgDTO storeImg : storeRegistDTO.getStoreImg()) {
-            if (!existingImgs.contains(storeImg.getStoreImgLocation())) {
-                adminStoreMapper.addStoreImg(storeImg);  // DB에 없는 이미지만 삽입
+        if (storeImgList != null && !storeImgList.isEmpty()) {
+            // 2. DB에 없는 이미지만 삽입
+            List<String> existingImgs = adminStoreMapper.selectExistingStoreImg(storeId);
+
+            for (StoreImgDTO storeImg : storeImgList) {
+                if (storeImg != null && !existingImgs.contains(storeImg.getStoreImgLocation())) {
+                    adminStoreMapper.addStoreImg(storeImg);  // DB에 없는 이미지만 삽입
+                }
             }
         }
 
         //sns링크 삭제
-        adminStoreMapper.deleteStoreSns(storeId,storeSns);
+        adminStoreMapper.deleteStoreSns(storeId, storeSns);
+
 
         //db에 있는 sns링크 확인
         List<String> existingSns = adminStoreMapper.selectExistingSns(storeId);
 
-        for(StoreSnsDTO sns : storeRegistDTO.getStoreSns()){
-            if(!existingSns.contains(sns.getSnsLink())){
-                adminStoreMapper.addStoreSns(sns);
+        if(storeSns != null && !storeSns.isEmpty()) {
+            for (StoreSnsDTO sns : storeRegistDTO.getStoreSns()) {
+                if (!existingSns.contains(sns.getSnsLink())) {
+                    adminStoreMapper.addStoreSns(sns);
+                }
             }
         }
     }

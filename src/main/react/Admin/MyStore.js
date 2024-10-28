@@ -39,13 +39,27 @@ function MyStore() {
                     const formattedOpenTime = new Date(`1970-01-01T${resp.data.storeOpenTime}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
                     const formattedCloseTime = new Date(`1970-01-01T${resp.data.storeCloseTime}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 
+                    const storeImg = Array.isArray(resp.data.storeImg)
+                    ? resp.data.storeImg
+                        .filter(img => img.storeImgLocation !== null) // storeImgLocation이 null이 아닌 것만 필터링
+                        .map(img => ({ storeImgLocation: img.storeImgLocation }))
+                    : [];
+
+                    const storeSns = Array.isArray(resp.data.storeSns)
+                    ? resp.data.storeSns
+                        .filter(sns => sns.snsLink !== null) // storeImgLocation이 null이 아닌 것만 필터링
+                        .map(sns => ({ snsLink: sns.snsLink, snsName: sns.snsName }))
+                    : [];
+
                     setMyStoreInfo(prevInfo => ({
                         ...prevInfo,
                         ...resp.data,
                         storeOpenTime: formattedOpenTime,
                         storeCloseTime: formattedCloseTime,
-                        storeImg: resp.data.storeImg.map(img => ({ storeImgLocation: img.storeImgLocation }))
+                        storeSns: storeSns,
+                        storeImg: storeImg
                     }));
+
                 } else {
                     console.log("세션에 아이디정보가 없습니다.");
                 }

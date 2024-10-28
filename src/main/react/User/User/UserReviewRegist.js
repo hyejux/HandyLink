@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { FaCalendar, FaClock } from 'react-icons/fa';
 import { Rating } from '@mui/material';
 
+
 function UserReviewRegist () {
 
 
@@ -26,6 +27,7 @@ useEffect(() => {
   const [review, setReview] = useState('');
   const [charCount, setCharCount] = useState(0);
   const [images, setImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
 
   const handleStarClick = (value) => {
     setRating(value);
@@ -36,33 +38,27 @@ useEffect(() => {
     setCharCount(e.target.value.length);
   };
 
+  
   const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-       const previewUrl = URL.createObjectURL(file);
-      reader.onload = (e) => {
-        setImages((prevImages) => [...prevImages, e.target.result]);
-      };
-      reader.readAsDataURL(file);
+    const files = event.target.files; // 선택한 파일들
+    const newImages = []; // 새로운 이미지 URL을 저장할 배열
+
+    if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const previewUrl = URL.createObjectURL(file); // Blob URL 생성
+            newImages.push(previewUrl); // 미리보기 URL을 배열에 추가
+        }
+
+        // 상태 업데이트: 새 이미지 URL 추가
+        setNewImages((prev) => [...prev, ...newImages]); // 새 이미지 미리보기 URL 추가
+        setImages((prevImages) => [...prevImages, ...Array.from(files)]); // 기존 파일과 병합
     }
-  };
+};
+
+
 
   // ---------------------------------------------
-
-
-  // const [selectedImage, setSelectedImage] = useState(null);
-  // const [imagePreview, setImagePreview] = useState(null);
-
-  // const handleImageChange = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     setSelectedImage(file);
-  //     // 이미지 미리보기
-  //     const previewUrl = URL.createObjectURL(file);
-  //     setImagePreview(previewUrl);
-  //   }
-  // };
 
 
   useEffect(() => {
@@ -70,6 +66,7 @@ useEffect(() => {
       reviewRating : rating,
       reviewContent : review,
       userReviewImg : images,
+      userImg : newImages
     }
     console.log(sumbitData);
   },[rating,review,charCount,images])
@@ -84,35 +81,38 @@ useEffect(() => {
       .then(response => {
         console.log('리뷰 등록 성공 !:', response.data);
 
+        const reviewNoId = response.data;
+
         // const formData = new FormData();
-        // formData.append('file', selectedImage); // 'file'은 서버에서 기대하는 필드명입니다.
-        // formData.append('category_id', response.data);
-    
 
-          // 두 번째 요청: 카테고리 이미지 업로드
-          return axios.post('/userMyReservation/setReviewImg', images, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-
-
-      })
-      .then(response => {
-        console.log('파일 업로드 성공:', response.data);
-        console.log('파일 업로드 성공:', response.data);
-        alert("리뷰 등록 완료");
-        // window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
+        // images가 배열이라고 가정하고 순회하여 파일 추가
+        const formData = new FormData();
+        if (images && images.length > 0) {
+            for (let i = 0; i < images.length; i++) {
+                console.log(images[i]); // 각 이미지 파일의 내용을 확인
+                formData.append('files', images[i]); // 'files'는 서버에서 기대하는 필드명
+            }
+        }
+        formData.append('reviewNoId', reviewNoId);
+        console.log([...formData]); // FormData의 내용을 확인 (Array.from을 사용하여 배열로 변환)
         
+        axios.post(`/userMyReservation/setReviewImg`, formData, reviewNoId, {
+            headers: {
+                'Content-Type': 'multipart/form-data', // 헤더 설정
+            },
+        }).then(response => {
+          console.log('파일 업로드 성공:', response.data);
+          console.log('파일 업로드 성공:', response.data);
+          alert("리뷰 등록 완료");
+          // window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동;
+      })
     })
       .catch(error => {
         console.error('에러 발생:', error);
     });
       
     }
-  // userReservation/getReviewList
-  // userReservation/setReview
-  
+
     return (
         <div>
           리뷰 작성 페이지 
@@ -143,10 +143,13 @@ useEffect(() => {
       </div>
 
       <div className="media-section">
-        {images.map((image, index) => (
-          <div key={index} className="media-placeholder">
-            <img src={image} alt={`Uploaded preview ${index + 1}`} />
-          </div>
+      {newImages.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            alt={`Preview ${index}`}
+            style={{ width: '100px', height: '100px', margin: '10px' }}
+          />
         ))}
         <div
           className="camera-placeholder"
@@ -157,6 +160,7 @@ useEffect(() => {
             type="file"
             id="file-input"
             accept="image/*"
+            multiple
             style={{ display: 'none' }}
             onChange={handleFileUpload}
           />

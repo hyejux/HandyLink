@@ -24,6 +24,7 @@ repositories {
 }
 
 dependencies {
+
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0' //마이바티스 // MyBatis Spring Boot Starter
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA
 	implementation 'org.mybatis:mybatis:3.5.6'  // MyBatis Core

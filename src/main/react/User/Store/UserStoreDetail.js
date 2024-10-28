@@ -400,13 +400,17 @@ const [noticeList, setNoticeList] = useState([]);
                   <div className="reviews">
                     {reviewList.map((review) => (
                       <div key={review.reviewNo} className="review-item">
-                        {review.userReviewImg > 0 && (
+               
                           <div className="photo-review2">
-                            {Array.from({ length: review.userReviewImg }).map((_, index) => (
-                              <img key={index} className="photo-item2" src={userReviewImg}> </img>
-                            ))}
+                        {review.userReviewImg.map((imgUrl, index) => {
+                              // 'blob:'를 제거한 URL 생성
+                              const formattedUrl = imgUrl.replace('blob:', ''); 
+                              return (
+                                <img key={index} className="photo-item2" src={formattedUrl} alt={`Review image ${index + 1}`} />
+                              );
+                            })}
                           </div>
-                        )}
+                        
                         <div className="review-header">
                           <span className="reviewer-name">{review.userName}</span>
                        

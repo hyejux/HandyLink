@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.HiMade.admin.mapper.AdminChatMapper">
+
+    <!-- 채팅 히스토리 조회 -->
+    <select id="fetchChatHistory" resultType="com.example.HiMade.admin.dto.AdminChatDTO">
+        SELECT chat_no AS chatNo, chat_message AS chatMessage, send_time AS sendTime,
+               store_id AS storeId, user_id AS userId, sender_type AS senderType, store_no AS storeNo
+        FROM chat
+        WHERE user_id = #{userId} AND store_id = #{storeId}
+        ORDER BY send_time DESC
+            LIMIT #{limit}
+    </select>
+
+    <!-- 새로운 채팅 메시지 저장 -->
+    <insert id="insertChatMessage" parameterType="com.example.HiMade.admin.dto.AdminChatDTO">
+        INSERT INTO chat (chat_no, chat_message, send_time, store_id, user_id, sender_type, store_no)
+        VALUES (#{chatNo}, #{chatMessage}, #{sendTime}, #{storeId}, #{userId}, #{senderType}, #{storeNo})
+    </insert>
+
+</mapper>

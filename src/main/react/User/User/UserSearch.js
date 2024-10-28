@@ -213,6 +213,7 @@ function UserSearch() {
             }
           }} />
       </div>
+      
 
       {/* 카테고리 배너 */}
       <div className="user-search-content">

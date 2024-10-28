@@ -28,10 +28,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService, UserDetailsService {
@@ -111,6 +108,18 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         if (user == null) {
             logger.error("유저를 찾을 수 없음: {}", userId);
             throw new UsernameNotFoundException("찾을 수 없는 유저 : " + userId);
+        }
+
+//        // 탈퇴 상태 확인: user_id에 "(del)"이 포함된 경우 로그인 불가
+//        if (user.getUserId().contains("(del)")) {
+//            logger.warn("탈퇴된 계정으로 로그인 시도: {}", userId);
+//            throw new BadCredentialsException("탈퇴된 계정입니다.");
+//        }
+
+        // 탈퇴 상태 확인
+        if ("N".equals(user.getUserStatus())) {
+            logger.warn("탈퇴된 계정으로 로그인 시도: {}", userId);
+            throw new BadCredentialsException("탈퇴된 계정입니다.");
         }
 
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -197,5 +206,40 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
     public void resetPassword(String userId, String newPassword) {
         String encodedPassword = passwordEncoder.encode(newPassword);
         userAccountMapper.updatePassword(userId, encodedPassword);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteUser(String userId, String password) {
+        // 1. 사용자 검증
+        UserDTO user = userAccountMapper.getUserById(userId);
+        if (user == null) {
+            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
+        }
+
+        // 2. 비밀번호 확인
+        if (!passwordEncoder.matches(password, user.getUserPw())) {
+            return false;
+        }
+
+        try {
+            // 3. 새로운 userId 생성 (맨 앞에 del_ 추가)
+            String newUserId = "del_" + userId;
+
+            // 4. 매퍼에 전달할 파라미터 설정
+            Map<String, String> params = new HashMap<>();
+            params.put("originalUserId", userId);
+            params.put("newUserId", newUserId);
+
+            // 5. 업데이트 실행
+            userAccountMapper.deleteUser(params);
+
+            logger.info("회원 탈퇴 처리 완료 - 기존 ID: {}, 변경된 ID: {}", userId, newUserId);
+            return true;
+
+        } catch (Exception e) {
+            logger.error("회원 탈퇴 처리 중 오류 발생", e);
+            throw new RuntimeException("회원 탈퇴 처리 중 오류가 발생했습니다.", e);
+        }
     }
 }

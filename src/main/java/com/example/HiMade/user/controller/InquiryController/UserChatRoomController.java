@@ -8,9 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/chat")
@@ -60,6 +63,16 @@ public class UserChatRoomController {
     @GetMapping("/history")
     public List<UserChatDTO> getChatHistory(@RequestParam String userId, @RequestParam String storeId) {
         return userChatRoomService.selectChat(userId, storeId);
+    }
+
+    // 현재 로그인된 사용자 확인
+    @GetMapping("/current")
+    public ResponseEntity<?> getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getPrincipal().equals("anonymousUser")) {
+            return ResponseEntity.ok(Map.of("userId", auth.getName()));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
 }

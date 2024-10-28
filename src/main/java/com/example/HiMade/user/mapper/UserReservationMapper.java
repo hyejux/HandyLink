@@ -35,6 +35,7 @@ public interface UserReservationMapper {
 
   //리뷰
   List<UserReviewDTO> getReviewList(@Param("id") int id);
+  List<UserReviewDTO> getReviewPhotoList(@Param("id") int id);
   int setReview(UserReviewDTO dto);
   void setReviewImg(Map map);
 

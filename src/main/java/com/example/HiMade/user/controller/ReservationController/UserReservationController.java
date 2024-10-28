@@ -116,6 +116,13 @@ public class UserReservationController {
       return userReservationService.getReviewList(id);
   }
 
+  @GetMapping("/getReviewPhotoList/{id}")
+  public List<UserReviewDTO> getReviewPhotoList(@PathVariable int id) {
+    System.out.println("실행됨ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ");
+//    System.out.println(userReservationService.getReviewList(id) + "리뷰 리스트");
+    return userReservationService.getReviewPhotoList(id);
+  }
+
 
 
 }

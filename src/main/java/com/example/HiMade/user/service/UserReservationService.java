@@ -36,6 +36,7 @@ UserReservationService {
 
   // 리뷰
   List<UserReviewDTO> getReviewList(int id);
+  List<UserReviewDTO> getReviewPhotoList(int id);
   int setReview(UserReviewDTO dto);
   void setReviewImg(String reviewImgUrl, int reviewNo);
 

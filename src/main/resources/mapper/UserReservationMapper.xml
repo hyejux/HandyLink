@@ -151,16 +151,35 @@
 
 
     <select id="getReviewList" resultType="com.example.HiMade.user.dto.UserReviewDTO">
-        select rw.review_no, rw.review_rating, rw.review_content, rw.review_date, rw.reservation_no, rn.store_no, rwi.review_img_url, u.user_name
+        select rw.review_no, rw.review_rating, rw.review_content, rw.review_date, rw.reservation_no, rn.store_no, rwi.review_img_url, u.user_name, c.service_name
         from review rw
         left join review_img rwi
         on rwi.review_no = rw.review_no
         left join reservation rn
         on rn.reservation_no = rw.reservation_no
+        left join reservation_form rf
+        on rf.reservation_no = rn.reservation_no
+        left join category c
+        on rf.main_category_id = c.category_id
         left join users u
         on rn.user_id = u.user_id
-        where store_no = #{id}
+        where rn.store_no = ${id}
+    </select>
 
+    <select id="getReviewPhotoList" resultType="com.example.HiMade.user.dto.UserReviewDTO">
+        select rw.review_no, rw.review_rating, rw.review_content, rw.review_date, rw.reservation_no, rn.store_no, rwi.review_img_url, u.user_name, c.service_name
+        from review rw
+        join review_img rwi
+        on rwi.review_no = rw.review_no
+        left join reservation rn
+        on rn.reservation_no = rw.reservation_no
+        left join reservation_form rf
+        on rf.reservation_no = rn.reservation_no
+        left join category c
+        on rf.main_category_id = c.category_id
+        left join users u
+        on rn.user_id = u.user_id
+        where rn.store_no = ${id}
     </select>
 
 

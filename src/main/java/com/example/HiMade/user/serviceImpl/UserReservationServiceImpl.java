@@ -140,6 +140,11 @@ public class UserReservationServiceImpl implements UserReservationService {
   }
 
   @Override
+  public List<UserReviewDTO> getReviewPhotoList(int id) {
+    return userReservationMapper.getReviewPhotoList(id);
+  }
+
+  @Override
   public int setReview(UserReviewDTO dto) {
     userReservationMapper.setReview(dto);
     int num = dto.getReviewNo();

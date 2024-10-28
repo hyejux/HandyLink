@@ -145,12 +145,12 @@
         returning review_no as reviewNo
     </insert>
 
-    <insert id="setReviewImg" parameterType="java.lang.String">
-        insert into review_img (review_img_url , review_no) values(#{dto}, 2);
+    <insert id="setReviewImg" parameterType="map">
+        insert into review_img (review_img_url , review_no) values(#{reviewImgUrl}, #{reviewNo})
     </insert>
 
 
-    <select id="getReviewList" resultType="com.example.HiMade.user.dto.UserReviewDTO" >
+    <select id="getReviewList" resultType="com.example.HiMade.user.dto.UserReviewDTO">
         select rw.review_no, rw.review_rating, rw.review_content, rw.review_date, rw.reservation_no, rn.store_no, rwi.review_img_url, u.user_name
         from review rw
         left join review_img rwi
@@ -159,7 +159,7 @@
         on rn.reservation_no = rw.reservation_no
         left join users u
         on rn.user_id = u.user_id
-        where store_no = #{id};
+        where store_no = #{id}
 
     </select>
 

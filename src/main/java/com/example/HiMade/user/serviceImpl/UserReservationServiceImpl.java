@@ -6,13 +6,17 @@ import com.example.HiMade.user.mapper.UserReservationMapper;
 import com.example.HiMade.user.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.File;
 import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("UserReservationService")
 public class UserReservationServiceImpl implements UserReservationService {
@@ -108,7 +112,31 @@ public class UserReservationServiceImpl implements UserReservationService {
 
   @Override
   public List<UserReviewDTO> getReviewList(int id) {
-    return userReservationMapper.getReviewList(id);
+    List<UserReviewDTO> reviewList = userReservationMapper.getReviewList(id);
+
+    // 리뷰 목록을 처리하여 이미지 URL을 배열로 묶기
+    Map<Integer, UserReviewDTO> reviewMap = new HashMap<>();
+
+    for (UserReviewDTO review : reviewList) {
+      // 리뷰가 맵에 없으면 추가
+      if (!reviewMap.containsKey(review.getReviewNo())) {
+        reviewMap.put(review.getReviewNo(), review);
+      }
+
+      // userReviewImg가 null인 경우 초기화
+      UserReviewDTO userReviewDTO = reviewMap.get(review.getReviewNo());
+      if (userReviewDTO.getUserReviewImg() == null) {
+        userReviewDTO.setUserReviewImg(new ArrayList<>()); // 리스트 초기화
+      }
+
+      // userReviewImg에 이미지를 추가
+      if (review.getReviewImgUrl() != null) {
+        userReviewDTO.getUserReviewImg().add(review.getReviewImgUrl());
+      }
+    }
+
+    System.out.println(reviewMap + "==================");
+    return new ArrayList<>(reviewMap.values());
   }
 
   @Override
@@ -120,26 +148,19 @@ public class UserReservationServiceImpl implements UserReservationService {
 
   }
 
-  @Override
-  public void setReviewImg(List<String> dto) {
-
-    for (String d : dto){
-      userReservationMapper.setReviewImg(d);
-    }
-
-  }
-
 //  @Override
-//  public void setReviewImg(File file, int reviewNo) {
+//  public void setReviewImg(MultipartFile[] files) {
 //
-//  }
-////
-//  @Override
-//  void setReviewImg(File file , int reviewNo){
-//    System.out.println("리뷰이미지등록" + file + reviewNo );
-//
-//    for (File f :file){
-//      userReservationMapper.setReviewImg();
+//    for (MultipartFile f :files){
+//      userReservationMapper.setReviewImg(f);
 //    }
 //  }
+
+  public void setReviewImg(String reviewImgUrl, int reviewNo) {
+    Map<String, Object> params = new HashMap<>();
+    params.put("reviewImgUrl", reviewImgUrl);
+    params.put("reviewNo", reviewNo);
+
+    userReservationMapper.setReviewImg(params); // 이제 params를 매퍼로 전달합니다.
+  }
 }

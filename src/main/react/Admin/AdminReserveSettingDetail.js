@@ -22,88 +22,6 @@ const AdminReserveSettingDetailModify = () => {
   };
 
 
-
-// ---------------------------- 사진 등록하기
-
-const [selectedImages, setSelectedImages] = useState([]); // 화면에 보여질 파일 리스트 (미리보기 URL)
-const [uploadedImageUrls, setUploadedImageUrls] = useState([]); // 서버에서 반환된 실제 이미지 URL들
-
-const onSelectFile = async (e) => {
-    e.preventDefault();
-    const files = Array.from(e.target.files); // 선택된 파일들 배열로 변환
-
-    // 이미지는 8장 이하일 때만 추가
-    if (selectedImages.length + files.length <= 8) {
-
-        // 미리보기
-        const selectImgs = files.map(file => URL.createObjectURL(file));
-        setSelectedImages(prev => [...prev, ...selectImgs]);
-
-        const uploadPromises = files.map(async (file) => {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            try {
-                // 서버에 파일 업로드
-                const response = await axios.post('/adminStore/uploadImageToServer', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-
-                // 서버에서 반환된 URL
-                return response.data; // imageUrl만 반환해야 합니다.
-            } catch (error) {
-                console.error("파일 업로드 오류: ", error); // 오류 로그 추가
-                return null; // 오류가 발생할 경우 null 반환
-            }
-        });
-
-        // 모든 URL을 받아서 상태 업데이트
-        const imageUrls = await Promise.all(uploadPromises);
-        console.log("업로드된 이미지 URL들: ", imageUrls); // 확인 로그 추가
-
-        // null 값 필터링
-        const filteredUrls = imageUrls.filter(url => url !== null);
-
-        // 실제 서버 URL 배열 업데이트
-        setUploadedImageUrls((prev) => [...prev, ...filteredUrls]);
-
-        // Store 정보 업데이트
-        setStoreInfoRegistData((prev) => ({
-            ...prev,
-            imageUrl: [...prev.imageUrl, ...filteredUrls], // URL 배열로 업데이트
-        }));
-    } else {
-        alert('이미지는 최대 8장까지 업로드 가능합니다.');
-    }
-};
-
-const removeImage = async (index) => {
-    // 미리보기와 서버 URL이 각각 동기화되어야 함
-    const imageUrlToRemove = uploadedImageUrls[index];
-
-    try {
-        // 서버에 삭제 요청
-        await axios.delete('/adminStore/deleteImage', { data: { imageUrl: imageUrlToRemove } });
-
-        // 미리보기 이미지 상태 업데이트
-        setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
-
-        // 서버에서 저장된 실제 URL 상태 업데이트
-        setUploadedImageUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
-
-        // Store 정보 업데이트
-        setStoreInfoRegistData((prev) => ({
-            ...prev,
-            imageUrl: prev.imageUrl.filter((_, i) => i !== index), // URL 배열에서 삭제
-        }));
-
-    } catch (error) {
-        console.error("이미지 삭제 오류: ", error); // 오류 로그 추가
-    }
-};
-
 //사진업로드
 
 
@@ -231,25 +149,25 @@ const handleTimeNumChange = (e) => {
   };
 //-------------------------------------------------------
 
-const handleUpload = async () => {
-  if (!selectedImage) return;
+// const handleUpload = async () => {
+//   if (!selectedImage) return;
 
-  const formData = new FormData();
-  formData.append('file', selectedImage); // 'image'는 서버에서 기대하는 필드명입니다.
-  formData.append('category_id', 118);
-  console.log(formData);
+//   const formData = new FormData();
+//   formData.append('file', selectedImage); // 'image'는 서버에서 기대하는 필드명입니다.
+//   formData.append('category_id', 118);
+//   console.log(formData);
   
-  try {
-    const response = await axios.post('/adminReservation/setMainCategoryImg', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+//   try {
+//     const response = await axios.post('/adminReservation/setMainCategoryImg', formData, {
+//       headers: {
+//         'Content-Type': 'multipart/form-data',
+//       },
+//     });
  
-  } catch (error) {
-    console.error('파일 업로드 실패:', error);
-  }
-};
+//   } catch (error) {
+//     console.error('파일 업로드 실패:', error);
+//   }
+// };
 
 
 //-----------------------------------------------------------------

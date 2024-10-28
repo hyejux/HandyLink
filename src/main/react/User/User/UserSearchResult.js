@@ -19,6 +19,7 @@ function UserSearchResult() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredStores, setFilteredStores] = useState([]);
 
+
   useEffect(() => {
     // URL에서 검색어 가져오기
     const searchTermFromUrl = getSearchTermFromUrl();
@@ -46,14 +47,16 @@ function UserSearchResult() {
       })
       .then((data) => {
         console.log(data);
-        const formattedData = data.map(([serviceName, storeNo]) => ({
+        const formattedData = data.map(([serviceName, storeNo, servicePrice]) => ({
           serviceName,
           storeNo,
+          servicePrice, // servicePrice 추가
         }));
         setLevel1Categories(formattedData);
       })
       .catch((error) => console.error('카테고리를 가져오는 중 오류 발생:', error));
   }, []);
+
 
   // 검색 필터링
   useEffect(() => {
@@ -75,6 +78,14 @@ function UserSearchResult() {
     }
   }, [searchTerm, store, level1Categories]);;
 
+  // 검색어 입력 핸들러
+  const handleInputChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearch = () => {
+    setSearchTerm(searchTerm);
+  };
 
   // Kakao Maps API 로드
   useKakaoLoader();
@@ -172,6 +183,11 @@ function UserSearchResult() {
     return urlString.replace(/{|}/g, "").split(",").map(url => url.trim());
   };
 
+  const goToStoreDetail = (id) => {
+    window.location.href = `/userStoreDetail.user/${id}`;
+  }
+
+
   return (
     <div>
 
@@ -182,8 +198,13 @@ function UserSearchResult() {
       </div>
 
       <div className="store-search-bar">
-        <i className="bi bi-search"></i>
-        <input type="text" placeholder="찾으시는 가게가 있나요?" />
+        <button className="search-btn" onClick={handleSearch}><i className="bi bi-search"></i></button>
+        <input type="text" placeholder="찾으시는 가게가 있나요?" value={searchTerm} onChange={handleInputChange}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              handleSearch();
+            }
+          }} />
       </div>
 
 
@@ -195,7 +216,7 @@ function UserSearchResult() {
             const storeDistance = distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음';
 
             return (
-              <div className="search-result-list-content" key={store.storeId}>
+              <div className="search-result-list-content" key={store.storeId} onClick={() => goToStoreDetail(store.storeNo)}>
                 <i className="bi bi-heart"></i>
                 <div className="result-list-content-img-box">
                   <img src={imageUrl} alt={store.storeName} />
@@ -203,29 +224,18 @@ function UserSearchResult() {
 
                 <div className="result-list-top">
                   <div className="result-list-container">
-                    <div className="result-list-title">{store.storeName}</div>
-                    <div className="result-list-category">{store.storeCate}</div>
+                    <span className="result-list-title">{store.storeName}</span>
+                    <span className="result-list-category">{store.storeCate}</span>
                   </div>
+                </div>
+
+                <div className="result-list-mid">
                   <div className="result-list-date">
-                    <i class="bi bi-clock-fill"></i> 영업시간: {store.storeOpenTime} - {store.storeCloseTime}
+                    <i className="bi bi-clock-fill"></i>영업시간: {store.storeOpenTime.slice(0, 5)} - {store.storeCloseTime.slice(0, 5)}
+                    <span className="result-list-location">
+                      <i className="bi bi-geo-alt-fill"></i>현재 위치에서 {storeDistance}
+                    </span>
                   </div>
-                </div>
-
-                <div className="result-list-mid">
-                  <div className="result-list-location">
-                    <i class="bi bi-geo-alt-fill"></i> 현재 위치에서 {storeDistance}
-                  </div>
-                </div>
-
-                <div className="result-list-mid">
-                  <div className="result-list-review">
-                    ⭐<span>{store.reviewRating || '4.8'}</span>
-                    <span>({store.reviewCount || '10,959'})</span>
-                  </div>
-                </div>
-
-                <div className="result-list-bottom">
-                  <div className="result-list-price">₩ {store.price || '12,000'} ~ </div>
                 </div>
 
                 <div className="result-list-bottom">
@@ -236,6 +246,20 @@ function UserSearchResult() {
                           <i className="bi bi-hash"></i>
                           {category.serviceName}
                         </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="result-list-bottom">
+                  <div className="result-list-review">
+                    <i className="bi bi-star-fill"></i> <span>{store.reviewRating || '4.8'}</span>
+                    <span>({store.reviewCount || '10,959'})</span>
+                  </div>
+                  <div className="result-list-price">
+                    {level1Categories.filter(category => category.storeNo === store.storeNo).map((category, index) => (
+                      <div key={index}>
+                        ₩ {category.servicePrice || '0,000'} ~
                       </div>
                     ))}
                   </div>

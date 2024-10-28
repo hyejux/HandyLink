@@ -91,8 +91,7 @@ function UserSearch() {
       })
       .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
   }, []);
-
-  // 레벨 1 서비스네임, 스토어NO 가져오기
+  
   useEffect(() => {
     fetch('/userSearch/categories/level1')
       .then((response) => {
@@ -103,14 +102,16 @@ function UserSearch() {
       })
       .then((data) => {
         console.log(data);
-        const formattedData = data.map(([serviceName, storeNo]) => ({
+        const formattedData = data.map(([serviceName, storeNo, servicePrice]) => ({
           serviceName,
           storeNo,
+          servicePrice, // servicePrice 추가
         }));
         setLevel1Categories(formattedData);
       })
       .catch((error) => console.error('카테고리를 가져오는 중 오류 발생:', error));
   }, []);
+  
 
 
 

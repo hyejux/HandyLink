@@ -10,9 +10,10 @@ import java.util.List;
 @Repository
 public interface UserSearchRepository extends JpaRepository<Category, Integer> {
 
-    @Query("SELECT c.serviceName, c.storeNo FROM Category c WHERE c.categoryLevel = :level")
-    List<Object[]> findServiceNameAndStoreNoByCategoryLevel(int level);
+    @Query("SELECT c.serviceName, c.storeNo, c.servicePrice FROM Category c WHERE c.categoryLevel = :level")
+    List<Object[]> findServiceNameStoreNoAndServicePriceByCategoryLevel(int level);
 }
+
 
 
 

@@ -46,6 +46,11 @@
   margin: 10px;
 }
 
+.search-btn {
+  border: none;
+  cursor: pointer;
+}
+
 /*  */
 
 
@@ -87,12 +92,13 @@
 }
 
 .search-result-list-content {
-  padding: 10px;
+  padding: 5px;
   border-radius: 10px;
   position: relative;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   border: 1px solid #2C348F;
+  cursor: pointer;
 }
 
 .search-result-list-content>.bi {
@@ -122,19 +128,21 @@
 .result-list-title {
   font-size: 20px;
   font-weight: bold;
-  margin: 0 10px;
+  margin-left: 5px;
   white-space: nowrap;
 }
 
 /* 가게 카테고리 */
 .result-list-category {
-  margin-top: 5px;
+  margin: 4px 0 0 5px;
+  font-size: 12px;
+  color: #999;
 }
 
 /* 영업시간 */
 .result-list-date {
-  margin: 5px 10px 0 0;
-  font-size: 14px;
+  margin-left: 5px;
+  font-size: 10px;
 }
 
 .result-list-date img {
@@ -147,22 +155,26 @@
 
 /* 별점 */
 .result-list-review {
-  font-size: 20px;
+  font-size: 16px;
   margin-left: 5px;
 }
 
-.result-list-review>span:nth-child(1) {
+.bi-star-fill {
   color: #FFD700;
 }
 
 .result-list-review>span:nth-child(2) {
+  color: #FFD700;
+}
+
+.result-list-review>span:nth-child(3) {
   color: #999;
 }
 
 /* 위치 */
 .result-list-location {
-  margin: 0 10px 5px 0;
-  font-size: 14px;
+  margin-left: 10px;
+  font-size: 10px;
 }
 
 .result-list-location img {
@@ -175,9 +187,9 @@
 
 /* 가격 */
 .result-list-price {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
-  margin-left: 10px;
+  margin-right: 10px;
 }
 
 /* 해시태그(메뉴명) */
@@ -186,7 +198,8 @@
 }
 
 .result-list-option {
-  font-size: 16px;
+  font-size: 14px;
+  margin-left: 5px;
 }
 
 

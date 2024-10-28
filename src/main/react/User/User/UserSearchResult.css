@@ -1,3 +1,21 @@
+.search-result-top {
+  overflow: hidden;
+}
+
+.back-btn-container {
+  float: left;
+  margin: 15px 5px 15px 5px;
+}
+
+.back-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+
 .search-top {
   overflow: hidden;
   padding: 10px;
@@ -16,7 +34,9 @@
 
 /* 검색바 */
 .store-search-bar {
+  float: right;
   margin: 10px;
+  width: 78%;
   height: 25px;
   border-radius: 10px;
   text-align: center;
@@ -101,10 +121,14 @@
   cursor: pointer;
 }
 
+.search-result-list-content:last-child {
+  margin-bottom: 100px;
+}
+
 .search-result-list-content>.bi {
   position: absolute;
   font-size: 25px;
-  color: #fff;
+  color: #ffffff;
   top: 20px;
   left: 510px;
 }

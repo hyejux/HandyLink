@@ -191,20 +191,19 @@ function UserSearchResult() {
   return (
     <div>
 
-
-      <div className="search-top">
-        <div className='left'>검색</div>
-        <div className='right'><i className="bi bi-bell-fill"></i></div>
-      </div>
-
-      <div className="store-search-bar">
-        <button className="search-btn" onClick={handleSearch}><i className="bi bi-search"></i></button>
-        <input type="text" placeholder="찾으시는 가게가 있나요?" value={searchTerm} onChange={handleInputChange}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              handleSearch();
-            }
-          }} />
+      <div className="search-result-top">
+        <div className="back-btn-container">
+          <button className="back-btn" onClick={() => window.history.back()}><i class="bi bi-chevron-left"></i></button>
+        </div>
+        <div className="store-search-bar">
+          <button className="search-btn" onClick={handleSearch}><i className="bi bi-search"></i></button>
+          <input type="text" placeholder="찾으시는 가게가 있나요?" value={searchTerm} onChange={handleInputChange}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                handleSearch();
+              }
+            }} />
+        </div>
       </div>
 
 
@@ -269,7 +268,7 @@ function UserSearchResult() {
             );
           })
         ) : (
-          <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+          <div className="no-stores">Loading...</div>
         )}
       </div>
 

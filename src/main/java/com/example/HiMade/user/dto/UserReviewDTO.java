@@ -24,8 +24,11 @@ public class UserReviewDTO {
   private int storeNo;
   private String userName;
   private String userId;
+  private String serviceName;
+
   private String reviewImgUrl;
   private List<String> userReviewImg;
+
 //  private List<String> reviewImgUrls;
 
 }

@@ -107,7 +107,29 @@ public class UserReservationServiceImpl implements UserReservationService {
 
   @Override
   public void updateSlotCount1(UserRSlotDTO dto) {
+    System.out.println(dto);
     userReservationMapper.updateSlotCount1(dto);
+  }
+
+  @Override
+  public void updateSlotCount2(int slotCount ,int categoryId, LocalDate date1, LocalDate date2) {
+    System.out.println(date1);
+    System.out.println(date2);
+    LocalDate currentDate = date1;
+    while (!currentDate.isAfter(date2)) { // currentDate가 date2를 초과하지 않는 동안
+
+      UserRSlotDTO dto = new UserRSlotDTO();
+      dto.setCategoryId(categoryId);
+      dto.setReservationSlotDate(currentDate);
+      dto.setSlotCount(slotCount);
+      System.out.println(dto + "----------------------");
+      userReservationMapper.updateSlotCount1(dto);
+
+      System.out.println(currentDate);
+      currentDate = currentDate.plusDays(1); // 하루 추가
+    }
+
+
   }
 
   @Override
@@ -140,6 +162,11 @@ public class UserReservationServiceImpl implements UserReservationService {
   }
 
   @Override
+  public List<UserReviewDTO> getReviewPhotoList(int id) {
+    return userReservationMapper.getReviewPhotoList(id);
+  }
+
+  @Override
   public int setReview(UserReviewDTO dto) {
     userReservationMapper.setReview(dto);
     int num = dto.getReviewNo();
@@ -147,14 +174,6 @@ public class UserReservationServiceImpl implements UserReservationService {
     return num;
 
   }
-
-//  @Override
-//  public void setReviewImg(MultipartFile[] files) {
-//
-//    for (MultipartFile f :files){
-//      userReservationMapper.setReviewImg(f);
-//    }
-//  }
 
   public void setReviewImg(String reviewImgUrl, int reviewNo) {
     Map<String, Object> params = new HashMap<>();

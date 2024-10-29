@@ -19,7 +19,7 @@
 }
 
 .search-bar input {
-    width: 100%;
+    width: 80%;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -38,6 +38,7 @@
 .chat-name {
     font-weight: bold;
     display: block;
+    margin-bottom: -10px;
 }
 
 .chat-date {
@@ -107,7 +108,8 @@
 .message-time {
     font-size: 12px;
     color: #888;
-    margin-top: 5px;
+    margin: 2px 5px;
+    /*margin-top: 5px;*/
     display: block;
 }
 
@@ -134,3 +136,100 @@
     border-radius: 4px;
     cursor: pointer;
 }
+
+/* 채팅 목록의 프로필 이미지 */
+.chat-profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+/* 메시지 내의 프로필 이미지 */
+.message-profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* 채팅 목록 아이템 레이아웃 수정 */
+.chat-item {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* 채팅 정보 컨테이너 */
+.chat-info {
+    flex: 1;
+}
+
+/* 채팅방 헤더의 프로필 이미지 */
+.header-profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+/* 메시지 프로필 섹션 레이아웃 */
+.message-profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.sender-name {
+    margin-left: 10px;
+    font-weight: bold;
+    margin-top: -40px;
+}
+
+/* 메시지 컨테이너 스타일 수정 */
+.message {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 받은 메시지(왼쪽) */
+.received {
+    align-items: flex-start;
+}
+
+/* 보낸 메시지(오른쪽) */
+.sent {
+    align-items: flex-end;
+}
+
+.received .bubble {
+    background-color: #e5e5ea;
+    color: #333;
+    margin-left: 60px; /* 프로필 이미지 공간 확보 */
+    margin-top: -30px;
+}
+
+.sent .bubble {
+    background-color: #007aff;
+    color: #fff;
+}
+
+/* 메시지 내용 스타일 */
+.bubble {
+    max-width: 60%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    display: inline-block;
+    word-wrap: break-word;
+    margin: 5px 0;
+}
+
+
+
+
+

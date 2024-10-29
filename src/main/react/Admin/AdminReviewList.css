@@ -110,7 +110,7 @@
   width: 100%;
   /* border: 1px solid #ddd; */
   border-collapse: collapse;
-  font-size: 17px;
+  font-size: 15px;
 
 
 }
@@ -172,8 +172,10 @@
 }
 
 .management-table tbody tr td img {
-  border-radius: 100%;
-  width: 38px;
+
+  height: 50px;
+  width: 50px;
+  object-fit: cover;
 }
 
 

@@ -165,7 +165,7 @@ const AdminReserveSettingDetailModify = () => {
       <div className="main-contents">
         <div className="reserve-container">
         <div className="reserve-img">
-            {/* <img src={http://localhost:8585/img/${reserveModi.imageUrl}} alt="My Image" /> */}
+            <img src={reserveModi.imageUrl} alt="My Image" />
             <button type="button" className="btn-st btn-imgChg">사진 변경하기</button>
           </div>
           <div className="reserve-content">

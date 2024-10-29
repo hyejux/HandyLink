@@ -92,15 +92,17 @@ const goToDetail = (no) => {
       <div className="management-container">
         <table className="management-table">
           <thead>
+  
             <tr>
-              <th>no</th>
-              <th>등록일</th>
-              <th> 작성자 </th>
-              <th>상품명</th>
-              <th>리뷰사진</th>
-              <th>별점</th>
-              <th>리뷰내용</th>
-              <th>관리</th>
+            <th style={{ width: '3%' }}>No</th>
+
+      <th style={{ width: '8%' }}>작성자</th>
+      <th style={{ width: '11%' }}>상품명</th>
+      <th style={{ width: '15%' }}>리뷰사진</th>
+      <th style={{ width: '5%' }}>별점</th>
+      <th style={{ width: '30%' }}>리뷰내용</th>
+      <th style={{ width: '12%' }}>등록일</th>
+      {/* <th style={{ width: '5%' }}>관리</th> */}
             </tr>
           </thead>
           <tbody>
@@ -108,7 +110,7 @@ const goToDetail = (no) => {
               <React.Fragment key={index}>
                 <tr>
                   <td>{index + 1}</td>
-                  <td>{formatDate(value.reviewDate)}</td>
+              
                   <td> {value.userName}</td>
                   <td onClick={() => goToDetail(value.reservationNo)} className='detail-serviceName'> {value.serviceName} </td>
                   <td>   {value.userReviewImg.map((imgUrl, index) => {
@@ -126,7 +128,8 @@ const goToDetail = (no) => {
                   {value.reviewContent.slice(0, 50)}
                     <i class="bi bi-chevron-down" onClick={() => handleToggleRow(index)}></i>
                   </td>
-                  <td></td>
+                  <td>{formatDate(value.reviewDate)}</td>
+                  {/* <td></td> */}
                   
                 </tr>
                 {/* 토글된 행에 대해 자세한 내용 표시 */}

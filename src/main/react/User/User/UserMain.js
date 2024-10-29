@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
 import ReactDOM from "react-dom/client";
 import useKakaoLoader from '../Payment/useKakaoLoader';
 import { useSwipeable } from 'react-swipeable';
@@ -12,6 +13,7 @@ function UserMain() {
   const LOAD_MORE_COUNT = 1; // 더 볼 가게 수
   const [level1Categories, setLevel1Categories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isBookmarked, setIsBookmarked] = useState(false); //찜
 
   // 검색어 입력 핸들러
   const handleInputChange = (event) => {
@@ -135,6 +137,25 @@ function UserMain() {
       alert("Geolocation을 지원하지 않습니다.");
     }
   }, []);
+
+  //찜 데이터 가져오기
+  useEffect(() => {
+    const getBookmarked = async () => {
+      try {
+        const resp = await axios.get('/userStoreList/getLike');
+
+        if (resp.status === 200) {
+          setIsBookmarked(resp.data.map(like => like.storeNo));
+          console.log("찜 목록 ", resp.data);
+        }
+      } catch (error) {
+        console.log("찜 데이터 가져오는 중 error ", error);
+      }
+    };
+
+    getBookmarked();
+  }, []);
+
 
   // Kakao Map API를 이용한 거리 계산 함수
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
@@ -279,6 +300,22 @@ function UserMain() {
     return urlString.replace(/{|}/g, "").split(",").map(url => url.trim());
   };
 
+  //가게 찜하기
+  const handleStoreLike = async(store) => {
+    console.log("가게번호 ", store.storeNo);
+
+    try {
+      const resp = await axios.post('/userStoreList/storeLike', {storeNo: store.storeNo});
+      setIsBookmarked(prev =>
+        prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) //찜 해제
+                                      : [...prev, store.storeNo] //찜 추가
+      );
+
+    }catch (error) {
+      console.log("찜하던 중 error ", error);
+    }
+  };
+
   return (
     <div>
       <div className="user-main-content">
@@ -364,8 +401,8 @@ function UserMain() {
                   <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
                     <div className="user-category-menu">
                       <div className="user-category-menu-img">
-                        <button className="button bookmark-btn" aria-label="북마크 추가">
-                          <i className="bi bi-heart"></i>
+                        <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                          <i className={`bi bi-heart ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
                         </button>
                         <img src={imageUrl} alt={store.storeName} />
                       </div>

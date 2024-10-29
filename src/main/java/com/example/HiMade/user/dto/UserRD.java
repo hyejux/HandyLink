@@ -12,7 +12,7 @@ import java.time.LocalTime;
 @ToString
 @Builder
 
-public class UserRD {
+public class  UserRD {
 
   private int reservationNo;
   private int reservationFormKey;

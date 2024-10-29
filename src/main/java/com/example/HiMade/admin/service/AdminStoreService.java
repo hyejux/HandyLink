@@ -19,10 +19,10 @@ public interface AdminStoreService {
     StoreRegistDTO getMyStore(Long storeNo); //가게관리정보 불러오기
 
     void updateDay(StoreRegistDTO storeRegistDTO); //고정휴무-update
-    List<DayOffDay> getOffDay(Integer storeNo);//고정휴무-select
+    List<DayOffDay> getOffDay(Long storeNo);//고정휴무-select
     void registDayOffSet(DayOffSet dayOffSet); //지정휴무
-    List<DayOffSet> getOffSet(Integer storeNo); //지정휴무-select
-    Integer deleteOffSet(Integer storeNo, Integer setNo); //지정휴무-delete
+    List<DayOffSet> getOffSet(Long storeNo); //지정휴무-select
+    Integer deleteOffSet(Long storeNo, Long setNo); //지정휴무-delete
 
     String uploadImage(MultipartFile file); // 이미지 업로드
     Integer duplicatedId(String storeId); //아이디 중복검사

@@ -92,7 +92,7 @@ public class AdminStoreController {
 
     //고정휴무-select
     @GetMapping("/getOffDay")
-    public List<DayOffDay> getOffDay(@RequestParam Integer storeNo){
+    public List<DayOffDay> getOffDay(@RequestParam Long storeNo){
         return adminStoreService.getOffDay(storeNo);
     }
 
@@ -106,7 +106,7 @@ public class AdminStoreController {
 
     //지정휴무 - delete
     @DeleteMapping("/deleteOffSet")
-    public ResponseEntity<Integer> deleteOffSet(@RequestParam Integer storeNo, @RequestParam Integer setNo){
+    public ResponseEntity<Integer> deleteOffSet(@RequestParam Long storeNo, @RequestParam Long setNo){
         Integer result = adminStoreService.deleteOffSet(storeNo, setNo);
         if(result > 0){
             return ResponseEntity.ok(result);
@@ -117,7 +117,7 @@ public class AdminStoreController {
 
     //지정휴무-select
     @GetMapping("/getOffSet")
-    public List<DayOffSet> getOffSet(@RequestParam Integer storeNo){
+    public List<DayOffSet> getOffSet(@RequestParam Long storeNo){
         return adminStoreService.getOffSet(storeNo);
     }
 

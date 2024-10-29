@@ -73,19 +73,19 @@ public class AdminStoreServiceImpl implements AdminStoreService {
 
     @Override
     public void updateStore(StoreRegistDTO storeRegistDTO) {
-        String storeId = storeRegistDTO.getStoreId();
+        Long storeNo = storeRegistDTO.getStoreNo();
         List<StoreImgDTO> storeImgList = storeRegistDTO.getStoreImg();
         List<StoreSnsDTO> storeSns = storeRegistDTO.getStoreSns();
 
         adminStoreMapper.updateStore(storeRegistDTO); // 가게정보 업데이트
 
         // 1. 기존 이미지 삭제
-        adminStoreMapper.deleteStoreImg(storeId, storeImgList);
+        adminStoreMapper.deleteStoreImg(storeNo, storeImgList);
 
 
         if (storeImgList != null && !storeImgList.isEmpty()) {
             // 2. DB에 없는 이미지만 삽입
-            List<String> existingImgs = adminStoreMapper.selectExistingStoreImg(storeId);
+            List<String> existingImgs = adminStoreMapper.selectExistingStoreImg(storeNo);
 
             for (StoreImgDTO storeImg : storeImgList) {
                 if (storeImg != null && !existingImgs.contains(storeImg.getStoreImgLocation())) {
@@ -95,11 +95,11 @@ public class AdminStoreServiceImpl implements AdminStoreService {
         }
 
         //sns링크 삭제
-        adminStoreMapper.deleteStoreSns(storeId, storeSns);
+        adminStoreMapper.deleteStoreSns(storeNo, storeSns);
 
 
         //db에 있는 sns링크 확인
-        List<String> existingSns = adminStoreMapper.selectExistingSns(storeId);
+        List<String> existingSns = adminStoreMapper.selectExistingSns(storeNo);
 
         if(storeSns != null && !storeSns.isEmpty()) {
             for (StoreSnsDTO sns : storeRegistDTO.getStoreSns()) {
@@ -122,7 +122,7 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
-    public List<DayOffDay> getOffDay(Integer storeNo) {
+    public List<DayOffDay> getOffDay(Long storeNo) {
         return adminStoreMapper.getOffDay(storeNo);
     }
 
@@ -132,12 +132,12 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
-    public List<DayOffSet> getOffSet(Integer storeNo) {
+    public List<DayOffSet> getOffSet(Long storeNo) {
         return adminStoreMapper.getOffSet(storeNo);
     }
 
     @Override
-    public Integer deleteOffSet(Integer storeNo, Integer setNo) {
+    public Integer deleteOffSet(Long storeNo, Long setNo) {
         return adminStoreMapper.deleteOffSet(storeNo, setNo);
     }
 

@@ -109,8 +109,8 @@
     </update>
 
     <insert id="insertDay" parameterType="com.example.HiMade.admin.dto.DayOffDay">
-        insert into day_off_day(store_id, store_no, day_off_fix_status, day_off_day)
-        values (#{storeId}, #{storeNo}, #{dayOffFixStatus}, #{dayOffDay});
+        insert into day_off_day(store_no, day_off_fix_status, day_off_day)
+        values (#{storeNo}, #{dayOffFixStatus}, #{dayOffDay});
     </insert>
 
     <update id="updateStoreInfo" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
@@ -126,7 +126,7 @@
             addr = #{addr},
             addrdetail = #{addrdetail},
             store_business_no = #{storeBusinessNo}
-        where store_id = #{storeId} and store_no = #{storeNo}
+        where store_no = #{storeNo}
     </update>
 
 
@@ -142,13 +142,13 @@
             account_bank = #{accountBank},
             account_number = #{accountNumber},
             store_status = #{storeStatus}
-        where store_id = #{storeId}
+        where store_no = #{storeNo}
     </update>
 
 <!-- sns입력 -->
     <delete id="deleteStoreSns" parameterType="com.example.HiMade.admin.dto.StoreSnsDTO">
         delete from store_sns_link
-        where store_id = #{storeId}
+        where store_no = #{storeNo}
         <if test="storeSns != null and storeSns.size() > 0">
             and sns_link not in
             <foreach item="snsLink" collection="storeSns" open="(" separator="," close=")">
@@ -157,22 +157,22 @@
         </if>
     </delete>
 
-    <select id="selectExistingSns" parameterType="string" resultType="string">
+    <select id="selectExistingSns" parameterType="Long" resultType="string">
         select sns_link
         from store_sns_link
-        where store_id = #{storeId}
+        where store_no = #{storeNo}
     </select>
 
     <insert id="addStoreSns" parameterType="com.example.HiMade.admin.dto.StoreSnsDTO">
         insert into store_sns_link
-        values (#{snsLink}, #{snsName}, #{storeId}, #{storeNo})
+        values (#{snsLink}, #{snsName}, #{storeNo})
     </insert>
 
 <!-- img입력 -->
 <!-- data != DB면 (DB에서 delete & data insert) -->
     <delete id="deleteStoreImg" parameterType="com.example.HiMade.admin.dto.StoreImgDTO">
         DELETE FROM store_img
-        WHERE store_id = #{storeId}
+        WHERE store_no = #{storeNo}
         <if test="storeImgList != null and storeImgList.size() > 0">
             AND store_img_location NOT IN
             <foreach item="img" collection="storeImgList" open="(" separator="," close=")">
@@ -181,15 +181,15 @@
         </if>
     </delete>
 
-    <select id="selectExistingStoreImg" resultType="string" parameterType="string">
+    <select id="selectExistingStoreImg" resultType="string" parameterType="Long">
         SELECT store_img_location
         FROM store_img
-        WHERE store_id = #{storeId}
+        WHERE store_no = #{storeNo}
     </select>
 
     <insert id="addStoreImg" parameterType="com.example.HiMade.admin.dto.StoreImgDTO">
-        insert into store_img (store_img_location, store_id, store_no)
-        values (#{storeImgLocation}, #{storeId}, #{storeNo})
+        insert into store_img (store_img_location, store_no)
+        values (#{storeImgLocation}, #{storeNo})
     </insert>
 
     <select id="getMyStore" resultMap="storeRegistResultMap">
@@ -260,8 +260,7 @@
         <!-- 휴무가 아닌 경우 상태를 'N'으로 업데이트 -->
         update day_off_day
         set day_off_fix_status = 'N'
-        where store_id = #{storeId}
-        and store_no = #{storeNo}
+        where store_no = #{storeNo}
         and day_off_day NOT IN
         <foreach item="dayOffDay" collection="dayOffDayList" open="(" separator="," close=")">
             #{dayOffDay.dayOffDay}
@@ -271,18 +270,17 @@
         <foreach item="dayOffDay" collection="dayOffDayList">
             update day_off_day
             set day_off_fix_status = 'Y'
-            where store_id = #{storeId}
-            and store_no = #{storeNo}
+            where store_no = #{storeNo}
             and day_off_day = #{dayOffDay.dayOffDay};
         </foreach>
     </update>
 
     <insert id="registDayOffSet" parameterType="com.example.HiMade.admin.dto.DayOffSet">
-        insert into day_off_set(day_off_start, day_off_end, store_id, store_no)
-        values(#{dayOffStart}, #{dayOffEnd}, #{storeId}, #{storeNo})
+        insert into day_off_set(day_off_start, day_off_end, store_no)
+        values(#{dayOffStart}, #{dayOffEnd}, #{storeNo})
     </insert>
 
-    <delete id="deleteOffSet" parameterType="int">
+    <delete id="deleteOffSet" parameterType="Long">
         delete from day_off_set
         where store_no = #{storeNo} and set_no = #{setNo} and day_off_end &gt; now()
     </delete>

@@ -215,3 +215,13 @@ CREATE TABLE SUB_CATEGORY_STATUS (
     is_paid VARCHAR(1) NULL CHECK (is_paid IN ('Y', 'N')),
     PRIMARY KEY (category_status)
 );
+
+--store_like테이블
+CREATE TABLE store_like (
+    store_like_no BIGSERIAL PRIMARY KEY,
+    store_like_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    store_like_count BIGINT,
+    user_id VARCHAR(100),
+    store_no BIGINT,
+    store_id VARCHAR(100)
+);

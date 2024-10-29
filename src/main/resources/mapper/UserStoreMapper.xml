@@ -65,4 +65,28 @@
             <result property="storeNo" column="store_no"/>
         </collection>
     </resultMap>
+
+<!--  가게 찜  -->
+    <select id="existingLike" resultType="int">
+        select count(*)
+        from user_likes
+        where user_id = #{userId} and store_no = #{storeNo}
+    </select>
+
+    <insert id="clickLike" parameterType="com.example.HiMade.user.dto.UserLikesDTO">
+        insert into user_likes(user_like_date, user_id, store_no)
+        values (now(), #{userId}, #{storeNo})
+    </insert>
+
+    <delete id="deleteLike" parameterType="com.example.HiMade.user.dto.UserLikesDTO">
+        delete from user_likes
+        where user_id = #{userId} and store_no = #{storeNo}
+    </delete>
+
+<!--  나의 찜  -->
+    <select id="getLike" resultType="com.example.HiMade.user.dto.UserLikesDTO">
+        select * from user_likes
+        where user_id = #{userId}
+    </select>
+
 </mapper>

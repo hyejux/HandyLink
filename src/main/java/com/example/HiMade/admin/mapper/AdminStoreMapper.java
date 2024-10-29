@@ -22,19 +22,19 @@ public interface AdminStoreMapper {
     StoreRegistDTO getMyStore(Long storeNo); //가게관리정보 불러오기
     void updateStore(StoreRegistDTO storeRegistDTO); //내가게 업데이트
 
-    void deleteStoreImg(@Param("storeId") String storeId, @Param("storeImgList") List<StoreImgDTO> storeImgList); //이미지 삭제
-    List<String> selectExistingStoreImg(String storeId); // DB에 저장된 이미지 경로 확인
+    void deleteStoreImg(@Param("storeNo") Long storeNo, @Param("storeImgList") List<StoreImgDTO> storeImgList); //이미지 삭제
+    List<String> selectExistingStoreImg(Long storeNo); // DB에 저장된 이미지 경로 확인
     void addStoreImg(StoreImgDTO storeImgDTO); //가게img 추가
 
-    void deleteStoreSns(@Param("storeId") String storeId, @Param("storeSns") List<StoreSnsDTO> storeSns);
-    List<String> selectExistingSns(String storeId); // DB에 저장된 이미지 경로 확인
+    void deleteStoreSns(@Param("storeNo") Long storeNo, @Param("storeSns") List<StoreSnsDTO> storeSns);
+    List<String> selectExistingSns(Long storeNo); // DB에 저장된 이미지 경로 확인
     void addStoreSns(StoreSnsDTO storeSnsDTO); //가게img 추가
 
     void updateDay(StoreRegistDTO storeRegistDTO); //고정휴무-update
-    List<DayOffDay> getOffDay(Integer storeNo);//고정휴무-select
+    List<DayOffDay> getOffDay(Long storeNo);//고정휴무-select
     void registDayOffSet(DayOffSet dayOffSet); //지정휴무
-    List<DayOffSet> getOffSet(Integer storeNo); //지정휴무-select
-    Integer deleteOffSet(@Param("storeNo") Integer storeNo, @Param("setNo") Integer setNo); //지정휴무-delete
+    List<DayOffSet> getOffSet(Long storeNo); //지정휴무-select
+    Integer deleteOffSet(@Param("storeNo") Long storeNo, @Param("setNo") Long setNo); //지정휴무-delete
 
     Integer duplicatedId(String storeId); //아이디 중복검사
 

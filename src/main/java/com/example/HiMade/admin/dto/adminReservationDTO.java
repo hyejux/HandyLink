@@ -22,5 +22,6 @@ public class adminReservationDTO {
   private String storeId;
   private LocalDateTime ServiceStart;
   private String imageUrl;
+  private String activated;
 
 }

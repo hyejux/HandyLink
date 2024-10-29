@@ -180,4 +180,19 @@ public class AdminStoreServiceImpl implements AdminStoreService {
        adminStoreMapper.setNotice(dto);
     }
 
+    @Override
+    public void setNoticeModi(storeNoticeDTO dto) {
+        adminStoreMapper.setNoticeModi(dto);
+    }
+
+    @Override
+    public void setNoticeStatus(storeNoticeDTO dto) {
+        adminStoreMapper.setNoticeStatus(dto);
+    }
+
+    @Override
+    public storeNoticeDTO getNoticeDetail(int id) {
+        return adminStoreMapper.getNoticeDetail(id);
+    }
+
 }

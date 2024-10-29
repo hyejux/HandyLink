@@ -7,7 +7,7 @@
 
 
     <select id="getNoticeList" resultType="com.example.HiMade.admin.dto.storeNoticeDTO">
-        select * from store_notice
+        select * from store_notice where status = 'Y' or status = 'D'
     </select>
 <!-- 스토어 넘버 변경 -->
     <insert id="setNotice" parameterType="com.example.HiMade.admin.dto.storeNoticeDTO">
@@ -25,6 +25,25 @@
         'bbb123'
         );
     </insert>
+
+    <update id="setNoticeModi" parameterType="com.example.HiMade.admin.dto.storeNoticeDTO">
+        update store_notice
+        set notice_content =  #{noticeContent}
+        ,notice_regdate = now()
+        ,notice_type = #{noticeType}
+        ,modi = 'Y'
+        where notice_no = #{noticeNo}
+    </update>
+
+    <update id="setNoticeStatus" parameterType="com.example.HiMade.admin.dto.storeNoticeDTO">
+        update store_notice
+        set status = #{status}
+        where notice_no = #{noticeNo}
+    </update>
+
+    <select id="getNoticeDetail" resultType="com.example.HiMade.admin.dto.storeNoticeDTO">
+        select * from store_notice where notice_no = #{id}
+    </select>
 
     <!-- 계정관리(가입,로그인,마이페이지)  -->
     <select id="loginCheck" resultType="com.example.HiMade.admin.dto.StoreRegistDTO">
@@ -267,5 +286,6 @@
         delete from day_off_set
         where store_no = #{storeNo} and set_no = #{setNo} and day_off_end &gt; now()
     </delete>
+
 
 </mapper>

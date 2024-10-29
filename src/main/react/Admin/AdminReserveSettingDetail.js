@@ -5,7 +5,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import './AdminReserveSetting.css';
 import './AdminReserveSettingDetail.css';
 
-const AdminReserveSettingDetailModify = () => {
+const AdminReserveSettingDetail = () => {
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -468,4 +468,4 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<AdminReserveSettingDetailModify />);
+root.render(<AdminReserveSettingDetail />);

@@ -54,7 +54,9 @@ public class AdminReservationServiceImpl implements AdminReservationService {
 
   @Override
   public Integer setMainCategory(adminReservationDTO dto) {
+//    adminReservationMapper.setActivated(id);
     adminReservationMapper.setMainCategory(dto);
+
     return dto.getCategoryId();
   }
 
@@ -129,6 +131,16 @@ public class AdminReservationServiceImpl implements AdminReservationService {
       dto.setCategoryId(categoryId);
 
       adminReservationMapper.setMainCategoryImg(dto);
+  }
+
+  @Override
+  public void setActivated(int id) {
+    adminReservationMapper.setActivated(id);
+  }
+
+  @Override
+  public void setSlotModi(int id, int realId) {
+    adminReservationMapper.setSlotModi(id, realId);
   }
 
 

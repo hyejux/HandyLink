@@ -333,9 +333,11 @@ const [noticeList, setNoticeList] = useState([]);
 
               <div className="user-content-container">
               {noticeList.map((notice, index) => (
+                 notice.status === 'Y' && ( 
                <ul key={index} style={{listStyle:'none'}}>
                 <li> <i class="bi bi-bell"></i> {notice.noticeType}  | {notice.noticeContent.slice(0, 20)}...</li>
-                </ul>             
+                </ul>            
+                 ) 
                 ))}
             </div>
 
@@ -346,31 +348,38 @@ const [noticeList, setNoticeList] = useState([]);
            {activeSection === 'info' && (
 
               <div>
-              {noticeList.map((notice, index) => (
-                 <React.Fragment key={index}>
-                  <div key={index} className="user-content-container">
-                  <i class="bi bi-chevron-down" style={{float:'right'}} onClick={() => handleToggleRow(index)}></i>
-                  {expandedRows.includes(index) ? (
-                            <div>
-                                {/* 확장된 내용을 표시 */}
-                                <div className="expanded-content">
-                                    <p>카테고리: {notice.noticeType}</p>
-                                    <p>소식 내용: {notice.noticeContent}</p>
-                                    <p>등록일: {notice.noticeRegdate}</p>
-                                </div>
-                            </div>
-                        ) : (
-                            <div>
-                                {/* 기본 내용, 확장되지 않았을 때 보이는 부분 */}
-                                <div>{notice.noticeType}</div>
-                                <div>{notice.noticeContent.slice(0, 50)}...</div>
-                                <div>{notice.noticeRegdate}</div>
-                            </div>
-                        )}
-                  </div>
-                    
-                </React.Fragment>
-              ))}
+
+{noticeList.map((notice, index) => (
+  notice.status === 'Y' && ( // status가 'Y'인 경우에만 렌더링
+    <React.Fragment key={index}>
+      <div className="user-content-container">
+        <i
+          className="bi bi-chevron-down"
+          style={{ float: 'right' }}
+          onClick={() => handleToggleRow(index)}
+        ></i>
+        {expandedRows.includes(index) ? (
+          <div>
+            {/* 확장된 내용을 표시 */}
+            <div className="expanded-content">
+              <p>카테고리: {notice.noticeType}</p>
+              <p>소식 내용: {notice.noticeContent}</p>
+              <p>등록일: {notice.noticeRegdate}</p>
+            </div>
+          </div>
+        ) : (
+          <div>
+            {/* 기본 내용, 확장되지 않았을 때 보이는 부분 */}
+            <div>{notice.noticeType}</div>
+            <div>{notice.noticeContent.slice(0, 50)}...</div>
+            <div>{notice.noticeRegdate}</div>
+          </div>
+        )}
+      </div>
+    </React.Fragment>
+  )
+))}
+
              
               </div>
 
@@ -380,6 +389,7 @@ const [noticeList, setNoticeList] = useState([]);
           {activeSection === 'reservation' && (
             <>
               {reservationList.map((value, index) => {
+          if (value.activated === 'Y') {
                 const remainingTime = calculateRemainingTime(value.serviceStart);
                 // const formattedDate = convertDateFormat(serviceStart, 'YYYY/MM/DD HH:mm');
                 const daysUntilServiceStart = calculateDaysUntilServiceStart(value.serviceStart);
@@ -414,6 +424,9 @@ const [noticeList, setNoticeList] = useState([]);
                     </div>
                   </div>
                 );
+                
+              }
+              return null;
               })}
             </>
           )}

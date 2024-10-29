@@ -106,8 +106,6 @@ function AdminReserveManageDetail() {
   };
 
 
-
-
   return (
     <div>
       <div className="main-contents">

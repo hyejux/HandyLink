@@ -4,6 +4,7 @@ import com.example.HiMade.user.entity.Payment;
 import com.example.HiMade.user.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,6 +40,21 @@ public class PaymentService {
     public Payment updatePayment(Payment payment) {
         return paymentRepository.save(payment);
     }
+
+    // 결제 상태 업데이트 메서드
+    public void updatePaymentStatus(Long reservationNo, String newStatus) {
+        List<Payment> payments = paymentRepository.findByReservationNo(reservationNo);
+
+        if (!payments.isEmpty()) {
+            payments.forEach(payment -> {
+                payment.setPaymentStatus(newStatus);
+                paymentRepository.save(payment); // 상태 저장
+            });
+        } else {
+            throw new IllegalArgumentException("Reservation not found for reservationNo: " + reservationNo);
+        }
+    }
+
 
 
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/adminChat")
@@ -24,6 +25,12 @@ public class AdminChatController {
     @PostMapping("/save")
     public void saveChatMessage(@RequestBody AdminChatDTO chatMessage) {
         adminChatService.saveChatMessage(chatMessage);
+    }
+
+    // 업체 기준 채팅 목록 조회 (사용자별 최신 메시지)
+    @GetMapping("/list")
+    public List<Map<String, Object>> getChatListForStore(@RequestParam String storeId) {
+        return adminChatService.getChatListForStore(storeId);
     }
 
 }

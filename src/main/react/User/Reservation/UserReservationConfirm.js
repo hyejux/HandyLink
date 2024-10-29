@@ -162,61 +162,77 @@ function UserReservationConfirm() {
   // ----------------------- 주문등록, 결제 부분 -----------------------
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(""); // 결제수단
 
-
-  const requestPayment = (paymentMethod) => {
-
+  const handleReservation = async (paymentMethod) => {
     let reservationNum = 0;
+
+    const reservationStatus = paymentMethod === "bank_transfer" ? "입금대기" : "대기";
 
     const reservationData = {
       reservationTime: slot,  // 세션 데이터에서 가져옴
       reservationSlotKey: reservationSlotKey,  // 세션 데이터에서 가져옴
       customerRequest: requestText,  // 사용자 입력 요청사항
-      reservationPrice: totalPrice  // 총액 정보
+      reservationPrice: totalPrice,  // 총액 정보
+      storeNo: storeInfo.storeNo,
+      reservationStatus: reservationStatus
     };
 
-    console.log('최종 예약 데이터:', reservationData);
-    axios
-      .post(`/userReservation/setReservationForm`, reservationData)
-      .then(response => {
-        const reservation_id = response.data;
-        reservationNum = response.data;  // 예약 번호를 받아옴
-        console.log("reservation_no 주문번호 ! : : ", reservation_id);
+    try {
+      // 1. 예약 정보 저장
+      const response = await axios.post(`/userReservation/setReservationForm`, reservationData);
+      reservationNum = response.data;
 
-        // reservation_id가 설정된 후에 배열을 업데이트
-        const updatedArray = formData.map(item => ({
-          ...item,  // 기존 객체의 모든 속성 복사
-          reservationNo: reservation_id  // reservationNo 추가
-        }));
+      console.log("예약 번호: ", reservationNum);
 
-        console.log('업데이트된 배열:', updatedArray);
+      // 2. 세부 예약 정보 업데이트
+      const updatedArray = formData.map(item => ({
+        ...item,
+        reservationNo: reservationNum
+      }));
 
-        // 필요시 여기서 두 번째 요청을 진행
-        return axios.post(`/userReservation/setReservationFormDetail`, updatedArray);
-      })
-      .then(response => {
-        console.log("슬롯 상태 업데이트 요청 성공! ", response.data);
-        const categoryId = cateId;
-        const storeNo = sessionSestoreNo;
-        const reservationDate = date;
+      await axios.post(`/userReservation/setReservationFormDetail`, updatedArray);
 
-        console.log("전송될 데이터:", { categoryId, reservationDate, storeNo });
-
-        return axios.post(`/userReservation/updateSlotStatus`, {
-          categoryId,
-          reservationDate,
-          storeNo
-        });
-      })
-      .then(response => {
-        console.log("두 번째 요청 성공! ", response.data);
-      })
-      .catch(error => {
-        console.error('Error during slot status update', error);
+      // 3. 슬롯 상태 업데이트
+      await axios.post(`/userReservation/updateSlotStatus`, {
+        categoryId: cateId,
+        reservationDate: date,
+        storeNo: sessionSestoreNo
       });
 
-    // ---------------------------------------------------------------------------
+      console.log("예약 완료 및 슬롯 상태 업데이트 성공!");
 
-    //결제
+      return reservationNum;
+    } catch (error) {
+      console.error("예약 처리 중 오류 발생:", error);
+      throw error;
+    }
+  };
+
+  const handlePaymentSuccess = async (reservationNum, paymentMethod) => {
+    try {
+      await storePaymentInfo({
+        paymentMethod: paymentMethod === "card" ? "간편결제" : paymentMethod === "trans" ? "일반결제" : "계좌이체",
+        paymentAmount: totalPrice,
+        paymentStatus: paymentMethod === "bank_transfer" ? "입금대기" : "결제완료",
+        reservationNo: reservationNum
+      });
+
+      sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
+      sessionStorage.setItem('totalPrice', totalPrice);
+      sessionStorage.setItem('reserveModi', JSON.stringify(reserveModi));
+      sessionStorage.setItem('categories', JSON.stringify(categories));
+
+      // 리다이렉트
+      const redirectUrl = paymentMethod === "bank_transfer" ?
+        `../UserMyReservationDetail.user/${reservationNum}` :
+        `../UserMyReservationList.user`;
+
+      window.location.href = redirectUrl;
+    } catch (error) {
+      console.error("결제 정보 저장 중 오류 발생:", error);
+    }
+  };
+
+  const requestPayment = (paymentMethod) => {
     const { IMP } = window;
     if (!IMP) {
       console.error("IMP 객체가 정의되지 않았습니다. 아임포트 스크립트를 확인하세요.");
@@ -236,44 +252,35 @@ function UserReservationConfirm() {
       buyer_tel: "010-1234-5678",
       buyer_addr: "구매자 주소",
       buyer_postcode: "우편번호",
-      m_redirect_url: window.location.href,
+      m_redirect_url: window.location.href
     };
 
-    IMP.request_pay(data, async function (response) {
+    IMP.request_pay(data, async (response) => {
       if (response.success) {
         console.log("결제 성공:", response);
         alert(`결제 성공! 결제 ID: ${response.imp_uid}`);
 
-        console.log("예약번호: " + reservationNum);
-
-        // 결제 성공 후 DB에 저장
-        await storePaymentInfo({
-          paymentMethod: paymentMethod === "card" ? "간편결제" : "일반결제",
-          paymentAmount: totalPrice,
-          paymentStatus: "Y",
-          reservationNo: reservationNum,
-        });
-
-        sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
-        sessionStorage.setItem('totalPrice', totalPrice);
-        sessionStorage.setItem('reserveModi', JSON.stringify(reserveModi));
-        sessionStorage.setItem('categories', JSON.stringify(categories));
-
-        // 결제 성공 후 리다이렉트
-        window.location.href = `../UserMyReservationList.user`;
+        try {
+          const reservationNum = await handleReservation(paymentMethod);
+          await handlePaymentSuccess(reservationNum, paymentMethod);
+        } catch (error) {
+          console.error("결제 성공 후 처리 중 오류 발생:", error);
+        }
 
       } else {
-        console.log("결제 실패:", response);
+        console.error("결제 실패:", response);
         alert(`결제 실패! 에러 코드: ${response.error_code}, 에러 메시지: ${response.error_msg}`);
-
-        // 결제 실패 시 결제 정보 초기화
-        setSelectedPaymentMethod(""); 
-        sessionStorage.removeItem('storeInfo');
-        sessionStorage.removeItem('totalPrice');
-        sessionStorage.removeItem('reserveModi'); 
-        sessionStorage.removeItem('categories'); 
+        resetPaymentState();
       }
     });
+  };
+
+  const resetPaymentState = () => {
+    setSelectedPaymentMethod("");
+    sessionStorage.removeItem('storeInfo');
+    sessionStorage.removeItem('totalPrice');
+    sessionStorage.removeItem('reserveModi');
+    sessionStorage.removeItem('categories');
   };
 
   const storePaymentInfo = async (paymentData) => {
@@ -285,17 +292,15 @@ function UserReservationConfirm() {
         },
         body: JSON.stringify(paymentData),
       });
-      if (response.ok) {
-        const result = await response.json();
-        console.log("결제 정보 저장 성공:", result);
-      } else {
-        console.error("결제 정보 저장 실패:", response.statusText);
-      }
+
+      if (!response.ok) throw new Error('결제 정보 저장 실패');
+
+      const result = await response.json();
+      console.log("결제 정보 저장 성공:", result);
     } catch (error) {
       console.error("결제 정보 저장 중 오류 발생:", error);
     }
   };
-
 
 
   return (
@@ -522,34 +527,8 @@ function UserReservationConfirm() {
             <button className="payment-button" onClick={async () => {
               if (selectedPaymentMethod === "bank_transfer") {
                 try {
-                  // 계좌이체 선택 시, 주문 정보 등록 후 결제 정보 저장
-                  let reservationNum = 0;
-
-                  const reservationData = {
-                    reservationTime: slot,  // 세션 데이터에서 가져옴
-                    reservationSlotKey: reservationSlotKey,  // 세션 데이터에서 가져옴
-                    customerRequest: requestText,  // 사용자 입력 요청사항
-                    reservationPrice: totalPrice  // 총액 정보
-                  };
-
-                  console.log('최종 예약 데이터 (계좌이체):', reservationData);
-
-                  const response = await axios.post(`/userReservation/setReservationForm`, reservationData);
-                  reservationNum = response.data;  // 예약 번호를 받아옴
-                  console.log("계좌이체 주문번호 ! : : ", reservationNum);
-
-                  // 결제 정보 저장
-                  await storePaymentInfo({
-                    paymentMethod: "계좌이체",
-                    paymentAmount: totalPrice,
-                    paymentStatus: "입금대기",
-                    reservationNo: reservationNum,
-                  });
-
-                  sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
-                  // 결제 성공 후 리다이렉트
-                  window.location.href = `../UserMyReservationDetail.user/${reservationNum}`;
-
+                  const reservationNum = await handleReservation(selectedPaymentMethod);
+                  await handlePaymentSuccess(reservationNum, "bank_transfer");
                 } catch (error) {
                   console.error("계좌이체 주문 등록 중 오류 발생:", error);
                   alert("주문 등록에 실패했습니다. 다시 시도해주세요.");
@@ -561,9 +540,6 @@ function UserReservationConfirm() {
               {totalPrice}원 결제하기
             </button>
           </div>
-
-
-
 
         </div>
       </div>

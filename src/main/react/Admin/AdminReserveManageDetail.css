@@ -1,3 +1,57 @@
-.reserve-table , .reserve-table td , .reserve-table tr , .reserve-table th{
-  border : 1px solid #ddd;
+/* 승인상태 */
+.reserve-status-container {
+  overflow: hidden;
 }
+
+.reserve-status-container .left {
+  float: left;
+}
+
+.reserve-status-container .right {
+  float: right;
+}
+
+
+
+
+/* 테이블 */
+.reserve-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.reserve-table th,
+.reserve-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border: 1px solid #e0e0e0;
+}
+
+
+.reserve-table th {
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+
+
+.reserve-table h2 {
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+
+.flex-container {
+  display: flex;
+  justify-content: space-between; 
+  margin-bottom: 20px;
+}
+
+.reserve-table {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+

@@ -68,6 +68,7 @@ function UserMain() {
     const scrollLeft = list.scrollLeft;
     const maxScrollLeft = list.scrollWidth - list.clientWidth;
 
+    
     leftBtn.style.display = scrollLeft <= 0 ? 'none' : 'block';
     rightBtn.style.display = scrollLeft >= maxScrollLeft ? 'none' : 'block';
   };
@@ -493,7 +494,7 @@ function UserMain() {
 
                   <div className="result-list-mid">
                     <div className="result-list-date">
-                      <i className="bi bi-clock-fill"></i>영업시간: {store.storeOpenTime.slice(0, 5)} - {store.storeCloseTime.slice(0, 5)}
+                      <i className="bi bi-clock-fill"></i>영업시간: {store.storeOpenTime ? store.storeOpenTime.slice(0, 5) : ''} - {store.storeCloseTime ? store.storeCloseTime.slice(0, 5) : ''}
                       <span className="result-list-location">
                         <i className="bi bi-geo-alt-fill"></i>현재 위치에서 {storeDistance}
                       </span>
@@ -502,8 +503,8 @@ function UserMain() {
 
                   <div className="result-list-bottom">
                     <div className="result-list-option-container">
-                      {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category, index) => (
-                        <span key={index} className="result-list-option">
+                      {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
+                        <span key={category.id} className="result-list-option">
                           <i className="bi bi-hash"></i>
                           {category.serviceName}
                         </span>

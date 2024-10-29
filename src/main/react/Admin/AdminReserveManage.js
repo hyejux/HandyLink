@@ -114,39 +114,39 @@ function AdminReserveManage() {
         if (window.confirm(`${reservationNo} 주문건을 ${status}로 변경하시겠습니까?`)) {
             // 결제 상태 결정
             const paymentStatus = (status === '확정') ? '결제완료' : (status === '취소(업체)' || status === '취소(고객)') ? '결제취소' : '';
-    
+
             // 예약 상태 업데이트
             axios.post('/adminReservation/updateStatus', {
                 reservationId: reservationNo,
                 newStatus: status,
             })
-            .then(response => {
-                // 결제 상태 업데이트
-                return axios.post('/userPayment/updateStatus', null, {
-                    params: {
-                        reservationNo: reservationNo,
-                        newStatus: paymentStatus,
-                    },
+                .then(response => {
+                    // 결제 상태 업데이트
+                    return axios.post('/userPayment/updateStatus', null, {
+                        params: {
+                            reservationNo: reservationNo,
+                            newStatus: paymentStatus,
+                        },
+                    });
+                })
+                .then(response => {
+                    setReservationList(prevList => prevList.map(item =>
+                        item.reservationNo === reservationNo ? { ...item, reservationStatus: status } : item
+                    ));
+                    setUpdatingReservationId(null); // 업데이트 완료 후 ID 초기화
+                    setNewStatus(''); // 새로운 상태 초기화
+                })
+                .catch(error => {
+                    console.error('Error updating reservation or payment status:', error);
                 });
-            })
-            .then(response => {
-                setReservationList(prevList => prevList.map(item =>
-                    item.reservationNo === reservationNo ? { ...item, reservationStatus: status } : item
-                ));
-                setUpdatingReservationId(null); // 업데이트 완료 후 ID 초기화
-                setNewStatus(''); // 새로운 상태 초기화
-            })
-            .catch(error => {
-                console.error('Error updating reservation or payment status:', error);
-            });
         } else {
             setUpdatingReservationId(null);
             setNewStatus('');
         }
     };
-    
-    
-    
+
+
+
 
     // 예약 상태 변경 취소 버튼
     const handleCancelUpdate = () => {
@@ -159,13 +159,13 @@ function AdminReserveManage() {
     const goToDetail = (no) => {
         window.location.href = `/AdminReserveManageDetail.admin/${no}`;
     };
-    
+
 
     return (
         <div>
             <div className="main-content-title">
                 <div className='header-title'> 예약 관리 </div>
-                <hr/>
+                <hr />
                 <div className="icon-buttons">
                     <button className="icon-button calendar-button" onClick={() => setViewMode('calendar')}>
                         <span className="material-symbols-outlined">calendar_today</span>
@@ -196,8 +196,8 @@ function AdminReserveManage() {
 
             <div className="main-contents">
                 <div className="search-bar-box">
-                        <input type='text' placeholder='검색할 내용을 입력해주세요'/> 
-                        <button>  <i class="bi bi-search"></i> </button>
+                    <input type='text' placeholder='검색할 내용을 입력해주세요' />
+                    <button>  <i class="bi bi-search"></i> </button>
                 </div>
 
                 {viewMode === 'list' ? (
@@ -217,7 +217,7 @@ function AdminReserveManage() {
                             </thead>
                             <tbody>
                                 {reservationList.map((value, index) => (
-                                    <tr key={index} onDoubleClick={()=>{goToDetail(value.reservationNo)}}>
+                                    <tr key={index} onDoubleClick={() => { goToDetail(value.reservationNo) }}>
                                         <td><input type="checkbox" /></td>
                                         <td>{value.reservationNo}</td>
                                         <td>{value.userId}</td>
@@ -226,28 +226,28 @@ function AdminReserveManage() {
                                         <td>{value.customerRequest}</td>
                                         {/* <td>{value.reservationStatus}</td> */}
                                         <td>
-                                        <div>
-    <select
-        value={newStatus}
-        onChange={(e) => {
-            const selectedStatus = e.target.value;
-            setNewStatus(selectedStatus);
-            handleStatusChange(value.reservationNo, selectedStatus);
-        }}
-        disabled={
-            value.reservationStatus === '완료' || 
-            value.reservationStatus === '취소(업체)' || 
-            value.reservationStatus === '취소(고객)'
-        }
-    >
-        <option value={value.reservationStatus}>{value.reservationStatus}</option>
-        {value.reservationStatus !== '확정' && <option value="확정">확정</option>}
-        {value.reservationStatus !== '완료' && <option value="완료">완료</option>}
-        {value.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
-    </select>
-</div>
+                                            <div>
+                                                <select
+                                                    value={newStatus}
+                                                    onChange={(e) => {
+                                                        const selectedStatus = e.target.value;
+                                                        setNewStatus(selectedStatus);
+                                                        handleStatusChange(value.reservationNo, selectedStatus);
+                                                    }}
+                                                    disabled={
+                                                        value.reservationStatus === '완료' ||
+                                                        value.reservationStatus === '취소(업체)' ||
+                                                        value.reservationStatus === '취소(고객)'
+                                                    }
+                                                >
+                                                    <option value={value.reservationStatus}>{value.reservationStatus}</option>
+                                                    {value.reservationStatus !== '확정' && <option value="확정">확정</option>}
+                                                    {value.reservationStatus !== '완료' && <option value="완료">완료</option>}
+                                                    {value.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
+                                                </select>
+                                            </div>
 
-                                         
+
                                         </td>
                                     </tr>
                                 ))}

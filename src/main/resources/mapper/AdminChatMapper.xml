@@ -17,8 +17,32 @@
 
     <!-- 새로운 채팅 메시지 저장 -->
     <insert id="insertChatMessage" parameterType="com.example.HiMade.admin.dto.AdminChatDTO">
-        INSERT INTO chat (chat_no, chat_message, send_time, store_id, user_id, sender_type, store_no)
-        VALUES (#{chatNo}, #{chatMessage}, #{sendTime}, #{storeId}, #{userId}, #{senderType}, #{storeNo})
+        INSERT INTO chat (chat_message, send_time, store_id, user_id, sender_type, store_no)
+        VALUES (#{chatMessage}, #{sendTime}, #{storeId}, #{userId}, #{senderType}, #{storeNo})
     </insert>
+
+    <!-- 업체 기준 채팅 목록 조회 (사용자별 최신 메시지) -->
+    <select id="getChatListForStore" resultType="map">
+        SELECT
+            c.user_id AS userId,
+            u.user_name AS userName,
+            latest_messages.lastMessageTime AS lastMessageTime,
+            latest_messages.chat_message AS lastMessage,
+            u.user_img_url AS userImgUrl
+        FROM users u
+                 JOIN chat c ON u.user_id = c.user_id
+                 JOIN (
+            SELECT user_id, store_id, MAX(send_time) AS lastMessageTime, chat_message
+            FROM chat
+            WHERE store_id = #{storeId}
+            GROUP BY user_id, store_id, chat_message
+        ) AS latest_messages ON c.user_id = latest_messages.user_id
+            AND c.store_id = latest_messages.store_id
+            AND c.send_time = latest_messages.lastMessageTime
+        WHERE c.store_id = #{storeId}
+        GROUP BY c.user_id, u.user_name, u.user_img_url, latest_messages.lastMessageTime, latest_messages.chat_message
+        ORDER BY lastMessageTime DESC
+    </select>
+
 
 </mapper>

@@ -57,6 +57,21 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
+    public String findAdminId(String managerName, String storeBusinessNo) {
+        return adminStoreMapper.findAdminId(managerName, storeBusinessNo);
+    }
+
+    @Override
+    public Integer findAdminPw(String storeId, String storeBusinessNo) {
+        return adminStoreMapper.findAdminPw(storeId, storeBusinessNo);
+    }
+
+    @Override
+    public void updatePw(String newPw, String storeId, String storeBusinessNo) {
+        adminStoreMapper.updatePw(newPw, storeId, storeBusinessNo);
+    }
+
+    @Override
     public void updateStore(StoreRegistDTO storeRegistDTO) {
         String storeId = storeRegistDTO.getStoreId();
         List<StoreImgDTO> storeImgList = storeRegistDTO.getStoreImg();
@@ -67,24 +82,30 @@ public class AdminStoreServiceImpl implements AdminStoreService {
         // 1. 기존 이미지 삭제
         adminStoreMapper.deleteStoreImg(storeId, storeImgList);
 
-        // 2. DB에 없는 이미지만 삽입
-        List<String> existingImgs = adminStoreMapper.selectExistingStoreImg(storeId);
 
-        for (StoreImgDTO storeImg : storeRegistDTO.getStoreImg()) {
-            if (!existingImgs.contains(storeImg.getStoreImgLocation())) {
-                adminStoreMapper.addStoreImg(storeImg);  // DB에 없는 이미지만 삽입
+        if (storeImgList != null && !storeImgList.isEmpty()) {
+            // 2. DB에 없는 이미지만 삽입
+            List<String> existingImgs = adminStoreMapper.selectExistingStoreImg(storeId);
+
+            for (StoreImgDTO storeImg : storeImgList) {
+                if (storeImg != null && !existingImgs.contains(storeImg.getStoreImgLocation())) {
+                    adminStoreMapper.addStoreImg(storeImg);  // DB에 없는 이미지만 삽입
+                }
             }
         }
 
         //sns링크 삭제
-        adminStoreMapper.deleteStoreSns(storeId,storeSns);
+        adminStoreMapper.deleteStoreSns(storeId, storeSns);
+
 
         //db에 있는 sns링크 확인
         List<String> existingSns = adminStoreMapper.selectExistingSns(storeId);
 
-        for(StoreSnsDTO sns : storeRegistDTO.getStoreSns()){
-            if(!existingSns.contains(sns.getSnsLink())){
-                adminStoreMapper.addStoreSns(sns);
+        if(storeSns != null && !storeSns.isEmpty()) {
+            for (StoreSnsDTO sns : storeRegistDTO.getStoreSns()) {
+                if (!existingSns.contains(sns.getSnsLink())) {
+                    adminStoreMapper.addStoreSns(sns);
+                }
             }
         }
     }

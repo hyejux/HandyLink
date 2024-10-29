@@ -84,7 +84,9 @@ public class MainController {
   }
 
   @PostMapping("/loginForm")
-  public ResponseEntity<Map<String, Object>> loginForm(@RequestBody Map<String, String> loginData, HttpSession session) {
+  public ResponseEntity<Map<String, Object>> loginForm(@RequestBody Map<String, String> loginData,
+                                                       HttpSession session,
+                                                       Model model) {
     String id = loginData.get("id");
     String pw = loginData.get("pw");
 
@@ -94,16 +96,21 @@ public class MainController {
 
     String storeId = store.getStoreId();
     Long storeNo = store.getStoreNo();
+    String storeStatus = store.getStoreStatus();
 
     if(storeId != null && !storeId.isEmpty()){
       session.setAttribute("storeId", storeId);
       session.setAttribute("storeNo", storeNo);
       session.setAttribute("storeName", store.getStoreName());
+      session.setAttribute("storeStatus", store.getStoreStatus());
+
+      model.addAttribute("storeStatus", storeStatus);
 
       //두개를 리턴하기 위해 Map사용
       Map<String, Object> response = new HashMap<>();
       response.put("storeId",storeId);
       response.put("storeNo",storeNo);
+      response.put("storeStatus",storeStatus);
 
       return ResponseEntity.ok(response);
     } else {

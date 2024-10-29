@@ -60,7 +60,9 @@ module.exports = {
         UserDelete: './User/User/UserDelete.js',
         AdminChat: './Admin/AdminChat.js',
         AdminReviewList : './Admin/AdminReviewList.js',
-        UserReviewRegist : './User/User/UserReviewRegist.js'
+        UserReviewRegist : './User/User/UserReviewRegist.js',
+        UserSearchResult: './User/User/UserSearchResult.js',
+        AdminAccountFind: './Admin/AdminAccountFind.js'
 
     },
 

@@ -8,8 +8,6 @@ function AdminSignupApproval(){
     // 세션 스토리지에서 storeId 가져오기
     const storeId = sessionStorage.getItem('storeId');
     const storeNo = sessionStorage.getItem('storeNo');
-    console.log("세션에서 가져온 storeId: ", storeId);
-    console.log("세션에서 가져온 storeNo: ", storeNo);
 
     const [approvalStore, setApprovalStore] = useState(null);
 

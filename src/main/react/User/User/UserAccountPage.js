@@ -45,13 +45,15 @@ function UserAccountPage () {
         if (isKakaoLogin) {
             // 카카오 로그아웃 처리
             const REST_API_KEY = process.env.REACT_APP_KAKAO_CLIENT_ID;
-            const LOGOUT_REDIRECT_URI = 'http://172.30.1.99:8585/UserLoginPage.user';
+            // const LOGOUT_REDIRECT_URI = 'http://172.30.1.99:8585/UserLoginPage.user';
+            const LOGOUT_REDIRECT_URI = 'http://localhost:8585/kakao/logout';
 
             // 카카오 로그아웃 URL
-            const logoutUrl = `https://kauth.kakao.com/oauth/logout?client_id=${REST_API_KEY}&logout_redirect_uri=${encodeURIComponent(LOGOUT_REDIRECT_URI)}`
+            const logoutUrl = `https://kauth.kakao.com/oauth/logout?client_id=${REST_API_KEY}&logout_redirect_uri=${encodeURIComponent(LOGOUT_REDIRECT_URI)}`;
 
             // 로컬 스토리지에서 사용자 정보 제거
             localStorage.removeItem('token');
+            localStorage.removeItem('kakaoAccessToken');
 
             // 카카오 로그아웃 요청
             window.location.href = logoutUrl; // 카카오 로그아웃 페이지로 이동
@@ -60,6 +62,10 @@ function UserAccountPage () {
             window.location.href = '/logout'; // 시큐리티 로그아웃 경로
         }
     };
+
+
+
+
 
     return (
         <div>

@@ -4,6 +4,8 @@ import com.example.HiMade.user.dto.UserDTO;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import javax.servlet.http.HttpSession;
+
 public interface UserAccountService {
     void insertUser(UserDTO userDTO);
     boolean checkId(String userId);
@@ -15,4 +17,7 @@ public interface UserAccountService {
     boolean verifyUserForPasswordReset(String userId, String userName, String phonenum);
     void resetPassword(String userId, String newPassword);
     boolean deleteUser(String userId, String password);
+    boolean deleteKakaoUser(String userId, String accessToken, String confirmationText) throws Exception;
+
+
 }

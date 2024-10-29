@@ -9,19 +9,15 @@ function AdminChat() {
     const [showToast, setShowToast] = useState(false);
     const [newMessageCount, setNewMessageCount] = useState(0);
     const [isAtBottom, setIsAtBottom] = useState(true);
+    const [storeId, setStoreId] = useState(null);
+    const [storeNo, setStoreNo] = useState("");
 
     const chatBoxRef = useRef(null);
     const websocket = useRef(null);
     const inputRef = useRef(null);
 
-    // 고정된 사용자 및 업체 ID, 추후 로그인 연동 시 변경
-    const userId = 'qwer@naver.com';
-    const senderType = 'STORE';
-    const storeNo = 5;
-    const storeId = 'test1';
-    const storeName = '도레도레';
-    const profileImg = '/img/user_basic_profile.jpg';
-
+    const userId = 'chat@naver.com'; // 임시 업체 ID
+    const profileImg= '/img/user_basic_profile.jpg';
 
     const handleScroll = () => {
         if (!chatBoxRef.current) return;
@@ -45,9 +41,23 @@ function AdminChat() {
         }
     }, [messages]);
 
+    // 세션 스토리지에서 값 가져오기
+    useEffect(() => {
+        const storedStoreId = sessionStorage.getItem('storeId');
+        const storedStoreNo = sessionStorage.getItem('storeNo');
+
+        if (storedStoreId) {
+            setStoreId(storedStoreId);
+            setStoreNo(storedStoreNo);
+        } else {
+            console.error("로그인 정보가 세션 스토리지에 없습니다.");
+        }
+    }, []);
+
     // 기존 채팅 기록 불러오기
     useEffect(() => {
         const loadChatHistory = async () => {
+            if (!storeId) return; // storeId가 없으면 호출하지 않음
             try {
                 const response = await axios.get(`/chat/history?userId=${userId}&storeId=${storeId}&limit=15`);
                 setMessages(response.data);
@@ -56,25 +66,22 @@ function AdminChat() {
             }
         };
         loadChatHistory();
-    }, []);
+    }, [storeId]); // storeId가 설정된 후에만 채팅 기록을 불러옵니다.
 
     // WebSocket 연결 설정
     useEffect(() => {
+        if (!userId || !storeId) return; // 로그인 정보 없으면 연결 X
+
         websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
 
         websocket.current.onmessage = (event) => {
             const received = JSON.parse(event.data);
-            console.log("WebSocket에서 받은 메시지:", received);
-
-            if (senderType === 'STORE' && received.senderType === 'STORE') return;
-
-            if (received.userId === userId && received.storeId === storeId) {
+            if (received.storeId === storeId) {
                 setMessages(prevMessages => [...prevMessages, received]);
             }
         };
 
         websocket.current.onerror = (error) => console.error("WebSocket 에러:", error);
-
         websocket.current.onclose = () => console.log("WebSocket 연결이 종료되었습니다");
 
         return () => {
@@ -82,17 +89,16 @@ function AdminChat() {
         };
     }, [userId, storeId]);
 
+    // 메시지 전송 함수
     const handleSend = async (e) => {
         e.preventDefault();
-        if (!messageInput.trim()) return;
+        if (!messageInput.trim() || !userId || !storeId) return;
 
         const message = {
-            senderType,
+            senderType: 'STORE',
             storeId,
-            storeName,
-            profileImg,
-            userId,
             storeNo,
+            userId,
             chatMessage: messageInput.trim(),
             sendTime: new Date().toISOString(),
         };
@@ -100,11 +106,7 @@ function AdminChat() {
         try {
             setMessages(prevMessages => [...prevMessages, message]);
             websocket.current.send(JSON.stringify(message));
-
-            await axios.post('/chat/save', message, {
-                headers: { 'Content-Type': 'application/json' }
-            });
-
+            await axios.post('/chat/save', message, { headers: { 'Content-Type': 'application/json' } });
             setMessageInput("");
         } catch (error) {
             console.error("메시지 전송 중 오류가 발생했습니다.", error);
@@ -141,7 +143,7 @@ function AdminChat() {
             {/* Chat Area */}
             <div className="chat-content" ref={chatBoxRef} onScroll={handleScroll}>
                 <div className="chat-header">
-                    <h2>{storeName}</h2>
+                    <h2>{storeNo}</h2>
                 </div>
                 <div className="messages">
                     {messages.map((message, index) => (

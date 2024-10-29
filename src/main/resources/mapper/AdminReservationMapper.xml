@@ -10,14 +10,28 @@
         insert into category_image (category_id, image_url) values (#{categoryId},#{imageUrl});
     </insert>
 
+<!-- 수정)   상태 업데이트 -->
+    <update id="setActivated" >
+        update category
+        set activated = 'N'
+        where category_id = #{id}
+    </update>
+
+<!--   수정 ) 슬롯 변경 -->
+    <update id="setSlotModi" >
+        update reservation_slot
+        set category_id = #{realId}
+        where category_id = #{id};
+    </update>
+
 
     <!--  서비스 (대분류) 가져오기   -->
     <select id="getList" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
-        select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_id, ci.image_url
+        select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_id, ci.image_url, c.service_start
         from category c
         left join category_image ci
         on c.category_id = ci.category_id
-        where category_level = 1
+        where category_level = 1 and activated = 'Y'
         ORDER BY c.category_id DESC
     </select>
 
@@ -28,12 +42,14 @@
 
     <!--  서비스 대분류 (상세 가져오기)  -->
     <select id="getListDetail" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
-        select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_id, ci.image_url
+        select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_id, ci.image_url,  c.service_start
         from category c
         left join category_image ci
         on c.category_id = ci.category_id
         where c.category_level = 1 AND  c.category_id = #{id}
     </select>
+
+
 
     <!--   서비스 중분류 가져오기  -->
     <select id="getMiddleItem" resultType="com.example.HiMade.admin.dto.adminRSDTO">

@@ -93,8 +93,8 @@
 
 
     <insert id="setReservationForm" parameterType="UserReservationDTO" useGeneratedKeys="true" keyProperty="reservationNo">
-        INSERT INTO reservation (reservation_status, reservation_time, reg_time, customer_request, reservation_price, store_id, user_id, reservation_slot_key)
-        VALUES ('대기', #{reservationTime}, CURRENT_TIMESTAMP, #{customerRequest}, #{reservationPrice}, 'bbb123', 'hello@naver.com', #{reservationSlotKey})
+        INSERT INTO reservation (reservation_status, reservation_time, reg_time, customer_request, reservation_price, store_id, user_id, reservation_slot_key, store_no)
+        VALUES (#{reservationStatus}, #{reservationTime}, CURRENT_TIMESTAMP, #{customerRequest}, #{reservationPrice}, 'bbb123', 'hello@naver.com', #{reservationSlotKey}, #{storeNo})
         RETURNING reservation_no
     </insert>
 

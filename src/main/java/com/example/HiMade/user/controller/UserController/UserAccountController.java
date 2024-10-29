@@ -117,6 +117,23 @@ public class UserAccountController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<UserDTO> getUserProfileById(@PathVariable String userId) {
+        UserDTO user = userAccountService.getUserById(userId);
+        if (user != null) {
+            // 프로필 이미지 URL 처리
+            if ("KAKAO".equals(user.getLoginType())) {
+                // 카카오 가입자는 카카오에서 제공한 URL 그대로 사용
+            } else {
+                if (user.getUserImgUrl() != null && !user.getUserImgUrl().isEmpty()) {
+                    user.setUserImgUrl("/uploads/" + Paths.get(user.getUserImgUrl()).getFileName().toString());
+                }
+            }
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 
     // 사용자 정보 수정 (비밀번호 포함)
     @PutMapping("/update")

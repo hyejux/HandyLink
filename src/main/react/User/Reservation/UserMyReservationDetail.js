@@ -93,7 +93,7 @@ function UserMyReservationDetail() {
     const reservationNo = cateId;
     const storeName = reservationList.length > 0 ? reservationList[0].storeName : '정보 없음';
     try {
-      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, { paymentStatus: "N", storeName });
+      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, { paymentStatus: "결제취소", storeName });
       console.log("예약 취소 성공:", response.data);
       alert("예약이 취소되었습니다.");
 

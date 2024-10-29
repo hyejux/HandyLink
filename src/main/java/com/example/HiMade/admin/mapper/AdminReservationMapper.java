@@ -3,6 +3,7 @@ package com.example.HiMade.admin.mapper;
 
 import com.example.HiMade.admin.dto.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -21,7 +22,8 @@ public interface AdminReservationMapper {
   public void setMainCategory3(adminRSDTO dto);
   public void setMainCategory4(adminReservationDTO dto);
 
-
+  void setActivated(int id);
+  void setSlotModi( @Param("id")int id,  @Param("realId") int realId);
   void setSlotAll(adminReserveAdd dto);  // 슬롯 삽입
   public List<adminReserveMangeDTO> getManageList();
 

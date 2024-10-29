@@ -40,4 +40,7 @@ public interface AdminStoreMapper {
 
     List<storeNoticeDTO> getNoticeList(); // 가게소식
     void setNotice(storeNoticeDTO dto); // 가게 소식 등록
+    void setNoticeModi(storeNoticeDTO dto); // 가게 소식 등록
+    void setNoticeStatus(storeNoticeDTO dto);
+    public storeNoticeDTO getNoticeDetail( int id);
 }

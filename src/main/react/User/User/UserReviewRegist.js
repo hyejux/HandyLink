@@ -104,7 +104,7 @@ useEffect(() => {
           console.log('파일 업로드 성공:', response.data);
           console.log('파일 업로드 성공:', response.data);
           alert("리뷰 등록 완료");
-          // window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동;
+          window.location.href = '/userMyReservationList.user'; // 페이지 이동;
       })
     })
       .catch(error => {

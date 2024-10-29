@@ -31,22 +31,6 @@ public class UserChatRoomController {
         // 들어온 요청 로그 찍기
         logger.info("로그 컨트롤러 Received message data: {}", userChatDTO);
 
-        // 필수 값 체크 및 로그 기록
-        if (userChatDTO.getStoreId() == null) {
-            logger.error("storeId 값이 없습니다.");
-            return ResponseEntity.badRequest().body("storeId 값이 없습니다.");
-        }
-
-        if (userChatDTO.getUserId() == null) {
-            logger.error("userId 값이 없습니다.");
-            return ResponseEntity.badRequest().body("userId 값이 없습니다.");
-        }
-
-        if (userChatDTO.getChatMessage() == null || userChatDTO.getChatMessage().trim().isEmpty()) {
-            logger.error("메시지가 없습니다.");
-            return ResponseEntity.badRequest().body("메시지가 없습니다.");
-        }
-
         // 메시지 저장 시도
         try {
             logger.info("메시지 저장 시도: {}", userChatDTO);
@@ -58,7 +42,6 @@ public class UserChatRoomController {
             return ResponseEntity.status(500).body("메시지 저장 중 오류가 발생했습니다.");
         }
     }
-
 
     // 채팅 기록 불러오기
     @GetMapping("/history")

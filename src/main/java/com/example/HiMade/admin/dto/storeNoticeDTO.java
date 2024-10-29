@@ -19,5 +19,7 @@ public class storeNoticeDTO {
   private String noticeType;
   private int storeNo;
   private String storeId;
+  private String status;
+  private String modi;
 
 }

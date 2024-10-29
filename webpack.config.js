@@ -52,7 +52,6 @@ module.exports = {
         StoreDayOff: './Admin/StoreDayOff.js',
         AdminStoreNotice : './Admin/AdminStoreNotice.js',
         AdminStoreNoticeRegist : './Admin/AdminStoreNoticeRegist.js',
-        StoreChatRoom : './User/Inquiry/StoreChatRoom.js',
         AdminSignupApproval: './Admin/AdminSignupApproval.js',
         AdminStoreReport: './Admin/AdminStoreReport.js',
         UserSearch : './User/User/UserSearch.js',
@@ -62,7 +61,8 @@ module.exports = {
         AdminReviewList : './Admin/AdminReviewList.js',
         UserReviewRegist : './User/User/UserReviewRegist.js',
         UserSearchResult: './User/User/UserSearchResult.js',
-        AdminAccountFind: './Admin/AdminAccountFind.js'
+        AdminAccountFind: './Admin/AdminAccountFind.js',
+        AdminStoreNoticeModi : './Admin/AdminStoreNoticeModi.js'
 
     },
 

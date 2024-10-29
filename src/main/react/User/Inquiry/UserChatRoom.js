@@ -98,22 +98,26 @@ function UserChatRoom() {
             websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
 
             websocket.current.onopen = () => {
-                console.log('WebSocket 연결이 열렸습니다.');
+                console.log('WebSocket 연결됨 - 상태:', websocket.current.readyState);
             };
 
             websocket.current.onmessage = (event) => {
                 const received = JSON.parse(event.data);
+                console.log('메시지 수신:', received);
+                console.log('WebSocket 상태:', websocket.current.readyState);
                 if (received.userId === userId && received.storeId === storeId) {
                     setMessages((prevMessages) => [...prevMessages, received]);
                 }
             };
 
             websocket.current.onerror = (error) => {
-                console.error('WebSocket 에러 발생:', error);
+                console.error('WebSocket 에러:', error);
+                console.log('에러 발생 시 WebSocket 상태:', websocket.current.readyState);
             };
 
             websocket.current.onclose = (event) => {
-                console.log('WebSocket 연결이 종료되었습니다:', event);
+                console.log('WebSocket 연결 종료. 코드:', event.code, '사유:', event.reason);
+                console.log('종료 시점 WebSocket 상태:', websocket.current.readyState);
             };
         };
 
@@ -132,33 +136,38 @@ function UserChatRoom() {
             return;
         }
 
-        if (messageInput.trim()) {
+        if (messageInput.trim() && websocket.current) {
             const message = {
                 userId,
                 storeId,
+                storeNo: storeInfo.storeNo,
                 senderType: "USER",
                 chatMessage: messageInput,
                 sendTime: Date.now(),
             };
 
             try {
-                if (websocket.current && websocket.current.readyState === WebSocket.OPEN) {
+                console.log('메시지 전송 전 WebSocket 상태:', websocket.current.readyState);
+
+                if (websocket.current.readyState === WebSocket.OPEN) {
                     websocket.current.send(JSON.stringify(message));
+                    console.log('메시지 전송 완료');
+
+                    await axios.post('/chat/save', message, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+
+                    console.log('메시지 저장 후 WebSocket 상태:', websocket.current.readyState);
+
+                    setMessages((prevMessages) => [...prevMessages, { ...message, type: 'sent' }]);
+                    setMessageInput('');
                 } else {
-                    console.error('WebSocket이 연결되지 않았습니다!');
-                    return;
+                    console.error('WebSocket이 열려있지 않음. 현재 상태:', websocket.current.readyState);
                 }
-
-                await axios.post('/chat/save', message, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                setMessages((prevMessages) => [...prevMessages, { ...message, type: 'sent' }]);
-                setMessageInput('');
             } catch (error) {
-                console.error('메시지 전송 중 오류가 발생했습니다:', error);
+                console.error('메시지 전송 중 오류:', error);
             }
         }
     };

@@ -123,9 +123,10 @@ const [status, setStatus] = useState();
             <tr>
               <th></th>
               <th>카테고리</th>
-              <th>소식 내용</th>
+              <th>소식내용</th>
               <th>등록일</th>
-              <th> 상태 </th>
+              <th> 상태변경</th>
+              <th> 수정 </th>
             </tr>
           </thead>
           <tbody>
@@ -141,7 +142,7 @@ const [status, setStatus] = useState();
                   </td>
                   <td>{formatDate(value.noticeRegdate)} {value.modi === 'Y' ? '(수정됨)' : ''}</td>
                   <td><select value={value.status} onChange={(e)=>handleStatus(e.target.value, value.noticeNo) }> <option value='Y'> 보이기 </option> <option value='D'> 숨기기 </option> <option value='N'> 삭제 </option></select></td>
-                  <td> <button type='button' onClick={() => noticeModi(value.noticeNo)}> 수정 </button></td>
+                  <td> <button type='button' className="btn-st" onClick={() => noticeModi(value.noticeNo)}> 수정 </button></td>
                 </tr>
                 {/* 토글된 행에 대해 자세한 내용 표시 */}
                 {expandedRows.includes(index) && (

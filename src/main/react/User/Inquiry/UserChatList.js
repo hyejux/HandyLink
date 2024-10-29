@@ -46,7 +46,7 @@ function UserChatList() {
 
     // 검색 기능 구현
     const filteredChatList = chatList.filter(chat =>
-        (chat.storeName || "").toLowerCase().includes(searchTerm.toLowerCase())
+        (chat.storename || "").toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     if (loading) {

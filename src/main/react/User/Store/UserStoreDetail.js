@@ -16,6 +16,40 @@ function UserStoreDetail() {
   const [reviewList, setReviewList] = useState({});
   const [reviewPhotoList, setReviewPhotoList] =useState([]);
 
+  /************채팅**************/
+
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    // 사용자 정보 가져오기 (로그인된 userId)
+    axios.get('/chat/current')
+        .then(response => setUserId(response.data.userId))
+        .catch(error => console.error('사용자 정보를 가져오는데 실패했습니다:', error));
+  }, []);
+
+  useEffect(() => {
+    // 가게 정보 가져오기
+    const pathSegments = window.location.pathname.split('/');
+    const storeId = pathSegments[pathSegments.length - 1];
+
+    axios.get(`/UserStoreDetail/getStoreInfo/${storeId}`)
+        .then(response => setStoreInfo(response.data))
+        .catch(error => console.error('Error loading store info:', error));
+  }, []);
+
+  // 채팅방으로 이동
+  const handleInquiryClick = () => {
+    if (userId && storeInfo.storeId) {
+      window.location.href = `/UserChatRoom.user?userId=${userId}&storeId=${storeInfo.storeId}`;
+    } else {
+      console.error('userId 또는 storeId가 정의되지 않았습니다.');
+    }
+  };
+
+
+  /*****************************/
+
+
   const goToAdminPage = (id) => {
     sessionStorage.setItem('storeCloseTime', storeInfo.storeCloseTime);
     sessionStorage.setItem('storeOpenTime', storeInfo.storeOpenTime);
@@ -262,7 +296,7 @@ const [noticeList, setNoticeList] = useState([]);
               <div className="store-name">
                 <div>{storeInfo.storeName}</div>
                 <button type="button"><i className="bi bi-star"></i></button>
-                <button type="button"><i className="bi bi-chat-dots"></i></button>{/*문의하기 버튼*/}
+                <button type="button" onClick={handleInquiryClick}><i className="bi bi-chat-dots"></i></button>{/*문의하기 버튼*/}
               </div>
               <div><i className="bi bi-shop"></i> {storeInfo.addr}   {storeInfo.addrdetail} </div>
               <hr />

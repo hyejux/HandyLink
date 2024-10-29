@@ -333,9 +333,11 @@ const [noticeList, setNoticeList] = useState([]);
 
               <div className="user-content-container">
               {noticeList.map((notice, index) => (
+                 notice.status === 'Y' && ( 
                <ul key={index} style={{listStyle:'none'}}>
                 <li> <i class="bi bi-bell"></i> {notice.noticeType}  | {notice.noticeContent.slice(0, 20)}...</li>
-                </ul>             
+                </ul>            
+                 ) 
                 ))}
             </div>
 

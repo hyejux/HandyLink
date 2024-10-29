@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import MwChart from './MwChart.js';
+import AgeChart from './AgeChart.js';
+import ReservationBarChart from './ReservationBarChart.js';
 import './AdminStoreReport.css';
 
 function AdminStoreReport(){
@@ -9,7 +12,7 @@ function AdminStoreReport(){
 
     return(
         <div className="admin-store-report-container">
-            <label htmlFor="store-report">통계 관리</label>
+            <label htmlFor="store-report">데이터 아님</label>
             <div className="store-report">
 
                 <div className="report-section">
@@ -37,20 +40,81 @@ function AdminStoreReport(){
 
                 <div className="report-section">
                     <h2>일일 통계</h2>
-                    <div classNAme="reservation-graph">
-                        <p> 2024-09-25 ~ 2024-10-25 </p>
+                    <div className="reservation-graph">
                         <div className="graph-filter">
-
+                            <span>이번 달</span>
+                            <span>올해</span>
+                            <span>작년</span>
                         </div>
-
+                        <div className="graph">
+                            <ReservationBarChart/>
+                        </div>
                     </div>
                 </div>
-
-
-
-
-
-
+        
+                <div className="report-section">
+                    <h2>고객 통계</h2>
+                    <div className="customer-section-box">
+                
+                        <div className="customer mw">
+                            <h3>성비</h3>
+                            <div>
+                                <MwChart/>
+                            </div>
+                        </div>
+                
+                        <div className="mw-detail">
+                            <table className="mwtable table">
+                                <thead>
+                                    <tr>
+                                        <th>남자</th>
+                                        <th>여자</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>150명</td>
+                                        <td>200명</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                
+                        <div className="customer age">
+                            <h3>나이</h3>
+                            <div>
+                                <AgeChart />
+                            </div>
+                        </div>
+                
+                        <div className="age-detail">
+                            <table className="agetable table">
+                                <thead>
+                                    <tr>
+                                        <th>나이</th>
+                                        <th>주로 찾는 서비스</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>10대</td>
+                                        <td>하츄핑 케이크</td>
+                                    </tr>
+                                    <tr>
+                                        <td>20대</td>
+                                        <td>빵빵이 케이크</td>
+                                    </tr>
+                                    <tr>
+                                        <td>30대</td>
+                                        <td>퇴사 케이크</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            
+                </div>
+            
             </div>
         </div>
     )

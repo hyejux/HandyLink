@@ -171,7 +171,8 @@ function UserReservationConfirm() {
       reservationTime: slot,  // 세션 데이터에서 가져옴
       reservationSlotKey: reservationSlotKey,  // 세션 데이터에서 가져옴
       customerRequest: requestText,  // 사용자 입력 요청사항
-      reservationPrice: totalPrice  // 총액 정보
+      reservationPrice: totalPrice,  // 총액 정보
+      storeNo: storeInfo.storeNo
     };
 
     console.log('최종 예약 데이터:', reservationData);
@@ -250,7 +251,7 @@ function UserReservationConfirm() {
         await storePaymentInfo({
           paymentMethod: paymentMethod === "card" ? "간편결제" : "일반결제",
           paymentAmount: totalPrice,
-          paymentStatus: "Y",
+          paymentStatus: "결제완료",
           reservationNo: reservationNum,
         });
 
@@ -561,9 +562,6 @@ function UserReservationConfirm() {
               {totalPrice}원 결제하기
             </button>
           </div>
-
-
-
 
         </div>
       </div>

@@ -222,7 +222,7 @@ function AdminReserveManage() {
                                                     disabled={value.reservationStatus === '완료' || value.reservationStatus === '취소(업체)' || value.reservationStatus === '취소(고객)'}
                                                 >
                                                     <option value={value.reservationStatus}>{value.reservationStatus}</option>
-                                                    {value.reservationStatus !== '진행' && <option value="진행">진행</option>}
+                                                    {value.reservationStatus !== '확정' && <option value="확정">확정</option>}
                                                     {value.reservationStatus !== '완료' && <option value="완료">완료</option>}
                                                     {value.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
                                                 </select>

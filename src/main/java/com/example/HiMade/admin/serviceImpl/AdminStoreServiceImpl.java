@@ -57,6 +57,21 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
+    public String findAdminId(String managerName, String storeBusinessNo) {
+        return adminStoreMapper.findAdminId(managerName, storeBusinessNo);
+    }
+
+    @Override
+    public Integer findAdminPw(String storeId, String storeBusinessNo) {
+        return adminStoreMapper.findAdminPw(storeId, storeBusinessNo);
+    }
+
+    @Override
+    public void updatePw(String newPw, String storeId, String storeBusinessNo) {
+        adminStoreMapper.updatePw(newPw, storeId, storeBusinessNo);
+    }
+
+    @Override
     public void updateStore(StoreRegistDTO storeRegistDTO) {
         String storeId = storeRegistDTO.getStoreId();
         List<StoreImgDTO> storeImgList = storeRegistDTO.getStoreImg();

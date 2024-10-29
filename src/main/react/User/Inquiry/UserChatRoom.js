@@ -4,23 +4,30 @@ import './UserChatRoom.css';
 import ReactDOM from "react-dom/client";
 
 function UserChatRoom() {
-    const [messages, setMessages] = useState([]); // 기존 메시지 목록
-    const [messageInput, setMessageInput] = useState(""); // 입력한 메시지
+    const [messages, setMessages] = useState([]);
+    const [messageInput, setMessageInput] = useState("");
     const [showToast, setShowToast] = useState(false);
     const [newMessageCount, setNewMessageCount] = useState(0);
     const [isAtBottom, setIsAtBottom] = useState(true);
     const [userId, setUserId] = useState(null);
+    const [storeId, setStoreId] = useState(null);
+    const [storeInfo, setStoreInfo] = useState({
+        storeNo: '',
+        storeName: '',
+        storeImg: [{ storeImgLocation: '/img/user_basic_profile.jpg' }],
+        storeOpenTime: '',
+        storeCloseTime: '',
+    });
 
     const chatBoxRef = useRef(null);
     const websocket = useRef(null);
     const inputRef = useRef(null);
 
-    const storeId = 'test1'; // 임시 업체 ID
-    const senderType = 'USER';
-    const profileImg= '/img/user_basic_profile.jpg';
-    const storeNo = 5;
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        setStoreId(params.get("storeId"));
+    }, []);
 
-    // 스크롤 위치 감지 추가
     const handleScroll = () => {
         if (!chatBoxRef.current) return;
 
@@ -34,11 +41,8 @@ function UserChatRoom() {
         }
     };
 
-    // 메시지 업데이트 후 스크롤을 하단으로 이동
     useEffect(() => {
-        if (!chatBoxRef.current) return;
-
-        if (isAtBottom) {
+        if (isAtBottom && chatBoxRef.current) {
             chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
         } else {
             setShowToast(true);
@@ -46,7 +50,6 @@ function UserChatRoom() {
         }
     }, [messages]);
 
-    // 현재 로그인된 사용자 정보 가져오기
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
@@ -54,27 +57,40 @@ function UserChatRoom() {
                 setUserId(response.data.userId);
             } catch (error) {
                 console.error('사용자 정보를 가져오는데 실패했습니다:', error);
-                window.location.href = '/UserLoginPage.user';  // 로그인 페이지로 리다이렉트
+                window.location.href = '/UserLoginPage.user';
             }
         };
         fetchUserInfo();
     }, []);
 
+    useEffect(() => {
+        const fetchStoreInfo = async () => {
+            if (storeId) {
+                try {
+                    const response = await axios.get(`/chat/getStoreInfoByStoreId/${storeId}`);
+                    setStoreInfo(response.data);
+                } catch (error) {
+                    console.error('가게 정보를 가져오는데 실패했습니다:', error);
+                }
+            }
+        };
+        fetchStoreInfo();
+    }, [storeId]);
 
-    // 기존 채팅 기록 불러오기
     useEffect(() => {
         const loadChatHistory = async () => {
-            try {
-                const response = await axios.get(`/chat/history?userId=${userId}&storeId=${storeId}`);
-                setMessages(response.data);
-            } catch (error) {
-                console.error('채팅 기록을 불러오는 중 오류가 발생했습니다:', error);
+            if (userId && storeId) {
+                try {
+                    const response = await axios.get(`/chat/history?userId=${userId}&storeId=${storeId}`);
+                    setMessages(response.data);
+                } catch (error) {
+                    console.error('채팅 기록을 불러오는 중 오류가 발생했습니다:', error);
+                }
             }
         };
         loadChatHistory();
     }, [userId, storeId]);
 
-    // WebSocket 연결 설정
     useEffect(() => {
         if (!userId) return;
 
@@ -98,8 +114,6 @@ function UserChatRoom() {
 
             websocket.current.onclose = (event) => {
                 console.log('WebSocket 연결이 종료되었습니다:', event);
-                // 일정 시간 후 재연결 시도
-                setTimeout(connectWebSocket, 3000); // 3초 후 재연결
             };
         };
 
@@ -110,14 +124,9 @@ function UserChatRoom() {
                 websocket.current.close();
             }
         };
-    }, [userId]);
+    }, [userId, storeId]);
 
-
-
-
-    // 메시지 전송
     const sendMessage = async () => {
-
         if (!userId) {
             window.location.href = '/UserLoginPage.user';
             return;
@@ -125,10 +134,9 @@ function UserChatRoom() {
 
         if (messageInput.trim()) {
             const message = {
-                userId,  // 고객의 ID를 발신자로 설정
-                storeId,  // 업체의 ID를 수신자로 설정
-                senderType,
-                storeNo,
+                userId,
+                storeId,
+                senderType: "USER",
                 chatMessage: messageInput,
                 sendTime: Date.now(),
             };
@@ -141,14 +149,12 @@ function UserChatRoom() {
                     return;
                 }
 
-                // DB에 메시지 저장
                 await axios.post('/chat/save', message, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 });
 
-                // 로컬 상태 업데이트 및 입력 초기화
                 setMessages((prevMessages) => [...prevMessages, { ...message, type: 'sent' }]);
                 setMessageInput('');
             } catch (error) {
@@ -157,46 +163,53 @@ function UserChatRoom() {
         }
     };
 
-    // 엔터 키로 메시지 전송
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             sendMessage(e);
         }
     };
 
-    // 페이지 로드시 input에 포커스 주기
     useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus();
         }
     }, []);
 
+    const handleImageClick = () => {
+        window.location.href = `/userStoreDetail.user/${storeInfo.storeNo}`;
+    };
+
+
     return (
         <div>
             <div className="user-chat-room-container">
-                <div
-                    className="chat-box"
-                    ref={chatBoxRef}
-                    onScroll={handleScroll}
-                >
+{/*
+                <div className="store-info">
+                    <img className="store-image" src={storeInfo.storeImg[0]?.storeImgLocation || '/img/user_basic_profile.jpg'} alt={storeInfo.storeName} />
+                    <h2 className="store-name">{storeInfo.storeName}</h2>
+                    <p className="store-hours">
+                        영업시간: {storeInfo.storeOpenTime} - {storeInfo.storeCloseTime}
+                    </p>
+                </div>
+*/}
+
+                {/* 채팅 영역 */}
+                <div className="chat-box" ref={chatBoxRef} onScroll={handleScroll}>
                     {messages.map((msg, index) => (
                         <div key={index} className={`message-wrapper ${msg.senderType === 'USER' ? 'sent' : 'received'}`}>
                             {msg.senderType !== 'USER' && (
-                                <div className="profile-section">
-                                    <img className="profile-img" src={profileImg} alt={`${msg.userName} 프로필`} />
+                                <div className="profile-section" onClick={handleImageClick}>
+                                    <img className="profile-img" src={storeInfo.storeImg[0]?.storeImgLocation || '/img/user_basic_profile.jpg'} alt={`${msg.userName} 프로필`} />
                                 </div>
                             )}
                             <div className="message-content">
-                                {msg.senderType !== 'USER' && <div className="sender-name">{/*{msg.userName}*/}도레도레</div>}
-                                <div className="bubble">
-                                    {msg.chatMessage}
-                                </div>
+                                {msg.senderType !== 'USER' && <div className="sender-name">{storeInfo.storeName}</div>}
+                                <div className="bubble">{msg.chatMessage}</div>
                                 <div className="timestamp">
                                     {new Date(msg.sendTime).toLocaleTimeString('ko-KR', {
                                         hour: 'numeric',
                                         minute: '2-digit',
                                         hour12: true
-
                                     })}
                                 </div>
                             </div>
@@ -217,7 +230,6 @@ function UserChatRoom() {
                     </div>
                 )}
 
-
                 <div className="input-box">
                     <input
                         type="text"
@@ -225,7 +237,7 @@ function UserChatRoom() {
                         onChange={(e) => setMessageInput(e.target.value)}
                         onKeyDown={handleKeyDown}
                         ref={inputRef}
-                        placeholder="Message here..."
+                        placeholder="메시지를 입력하세요..."
                     />
                     <button onClick={sendMessage}>
                         <i className="bi bi-arrow-up-circle-fill"></i>
@@ -237,6 +249,4 @@ function UserChatRoom() {
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <UserChatRoom/>
-);
+root.render(<UserChatRoom />);

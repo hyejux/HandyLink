@@ -1,5 +1,6 @@
 package com.example.HiMade.user.controller.InquiryController;
 
+import com.example.HiMade.admin.dto.StoreRegistDTO;
 import com.example.HiMade.user.dto.UserChatDTO;
 import com.example.HiMade.user.service.UserChatRoomService;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +74,37 @@ public class UserChatRoomController {
             return ResponseEntity.ok(Map.of("userId", auth.getName()));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    // 채팅 목록 조회
+    @GetMapping("/list")
+    public ResponseEntity<?> getChatList(@RequestParam String userId) {
+        try {
+            // 현재 로그인한 사용자와 요청된 userId가 일치하는지 확인
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (!auth.getName().equals(userId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("접근 권한이 없습니다.");
+            }
+
+            List<Map<String, Object>> chatList = userChatRoomService.getChatListForUser(userId);
+            return ResponseEntity.ok(chatList);
+        } catch (Exception e) {
+            logger.error("채팅 목록 조회 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("채팅 목록을 불러오는 중 오류가 발생했습니다.");
+        }
+    }
+
+    // store_id 기반 가게 조회 (임시)
+    @GetMapping("/getStoreInfoByStoreId/{storeId}")
+    public ResponseEntity<StoreRegistDTO> getStoreInfoByStoreId(@PathVariable String storeId) {
+        System.out.println( "가게 정보 띄우기" + userChatRoomService.getStoreInfoByStoreId(storeId));
+        StoreRegistDTO storeInfo = userChatRoomService.getStoreInfoByStoreId(storeId);
+        if (storeInfo != null) {
+            return ResponseEntity.ok(storeInfo);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 }

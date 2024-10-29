@@ -32,6 +32,7 @@ public class AdminStoreController {
     //업체가입
     @PostMapping("/registStore")
     public void registStore(@RequestBody StoreRegistDTO storeRegistDTO){
+
         adminStoreService.registStore(storeRegistDTO);
     }
 
@@ -166,5 +167,28 @@ public class AdminStoreController {
         System.out.println(dto);
         adminStoreService.setNotice(dto);
     }
+
+    @PostMapping("setNoticeModi/{id}")
+    public void setNoticeModi(@RequestBody storeNoticeDTO dto, @PathVariable int id){
+        dto.setNoticeNo(id);
+        System.out.println(dto);
+        adminStoreService.setNoticeModi(dto);
+    }
+
+    @PostMapping("setNoticeStatus")
+    public void setNoticeStatus(@RequestBody storeNoticeDTO dto){
+//        System.out.println(dto + "--------------------");
+        adminStoreService.setNoticeStatus(dto);
+    }
+
+
+
+    @GetMapping("getNoticeDetail/{id}")
+    public storeNoticeDTO getNoticeDetail(@PathVariable int id){
+       return adminStoreService.getNoticeDetail(id);
+    }
+
+
+
 
 }

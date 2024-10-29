@@ -7,20 +7,57 @@ import { useNavigate } from 'react-router-dom';
 
 
 function AdminStoreNotice() {
+  
 
 const [noticeList, setNoticeList] = useState([]);
+const [status, setStatus] = useState();
 
     useEffect(() => {
+
+      
             axios.get('/adminStore/getNoticeList')
                 .then(response => {
-                    console.log(response.data);
-                    setNoticeList(response.data);
+                    setNoticeList(response.data); // 기본값으로 빈 배열 설정
+                    
                 })
                 .catch(error => {
                     console.log('Error Category', error);
                 });
         }, [])
 
+
+
+        const handleStatus = (e, id) => {
+          console.log(id , e);
+          if (e === 'D'){
+            confirm("소식을 숨기시겠습니까?");
+          }else if (e === 'Y'){
+            confirm("소식을 보이게하시겠습니까?");
+          }else if (e === 'N'){
+            confirm("소식을 삭제하시겠습니까?");
+          }
+          
+          axios.post('/adminStore/setNoticeStatus', {status : e , noticeNo : id})
+          .then(response => {
+              console.log(response.data);
+              // setNoticeList(response.data);
+              axios.get('/adminStore/getNoticeList')
+              .then(response => {
+                
+                  console.log(response.data);
+                  setNoticeList(response.data);
+                  
+              })
+          })
+          .catch(error => {
+              console.log('Error Category', error);
+          });
+        }
+
+
+        const noticeModi = (id) => {
+          window.location.href = `/AdminStoreNoticeModi.admin/${id}`; // 페이지 이동
+        }
 
 
 // 가게 소식 추가하기 
@@ -88,9 +125,11 @@ const [noticeList, setNoticeList] = useState([]);
               <th>카테고리</th>
               <th>소식 내용</th>
               <th>등록일</th>
+              <th> 상태 </th>
             </tr>
           </thead>
           <tbody>
+        
             {noticeList.map((value, index) => (
               <React.Fragment key={index}>
                 <tr onDoubleClick={() => goToDetail(value.reservationNo)}>
@@ -100,7 +139,9 @@ const [noticeList, setNoticeList] = useState([]);
                   {value.noticeContent.slice(0, 50)}
                     <i class="bi bi-chevron-down" onClick={() => handleToggleRow(index)}></i>
                   </td>
-                  <td>{formatDate(value.noticeRegdate)}</td>
+                  <td>{formatDate(value.noticeRegdate)} {value.modi === 'Y' ? '(수정됨)' : ''}</td>
+                  <td><select value={value.status} onChange={(e)=>handleStatus(e.target.value, value.noticeNo) }> <option value='Y'> 보이기 </option> <option value='D'> 숨기기 </option> <option value='N'> 삭제 </option></select></td>
+                  <td> <button type='button' onClick={() => noticeModi(value.noticeNo)}> 수정 </button></td>
                 </tr>
                 {/* 토글된 행에 대해 자세한 내용 표시 */}
                 {expandedRows.includes(index) && (
@@ -117,6 +158,7 @@ const [noticeList, setNoticeList] = useState([]);
                 )}
               </React.Fragment>
             ))}
+       
           </tbody>
         </table>
       </div>

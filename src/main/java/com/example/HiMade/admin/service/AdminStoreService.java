@@ -1,6 +1,7 @@
 package com.example.HiMade.admin.service;
 
 import com.example.HiMade.admin.dto.*;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public interface AdminStoreService {
     void updateStore(StoreRegistDTO storeRegistDTO); //내가게 업데이트
     StoreRegistDTO getMyStore(Long storeNo); //가게관리정보 불러오기
 
+
     void updateDay(StoreRegistDTO storeRegistDTO); //고정휴무-update
     List<DayOffDay> getOffDay(Integer storeNo);//고정휴무-select
     void registDayOffSet(DayOffSet dayOffSet); //지정휴무
@@ -29,4 +31,8 @@ public interface AdminStoreService {
 
     List<storeNoticeDTO> getNoticeList(); // 가게소식
     void setNotice(storeNoticeDTO dto); // 가게 소식 등록
+    void setNoticeModi(storeNoticeDTO dto); // 가게 소식 등록
+    void setNoticeStatus(storeNoticeDTO dto);
+    public storeNoticeDTO getNoticeDetail( int id);
+
 }

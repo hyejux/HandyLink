@@ -106,8 +106,6 @@ function AdminChat() {
         try {
             const response = await axios.get(`/user/profile/${userId}`);
             console.log('User profile:', response.data);
-            setUserDetail(response.data);
-            setShowUserInfo(true);
         } catch (error) {
             console.error("사용자 정보를 불러오는데 실패했습니다:", error);
         }
@@ -115,8 +113,10 @@ function AdminChat() {
 
     // 프로필 클릭 핸들러
     const handleProfileClick = (e) => {
-        e.stopPropagation(); // 채팅방 선택 이벤트 방지
-        fetchUserDetail();
+        e.stopPropagation();
+        if (selectedUserInfo && selectedUserInfo.userid) {  // userid로 수정 (소문자)
+            fetchUserDetail(selectedUserInfo.userid);
+        }
     };
 
     // 채팅방 선택 시 메시지 불러오기
@@ -260,7 +260,7 @@ function AdminChat() {
                                             <img
                                                 src={selectedUserInfo.userimgurl || '/img/user_basic_profile.jpg'}
                                                 alt="profile"
-                                                onClick={(e) => handleProfileClick(e, selectedUserInfo.userid)}
+                                                onClick={handleProfileClick}
                                                 style={{cursor: 'pointer'}}
                                             />
                                             <span className="sender-name">{selectedUserInfo.username}</span>

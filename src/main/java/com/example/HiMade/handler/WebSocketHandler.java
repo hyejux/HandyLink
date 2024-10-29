@@ -38,32 +38,29 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        @Override
+        protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+            String userId = extractUserIdFromSession(session);
+            if (userId == null) {
+                session.close();
+                return;
+            }
 
-        String userId = extractUserIdFromSession(session);
-        if (userId == null) {
-            session.close();
-            return;
+            Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
+            String senderId = (String) payload.get("userId");
+            String storeId = (String) payload.get("storeId");  // storeId로 수정
+
+            // 메시지 발신자 검증
+            if (!userId.equals(senderId)) {
+                return;
+            }
+
+            System.out.println("Message received from: " + senderId + " to store: " + storeId);
+
+            // 각 대상의 모든 세션에 메시지 전송
+            sendMessageToUser(senderId, payload);  // 발신자에게 전송
+            sendMessageToUser(storeId, payload);   // 상점에 전송
         }
-
-        Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
-        // 메시지에서 userId와 storeId를 추출
-        String senderId = (String) payload.get("userId");
-
-        // 메시지 발신자 검증
-        if (!userId.equals(senderId)) {
-            return;  // 권한 없음
-        }
-
-        String recipientId = (String) payload.get("recipientId"); // 받는 사람 ID
-
-        System.out.println("Message received from: " + senderId + " to " + recipientId);
-
-        // 각 대상의 모든 세션에 메시지 전송
-        sendMessageToUser(senderId, payload);
-        sendMessageToUser(recipientId, payload);
-    }
 
     // 각 사용자 ID에 연결된 모든 세션에 메시지 전송
     private void sendMessageToUser(String userId, Map<String, Object> payload) throws Exception {

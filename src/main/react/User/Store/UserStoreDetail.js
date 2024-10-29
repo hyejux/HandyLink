@@ -262,6 +262,7 @@ const [noticeList, setNoticeList] = useState([]);
               <div className="store-name">
                 <div>{storeInfo.storeName}</div>
                 <button type="button"><i className="bi bi-star"></i></button>
+                <button type="button"><i className="bi bi-chat-dots"></i></button>{/*문의하기 버튼*/}
               </div>
               <div><i className="bi bi-shop"></i> {storeInfo.addr}   {storeInfo.addrdetail} </div>
               <hr />

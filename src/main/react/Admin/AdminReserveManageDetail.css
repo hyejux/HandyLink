@@ -1,16 +1,47 @@
 /* 승인상태 */
 .reserve-status-container {
-  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .reserve-status-container .left {
-  float: left;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-right: 20px;
+}
+
+.reserve-status-container .mid {
+  font-size: 16px;
+  color: #333;
+  margin-right: 20px;
 }
 
 .reserve-status-container .right {
-  float: right;
+  position: relative;
 }
 
+
+.reserve-status-container select {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.reserve-status-container select:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
 
 
 

@@ -81,8 +81,8 @@ function UserMyReservationDetail() {
     return `${formattedDate} ${time.substring(0, 8)}`; // 'YYYY/MM/DD HH:MM:SS' 형식으로 반환
   };
 
-   // 예약 일시 포맷 (년.월.일 시:분:초)
-   const formatDate2 = (isoDateString) => {
+  // 예약 일시 포맷 (년.월.일 시:분:초)
+  const formatDate2 = (isoDateString) => {
     const date = new Date(isoDateString);
     return `${date.getUTCFullYear()}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${String(date.getUTCDate()).padStart(2, '0')} ${String(date.getUTCHours() + 9).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}:${String(date.getUTCSeconds()).padStart(2, '0')}`;
   };
@@ -281,8 +281,6 @@ function UserMyReservationDetail() {
       <h1> 환불규정 </h1>
 
       <hr />
-
-
 
 
     </div>

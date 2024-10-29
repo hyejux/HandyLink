@@ -30,13 +30,18 @@ function AdminLogin() {
                 pw: inputLogin.pw
             });
 
-            const {storeId, storeNo} = response.data;
+            const {storeId, storeNo, storeStatus} = response.data;
             sessionStorage.setItem('storeId', storeId);
             sessionStorage.setItem('storeNo', storeNo);
 
             if (response.status === 200 && storeId) { // storeId가 null 또는 빈 문자열이 아닌지 확인
-                alert(`로그인 성공 ${storeId}`);
-                window.location.href = `/adminsignupapproval.admin?${storeNo}`;
+                alert(`로그인 성공 ${storeId} 상태 ${storeStatus}`);
+
+                if(storeStatus === '대기'){
+                    window.location.href = `/adminsignupapproval.admin?${storeNo}`;
+                }else{
+                    window.location.href = `/admin.admin?${storeNo}`;
+                }
             } else {
                 alert('해당 정보를 찾을 수 없습니다.');
             }
@@ -74,7 +79,7 @@ function AdminLogin() {
                             onChange={handleChange}
                         />
                         <div className="find-msg">
-                            <a href="">
+                            <a href="adminaccountfind.login">
                                 아이디/비밀번호 찾기
                             </a>
                         </div>

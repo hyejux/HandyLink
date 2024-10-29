@@ -35,6 +35,34 @@ public class AdminStoreController {
         adminStoreService.registStore(storeRegistDTO);
     }
 
+    //아이디 찾기
+    @GetMapping("/findAdminId")
+    public String findAdminId(@RequestParam String managerName, @RequestParam String storeBusinessNo){
+        String storeId = adminStoreService.findAdminId(managerName,storeBusinessNo);
+        System.out.println("아이디찾기 " + storeId);
+
+        return storeId;
+    }
+
+    //비밀번호 찾기
+    @GetMapping("/findAdminPw")
+    public Integer findAdminPw(@RequestParam String storeId, @RequestParam String storeBusinessNo){
+        Integer pwYn = adminStoreService.findAdminPw(storeId, storeBusinessNo);
+        System.out.println("비번찾기 " + pwYn);
+
+        return pwYn;
+    }
+
+    //비밀번호 찾기 - 새로운 비밀번호 변경
+    @PostMapping("/updatePw")
+    public void updatePw(@RequestParam String newPw,
+                         @RequestParam String storeId,
+                         @RequestParam String storeBusinessNo){
+
+        System.out.println("newPw: "+newPw+" storeId: "+storeId+"storeBusinessNo: "+storeBusinessNo);
+        adminStoreService.updatePw(newPw, storeId, storeBusinessNo);
+    }
+
     //마이페이지 - update
     @PostMapping("/updateStoreInfo")
     public void updateStoreInfo(@RequestBody StoreRegistDTO storeRegistDTO){

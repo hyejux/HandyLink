@@ -11,6 +11,10 @@ public interface AdminStoreService {
     void registStore(StoreRegistDTO storeRegistDTO); //업체등록
     void updateStoreInfo(StoreRegistDTO storeRegistDTO); //마이페이지 update
 
+    String findAdminId(String managerName, String storeBusinessNo); //아이디찾기
+    Integer findAdminPw(String storeId, String storeBusinessNo); //비번찾기
+    void updatePw(String newPw, String storeId, String storeBusinessNo); //새비번등록
+
     void updateStore(StoreRegistDTO storeRegistDTO); //내가게 업데이트
     StoreRegistDTO getMyStore(Long storeNo); //가게관리정보 불러오기
 

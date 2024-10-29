@@ -70,6 +70,25 @@
         returning store_no as storeNo
     </insert>
 
+<!--  아이디/비번 찾기  -->
+    <select id="findAdminId" resultType="string">
+        select store_id
+        from store
+        where manager_name = #{managerName} and store_business_no = #{storeBusinessNo}
+    </select>
+
+    <select id="findAdminPw" resultType="int">
+        select count(*)
+        from store
+        where store_id = #{storeId} and store_business_no = #{storeBusinessNo}
+    </select>
+
+    <update id="updatePw">
+        update store
+        set store_pw = #{newPw}
+        where store_id = #{storeId} and store_business_no = #{storeBusinessNo}
+    </update>
+
     <insert id="insertDay" parameterType="com.example.HiMade.admin.dto.DayOffDay">
         insert into day_off_day(store_id, store_no, day_off_fix_status, day_off_day)
         values (#{storeId}, #{storeNo}, #{dayOffFixStatus}, #{dayOffDay});

@@ -13,6 +13,7 @@ import java.time.LocalTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Reservation {
 
     @Id

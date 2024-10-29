@@ -27,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
@@ -150,6 +151,8 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
 
         if (response.getStatusCode() == HttpStatus.OK) {
             Map<String, Object> responseBody = response.getBody();
+            logger.info("카카오 토큰 응답: {}", responseBody);
+
             return (String) responseBody.get("access_token");
         }
         return null;
@@ -208,6 +211,7 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         userAccountMapper.updatePassword(userId, encodedPassword);
     }
 
+    // 탈퇴
     @Override
     @Transactional
     public boolean deleteUser(String userId, String password) {
@@ -223,8 +227,16 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         }
 
         try {
-            // 3. 새로운 userId 생성 (맨 앞에 del_ 추가)
+/*            // 3. 새로운 userId 생성 (맨 앞에 del_ 추가)
             String newUserId = "del_" + userId;
+
+            // 4. 매퍼에 전달할 파라미터 설정
+            Map<String, String> params = new HashMap<>();
+            params.put("originalUserId", userId);
+            params.put("newUserId", newUserId);*/
+
+            // 3. 새로운 userId 생성 (고유한 del_ 접두어와 타임스탬프 추가)
+            String newUserId = "del_" + System.currentTimeMillis() + "_" + userId;
 
             // 4. 매퍼에 전달할 파라미터 설정
             Map<String, String> params = new HashMap<>();
@@ -242,4 +254,53 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
             throw new RuntimeException("회원 탈퇴 처리 중 오류가 발생했습니다.", e);
         }
     }
+
+    @Override
+    @Transactional
+    public boolean deleteKakaoUser(String userId, String accessToken, String confirmationText) throws Exception {
+        UserDTO user = userAccountMapper.getUserById(userId);
+
+        if (user == null || !"KAKAO".equals(user.getLoginType())) {
+            throw new IllegalArgumentException("카카오 회원이 아니거나 존재하지 않는 회원입니다.");
+        }
+
+        // 입력된 텍스트 검증
+        if (!"delete".equalsIgnoreCase(confirmationText)) {
+            throw new IllegalArgumentException("올바른 텍스트를 입력해 주세요.");
+        }
+
+        // 1. 카카오 연결 해제 API 호출
+        if (accessToken != null) {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + accessToken);
+
+            HttpEntity<Void> request = new HttpEntity<>(headers);
+            ResponseEntity<Map> response = restTemplate.postForEntity("https://kapi.kakao.com/v1/user/unlink", request, Map.class);
+
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("카카오 연결 해제에 실패했습니다.");
+            }
+        }
+
+/*        // 2. DB 탈퇴 처리
+        String newUserId = "del_" + userId;
+        Map<String, String> params = new HashMap<>();
+        params.put("originalUserId", userId);
+        params.put("newUserId", newUserId);*/
+
+        // 2. DB 탈퇴 처리 (고유한 del_ 접두어와 타임스탬프 추가)
+        String newUserId = "del_" + System.currentTimeMillis() + "_" + userId;
+        Map<String, String> params = new HashMap<>();
+        params.put("originalUserId", userId);
+        params.put("newUserId", newUserId);
+
+        userAccountMapper.deleteUser(params);
+
+        logger.info("카카오 회원 탈퇴 처리 완료 - 기존 ID: {}, 변경된 ID: {}", userId, newUserId);
+        return true;
+    }
+
+
+
 }

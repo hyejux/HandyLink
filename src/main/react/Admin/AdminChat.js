@@ -73,6 +73,7 @@ function AdminChat() {
         if (!userId || !storeId) return; // 로그인 정보 없으면 연결 X
 
         websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
+        //websocket.current = new WebSocket('ws://172.30.1.99:8585/ws/chat');
 
         websocket.current.onmessage = (event) => {
             const received = JSON.parse(event.data);

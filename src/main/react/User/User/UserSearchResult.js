@@ -230,7 +230,7 @@ function UserSearchResult() {
 
                 <div className="result-list-mid">
                   <div className="result-list-date">
-                    <i className="bi bi-clock-fill"></i>영업시간: {store.storeOpenTime.slice(0, 5)} - {store.storeCloseTime.slice(0, 5)}
+                    <i className="bi bi-clock-fill"></i>영업시간: {store.storeOpenTime ? store.storeOpenTime.slice(0, 5) : ''} - {store.storeCloseTime ? store.storeCloseTime.slice(0, 5) : ''}
                     <span className="result-list-location">
                       <i className="bi bi-geo-alt-fill"></i>현재 위치에서 {storeDistance}
                     </span>

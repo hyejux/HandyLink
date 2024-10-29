@@ -12,7 +12,8 @@ function UserMyReservationDetail() {
   const [reservationList, setReservationList] = useState([]);
   const [paymentInfo, setPaymentInfo] = useState([]);
   const [reservationDetail, setReservationDetail] = useState({});
-  const [storeInfo, setStoreInfo] = useState({});
+  const [userId, setUserId] = useState('');
+  const [userInfo, setUserInfo] = useState({});
 
 
   useEffect(() => {
@@ -46,9 +47,21 @@ function UserMyReservationDetail() {
       .then(response => {
         console.log(response.data);
         setReservationDetail(response.data);
+
+        // 예약 상세 정보에서 userId 추출
+        const userId = response.data.userId;
+        setUserId(userId);
+        console.log("userId: " + userId);
+
+        // 사용자 정보 가져오기 (userId를 사용하여 요청)
+        return axios.get(`/getUser/${userId}`);
+      })
+      .then(response => {
+        console.log(response.data);
+        setUserInfo(response.data);
       })
       .catch(error => {
-        console.log('Error fetching reservation detail:', error);
+        console.log('Error fetching reservation detail or user profile:', error);
       });
   }, []);
 
@@ -62,10 +75,16 @@ function UserMyReservationDetail() {
   });
 
   // 결제 일시 포맷 (년/월/일 시:분:초)
-  const formatDate = (dateString) => {
+  const formatDate1 = (dateString) => {
     const [date, time] = dateString.split('T');
     const formattedDate = date.replace(/-/g, '.'); // '-'을 '/'로 변경
     return `${formattedDate} ${time.substring(0, 8)}`; // 'YYYY/MM/DD HH:MM:SS' 형식으로 반환
+  };
+
+  // 예약 일시 포맷 (년.월.일 시:분:초)
+  const formatDate2 = (isoDateString) => {
+    const date = new Date(isoDateString);
+    return `${date.getUTCFullYear()}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${String(date.getUTCDate()).padStart(2, '0')} ${String(date.getUTCHours() + 9).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}:${String(date.getUTCSeconds()).padStart(2, '0')}`;
   };
 
 
@@ -108,7 +127,7 @@ function UserMyReservationDetail() {
     <div>
       <div className="user-content-container">
         <div className='store-name'>{reservationList.length > 0 ? reservationList[0].storeName : '정보 없음'}</div>
-        <div className='payment-date'>{reservationDetail.regTime}</div>
+        <div className='payment-date'>{formatDate2(reservationDetail.regTime)}</div>
       </div>
 
       {/* 입금정보 */}
@@ -118,7 +137,7 @@ function UserMyReservationDetail() {
         </div>
         <div className="payment-info-top">
           <div className="account-left">입금 대기금액</div>
-          <div className="account-right"> {paymentInfo.length > 0 ? paymentInfo[0].paymentAmount : '정보 없음'} 원</div>
+          <div className="account-right"> {paymentInfo.length > 0 ? paymentInfo[0].paymentAmount.toLocaleString() : '정보 없음'} 원</div>
         </div>
         <div className="payment-info-top">
           <div className="account-left">입금 계좌</div>
@@ -131,15 +150,23 @@ function UserMyReservationDetail() {
 
       <div className="user-content-container">
         <div className="info-row">
-          <div className="left"><i class="bi bi-calendar-check-fill"></i> {reservationDetail.regTime} </div>
-          <div className="right"><i class="bi bi-clock-fill"></i> {reservationDetail.reservationTime} </div>
+          <div className="left"><i class="bi bi-calendar-check-fill"></i> {formatDate2(reservationDetail.regTime)} </div>
+          <div className="right"><i class="bi bi-clock-fill"></i>{(reservationDetail.reservationTime || '정보 없음').slice(0, 5)} </div>
         </div>
       </div>
 
 
       {/* 예약자정보 */}
       <div className="user-content-container">
-        예약자 정보
+        <div className="header">예약자 정보</div>
+        <div className="info-row">
+          <div className="left">이름</div>
+          <div className="right">{userInfo.userName}</div>
+        </div>
+        <div className="info-row">
+          <div className="left">전화번호</div>
+          <div className="right">{userInfo.userPhonenum}</div>
+        </div>
       </div>
 
 
@@ -212,7 +239,7 @@ function UserMyReservationDetail() {
             paymentInfo.map((payment, index) => (
               <div key={index} className="info-row">
                 <div className="left">결제 일시</div>
-                <div className="right">{formatDate(payment.paymentDate)}</div>
+                <div className="right">{formatDate1(payment.paymentDate)}</div>
               </div>
             ))
           ) : (
@@ -228,7 +255,7 @@ function UserMyReservationDetail() {
               </div>
               <div className="info-row">
                 <div className="left">결제 금액</div>
-                <div className="right">{payment.paymentAmount}</div>
+                <div className="right">{payment.paymentAmount.toLocaleString()} 원</div>
               </div>
             </div>
           ))}
@@ -254,8 +281,6 @@ function UserMyReservationDetail() {
       <h1> 환불규정 </h1>
 
       <hr />
-
-
 
 
     </div>

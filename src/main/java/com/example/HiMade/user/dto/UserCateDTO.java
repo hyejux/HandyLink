@@ -23,6 +23,7 @@ public class UserCateDTO {
   private int storeNo;
   private LocalDateTime ServiceStart;
   private int imageId;
+  private String activated;
 
   private String imageUrl;
   private String imageDescription;

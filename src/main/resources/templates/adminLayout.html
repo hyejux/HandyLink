@@ -80,46 +80,75 @@
     //     // 배경색 변경
     //     this.classList.toggle('active'); // active 클래스 토글
     // });
-    document.querySelector('.dropdown-btn').addEventListener('click', function() {
-            const dropdown = document.querySelector('.dropdown');
-            const downIcon = document.querySelector('.bi-caret-down-fill');
-            const leftIcon = document.querySelector('.bi-caret-left-fill');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 
-            // 드롭다운 상태에 따라 max-height 조정
-            if (dropdown.style.maxHeight) {
-                dropdown.style.maxHeight = null; // 숨김
-                downIcon.style.display = 'block'; // 아래 화살표 보이기
-                leftIcon.style.display = 'none'; // 왼쪽 화살표 숨기기
-            } else {
-                dropdown.style.maxHeight = dropdown.scrollHeight + "px"; // 펼침
-                downIcon.style.display = 'none'; // 아래 화살표 숨기기
-                leftIcon.style.display = 'block'; // 왼쪽 화살표 보이기
-            }
+    const storeStatus = '[[${session.storeStatus}]]'; // 기본값 설정 (선택 사항)
+    console.log(storeStatus); // storeStatus의 값을 콘솔에 출력
 
-            // 배경색 변경
-            this.classList.toggle('active'); // active 클래스 토글
+    function setupMenuButtons() {
+        const menuButtons = document.querySelectorAll('.menu-btn, .dropdown-btn, .dropdown-btn2');
+
+        // 모든 메뉴 버튼에 대해 클릭 이벤트 리스너를 한 번만 등록
+        menuButtons.forEach(btn => {
+            btn.addEventListener('click', (event) => {
+                if (storeStatus === '대기') {
+                    event.preventDefault(); // 기본 클릭 동작 방지
+                    alert('현재 대기 중입니다. 메뉴를 사용할 수 없습니다.'); // 알림 메시지
+                    return;
+                }
+
+                // 드롭다운 열기 및 닫기 로직
+                if (btn.classList.contains('dropdown-btn')) {
+                    const dropdown = document.querySelector('.dropdown');
+                    const downIcon = document.querySelector('.bi-caret-down-fill');
+                    const leftIcon = document.querySelector('.bi-caret-left-fill');
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+
+                    // 드롭다운 상태에 따라 max-height 조정
+                    if (dropdown.style.maxHeight) {
+                        dropdown.style.maxHeight = null; // 숨김
+                        downIcon.style.display = 'block'; // 아래 화살표 보이기
+                        leftIcon.style.display = 'none'; // 왼쪽 화살표 숨기기
+                    } else {
+                        dropdown.style.maxHeight = dropdown.scrollHeight + "px"; // 펼침
+                        downIcon.style.display = 'none'; // 아래 화살표 숨기기
+                        leftIcon.style.display = 'block'; // 왼쪽 화살표 보이기
+                    }
+
+                    // 배경색 변경
+                    btn.classList.toggle('active'); // active 클래스 토글
+                }
+
+                if (btn.classList.contains('dropdown-btn2')) {
+                    const dropdown = document.querySelector('.dropdown2');
+                    const downIcon = document.querySelector('.bi3');
+                    const leftIcon = document.querySelector('.bi4');
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+
+                    // 드롭다운 상태에 따라 max-height 조정
+                    if (dropdown.style.maxHeight) {
+                        dropdown.style.maxHeight = null; // 숨김
+                        downIcon.style.display = 'block'; // 아래 화살표 보이기
+                        leftIcon.style.display = 'none'; // 왼쪽 화살표 숨기기
+                    } else {
+                        dropdown.style.maxHeight = dropdown.scrollHeight + "px"; // 펼침
+                        downIcon.style.display = 'none'; // 아래 화살표 숨기기
+                        leftIcon.style.display = 'block'; // 왼쪽 화살표 보이기
+                    }
+
+                    // 배경색 변경
+                    btn.classList.toggle('active'); // active 클래스 토글
+                }
+            });
         });
-        document.querySelector('.dropdown-btn2').addEventListener('click', function() {
-            const dropdown = document.querySelector('.dropdown2');
-            const downIcon = document.querySelector('.bi3');
-            const leftIcon = document.querySelector('.bi4');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
 
-            // 드롭다운 상태에 따라 max-height 조정
-            if (dropdown.style.maxHeight) {
-                dropdown.style.maxHeight = null; // 숨김
-                downIcon.style.display = 'block'; // 아래 화살표 보이기
-                leftIcon.style.display = 'none'; // 왼쪽 화살표 숨기기
-            } else {
-                dropdown.style.maxHeight = dropdown.scrollHeight + "px"; // 펼침
-                downIcon.style.display = 'none'; // 아래 화살표 숨기기
-                leftIcon.style.display = 'block'; // 왼쪽 화살표 보이기
-            }
+    window.onload = function() {
+        setupMenuButtons();
+    };
 
-            // 배경색 변경
-            this.classList.toggle('active'); // active 클래스 토글
-        });
+
+
+
 </script>
 
 

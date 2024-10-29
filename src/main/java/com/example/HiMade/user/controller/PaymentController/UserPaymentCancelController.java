@@ -43,7 +43,7 @@ public class UserPaymentCancelController {
             userReservationService.updateReservationStatus(reservationNo.intValue(), "취소 (" + storeName + ")"); // 예약 상태 업데이트
 
             // 환불 정보 생성 (상태가 N일 경우)
-            if ("N".equals(newStatus)) {
+            if ("결제취소".equals(newStatus)) {
                 try {
                     refundService.createRefund(
                             payment.getPaymentId(),

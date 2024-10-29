@@ -30,12 +30,13 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/css/**", "/uploads/**", "/img/**", "/bundle/**").permitAll()
-                .antMatchers("/UserAccountPage.user").authenticated() // 로그인 필요
                 .antMatchers("/**").permitAll()  // 모든 경로에 접근 허용 (임시 설정)
+                //.antMatchers("/userMain.user").permitAll() // 로그인 필요없이 접근 가능한 요청
                 //.anyRequest().authenticated()  // 그 외 요청은 로그인 필요
                 .and()
                 .formLogin()
                 .loginPage("/UserLoginPage.user")
+                .permitAll()
                 .loginProcessingUrl("/login")
                 .usernameParameter("userId")
                 .passwordParameter("userPw")

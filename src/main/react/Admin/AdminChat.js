@@ -16,7 +16,7 @@ function AdminChat() {
     const websocket = useRef(null);
     const inputRef = useRef(null);
 
-    const userId = 'chat@naver.com'; // 임시 업체 ID
+    const userId = 'chat@naver.com';
     const profileImg= '/img/user_basic_profile.jpg';
 
     const handleScroll = () => {

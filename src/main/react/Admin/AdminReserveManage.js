@@ -73,7 +73,7 @@ function AdminReserveManage() {
         console.log("세션 storeNo: ", storeNo);
     
 
-        axios.get('/adminReservation/getManageList', {storeNo : storeNo})
+        axios.post('/adminReservation/getManageList', {storeNo : storeNo})
             .then(response => {
                 console.log(response.data);
                 setReservationList(response.data);

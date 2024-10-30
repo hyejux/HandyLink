@@ -23,7 +23,7 @@ public class AdminReservationController {
   private AdminReservationService adminReservationService;
 
 
-  @GetMapping("/getManageList")
+  @PostMapping("/getManageList")
   public List<adminReserveMangeDTO> getManageList(@RequestBody Map<String, Integer> request) {
     int storeNo = request.get("storeNo");
     System.out.println(storeNo);

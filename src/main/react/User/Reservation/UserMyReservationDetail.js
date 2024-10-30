@@ -131,22 +131,30 @@ function UserMyReservationDetail() {
       </div>
 
       {/* 입금정보 */}
-      <div className="user-content-container">
-        <div className='payment-info-top'>
-          <div className='deposit-date'></div>
-        </div>
-        <div className="payment-info-top">
-          <div className="account-left">입금 대기금액</div>
-          <div className="account-right"> {paymentInfo.length > 0 ? paymentInfo[0].paymentAmount.toLocaleString() : '정보 없음'} 원</div>
-        </div>
-        <div className="payment-info-top">
-          <div className="account-left">입금 계좌</div>
-          <div className="account-right">
-            {reservationList.length > 0 ? reservationList[0].accountBank : '정보 없음'} {reservationList.length > 0 ? reservationList[0].accountNumber : '정보 없음'}
-            <button className='account-number-copy-btn' onClick={copyToClipboard} ><i class="bi bi-copy"></i></button>
+      {reservationDetail.reservationStatus === "입금대기" && (
+        <div className="user-content-container">
+          <div className='payment-info-top'>
+            <div className='deposit-date'></div>
+          </div>
+          <div className="payment-info-top">
+            <div className="account-left">입금 대기금액</div>
+            <div className="account-right">
+              {paymentInfo.length > 0 ? paymentInfo[0].paymentAmount.toLocaleString() : '정보 없음'} 원
+            </div>
+          </div>
+          <div className="payment-info-top">
+            <div className="account-left">입금 계좌</div>
+            <div className="account-right">
+              {reservationList.length > 0 ? reservationList[0].accountBank : '정보 없음'}
+              {reservationList.length > 0 ? reservationList[0].accountNumber : '정보 없음'}
+              <button className='account-number-copy-btn' onClick={copyToClipboard}>
+                <i className="bi bi-copy"></i>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
 
       <div className="user-content-container">
         <div className="info-row">

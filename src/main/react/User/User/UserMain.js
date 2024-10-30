@@ -13,7 +13,7 @@ function UserMain() {
   const LOAD_MORE_COUNT = 1; // 더 볼 가게 수
   const [level1Categories, setLevel1Categories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isBookmarked, setIsBookmarked] = useState(false); //찜
+  const [isBookmarked, setIsBookmarked] = useState([]); //찜
 
   // 검색어 입력 핸들러
   const handleInputChange = (event) => {

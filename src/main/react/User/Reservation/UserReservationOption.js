@@ -176,7 +176,10 @@ function UserReservationOption() {
 
   // sessionStorage에서 데이터 가져오기
   const storedData = sessionStorage.getItem('storeInfo');
-  
+  const userName = sessionStorage.getItem('userName');
+  const userPhonenum = sessionStorage.getItem('userPhonenum');
+
+
   // 가져온 데이터를 변환하여 바로 사용
   const storeInfo = storedData ? JSON.parse(storedData) : null; 
   console.log(storeInfo);
@@ -274,12 +277,12 @@ function UserReservationOption() {
             <div className="user-content-container3">
               <div className="sub-container3">
                 <div className="bold-text">예약자 성함</div>
-                <div>세션 이름</div>
+                <div>{userName}</div>
               </div>
 
               <div className="sub-container3">
                 <div className="bold-text">예약자 전화번호</div>
-                <div>세션 번호</div>
+                <div>{userPhonenum}</div>
               </div>
             </div>
           </div>

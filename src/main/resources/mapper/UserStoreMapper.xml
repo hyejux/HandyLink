@@ -89,4 +89,12 @@
         where user_id = #{userId}
     </select>
 
+    <select id="getLikeInfo" parameterType="string" resultType="java.util.Map">
+        select ul.store_no, s.store_cate, s.store_name, s.addr, s.addrdetail, si.store_img_location
+        from user_likes ul
+        left join store s on ul.store_no = s.store_no
+        left join store_img si on s.store_no = si.store_no
+        where ul.user_id = #{userId}
+    </select>
+
 </mapper>

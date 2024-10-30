@@ -1,0 +1,100 @@
+.favorite-list {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    min-height: calc(100vh - 63px);
+}
+
+.title {
+    font-size: 1.5em;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.category-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.category-button {
+    background-color: #f7f7f7;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    margin: 0 5px;
+    font-size: 0.9em;
+    color: #333;
+    cursor: pointer;
+}
+
+.category-button.active {
+    background-color: #ffcad4;
+    color: #ffffff;
+}
+
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-image {
+    width: 115px;
+    height: 115px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.category {
+    font-size: 0.8em;
+    color: #ff7e87;
+    margin-bottom: 5px;
+}
+
+.card-main {
+    display: flext;
+}
+
+.card-content {
+    flex: 1;
+    text-align: right;
+}
+
+.store {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 5px 0;
+    text-align: right;
+}
+
+.address, .addrdetail {
+    font-size: 0.9em;
+    color: #888888;
+}
+
+.rating-section {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    float: right;
+}
+
+.rating {
+    font-size: 1em;
+    color: #ffcc00;
+    margin-right: 10px;
+}
+
+.reviews {
+    font-size: 0.9em;
+    color: #888888;
+}

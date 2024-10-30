@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/userStoreList")
@@ -56,6 +57,25 @@ public class UserStoreListController {
             return ResponseEntity.ok(likes); // 항상 200 상태로 응답
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 인증되지 않은 사용자
+        }
+    }
+
+    //찜리스트 가게정보 가져오기
+    @GetMapping("/getLikeInfo")
+    public ResponseEntity<List<Map<String ,Object>>> getLikeInfo(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+            String userId = auth.getName(); // 로그인한 사용자 ID
+            List<Map<String ,Object>> listInfo = userStoreService.getLikeInfo(userId);
+
+            if(listInfo == null){
+                listInfo = new ArrayList<>();
+            }
+
+            return ResponseEntity.ok(listInfo);
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 

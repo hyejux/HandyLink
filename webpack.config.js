@@ -62,7 +62,8 @@ module.exports = {
         UserReviewRegist : './User/User/UserReviewRegist.js',
         UserSearchResult: './User/User/UserSearchResult.js',
         AdminAccountFind: './Admin/AdminAccountFind.js',
-        AdminStoreNoticeModi : './Admin/AdminStoreNoticeModi.js'
+        AdminStoreNoticeModi : './Admin/AdminStoreNoticeModi.js',
+        UserLikeList:'./User/User/UserLikeList.js'
 
     },
 

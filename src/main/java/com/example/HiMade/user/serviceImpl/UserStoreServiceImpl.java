@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service("UserStoreService")
 public class UserStoreServiceImpl implements UserStoreService {
@@ -48,5 +49,10 @@ public class UserStoreServiceImpl implements UserStoreService {
   @Override
   public List<UserLikesDTO> getLike(String userId) {
     return userStoreMapper.getLike(userId);
+  }
+
+  @Override
+  public List<Map<String, Object>> getLikeInfo(String userId) {
+    return userStoreMapper.getLikeInfo(userId);
   }
 }

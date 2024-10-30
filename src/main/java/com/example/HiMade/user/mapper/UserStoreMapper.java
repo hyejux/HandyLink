@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UserStoreMapper {
@@ -17,4 +18,5 @@ public interface UserStoreMapper {
   public void deleteLike(@Param("userId") String userId,@Param("storeNo") Long storeNo); //가게찜-삭제
   public Integer existingLike(@Param("userId") String userId,@Param("storeNo") Long storeNo); //가게찜-삭제
   public List<UserLikesDTO> getLike(String userId); //찜 데이터 가져오기
+  public List<Map<String ,Object>> getLikeInfo(String userId); //찜 가게정보 가져오기
 }

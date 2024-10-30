@@ -14,6 +14,7 @@ function UserMain() {
   const [level1Categories, setLevel1Categories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isBookmarked, setIsBookmarked] = useState([]); //찜
+  const [activeSection, setActiveSection] = useState('menu1');
 
   // 검색어 입력 핸들러
   const handleInputChange = (event) => {
@@ -70,7 +71,7 @@ function UserMain() {
     const scrollLeft = list.scrollLeft;
     const maxScrollLeft = list.scrollWidth - list.clientWidth;
 
-    
+
     leftBtn.style.display = scrollLeft <= 0 ? 'none' : 'block';
     rightBtn.style.display = scrollLeft >= maxScrollLeft ? 'none' : 'block';
   };
@@ -295,23 +296,18 @@ function UserMain() {
 
   // ----------------------------------------------------------
 
-  const parseImageUrl = (urlString) => {
-    if (!urlString) return []; // urlString이 없을 경우 빈 배열 반환
-    return urlString.replace(/{|}/g, "").split(",").map(url => url.trim());
-  };
-
   //가게 찜하기
-  const handleStoreLike = async(store) => {
+  const handleStoreLike = async (store) => {
     console.log("가게번호 ", store.storeNo);
 
     try {
-      const resp = await axios.post('/userStoreList/storeLike', {storeNo: store.storeNo});
+      const resp = await axios.post('/userStoreList/storeLike', { storeNo: store.storeNo });
       setIsBookmarked(prev =>
         prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) //찜 해제
-                                      : [...prev, store.storeNo] //찜 추가
+          : [...prev, store.storeNo] //찜 추가
       );
 
-    }catch (error) {
+    } catch (error) {
       console.log("찜하던 중 error ", error);
     }
   };
@@ -369,7 +365,7 @@ function UserMain() {
 
 
         {/* 위치 카테고리 */}
-        <h3>어디로 가시나요?</h3>
+        {/* <h3>어디로 가시나요?</h3>
         <div className="user-location-content">
           <div className="user-location-item">내주변</div>
           <div className="user-location-item">압구정 청담</div>
@@ -377,7 +373,66 @@ function UserMain() {
           <div className="user-location-item">잠실 송파</div>
           <div className="user-location-item">이태원 한남</div>
           <div className="user-location-item">성수</div>
+        </div> */}
+
+        <div class="user-main-menu-bar-container">
+          <div class="user-main-menu-bar">
+            <button type="button" className={activeSection === 'menu1' ? 'active' : ''} onClick={() => setActiveSection('menu1')}>menu1</button>
+            <button type="button" className={activeSection === 'menu2' ? 'active' : ''} onClick={() => setActiveSection('menu2')}>menu2</button>
+            <button type="button" className={activeSection === 'menu3' ? 'active' : ''} onClick={() => setActiveSection('menu3')}>menu3</button>
+            <button type="button" className={activeSection === 'menu4' ? 'active' : ''} onClick={() => setActiveSection('menu4')}>menu4</button>
+          </div>
         </div>
+
+        {activeSection === 'menu1' && (
+          <div className="user-main-menu-content">
+            컨텐츠1
+            <div className="user-main-menu-content-list">
+              
+              <div className="user-main-menu-img">
+                <img src="/img/cake001.jpg" />
+              </div>
+              <div className='user-main-menu-info'>
+                <div>업체명</div>
+                <div>업체소개</div>
+                <div>별점 카테고리</div>
+              </div>
+
+            </div>
+          </div>
+
+        )}
+
+        {activeSection === 'menu2' && (
+          <div className="user-main-menu-content">
+            컨텐츠2
+            <div>
+
+            </div>
+          </div>
+
+        )}
+
+        {activeSection === 'menu3' && (
+          <div className="user-main-menu-content">
+            컨텐츠3
+            <div>
+
+            </div>
+          </div>
+
+        )}
+
+        {activeSection === 'menu4' && (
+          <div className="user-main-menu-content">
+            컨텐츠4
+            <div>
+
+            </div>
+          </div>
+
+        )}
+
 
         {/* 배너 */}
         <div className="advertisement-banner">
@@ -511,9 +566,10 @@ function UserMain() {
         <div className="search-result-list-container">
           {store.length > 0 ? (
             store.map((store) => {
-              const imageUrls = parseImageUrl(store.imageUrl);
-              const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
               const storeDistance = distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음';
+              const imageUrl = store.storeImages.length > 0
+                ? store.storeImages[0].storeImgLocation
+                : "/img/cake001.jpg"; // 기본 이미지 설정
 
               return (
                 <div className="search-result-list-content" key={store.storeId} onClick={() => goToStoreDetail(store.storeNo)}>

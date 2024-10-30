@@ -19,7 +19,7 @@ public class adminReservationDTO {
   private String serviceName;
   private int servicePrice;
   private String serviceContent;
-  private String storeId;
+  private int storeNo;
   private LocalDateTime ServiceStart;
   private String imageUrl;
   private String activated;

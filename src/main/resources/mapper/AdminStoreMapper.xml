@@ -7,7 +7,11 @@
 
 
     <select id="getNoticeList" resultType="com.example.HiMade.admin.dto.storeNoticeDTO">
-        select * from store_notice where status = 'Y' or status = 'D'
+        select *
+        from store_notice
+        where  (status = 'Y' or status = 'D')
+        and store_no = #{storeNo}
+
     </select>
 <!-- 스토어 넘버 변경 -->
     <insert id="setNotice" parameterType="com.example.HiMade.admin.dto.storeNoticeDTO">
@@ -15,14 +19,12 @@
         notice_regdate,
         notice_content,
         notice_type,
-        store_no,
-        store_id
+        store_no
         ) VALUES (
         NOW(),
         #{noticeContent},
         #{noticeType},
-        7,
-        'bbb123'
+        #{storeNo}
         );
     </insert>
 

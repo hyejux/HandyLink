@@ -89,6 +89,12 @@ const handleTimeNumChange = (e) => {
 
   //-------------------------------------------
   const handleComplete = () => {
+
+    const storeId = sessionStorage.getItem('storeId');
+    const storeNo = sessionStorage.getItem('storeNo');
+    console.log("세션 storeId: ", storeId);
+    console.log("세션 storeNo: ", storeNo);
+
     const transformedCategories = categories.map(category => ({
       ...category,
       isPaid: category.isPaid ? 'Y' : 'N',
@@ -109,8 +115,7 @@ const handleTimeNumChange = (e) => {
       ServiceStart: combinedDateTime,
       DateNumCase: dateNumCase,
       TimeNumCase: timeNumCase,
-      StoreNo : 7,
-      StoreId: 'bbb123'
+      StoreNo : storeNo
     };
 
     console.log(requestData);

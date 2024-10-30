@@ -67,7 +67,13 @@ function AdminReserveManage() {
     const [newStatus, setNewStatus] = useState(''); // 새로운 예약 상태
 
     useEffect(() => {
-        axios.get('/adminReservation/getManageList')
+        const storeId = sessionStorage.getItem('storeId');
+        const storeNo = sessionStorage.getItem('storeNo');
+        console.log("세션 storeId: ", storeId);
+        console.log("세션 storeNo: ", storeNo);
+    
+
+        axios.get('/adminReservation/getManageList', {storeNo : storeNo})
             .then(response => {
                 console.log(response.data);
                 setReservationList(response.data);

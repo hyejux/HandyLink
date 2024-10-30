@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface AdminReservationMapper {
 
-  public List<adminReservationDTO> getList();
+  public List<adminReservationDTO> getList(int storeNo);
   public void setCategory(adminReservationDTO dto);
   public adminReservationDTO getListDetail(int id);
   public List<adminRSDTO> getMiddleItem(int id);
@@ -25,7 +25,7 @@ public interface AdminReservationMapper {
   void setActivated(int id);
   void setSlotModi( @Param("id")int id,  @Param("realId") int realId);
   void setSlotAll(adminReserveAdd dto);  // 슬롯 삽입
-  public List<adminReserveMangeDTO> getManageList();
+  public List<adminReserveMangeDTO> getManageList(int storeNo);
 
   //예약 상태 변경
   void updateStatus(UpdateReservationStatusDTO dto);

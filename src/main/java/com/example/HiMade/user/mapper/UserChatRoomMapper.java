@@ -5,6 +5,7 @@ import com.example.HiMade.user.dto.UserChatDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -14,4 +15,5 @@ public interface UserChatRoomMapper {
     List<UserChatDTO> selectChat(String userId, String storeId);
     List<Map<String, Object>> getChatListForUser(String userId);
     StoreRegistDTO getStoreInfoByStoreId(String storeId);
+    List<UserChatDTO> selectNewMessages(String userId, String storeId, Timestamp lastCheckedTime);
 }

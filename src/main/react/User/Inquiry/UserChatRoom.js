@@ -68,6 +68,7 @@ function UserChatRoom() {
             if (storeId) {
                 try {
                     const response = await axios.get(`/chat/getStoreInfoByStoreId/${storeId}`);
+                    console.log("storeInfo ", response.data);
                     setStoreInfo(response.data);
                 } catch (error) {
                     console.error('가게 정보를 가져오는데 실패했습니다:', error);
@@ -105,7 +106,8 @@ function UserChatRoom() {
                 const received = JSON.parse(event.data);
                 console.log('메시지 수신:', received);
                 console.log('WebSocket 상태:', websocket.current.readyState);
-                if (received.userId === userId && received.storeId === storeId) {
+
+                if (received.storeId === storeId) {
                     setMessages((prevMessages) => [...prevMessages, received]);
                 }
             };
@@ -143,7 +145,7 @@ function UserChatRoom() {
                 storeNo: storeInfo.storeNo,
                 senderType: "USER",
                 chatMessage: messageInput,
-                sendTime: Date.now(),
+                sendTime: new Date().toISOString(),
             };
 
             try {
@@ -161,7 +163,7 @@ function UserChatRoom() {
 
                     console.log('메시지 저장 후 WebSocket 상태:', websocket.current.readyState);
 
-                    setMessages((prevMessages) => [...prevMessages, { ...message, type: 'sent' }]);
+                    // setMessages((prevMessages) => [...prevMessages, { ...message, type: 'sent' }]);
                     setMessageInput('');
                 } else {
                     console.error('WebSocket이 열려있지 않음. 현재 상태:', websocket.current.readyState);
@@ -188,20 +190,9 @@ function UserChatRoom() {
         window.location.href = `/userStoreDetail.user/${storeInfo.storeNo}`;
     };
 
-
     return (
         <div>
             <div className="user-chat-room-container">
-{/*
-                <div className="store-info">
-                    <img className="store-image" src={storeInfo.storeImg[0]?.storeImgLocation || '/img/user_basic_profile.jpg'} alt={storeInfo.storeName} />
-                    <h2 className="store-name">{storeInfo.storeName}</h2>
-                    <p className="store-hours">
-                        영업시간: {storeInfo.storeOpenTime} - {storeInfo.storeCloseTime}
-                    </p>
-                </div>
-*/}
-
                 {/* 채팅 영역 */}
                 <div className="chat-box" ref={chatBoxRef} onScroll={handleScroll}>
                     {messages.map((msg, index) => (

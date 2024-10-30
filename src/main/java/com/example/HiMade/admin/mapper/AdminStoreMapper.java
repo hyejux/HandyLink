@@ -38,7 +38,7 @@ public interface AdminStoreMapper {
 
     Integer duplicatedId(String storeId); //아이디 중복검사
 
-    List<storeNoticeDTO> getNoticeList(); // 가게소식
+    List<storeNoticeDTO> getNoticeList(int storeNo); // 가게소식
     void setNotice(storeNoticeDTO dto); // 가게 소식 등록
     void setNoticeModi(storeNoticeDTO dto); // 가게 소식 등록
     void setNoticeStatus(storeNoticeDTO dto);

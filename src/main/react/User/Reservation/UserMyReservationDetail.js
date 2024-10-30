@@ -11,6 +11,7 @@ function UserMyReservationDetail() {
   const [cateId, setCateId] = useState(0);
   const [reservationList, setReservationList] = useState([]);
   const [paymentInfo, setPaymentInfo] = useState([]);
+  const [refundInfo, setRefundInfo] = useState([]);
   const [reservationDetail, setReservationDetail] = useState({});
   const [userId, setUserId] = useState('');
   const [userInfo, setUserInfo] = useState({});
@@ -35,8 +36,21 @@ function UserMyReservationDetail() {
     // 결제 정보 가져오기
     axios.get(`/userPaymentInfo/getPaymentInfo/${categoryId}`)
       .then(response => {
-        console.log(response.data);
+        console.log("결제정보", response.data);
         setPaymentInfo(response.data);
+
+        const paymentId = response.data[0]?.paymentId;
+        if (paymentId) {
+          // 환불 정보 가져오기
+          axios.get(`/userRefund/getRefundInfo/${paymentId}`)
+            .then(response => {
+              console.log("환불정보", response.data);
+              setRefundInfo(response.data);
+            })
+            .catch(error => {
+              console.log('Error fetching refund info:', error);
+            });
+        }
       })
       .catch(error => {
         console.log('Error fetching payment info:', error);
@@ -57,14 +71,13 @@ function UserMyReservationDetail() {
         return axios.get(`/getUser/${userId}`);
       })
       .then(response => {
-        console.log(response.data);
+        console.log("사용자정보", response.data);
         setUserInfo(response.data);
       })
       .catch(error => {
         console.log('Error fetching reservation detail or user profile:', error);
       });
   }, []);
-
 
   const [category, setCategory] = useState({
     categoryLevel: 0,
@@ -213,12 +226,18 @@ function UserMyReservationDetail() {
       </div>
 
 
-      {/* 결제금액 */}
+      {/* 결제금액 또는 환불금액 */}
       <div className="user-content-container">
         <div className='totalPrice'>
           <div className="info-row">
-            <div className="left">결제금액</div>
-            <div className="right">{paymentInfo.length > 0 ? paymentInfo[0].paymentAmount : '정보 없음'} 원</div>
+            <div className="left">{refundInfo.length > 0 ? '환불금액' : '결제금액'}</div>
+            <div className="right">
+              {refundInfo.length > 0 ? (
+                `${refundInfo[0].refundAmount.toLocaleString()} 원` // 환불금액
+              ) : (
+                `${paymentInfo.length > 0 ? paymentInfo[0].paymentAmount.toLocaleString() : '정보 없음'} 원` // 결제금액
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -233,46 +252,66 @@ function UserMyReservationDetail() {
       </div>
 
 
-      {/* 결제정보 */}
+      {/* 결제 / 환불 정보 */}
       <div className="user-content-container">
-        <div className="payment-info-top">
-          <div className="payment-left">결제 정보</div>
-          <div className="payment-right">
-            <a href={`/paymentInfo.user/${cateId}`}>결제 상세</a>
+        {refundInfo.length > 0 ? (
+          // 환불 정보
+          <div className="payment-info">
+            <div className="payment-info-top">
+              <div className="payment-left">환불 정보</div>
+            </div>
+            {refundInfo.map((refund, index) => (
+              <div key={index}>
+                <div className="info-row">
+                  <div className="left">환불 일시</div>
+                  <div className="right">{formatDate1(refund.refundDate)}</div>
+                </div>
+                <div className="info-row">
+                  <div className="left">환불 수단</div>
+                  <div className="right">{refund.refundMethod}</div>
+                </div>
+                <div className="info-row">
+                  <div className="left">환불 금액</div>
+                  <div className="right">{refund.refundAmount.toLocaleString()} 원</div>
+                </div>
+              </div>
+            ))}
           </div>
-
-        </div>
-        <div className="payment-info">
-          {paymentInfo.length > 0 ? (
-            paymentInfo.map((payment, index) => (
-              <div key={index} className="info-row">
-                <div className="left">결제 일시</div>
-                <div className="right">{formatDate1(payment.paymentDate)}</div>
-              </div>
-            ))
-          ) : (
-            <div className="info-row">
-              <div className="left">결제 정보가 없습니다.</div>
-            </div>
-          )}
-          {paymentInfo.length > 0 && paymentInfo.map((payment, index) => (
-            <div key={index}>
-              <div className="info-row">
-                <div className="left">결제수단</div>
-                <div className="right">{payment.paymentMethod}</div>
-              </div>
-              <div className="info-row">
-                <div className="left">결제 금액</div>
-                <div className="right">{payment.paymentAmount.toLocaleString()} 원</div>
+        ) : (
+          // 결제 정보
+          <div className="payment-info">
+            <div className="payment-info-top">
+              <div className="payment-left">결제 정보</div>
+              <div className="payment-right">
+                <a href={`/paymentInfo.user/${cateId}`}>결제 상세</a>
               </div>
             </div>
-          ))}
-        </div>
+            {paymentInfo.length > 0 && paymentInfo.map((payment, index) => (
+              <div key={index}>
+                <div className="info-row">
+                  <div className="left">결제 일시</div>
+                  <div className="right">{formatDate1(payment.paymentDate)}</div>
+                </div>
+                <div className="info-row">
+                  <div className="left">결제 수단</div>
+                  <div className="right">{payment.paymentMethod}</div>
+                </div>
+                <div className="info-row">
+                  <div className="left">결제 금액</div>
+                  <div className="right">{payment.paymentAmount.toLocaleString()} 원</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      <div className="user-content-container">
-        <button onClick={cancelReservation}>예약취소</button>
-      </div>
+      {refundInfo.length === 0 && (
+        <div className="user-content-container">
+          <button onClick={cancelReservation}>예약취소</button>
+        </div>
+      )}
+
 
 
 

@@ -10,6 +10,7 @@ function AdminReserveManageDetail() {
   const [cateId, setCateId] = useState(0);
   const [reservationList, setReservationList] = useState([]);
   const [paymentInfo, setPaymentInfo] = useState([]);
+  const [refundInfo, setRefundInfo] = useState([]);
   const [reservationDetail, setReservationDetail] = useState({});
   const [userId, setUserId] = useState('');
   const [userInfo, setUserInfo] = useState({});
@@ -35,8 +36,21 @@ function AdminReserveManageDetail() {
     // 결제 정보 가져오기
     axios.get(`/userPaymentInfo/getPaymentInfo/${categoryId}`)
       .then(response => {
-        console.log(response.data);
+        console.log("결제정보", response.data);
         setPaymentInfo(response.data);
+
+        const paymentId = response.data[0]?.paymentId;
+        if (paymentId) {
+          // 환불 정보 가져오기
+          axios.get(`/userRefund/getRefundInfo/${paymentId}`)
+            .then(response => {
+              console.log("환불정보", response.data);
+              setRefundInfo(response.data);
+            })
+            .catch(error => {
+              console.log('Error fetching refund info:', error);
+            });
+        }
       })
       .catch(error => {
         console.log('Error fetching payment info:', error);
@@ -57,14 +71,14 @@ function AdminReserveManageDetail() {
         return axios.get(`/getUser/${userId}`);
       })
       .then(response => {
-        console.log(response.data);
+        console.log("사용자정보", response.data);
         setUserInfo(response.data);
       })
       .catch(error => {
         console.log('Error fetching reservation detail or user profile:', error);
       });
-
   }, []);
+
 
   // 결제 일시 포맷 (년.월.일 시:분:초)
   const formatDate1 = (dateString) => {
@@ -79,49 +93,49 @@ function AdminReserveManageDetail() {
     return `${date.getUTCFullYear()}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${String(date.getUTCDate()).padStart(2, '0')} ${String(date.getUTCHours() + 9).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}:${String(date.getUTCSeconds()).padStart(2, '0')}`;
   };
 
-// 예약 상태 변경
-const handleStatusChange = (reservationNo, status) => {
-  console.log(reservationNo, status);
-  if (window.confirm(`${reservationNo} 주문건을 ${status}로 변경하시겠습니까?`)) {
+  // 예약 상태 변경
+  const handleStatusChange = (reservationNo, status) => {
+    console.log(reservationNo, status);
+    if (window.confirm(`${reservationNo} 주문건을 ${status}로 변경하시겠습니까?`)) {
       // 결제 상태 결정
-      const paymentStatus = (status === '확정') 
-          ? '결제완료' 
-          : (status === '취소(업체)' || status === '취소(고객)') 
-              ? '결제취소' 
-              : '';
+      const paymentStatus = (status === '확정')
+        ? '결제완료'
+        : (status === '취소(업체)' || status === '취소(고객)')
+          ? '결제취소'
+          : '';
 
       // 예약 상태 업데이트
       axios.post('/adminReservation/updateStatus', {
-          reservationId: reservationNo,
-          newStatus: status,
+        reservationId: reservationNo,
+        newStatus: status,
       })
-      .then(response => {
+        .then(response => {
           // 결제 상태 업데이트
           return axios.post('/userPayment/updateStatus', null, {
-              params: {
-                  reservationNo: reservationNo,
-                  newStatus: paymentStatus,
-              },
+            params: {
+              reservationNo: reservationNo,
+              newStatus: paymentStatus,
+            },
           });
-      })
-      .then(response => {
-          setReservationList(prevList => 
-              prevList.map(item => 
-                  item.reservationNo === reservationNo ? { ...item, reservationStatus: status } : item
-              )
+        })
+        .then(response => {
+          setReservationList(prevList =>
+            prevList.map(item =>
+              item.reservationNo === reservationNo ? { ...item, reservationStatus: status } : item
+            )
           );
           setUpdatingReservationId(null); // 업데이트 완료 후 ID 초기화
           setNewStatus(''); // 새로운 상태 초기화
           window.location.reload(); // 페이지 새로 고침
-      })
-      .catch(error => {
+        })
+        .catch(error => {
           console.error('Error updating reservation or payment status:', error);
-      });
-  } else {
+        });
+    } else {
       setUpdatingReservationId(null);
       setNewStatus('');
-  }
-};
+    }
+  };
 
   return (
     <div>
@@ -131,24 +145,24 @@ const handleStatusChange = (reservationNo, status) => {
           <div className="left">승인 상태</div>
           <div className="mid">{reservationDetail.reservationStatus}</div>
           <div className="right">
-          <select
-    value={newStatus}
-    onChange={(e) => {
-        const newStatusValue = e.target.value;
-        setNewStatus(newStatusValue);
-        handleStatusChange(reservationDetail.reservationNo, newStatusValue);
-    }}
-    disabled={
-        reservationDetail.reservationStatus === '완료' ||
-        reservationDetail.reservationStatus === '취소(업체)' ||
-        reservationDetail.reservationStatus === '취소(고객)'
-    }
->
-    <option value={reservationDetail.reservationStatus}>{reservationDetail.reservationStatus}</option>
-    {reservationDetail.reservationStatus !== '확정' && <option value="확정">확정</option>}
-    {reservationDetail.reservationStatus !== '완료' && <option value="완료">완료</option>}
-    {reservationDetail.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
-</select>
+            <select
+              value={newStatus}
+              onChange={(e) => {
+                const newStatusValue = e.target.value;
+                setNewStatus(newStatusValue);
+                handleStatusChange(reservationDetail.reservationNo, newStatusValue);
+              }}
+              disabled={
+                reservationDetail.reservationStatus === '완료' ||
+                reservationDetail.reservationStatus === '취소(업체)' ||
+                reservationDetail.reservationStatus === '취소(고객)'
+              }
+            >
+              <option value={reservationDetail.reservationStatus}>{reservationDetail.reservationStatus}</option>
+              {reservationDetail.reservationStatus !== '확정' && <option value="확정">확정</option>}
+              {reservationDetail.reservationStatus !== '완료' && <option value="완료">완료</option>}
+              {reservationDetail.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
+            </select>
           </div>
         </div>
 
@@ -189,38 +203,64 @@ const handleStatusChange = (reservationNo, status) => {
           </table>
         </div>
 
-        {/* 결제 정보 */}
-        <table className="reserve-table">
-          <tbody>
-            <tr>
-              <th colSpan="2">결제 정보</th>
-            </tr>
-            {paymentInfo.length > 0 && paymentInfo.map((payment, index) => (
-              <tr key={index}>
-                <th>결제 일시</th>
-                <td>{formatDate1(payment.paymentDate)}</td>
+
+        {/* 결제 / 환불 정보 */}
+        {refundInfo.length > 0 ? (
+          //환불 정보
+          <table className="reserve-table">
+            <tbody>
+              <tr>
+                <th colSpan="2">환불 정보</th>
               </tr>
-            ))}
-            {paymentInfo.length > 0 && paymentInfo.map((payment, index) => (
-              <tr key={index}>
-                <th>결제 수단</th>
-                <td>{payment.paymentMethod}</td>
-              </tr>
-            ))}
-            {paymentInfo.length > 0 && paymentInfo.map((payment, index) => (
-              <tr key={index}>
-                <th>결제 상태</th>
-                <td>{payment.paymentStatus}</td>
-              </tr>
-            ))}
-            {paymentInfo.length > 0 && paymentInfo.map((payment, index) => (
-              <tr key={index}>
-                <th>결제 금액</th>
-                <td>{payment.paymentAmount.toLocaleString()} 원</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              {refundInfo.map((refund) => (
+                <React.Fragment key={refund.refundId}>
+                  <tr>
+                    <th>환불 일시</th>
+                    <td>{formatDate1(refund.refundDate)}</td>
+                  </tr>
+                  <tr>
+                    <th>환불 수단</th>
+                    <td>{refund.refundMethod}</td>
+                  </tr>
+                  <tr>
+                    <th>환불 금액</th>
+                    <td>{refund.refundAmount.toLocaleString()} 원</td>
+                  </tr>
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          // 결제 정보
+            <table className="reserve-table">
+              <tbody>
+                <tr>
+                  <th colSpan="2">결제 정보</th>
+                </tr>
+                {paymentInfo.map((payment, index) => (
+                  <React.Fragment key={index}>
+                    <tr>
+                      <th>결제 일시</th>
+                      <td>{formatDate1(payment.paymentDate)}</td>
+                    </tr>
+                    <tr>
+                      <th>결제 수단</th>
+                      <td>{payment.paymentMethod}</td>
+                    </tr>
+                    <tr>
+                      <th>결제 상태</th>
+                      <td>{payment.paymentStatus}</td>
+                    </tr>
+                    <tr>
+                      <th>결제 금액</th>
+                      <td>{payment.paymentAmount.toLocaleString()} 원</td>
+                    </tr>
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </table>
+        )}
+
 
         {/* 예약 정보 */}
         <table className="reserve-table">

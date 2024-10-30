@@ -139,6 +139,8 @@ function UserReservationConfirm() {
   //------------------------------------
   const slot = sessionStorage.getItem('selectSlot');
   const date = sessionStorage.getItem('formattedDate');
+  const userName = sessionStorage.getItem('userName');
+  const userPhonenum = sessionStorage.getItem('userPhonenum');
   const reservationSlotKey = sessionStorage.getItem('reservationSlotKey');
   const sessionSestoreNo = sessionStorage.getItem('storeNo');
 
@@ -152,6 +154,7 @@ function UserReservationConfirm() {
 
   // sessionStorage에서 데이터 가져오기
   const storedData = sessionStorage.getItem('storeInfo');
+  const userId = sessionStorage.getItem('userId');
   // 가져온 데이터를 변환하여 바로 사용
   const storeInfo = storedData ? JSON.parse(storedData) : null; // 데이터가 있을 경우만 변환
   console.log(storeInfo);
@@ -173,7 +176,9 @@ function UserReservationConfirm() {
       customerRequest: requestText,  // 사용자 입력 요청사항
       reservationPrice: totalPrice,  // 총액 정보
       storeNo: storeInfo.storeNo,
-      reservationStatus: reservationStatus
+      reservationStatus: reservationStatus,
+      userId : userId
+      
     };
 
     try {
@@ -322,12 +327,12 @@ function UserReservationConfirm() {
             <div className="user-content-container3">
               <div className="sub-container3">
                 <div className="bold-text">예약자 성함</div>
-                <div>세션 이름</div>
+                <div>{userName}</div>
               </div>
 
               <div className="sub-container3">
                 <div className="bold-text">예약자 전화번호</div>
-                <div>세션 번호</div>
+                <div>{userPhonenum}</div>
               </div>
             </div>
           </div>

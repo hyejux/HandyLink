@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AdminReservationService
 {
-  public List<adminReservationDTO> getList();
+  public List<adminReservationDTO> getList(int storeNo);
   public void setCategory(adminReservationDTO dto);
   public  adminReservationDTO  getListDetail(int id);
   public  List<adminRSDTO> getMiddleItem(int id);
@@ -19,7 +19,7 @@ public interface AdminReservationService
 
 
   void setSlotAll(adminReserveAdd dto); // 슬롯 삽입
-  public List<adminReserveMangeDTO> getManageList();
+  public List<adminReserveMangeDTO> getManageList(int storeNo);
 
   //예약 상태 변경
   void updateStatus(UpdateReservationStatusDTO dto);

@@ -157,9 +157,11 @@ public class AdminStoreController {
     }
 
 
-    @GetMapping("getNoticeList")
-    public List<storeNoticeDTO> getNoticeList(){
-        return adminStoreService.getNoticeList();
+    @PostMapping("getNoticeList")
+    public List<storeNoticeDTO> getNoticeList(@RequestBody Map<String, Integer> request) {
+        int storeNo = request.get("storeNo");
+        System.out.println(storeNo);
+        return adminStoreService.getNoticeList(storeNo);
     }
 
     @PostMapping("setNotice")

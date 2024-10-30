@@ -27,22 +27,22 @@
 
     <!--  서비스 (대분류) 가져오기   -->
     <select id="getList" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
-        select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_id, ci.image_url, c.service_start
+        select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_no, ci.image_url, c.service_start
         from category c
         left join category_image ci
         on c.category_id = ci.category_id
-        where category_level = 1 and activated = 'Y'
+        where category_level = 1 and activated = 'Y' and store_no = #{storeNo}
         ORDER BY c.category_id DESC
     </select>
 
     <!--    -->
     <select id="getManageList" resultType="com.example.HiMade.admin.dto.adminReserveMangeDTO">
-        select * from reservation
+        select * from reservation where store_no = #{storeNo}
     </select>
 
     <!--  서비스 대분류 (상세 가져오기)  -->
     <select id="getListDetail" resultType="com.example.HiMade.admin.dto.adminReservationDTO">
-        select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_id, ci.image_url,  c.service_start
+        select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_no, ci.image_url,  c.service_start
         from category c
         left join category_image ci
         on c.category_id = ci.category_id
@@ -53,7 +53,7 @@
 
     <!--   서비스 중분류 가져오기  -->
     <select id="getMiddleItem" resultType="com.example.HiMade.admin.dto.adminRSDTO">
-        select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_id, sc.category_status, sc.category_id, sc.sub_category_type, sc.is_required, sc.is_paid
+        select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_no, sc.category_status, sc.category_id, sc.sub_category_type, sc.is_required, sc.is_paid
         from category c
         LEFT join sub_category_status sc
         on c.category_id = sc.category_id
@@ -74,15 +74,15 @@
 
     <!--  서비스 (대분류) 등록하기    -->
     <insert id="setMainCategory" parameterType="com.example.HiMade.admin.dto.adminReservationDTO" useGeneratedKeys="true" keyProperty="categoryId">
-        INSERT INTO category (category_level, service_name, service_price, service_content, store_id, store_no, service_start)
-        VALUES (1, #{serviceName}, #{servicePrice}, #{serviceContent}, 'bbb123' , '7', #{serviceStart})
+        INSERT INTO category (category_level, service_name, service_price, service_content,store_no, service_start)
+        VALUES (1, #{serviceName}, #{servicePrice}, #{serviceContent},  #{storeNo}, #{serviceStart})
         RETURNING category_id
     </insert>
 
     <!--  서비스 (중분류) 등록하기    -->
     <insert id="setMainCategory2" parameterType="com.example.HiMade.admin.dto.adminRSDTO" useGeneratedKeys="true" keyProperty="middleId">
-        INSERT INTO category (category_level, parent_category_id, service_name, service_price,  store_id, store_no)
-        VALUES (2, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 'bbb123' , '7')
+        INSERT INTO category (category_level, parent_category_id, service_name, service_price, store_no)
+        VALUES (2, #{parentCategoryId}, #{serviceName}, #{servicePrice},#{storeNo})
         RETURNING category_id
     </insert>
 
@@ -94,8 +94,8 @@
 
     <!--  서비스 (소분류) 등록하기    -->
     <insert id="setMainCategory4" parameterType="com.example.HiMade.admin.dto.adminReservationDTO">
-        INSERT INTO category (category_level, parent_category_id, service_name, service_price, store_id, store_no)
-        VALUES (3, #{parentCategoryId}, #{serviceName}, #{servicePrice}, 'bbb123' , '7')
+        INSERT INTO category (category_level, parent_category_id, service_name, service_price, store_no)
+        VALUES (3, #{parentCategoryId}, #{serviceName}, #{servicePrice}, #{storeNo})
     </insert>
 
 
@@ -112,7 +112,6 @@
         slot_count,
         slot_status_count,
         reservation_active,
-        store_id,
         category_id,
         store_no,
         limit_time
@@ -121,7 +120,6 @@
         #{DateNumCase, jdbcType=INTEGER},
         0,
         'Y',
-        #{StoreId, jdbcType=INTEGER},
         #{categoryId, jdbcType=INTEGER},
         #{StoreNo, jdbcType=INTEGER},
         #{TimeNumCase, jdbcType=INTEGER}

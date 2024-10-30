@@ -121,11 +121,12 @@ public class UserReservationController {
 
 
 
-  @GetMapping("/getReviewList/{id}")
-  public List<UserReviewDTO> getReviewList(@PathVariable int id) {
-
+  @GetMapping("/getReviewList")
+  public List<UserReviewDTO> getReviewList(@RequestBody Map<String, Integer> request) {
+    int storeNo = request.get("storeNo");
+    System.out.println(storeNo);
 //    System.out.println(userReservationService.getReviewList(id) + "리뷰 리스트");
-      return userReservationService.getReviewList(id);
+      return userReservationService.getReviewList(storeNo);
   }
 
   @GetMapping("/getReviewPhotoList/{id}")

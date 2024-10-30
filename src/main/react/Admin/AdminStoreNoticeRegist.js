@@ -9,11 +9,18 @@ function AdminStoreNoticeRegist() {
     const [noticeType, setNoticeType] = useState('공지사항'); // Default type
     const [noticeContent, setNoticeContent] = useState('');
 
+
+    const storeId = sessionStorage.getItem('storeId');
+    const storeNo = sessionStorage.getItem('storeNo');
+    console.log("세션 storeId: ", storeId);
+    console.log("세션 storeNo: ", storeNo);
+
     // 완료 버튼 클릭 핸들러
     const handleCompleteClick = () => {
         const noticeData = {
             noticeType,
             noticeContent,
+            storeNo
         };
 
         axios.post('/adminStore/setNotice', noticeData)

@@ -11,10 +11,14 @@ function AdminReviewList () {
     const [reviewList, setReviewList] = useState([]);
 
 
-    const store_no = 7;
 
     useEffect(() => {
-                axios.get(`/userReservation/getReviewList/${store_no}`)
+      const storeId = sessionStorage.getItem('storeId');
+      const storeNo = sessionStorage.getItem('storeNo');
+      console.log("세션 storeId: ", storeId);
+      console.log("세션 storeNo: ", storeNo);
+
+                axios.post(`/userReservation/getReviewList`,{storeNo : storeNo})
                 .then(response => {
                   console.log(response.data);
                   setReviewList(response.data);
@@ -75,9 +79,7 @@ const goToDetail = (no) => {
         <div>
           <div>
       <div className="main-content-title"> <div className='header-title'> 리뷰 관리 </div>  
-      <button type="button" className="btn-st" onClick={handleAddClick}>
-                  추가하기
-              </button></div>
+  </div>
 
       <div className="main-btns">
         

@@ -9,16 +9,26 @@ import { useNavigate } from 'react-router-dom';
 function AdminStoreNotice() {
   
 
-const [noticeList, setNoticeList] = useState([]);
-const [status, setStatus] = useState();
+    const [noticeList, setNoticeList] = useState([]);
+    const [status, setStatus] = useState();
+
+
+
+
+
 
     useEffect(() => {
+      const storeId = sessionStorage.getItem('storeId');
+      const storeNo = sessionStorage.getItem('storeNo');
+      console.log("세션 storeId: ", storeId);
+      console.log("세션 storeNo: ", storeNo);
 
-      
-            axios.get('/adminStore/getNoticeList')
+            console.log(storeNo);
+            axios.post('/adminStore/getNoticeList', 
+              { storeNo: parseInt(storeNo) }
+            )
                 .then(response => {
                     setNoticeList(response.data); // 기본값으로 빈 배열 설정
-                    
                 })
                 .catch(error => {
                     console.log('Error Category', error);

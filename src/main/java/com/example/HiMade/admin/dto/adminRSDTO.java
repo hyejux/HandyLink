@@ -14,7 +14,7 @@ public class adminRSDTO {
   private int subId;
 
   private int categoryId;
-  private String storeId;
+  private int storeNo;
   private int categoryLevel; // 1,2,3
   private int parentCategoryId; // {cateId}
 

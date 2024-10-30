@@ -56,9 +56,9 @@ function AdminChat() {
     // 채팅 목록 불러오기
     useEffect(() => {
         const loadChatList = async () => {
-            if (!storeId) return;
+            if (!storeNo) return;
             try {
-                const response = await axios.get(`/adminChat/list?storeId=${storeId}`);
+                const response = await axios.get(`/adminChat/list?storeNo=${storeNo}`);
 
                 // userId 기준으로 그룹화하여 가장 최근 메시지만 남기기
                 const uniqueChats = response.data.reduce((acc, curr) => {
@@ -87,7 +87,7 @@ function AdminChat() {
             }
         };
         loadChatList();
-    }, [storeId]);
+    }, [storeNo]);
 
 // 세션 스토리지에서 스토어 정보 가져오기
     useEffect(() => {
@@ -125,7 +125,7 @@ function AdminChat() {
         setSelectedUserInfo(selectedUser);
 
         try {
-            const response = await axios.get(`/adminChat/history?userId=${userId}&storeId=${storeId}&limit=100`);
+            const response = await axios.get(`/adminChat/history?userId=${userId}&storeNo=${storeNo}&limit=20`);
             // 최신 메시지가 아래에 오도록 정렬
             const sortedMessages = response.data.sort((a, b) =>
                 new Date(a.sendTime) - new Date(b.sendTime)

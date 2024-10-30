@@ -47,8 +47,9 @@ public class UserChatRoomController {
 
     // 채팅 기록 불러오기
     @GetMapping("/history")
-    public List<UserChatDTO> getChatHistory(@RequestParam String userId, @RequestParam String storeId) {
-        return userChatRoomService.selectChat(userId, storeId);
+    public List<UserChatDTO> getChatHistory(@RequestParam String userId, @RequestParam Long storeNo) {
+        logger.info("로그 Fetching chat history for userId: {} and storeNo: {}", userId, storeNo);
+        return userChatRoomService.selectChat(userId, storeNo);
     }
 
     // 현재 로그인된 사용자 확인
@@ -80,11 +81,10 @@ public class UserChatRoomController {
         }
     }
 
-    // store_id 기반 가게 조회 (임시)
-    @GetMapping("/getStoreInfoByStoreId/{storeId}")
-    public ResponseEntity<StoreRegistDTO> getStoreInfoByStoreId(@PathVariable String storeId) {
-        System.out.println( "가게 정보 띄우기" + userChatRoomService.getStoreInfoByStoreId(storeId));
-        StoreRegistDTO storeInfo = userChatRoomService.getStoreInfoByStoreId(storeId);
+    @GetMapping("/getStoreInfoByStoreNo/{storeNo}")
+    public ResponseEntity<StoreRegistDTO> getStoreInfoByStoreNo(@PathVariable Long storeNo) {
+        System.out.println("가게 정보 띄우기" + userChatRoomService.getStoreInfoByStoreNo(storeNo));
+        StoreRegistDTO storeInfo = userChatRoomService.getStoreInfoByStoreNo(storeNo);
         if (storeInfo != null) {
             return ResponseEntity.ok(storeInfo);
         } else {
@@ -92,12 +92,13 @@ public class UserChatRoomController {
         }
     }
 
+
     @GetMapping("/checkNewMessages")
     public List<UserChatDTO> checkNewMessages(
             @RequestParam String userId,
-            @RequestParam String storeId,
+            @RequestParam Long storeNo,
             @RequestParam Timestamp lastCheckedTime) {
-        return userChatRoomService.findNewMessages(userId, storeId, lastCheckedTime);
+        return userChatRoomService.findNewMessages(userId, storeNo, lastCheckedTime);
     }
 
 

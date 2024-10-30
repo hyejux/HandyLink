@@ -18,8 +18,8 @@ public class AdminChatController {
 
     // 채팅 히스토리 가져오기
     @GetMapping("/history")
-    public List<AdminChatDTO> getChatHistory(@RequestParam String userId, @RequestParam String storeId, @RequestParam int limit) {
-        return adminChatService.getChatHistory(userId, storeId, limit);
+    public List<AdminChatDTO> getChatHistory(@RequestParam String userId, @RequestParam Long storeNo, @RequestParam int limit) {
+        return adminChatService.getChatHistory(userId, storeNo, limit);
     }
 
     // 새로운 채팅 메시지 저장
@@ -30,16 +30,16 @@ public class AdminChatController {
 
     // 업체 기준 채팅 목록 조회 (사용자별 최신 메시지)
     @GetMapping("/list")
-    public List<Map<String, Object>> getChatListForStore(@RequestParam String storeId) {
-        return adminChatService.getChatListForStore(storeId);
+    public List<Map<String, Object>> getChatListForStore(@RequestParam Long storeNo) {
+        return adminChatService.getChatListForStore(storeNo);
     }
 
     @GetMapping("/checkNewMessages")
     public List<AdminChatDTO> checkNewMessages(
             @RequestParam String userId,
-            @RequestParam String storeId,
+            @RequestParam Long storeNo,
             @RequestParam Timestamp lastCheckedTime) {
-        return adminChatService.findNewMessages(userId, storeId, lastCheckedTime);
+        return adminChatService.findNewMessages(userId, storeNo, lastCheckedTime);
     }
 
 

@@ -41,7 +41,7 @@
         select s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name, r.reservation_time
         from reservation r
         LEFT JOIN store s
-        ON s.store_id = r.store_id
+        ON s.store_no = r.store_no
         LEFT JOIN reservation_form rf
         ON r.reservation_no = rf.reservation_no
         LEFT JOIN category c
@@ -50,7 +50,7 @@
         ON rs.reservation_slot_key = r.reservation_slot_key
         LEFT JOIN users u
         ON u.user_id = r.user_id
-        where r.user_id = #{userId}
+<!--        where r.user_id = #{userId}-->
         group by r.reservation_no,s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name
 
     </select>

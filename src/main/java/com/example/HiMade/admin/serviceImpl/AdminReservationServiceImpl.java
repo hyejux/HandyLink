@@ -23,8 +23,8 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   private ServletContext servletContext;
 
   @Override
-  public List<adminReservationDTO> getList() {
-    return adminReservationMapper.getList();
+  public List<adminReservationDTO> getList(int storeNo) {
+    return adminReservationMapper.getList(storeNo);
   }
 
   @Override
@@ -91,8 +91,8 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   }
 
   @Override
-  public List<adminReserveMangeDTO> getManageList() {
-    return adminReservationMapper.getManageList();
+  public List<adminReserveMangeDTO> getManageList(int storeNo) {
+    return adminReservationMapper.getManageList(storeNo);
   }
 
   //예약 상태 변경

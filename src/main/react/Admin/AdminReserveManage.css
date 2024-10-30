@@ -194,6 +194,12 @@
   align-items: baseline;
 }
 
+.management-table button {
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+}
+
 
 
 
@@ -459,3 +465,4 @@
   background-color: #e9f5ff; /* 호버 시 배경색 변화 */
   cursor: pointer; /* 커서 포인터로 변경 */
 }
+

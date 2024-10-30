@@ -15,7 +15,6 @@ function AdminChat() {
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedUserInfo, setSelectedUserInfo] = useState(null);
-
     const chatBoxRef = useRef(null);
     const websocket = useRef(null);
     const inputRef = useRef(null);
@@ -144,35 +143,81 @@ function AdminChat() {
     useEffect(() => {
         if (!storeId) return;
 
-        websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
+        const connectWebSocket = () => {
+            websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
 
-        websocket.current.onmessage = (event) => {
-            const received = JSON.parse(event.data);
-            if (received.storeId === storeId) {
-                setMessages(prevMessages => [...prevMessages, received]);
-                // 채팅 목록 업데이트
-                setChatList(prevList => {
-                    const updatedList = prevList.map(chat => {
-                        if (chat.userId === received.userId) {
-                            return {
-                                ...chat,
-                                lastMessage: received.chatMessage,
-                                lastMessageTime: received.sendTime
-                            };
-                        }
-                        return chat;
+            websocket.current.onopen = () => {
+                console.log('WebSocket 연결됨 - 상태:', websocket.current.readyState);
+            };
+
+            websocket.current.onmessage = (event) => {
+                const received = JSON.parse(event.data);
+                if (received.storeId === storeId) {
+                    // 현재 채팅방의 메시지 업데이트
+                    setMessages(prevMessages => [...prevMessages, received]);
+
+                    // 채팅 목록 업데이트
+                    setChatList(prevList => {
+                        return prevList.map(chat => {
+                            if (chat.userid === received.userId) {
+                                return {
+                                    ...chat,
+                                    lastmessage: received.chatMessage,
+                                    lastmessagetime: received.sendTime
+                                };
+                            }
+                            return chat;
+                        }).sort((a, b) =>
+                            // 최신 메시지가 위로 오도록 정렬
+                            new Date(b.lastmessagetime) - new Date(a.lastmessagetime)
+                        );
                     });
-                    return updatedList;
-                });
-            }
+                }
+            };
+
+            websocket.current.onerror = (error) => {
+                console.error('WebSocket 에러:', error);
+                console.log('에러 발생 시 WebSocket 상태:', websocket.current.readyState);
+            };
+
+            websocket.current.onclose = (event) => {
+                console.log('WebSocket 연결 종료. 코드:', event.code, '사유:', event.reason);
+                console.log('종료 시점 WebSocket 상태:', websocket.current.readyState);
+            };
         };
 
+        connectWebSocket();
+
         return () => {
-            if (websocket.current) websocket.current.close();
+            if (websocket.current) {
+                websocket.current.close();
+            }
         };
     }, [storeId]);
 
     // 메시지 전송
+    // const handleSend = async (e) => {
+    //     e.preventDefault();
+    //     if (!messageInput.trim() || !selectedUserId) return;
+    //
+    //     const message = {
+    //         senderType: 'STORE',
+    //         storeId,
+    //         storeNo,
+    //         userId: selectedUserId,
+    //         chatMessage: messageInput.trim(),
+    //         sendTime: new Date().toISOString()
+    //     };
+    //
+    //     try {
+    //         websocket.current.send(JSON.stringify(message));
+    //         await axios.post('/adminChat/save', message);
+    //         setMessageInput("");
+    //     } catch (error) {
+    //         console.error("메시지 전송 실패:", error);
+    //     }
+    // };
+
     const handleSend = async (e) => {
         e.preventDefault();
         if (!messageInput.trim() || !selectedUserId) return;
@@ -183,13 +228,28 @@ function AdminChat() {
             storeNo,
             userId: selectedUserId,
             chatMessage: messageInput.trim(),
-            sendTime: new Date().toISOString()
+            sendTime: new Date().toISOString(),
         };
 
         try {
-            websocket.current.send(JSON.stringify(message));
-            await axios.post('/adminChat/save', message);
-            setMessageInput("");
+            console.log('메시지 전송 전 WebSocket 상태:', websocket.current?.readyState);
+
+            if (websocket.current?.readyState === WebSocket.OPEN) {
+                websocket.current.send(JSON.stringify(message));
+                console.log('메시지 전송 완료');
+
+                await axios.post('/adminChat/save', message);
+                setMessageInput("");
+
+                // 로컬에서 메시지 추가
+                setMessages(prevMessages => [...prevMessages, message]);
+            } else {
+                console.error('WebSocket이 열려있지 않음. 현재 상태:', websocket.current?.readyState);
+                // 연결이 끊어진 경우 메시지를 DB에만 저장
+                await axios.post('/adminChat/save', message);
+                setMessageInput("");
+                setMessages(prevMessages => [...prevMessages, message]);
+            }
         } catch (error) {
             console.error("메시지 전송 실패:", error);
         }
@@ -234,7 +294,11 @@ function AdminChat() {
                         <div className="chat-info">
                             <span className="chat-name">{chat.username}</span>
                             <span className="chat-date">{formatTime(chat.lastmessagetime)}</span>
-                            <p className="chat-preview">{chat.lastmessage}</p>
+                            <p className="chat-preview">
+                                {chat.lastmessage.length > 30
+                                    ? `${chat.lastmessage.substring(0, 30)}...`
+                                    : chat.lastmessage}
+                            </p>
                         </div>
                     </div>
                 ))}
@@ -242,7 +306,7 @@ function AdminChat() {
 
             {/* 채팅창 */}
             <div className="chat-content">
-                {!chatList.length ? (
+            {!chatList.length ? (
                     <div className="no-chat-selected">
                         대화 내역이 없습니다
                     </div>

@@ -49,6 +49,7 @@
 .chat-preview {
     color: #555;
     font-size: 14px;
+    width: 160px;
 }
 
 .chat-content {
@@ -229,7 +230,31 @@
     margin: 5px 0;
 }
 
+.toast-message {
+    position: fixed;
+    bottom: 135px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #444;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 14px;
+    transition: opacity 0.3s ease;
+}
 
+.toast-message:hover {
+    opacity: 0.9;
+}
+
+.no-chat-selected {
+    margin: 30% auto;
+    font-size: 15px;
+    color: #333;
+}
 
 
 

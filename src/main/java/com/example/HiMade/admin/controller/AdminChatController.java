@@ -5,6 +5,7 @@ import com.example.HiMade.admin.service.AdminChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -32,5 +33,14 @@ public class AdminChatController {
     public List<Map<String, Object>> getChatListForStore(@RequestParam String storeId) {
         return adminChatService.getChatListForStore(storeId);
     }
+
+    @GetMapping("/checkNewMessages")
+    public List<AdminChatDTO> checkNewMessages(
+            @RequestParam String userId,
+            @RequestParam String storeId,
+            @RequestParam Timestamp lastCheckedTime) {
+        return adminChatService.findNewMessages(userId, storeId, lastCheckedTime);
+    }
+
 
 }

@@ -44,5 +44,11 @@
         ORDER BY lastMessageTime DESC
     </select>
 
+    <select id="selectNewMessages" resultType="com.example.HiMade.admin.dto.AdminChatDTO">
+        SELECT * FROM chat
+        WHERE user_id = #{userId}
+          AND store_id = #{storeId}
+          AND send_time > #{lastCheckedTime}
+    </select>
 
 </mapper>

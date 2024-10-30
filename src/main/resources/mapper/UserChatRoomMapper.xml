@@ -32,11 +32,11 @@
         i.store_img_location AS storeImgUrl
         FROM public.chat c
             JOIN public.store s ON c.store_no = s.store_no AND c.store_id = s.store_id
-            LEFT JOIN public.store_img i ON c.store_no = i.store_no AND c.store_id = i.store_id
+            LEFT JOIN public.store_img i ON c.store_no = i.store_no
             AND i.store_img_no = (
             SELECT MIN(store_img_no)
             FROM public.store_img
-            WHERE store_no = s.store_no AND store_id = s.store_id
+            WHERE i.store_no = s.store_no
             )
         WHERE c.user_id = #{userId}
         GROUP BY c.store_no, c.store_id, s.store_name, i.store_img_location
@@ -48,8 +48,15 @@
         SELECT *
         FROM store sa
                  LEFT JOIN store_sns_link sns ON sa.store_no = sns.store_no
-                 LEFT JOIN store_img si ON si.store_id = sa.store_id
+                 LEFT JOIN store_img si ON si.store_no = sa.store_no
         WHERE sa.store_id = #{storeId}
+    </select>
+
+    <select id="selectNewMessages" resultType="com.example.HiMade.user.dto.UserChatDTO">
+        SELECT * FROM chat
+        WHERE user_id = #{userId}
+          AND store_id = #{storeId}
+          AND send_time > #{lastCheckedTime}
     </select>
 
     <resultMap id="storeRegistResultMap" type="com.example.HiMade.admin.dto.StoreRegistDTO">

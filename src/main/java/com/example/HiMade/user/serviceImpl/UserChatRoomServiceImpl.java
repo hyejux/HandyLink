@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -40,5 +41,10 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
     @Override
     public StoreRegistDTO getStoreInfoByStoreId(String storeId) {
         return userChatRoomMapper.getStoreInfoByStoreId(storeId);
+    }
+
+    @Override
+    public List<UserChatDTO> findNewMessages(String userId, String storeId, Timestamp lastCheckedTime) {
+        return userChatRoomMapper.selectNewMessages(userId, storeId, lastCheckedTime);
     }
 }

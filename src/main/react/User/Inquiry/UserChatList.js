@@ -141,7 +141,11 @@ function UserChatList() {
                                 />
                                 <div className="inquiry-content">
                                     <p className="inquiry-title">{chat.storename}</p>
-                                    <p className="inquiry-message">{chat.lastmessage}</p>
+                                    <p className="chat-preview">
+                                        {chat.lastmessage.length > 30
+                                            ? `${chat.lastmessage.substring(0, 30)}...`
+                                            : chat.lastmessage}
+                                    </p>
                                 </div>
                                 <span className="inquiry-time">
                                     {formatTime(chat.lastmessagetime)}

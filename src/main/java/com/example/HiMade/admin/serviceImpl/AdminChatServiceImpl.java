@@ -6,6 +6,7 @@ import com.example.HiMade.admin.service.AdminChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -28,5 +29,10 @@ public class AdminChatServiceImpl implements AdminChatService {
     @Override
     public List<Map<String, Object>> getChatListForStore(String storeId) {
         return adminChatMapper.getChatListForStore(storeId);
+    }
+
+    @Override
+    public List<AdminChatDTO> findNewMessages(String userId, String storeId, Timestamp lastCheckedTime) {
+        return adminChatMapper.selectNewMessages(userId, storeId, lastCheckedTime);
     }
 }

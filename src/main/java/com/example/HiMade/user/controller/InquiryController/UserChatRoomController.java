@@ -13,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -89,5 +91,14 @@ public class UserChatRoomController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @GetMapping("/checkNewMessages")
+    public List<UserChatDTO> checkNewMessages(
+            @RequestParam String userId,
+            @RequestParam String storeId,
+            @RequestParam Timestamp lastCheckedTime) {
+        return userChatRoomService.findNewMessages(userId, storeId, lastCheckedTime);
+    }
+
 
 }

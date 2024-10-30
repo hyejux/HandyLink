@@ -125,10 +125,11 @@ function UserChatList() {
                     <ul className="inquiry-list">
                         {filteredChatList.map((chat, index) => (
                             <li
-                                key={`${chat.storeid}-${index}`} // 각 항목에 고유한 key 부여
+                                key={`${chat.storeno}-${index}`} // 각 항목에 고유한 key 부여
                                 className="inquiry-item"
                                 onClick={() => {
-                                    window.location.href = `/UserChatRoom.user?storeId=${chat.storeid}`;
+                                    console.log("겟한 store_no", chat.storeno);
+                                    window.location.href = `/UserChatRoom.user?storeNo=${chat.storeno}`;
                                 }}
                             >
                                 <img
@@ -141,7 +142,11 @@ function UserChatList() {
                                 />
                                 <div className="inquiry-content">
                                     <p className="inquiry-title">{chat.storename}</p>
-                                    <p className="inquiry-message">{chat.lastmessage}</p>
+                                    <p className="chat-preview">
+                                        {chat.lastmessage.length > 30
+                                            ? `${chat.lastmessage.substring(0, 30)}...`
+                                            : chat.lastmessage}
+                                    </p>
                                 </div>
                                 <span className="inquiry-time">
                                     {formatTime(chat.lastmessagetime)}

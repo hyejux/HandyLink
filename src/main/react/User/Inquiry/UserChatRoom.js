@@ -10,7 +10,7 @@ function UserChatRoom() {
     const [newMessageCount, setNewMessageCount] = useState(0);
     const [isAtBottom, setIsAtBottom] = useState(true);
     const [userId, setUserId] = useState(null);
-    const [storeId, setStoreId] = useState(null);
+    const [storeNo, setStoreNo] = useState(null);
     const [storeInfo, setStoreInfo] = useState({
         storeNo: '',
         storeName: '',
@@ -25,8 +25,11 @@ function UserChatRoom() {
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-        setStoreId(params.get("storeId"));
+        const storeNo = params.get("storeNo");
+        console.log("Received storeNo from URL:", storeNo); // 확인용 로그
+        setStoreNo(storeNo);
     }, []);
+
 
     const handleScroll = () => {
         if (!chatBoxRef.current) return;
@@ -65,9 +68,10 @@ function UserChatRoom() {
 
     useEffect(() => {
         const fetchStoreInfo = async () => {
-            if (storeId) {
+            if (storeNo) {  // storeNo가 정확히 설정되었는지 확인
                 try {
-                    const response = await axios.get(`/chat/getStoreInfoByStoreId/${storeId}`);
+                    const response = await axios.get(`/chat/getStoreInfoByStoreNo/${storeNo}`);
+                    console.log("가게 정보", response.data);
                     setStoreInfo(response.data);
                 } catch (error) {
                     console.error('가게 정보를 가져오는데 실패했습니다:', error);
@@ -75,13 +79,13 @@ function UserChatRoom() {
             }
         };
         fetchStoreInfo();
-    }, [storeId]);
+    }, [storeNo]);
 
     useEffect(() => {
         const loadChatHistory = async () => {
-            if (userId && storeId) {
+            if (userId && storeNo) {
                 try {
-                    const response = await axios.get(`/chat/history?userId=${userId}&storeId=${storeId}`);
+                    const response = await axios.get(`/chat/history?userId=${userId}&storeNo=${storeNo}`); // 파라미터 이름 변경
                     setMessages(response.data);
                 } catch (error) {
                     console.error('채팅 기록을 불러오는 중 오류가 발생했습니다:', error);
@@ -89,7 +93,7 @@ function UserChatRoom() {
             }
         };
         loadChatHistory();
-    }, [userId, storeId]);
+    }, [userId, storeNo]);
 
     useEffect(() => {
         if (!userId) return;
@@ -103,9 +107,7 @@ function UserChatRoom() {
 
             websocket.current.onmessage = (event) => {
                 const received = JSON.parse(event.data);
-                console.log('메시지 수신:', received);
-                console.log('WebSocket 상태:', websocket.current.readyState);
-                if (received.userId === userId && received.storeId === storeId) {
+                if (received.storeNo === storeNo) {  // storeNo가 제대로 설정되어 있는지 확인
                     setMessages((prevMessages) => [...prevMessages, received]);
                 }
             };
@@ -128,7 +130,7 @@ function UserChatRoom() {
                 websocket.current.close();
             }
         };
-    }, [userId, storeId]);
+    }, [userId, storeNo]);
 
     const sendMessage = async () => {
         if (!userId) {
@@ -139,11 +141,10 @@ function UserChatRoom() {
         if (messageInput.trim() && websocket.current) {
             const message = {
                 userId,
-                storeId,
-                storeNo: storeInfo.storeNo,
+                storeNo,
                 senderType: "USER",
                 chatMessage: messageInput,
-                sendTime: Date.now(),
+                sendTime: new Date().toISOString(),
             };
 
             try {
@@ -160,8 +161,6 @@ function UserChatRoom() {
                     });
 
                     console.log('메시지 저장 후 WebSocket 상태:', websocket.current.readyState);
-
-                    setMessages((prevMessages) => [...prevMessages, { ...message, type: 'sent' }]);
                     setMessageInput('');
                 } else {
                     console.error('WebSocket이 열려있지 않음. 현재 상태:', websocket.current.readyState);
@@ -188,27 +187,19 @@ function UserChatRoom() {
         window.location.href = `/userStoreDetail.user/${storeInfo.storeNo}`;
     };
 
-
     return (
         <div>
             <div className="user-chat-room-container">
-{/*
-                <div className="store-info">
-                    <img className="store-image" src={storeInfo.storeImg[0]?.storeImgLocation || '/img/user_basic_profile.jpg'} alt={storeInfo.storeName} />
-                    <h2 className="store-name">{storeInfo.storeName}</h2>
-                    <p className="store-hours">
-                        영업시간: {storeInfo.storeOpenTime} - {storeInfo.storeCloseTime}
-                    </p>
-                </div>
-*/}
-
-                {/* 채팅 영역 */}
                 <div className="chat-box" ref={chatBoxRef} onScroll={handleScroll}>
                     {messages.map((msg, index) => (
                         <div key={index} className={`message-wrapper ${msg.senderType === 'USER' ? 'sent' : 'received'}`}>
                             {msg.senderType !== 'USER' && (
                                 <div className="profile-section" onClick={handleImageClick}>
-                                    <img className="profile-img" src={storeInfo.storeImg[0]?.storeImgLocation || '/img/user_basic_profile.jpg'} alt={`${msg.userName} 프로필`} />
+                                    <img
+                                        className="profile-img"
+                                        src={storeInfo.storeImg[0]?.storeImgLocation || '/img/user_basic_profile.jpg'}
+                                        alt={`${storeInfo.storeName} 프로필`}
+                                    />
                                 </div>
                             )}
                             <div className="message-content">

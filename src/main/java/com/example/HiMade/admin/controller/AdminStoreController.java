@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -156,10 +157,17 @@ public class AdminStoreController {
         }
     }
 
+    @GetMapping("getNoticeList/{id}")
+    public List<storeNoticeDTO> getNoticeList(@PathVariable int id) {
+        return adminStoreService.getNoticeList(id);
+    }
 
-    @GetMapping("getNoticeList")
-    public List<storeNoticeDTO> getNoticeList(){
-        return adminStoreService.getNoticeList();
+
+    @PostMapping("getNoticeList")
+    public List<storeNoticeDTO> getNoticeList(@RequestBody Map<String, Integer> request) {
+        int storeNo = request.get("storeNo");
+        System.out.println(storeNo);
+        return adminStoreService.getNoticeList(storeNo);
     }
 
     @PostMapping("setNotice")

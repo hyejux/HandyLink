@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +29,8 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
     }
 
     @Override
-    public List<UserChatDTO> selectChat(String userId, String storeId) {
-        return userChatRoomMapper.selectChat(userId, storeId);
+    public List<UserChatDTO> selectChat(String userId, Long storeNo) {
+        return userChatRoomMapper.selectChat(userId, storeNo);
     }
 
     @Override
@@ -38,7 +39,12 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
     }
 
     @Override
-    public StoreRegistDTO getStoreInfoByStoreId(String storeId) {
-        return userChatRoomMapper.getStoreInfoByStoreId(storeId);
+    public StoreRegistDTO getStoreInfoByStoreNo(Long storeNo) {
+        return userChatRoomMapper.getStoreInfoByStoreNo(storeNo);
+    }
+
+    @Override
+    public List<UserChatDTO> findNewMessages(String userId, Long storeNo, Timestamp lastCheckedTime) {
+        return userChatRoomMapper.selectNewMessages(userId, storeNo, lastCheckedTime);
     }
 }

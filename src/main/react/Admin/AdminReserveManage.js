@@ -67,7 +67,13 @@ function AdminReserveManage() {
     const [newStatus, setNewStatus] = useState(''); // 새로운 예약 상태
 
     useEffect(() => {
-        axios.get('/adminReservation/getManageList')
+        const storeId = sessionStorage.getItem('storeId');
+        const storeNo = sessionStorage.getItem('storeNo');
+        console.log("세션 storeId: ", storeId);
+        console.log("세션 storeNo: ", storeNo);
+    
+
+        axios.get('/adminReservation/getManageList', {storeNo : storeNo})
             .then(response => {
                 console.log(response.data);
                 setReservationList(response.data);
@@ -108,42 +114,54 @@ function AdminReserveManage() {
         setSelectedDates([]); // 선택된 날짜 초기화
     };
 
-    // 예약 상태 변경
-    const handleStatusChange = (reservationNo, status) => {
-        console.log(reservationNo, status);
-        if (window.confirm(`${reservationNo} 주문건을 ${status}로 변경하시겠습니까?`)) {
-            // 결제 상태 결정
-            const paymentStatus = (status === '확정') ? '결제완료' : (status === '취소(업체)' || status === '취소(고객)') ? '결제취소' : '';
+// 예약 상태 변경
+const handleStatusChange = (reservationNo, status, storeName) => {
+    console.log(reservationNo, status);
+    if (window.confirm(`${reservationNo} 주문건을 ${status}로 변경하시겠습니까?`)) {
+        // 결제 상태 결정
+        const paymentStatus = (status === '확정') ? '결제완료' : (status === '취소(업체)' || status === '취소(고객)') ? '결제취소' : '';
 
-            // 예약 상태 업데이트
-            axios.post('/adminReservation/updateStatus', {
-                reservationId: reservationNo,
-                newStatus: status,
-            })
-                .then(response => {
-                    // 결제 상태 업데이트
-                    return axios.post('/userPayment/updateStatus', null, {
-                        params: {
-                            reservationNo: reservationNo,
-                            newStatus: paymentStatus,
-                        },
-                    });
-                })
-                .then(response => {
-                    setReservationList(prevList => prevList.map(item =>
-                        item.reservationNo === reservationNo ? { ...item, reservationStatus: status } : item
-                    ));
-                    setUpdatingReservationId(null); // 업데이트 완료 후 ID 초기화
-                    setNewStatus(''); // 새로운 상태 초기화
-                })
-                .catch(error => {
-                    console.error('Error updating reservation or payment status:', error);
+        // 예약 상태 업데이트
+        axios.post('/adminReservation/updateStatus', {
+            reservationId: reservationNo,
+            newStatus: status,
+        })
+            .then(response => {
+                // 결제 상태 업데이트
+                return axios.post('/userPayment/updateStatus', null, {
+                    params: {
+                        reservationNo: reservationNo,
+                        newStatus: paymentStatus,
+                    },
                 });
-        } else {
-            setUpdatingReservationId(null);
-            setNewStatus('');
-        }
-    };
+            })
+            .then(response => {
+                setReservationList(prevList => prevList.map(item =>
+                    item.reservationNo === reservationNo ? { ...item, reservationStatus: status } : item
+                ));
+
+                // 결제취소일 경우 환불 처리
+                if (paymentStatus === '결제취소') {
+                    return axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, {
+                        paymentStatus: paymentStatus,
+                        storeName: storeName,
+                    });
+                }
+            })
+            .then(response => {
+                console.log('환불 처리 완료:', response.data);
+                setUpdatingReservationId(null); // 업데이트 완료 후 ID 초기화
+                setNewStatus(''); // 새로운 상태 초기화
+            })
+            .catch(error => {
+                console.error('Error updating reservation, payment, or refund status:', error);
+            });
+    } else {
+        setUpdatingReservationId(null);
+        setNewStatus('');
+    }
+};
+
 
 
 

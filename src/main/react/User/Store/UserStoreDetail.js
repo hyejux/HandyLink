@@ -20,6 +20,7 @@ function UserStoreDetail() {
 
   const [userId, setUserId] = useState(null);
 
+  const [userInfo, setUserInfo] = useState(null);
   useEffect(() => {
     // 사용자 정보 가져오기 (로그인된 userId)
     axios.get('/chat/current')
@@ -55,6 +56,10 @@ function UserStoreDetail() {
     sessionStorage.setItem('storeOpenTime', storeInfo.storeOpenTime);
     sessionStorage.setItem('storeNo', storeInfo.storeNo);
     sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
+    sessionStorage.setItem('userName', userInfo.userName);
+    sessionStorage.setItem('userPhonenum', userInfo.userPhonenum);
+    sessionStorage.setItem('userId', userInfo.userId);
+  
     window.location.href = `/UserReservationDate.user/${id}`;
   };
 
@@ -82,7 +87,7 @@ function UserStoreDetail() {
       .catch(error => {
         console.log('Error Category', error);
       });
-      axios.get('/adminStore/getNoticeList')
+      axios.get(`/adminStore/getNoticeList/${categoryId}`)
       .then(response => {
           console.log(response.data);
           setNoticeList(response.data);
@@ -106,7 +111,16 @@ function UserStoreDetail() {
       .catch(error => {
         console.log("리뷰 쪽 에러 발생", error);
       })
+      axios.get(`/user/profile`)
+      .then(response => {
+        console.log(response.data);
+        setUserInfo(response.data);
+      })
+      .catch(error => {
+        console.log("리뷰 쪽 에러 발생", error);
+      })
 
+     
   }, []);
 
 

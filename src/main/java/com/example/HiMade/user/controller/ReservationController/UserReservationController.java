@@ -119,13 +119,22 @@ public class UserReservationController {
 
 //  리뷰
 
-
-
   @GetMapping("/getReviewList/{id}")
   public List<UserReviewDTO> getReviewList(@PathVariable int id) {
-
+//    int storeNo = request.get("storeNo");
+//    System.out.println(storeNo);
 //    System.out.println(userReservationService.getReviewList(id) + "리뷰 리스트");
-      return userReservationService.getReviewList(id);
+    System.out.println(userReservationService.getReviewList(id));
+    return userReservationService.getReviewList(id);
+  }
+
+
+  @PostMapping("/getReviewList")
+  public List<UserReviewDTO> getReviewList(@RequestBody Map<String, Integer> request) {
+    int storeNo = request.get("storeNo");
+    System.out.println(storeNo);
+//    System.out.println(userReservationService.getReviewList(id) + "리뷰 리스트");
+      return userReservationService.getReviewList(storeNo);
   }
 
   @GetMapping("/getReviewPhotoList/{id}")

@@ -11,7 +11,14 @@ function AdminReserveSetting() {
 const [reservationList, setReservationList] = useState([]);
 
     useEffect(() => {
-            axios.get('/adminReservation/getList')
+      const storeId = sessionStorage.getItem('storeId');
+      const storeNo = sessionStorage.getItem('storeNo');
+      console.log("세션 storeId: ", storeId);
+      console.log("세션 storeNo: ", storeNo);
+
+
+
+            axios.post('/adminReservation/getList', {storeNo : storeNo})
                 .then(response => {
                     console.log(response.data);
                     setReservationList(response.data);

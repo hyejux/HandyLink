@@ -170,9 +170,11 @@ public class AdminStoreServiceImpl implements AdminStoreService {
         return adminStoreMapper.duplicatedId(storeId);
     }
 
+
+
     @Override
-    public List<storeNoticeDTO> getNoticeList() {
-        return adminStoreMapper.getNoticeList();
+    public List<storeNoticeDTO> getNoticeList(int storeNo) {
+        return adminStoreMapper.getNoticeList(storeNo);
     }
 
     @Override

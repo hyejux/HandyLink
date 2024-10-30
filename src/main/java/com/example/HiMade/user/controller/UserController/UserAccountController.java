@@ -227,10 +227,10 @@ public class UserAccountController {
         boolean isDeleted = userAccountService.deleteUser(userId, password);
         if (isDeleted) {
             System.out.println("Controller - deleteUser 성공");
-            return ResponseEntity.ok("탈퇴가 성공적으로 완료되었습니다.");
+            return ResponseEntity.ok("{\"message\": \"탈퇴가 성공적으로 완료되었습니다.\"}");
         } else {
             System.out.println("Controller - deleteUser 실패");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"error\": \"비밀번호가 일치하지 않습니다.\"}");
         }
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.web.socket.CloseStatus;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
     // 사용자 ID별로 여러 개의 WebSocket 세션을 관리하는 Map
 @Component
 public class WebSocketHandler extends TextWebSocketHandler {
+
     private static final ConcurrentHashMap<String, Set<WebSocketSession>> userSessions = new ConcurrentHashMap<>();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -38,29 +40,33 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-        @Override
-        protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-            String userId = extractUserIdFromSession(session);
-            if (userId == null) {
-                session.close();
-                return;
-            }
-
-            Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
-            String senderId = (String) payload.get("userId");
-            String storeId = (String) payload.get("storeId");  // storeId로 수정
-
-            // 메시지 발신자 검증
-            if (!userId.equals(senderId)) {
-                return;
-            }
-
-            System.out.println("Message received from: " + senderId + " to store: " + storeId);
-
-            // 각 대상의 모든 세션에 메시지 전송
-            sendMessageToUser(senderId, payload);  // 발신자에게 전송
-            sendMessageToUser(storeId, payload);   // 상점에 전송
+    @Override
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        String sessionUserId = extractUserIdFromSession(session);
+        if (sessionUserId == null) {
+            session.close();
+            return;
         }
+
+        Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
+        String userId = (String) payload.get("userId");
+        String storeNo = (String) payload.get("storeNo"); // storeId → storeNo로 변경
+        String senderType = (String) payload.get("senderType");
+
+        if ("STORE".equals(senderType)) {
+            if (!sessionUserId.equals(storeNo)) { // storeId → storeNo로 변경
+                return;
+            }
+        } else {
+            if (!sessionUserId.equals(userId)) {
+                return;
+            }
+        }
+
+        sendMessageToUser(userId, payload);   // userId에게 전송
+        sendMessageToUser(storeNo, payload);  // storeNo에게 전송 (storeId → storeNo로 변경)
+    }
+
 
     // 각 사용자 ID에 연결된 모든 세션에 메시지 전송
     private void sendMessageToUser(String userId, Map<String, Object> payload) throws Exception {
@@ -87,11 +93,27 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     private String extractUserIdFromSession(WebSocketSession session) {
         Map<String, Object> attributes = session.getAttributes();
+
+        // 1. 시큐리티로 로그인한 일반 사용자 체크
         Principal principal = session.getPrincipal();
         if (principal != null) {
-            return principal.getName();  // UserDetailsService에서 설정한 username(userId) 반환
+            System.out.println("Found user through security principal: " + principal.getName());
+            return principal.getName();
         }
+
+        // 2. 일반 세션으로 로그인한 스토어 체크
+        HttpSession httpSession = (HttpSession) attributes.get("HTTP.SESSION");
+        if (httpSession != null) {
+            String storeNo = (String) httpSession.getAttribute("storeNo"); // storeId → storeNo로 변경
+            if (storeNo != null) {
+                System.out.println("Found store through session: " + storeNo);
+                return storeNo;
+            }
+        }
+
+        System.out.println("No user or store ID found");
         return null;
     }
-}
+
+    }
 

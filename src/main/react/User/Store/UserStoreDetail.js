@@ -21,6 +21,7 @@ function UserStoreDetail() {
   const [userId, setUserId] = useState(null);
 
   const [userInfo, setUserInfo] = useState(null);
+
   useEffect(() => {
     // 사용자 정보 가져오기 (로그인된 userId)
     axios.get('/chat/current')
@@ -31,21 +32,25 @@ function UserStoreDetail() {
   useEffect(() => {
     // 가게 정보 가져오기
     const pathSegments = window.location.pathname.split('/');
-    const storeId = pathSegments[pathSegments.length - 1];
+    const storeNo = pathSegments[pathSegments.length - 1];
+    console.log("Store No from URL:", storeNo);
+    setStoreInfo(prevInfo => ({ ...prevInfo, storeNo }));
 
-    axios.get(`/UserStoreDetail/getStoreInfo/${storeId}`)
+    axios.get(`/UserStoreDetail/getStoreInfo/${storeNo}`)
         .then(response => setStoreInfo(response.data))
         .catch(error => console.error('Error loading store info:', error));
   }, []);
 
+
   // 채팅방으로 이동
   const handleInquiryClick = () => {
-    if (userId && storeInfo.storeId) {
-      window.location.href = `/UserChatRoom.user?userId=${userId}&storeId=${storeInfo.storeId}`;
+    if (userId && storeInfo.storeNo) {  // storeId → storeNo로 변경
+      window.location.href = `/UserChatRoom.user?userId=${userId}&storeNo=${storeInfo.storeNo}`;  // storeId → storeNo로 변경
     } else {
-      console.error('userId 또는 storeId가 정의되지 않았습니다.');
+      console.error('userId 또는 storeNo가 정의되지 않았습니다.');
     }
   };
+
 
 
   /*****************************/

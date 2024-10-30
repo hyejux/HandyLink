@@ -50,13 +50,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
         String userId = (String) payload.get("userId");
-        String storeId = (String) payload.get("storeId");
+        String storeNo = (String) payload.get("storeNo"); // storeId → storeNo로 변경
         String senderType = (String) payload.get("senderType");
 
-        // STORE 타입일 경우 sessionUserId와 storeId를 비교
-        // USER 타입일 경우 sessionUserId와 userId를 비교
         if ("STORE".equals(senderType)) {
-            if (!sessionUserId.equals(storeId)) {
+            if (!sessionUserId.equals(storeNo)) { // storeId → storeNo로 변경
                 return;
             }
         } else {
@@ -65,10 +63,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
             }
         }
 
-        // 기존 로직대로 메시지 전송
         sendMessageToUser(userId, payload);   // userId에게 전송
-        sendMessageToUser(storeId, payload);  // storeId에게 전송
+        sendMessageToUser(storeNo, payload);  // storeNo에게 전송 (storeId → storeNo로 변경)
     }
+
 
     // 각 사용자 ID에 연결된 모든 세션에 메시지 전송
     private void sendMessageToUser(String userId, Map<String, Object> payload) throws Exception {
@@ -93,28 +91,29 @@ public class WebSocketHandler extends TextWebSocketHandler {
         System.out.println("WebSocket connection closed: " + session.getId());
     }
 
-        private String extractUserIdFromSession(WebSocketSession session) {
-            Map<String, Object> attributes = session.getAttributes();
+    private String extractUserIdFromSession(WebSocketSession session) {
+        Map<String, Object> attributes = session.getAttributes();
 
-            // 1. 시큐리티로 로그인한 일반 사용자 체크
-            Principal principal = session.getPrincipal();
-            if (principal != null) {
-                System.out.println("Found user through security principal: " + principal.getName());
-                return principal.getName();
-            }
-
-            // 2. 일반 세션으로 로그인한 스토어 체크
-            HttpSession httpSession = (HttpSession) attributes.get("HTTP.SESSION");
-            if (httpSession != null) {
-                String storeId = (String) httpSession.getAttribute("storeId");
-                if (storeId != null) {
-                    System.out.println("Found store through session: " + storeId);
-                    return storeId;
-                }
-            }
-
-            System.out.println("No user or store ID found");
-            return null;
+        // 1. 시큐리티로 로그인한 일반 사용자 체크
+        Principal principal = session.getPrincipal();
+        if (principal != null) {
+            System.out.println("Found user through security principal: " + principal.getName());
+            return principal.getName();
         }
-}
+
+        // 2. 일반 세션으로 로그인한 스토어 체크
+        HttpSession httpSession = (HttpSession) attributes.get("HTTP.SESSION");
+        if (httpSession != null) {
+            String storeNo = (String) httpSession.getAttribute("storeNo"); // storeId → storeNo로 변경
+            if (storeNo != null) {
+                System.out.println("Found store through session: " + storeNo);
+                return storeNo;
+            }
+        }
+
+        System.out.println("No user or store ID found");
+        return null;
+    }
+
+    }
 

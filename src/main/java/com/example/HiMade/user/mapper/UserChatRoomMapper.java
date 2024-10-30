@@ -12,8 +12,8 @@ import java.util.Map;
 @Mapper
 public interface UserChatRoomMapper {
     void insertChat(UserChatDTO userChatDTO);
-    List<UserChatDTO> selectChat(String userId, String storeId);
+    List<UserChatDTO> selectChat(String userId, Long storeNo);
     List<Map<String, Object>> getChatListForUser(String userId);
-    StoreRegistDTO getStoreInfoByStoreId(String storeId);
-    List<UserChatDTO> selectNewMessages(String userId, String storeId, Timestamp lastCheckedTime);
+    StoreRegistDTO getStoreInfoByStoreNo(Long storeNo);
+    List<UserChatDTO> selectNewMessages(String userId, Long storeNo, Timestamp lastCheckedTime);
 }

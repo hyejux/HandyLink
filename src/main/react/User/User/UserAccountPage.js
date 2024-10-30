@@ -95,7 +95,7 @@ function UserAccountPage () {
                         <li>
                             <div className="menu-item">
                                 <span>내가 찜한 가게</span>
-                                <span className="status">32건</span>
+                                <span className="status"><a href="/userlikelist.user">32건</a></span>
                             </div>
                         </li>
                     </ul>

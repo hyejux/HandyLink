@@ -439,8 +439,8 @@ function UserMain() {
                   <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
                     <div className="user-category-menu">
                       <div className="user-category-menu-img">
-                        <button className="button bookmark-btn" aria-label="북마크 추가">
-                          <i className="bi bi-heart"></i>
+                        <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                          <i className={`bi bi-heart ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
                         </button>
                         <img src={imageUrl} alt={store.storeName} />
                       </div>
@@ -478,9 +478,9 @@ function UserMain() {
                   <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
                     <div className="user-category-menu">
                       <div className="user-category-menu-img">
-                        <button className="button bookmark-btn" aria-label="북마크 추가">
-                          <i className="bi bi-heart"></i>
-                        </button>
+                          <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                            <i className={`bi bi-heart ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
+                          </button>
                         <img src={imageUrl} alt={store.storeName} />
                         <div className="event-box">이벤트</div>
                       </div>

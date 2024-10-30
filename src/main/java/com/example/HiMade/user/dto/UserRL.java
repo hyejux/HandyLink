@@ -25,5 +25,6 @@ public class UserRL {
   private LocalTime reservationTime; // 예약 시간
 
   private String ServiceName; //서비스 이름
+  private String userId;
 
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -154,6 +155,11 @@ public class AdminStoreController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이미지 파일을 찾을 수 없습니다.");
         }
+    }
+
+    @GetMapping("getNoticeList/{id}")
+    public List<storeNoticeDTO> getNoticeList(@PathVariable int id) {
+        return adminStoreService.getNoticeList(id);
     }
 
 

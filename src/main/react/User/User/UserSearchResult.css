@@ -217,6 +217,10 @@
 }
 
 /* 해시태그(메뉴명) */
+.result-list-option-container{
+  display: flex;
+}
+
 .result-list-option-container img {
   width: 12px;
 }

@@ -203,8 +203,6 @@
 
 
 
-
-
 /*  */
 
 .user-main-list-wrap {
@@ -213,7 +211,7 @@
 }
 
 .user-main-list-container {
-  width: 120px;
+  width: 150px;
   background-color: white;
   margin: 5px;
   flex-shrink: 0;
@@ -231,8 +229,8 @@
 }
 
 .user-category-menu-img {
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  height: 150px;
   gap: 3%;
   position: relative;
 }
@@ -752,4 +750,51 @@
 
 .like {
   color: blue;
+}
+
+
+
+/*  */
+.user-main-menu-bar {
+  height: 50px;
+  display: inline-flex;
+  margin-left: 20px;
+}
+
+.user-main-menu-bar button {
+  font-weight: bold;
+  width: 70px;
+  height: 50px;
+  border: none;
+  background-color: #fff;
+  margin-right: 20px;
+  transition: border-bottom 0.1s ease, color 0.1s ease;
+  color: #000;
+}
+
+.user-main-menu-bar button.active {
+  border-bottom: 5px solid #738BE3;
+  color: #738BE3;
+}
+
+.user-main-menu-content {
+  width: 100%;
+  height: 200px;
+  padding: 10px;
+}
+
+.user-main-menu-content-list {
+  display: flex;
+}
+
+.user-main-menu-img {
+  width: 70px;
+  height: 70px;
+}
+
+.user-main-menu-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
 }

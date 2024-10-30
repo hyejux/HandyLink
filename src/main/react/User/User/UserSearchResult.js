@@ -178,11 +178,6 @@ function UserSearchResult() {
   //   }
   // };
 
-  const parseImageUrl = (urlString) => {
-    if (!urlString) return []; // urlString이 없을 경우 빈 배열 반환
-    return urlString.replace(/{|}/g, "").split(",").map(url => url.trim());
-  };
-
   const goToStoreDetail = (id) => {
     window.location.href = `/userStoreDetail.user/${id}`;
   }
@@ -210,9 +205,10 @@ function UserSearchResult() {
       <div className="search-result-list-container">
         {filteredStores.length > 0 ? (
           filteredStores.map((store) => {
-            const imageUrls = parseImageUrl(store.imageUrl);
-            const imageUrl = imageUrls.length > 0 ? imageUrls[0] : "/img/cake001.jpg";
             const storeDistance = distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음';
+            const imageUrl = store.storeImages.length > 0
+            ? store.storeImages[0].storeImgLocation
+            : "/img/cake001.jpg"; // 기본 이미지 설정
 
             return (
               <div className="search-result-list-content" key={store.storeId} onClick={() => goToStoreDetail(store.storeNo)}>

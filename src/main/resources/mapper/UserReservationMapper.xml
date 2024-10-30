@@ -50,7 +50,7 @@
         ON rs.reservation_slot_key = r.reservation_slot_key
         LEFT JOIN users u
         ON u.user_id = r.user_id
-        where r.user_id = 'qwer@naver.com'
+        where r.user_id = #{userId}
         group by r.reservation_no,s.store_name, r.reservation_no, r.reservation_status, r.reservation_price, r.reg_time, rs.reservation_slot_date , rf.main_category_id, c.service_name
 
     </select>
@@ -93,8 +93,8 @@
 
 
     <insert id="setReservationForm" parameterType="UserReservationDTO" useGeneratedKeys="true" keyProperty="reservationNo">
-        INSERT INTO reservation (reservation_status, reservation_time, reg_time, customer_request, reservation_price, store_id, user_id, reservation_slot_key, store_no)
-        VALUES (#{reservationStatus}, #{reservationTime}, CURRENT_TIMESTAMP, #{customerRequest}, #{reservationPrice}, 'bbb123', 'hello@naver.com', #{reservationSlotKey}, #{storeNo})
+        INSERT INTO reservation (reservation_status, reservation_time, reg_time, customer_request, reservation_price, user_id, reservation_slot_key, store_no)
+        VALUES (#{reservationStatus}, #{reservationTime}, CURRENT_TIMESTAMP, #{customerRequest}, #{reservationPrice}, #{userId}, #{reservationSlotKey}, #{storeNo})
         RETURNING reservation_no
     </insert>
 

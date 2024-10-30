@@ -16,7 +16,6 @@ public class UserPaymentStatusController {
     public ResponseEntity<String> updatePaymentStatus(@RequestParam Long reservationNo, @RequestParam String newStatus) {
         try {
             paymentService.updatePaymentStatus(reservationNo, newStatus);
-            System.out.println("실행됨");
             return ResponseEntity.ok("결제 상태가 성공적으로 업데이트되었습니다.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

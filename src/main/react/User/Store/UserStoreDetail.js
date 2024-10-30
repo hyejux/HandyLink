@@ -87,7 +87,7 @@ function UserStoreDetail() {
       .catch(error => {
         console.log('Error Category', error);
       });
-      axios.get('/adminStore/getNoticeList')
+      axios.get(`/adminStore/getNoticeList/${categoryId}`)
       .then(response => {
           console.log(response.data);
           setNoticeList(response.data);

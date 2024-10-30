@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -21,6 +22,10 @@ public class RefundService {
 
     @Autowired
     private RefundRepository refundRepository;
+
+    public List<Refund> getRefundsByPaymentId(Long paymentId) {
+        return refundRepository.findByPaymentId(paymentId);
+    }
 
     // RestTemplate을 사용하여 포트원 API 요청을 처리합니다.
     private RestTemplate restTemplate = new RestTemplate();

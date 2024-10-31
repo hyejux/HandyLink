@@ -82,16 +82,26 @@ const handleTimeNumChange = (e) => {
 
 
   const isValid = () => {
-    if (reserveAdd.serviceName.trim() === '' || categories.some(category => {
-      return (
-        category.serviceName.trim() === '' ||
-        category.subCategories.some(sub => sub.serviceName.trim() === '')
-      );
-    })) {
-      return false; // Invalid if any service name or subcategory name is empty
+    // Check if the main service name is empty
+    if (reserveAdd.serviceName.trim() === '') {
+      return false; // Invalid if the main service name is empty
     }
-    return true; // Valid
+  
+    // Check categories only if the subCategoryType is 'SELECTN' or 'SELECT1'
+    const hasInvalidCategories = categories.some(category => {
+      // Only check if the subCategoryType is 'SELECTN' or 'SELECT1'
+      if (category.subCategoryType === 'SELECTN' || category.subCategoryType === 'SELECT1') {
+        return (
+          category.serviceName.trim() === '' || // Check if the category service name is empty
+          category.subCategories.some(sub => sub.serviceName.trim() === '') // Check if any subcategory name is empty
+        );
+      }
+      return false; // If the type is not 'SELECTN' or 'SELECT1', don't consider it invalid
+    });
+  
+    return !hasInvalidCategories; // Valid if no invalid categories found
   };
+  
 
   const isValid2 = () => {
     if (reserveAdd.serviceName.trim() === '' || categories.some(category => {
@@ -135,70 +145,70 @@ const handleTimeNumChange = (e) => {
      
     
   
-    // const storeId = sessionStorage.getItem('storeId');
-    // const storeNo = sessionStorage.getItem('storeNo');
-    // console.log("세션 storeId: ", storeId);
-    // console.log("세션 storeNo: ", storeNo);
+    const storeId = sessionStorage.getItem('storeId');
+    const storeNo = sessionStorage.getItem('storeNo');
+    console.log("세션 storeId: ", storeId);
+    console.log("세션 storeNo: ", storeNo);
 
-    // const transformedCategories = categories.map(category => ({
-    //   ...category,
-    //   isPaid: category.isPaid ? 'Y' : 'N',
-    //   isRequired: category.isRequired ? 'Y' : 'N'
+    const transformedCategories = categories.map(category => ({
+      ...category,
+      isPaid: category.isPaid ? 'Y' : 'N',
+      isRequired: category.isRequired ? 'Y' : 'N'
     
-    // }));
+    }));
 
 
   
 
-    // // 날짜와 시간을 결합하여 "YYYY-MM-DDTHH:00:00" 형식으로 만들기
-    // const combinedDateTime = `${serviceDate}T${serviceHour}:00`;
-    // console.log(combinedDateTime); // 서버로 전송할 데이터
+    // 날짜와 시간을 결합하여 "YYYY-MM-DDTHH:00:00" 형식으로 만들기
+    const combinedDateTime = `${serviceDate}T${serviceHour}:00`;
+    console.log(combinedDateTime); // 서버로 전송할 데이터
 
 
-    // console.log(transformedCategories);
-    // const requestData = {
-    //   serviceName: reserveAdd.serviceName,
-    //   servicePrice: reserveAdd.servicePrice,
-    //   serviceContent: reserveAdd.serviceContent,
-    //   categories: transformedCategories,
-    //   ServiceStart: combinedDateTime,
-    //   DateNumCase: dateNumCase,
-    //   TimeNumCase: timeNumCase,
-    //   StoreNo : storeNo
-    // };
+    console.log(transformedCategories);
+    const requestData = {
+      serviceName: reserveAdd.serviceName,
+      servicePrice: reserveAdd.servicePrice,
+      serviceContent: reserveAdd.serviceContent,
+      categories: transformedCategories,
+      ServiceStart: combinedDateTime,
+      DateNumCase: dateNumCase,
+      TimeNumCase: timeNumCase,
+      StoreNo : storeNo
+    };
 
-    // console.log(requestData);
+    console.log(requestData);
     
-    // // 첫 번째 요청: 메인 카테고리 설정
-    // axios.post(`/adminReservation/setMainCategory`, requestData, {
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    // })
-    // .then(response => {
+    // 첫 번째 요청: 메인 카테고리 설정
+    axios.post(`/adminReservation/setMainCategory`, requestData, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
    
-    //     console.log('메인 카테고리 설정 성공:', response.data);
-    //     const formData = new FormData();
-    //     formData.append('file', selectedImage); // 'file'은 서버에서 기대하는 필드명입니다.
-    //     formData.append('category_id', response.data);
+        console.log('메인 카테고리 설정 성공:', response.data);
+        const formData = new FormData();
+        formData.append('file', selectedImage); // 'file'은 서버에서 기대하는 필드명입니다.
+        formData.append('category_id', response.data);
     
-    //     // 두 번째 요청: 카테고리 이미지 업로드
-    //     return axios.post('/adminReservation/setMainCategoryImg', formData, {
-    //         headers: {
-    //             'Content-Type': 'multipart/form-data',
-    //         },
-    //     });
-    // })
-    // .then(response => {
-    //     console.log('파일 업로드 성공:', response.data);
-    //     console.log('파일 업로드 성공:', response.data);
-    //     alert("서비스 등록이 완료되었습니다.");
-    //     // window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
+        // 두 번째 요청: 카테고리 이미지 업로드
+        return axios.post('/adminReservation/setMainCategoryImg', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    })
+    .then(response => {
+        console.log('파일 업로드 성공:', response.data);
+        console.log('파일 업로드 성공:', response.data);
+        alert("서비스 등록이 완료되었습니다.");
+        // window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
         
-    // })
-    // .catch(error => {
-    //     console.error('에러 발생:', error);
-    // });
+    })
+    .catch(error => {
+        console.error('에러 발생:', error);
+    });
     
   };
 //-------------------------------------------------------

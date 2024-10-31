@@ -92,6 +92,18 @@ const handleTimeNumChange = (e) => {
     }
     return true; // Valid
   };
+
+  const isValid2 = () => {
+    if (reserveAdd.serviceName.trim() === '' || categories.some(category => {
+      const hasEmptyServiceName = category.serviceName.trim() === '';
+      const hasEmptySubCategoryName = category.subCategories.some(sub => sub.serviceName.trim() === '');
+      const isSelectNType = category.subCategoryType === 'SELECTN' && category.subCategories.length < 2;
+      return hasEmptyServiceName || hasEmptySubCategoryName || isSelectNType;
+    })) {
+      return false; // Invalid if any service name or subcategory name is empty or if SELECT_N condition fails
+    }
+    return true; // Valid
+  };
  
     const handleComplete = () => {
    
@@ -117,6 +129,8 @@ const handleTimeNumChange = (e) => {
       else if (!isValid()) {
         alert("모든 서브카테고리 이름을 입력해주세요."); // Alert message for empty names
         // return;
+      }else if(!isValid2()){
+        alert("다중선택은 소분류를 두개이상 입력해주세요");
       }
      
     
@@ -130,7 +144,11 @@ const handleTimeNumChange = (e) => {
     //   ...category,
     //   isPaid: category.isPaid ? 'Y' : 'N',
     //   isRequired: category.isRequired ? 'Y' : 'N'
+    
     // }));
+
+
+  
 
     // // 날짜와 시간을 결합하여 "YYYY-MM-DDTHH:00:00" 형식으로 만들기
     // const combinedDateTime = `${serviceDate}T${serviceHour}:00`;

@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/userMyReservation")
@@ -21,11 +22,13 @@ public class UserMyReservationController {
   @Autowired
   UserReservationService userReservationService;
 
-  @GetMapping("/getMyReserveList")
-  public List<UserRL> getMyReserveList() {
-    System.out.println(userReservationService.getMyReserveList());
-    return userReservationService.getMyReserveList();
+  @PostMapping("/getMyReserveList")
+  public List<UserRL> getMyReserveList(@RequestBody UserRL dto) {
+    System.out.println(dto );
+    System.out.println(userReservationService.getMyReserveList(dto));
+    return userReservationService.getMyReserveList(dto);
   }
+
 
   @GetMapping("/getMyReservationDetail/{id}")
   public List<UserRD> getMyReservationDetail(@PathVariable int id){

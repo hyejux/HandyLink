@@ -10,17 +10,32 @@ function UserMyReservationList() {
 
 
     const [reservationList, setReservationList] = useState([]);
+    const [userInfo, setUserInfo] = useState(null);
+    const [reviewBtn , setReviewBtn] = useState(false);
 
-       useEffect(() => {
-            axios.get('/userMyReservation/getMyReserveList')
-                .then(response => {
-                    console.log(response.data);
-                    setReservationList(response.data);
-                })
-                .catch(error => {
-                    console.log('Error Category', error);
-                });
-        }, [])
+    useEffect(() => {
+      // Fetch user profile and then fetch reservations
+      axios.get(`/user/profile`)
+          .then(response => {
+              console.log(response.data);
+              setUserInfo(response.data);
+              const extractedUserId = response.data.userId; // Extract userId here
+  
+              // Now make the second API call for reservations
+              return axios.post('/userMyReservation/getMyReserveList', { userId: extractedUserId });
+          })
+          .then(response => {
+              console.log(response.data);
+              setReservationList(response.data);
+          })
+          .catch(error => {
+              console.log("Error occurred:", error);
+          });
+
+
+
+  }, []);
+  
 
   const [category, setCategory] = useState({
     categoryLevel: 0,
@@ -54,10 +69,20 @@ function UserMyReservationList() {
               <div className="reservation-header">
                 <span className="reservation-status">{value.reservationStatus}</span>
                 <div className="reservation-time">{value.regTime} </div>
-                <button onClick={(event) => {
-          event.stopPropagation(); // 클릭 이벤트의 버블링 방지
-          goToReview(value.reservationNo); // 리뷰 작성 함수 호출
-        }}> 리뷰 작성하기 </button>
+
+
+                {value.reviewCount === 0 && value.reservationStatus === '확정' && (
+  <button
+    onClick={(event) => {
+      event.stopPropagation(); // Prevents event bubbling
+      goToReview(value.reservationNo); // Call the function to navigate to the review page
+    }}
+  >
+    리뷰 작성하기
+  </button>
+)}
+
+
               </div>
               <div className="store-name-title">{value.storeName} <i class="bi bi-chevron-right"></i> </div>
               <div className="product-details">{value.serviceName} | {value.reservationPrice} 원</div>

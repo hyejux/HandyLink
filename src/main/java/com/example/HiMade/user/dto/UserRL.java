@@ -27,4 +27,6 @@ public class UserRL {
   private String ServiceName; //서비스 이름
   private String userId;
 
+  private  int reviewCount;
+
 }

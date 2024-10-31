@@ -65,7 +65,6 @@ function AdminReserveManage() {
     const [startMonth] = useState(new Date());
     const [updatingReservationId, setUpdatingReservationId] = useState(null); // 현재 업데이트 중인 예약 ID
     const [newStatus, setNewStatus] = useState(''); // 새로운 예약 상태
-    const [sortField, setSortField] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
 
 
@@ -182,7 +181,7 @@ function AdminReserveManage() {
     };
 
 
-    // 정렬 함수
+    // 정렬
     const handleSort = (field, type) => {
         let order = sortOrder === 'asc' ? 'desc' : 'asc';
         setSortOrder(order);

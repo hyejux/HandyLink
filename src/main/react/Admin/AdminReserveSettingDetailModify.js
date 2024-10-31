@@ -145,6 +145,15 @@ const handleTimeNumChange = (e) => {
   //--------------------------------------------------
 
 
+  const handleDelete = () => {
+    axios.get(`/adminReservation/setCategoryDel/${cateId}`)
+    .then(response => {
+      alert('삭제되었습니다.')
+      window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
+    }
+  )}
+
+
 
 
 
@@ -313,37 +322,9 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
       <div className="main-content-title">예약 서비스 수정</div>
       <div className="main-btns">
         <button type="button" className="btn-st" onClick={handleComplete}>완료</button>
+        <button type="button" className="btn-st" onClick={handleDelete}>삭제</button>
       </div>
-      <div className="main-slot">
-        <div> 서비스 시작일 </div>
-       {/* 날짜 입력 필드 */}
-       <input 
-                type="date" 
-                value={serviceDate} 
-                onChange={(e) => setServiceDate(e.target.value)} 
-            />
 
-            {/* 시간 입력을 위한 드롭다운 */}
-            <select 
-                value={serviceHour} 
-                onChange={(e) => setServiceHour(e.target.value)}
-            >
-                <option value="">시간 선택</option>
-                {[...Array(24)].map((_, index) => (
-                    <option key={index} value={String(index).padStart(2, '0')}>
-                        {String(index).padStart(2, '0')}:00 {/* 두 자리로 표현 */}
-                    </option>
-                ))}
-            </select>
-      </div>
-      <div className="main-slot">
-        <div> 일별 건수 </div>
-        <input type="number" value={dateNumCase} onChange={handleDateNumChange} />
-      </div>
-      <div className="main-slot">
-        <div> 시간별 예약 건수 </div>
-        <input type="number" value={timeNumCase} onChange={handleTimeNumChange} />
-      </div>
       <div className="main-contents">
       <div className="reserve-container">
       <div className="reserve-img">

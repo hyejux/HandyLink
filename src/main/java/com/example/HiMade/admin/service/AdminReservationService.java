@@ -17,7 +17,7 @@ public interface AdminReservationService
   public void setMainCategory3(adminRSDTO dto);
   public void setMainCategory4(adminReservationDTO dto);
 
-
+  void setCategoryDel(int id);
   void setSlotAll(adminReserveAdd dto); // 슬롯 삽입
   public List<adminReserveMangeDTO> getManageList(int storeNo);
 

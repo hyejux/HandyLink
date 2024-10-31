@@ -27,31 +27,33 @@
   background-color: #2e3133;
 
 }
+
 .management-table tbody tr:hover {
   background-color: #c8d6e570;
   cursor: pointer;
 }
-.management-table thead th {
 
-}
+.management-table thead th {}
 
 .search-bar-box {
+  float: left;
   display: flex;
-    margin-bottom: 30px;
-    justify-content: flex-end;
-    gap: 1%;
+  margin-left: 350px;
+  justify-content: flex-end;
+  gap: 1%;
+}
 
-}
-.search-bar-box > input {
+.search-bar-box>input {
   padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
+  border-radius: 10px;
+  border: 1px solid #ddd;
 }
-.search-bar-box > button {
-  border : 1px solid #ddd;
+
+.search-bar-box>button {
+  border: 1px solid #ddd;
   background-color: #fff;
   border-radius: 10px;
-    padding: 0px 10px;
+  padding: 0px 10px;
 }
 
 
@@ -134,8 +136,9 @@
   text-align: left;
   border-right: 1px solid #ddd;
 }
+
 .management-table th:last-child,
-.management-table td:last-child{
+.management-table td:last-child {
   border-right: none;
   /* color : red; */
 }
@@ -192,6 +195,13 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+}
+
+.management-table button {
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 
@@ -419,54 +429,63 @@
 /* 캘린더 옆 예약정보 리스트 */
 .reservation-info-container {
   background-color: #f7f9fc;
-  border-radius: 10px; 
-  padding: 20px; 
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 예약정보 */
 .reservation-info-container h3 {
   font-size: 24px;
-  color: #333; 
+  color: #333;
 }
 
 /* 날짜 */
 .reservation-info-container h4 {
-  font-size: 18px; 
-  color: #007bff; 
-  border-bottom: 2px solid #007bff; 
-  padding-bottom: 5px; 
+  font-size: 18px;
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
 }
 
 /* 리스트 */
 .reservation-info-container ul {
-  list-style-type: none; 
-  padding-left: 0; 
+  list-style-type: none;
+  padding-left: 0;
   margin-bottom: 35px;
 }
 
 .reservation-info-container li {
-  background-color: #fff; /* 항목 배경색 */
-  margin: 5px 0; /* 항목 사이 여백 */
-  padding: 10px; /* 항목 내부 여백 */
-  border-radius: 5px; /* 항목 둥근 모서리 */
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* 항목 그림자 */
-  transition: transform 0.2s; /* 애니메이션 효과 */
+  background-color: #fff;
+  /* 항목 배경색 */
+  margin: 5px 0;
+  /* 항목 사이 여백 */
+  padding: 10px;
+  /* 항목 내부 여백 */
+  border-radius: 5px;
+  /* 항목 둥근 모서리 */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  /* 항목 그림자 */
+  transition: transform 0.2s;
+  /* 애니메이션 효과 */
 }
 
 .reservation-info-container li:hover {
-  transform: translateY(-2px); /* 호버 시 약간의 상승 효과 */
-  background-color: #e9f5ff; /* 호버 시 배경색 변화 */
-  cursor: pointer; /* 커서 포인터로 변경 */
+  transform: translateY(-2px);
+  /* 호버 시 약간의 상승 효과 */
+  background-color: #e9f5ff;
+  /* 호버 시 배경색 변화 */
+  cursor: pointer;
+  /* 커서 포인터로 변경 */
 }
 
 .expanded-content {
-  border : 1px solid #ddd;
+  border: 1px solid #ddd;
 }
 
 .bi-chevron-down {
- cursor: pointer;
- float: right;
+  cursor: pointer;
+  float: right;
 }
 
 
@@ -474,3 +493,48 @@
   display: flex;
   justify-content: space-between;
 } */
+
+
+.store-notice-top {
+  overflow: hidden;
+  padding: 5px;
+}
+
+.filter-btn-box {
+  float: left;
+  margin-bottom: 30px;
+}
+
+.filter-btn-box button {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 8px 10px;
+  white-space: nowrap;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.filter-btn-box button.active {
+  border-color: #738BE3;
+  background-color: #fff; 
+}
+
+.select-filter-box {
+  float: right;
+}
+
+.select-filter-box button {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 8px 10px;
+  white-space: nowrap;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.select-filter-box button.active {
+  border-color: #738BE3;
+  background-color: #fff; 
+}

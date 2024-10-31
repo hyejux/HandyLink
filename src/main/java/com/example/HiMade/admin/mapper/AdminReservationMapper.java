@@ -33,4 +33,5 @@ public interface AdminReservationMapper {
  public void setMainCategoryImg(AdminCategoryImgDTO dto) ;
 
  void setCategoryDel(int id);
+ void setSlotDel(int id);
 }

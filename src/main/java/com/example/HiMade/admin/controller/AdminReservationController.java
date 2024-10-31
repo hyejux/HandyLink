@@ -92,18 +92,22 @@ public class AdminReservationController {
       System.out.println("중분류 카테고리 삽입 후 " + serviceId2);
       adminReservationService.setMainCategory3(category); // 중분류 상태 insert
 
-      System.out.println(category.getSubCategories());
-      List<adminReservationDTO> subCategories = category.getSubCategories();
+
       //subCategory 배열 들어감
 
-      System.out.println(subCategories);
+//      System.out.println(subCategories);
 
-      for (adminReservationDTO subcategory : subCategories) {
-        System.out.println(subcategory);
-        subcategory.setParentCategoryId(serviceId2); // 삽입된 중분류 아이디를 부모 아이디로 가지고 감
-        adminReservationService.setMainCategory4(subcategory); // 소분류 insert
-        System.out.println("중분류 삽입됨");
+      if (category.getSubCategoryType().equals("SELECTN") || category.getSubCategoryType().equals("SELECT1") ) {
+        System.out.println(category.getSubCategories());
+        List<adminReservationDTO> subCategories = category.getSubCategories();
+        for (adminReservationDTO subcategory : subCategories) {
+          System.out.println(subcategory);
+          subcategory.setParentCategoryId(serviceId2); // 삽입된 중분류 아이디를 부모 아이디로 가지고 감
+          adminReservationService.setMainCategory4(subcategory); // 소분류 insert
+          System.out.println("소분류 삽입됨");
+        }
       }
+
     }
     // 소분류 카테고리
     return serviceId;

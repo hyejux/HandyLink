@@ -72,15 +72,15 @@ function UserMyReservationList() {
 
 
                 {value.reviewCount === 0 && value.reservationStatus === '확정' && (
-  <button
-    onClick={(event) => {
-      event.stopPropagation(); // Prevents event bubbling
-      goToReview(value.reservationNo); // Call the function to navigate to the review page
-    }}
-  >
-    리뷰 작성하기
-  </button>
-)}
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation(); // Prevents event bubbling
+                    goToReview(value.reservationNo); // Call the function to navigate to the review page
+                  }}
+                >
+                  리뷰 작성하기
+                </button>
+              )}
 
 
               </div>

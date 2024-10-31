@@ -113,6 +113,38 @@ const handleTimeNumChange = (e) => {
     return !hasInvalidCategories; // 유효하지 않은 카테고리가 없으면 유효함
   };
   
+   
+  const isValid3 = () => {
+    // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우에만 카테고리 체크
+    const hasInvalidCategories = categories.some(category => {
+      // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우만 체크
+      if (category.subCategoryType === 'SELECTN' || category.subCategoryType === 'SELECT1') {
+        const hasEmptySubCategoryName = category.subCategories.some(sub => sub.serviceName.trim() === '');
+        const isSelectNType = category.subCategoryType === 'SELECT1' && category.subCategories.length < 1;
+        return hasEmptySubCategoryName || isSelectNType; // 비어 있는 서브카테고리 이름 또는 SELECT_N 조건 체크
+      }
+      return false; // 'SELECTN' 또는 'SELECT1'이 아닐 경우 유효하지 않다고 고려하지 않음
+    });
+  
+    return !hasInvalidCategories; // 유효하지 않은 카테고리가 없으면 유효함
+  };
+  
+
+     
+  const isValid4 = () => {
+    // isPaid가 true이면서 servicePrice가 0인 경우 유효하지 않음
+    const hasInvalidPaidCategories = categories.some(category => {
+      // 카테고리의 서브 카테고리 타입이 'SELECTN' 또는 'SELECT1'일 때만 체크
+      if (category.subCategoryType === 'NUMBER' || category.subCategoryType === 'TEXT') {
+        return category.isPaid && category.servicePrice === 0; // 조건에 맞는지 체크
+      }
+      return false; // 'SELECTN' 또는 'SELECT1'이 아닐 경우는 무시
+    });
+  
+    return !hasInvalidPaidCategories; // 유효하지 않은 카테고리가 없으면 유효함
+  };
+  
+  
  
     const handleComplete = () => {
    
@@ -151,6 +183,12 @@ const handleTimeNumChange = (e) => {
         // return;
       }else if(!isValid2()){
         alert("다중선택은 소분류를 두개이상 입력해주세요");
+        return;
+      }else if(!isValid3()) {
+        alert("소분류 하나 이상 입력해주세요.");
+        return;
+      }else if(!isValid4()) {
+        alert("유료인 경우에는 가격을 입력해주세요!");
         return;
       }
      

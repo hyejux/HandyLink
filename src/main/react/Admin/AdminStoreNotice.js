@@ -12,8 +12,10 @@ function AdminStoreNotice() {
   const [noticeList, setNoticeList] = useState([]);
   const [status, setStatus] = useState();
   const [sortOrder, setSortOrder] = useState('asc');
-  const [filteredList, setFilteredList] = useState([]);
+  const [filteredList, setFilteredList] = useState(noticeList);
   const [activeFilter, setActiveFilter] = useState(null);
+  const [visibilityFilter, setVisibilityFilter] = useState(null);
+
 
 
   useEffect(() => {
@@ -110,39 +112,64 @@ function AdminStoreNotice() {
   };
 
 
-  // 등록일 정렬
-  const handleDateSort = () => {
-    let order = sortOrder === 'asc' ? 'desc' : 'asc';
-    setSortOrder(order);
+  // -------------------- 필터 부분 --------------------
 
-    const listToSort = filteredList.length > 0 ? filteredList : noticeList;
+  // 필터를 적용하고 정렬된 목록을 반환
+  const getSortedFilteredList = () => {
+    const listToSort = applyFilters(); // 현재 필터가 적용된 목록 가져오기
+
+    // 정렬하기
     const sortedList = [...listToSort].sort((a, b) => {
-      let valueA = new Date(a.noticeRegdate);
-      let valueB = new Date(b.noticeRegdate);
-
-      return order === 'asc' ? valueA - valueB : valueB - valueA;
+      const valueA = new Date(a.noticeRegdate);
+      const valueB = new Date(b.noticeRegdate);
+      return sortOrder === 'asc' ? valueA - valueB : valueB - valueA;
     });
 
-    // 정렬된 목록을 상태에 설정
-    if (filteredList.length > 0) {
-      setFilteredList(sortedList); // 필터링된 목록이 있는 경우
-    } else {
-      setNoticeList(sortedList); // 전체 목록인 경우
-    }
+    return sortedList;
   };
 
+  // 등록일 정렬
+  const handleDateSort = () => {
+    const newOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    setSortOrder(newOrder);
+
+    // 정렬된 목록 업데이트
+    setFilteredList(getSortedFilteredList());
+  };
 
   // 소식, 카테고리 필터
   const handleFilter = (category) => {
-    const filtered = noticeList.filter(notice => notice.noticeType === category);
-    setFilteredList(filtered);
     setActiveFilter(category);
+    setFilteredList(getSortedFilteredList()); // 필터 후 정렬된 목록으로 업데이트
   };
 
-  // 소식, 카테고리 필터 초기화
+  const handleVisibilityFilter = (status) => {
+    setVisibilityFilter(status);
+    setFilteredList(getSortedFilteredList()); // 필터 후 정렬된 목록으로 업데이트
+  };
+
+  // 필터 적용
+  const applyFilters = () => {
+    let filtered = noticeList;
+
+    // 소식/공지사항 필터 적용
+    if (activeFilter) {
+      filtered = filtered.filter(notice => notice.noticeType === activeFilter);
+    }
+    // 보이기/숨기기 필터 적용
+    if (visibilityFilter) {
+      filtered = filtered.filter(notice => notice.status === visibilityFilter);
+    }
+
+    return filtered;
+  };
+
+  // 필터 초기화
   const resetFilter = () => {
-    setFilteredList([]);
+    setFilteredList(noticeList);
     setActiveFilter(null);
+    setVisibilityFilter(null);
+    setSortOrder('asc');
   };
 
 
@@ -163,20 +190,22 @@ function AdminStoreNotice() {
         <div className="store-notice-top">
           <div className="filter-btn-box">
             <button onClick={resetFilter}><i class="bi bi-arrow-clockwise"></i></button>
-            <button  className={activeFilter === '소식' ? 'active' : ''} onClick={() => handleFilter('소식')}>소식</button>
+            <button className={activeFilter === '소식' ? 'active' : ''} onClick={() => handleFilter('소식')}>소식</button>
             <button className={activeFilter === '공지사항' ? 'active' : ''} onClick={() => handleFilter('공지사항')}>공지사항</button>
           </div>
 
+          {/* 
           <div className="search-bar-box">
             <input type='text' placeholder='검색할 내용을 입력해주세요' />
             <button> <i className="bi bi-search"></i> </button>
-          </div>
+          </div> 
+          */}
 
           <div className="select-filter-box">
-            <button>버튼</button>
+            <button onClick={() => handleVisibilityFilter('Y')} className={visibilityFilter === 'Y' ? 'active' : ''}>보이기</button>
+            <button onClick={() => handleVisibilityFilter('D')} className={visibilityFilter === 'D' ? 'active' : ''}>숨기기</button>
           </div>
         </div>
-
 
 
         <div className="management-container">
@@ -193,7 +222,7 @@ function AdminStoreNotice() {
             </thead>
             <tbody>
 
-              {(filteredList.length > 0 ? filteredList : noticeList).map((value, index) => (
+              {getSortedFilteredList().map((value, index) => (
                 <React.Fragment key={index}>
                   <tr onDoubleClick={() => goToDetail(value.reservationNo)}>
                     <td><input type="checkbox" /></td>

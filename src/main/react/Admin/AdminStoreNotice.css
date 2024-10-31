@@ -523,3 +523,18 @@
 .select-filter-box {
   float: right;
 }
+
+.select-filter-box button {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 8px 10px;
+  white-space: nowrap;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.select-filter-box button.active {
+  border-color: #738BE3;
+  background-color: #fff; 
+}

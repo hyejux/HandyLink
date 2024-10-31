@@ -80,9 +80,14 @@ const handleTimeNumChange = (e) => {
   };
   
 
+  const isValid5 = () => {
+    const isServiceNameEmpty = categories.some(category => category.serviceName.trim() === '');
+
+    return !isServiceNameEmpty;
+  }
 
   const isValid = () => {
-
+  
     // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우에만 카테고리 체크
     const hasInvalidCategories = categories.some(category => {
       // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우만 체크
@@ -176,9 +181,12 @@ const handleTimeNumChange = (e) => {
         return;
       }
 
-  
+   else if(!isValid5()) {
+    alert("모든 서비스 명을 입력해주세요.");
+    return;
+   }
       else if (!isValid()) {
-        alert("모든 서비스명을 입력해주세요."); // Alert message for empty names
+        alert("모든 소분류명을 입력해주세요."); // Alert message for empty names
         return;
         // return;
       }else if(!isValid2()){

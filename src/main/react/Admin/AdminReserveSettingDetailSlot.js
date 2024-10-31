@@ -241,15 +241,32 @@ function AdminReserveSettingDetailSlot() {
     const currentMinute = today.getMinutes();
     const currentSecond = today.getSeconds();
  // 날짜와 시간을 비교하여 비활성화 조건 확인
-    const isDatePastOrToday = serviceDate && serviceDate < formattedToday;
-    const isTimePast = serviceDate === formattedToday && serviceHour !== "" && 
-                    (parseInt(serviceHour) < currentHour || 
-                    (parseInt(serviceHour) === currentHour && 
-                        (parseInt(serviceMinute) < currentMinute || 
-                        (parseInt(serviceMinute) === currentMinute && 
-                        parseInt(serviceSecond) <= currentSecond))));
+ const isDatePastOrToday =  serviceDate < formattedToday; // Adjusted to include today
+//  const isTimePast = serviceDate === formattedToday && serviceHour !== "" && 
+//                      (parseInt(serviceHour) < currentHour || 
+//                      (parseInt(serviceHour) === currentHour && 
+//                          (parseInt(serviceMinute) < currentMinute || 
+//                          (parseInt(serviceMinute) === currentMinute && 
+//                          parseInt(serviceSecond) <= currentSecond))));
+ 
+ // Combine both conditions to determine if the button should be disabled
+ const isDisabled = isDatePastOrToday ;
+//  || isTimePast; // Disable if date is today or past
+ 
 
-    const isDisabled = isDatePastOrToday || isTimePast; // 비활성화 조건
+const handleDateChange2 = (e) => {
+    const selectedDate = e.target.value;
+
+    // Check if the selected date is before today
+    if (selectedDate < formattedToday) {
+      alert('오늘 이전의 날짜는 선택할 수 없습니다.');
+    //   setServiceDate(''); // Reset the date if the selected date is invalid
+    //   return;
+    } else {
+      setServiceDate(selectedDate); // Set the selected date if valid
+    }
+
+  };
 
 
 
@@ -445,8 +462,10 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
                         <input 
                         type="date" 
                         value={serviceDate} 
-                        onChange={(e) => setServiceDate(e.target.value)} 
+                        // onChange={(e) => setServiceDate(e.target.value)} 
+                        onChange={handleDateChange2}
                         disabled={isDisabled} // 이미 지난 날짜라면 비활성화
+                        
                     />
 
                     {/* 시간 입력을 위한 드롭다운 */}

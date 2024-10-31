@@ -78,6 +78,7 @@ public class AdminReservationServiceImpl implements AdminReservationService {
 
   @Override
   public void setCategoryDel(int id) {
+    adminReservationMapper.setSlotDel(id);
     adminReservationMapper.setCategoryDel(id);
   }
 

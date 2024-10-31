@@ -54,6 +54,10 @@ public class AdminReservationController {
   }
 
 
+  @GetMapping("/setCategoryDel/{id}")
+  public void setCategoryDel(@PathVariable int id) {
+    adminReservationService.setCategoryDel(id);
+  }
 
   @PostMapping("/setMainCategoryModi/{id}")
   public int setMainCategoryModi(@RequestBody adminReserveAdd dto, @PathVariable int id) {

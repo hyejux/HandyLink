@@ -25,8 +25,8 @@ public class UserReservationServiceImpl implements UserReservationService {
   UserReservationMapper userReservationMapper;
 
   @Override
-  public List<UserRL> getMyReserveList() {
-    return  userReservationMapper.getMyReserveList();
+  public List<UserRL> getMyReserveList(UserRL dto) {
+    return  userReservationMapper.getMyReserveList(dto);
   }
 
   @Override

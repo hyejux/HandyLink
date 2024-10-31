@@ -140,16 +140,77 @@ const handleTimeNumChange = (e) => {
     }));
   };
   
-
+  const isValid = () => {
+    if (reserveAdd.serviceName.trim() === '' || categories.some(category => {
+      return (
+        category.serviceName.trim() === '' ||
+        category.subCategories.some(sub => sub.serviceName.trim() === '')
+      );
+    })) {
+      return false; // Invalid if any service name or subcategory name is empty
+    }
+    return true; // Valid
+  };
 
   //--------------------------------------------------
 
+
+  const handleDelete = () => {
+    axios.get(`/adminReservation/setCategoryDel/${cateId}`)
+    .then(response => {
+      alert('삭제되었습니다.')
+      window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
+    }
+  )}
+
+  const isValid2 = () => {
+    if (reserveAdd.serviceName.trim() === '' || categories.some(category => {
+      const hasEmptyServiceName = category.serviceName.trim() === '';
+      const hasEmptySubCategoryName = category.subCategories.some(sub => sub.serviceName.trim() === '');
+      const isSelectNType = category.subCategoryType === 'SELECTN' && category.subCategories.length < 2;
+      return hasEmptyServiceName || hasEmptySubCategoryName || isSelectNType;
+    })) {
+      return false; // Invalid if any service name or subcategory name is empty or if SELECT_N condition fails
+    }
+    return true; // Valid
+  };
 
 
 
 
   //-------------------------------------------
   const handleComplete = () => {
+
+
+
+   
+    if (reserveAdd.serviceName === ''){
+      alert("서비스 명을 입력해주세요.")
+    }else if (reserveAdd.servicePrice === 0) {
+      alert("서비스 가격을 입력해주세요.")
+    }else if (selectedImage === null) {
+      alert("사진은 필수입니다.")
+    }else if (dateNumCase === 0) {
+      alert("일별 건수 기본 값을 입력해주세요")
+    }else if (serviceDate === '') {
+      alert("시작일 을 입력해주세요")
+    }else if (serviceHour === '') {
+      alert("시작일의 시간을 입력해주세요")
+    }else if (serviceHour === '') {
+      alert("시작일의 시간을 입력해주세요")
+    }else if(reserveAdd.serviceContent === ''){
+      alert("서비스 설명을 입력해주세요");
+    }
+    else if (!isValid()) {
+      alert("모든 서브카테고리 이름을 입력해주세요."); // Alert message for empty names
+      // return;
+    }else if(!isValid2()){
+      alert("다중선택은 소분류를 두개이상 입력해주세요");
+    }
+   
+   
+
+
     const transformedCategories = categories.map(category => ({
       ...category,
       isPaid: category.isPaid ? 'Y' : 'N',
@@ -313,37 +374,9 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
       <div className="main-content-title">예약 서비스 수정</div>
       <div className="main-btns">
         <button type="button" className="btn-st" onClick={handleComplete}>완료</button>
+        <button type="button" className="btn-st" onClick={handleDelete}>삭제</button>
       </div>
-      <div className="main-slot">
-        <div> 서비스 시작일 </div>
-       {/* 날짜 입력 필드 */}
-       <input 
-                type="date" 
-                value={serviceDate} 
-                onChange={(e) => setServiceDate(e.target.value)} 
-            />
 
-            {/* 시간 입력을 위한 드롭다운 */}
-            <select 
-                value={serviceHour} 
-                onChange={(e) => setServiceHour(e.target.value)}
-            >
-                <option value="">시간 선택</option>
-                {[...Array(24)].map((_, index) => (
-                    <option key={index} value={String(index).padStart(2, '0')}>
-                        {String(index).padStart(2, '0')}:00 {/* 두 자리로 표현 */}
-                    </option>
-                ))}
-            </select>
-      </div>
-      <div className="main-slot">
-        <div> 일별 건수 </div>
-        <input type="number" value={dateNumCase} onChange={handleDateNumChange} />
-      </div>
-      <div className="main-slot">
-        <div> 시간별 예약 건수 </div>
-        <input type="number" value={timeNumCase} onChange={handleTimeNumChange} />
-      </div>
       <div className="main-contents">
       <div className="reserve-container">
       <div className="reserve-img">
@@ -396,124 +429,132 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
   <Droppable droppableId="categories">
     {(provided) => (
       <div className="category-contents" {...provided.droppableProps} ref={provided.innerRef}>
-        {categories.map((category, index) => (
-          <Draggable key={index} draggableId={`category-${index}`} index={index}>
-            {(provided) => (
-              <div className="category-container" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                <div className="category-container-content">
-                  <div className="type-input-require">
-                    <div className="type-paid">
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={category.isPaid}
-                          onChange={() => handleChangeCategory(index, 'isPaid', !category.isPaid)}
-                        />
-                        유료
-                      </label>
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={!category.isPaid}
-                          onChange={() => handleChangeCategory(index, 'isPaid', category.isPaid)}
-                        />
-                        무료
-                      </label>
-                    </div>
-                    <div className="type-require">
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={category.isRequired}
-                          onChange={() => handleChangeCategory(index, 'isRequired', !category.isRequired)}
-                        />
-                        필수
-                      </label>
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={!category.isRequired}
-                          onChange={() => handleChangeCategory(index, 'isRequired', category.isRequired)}
-                        />
-                        선택
-                      </label>
-                    </div>
+      {categories.map((category, index) => (
+        <Draggable key={index} draggableId={`category-${index}`} index={index}>
+          {(provided) => (
+            <div className="category-container" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+              <div className="category-container-content">
+                <div className="type-input-require">
+                <div className="type-paid">
+                    <label>
+                      <input
+                        type="radio"
+                        checked={category.isPaid}
+                        onChange={() => handleChangeCategory(index, 'isPaid', true)}
+                      />
+                      유료
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        checked={!category.isPaid}
+                        onChange={() => handleChangeCategory(index, 'isPaid', false)}
+                      />
+                      무료
+                    </label>
                   </div>
-                  <div className="type-category-sub">
+
+                  <div className="type-require">
+                  <label>
                     <input
-                      type="text"
-                      placeholder="이름"
-                      value={category.serviceName}
-                      onChange={(e) => handleChangeCategory(index, 'serviceName', e.target.value)}
+                      type="radio"
+                      checked={category.isRequired}
+                      onChange={() => handleChangeCategory(index, 'isRequired', true)}
                     />
+                    필수
+                  </label>
+                  <label>
                     <input
-                      type="number"
-                      placeholder="가격"
-                      value={category.servicePrice}
-                      onChange={(e) => handleChangeCategory(index, 'servicePrice', Number(e.target.value))}
+                      type="radio"
+                      checked={!category.isRequired}
+                      onChange={() => handleChangeCategory(index, 'isRequired', false)}
                     />
-                  </div>
-
-                  <div className="type-input-type">
-                    <input
-                      type="checkbox"
-                      checked={category.subCategoryType === 'SELECT1'}
-                      onChange={() => handleChangeCategory(index, 'subCategoryType', 'SELECT1')}
-                    /> 선택 (하나)
-                    <input
-                      type="checkbox"
-                      checked={category.subCategoryType === 'SELECTN'}
-                      onChange={() => handleChangeCategory(index, 'subCategoryType', 'SELECTN')}
-                    /> 선택 (다중)
-                    <input
-                      type="checkbox"
-                      checked={category.subCategoryType === 'NUMBER'}
-                      onChange={() => handleChangeCategory(index, 'subCategoryType', 'NUMBER')}
-                    /> 숫자
-                    <input
-                      type="checkbox"
-                      checked={category.subCategoryType === 'TEXT'}
-                      onChange={() => handleChangeCategory(index, 'subCategoryType', 'TEXT')}
-                    /> 텍스트
-                  </div>
-
-                  {/* 조건부 렌더링 추가 */}
-                  {category.subCategoryType !== 'NUMBER' && category.subCategoryType !== 'TEXT' && (
-                    <div className="category-sub-sub">
-                      {category.subCategories.map((subCategory, subIndex) => (
-                        <div key={subIndex} className="type-category-sub-sub">
-                          <input
-                            type="text"
-                            placeholder="서브카테고리 이름"
-                            value={subCategory.serviceName}
-                            onChange={(e) => handleChangeSubCategory(index, subIndex, 'serviceName', e.target.value)}
-                          />
-                          <input
-                            type="number"
-                            placeholder="서브카테고리 가격"
-                            value={subCategory.servicePrice}
-                            onChange={(e) => handleChangeSubCategory(index, subIndex, 'servicePrice', Number(e.target.value))}
-                          />
-                          <button type="button" className="btn-sub-del" onClick={() => handleRemoveSubCategory(index, subIndex)}>
-                            <i className="bi bi-x-lg"></i>
-                          </button>
-                        </div>
-                      ))}
-                      <button type="button" className="btn-sub-add" onClick={() => handleAddSubCategory(index)}> + </button>
-                    </div>
-                  )}
-
-                
+                    선택
+                  </label>
                 </div>
-                <button type="button" className="btn-del" onClick={() => handleRemoveCategory(index)}>
-                    <i className="bi bi-x-lg"></i>
-                  </button>
+
+                </div>
+                <div className="type-category-sub">
+<input
+  type="text"
+  placeholder="이름"
+  value={category.serviceName}
+  onChange={(e) => handleChangeCategory(index, 'serviceName', e.target.value)}
+/>
+<input
+  type="number"
+  placeholder="가격"
+  value={category.isPaid ? category.servicePrice : 0} // isPaid가 false일 경우 가격을 0으로 설정
+  onChange={(e) => handleChangeCategory(index, 'servicePrice', category.isPaid ? Number(e.target.value) : 0)}
+  disabled={!category.isPaid || category.subCategoryType === 'SELECT1' || category.subCategoryType === 'SELECTN'}
+  
+/>
+</div>
+
+
+                <div className="type-input-type">
+                  <input
+                    type="checkbox"
+                    checked={category.subCategoryType === 'SELECT1'}
+                    onChange={() => handleChangeCategory(index, 'subCategoryType', 'SELECT1')}
+                  /> 선택 (하나)
+                  <input
+                    type="checkbox"
+                    checked={category.subCategoryType === 'SELECTN'}
+                    onChange={() => handleChangeCategory(index, 'subCategoryType', 'SELECTN')}
+                  /> 선택 (다중)
+                  <input
+                    type="checkbox"
+                    checked={category.subCategoryType === 'NUMBER'}
+                    onChange={() => handleChangeCategory(index, 'subCategoryType', 'NUMBER')}
+                  /> 숫자
+                  <input
+                    type="checkbox"
+                    checked={category.subCategoryType === 'TEXT'}
+                    onChange={() => handleChangeCategory(index, 'subCategoryType', 'TEXT')}
+                  /> 텍스트
+                </div>
+
+                {/* 조건부 렌더링 추가 */}
+                {category.subCategoryType !== 'NUMBER' && category.subCategoryType !== 'TEXT' && (
+                  <div className="category-sub-sub">
+                    {category.subCategories.map((subCategory, subIndex) => (
+                      <div key={subIndex} className="type-category-sub-sub">
+                        <input
+                          type="text"
+                          placeholder="서브카테고리 이름"
+                          value={subCategory.serviceName}
+                          onChange={(e) => handleChangeSubCategory(index, subIndex, 'serviceName', e.target.value)}
+                        />
+                        <input
+                          type="number"
+                          placeholder="서브카테고리 가격"
+                          value={category.isPaid ? subCategory.servicePrice : 0} // isPaid가 false일 경우 가격을 0으로 설정
+                          onChange={(e) => handleChangeSubCategory(index, subIndex, 'servicePrice', Number(e.target.value))}
+                          disabled={!category.isPaid} // isPaid가 false일 경우 비활성화
+                        />
+                        <button type="button" className="btn-sub-del" onClick={() => handleRemoveSubCategory(index, subIndex)}>
+                          <i className="bi bi-x-lg"></i>
+                        </button>
+                      </div>
+                    ))}
+                    <button type="button" className="btn-sub-add" onClick={() => handleAddSubCategory(index)}> + </button>
+                  </div>
+                )}
+
+              
               </div>
-            )}
-          </Draggable>
-        ))}
-        {provided.placeholder}
-      </div>
+              <button type="button" className="btn-del" onClick={() => handleRemoveCategory(index)}>
+                  <i className="bi bi-x-lg"></i>
+                </button>
+            </div>
+          )}
+        </Draggable>
+      ))}
+      {provided.placeholder}
+    </div>
+
+      
     )}
   </Droppable>
 </DragDropContext>

@@ -65,8 +65,11 @@ function AdminReserveManage() {
     const [startMonth] = useState(new Date());
     const [updatingReservationId, setUpdatingReservationId] = useState(null); // 현재 업데이트 중인 예약 ID
     const [newStatus, setNewStatus] = useState(''); // 새로운 예약 상태
-    const [sortField, setSortField] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredReservationList, setFilteredReservationList] = useState(reservationList);
+    const [filterStatus, setFilterStatus] = useState('');
+
 
 
     useEffect(() => {
@@ -182,12 +185,13 @@ function AdminReserveManage() {
     };
 
 
-    // 정렬 함수
+    // ------------------ 정렬 ------------------
     const handleSort = (field, type) => {
         let order = sortOrder === 'asc' ? 'desc' : 'asc';
         setSortOrder(order);
 
-        const sortedList = [...reservationList].sort((a, b) => {
+        // 정렬 대상 리스트를 filteredReservationList로 설정
+        const sortedList = [...filteredReservationList].sort((a, b) => {
             let valueA = a[field];
             let valueB = b[field];
 
@@ -212,7 +216,55 @@ function AdminReserveManage() {
 
             return 0; // 기본적으로 같으면 0 반환
         });
-        setReservationList(sortedList);
+
+        setFilteredReservationList(sortedList); // 필터링된 리스트 업데이트
+    };
+
+
+    // ------------------ 검색 ------------------
+    useEffect(() => {
+        setFilteredReservationList(reservationList);
+    }, [reservationList]);
+
+    // 검색
+    const handleSearch = () => {
+        console.log("Searching for:", searchTerm);
+        const filteredList = reservationList.filter((reservation) => {
+            const reservationNoMatch = reservation.reservationNo.toString().includes(searchTerm);
+            const userIdMatch = reservation.userId.includes(searchTerm);
+            const regTimeMatch = reservation.regTime.includes(searchTerm);
+
+            return reservationNoMatch || userIdMatch || regTimeMatch;
+        });
+
+        setFilteredReservationList(filteredList); // 필터링된 리스트 상태 업데이트
+    };
+
+    // 필터링 함수
+    const handleFilter = (status) => {
+        setFilterStatus(status); // 선택한 필터 상태 설정
+        const filteredList = reservationList.filter((reservation) => {
+            if (status === '대기') return reservation.reservationStatus === '대기';
+            if (status === '입금대기') return reservation.reservationStatus === '입금대기';
+            if (status === '확정') return reservation.reservationStatus === '확정';
+            if (status === '완료') return reservation.reservationStatus === '완료';
+            if (status === '취소') return reservation.reservationStatus === '취소';
+            return true; // 모든 상태를 포함
+        });
+
+        setFilteredReservationList(filteredList); // 필터링된 리스트 상태 업데이트
+    };
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+    // 초기화 함수
+    const resetFilter = () => {
+        setFilterStatus(''); // 필터 상태 초기화
+        setFilteredReservationList(reservationList); // 원래의 예약 목록으로 복원
     };
 
 
@@ -251,13 +303,23 @@ function AdminReserveManage() {
             )} */}
 
             <div className="main-contents">
-                <div className="search-bar-box">
-                    <input type='text' placeholder='검색할 내용을 입력해주세요' />
-                    <button>  <i class="bi bi-search"></i> </button>
-                </div>
 
                 {viewMode === 'list' ? (
                     <div className="management-container">
+                        <div className="reserve-manage-top">
+                            <div className="filter-btn-box">
+                                <button onClick={resetFilter}><i class="bi bi-arrow-clockwise"></i></button>
+                                <button className={filterStatus === '대기' ? 'active' : ''} onClick={() => handleFilter('대기')}>대기</button>
+                                <button className={filterStatus === '입금대기' ? 'active' : ''} onClick={() => handleFilter('입금대기')}>입금대기</button>
+                                <button className={filterStatus === '확정' ? 'active' : ''} onClick={() => handleFilter('확정')}>확정</button>
+                                <button className={filterStatus === '완료' ? 'active' : ''} onClick={() => handleFilter('완료')}>완료</button>
+                                <button className={filterStatus === '취소' ? 'active' : ''} onClick={() => handleFilter('취소')}>취소</button>
+                            </div>
+                            <div className="search-bar-box">
+                                <input type='text' placeholder='예약번호, 고객명, 예약일...' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} onKeyPress={handleKeyPress} />
+                                <button onClick={handleSearch}> <i className="bi bi-search"></i> </button>
+                            </div>
+                        </div>
                         <table className="management-table">
                             <thead>
                                 <tr>
@@ -272,7 +334,7 @@ function AdminReserveManage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {reservationList.map((value, index) => (
+                                {filteredReservationList.map((value, index) => (
                                     <tr key={index} onDoubleClick={() => { goToDetail(value.reservationNo) }}>
                                         <td><input type="checkbox" /></td>
                                         <td>{value.reservationNo}</td>

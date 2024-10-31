@@ -81,12 +81,6 @@ const handleTimeNumChange = (e) => {
   
 
 
-  //--------------------------------------------------
-
-
-
-
-
   //-------------------------------------------
   const handleComplete = () => {
 
@@ -288,10 +282,10 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
         <div> 일별 건수 </div>
         <input type="number" value={dateNumCase} onChange={handleDateNumChange} />
       </div>
-      <div className="main-slot">
+      {/* <div className="main-slot">
         <div> 시간별 예약 건수 </div>
         <input type="number" value={timeNumCase} onChange={handleTimeNumChange} />
-      </div>
+      </div> */}
       <div className="main-contents">
       <div className="reserve-container">
       <div className="reserve-img">
@@ -350,57 +344,62 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
               <div className="category-container" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                 <div className="category-container-content">
                   <div className="type-input-require">
-                    <div className="type-paid">
+                  <div className="type-paid">
                       <label>
                         <input
-                          type="checkbox"
+                          type="radio"
                           checked={category.isPaid}
-                          onChange={() => handleChangeCategory(index, 'isPaid', !category.isPaid)}
+                          onChange={() => handleChangeCategory(index, 'isPaid', true)}
                         />
                         유료
                       </label>
                       <label>
                         <input
-                          type="checkbox"
+                          type="radio"
                           checked={!category.isPaid}
-                          onChange={() => handleChangeCategory(index, 'isPaid', category.isPaid)}
+                          onChange={() => handleChangeCategory(index, 'isPaid', false)}
                         />
                         무료
                       </label>
                     </div>
+
                     <div className="type-require">
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={category.isRequired}
-                          onChange={() => handleChangeCategory(index, 'isRequired', !category.isRequired)}
-                        />
-                        필수
-                      </label>
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={!category.isRequired}
-                          onChange={() => handleChangeCategory(index, 'isRequired', category.isRequired)}
-                        />
-                        선택
-                      </label>
-                    </div>
+                    <label>
+                      <input
+                        type="radio"
+                        checked={category.isRequired}
+                        onChange={() => handleChangeCategory(index, 'isRequired', true)}
+                      />
+                      필수
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        checked={!category.isRequired}
+                        onChange={() => handleChangeCategory(index, 'isRequired', false)}
+                      />
+                      선택
+                    </label>
+                  </div>
+
                   </div>
                   <div className="type-category-sub">
-                    <input
-                      type="text"
-                      placeholder="이름"
-                      value={category.serviceName}
-                      onChange={(e) => handleChangeCategory(index, 'serviceName', e.target.value)}
-                    />
-                    <input
-                      type="number"
-                      placeholder="가격"
-                      value={category.servicePrice}
-                      onChange={(e) => handleChangeCategory(index, 'servicePrice', Number(e.target.value))}
-                    />
-                  </div>
+  <input
+    type="text"
+    placeholder="이름"
+    value={category.serviceName}
+    onChange={(e) => handleChangeCategory(index, 'serviceName', e.target.value)}
+  />
+  <input
+    type="number"
+    placeholder="가격"
+    value={category.isPaid ? category.servicePrice : 0} // isPaid가 false일 경우 가격을 0으로 설정
+    onChange={(e) => handleChangeCategory(index, 'servicePrice', category.isPaid ? Number(e.target.value) : 0)}
+    disabled={!category.isPaid || category.subCategoryType === 'SELECT1' || category.subCategoryType === 'SELECTN'}
+    
+  />
+</div>
+
 
                   <div className="type-input-type">
                     <input
@@ -439,8 +438,9 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
                           <input
                             type="number"
                             placeholder="서브카테고리 가격"
-                            value={subCategory.servicePrice}
+                            value={category.isPaid ? subCategory.servicePrice : 0} // isPaid가 false일 경우 가격을 0으로 설정
                             onChange={(e) => handleChangeSubCategory(index, subIndex, 'servicePrice', Number(e.target.value))}
+                            disabled={!category.isPaid} // isPaid가 false일 경우 비활성화
                           />
                           <button type="button" className="btn-sub-del" onClick={() => handleRemoveSubCategory(index, subIndex)}>
                             <i className="bi bi-x-lg"></i>

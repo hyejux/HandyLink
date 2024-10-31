@@ -31,4 +31,7 @@ public interface AdminReservationMapper {
   void updateStatus(UpdateReservationStatusDTO dto);
  // 서비스 별 사진 등록
  public void setMainCategoryImg(AdminCategoryImgDTO dto) ;
+
+ void setCategoryDel(int id);
+ void setSlotDel(int id);
 }

@@ -126,8 +126,17 @@
         );
     </insert>
 
+    <update id="setCategoryDel">
+        update category
+        set activated = 'N'
+        where category_id = #{id}
+    </update>
 
-
+    <update id="setSlotDel">
+        update reservation_slot
+        set reservation_active = 'N'
+        where category_id = #{userId};
+    </update>
 
 
 </mapper>

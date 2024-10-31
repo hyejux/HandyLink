@@ -77,6 +77,12 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   }
 
   @Override
+  public void setCategoryDel(int id) {
+    adminReservationMapper.setSlotDel(id);
+    adminReservationMapper.setCategoryDel(id);
+  }
+
+  @Override
   public void setSlotAll(adminReserveAdd dto) {
 
       LocalDate startDate = LocalDate.now();

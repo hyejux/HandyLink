@@ -80,16 +80,128 @@ const handleTimeNumChange = (e) => {
   };
   
 
+  const isValid5 = () => {
+    const isServiceNameEmpty = categories.some(category => category.serviceName.trim() === '');
 
-  //--------------------------------------------------
+    return !isServiceNameEmpty;
+  }
 
+  const isValid = () => {
+  
+    // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우에만 카테고리 체크
+    const hasInvalidCategories = categories.some(category => {
+      // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우만 체크
+      if (category.subCategoryType === 'SELECTN' || category.subCategoryType === 'SELECT1') {
+        return (
+          category.serviceName.trim() === '' || // 카테고리 서비스 이름이 비어 있는지 체크
+          category.subCategories.some(sub => sub.serviceName.trim() === '') // 서브카테고리 이름이 비어 있는지 체크
+        );
+      }
+      return false; // 'SELECTN' 또는 'SELECT1'이 아닐 경우 유효하지 않다고 고려하지 않음
+    });
+  
+    return !hasInvalidCategories; // 유효하지 않은 카테고리가 없으면 유효함
+  };
+  
+  const isValid2 = () => {
+    // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우에만 카테고리 체크
+    const hasInvalidCategories = categories.some(category => {
+      // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우만 체크
+      if (category.subCategoryType === 'SELECTN' || category.subCategoryType === 'SELECT1') {
+        const hasEmptySubCategoryName = category.subCategories.some(sub => sub.serviceName.trim() === '');
+        const isSelectNType = category.subCategoryType === 'SELECTN' && category.subCategories.length < 2;
+        return hasEmptySubCategoryName || isSelectNType; // 비어 있는 서브카테고리 이름 또는 SELECT_N 조건 체크
+      }
+      return false; // 'SELECTN' 또는 'SELECT1'이 아닐 경우 유효하지 않다고 고려하지 않음
+    });
+  
+    return !hasInvalidCategories; // 유효하지 않은 카테고리가 없으면 유효함
+  };
+  
+   
+  const isValid3 = () => {
+    // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우에만 카테고리 체크
+    const hasInvalidCategories = categories.some(category => {
+      // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우만 체크
+      if (category.subCategoryType === 'SELECTN' || category.subCategoryType === 'SELECT1') {
+        const hasEmptySubCategoryName = category.subCategories.some(sub => sub.serviceName.trim() === '');
+        const isSelectNType = category.subCategoryType === 'SELECT1' && category.subCategories.length < 1;
+        return hasEmptySubCategoryName || isSelectNType; // 비어 있는 서브카테고리 이름 또는 SELECT_N 조건 체크
+      }
+      return false; // 'SELECTN' 또는 'SELECT1'이 아닐 경우 유효하지 않다고 고려하지 않음
+    });
+  
+    return !hasInvalidCategories; // 유효하지 않은 카테고리가 없으면 유효함
+  };
+  
 
+     
+  const isValid4 = () => {
+    // isPaid가 true이면서 servicePrice가 0인 경우 유효하지 않음
+    const hasInvalidPaidCategories = categories.some(category => {
+      // 카테고리의 서브 카테고리 타입이 'SELECTN' 또는 'SELECT1'일 때만 체크
+      if (category.subCategoryType === 'NUMBER' || category.subCategoryType === 'TEXT') {
+        return category.isPaid && category.servicePrice === 0; // 조건에 맞는지 체크
+      }
+      return false; // 'SELECTN' 또는 'SELECT1'이 아닐 경우는 무시
+    });
+  
+    return !hasInvalidPaidCategories; // 유효하지 않은 카테고리가 없으면 유효함
+  };
+  
+  
+ 
+    const handleComplete = () => {
+   
+   
+   
+      if (reserveAdd.serviceName === ''){
+        alert("서비스 명을 입력해주세요.")
+        return;
+      }else if (reserveAdd.servicePrice === 0) {
+        alert("서비스 가격을 입력해주세요.")
+        return;
+      }else if (selectedImage === null) {
+        alert("사진은 필수입니다.")
+        return;
+      }else if (dateNumCase === 0) {
+        alert("일별 건수 기본 값을 입력해주세요")
+        return;
+      }else if (serviceDate === '') {
+        alert("시작일 을 입력해주세요")
+        return;
+      }else if (serviceHour === '') {
+        alert("시작일의 시간을 입력해주세요")
+        return;
+      }else if (serviceHour === '') {
+        alert("시작일의 시간을 입력해주세요")
+        return;
+      }else if(reserveAdd.serviceContent === ''){
+        alert("서비스 설명을 입력해주세요");
+        return;
+      }
 
-
-
-  //-------------------------------------------
-  const handleComplete = () => {
-
+   else if(!isValid5()) {
+    alert("모든 서비스 명을 입력해주세요.");
+    return;
+   }
+      else if (!isValid()) {
+        alert("모든 소분류명을 입력해주세요."); // Alert message for empty names
+        return;
+        // return;
+      }else if(!isValid2()){
+        alert("다중선택은 소분류를 두개이상 입력해주세요");
+        return;
+      }else if(!isValid3()) {
+        alert("소분류 하나 이상 입력해주세요.");
+        return;
+      }else if(!isValid4()) {
+        alert("유료인 경우에는 가격을 입력해주세요!");
+        return;
+      }
+     
+    
+  
     const storeId = sessionStorage.getItem('storeId');
     const storeNo = sessionStorage.getItem('storeNo');
     console.log("세션 storeId: ", storeId);
@@ -99,7 +211,11 @@ const handleTimeNumChange = (e) => {
       ...category,
       isPaid: category.isPaid ? 'Y' : 'N',
       isRequired: category.isRequired ? 'Y' : 'N'
+    
     }));
+
+
+  
 
     // 날짜와 시간을 결합하여 "YYYY-MM-DDTHH:00:00" 형식으로 만들기
     const combinedDateTime = `${serviceDate}T${serviceHour}:00`;
@@ -288,10 +404,10 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
         <div> 일별 건수 </div>
         <input type="number" value={dateNumCase} onChange={handleDateNumChange} />
       </div>
-      <div className="main-slot">
+      {/* <div className="main-slot">
         <div> 시간별 예약 건수 </div>
         <input type="number" value={timeNumCase} onChange={handleTimeNumChange} />
-      </div>
+      </div> */}
       <div className="main-contents">
       <div className="reserve-container">
       <div className="reserve-img">
@@ -350,57 +466,62 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
               <div className="category-container" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                 <div className="category-container-content">
                   <div className="type-input-require">
-                    <div className="type-paid">
+                  <div className="type-paid">
                       <label>
                         <input
-                          type="checkbox"
+                          type="radio"
                           checked={category.isPaid}
-                          onChange={() => handleChangeCategory(index, 'isPaid', !category.isPaid)}
+                          onChange={() => handleChangeCategory(index, 'isPaid', true)}
                         />
                         유료
                       </label>
                       <label>
                         <input
-                          type="checkbox"
+                          type="radio"
                           checked={!category.isPaid}
-                          onChange={() => handleChangeCategory(index, 'isPaid', category.isPaid)}
+                          onChange={() => handleChangeCategory(index, 'isPaid', false)}
                         />
                         무료
                       </label>
                     </div>
+
                     <div className="type-require">
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={category.isRequired}
-                          onChange={() => handleChangeCategory(index, 'isRequired', !category.isRequired)}
-                        />
-                        필수
-                      </label>
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={!category.isRequired}
-                          onChange={() => handleChangeCategory(index, 'isRequired', category.isRequired)}
-                        />
-                        선택
-                      </label>
-                    </div>
+                    <label>
+                      <input
+                        type="radio"
+                        checked={category.isRequired}
+                        onChange={() => handleChangeCategory(index, 'isRequired', true)}
+                      />
+                      필수
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        checked={!category.isRequired}
+                        onChange={() => handleChangeCategory(index, 'isRequired', false)}
+                      />
+                      선택
+                    </label>
+                  </div>
+
                   </div>
                   <div className="type-category-sub">
-                    <input
-                      type="text"
-                      placeholder="이름"
-                      value={category.serviceName}
-                      onChange={(e) => handleChangeCategory(index, 'serviceName', e.target.value)}
-                    />
-                    <input
-                      type="number"
-                      placeholder="가격"
-                      value={category.servicePrice}
-                      onChange={(e) => handleChangeCategory(index, 'servicePrice', Number(e.target.value))}
-                    />
-                  </div>
+  <input
+    type="text"
+    placeholder="이름"
+    value={category.serviceName}
+    onChange={(e) => handleChangeCategory(index, 'serviceName', e.target.value)}
+  />
+  <input
+    type="number"
+    placeholder="가격"
+    value={category.isPaid ? category.servicePrice : 0} // isPaid가 false일 경우 가격을 0으로 설정
+    onChange={(e) => handleChangeCategory(index, 'servicePrice', category.isPaid ? Number(e.target.value) : 0)}
+    disabled={!category.isPaid || category.subCategoryType === 'SELECT1' || category.subCategoryType === 'SELECTN'}
+    
+  />
+</div>
+
 
                   <div className="type-input-type">
                     <input
@@ -439,8 +560,9 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
                           <input
                             type="number"
                             placeholder="서브카테고리 가격"
-                            value={subCategory.servicePrice}
+                            value={category.isPaid ? subCategory.servicePrice : 0} // isPaid가 false일 경우 가격을 0으로 설정
                             onChange={(e) => handleChangeSubCategory(index, subIndex, 'servicePrice', Number(e.target.value))}
+                            disabled={!category.isPaid} // isPaid가 false일 경우 비활성화
                           />
                           <button type="button" className="btn-sub-del" onClick={() => handleRemoveSubCategory(index, subIndex)}>
                             <i className="bi bi-x-lg"></i>

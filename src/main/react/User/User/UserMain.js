@@ -315,7 +315,7 @@ function UserMain() {
 
   return (
     <div>
-      <div className="user-main-content">
+      <div className="user-main-container">
 
 
         <div className="search-top">

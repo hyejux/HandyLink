@@ -12,10 +12,8 @@ function AdminStoreNotice() {
   const [noticeList, setNoticeList] = useState([]);
   const [status, setStatus] = useState();
   const [sortOrder, setSortOrder] = useState('asc');
-
-
-
-
+  const [filteredList, setFilteredList] = useState([]);
+  const [activeFilter, setActiveFilter] = useState(null);
 
 
   useEffect(() => {
@@ -117,15 +115,34 @@ function AdminStoreNotice() {
     let order = sortOrder === 'asc' ? 'desc' : 'asc';
     setSortOrder(order);
 
-    const sortedList = [...noticeList].sort((a, b) => {
-      // 등록일 필드가 noticeRegdate임을 명시
+    const listToSort = filteredList.length > 0 ? filteredList : noticeList;
+    const sortedList = [...listToSort].sort((a, b) => {
       let valueA = new Date(a.noticeRegdate);
       let valueB = new Date(b.noticeRegdate);
 
       return order === 'asc' ? valueA - valueB : valueB - valueA;
     });
 
-    setNoticeList(sortedList);
+    // 정렬된 목록을 상태에 설정
+    if (filteredList.length > 0) {
+      setFilteredList(sortedList); // 필터링된 목록이 있는 경우
+    } else {
+      setNoticeList(sortedList); // 전체 목록인 경우
+    }
+  };
+
+
+  // 소식, 카테고리 필터
+  const handleFilter = (category) => {
+    const filtered = noticeList.filter(notice => notice.noticeType === category);
+    setFilteredList(filtered);
+    setActiveFilter(category);
+  };
+
+  // 소식, 카테고리 필터 초기화
+  const resetFilter = () => {
+    setFilteredList([]);
+    setActiveFilter(null);
   };
 
 
@@ -142,10 +159,26 @@ function AdminStoreNotice() {
 
 
       <div className="main-contents">
-        <div className="search-bar-box">
-          <input type='text' placeholder='검색할 내용을 입력해주세요' />
-          <button> <i className="bi bi-search"></i> </button>
+
+        <div className="store-notice-top">
+          <div className="filter-btn-box">
+            <button onClick={resetFilter}><i class="bi bi-arrow-clockwise"></i></button>
+            <button  className={activeFilter === '소식' ? 'active' : ''} onClick={() => handleFilter('소식')}>소식</button>
+            <button className={activeFilter === '공지사항' ? 'active' : ''} onClick={() => handleFilter('공지사항')}>공지사항</button>
+          </div>
+
+          <div className="search-bar-box">
+            <input type='text' placeholder='검색할 내용을 입력해주세요' />
+            <button> <i className="bi bi-search"></i> </button>
+          </div>
+
+          <div className="select-filter-box">
+            <button>버튼</button>
+          </div>
         </div>
+
+
+
         <div className="management-container">
           <table className="management-table">
             <thead>
@@ -160,7 +193,7 @@ function AdminStoreNotice() {
             </thead>
             <tbody>
 
-              {noticeList.map((value, index) => (
+              {(filteredList.length > 0 ? filteredList : noticeList).map((value, index) => (
                 <React.Fragment key={index}>
                   <tr onDoubleClick={() => goToDetail(value.reservationNo)}>
                     <td><input type="checkbox" /></td>

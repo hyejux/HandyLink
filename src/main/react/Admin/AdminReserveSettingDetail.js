@@ -81,69 +81,106 @@ const handleTimeNumChange = (e) => {
   
 
 
-  //-------------------------------------------
-  const handleComplete = () => {
-
-    const storeId = sessionStorage.getItem('storeId');
-    const storeNo = sessionStorage.getItem('storeNo');
-    console.log("세션 storeId: ", storeId);
-    console.log("세션 storeNo: ", storeNo);
-
-    const transformedCategories = categories.map(category => ({
-      ...category,
-      isPaid: category.isPaid ? 'Y' : 'N',
-      isRequired: category.isRequired ? 'Y' : 'N'
-    }));
-
-    // 날짜와 시간을 결합하여 "YYYY-MM-DDTHH:00:00" 형식으로 만들기
-    const combinedDateTime = `${serviceDate}T${serviceHour}:00`;
-    console.log(combinedDateTime); // 서버로 전송할 데이터
-
-
-    console.log(transformedCategories);
-    const requestData = {
-      serviceName: reserveAdd.serviceName,
-      servicePrice: reserveAdd.servicePrice,
-      serviceContent: reserveAdd.serviceContent,
-      categories: transformedCategories,
-      ServiceStart: combinedDateTime,
-      DateNumCase: dateNumCase,
-      TimeNumCase: timeNumCase,
-      StoreNo : storeNo
-    };
-
-    console.log(requestData);
-    
-    // 첫 번째 요청: 메인 카테고리 설정
-    axios.post(`/adminReservation/setMainCategory`, requestData, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => {
+  const isValid = () => {
+    if (reserveAdd.serviceName.trim() === '' || categories.some(category => {
+      return (
+        category.serviceName.trim() === '' ||
+        category.subCategories.some(sub => sub.serviceName.trim() === '')
+      );
+    })) {
+      return false; // Invalid if any service name or subcategory name is empty
+    }
+    return true; // Valid
+  };
+ 
+    const handleComplete = () => {
    
-        console.log('메인 카테고리 설정 성공:', response.data);
-        const formData = new FormData();
-        formData.append('file', selectedImage); // 'file'은 서버에서 기대하는 필드명입니다.
-        formData.append('category_id', response.data);
+   
+   
+      if (reserveAdd.serviceName === ''){
+        alert("서비스 명을 입력해주세요.")
+      }else if (reserveAdd.servicePrice === 0) {
+        alert("서비스 가격을 입력해주세요.")
+      }else if (selectedImage === null) {
+        alert("사진은 필수입니다.")
+      }else if (dateNumCase === 0) {
+        alert("일별 건수 기본 값을 입력해주세요")
+      }else if (serviceDate === '') {
+        alert("시작일 을 입력해주세요")
+      }else if (serviceHour === '') {
+        alert("시작일의 시간을 입력해주세요")
+      }else if (serviceHour === '') {
+        alert("시작일의 시간을 입력해주세요")
+      }else if(reserveAdd.serviceContent === ''){
+        alert("서비스 설명을 입력해주세요");
+      }
+      else if (!isValid()) {
+        alert("모든 서브카테고리 이름을 입력해주세요."); // Alert message for empty names
+        // return;
+      }
+     
     
-        // 두 번째 요청: 카테고리 이미지 업로드
-        return axios.post('/adminReservation/setMainCategoryImg', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-    })
-    .then(response => {
-        console.log('파일 업로드 성공:', response.data);
-        console.log('파일 업로드 성공:', response.data);
-        alert("서비스 등록이 완료되었습니다.");
-        // window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
+  
+    // const storeId = sessionStorage.getItem('storeId');
+    // const storeNo = sessionStorage.getItem('storeNo');
+    // console.log("세션 storeId: ", storeId);
+    // console.log("세션 storeNo: ", storeNo);
+
+    // const transformedCategories = categories.map(category => ({
+    //   ...category,
+    //   isPaid: category.isPaid ? 'Y' : 'N',
+    //   isRequired: category.isRequired ? 'Y' : 'N'
+    // }));
+
+    // // 날짜와 시간을 결합하여 "YYYY-MM-DDTHH:00:00" 형식으로 만들기
+    // const combinedDateTime = `${serviceDate}T${serviceHour}:00`;
+    // console.log(combinedDateTime); // 서버로 전송할 데이터
+
+
+    // console.log(transformedCategories);
+    // const requestData = {
+    //   serviceName: reserveAdd.serviceName,
+    //   servicePrice: reserveAdd.servicePrice,
+    //   serviceContent: reserveAdd.serviceContent,
+    //   categories: transformedCategories,
+    //   ServiceStart: combinedDateTime,
+    //   DateNumCase: dateNumCase,
+    //   TimeNumCase: timeNumCase,
+    //   StoreNo : storeNo
+    // };
+
+    // console.log(requestData);
+    
+    // // 첫 번째 요청: 메인 카테고리 설정
+    // axios.post(`/adminReservation/setMainCategory`, requestData, {
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    // })
+    // .then(response => {
+   
+    //     console.log('메인 카테고리 설정 성공:', response.data);
+    //     const formData = new FormData();
+    //     formData.append('file', selectedImage); // 'file'은 서버에서 기대하는 필드명입니다.
+    //     formData.append('category_id', response.data);
+    
+    //     // 두 번째 요청: 카테고리 이미지 업로드
+    //     return axios.post('/adminReservation/setMainCategoryImg', formData, {
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data',
+    //         },
+    //     });
+    // })
+    // .then(response => {
+    //     console.log('파일 업로드 성공:', response.data);
+    //     console.log('파일 업로드 성공:', response.data);
+    //     alert("서비스 등록이 완료되었습니다.");
+    //     // window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
         
-    })
-    .catch(error => {
-        console.error('에러 발생:', error);
-    });
+    // })
+    // .catch(error => {
+    //     console.error('에러 발생:', error);
+    // });
     
   };
 //-------------------------------------------------------

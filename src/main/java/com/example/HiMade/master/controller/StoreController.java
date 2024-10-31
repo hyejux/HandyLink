@@ -1,6 +1,8 @@
 package com.example.HiMade.master.controller;
 
+import com.example.HiMade.master.entity.Review;
 import com.example.HiMade.master.entity.Store;
+import com.example.HiMade.master.service.ReviewService;
 import com.example.HiMade.master.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,9 @@ public class StoreController {
 
     @Autowired
     private StoreService storeService;
+
+    @Autowired
+    private ReviewService reviewService;
 
     @GetMapping
     public List<Store> getAllStores() {
@@ -32,5 +37,10 @@ public class StoreController {
     @PostMapping("/{storeNo}/deactivate")
     public Store deactivateStore(@PathVariable Long storeNo) {
         return storeService.deactivateStore(storeNo);
+    }
+
+    @GetMapping("/{storeNo}/averageRating")
+    public Double getAverageRatingByStoreNo(@PathVariable Long storeNo) {
+        return reviewService.getAverageRatingByStoreNo(storeNo);
     }
 }

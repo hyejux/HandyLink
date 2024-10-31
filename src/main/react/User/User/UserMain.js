@@ -502,7 +502,7 @@ function UserMain() {
                       </div>
                       <div className="store-title-2">{store.storeName}</div>
                       <div className="store-review-option">
-                        <span className="store-review"><i className="bi bi-star-fill"></i> 4.8</span>
+                        <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
                         <span className="store-option">{store.storeCate || '미등록'}</span>
                         {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
                       </div>
@@ -542,7 +542,7 @@ function UserMain() {
                       </div>
                       <div className="store-title-2">{store.storeName}</div>
                       <div className="store-review-option">
-                        <span className="store-review"><i className="bi bi-star-fill"></i> 4.8</span>
+                        <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
                         <span className="store-option">{store.storeCate || '미등록'}</span>
                         {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
                       </div>
@@ -608,8 +608,8 @@ function UserMain() {
 
                   <div className="result-list-bottom">
                     <div className="result-list-review">
-                      <i className="bi bi-star-fill"></i> <span>{store.reviewRating || '4.8'}</span>
-                      <span>({store.reviewCount || '10,959'})</span>
+                      <i className="bi bi-star-fill"></i> <span>{store.averageRating}</span>
+                      <span>({store.reviewCount})</span>
                     </div>
                     <div className="result-list-price">
                       {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (

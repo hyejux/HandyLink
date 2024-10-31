@@ -16,11 +16,11 @@ public class DayOffSet {
     @Id
     private String setNo;
 
+    private String dayOffStart;
+    private String dayOffEnd;
+
     @ManyToOne
     @JoinColumn(name = "store_no")
     @JsonBackReference
     private Store store;
-
-    private String dayOffStart;
-    private String dayOffEnd;
 }

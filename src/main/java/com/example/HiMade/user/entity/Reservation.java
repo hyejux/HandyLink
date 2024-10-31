@@ -1,5 +1,6 @@
 package com.example.HiMade.user.entity;
 
+import com.example.HiMade.master.entity.Store;
 import lombok.*;
 
 import javax.persistence.*;
@@ -45,7 +46,8 @@ public class Reservation {
     @Column(name = "reservation_slot_key")
     private Long reservationSlotKey;
 
-    @Column(name = "store_no")
-    private String storeNo;
+    @ManyToOne
+    @JoinColumn(name = "store_no")
+    private Store store;
 
 }

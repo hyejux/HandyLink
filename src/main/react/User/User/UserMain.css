@@ -606,6 +606,11 @@
   cursor: pointer;
 }
 
+.search-result-list-content:hover {
+  box-shadow: 1px -1px 12px 0px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
 .search-result-list-content:last-child {
   margin-bottom: 100px;
 }
@@ -779,13 +784,22 @@
 
 .user-main-menu-content {
   width: 100%;
-  height: 200px;
+  height: 250px;
   padding: 10px;
 }
 
 .user-main-menu-content-list {
   display: flex;
+  padding: 5px;
+  cursor: pointer;
 }
+
+.user-main-menu-content-list:hover {
+  box-shadow: 1px -1px 12px 0px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+
 
 .user-main-menu-img {
   width: 70px;
@@ -797,4 +811,14 @@
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
+}
+
+.user-main-menu-info {
+  padding: 5px;
+}
+
+.info-store-name,
+.info-hashtag,
+.info-review-cate {
+  padding: 2px;
 }

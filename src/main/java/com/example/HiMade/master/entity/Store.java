@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ public class Store {
 
     private String storeIntro;
     private String storeParkingYn;
-    private String storeNotice;
     private Time storeOpenTime;
     private Time storeCloseTime;
     private String accountBank;
@@ -62,4 +62,16 @@ public class Store {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<DayOffSet> dayOffSets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<StoreNotice> storeNotice = new ArrayList<>();
+
+    // 평균 리뷰
+    @Transient // 이 필드는 데이터베이스에 저장하지 않음
+    private BigDecimal averageRating;
+
+    // 리뷰 개수
+    @Transient // 이 필드도 데이터베이스에 저장하지 않음
+    private Long reviewCount;
 }

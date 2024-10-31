@@ -248,8 +248,8 @@ function UserSearchResult() {
 
                 <div className="result-list-bottom">
                   <div className="result-list-review">
-                    <i className="bi bi-star-fill"></i> <span>{store.reviewRating || '4.8'}</span>
-                    <span>({store.reviewCount || '10,959'})</span>
+                    <i className="bi bi-star-fill"></i> <span>{store.averageRating}</span>
+                    <span>({store.reviewCount})</span>
                   </div>
                   <div className="result-list-price">
                     {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (

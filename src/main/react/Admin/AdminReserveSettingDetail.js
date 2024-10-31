@@ -82,38 +82,37 @@ const handleTimeNumChange = (e) => {
 
 
   const isValid = () => {
-    // Check if the main service name is empty
-    if (reserveAdd.serviceName.trim() === '') {
-      return false; // Invalid if the main service name is empty
-    }
-  
-    // Check categories only if the subCategoryType is 'SELECTN' or 'SELECT1'
+
+    // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우에만 카테고리 체크
     const hasInvalidCategories = categories.some(category => {
-      // Only check if the subCategoryType is 'SELECTN' or 'SELECT1'
+      // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우만 체크
       if (category.subCategoryType === 'SELECTN' || category.subCategoryType === 'SELECT1') {
         return (
-          category.serviceName.trim() === '' || // Check if the category service name is empty
-          category.subCategories.some(sub => sub.serviceName.trim() === '') // Check if any subcategory name is empty
+          category.serviceName.trim() === '' || // 카테고리 서비스 이름이 비어 있는지 체크
+          category.subCategories.some(sub => sub.serviceName.trim() === '') // 서브카테고리 이름이 비어 있는지 체크
         );
       }
-      return false; // If the type is not 'SELECTN' or 'SELECT1', don't consider it invalid
+      return false; // 'SELECTN' 또는 'SELECT1'이 아닐 경우 유효하지 않다고 고려하지 않음
     });
   
-    return !hasInvalidCategories; // Valid if no invalid categories found
+    return !hasInvalidCategories; // 유효하지 않은 카테고리가 없으면 유효함
   };
   
-
   const isValid2 = () => {
-    if (reserveAdd.serviceName.trim() === '' || categories.some(category => {
-      const hasEmptyServiceName = category.serviceName.trim() === '';
-      const hasEmptySubCategoryName = category.subCategories.some(sub => sub.serviceName.trim() === '');
-      const isSelectNType = category.subCategoryType === 'SELECTN' && category.subCategories.length < 2;
-      return hasEmptyServiceName || hasEmptySubCategoryName || isSelectNType;
-    })) {
-      return false; // Invalid if any service name or subcategory name is empty or if SELECT_N condition fails
-    }
-    return true; // Valid
+    // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우에만 카테고리 체크
+    const hasInvalidCategories = categories.some(category => {
+      // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우만 체크
+      if (category.subCategoryType === 'SELECTN' || category.subCategoryType === 'SELECT1') {
+        const hasEmptySubCategoryName = category.subCategories.some(sub => sub.serviceName.trim() === '');
+        const isSelectNType = category.subCategoryType === 'SELECTN' && category.subCategories.length < 2;
+        return hasEmptySubCategoryName || isSelectNType; // 비어 있는 서브카테고리 이름 또는 SELECT_N 조건 체크
+      }
+      return false; // 'SELECTN' 또는 'SELECT1'이 아닐 경우 유효하지 않다고 고려하지 않음
+    });
+  
+    return !hasInvalidCategories; // 유효하지 않은 카테고리가 없으면 유효함
   };
+  
  
     const handleComplete = () => {
    
@@ -121,26 +120,38 @@ const handleTimeNumChange = (e) => {
    
       if (reserveAdd.serviceName === ''){
         alert("서비스 명을 입력해주세요.")
+        return;
       }else if (reserveAdd.servicePrice === 0) {
         alert("서비스 가격을 입력해주세요.")
+        return;
       }else if (selectedImage === null) {
         alert("사진은 필수입니다.")
+        return;
       }else if (dateNumCase === 0) {
         alert("일별 건수 기본 값을 입력해주세요")
+        return;
       }else if (serviceDate === '') {
         alert("시작일 을 입력해주세요")
+        return;
       }else if (serviceHour === '') {
         alert("시작일의 시간을 입력해주세요")
+        return;
       }else if (serviceHour === '') {
         alert("시작일의 시간을 입력해주세요")
+        return;
       }else if(reserveAdd.serviceContent === ''){
         alert("서비스 설명을 입력해주세요");
+        return;
       }
+
+  
       else if (!isValid()) {
-        alert("모든 서브카테고리 이름을 입력해주세요."); // Alert message for empty names
+        alert("모든 서비스명을 입력해주세요."); // Alert message for empty names
+        return;
         // return;
       }else if(!isValid2()){
         alert("다중선택은 소분류를 두개이상 입력해주세요");
+        return;
       }
      
     

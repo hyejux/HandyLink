@@ -8,6 +8,7 @@
     "@mui/x-date-pickers-pro": "^7.21.0",
     "@react-spectrum/datepicker": "^3.10.3",
     "axios": "^1.7.7",
+    "chart": "^0.1.2",
     "chart.js": "^4.4.6",
     "crypto-browserify": "^3.12.1",
     "date-fns": "^4.1.0",

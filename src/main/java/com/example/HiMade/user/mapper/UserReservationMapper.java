@@ -17,7 +17,7 @@ import java.util.Map;
 @Mapper
 public interface UserReservationMapper {
 
-  public List<UserRL> getMyReserveList();
+  public List<UserRL> getMyReserveList(UserRL dto);
   public List<UserRSlotDTO> getDateTime(UserRSlotDTO Date);
   public List<UserRSlotDTO> getAllDateTime(int id);
   public int setReservationForm(UserReservationDTO dto);

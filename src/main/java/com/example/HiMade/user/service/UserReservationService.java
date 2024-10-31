@@ -13,7 +13,7 @@ import java.util.List;
 public interface
 UserReservationService {
 
-  public List<UserRL> getMyReserveList();
+  public List<UserRL> getMyReserveList(UserRL dto);
   public List<UserRSlotDTO> getDateTime(UserRSlotDTO Date);
   public List<UserRSlotDTO> getAllDateTime(int id);
 

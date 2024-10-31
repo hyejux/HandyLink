@@ -126,7 +126,11 @@
         );
     </insert>
 
-
+    <update id="setCategoryDel">
+        update category
+        set activated = 'N'
+        where category_id = #{id}
+    </update>
 
 
 

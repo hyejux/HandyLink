@@ -115,10 +115,10 @@ function AdminReviewList() {
 
 
         <div className="main-contents">
-          <div className="search-bar-box">
+          {/* <div className="search-bar-box">
             <input type='text' placeholder='검색할 내용을 입력해주세요' />
             <button> <i className="bi bi-search"></i> </button>
-          </div>
+          </div> */}
           <div className="management-container">
             <table className="management-table">
               <thead>

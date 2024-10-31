@@ -36,11 +36,10 @@
 .management-table thead th {}
 
 .search-bar-box {
+  float: right;
   display: flex;
-  margin-bottom: 30px;
   justify-content: flex-end;
   gap: 1%;
-
 }
 
 .search-bar-box>input {
@@ -202,6 +201,7 @@
   width: 30px;
   height: 30px;
   margin-left: 10px;
+  cursor: pointer;
 }
 
 
@@ -479,6 +479,16 @@
   /* 커서 포인터로 변경 */
 }
 
+
+.sreserve-manage-top {
+  overflow: hidden;
+  padding: 5px;
+}
+
+.filter-btn-box {
+  float: left;
+  margin-bottom: 30px;
+}
 
 .filter-btn-box button {
   border: 1px solid #ddd;

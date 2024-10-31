@@ -304,21 +304,22 @@ function AdminReserveManage() {
 
             <div className="main-contents">
 
-                <div className="filter-btn-box">
-                    <button onClick={resetFilter}><i class="bi bi-arrow-clockwise"></i></button>
-                    <button className={filterStatus === '대기' ? 'active' : ''} onClick={() => handleFilter('대기')}>대기</button>
-                    <button className={filterStatus === '입금대기' ? 'active' : ''} onClick={() => handleFilter('입금대기')}>입금대기</button>
-                    <button className={filterStatus === '확정' ? 'active' : ''} onClick={() => handleFilter('확정')}>확정</button>
-                    <button className={filterStatus === '완료' ? 'active' : ''} onClick={() => handleFilter('완료')}>완료</button>
-                    <button className={filterStatus === '취소' ? 'active' : ''} onClick={() => handleFilter('취소')}>취소</button>
-                </div>
-                <div className="search-bar-box">
-                    <input type='text' placeholder='예약번호, 고객명, 예약일...' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} onKeyPress={handleKeyPress} />
-                    <button onClick={handleSearch}> <i className="bi bi-search"></i> </button>
-                </div>
-
                 {viewMode === 'list' ? (
                     <div className="management-container">
+                        <div className="reserve-manage-top">
+                            <div className="filter-btn-box">
+                                <button onClick={resetFilter}><i class="bi bi-arrow-clockwise"></i></button>
+                                <button className={filterStatus === '대기' ? 'active' : ''} onClick={() => handleFilter('대기')}>대기</button>
+                                <button className={filterStatus === '입금대기' ? 'active' : ''} onClick={() => handleFilter('입금대기')}>입금대기</button>
+                                <button className={filterStatus === '확정' ? 'active' : ''} onClick={() => handleFilter('확정')}>확정</button>
+                                <button className={filterStatus === '완료' ? 'active' : ''} onClick={() => handleFilter('완료')}>완료</button>
+                                <button className={filterStatus === '취소' ? 'active' : ''} onClick={() => handleFilter('취소')}>취소</button>
+                            </div>
+                            <div className="search-bar-box">
+                                <input type='text' placeholder='예약번호, 고객명, 예약일...' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} onKeyPress={handleKeyPress} />
+                                <button onClick={handleSearch}> <i className="bi bi-search"></i> </button>
+                            </div>
+                        </div>
                         <table className="management-table">
                             <thead>
                                 <tr>

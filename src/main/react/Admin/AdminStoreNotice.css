@@ -41,7 +41,6 @@
   margin-left: 350px;
   justify-content: flex-end;
   gap: 1%;
-
 }
 
 .search-bar-box>input {
@@ -202,6 +201,7 @@
   width: 30px;
   height: 30px;
   margin-left: 10px;
+  cursor: pointer;
 }
 
 

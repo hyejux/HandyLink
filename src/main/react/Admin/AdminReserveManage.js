@@ -65,15 +65,18 @@ function AdminReserveManage() {
     const [startMonth] = useState(new Date());
     const [updatingReservationId, setUpdatingReservationId] = useState(null); // 현재 업데이트 중인 예약 ID
     const [newStatus, setNewStatus] = useState(''); // 새로운 예약 상태
+    const [sortField, setSortField] = useState('');
+    const [sortOrder, setSortOrder] = useState('asc');
+
 
     useEffect(() => {
         const storeId = sessionStorage.getItem('storeId');
         const storeNo = sessionStorage.getItem('storeNo');
         console.log("세션 storeId: ", storeId);
         console.log("세션 storeNo: ", storeNo);
-    
 
-        axios.post('/adminReservation/getManageList', {storeNo : storeNo})
+
+        axios.post('/adminReservation/getManageList', { storeNo: storeNo })
             .then(response => {
                 console.log(response.data);
                 setReservationList(response.data);
@@ -114,53 +117,53 @@ function AdminReserveManage() {
         setSelectedDates([]); // 선택된 날짜 초기화
     };
 
-// 예약 상태 변경
-const handleStatusChange = (reservationNo, status, storeName) => {
-    console.log(reservationNo, status);
-    if (window.confirm(`${reservationNo} 주문건을 ${status}로 변경하시겠습니까?`)) {
-        // 결제 상태 결정
-        const paymentStatus = (status === '확정') ? '결제완료' : (status === '취소(업체)' || status === '취소(고객)') ? '결제취소' : '';
+    // 예약 상태 변경
+    const handleStatusChange = (reservationNo, status, storeName) => {
+        console.log(reservationNo, status);
+        if (window.confirm(`${reservationNo} 주문건을 ${status}로 변경하시겠습니까?`)) {
+            // 결제 상태 결정
+            const paymentStatus = (status === '확정') ? '결제완료' : (status === '취소(업체)' || status === '취소(고객)') ? '결제취소' : '';
 
-        // 예약 상태 업데이트
-        axios.post('/adminReservation/updateStatus', {
-            reservationId: reservationNo,
-            newStatus: status,
-        })
-            .then(response => {
-                // 결제 상태 업데이트
-                return axios.post('/userPayment/updateStatus', null, {
-                    params: {
-                        reservationNo: reservationNo,
-                        newStatus: paymentStatus,
-                    },
-                });
+            // 예약 상태 업데이트
+            axios.post('/adminReservation/updateStatus', {
+                reservationId: reservationNo,
+                newStatus: status,
             })
-            .then(response => {
-                setReservationList(prevList => prevList.map(item =>
-                    item.reservationNo === reservationNo ? { ...item, reservationStatus: status } : item
-                ));
-
-                // 결제취소일 경우 환불 처리
-                if (paymentStatus === '결제취소') {
-                    return axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, {
-                        paymentStatus: paymentStatus,
-                        storeName: storeName,
+                .then(response => {
+                    // 결제 상태 업데이트
+                    return axios.post('/userPayment/updateStatus', null, {
+                        params: {
+                            reservationNo: reservationNo,
+                            newStatus: paymentStatus,
+                        },
                     });
-                }
-            })
-            .then(response => {
-                console.log('환불 처리 완료:', response.data);
-                setUpdatingReservationId(null); // 업데이트 완료 후 ID 초기화
-                setNewStatus(''); // 새로운 상태 초기화
-            })
-            .catch(error => {
-                console.error('Error updating reservation, payment, or refund status:', error);
-            });
-    } else {
-        setUpdatingReservationId(null);
-        setNewStatus('');
-    }
-};
+                })
+                .then(response => {
+                    setReservationList(prevList => prevList.map(item =>
+                        item.reservationNo === reservationNo ? { ...item, reservationStatus: status } : item
+                    ));
+
+                    // 결제취소일 경우 환불 처리
+                    if (paymentStatus === '결제취소') {
+                        return axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, {
+                            paymentStatus: paymentStatus,
+                            storeName: storeName,
+                        });
+                    }
+                })
+                .then(response => {
+                    console.log('환불 처리 완료:', response.data);
+                    setUpdatingReservationId(null); // 업데이트 완료 후 ID 초기화
+                    setNewStatus(''); // 새로운 상태 초기화
+                })
+                .catch(error => {
+                    console.error('Error updating reservation, payment, or refund status:', error);
+                });
+        } else {
+            setUpdatingReservationId(null);
+            setNewStatus('');
+        }
+    };
 
 
 
@@ -177,6 +180,41 @@ const handleStatusChange = (reservationNo, status, storeName) => {
     const goToDetail = (no) => {
         window.location.href = `/AdminReserveManageDetail.admin/${no}`;
     };
+
+
+    // 정렬 함수
+    const handleSort = (field, type) => {
+        let order = sortOrder === 'asc' ? 'desc' : 'asc';
+        setSortOrder(order);
+
+        const sortedList = [...reservationList].sort((a, b) => {
+            let valueA = a[field];
+            let valueB = b[field];
+
+            // 숫자 타입 정렬
+            if (type === 'number') {
+                valueA = parseFloat(valueA);
+                valueB = parseFloat(valueB);
+                return order === 'asc' ? valueA - valueB : valueB - valueA;
+            }
+
+            // 날짜 타입 정렬
+            if (type === 'date') {
+                valueA = new Date(valueA);
+                valueB = new Date(valueB);
+                return order === 'asc' ? valueA - valueB : valueB - valueA;
+            }
+
+            // 문자 타입 정렬
+            if (type === 'string') {
+                return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+            }
+
+            return 0; // 기본적으로 같으면 0 반환
+        });
+        setReservationList(sortedList);
+    };
+
 
 
     return (
@@ -224,13 +262,13 @@ const handleStatusChange = (reservationNo, status, storeName) => {
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>예약 번호 <i class="bi bi-chevron-expand"></i></th>
-                                    <th>고객 명 <i class="bi bi-chevron-expand"></i></th>
-                                    <th>예약일 <i class="bi bi-chevron-expand"></i></th>
-                                    <th>총액 <i class="bi bi-chevron-expand"></i></th>
-                                    <th>요청사항 <i class="bi bi-chevron-expand"></i></th>
+                                    <th>예약번호<button onClick={() => handleSort('reservationNo', 'number')}><i className="bi bi-chevron-expand"></i></button></th>
+                                    <th>고객 명<button onClick={() => handleSort('userId', 'string')}><i className="bi bi-chevron-expand"></i></button></th>
+                                    <th>예약일<button onClick={() => handleSort('regTime', 'date')}><i className="bi bi-chevron-expand"></i></button></th>
+                                    <th>총액<button onClick={() => handleSort('reservationPrice', 'number')}><i className="bi bi-chevron-expand"></i></button></th>
+                                    <th>요청사항 </th>
                                     {/* <th>예약 상태</th> */}
-                                    <th>상태 변경 <i class="bi bi-chevron-expand"></i></th>
+                                    <th>상태 변경</th>
                                 </tr>
                             </thead>
                             <tbody>

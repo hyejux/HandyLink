@@ -315,7 +315,7 @@ function UserMain() {
 
   return (
     <div>
-      <div className="user-main-container">
+      <div className="user-main-content">
 
 
         <div className="search-top">
@@ -376,63 +376,7 @@ function UserMain() {
           <div className="user-location-item">성수</div>
         </div> */}
 
-        <div class="user-main-menu-bar-container">
-          <div class="user-main-menu-bar">
-            <button type="button" className={activeSection === 'menu1' ? 'active' : ''} onClick={() => setActiveSection('menu1')}>menu1</button>
-            <button type="button" className={activeSection === 'menu2' ? 'active' : ''} onClick={() => setActiveSection('menu2')}>menu2</button>
-            <button type="button" className={activeSection === 'menu3' ? 'active' : ''} onClick={() => setActiveSection('menu3')}>menu3</button>
-            <button type="button" className={activeSection === 'menu4' ? 'active' : ''} onClick={() => setActiveSection('menu4')}>menu4</button>
-          </div>
-        </div>
 
-        {activeSection === 'menu1' && (
-          <div className="user-main-menu-content">
-            컨텐츠1
-            <div className="user-main-menu-content-list">
-              
-              <div className="user-main-menu-img">
-                <img src="/img/cake001.jpg" />
-              </div>
-              <div className='user-main-menu-info'>
-                <div>업체명</div>
-                <div>업체소개</div>
-                <div>별점 카테고리</div>
-              </div>
-
-            </div>
-          </div>
-
-        )}
-
-        {activeSection === 'menu2' && (
-          <div className="user-main-menu-content">
-            컨텐츠2
-            <div>
-
-            </div>
-          </div>
-
-        )}
-
-        {activeSection === 'menu3' && (
-          <div className="user-main-menu-content">
-            컨텐츠3
-            <div>
-
-            </div>
-          </div>
-
-        )}
-
-        {activeSection === 'menu4' && (
-          <div className="user-main-menu-content">
-            컨텐츠4
-            <div>
-
-            </div>
-          </div>
-
-        )}
 
 
         {/* 배너 */}
@@ -502,7 +446,7 @@ function UserMain() {
                       </div>
                       <div className="store-title-2">{store.storeName}</div>
                       <div className="store-review-option">
-                        <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                        <span className="store-review"><i className="bi bi-star-fill"></i> 4.8</span>
                         <span className="store-option">{store.storeCate || '미등록'}</span>
                         {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
                       </div>
@@ -534,15 +478,15 @@ function UserMain() {
                   <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
                     <div className="user-category-menu">
                       <div className="user-category-menu-img">
-                          <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
-                            <i className={`bi bi-heart ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
-                          </button>
+                        <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                          <i className={`bi bi-heart ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
+                        </button>
                         <img src={imageUrl} alt={store.storeName} />
                         <div className="event-box">이벤트</div>
                       </div>
                       <div className="store-title-2">{store.storeName}</div>
                       <div className="store-review-option">
-                        <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                        <span className="store-review"><i className="bi bi-star-fill"></i> 4.8</span>
                         <span className="store-option">{store.storeCate || '미등록'}</span>
                         {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
                       </div>
@@ -555,6 +499,89 @@ function UserMain() {
             )}
           </div>
         </div>
+
+
+        {/* 배너 */}
+        <div className="advertisement-banner">
+          <img src='./img/advertisement/banner.jpg' />
+        </div>
+
+
+        <div class="user-main-menu-bar-container">
+          <div class="user-main-menu-bar">
+            <button type="button" className={activeSection === 'menu1' ? 'active' : ''} onClick={() => setActiveSection('menu1')}>menu1</button>
+            <button type="button" className={activeSection === 'menu2' ? 'active' : ''} onClick={() => setActiveSection('menu2')}>menu2</button>
+            <button type="button" className={activeSection === 'menu3' ? 'active' : ''} onClick={() => setActiveSection('menu3')}>menu3</button>
+            <button type="button" className={activeSection === 'menu4' ? 'active' : ''} onClick={() => setActiveSection('menu4')}>menu4</button>
+          </div>
+        </div>
+
+        {activeSection === 'menu1' && (
+          <div className="user-main-menu-content">
+            {store.length > 0 ? (
+              store.slice(0, 3).map((store) => {
+                const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg";
+                return (
+                  <div className="user-main-menu-content-list" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+                    <div className="user-main-menu-img" >
+                      <img src={imageUrl} alt={store.storeName} />
+                    </div>
+                    <div className='user-main-menu-info'>
+                      <div className="info-store-name">{store.storeName}</div>
+                      <div className="info-hashtag">
+                        {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
+                          <span key={category.id} className="result-list-option"><i className="bi bi-hash"></i> {category.serviceName}</span>))}
+                      </div>
+                      <div className="info-review-cate"><i className="bi bi-star-fill"></i> {store.averageRating} 카테고리: {store.storeCate}</div>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div>정보를 불러오지 못했습니다</div>
+            )}
+          </div>
+        )}
+
+        {activeSection === 'menu2' && (
+          <div className="user-main-menu-content">
+            메뉴3
+          </div>
+        )}
+
+        {activeSection === 'menu3' && (
+          <div className="user-main-menu-content">
+            {store.length > 0 ? (
+              store.slice(0, 3).map((store) => {
+                const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg";
+                return (
+                  <div className="user-main-menu-content-list" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+                    <div className="user-main-menu-img" >
+                      <img src={imageUrl} alt={store.storeName} />
+                    </div>
+                    <div className='user-main-menu-info'>
+                      <div className="info-store-name">{store.storeName}</div>
+                      <div className="info-hashtag">
+                        {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
+                          <span key={category.id} className="result-list-option"><i className="bi bi-hash"></i> {category.serviceName}</span>))}
+                      </div>
+                      <div className="info-review-cate"><i className="bi bi-star-fill"></i> {store.averageRating} 카테고리: {store.storeCate}</div>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div>정보를 불러오지 못했습니다</div>
+            )}
+          </div>
+        )}
+
+        {activeSection === 'menu4' && (
+          <div className="user-main-menu-content">
+            메뉴4
+          </div>
+        )}
+
 
 
         {/* 배너 */}
@@ -608,8 +635,8 @@ function UserMain() {
 
                   <div className="result-list-bottom">
                     <div className="result-list-review">
-                      <i className="bi bi-star-fill"></i> <span>{store.averageRating}</span>
-                      <span>({store.reviewCount})</span>
+                      <i className="bi bi-star-fill"></i> <span>{store.reviewRating || '4.8'}</span>
+                      <span>({store.reviewCount || '10,959'})</span>
                     </div>
                     <div className="result-list-price">
                       {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (

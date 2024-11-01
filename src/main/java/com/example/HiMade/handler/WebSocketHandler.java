@@ -50,11 +50,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
         String userId = (String) payload.get("userId");
-        String storeNo = (String) payload.get("storeNo"); // storeId → storeNo로 변경
+        String storeNo = (String) payload.get("storeNo");
         String senderType = (String) payload.get("senderType");
 
         if ("STORE".equals(senderType)) {
-            if (!sessionUserId.equals(storeNo)) { // storeId → storeNo로 변경
+            if (!sessionUserId.equals(storeNo)) {
                 return;
             }
         } else {
@@ -64,7 +64,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
 
         sendMessageToUser(userId, payload);   // userId에게 전송
-        sendMessageToUser(storeNo, payload);  // storeNo에게 전송 (storeId → storeNo로 변경)
+        sendMessageToUser(storeNo, payload);  // storeNo에게 전송
     }
 
 
@@ -104,7 +104,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         // 2. 일반 세션으로 로그인한 스토어 체크
         HttpSession httpSession = (HttpSession) attributes.get("HTTP.SESSION");
         if (httpSession != null) {
-            String storeNo = (String) httpSession.getAttribute("storeNo"); // storeId → storeNo로 변경
+            String storeNo = (String) httpSession.getAttribute("storeNo");
             if (storeNo != null) {
                 System.out.println("Found store through session: " + storeNo);
                 return storeNo;

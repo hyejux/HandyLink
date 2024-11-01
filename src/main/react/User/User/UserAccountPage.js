@@ -70,9 +70,9 @@ function UserAccountPage () {
     return (
         <div>
             <div className="settings-container">
-                <div className="user-info">
+                <div className="user-info" onClick={() =>  window.location.href = '/UserMyPage.user'}>
                     <img className="profile-img" src={userInfo.userImgUrl} alt="Profile Image" id="profileImage"/>
-                    <div className="user-details" onClick={() =>  window.location.href = '/UserMyPage.user'}>
+                    <div className="user-details">
                         <h2>{userInfo.userName}</h2>
                         <p>프로필 편집</p>
                         <span className="arrow">></span>
@@ -90,12 +90,12 @@ function UserAccountPage () {
                     </ul>
                 </div>
 
-                <div className="settings-menu">
+                <div className="settings-menu" onClick={() =>  window.location.href = '/userlikelist.user'}>
                     <ul>
                         <li>
                             <div className="menu-item">
                                 <span>내가 찜한 가게</span>
-                                <span className="status"><a href="/userlikelist.user">32건</a></span>
+                                <span className="status">32건</span>
                             </div>
                         </li>
                     </ul>

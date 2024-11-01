@@ -152,26 +152,30 @@ function AdminChat() {
 
             websocket.current.onmessage = (event) => {
                 const received = JSON.parse(event.data);
-                if (received.storeId === storeId) {
-                    // 현재 채팅방의 메시지 업데이트
-                    setMessages(prevMessages => [...prevMessages, received]);
+                console.log("수신된 메시지:", received);
 
-                    // 채팅 목록 업데이트
-                    setChatList(prevList => {
-                        return prevList.map(chat => {
-                            if (chat.userid === received.userId) {
-                                return {
-                                    ...chat,
-                                    lastmessage: received.chatMessage,
-                                    lastmessagetime: received.sendTime
-                                };
-                            }
-                            return chat;
-                        }).sort((a, b) =>
-                            // 최신 메시지가 위로 오도록 정렬
-                            new Date(b.lastmessagetime) - new Date(a.lastmessagetime)
-                        );
-                    });
+                // 현재 선택된 채팅방의 메시지인지 확인
+                if (received.storeNo === storeNo && received.userId === selectedUserId) {
+                    // USER가 보낸 메시지일 때만 추가 (STORE가 보낸 건 이미 local state에 추가됨)
+                    if (received.senderType === 'USER') {
+                        setMessages(prevMessages => [...prevMessages, received]);
+
+                        // 채팅 목록 업데이트
+                        setChatList(prevList => {
+                            return prevList.map(chat => {
+                                if (chat.userid === received.userId) {
+                                    return {
+                                        ...chat,
+                                        lastmessage: received.chatMessage,
+                                        lastmessagetime: received.sendTime
+                                    };
+                                }
+                                return chat;
+                            }).sort((a, b) =>
+                                new Date(b.lastmessagetime) - new Date(a.lastmessagetime)
+                            );
+                        });
+                    }
                 }
             };
 
@@ -193,30 +197,7 @@ function AdminChat() {
                 websocket.current.close();
             }
         };
-    }, [storeId]);
-
-    // 메시지 전송
-    // const handleSend = async (e) => {
-    //     e.preventDefault();
-    //     if (!messageInput.trim() || !selectedUserId) return;
-    //
-    //     const message = {
-    //         senderType: 'STORE',
-    //         storeId,
-    //         storeNo,
-    //         userId: selectedUserId,
-    //         chatMessage: messageInput.trim(),
-    //         sendTime: new Date().toISOString()
-    //     };
-    //
-    //     try {
-    //         websocket.current.send(JSON.stringify(message));
-    //         await axios.post('/adminChat/save', message);
-    //         setMessageInput("");
-    //     } catch (error) {
-    //         console.error("메시지 전송 실패:", error);
-    //     }
-    // };
+    }, [storeId, selectedUserId]);
 
     const handleSend = async (e) => {
         e.preventDefault();
@@ -239,6 +220,7 @@ function AdminChat() {
                 console.log('메시지 전송 완료');
 
                 await axios.post('/adminChat/save', message);
+                console.log('메시지 저장 후 WebSocket 상태:', websocket.current.readyState);
                 setMessageInput("");
 
                 // 로컬에서 메시지 추가

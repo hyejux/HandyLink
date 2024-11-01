@@ -150,3 +150,13 @@
     top: 50%;
     transform: translateY(-50%);
 }
+
+.business-hours-message {
+    color: #333;
+    margin: 0 auto;
+}
+
+.date-separator {
+    color: #ccc;
+    text-align: center;
+}

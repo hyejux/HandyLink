@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './AdminChat.css';
+import ProfileCard from './ProfileCard.js';
 import ReactDOM from "react-dom/client";
 
 function AdminChat() {
@@ -18,6 +19,9 @@ function AdminChat() {
     const chatBoxRef = useRef(null);
     const websocket = useRef(null);
     const inputRef = useRef(null);
+    const [isProfileCardVisible, setIsProfileCardVisible] = useState(false);
+    const [profileCardUserInfo, setProfileCardUserInfo] = useState(null);
+
 
     // 시간 포맷팅 함수
     const formatTime = (timestamp) => {
@@ -100,27 +104,48 @@ function AdminChat() {
         }
     }, []);
 
+    const handleProfileClick = async (e) => {
+        e.stopPropagation();
+        if (selectedUserInfo && selectedUserInfo.userid) {
+            try {
+                const userInfo = await fetchUserDetail(selectedUserInfo.userid);
+                setProfileCardUserInfo(userInfo); // 프로필 카드에 표시할 정보 업데이트
+                setIsProfileCardVisible(true); // 프로필 카드 표시
+            } catch (error) {
+                console.error("프로필 정보를 불러올 수 없습니다:", error);
+            }
+        }
+    };
+
+
+
+    const closeProfileCard = () => {
+        setIsProfileCardVisible(false);
+    };
+
     // 사용자 프로필 정보 가져오기
     const fetchUserDetail = async (userId) => {
         try {
             const response = await axios.get(`/user/profile/${userId}`);
             console.log('User profile:', response.data);
+            return response.data;
         } catch (error) {
             console.error("사용자 정보를 불러오는데 실패했습니다:", error);
         }
     };
 
     // 프로필 클릭 핸들러
-    const handleProfileClick = (e) => {
-        e.stopPropagation();
-        if (selectedUserInfo && selectedUserInfo.userid) {  // userid로 수정 (소문자)
-            fetchUserDetail(selectedUserInfo.userid);
-        }
-    };
+    // const handleProfileClick = (e) => {
+    //     e.stopPropagation();
+    //     if (selectedUserInfo && selectedUserInfo.userid) {  // userid로 수정 (소문자)
+    //         fetchUserDetail(selectedUserInfo.userid);
+    //     }
+    // };
 
     // 채팅방 선택 시 메시지 불러오기
     const handleChatSelect = async (userId) => {
         setSelectedUserId(userId);
+        setIsProfileCardVisible(false);
         const selectedUser = chatList.find(chat => chat.userid === userId);
         setSelectedUserInfo(selectedUser);
 
@@ -319,6 +344,11 @@ function AdminChat() {
                                 </div>
                             ))}
                         </div>
+
+                        {isProfileCardVisible && profileCardUserInfo && (
+                            <ProfileCard user={profileCardUserInfo} onClose={closeProfileCard} />
+                        )}
+
                         <div className="message-input">
                             <input
                                 type="text"
@@ -332,6 +362,7 @@ function AdminChat() {
                     </>
                 )}
             </div>
+
         </div>
     );
 }

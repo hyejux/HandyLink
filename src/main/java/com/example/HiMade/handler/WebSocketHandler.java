@@ -40,33 +40,41 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        String sessionUserId = extractUserIdFromSession(session);
-        if (sessionUserId == null) {
-            session.close();
-            return;
-        }
-
-        Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
-        String userId = (String) payload.get("userId");
-        String storeNo = (String) payload.get("storeNo");
-        String senderType = (String) payload.get("senderType");
-
-        if ("STORE".equals(senderType)) {
-            if (!sessionUserId.equals(storeNo)) {
+        @Override
+        protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+            String sessionUserId = extractUserIdFromSession(session);
+            if (sessionUserId == null) {
+                session.close(CloseStatus.POLICY_VIOLATION);
                 return;
             }
-        } else {
-            if (!sessionUserId.equals(userId)) {
-                return;
+
+            Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
+            String userId = (String) payload.get("userId");
+            String storeNo = (String) payload.get("storeNo");
+            String senderType = (String) payload.get("senderType");
+
+            // 메시지를 받을 대상 결정
+            String recipientId;
+            if ("USER".equals(senderType)) {
+                recipientId = storeNo;  // USER가 보낸 메시지는 STORE에게
+            } else {
+                recipientId = userId;   // STORE가 보낸 메시지는 USER에게
+            }
+
+            // 메시지 전송
+            Set<WebSocketSession> sessions = userSessions.get(recipientId);
+            if (sessions != null) {
+                sessions.forEach(recipientSession -> {
+                    try {
+                        if (recipientSession.isOpen()) {
+                            recipientSession.sendMessage(message);
+                        }
+                    } catch (Exception e) {
+                        System.out.println("메시지 전송 중 오류 발생: " + e.getMessage());
+                    }
+                });
             }
         }
-
-        sendMessageToUser(userId, payload);   // userId에게 전송
-        sendMessageToUser(storeNo, payload);  // storeNo에게 전송
-    }
-
 
     // 각 사용자 ID에 연결된 모든 세션에 메시지 전송
     private void sendMessageToUser(String userId, Map<String, Object> payload) throws Exception {

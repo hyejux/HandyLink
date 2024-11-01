@@ -16,6 +16,17 @@
     cursor: pointer; /* 기본적으로 포인터 커서 설정 */
 }
 
+.user-content-container > ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.user-content-container > ul:nth-child(1){
+  margin: 0;
+}
+
 .disabled {
     opacity: 0.5; /* 반투명으로 표시 */
     pointer-events: none; /* 클릭 이벤트 무시 */
@@ -305,7 +316,7 @@ body {
 
 /* --------------------------------------------------- */
 
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
 @font-face {
     font-family: 'ghanachoco';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ghanachoco.woff') format('woff');
@@ -393,34 +404,48 @@ body {
 
   .bi {
     color : #2C348F;
+    margin: 0 10px 0 0;
   }
 
-  .user-content-first-img-num {
-    position: absolute;
-    top: 0;
-    left: 0;
-    
-  }
+.store-basic-info {
+  margin-top: 10px;
+  display: flex;
+}
+
+.store-basic-info:nth-child(1){
+  margin: 0;
+}
+
+.store-basic-info:nth-child(1) {
+  display: flex;
+}
+
+.user-content-first-img-num {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 
   .user-content-first-content {
     padding: 15px;
   }
 
-  .store-name {
+  .store-name-box {
     font-size: 30px;
     font-weight: bold;
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    
   }
-  .store-name button {
+  .store-name-box button {
     height: 50px;
     font-size: 25px;
     background-color: #fff;
     border: none;
+    padding-left: 0;
   }
-  .store-name button:active {
+  .store-name-box button:active {
     height: 50px;
     font-size: 25px;
     color : red;
@@ -428,7 +453,11 @@ body {
     border: none;
   }
 
-  
+  .store-name{
+  display: flex;
+  align-items: center;
+  margin-left: 0;
+}
 
   .store-detail-menu {
     /* border: 1px solid red; */

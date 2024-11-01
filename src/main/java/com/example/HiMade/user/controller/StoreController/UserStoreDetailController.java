@@ -26,6 +26,7 @@ public class UserStoreDetailController {
 
   @GetMapping("/getStoreInfo/{id}")
   public StoreRegistDTO getStoreInfo(@PathVariable int id){
+    System.out.println("고정휴무랑 지정휴무 "+ userStoreService.getStoreInfo(id).getDayOffDayList() + userStoreService.getStoreInfo(id).getDayOffSetList());
     System.out.println( "출력값" + userStoreService.getStoreInfo(id));
     return userStoreService.getStoreInfo(id);
   }

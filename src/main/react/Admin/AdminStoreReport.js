@@ -8,6 +8,15 @@ import ReservationBarChart from './ReservationBarChart.js';
 import './AdminStoreReport.css';
 
 function AdminStoreReport(){
+    const storeId = sessionStorage.getItem('storeId');
+    const storeNo = sessionStorage.getItem('storeNo');
+
+    useEffect(() => {
+        const fetchReport = async() => {
+            const resp = await axios.get(`/adminStore/getStoreReport?storeNo=${storeNo}`); //아직 서버 안함.
+            console.log("리포트정보 ", resp.data);
+        };
+    },[]);
 
 
     return(

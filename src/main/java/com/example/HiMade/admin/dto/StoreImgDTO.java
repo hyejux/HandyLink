@@ -12,7 +12,6 @@ public class StoreImgDTO {
 
     private Integer storeImgNo; //업체사진pk
     private String storeImgLocation; //업체사진경로
-    private String storeId; //업체아이디
     private Long storeNo; //업체번호
 
 }

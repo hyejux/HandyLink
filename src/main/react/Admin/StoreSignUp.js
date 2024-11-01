@@ -658,7 +658,7 @@ function StoreSignUp() {
 
                     <div class="singup-complete-content">
                         <div>
-                            <span> 팬케이크샵 가로수길점 </span> 승인 대기 중 ...
+                            <span> {storeInfoData.storeName} </span> 승인 대기 중 ...
                         </div>
                         <div>
                             * 회원가입 내역 확인 및 수정은 <span>마이페이지</span>에서 확인 가능합니다.

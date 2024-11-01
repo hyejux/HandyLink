@@ -525,3 +525,11 @@ body {
     font-size: 20px;
     font-weight: bold;
   }
+
+.bi-heart {
+  color: red;
+}
+
+.like {
+  color: blue;
+}

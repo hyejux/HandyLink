@@ -15,6 +15,42 @@ function UserStoreDetail() {
   const [storeInfo, setStoreInfo] = useState([]);
   const [reviewList, setReviewList] = useState({});
   const [reviewPhotoList, setReviewPhotoList] =useState([]);
+  const [isBookmarked, setIsBookmarked] = useState([]); //찜
+
+    //찜 데이터 가져오기
+    useEffect(() => {
+        const getBookmarked = async () => {
+            try {
+                const resp = await axios.get('/userStoreList/getLike');
+
+                if (resp.status === 200) {
+                    setIsBookmarked(resp.data.map(like => like.storeNo));
+                    console.log("찜 목록 ", resp.data);
+                }
+            } catch (error) {
+                console.log("찜 데이터 가져오는 중 error ", error);
+            }
+        };
+
+        getBookmarked();
+    }, []);
+
+    //가게 찜하기
+    const handleStoreLike = async (store) => {
+        console.log("가게번호 ", store.storeNo);
+
+        try {
+            const resp = await axios.post('/userStoreList/storeLike', { storeNo: store.storeNo });
+            setIsBookmarked(prev =>
+            prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) //찜 해제
+            : [...prev, store.storeNo] //찜 추가
+            );
+
+        } catch (error) {
+            console.log("찜하던 중 error ", error);
+        }
+    };
+
 
   /************채팅**************/
 
@@ -314,7 +350,14 @@ console.log("가게정보 ",storeInfo);
             <div className="user-content-first-content">
               <div className="store-name-box">
                 <div style={{display:'flex'}}>
-                  <button type="button"><i className="bi bi-star"></i></button>
+{/*<button type="button">
+                    <i className="bi bi-star"></i>
+                  </button>*/}
+
+<button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(storeInfo); }}>
+    <i className={`bi bi-heart ${isBookmarked.includes(storeInfo.storeNo) ? 'like' : ''}`}></i>
+</button>
+
                   <div className="store-name">{storeInfo.storeName}</div>
                 </div>
                 <button type="button" onClick={handleInquiryClick}><i className="bi bi-chat-dots"></i></button>{/*문의하기 버튼*/}
@@ -323,7 +366,7 @@ console.log("가게정보 ",storeInfo);
                 <div className="store-addr"> {storeInfo.addr}   {storeInfo.addrdetail}</div>
               </div>
               <hr />
-              <div className="store-basic-info"><i className="bi bi-alarm-fill"></i> {storeInfo.storeOpenTime} ~ {storeInfo.storeCloseTime}</div>
+              <div className="store-basic-info"><i className="bi bi-alarm-fill"></i> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
               <div className="store-basic-info"><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
             </div>
           </div>
@@ -344,7 +387,7 @@ console.log("가게정보 ",storeInfo);
                   <div className="store-basic-info"><i className="bi bi-shop"></i>
                     <div className="store-addr">{storeInfo.addr}   {storeInfo.addrdetail} </div>
                   </div>
-                  <div className="store-basic-info"><i className="bi bi-alarm-fill"></i> {storeInfo.storeOpenTime} ~ {storeInfo.storeCloseTime}</div>
+                  <div className="store-basic-info"><i className="bi bi-alarm-fill"></i> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
                     <div className="store-basic-info">
                         <i className="bi bi-calendar2-x"></i>
                         <div>

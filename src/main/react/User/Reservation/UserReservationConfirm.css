@@ -322,11 +322,13 @@ body {
 }
 
 .user-content-container3 {
+  font-size: 15px;
   background-color: white;
   border-radius: 10px;
-  margin: 10px;
+  /* margin: 10px 10px; */
   padding: 20px;
   /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  margin-bottom: 20px;
   margin-bottom: 20px;
   border: 1px solid #ddd;
 
@@ -388,9 +390,14 @@ body {
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-    border: 1px solid #2C348F;
+    border: 1px solid #ddd;
   }
 
+  hr {
+    padding: 7px;
+    background-color: #f2f6f9;
+    border: none;
+  }
 
 
   .user-content-first{
@@ -519,9 +526,12 @@ body {
   }
   
   .user-payment-method {
-    margin: 10px 0;
+    gap:10px;
+    margin: 0px 0;
+    padding: 16px 0px;
     display: flex;
     align-items: center;
+    border-bottom: 1px solid #ddd;
   }
   
   .user-payment-method input[type="radio"] {
@@ -530,6 +540,10 @@ body {
 
   .user-payment-method label {
     font-size: 20px;;
+  }
+
+  .user-payment-method label > .bi{
+       margin-right: 9px;
   }
   
   .payment-button {
@@ -542,3 +556,62 @@ body {
     font-size: 16px;
     cursor: pointer;
   }
+
+  .user-reserve-title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .user-reserve-data{
+    border : 1px solid #ddd;
+    border-radius: 50px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 9px 27px;
+    margin-bottom: 20px;
+  }
+  
+  .user-reserve-data  .bi {
+  margin-right: 10px;
+  }
+  
+  
+ .user-reserve-menu img{
+  width: 110px;
+  height: 110px;
+  border-radius: 5px;
+}
+.user-reserve-menu-content{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+}
+
+.user-reserve-menu-content  div {
+  
+}
+
+.user-reserve-menu-content div:nth-child(1) {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.user-reserve-menu-content div:nth-child(2) {
+  height: 100%;
+  font-size: 13px;
+}
+
+.user-reserve-menu-content div:nth-child(3) {
+  
+  text-align: right;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.bi {
+  color : #2C348F;
+}

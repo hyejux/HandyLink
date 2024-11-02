@@ -391,14 +391,15 @@ console.log("가게정보 ",storeInfo);
                     <div className="store-basic-info">
                         <i className="bi bi-calendar2-x"></i>
                         <div>
-                            {Array.isArray(storeInfo.dayOffDayList) && storeInfo.dayOffDayList.length > 0 ? (
+                            {Array.isArray(storeInfo.dayOffDayList) && storeInfo.dayOffDayList.some(day => day.dayOffDay) > 0 ? (
                                 <div>
                                     매주 {storeInfo.dayOffDayList.map(day => day.dayOffDay).join(', ')} 휴무
                                 </div>
                             ) : (
                                 <div>고정 휴무 없음</div>
                             )}
-                            {Array.isArray(storeInfo.dayOffSetList) && storeInfo.dayOffSetList.length > 0 ? (
+                            {Array.isArray(storeInfo.dayOffSetList) && storeInfo.dayOffSetList.some(dayOffSet =>
+                                                                        dayOffSet.dayOffStart && dayOffSet.dayOffEnd) > 0 ? (
                                 storeInfo.dayOffSetList.map((dayOffSet, index) => {
                                     const startDate = new Date(dayOffSet.dayOffStart);
                                     const endDate = new Date(dayOffSet.dayOffEnd);
@@ -481,7 +482,7 @@ console.log("가게정보 ",storeInfo);
   )
 ))}
 
-             
+
               </div>
 
            )}

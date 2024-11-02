@@ -80,13 +80,15 @@ function UserReservationDate() {
 
   const handleDateChange = (newDate) => { 
     console.log("실행됨 ----------");
+
+    setSelectSlot2('00:00');
     
     setDate(newDate);
     const adjustedDate = addHours(newDate, 9);
     const formattedDate = format(adjustedDate, 'yyyy-MM-dd');
     console.log(formattedDate);
 
-
+    
 
     const cateId2 = cateId
     const intCateId = parseInt(cateId, 10);
@@ -235,6 +237,10 @@ function UserReservationDate() {
 
   
   const goToAdminPage = (id) => {
+    if(selectSlot3 === '00:00' ){
+      alert('시간을 선택해주세요');
+      return;
+    }
     sessionStorage.setItem('reservationSlotKey', rSloyKey);
     sessionStorage.setItem('selectSlot', selectSlot3);
     sessionStorage.setItem('formattedDate', formattedDate);
@@ -275,12 +281,9 @@ function UserReservationDate() {
 
   return (
     <div className="user-main-container">
-      <div className="user-top-nav">
-        <div className="user-top-btns">
-          <button type="button"> &lt; </button>
-          <div className="logo">HandyLink</div>
-          <button type="button"> &gt; </button>
-        </div>
+      <div className="search-top">
+        <div className='left'> <i class="bi bi-chevron-left"> </i> 예약일 선택</div>
+        <div className='right'></div>
       </div>
 
       <div className="user-main-content">
@@ -297,7 +300,7 @@ function UserReservationDate() {
             <div><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
           </div>
         </div>
-        <div className="user-content-container">
+        <div className="user-content-container2">
           <div className="user-reserve-menu">
             <div className="user-reserve-menu-img">
               <img src={`${reserveModi.imageUrl}`} alt="My Image" />
@@ -315,7 +318,7 @@ function UserReservationDate() {
         </div>
 
 
-        <div className="user-content-container">
+        <div className="user-content-container3">
           <div className="user-reserve-date-title">예약일 선택</div>
           <hr />
 
@@ -336,9 +339,9 @@ function UserReservationDate() {
           {dateTime.map((slot) => (
             slot.slotStatusCount !== slot.slotCount ? (
               <div key={slot.reservationSlotKey}>
-                <button type="button">
+                {/* <button type="button">
                   <div>임시) 해당 날짜 슬롯 상태: ({slot.slotStatusCount} / {slot.slotCount})</div>
-                </button>
+                </button> */}
 
                 <div className="user-reserve-date-time">
                   {timeSlots.map((timeSlot, index) => (
@@ -365,7 +368,7 @@ function UserReservationDate() {
             ) : (
               // <div key={slot.reservationSlotKey} style={{ display: 'none' }} > 
 
-              <h3> 예약 가능한 시간이 없습니다. </h3>
+              <h3> 예약 가능한 시간이 없습니다. 다른 날짜를 선택해주세요. </h3>
 
               // </div> // 예약이 가득 차면 숨김
 
@@ -373,7 +376,7 @@ function UserReservationDate() {
           ))}
 
         </div>
-        <div className="user-content-container">
+        <div className="user-content-container3">
           <div className="user-reserve-data">
             <div><i className="bi bi-calendar-check-fill"></i>{date.toLocaleDateString()}</div>
             <div><i className="bi bi-clock-fill"></i>{selectSlot2}</div>

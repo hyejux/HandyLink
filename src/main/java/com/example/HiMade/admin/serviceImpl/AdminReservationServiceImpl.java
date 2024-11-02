@@ -11,6 +11,7 @@ import javax.servlet.ServletContext;
 import java.awt.*;
 import java.io.File;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service("AdminReservationService")
@@ -48,6 +49,7 @@ public class AdminReservationServiceImpl implements AdminReservationService {
       System.out.println();
       d.setSubCategories(adminReservationMapper.getSubItem(d.getCategoryId()));
     }
+
     System.out.println(dto);
     return dto;
   }
@@ -94,6 +96,17 @@ public class AdminReservationServiceImpl implements AdminReservationService {
         adminReservationMapper.setSlotAll(dto);
         startDate = startDate.plusDays(1);
       }
+
+//    LocalDateTime startDate2 = LocalDateTime.now();
+//    LocalDateTime endDate2 = dto.getServiceStart();
+////    오늘~스타트데이트
+//    while (!startDate2.isAfter(endDate2)) {
+//      dto.setReservationSlotDate(startDate);
+//      adminReservationMapper.setSlotActivated(dto);
+//      startDate = startDate.plusDays(1);
+//    }
+
+
   }
 
   @Override

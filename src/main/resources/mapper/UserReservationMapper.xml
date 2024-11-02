@@ -78,23 +78,29 @@
 
     <select id="getAllDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">
         <![CDATA[
-         SELECT *
-        FROM reservation_slot rs
-        JOIN category c ON c.category_id = rs.category_id
-        WHERE c.category_id = #{categoryId}
-        AND rs.reservation_slot_date >= (
-        SELECT MIN(reservation_slot_date)
-        FROM reservation_slot
-        WHERE category_id = #{categoryId}
-        )
-        AND rs.reservation_slot_date < (
-        SELECT MIN(reservation_slot_date) + INTERVAL '6 months'
-        FROM reservation_slot
-        WHERE category_id = #{categoryId}
-        )
-        AND rs.reservation_slot_date > CURRENT_DATE -- 오늘 이후의 날짜만 포함
-        ORDER BY rs.reservation_slot_date;  ]]>
+    SELECT *
+    FROM reservation_slot rs
+    JOIN category c ON c.category_id = rs.category_id
+    WHERE c.category_id = #{categoryId}
+      AND rs.reservation_slot_date >= (
+          SELECT MIN(reservation_slot_date)
+          FROM reservation_slot
+          WHERE category_id = #{categoryId}
+      )
+      AND rs.reservation_slot_date < (
+          SELECT MIN(reservation_slot_date) + INTERVAL '6 months'
+          FROM reservation_slot
+          WHERE category_id = #{categoryId}
+      )
+      AND rs.reservation_slot_date >= (
+          SELECT CAST(service_start AS DATE)  -- 또는 DATE(service_start)
+    FROM category
+    WHERE category_id = #{categoryId}
+      ) -- 오늘 이후의 날짜만 포함
+    ORDER BY rs.reservation_slot_date;
+    ]]>
     </select>
+
 
 
     <update id="setUpdateStart" parameterType="com.example.HiMade.user.dto.UserRSlotDTO">

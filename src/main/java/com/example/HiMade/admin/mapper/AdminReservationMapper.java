@@ -25,6 +25,8 @@ public interface AdminReservationMapper {
   void setActivated(int id);
   void setSlotModi( @Param("id")int id,  @Param("realId") int realId);
   void setSlotAll(adminReserveAdd dto);  // 슬롯 삽입
+  void setSlotActivated(adminReserveAdd dto);
+
   public List<adminReserveMangeDTO> getManageList(int storeNo);
 
   //예약 상태 변경
@@ -34,4 +36,6 @@ public interface AdminReservationMapper {
 
  void setCategoryDel(int id);
  void setSlotDel(int id);
+
+
 }

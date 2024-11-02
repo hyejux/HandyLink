@@ -320,7 +320,7 @@ function UserMain() {
         <div className="user-main-header-fix">
           <div className="search-top">
             <div className='left'>뭐 넣지</div>
-            <div className='right'><i class="bi bi-heart"></i></div>
+            <div className='right'><i className="bi bi-heart"></i></div>
           </div>
 
 

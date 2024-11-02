@@ -22,12 +22,11 @@
         FROM store sa
         LEFT JOIN store_sns_link sns ON sa.store_no = sns.store_no
         LEFT JOIN store_img si ON si.store_no = sa.store_no
-        LEFT JOIN day_off_day d on sa.store_no = d.store_no
-        LEFT JOIN day_off_set s on sa.store_no = s.store_no
+        LEFT JOIN day_off_day d ON sa.store_no = d.store_no AND d.day_off_fix_status = 'Y'
+        LEFT JOIN day_off_set s ON sa.store_no = s.store_no
+            AND (s.day_off_start &lt;= CURRENT_DATE + INTERVAL '7 days' OR s.day_off_start IS NULL)
+            AND (s.day_off_end &gt;= CURRENT_DATE OR s.day_off_end IS NULL)
         WHERE sa.store_no = #{id}
-            AND d.day_off_fix_status = 'Y'
-            AND s.day_off_start &lt;= CURRENT_DATE + INTERVAL '7 days'
-            AND s.day_off_end &gt;= CURRENT_DATE
     </select>
 
 

@@ -41,7 +41,7 @@ public class AdminStoreServiceImpl implements AdminStoreService {
 
         for (String day : daysOfWeek) {
             DayOffDay dayOff = new DayOffDay();
-            dayOff.setStoreId(storeRegistDTO.getStoreId());
+//            dayOff.setStoreId(storeRegistDTO.getStoreId());
             dayOff.setStoreNo(storeRegistDTO.getStoreNo());
             dayOff.setDayOffDay(day);
             dayOff.setDayOffType("고정");

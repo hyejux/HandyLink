@@ -22,7 +22,12 @@
         FROM store sa
         LEFT JOIN store_sns_link sns ON sa.store_no = sns.store_no
         LEFT JOIN store_img si ON si.store_no = sa.store_no
+        LEFT JOIN day_off_day d on sa.store_no = d.store_no
+        LEFT JOIN day_off_set s on sa.store_no = s.store_no
         WHERE sa.store_no = #{id}
+            AND d.day_off_fix_status = 'Y'
+            AND s.day_off_start &lt;= CURRENT_DATE + INTERVAL '7 days'
+            AND s.day_off_end &gt;= CURRENT_DATE
     </select>
 
 
@@ -54,15 +59,29 @@
             <result property="storeSnsNo" column="store_sns_no"/>
             <result property="snsLink" column="sns_link"/>
             <result property="snsName" column="sns_name"/>
-            <result property="storeId" column="store_id"/>
+<!--            <result property="storeId" column="store_id"/>-->
             <result property="storeNo" column="store_no"/>
         </collection>
 
         <collection property="storeImg" ofType="com.example.HiMade.admin.dto.StoreImgDTO" javaType="java.util.List">
             <result property="storeImgNo" column="store_img_no"/>
             <result property="storeImgLocation" column="store_img_location"/>
-            <result property="storeId" column="store_id"/>
+<!--            <result property="storeId" column="store_id"/>-->
             <result property="storeNo" column="store_no"/>
+        </collection>
+
+        <collection property="dayOffDayList" ofType="com.example.HiMade.admin.dto.DayOffDay" javaType="java.util.List">
+            <result property="dayNo" column="day_no"/>
+            <result property="storeNo" column="store_no"/>
+            <result property="dayOffFixStatus" column="day_off_fix_status"/>
+            <result property="dayOffDay" column="day_off_day"/>
+        </collection>
+
+        <collection property="dayOffSetList" ofType="com.example.HiMade.admin.dto.DayOffSet" javaType="java.util.List">
+            <result property="setNo" column="day_no"/>
+            <result property="storeNo" column="store_no"/>
+            <result property="dayOffStart" column="day_off_start"/>
+            <result property="dayOffEnd" column="day_off_end"/>
         </collection>
     </resultMap>
 

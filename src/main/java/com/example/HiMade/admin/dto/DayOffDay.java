@@ -14,7 +14,6 @@ public class DayOffDay {
     private String dayOffType; //휴무타입
     private String dayOffDay; //정기휴무요일
     private String dayOffFixStatus; //정기휴무상태(Y, N).
-    private String storeId; //업체id
     private Long storeNo; //업체번호
 
 }

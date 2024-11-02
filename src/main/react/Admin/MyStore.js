@@ -148,9 +148,9 @@ function MyStore() {
     const onSelectFile = async (e) => {
         e.preventDefault();
         const files = Array.from(e.target.files); // 선택된 파일들 배열로 변환
-
+        const imgLength = myStoreInfo.storeImg.length + selectedImages.length + files.length;
         // 이미지는 8장 이하일 때만 추가
-        if (selectedImages.length + files.length < 8) {
+        if (imgLength < 9 ) {
 
             // 미리보기
             const selectImgs = files.map(file => URL.createObjectURL(file));
@@ -228,6 +228,14 @@ function MyStore() {
                 if (hasUnsavedSns || hasEmptySnsLink) {
                     alert("저장되지 않은 SNS 링크가 있습니다.");
                     return; // 저장되지 않은 SNS가 있을 경우 입력을 막음
+                }else if (  myStoreInfo.storeStatus === null ||
+                            myStoreInfo.storeParkingYn === null ||
+                            myStoreInfo.storeOpenTime === null ||
+                            myStoreInfo.storeCloseTime === null ||
+                            myStoreInfo.storeIntro === null
+                ) {
+                    alert('기본 정보 입력을 완료해 주세요.');
+                    return;
                 }
 
                 const updatedImgs = [
@@ -242,6 +250,11 @@ function MyStore() {
                         storeImgLocation: url
                     }))
                 ];
+
+                if(updatedImgs.length < 1){
+                    alert('이미지는 최소 1장 입력해 주세요.');
+                    return;
+                }
 
                 const response = await axios.post('/adminStore/updateStore',{ //update
                     storeId: myStoreInfo.storeId,
@@ -278,7 +291,10 @@ function MyStore() {
 
         {/* 기본 정보 섹션 */}
         <div className="section-container">
+            <div className="section-title">
             <h2>기본 정보</h2>
+            <span className="small-text">*필수</span>
+            </div>
             <div className="section-content">
                 <div className="form-group">
                     <label htmlFor="storeStatus">공개 여부</label>
@@ -400,7 +416,10 @@ function MyStore() {
 
 
         <div className="section-container">
-            <h2>사진 관리</h2>
+            <div className="section-title">
+                <h2>사진 관리</h2>
+                <span className="small-text">* 필수 (최대 8장)</span>
+            </div>
             <label htmlFor="file-upload" className="custom-file-upload">
                 파일 업로드
             </label>

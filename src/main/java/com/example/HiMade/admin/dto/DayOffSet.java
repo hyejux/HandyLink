@@ -15,6 +15,5 @@ public class DayOffSet {
     private Long setNo; //업체휴무pk
     private LocalDate dayOffStart; //지정휴무시작일
     private LocalDate dayOffEnd; //지정휴무종료일
-    private String storeId; //업체아이디
     private Long storeNo; //업체번호
 }

@@ -15,6 +15,42 @@ function UserStoreDetail() {
   const [storeInfo, setStoreInfo] = useState([]);
   const [reviewList, setReviewList] = useState({});
   const [reviewPhotoList, setReviewPhotoList] =useState([]);
+  const [isBookmarked, setIsBookmarked] = useState([]); //찜
+
+    //찜 데이터 가져오기
+    useEffect(() => {
+        const getBookmarked = async () => {
+            try {
+                const resp = await axios.get('/userStoreList/getLike');
+
+                if (resp.status === 200) {
+                    setIsBookmarked(resp.data.map(like => like.storeNo));
+                    console.log("찜 목록 ", resp.data);
+                }
+            } catch (error) {
+                console.log("찜 데이터 가져오는 중 error ", error);
+            }
+        };
+
+        getBookmarked();
+    }, []);
+
+    //가게 찜하기
+    const handleStoreLike = async (store) => {
+        console.log("가게번호 ", store.storeNo);
+
+        try {
+            const resp = await axios.post('/userStoreList/storeLike', { storeNo: store.storeNo });
+            setIsBookmarked(prev =>
+            prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) //찜 해제
+            : [...prev, store.storeNo] //찜 추가
+            );
+
+        } catch (error) {
+            console.log("찜하던 중 error ", error);
+        }
+    };
+
 
   /************채팅**************/
 
@@ -277,7 +313,7 @@ const [noticeList, setNoticeList] = useState([]);
  };
 
 
-
+console.log("가게정보 ",storeInfo);
 
   return (
     <div>
@@ -312,15 +348,26 @@ const [noticeList, setNoticeList] = useState([]);
             <div className="user-content-first-img-num"></div>
 
             <div className="user-content-first-content">
-              <div className="store-name">
-                <div>{storeInfo.storeName}</div>
-                <button type="button"><i className="bi bi-star"></i></button>
+              <div className="store-name-box">
+                <div style={{display:'flex'}}>
+{/*<button type="button">
+                    <i className="bi bi-star"></i>
+                  </button>*/}
+
+<button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(storeInfo); }}>
+    <i className={`bi bi-heart ${isBookmarked.includes(storeInfo.storeNo) ? 'like' : ''}`}></i>
+</button>
+
+                  <div className="store-name">{storeInfo.storeName}</div>
+                </div>
                 <button type="button" onClick={handleInquiryClick}><i className="bi bi-chat-dots"></i></button>{/*문의하기 버튼*/}
               </div>
-              <div><i className="bi bi-shop"></i> {storeInfo.addr}   {storeInfo.addrdetail} </div>
+              <div className="store-basic-info"><i className="bi bi-shop"></i>
+                <div className="store-addr"> {storeInfo.addr}   {storeInfo.addrdetail}</div>
+              </div>
               <hr />
-              <div><i className="bi bi-alarm-fill"></i> {storeInfo.storeOpenTime} ~ {storeInfo.storeCloseTime}</div>
-              <div><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
+              <div className="store-basic-info"><i className="bi bi-alarm-fill"></i> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
+              <div className="store-basic-info"><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
             </div>
           </div>
 
@@ -335,9 +382,44 @@ const [noticeList, setNoticeList] = useState([]);
           {activeSection === 'home' && (
             <div>
 
-              <div className="user-content-container">
+              <div className="user-content-container"> {/*위치, 번호, 영업시간, 주차, 가까운 지하철 정보*/}
                 <div>
+                  <div className="store-basic-info"><i className="bi bi-shop"></i>
+                    <div className="store-addr">{storeInfo.addr}   {storeInfo.addrdetail} </div>
+                  </div>
+                  <div className="store-basic-info"><i className="bi bi-alarm-fill"></i> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
+                    <div className="store-basic-info">
+                        <i className="bi bi-calendar2-x"></i>
+                        <div>
+                            {Array.isArray(storeInfo.dayOffDayList) && storeInfo.dayOffDayList.length > 0 ? (
+                                <div>
+                                    매주 {storeInfo.dayOffDayList.map(day => day.dayOffDay).join(', ')} 휴무
+                                </div>
+                            ) : (
+                                <div>고정 휴무 없음</div>
+                            )}
+                            {Array.isArray(storeInfo.dayOffSetList) && storeInfo.dayOffSetList.length > 0 ? (
+                                storeInfo.dayOffSetList.map((dayOffSet, index) => {
+                                    const startDate = new Date(dayOffSet.dayOffStart);
+                                    const endDate = new Date(dayOffSet.dayOffEnd);
 
+                                    // 원하는 형식으로 변환 (MM/DD 형식)
+                                    const formattedStartDate = `${startDate.getMonth() + 1}/${startDate.getDate()}`;
+                                    const formattedEndDate = `${endDate.getMonth() + 1}/${endDate.getDate()}`;
+
+                                    return (
+                                        <div key={index}>
+                                            {formattedStartDate} ~ {formattedEndDate}
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                <div>지정된 휴무 없음</div>
+                            )}
+                        </div>
+                    </div>
+                  <div className="store-basic-info"><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
+                  <div className="store-basic-info"><i className="bi bi-p-square-fill"></i> {storeInfo.storeParkingYn === 'Y' ? '주차가능' : '주차불가'}</div>
                 </div>
               </div>
 
@@ -345,15 +427,15 @@ const [noticeList, setNoticeList] = useState([]);
                 <div>
                   <i className="bi bi-emoji-smile"></i>{storeInfo.storeName}
                 </div>
-                <div>
-
+                <div style={{margin: '10px 10px 0 10px'}}>
+                  {storeInfo.storeIntro}
                 </div>
               </div>
 
               <div className="user-content-container">
               {noticeList.map((notice, index) => (
                  notice.status === 'Y' && ( 
-               <ul key={index} style={{listStyle:'none'}}>
+               <ul key={index}>
                 <li> <i class="bi bi-bell"></i> {notice.noticeType}  | {notice.noticeContent.slice(0, 20)}...</li>
                 </ul>            
                  ) 

@@ -13,6 +13,5 @@ public class StoreSnsDTO {
     private Integer storeSnsNo; //pk
     private String snsLink;
     private String snsName;
-    private String storeId;
     private Long storeNo;
 }

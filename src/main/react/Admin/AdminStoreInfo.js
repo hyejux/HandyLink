@@ -102,6 +102,11 @@ function AdminStoreInfo() {
 
 
     const handleClickPw = async() => {
+        setStorePwChange({
+            storePwCurrent: '', //현재비밀번호
+            storePwNew: '', //새로운 비밀번호
+            storePwCheck: ''
+        });
         if (isPwDisabled) {
             setIsPwDisabled(false);
         } else {
@@ -118,7 +123,7 @@ function AdminStoreInfo() {
                 return; // 현재 비밀번호가 일치하지 않으면 함수 종료
             }
 
-            if (storePwChange.storePwNew === storePwChange.storePwCheck) {
+            if (storePwChange.storePwNew === storePwChange.storePwCheck && storePwChange.storePwCheck) {
                 const updatedStoreInfo = {
                     ...storeInfo,
                     storePw: storePwChange.storePwNew // storePwChange.storePwNew로 비밀번호 업데이트
@@ -194,6 +199,11 @@ function AdminStoreInfo() {
 
     //수정하기
     const toggleModify = async () => {
+        if(!isPwDisabled && (storePwChange.storePwNew !== storePwChange.storePwCheck || !storePwChange.storePwCheck)){
+            alert('비밀번호 변경을 완료해주십시오.');
+            return;
+        }
+
         if (isDisabled) {
             setIsDisabled(false);
         } else {
@@ -203,6 +213,10 @@ function AdminStoreInfo() {
                     if (checkBlank) {
                         alert('정보를 입력해주세요.');
                         return;
+                    }
+
+                    if(!isPwDisabled){
+                        handleClickPw();
                     }
 
                     await axios.post('/adminStore/updateStoreInfo', {
@@ -276,7 +290,10 @@ function AdminStoreInfo() {
                                 )
                             )}
                             <button type="button" className="cancel-pw" onClick={() => setIsPwDisabled(!isPwDisabled)}>취소</button>
-                            <button type="button" className="change-pw" onClick={handleClickPw}> 저장하기 </button>
+{isDisabled ? (
+    <button type="button" className="change-pw" onClick={handleClickPw}> 저장하기 </button>
+):null}
+
                         </div>
                     </div>
                 )}

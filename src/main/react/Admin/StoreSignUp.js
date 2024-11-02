@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
 import './TermsOfUse.css';
 import './StoreInfo.css';
-import './StoreInfoRegist.css';
 import './StoreRegistComplete.css';
 
 
@@ -13,6 +12,9 @@ function StoreSignUp() {
     const [termsCheck, setTermsCheck] = useState(false); //이용약관동의
     const [privacyCheck, setPrivacyCheck] = useState(false); //개인정보동의
     const [currentStep, setCurrentStep] = useState(1); // 현재 스텝 상태
+    const idRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/;
+    const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,13}$/;
+    const businessNoRegex = /^\d{10}$/;
 
     //step02
     const [storeInfoData, setStoreInfoData] = useState ({
@@ -49,9 +51,33 @@ function StoreSignUp() {
         }
     };
 
+    const [idError, setIdError] = useState('');
+    const [pwError, setPwError] = useState('');
+    const [businessNoError, setBusinessNoError] = useState('');
+    const [isIdValid, setIsIdValid] = useState(false);
+    const [isPwValid, setIsPwValid] = useState(false);
+    const [isBusinessNoValid, setIsBusinessNoValid] = useState(false);
+
     //step02 - input상태값 저장
     const handleChangeStore = (e) => {
         const { id, value } = e.target;
+
+        if (id === "storeId") {
+            setIsDuplicate(null);
+            setStoreInfoData({ ...storeInfoData, storeId: value });
+            setIsIdValid(idRegex.test(value));
+            setIdError(idRegex.test(value) ? "" : "아이디는 최소 5자 이상의 영문과 숫자로 입력해 주세요.");
+        } else if (id === "storePw") {
+            setStoreInfoData({ ...storeInfoData, storePw: value });
+            setIsPwValid(pwRegex.test(value));
+            setPwError(pwRegex.test(value) ? "" : "비밀번호는 영문, 숫자, 특수문자를 포함해 8~13자 이내로 입력해 주세요.");
+        } else if (id === "storeBusinessNo"){
+            setStoreInfoData({ ...storeInfoData, storeBusinessNo: value });
+            setIsBusinessNoValid(businessNoRegex.test(value));
+            setBusinessNoError(businessNoRegex.test(value) ? "" : "형식에 맞게 입력해 주세요.");
+        }
+
+
         setStoreInfoData({
             ...storeInfoData,
             [id]: value // id 속성에 해당하는 값을 동적으로 업데이트
@@ -63,15 +89,17 @@ function StoreSignUp() {
 
     const handleDuplicatedId = async() => {
         try{
-            const response = await axios.post('/adminStore/duplicatedIdCheck', {storeId: storeInfoData.storeId});
+            if(isIdValid){
 
-            if (response.data > 0) { // 중복된 경우
-                setIsDuplicate(true);
-                inputRef.current.focus(); // input 요소에 포커스 주기
-            } else {
-                setIsDuplicate(false); // 중복되지 않은 경우
+                const response = await axios.post('/adminStore/duplicatedIdCheck', {storeId: storeInfoData.storeId});
+
+                if (response.data > 0) { // 중복된 경우
+                    setIsDuplicate(true);
+                    inputRef.current.focus(); // input 요소에 포커스 주기
+                } else {
+                    setIsDuplicate(false); // 중복되지 않은 경우
+                }
             }
-
         } catch (error) {
             console.log("중복검사실패 ", error);
             alert('아이디 중복 검사 중 오류 발생');
@@ -144,7 +172,13 @@ function StoreSignUp() {
     const handleStoreRegist = async() => {
         try {
             if(isDuplicate === true || isDuplicate === null){
-                alert('아이디를 확인해주세요');
+                alert('아이디 중복체크를 해주세요.');
+                inputRef.current.focus();
+                return;
+            }
+
+            if(isIdValid === false || isPwValid === false){
+                alert('아이디와 비밀번호를 확인해주세요.');
                 inputRef.current.focus();
                 return;
             }
@@ -514,7 +548,7 @@ function StoreSignUp() {
                     </div>
 
                     <div className="buttons">
-                        <a href="" id="gohome">돌아가기</a>
+                        <a href="/adminlogin.login" id="gohome">돌아가기</a>
                         <button type="submit" className="next-btn" onClick={handleClickNext} >다음단계 ▶</button>
                     </div>
                 </div>
@@ -537,14 +571,15 @@ function StoreSignUp() {
                             <input type="text" id="storeId" value={storeInfoData.storeId} placeholder="아이디 입력" onChange={(e) => handleChangeStore(e)} ref={inputRef}/>
                             <button className="btn-check" onClick={handleDuplicatedId}>중복 체크</button>
                         </div>
-                        {isDuplicate === true && <p style={{color:'red'}}>이미 사용 중인 아이디입니다.</p>}
-                        {isDuplicate === false && <p style={{color:'green'}}>사용 가능한 아이디입니다.</p>}
+                        {idError && <p style={{ color: 'red' }} className="small-text">{idError}</p>}
+                        {isIdValid && isDuplicate === true && <p style={{color:'red'}} >이미 사용 중인 아이디입니다.</p>}
+                        {isIdValid && isDuplicate === false && <p style={{color:'green'}}>사용 가능한 아이디입니다.</p>}
                     </div>
 
                     <div className="input-group" style={{ marginBottom: '20px' }}>
                         <label htmlFor="storePw">비밀번호</label>
                             <input type="password" id="storePw" placeholder="비밀번호 입력" onChange={(e) => handleChangeStore(e)}/>
-                            <p className="small-text">* 8~13자 이내의 영문자와 숫자 조합</p>
+                            {!isPwValid && pwError && <p style={{ color: 'red' }} className="small-text">{pwError}</p>}
                         </div>
                     </div>
 
@@ -600,12 +635,13 @@ function StoreSignUp() {
                     <div className="input-group" style={{ marginBottom: '20px' }}>
                         <label htmlFor="storeBusinessNo">사업자등록번호</label>
                         <input type="text" id="storeBusinessNo" placeholder="사업자등록번호 입력" onChange={(e)=>handleChangeStore(e)} />
+                        {!isBusinessNoValid && businessNoError && <p style={{ color: 'red' }} className="small-text">{businessNoError}</p>}
                     </div>
                 </div>
 
                 <div className="buttons">
                     <button type="button" className="cancel-btn" onClick={handleGoBack}>◀ 이전</button>
-                    <button type="submit" className="next-btn" onClick={handleStoreRegist}>등록하기 ▶</button>
+                    <button type="submit" className="next-btn" onClick={handleStoreRegist} disabled={!isIdValid || !isPwValid || !isBusinessNoValid} >등록하기 ▶</button>
                 </div>
             </div>
         )}
@@ -622,7 +658,7 @@ function StoreSignUp() {
 
                     <div class="singup-complete-content">
                         <div>
-                            <span> 팬케이크샵 가로수길점 </span> 승인 대기 중 ...
+                            <span> {storeInfoData.storeName} </span> 승인 대기 중 ...
                         </div>
                         <div>
                             * 회원가입 내역 확인 및 수정은 <span>마이페이지</span>에서 확인 가능합니다.

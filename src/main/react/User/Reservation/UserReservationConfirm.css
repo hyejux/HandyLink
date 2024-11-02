@@ -18,6 +18,22 @@ body {
     padding : 0px;
 
 }
+.search-top {
+  overflow: hidden;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-top .left {
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.search-top .right {
+  float: right;
+  font-size: 20px;
+}
 
 .user-reserve-title {
   font-size: 25px;

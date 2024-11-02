@@ -507,3 +507,19 @@ body {
 .react-calendar__navigation button:hover {
   color: #2C348F; /* 호버 시 텍스트 색상 */
 }
+.search-top {
+  overflow: hidden;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-top .left {
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.search-top .right {
+  float: right;
+  font-size: 20px;
+}

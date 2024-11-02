@@ -108,7 +108,7 @@ function UserReservationOption() {
   };
 
   // 옵션 선택 처리 (단일 선택)
-  const handleFlavorSelect1 = (subCategory, index, categoryId) => {
+  const handleFlavorSelect1 = (subCategory, index, categoryId, isRequired) => {
     setCombinedInputs(prev => {
       const updatedInputs = [...prev];
       updatedInputs[index] = { ...updatedInputs[index], [index]: [subCategory] }; // 단일 선택 업데이트
@@ -122,7 +122,8 @@ function UserReservationOption() {
         mainCategoryId: reserveModi.categoryId,
         middleCategoryId: categoryId,
         subCategoryId: subCategory.categoryId,
-        middleCategoryValue: null
+        middleCategoryValue: null,
+        isRequired : isRequired
       };
       return updatedFormDatas;
     })
@@ -130,7 +131,7 @@ function UserReservationOption() {
   };
 
   // 옵션 선택 처리 (다중 선택) --> n 
-  const handleFlavorSelectN = (subCategory, index, categoryId) => {
+  const handleFlavorSelectN = (subCategory, index, categoryId,isRequired) => {
     setCombinedInputs(prev => {
       const updatedInputs = [...prev];
       const currentSelection = updatedInputs[index]?.[index] || [];
@@ -153,13 +154,15 @@ function UserReservationOption() {
         middleCategoryId: categoryId,            // middleCategoryId
         subCategoryId: subCategory.categoryId,   // subCategoryId
         middleCategoryValue: subCategory.value || null,  // 값이 없으면 null
+        isRequired: isRequired
       };
 
       // 이미 해당 항목이 있는지 확인
       const existingIndex = updatedFormDatas.findIndex(item =>
         item.mainCategoryId === reserveModi.categoryId &&
         item.middleCategoryId === categoryId &&
-        item.subCategoryId === subCategory.categoryId
+        item.subCategoryId === subCategory.categoryId &&
+        item.isRequired === isRequired
       );
 
       if (existingIndex !== -1) {
@@ -175,6 +178,26 @@ function UserReservationOption() {
   };
 
 
+
+
+
+
+  const checkRequiredCategoriesInFormData = () => {
+    // isRequired가 true인 카테고리 찾기
+    const requiredCategories = categories.filter(category => category.isRequired);
+
+    // formData에서 각 카테고리 ID를 확인
+    return requiredCategories.every(requiredCategory => {
+        // formData에서 중간 카테고리 ID가 일치하는지 확인
+        return formData.some(data => data.middleCategoryId === requiredCategory.categoryId);
+    });
+};
+
+
+
+
+
+
   // sessionStorage에서 데이터 가져오기
   const storedData = sessionStorage.getItem('storeInfo');
   const userName = sessionStorage.getItem('userName');
@@ -186,6 +209,13 @@ function UserReservationOption() {
   console.log(storeInfo);
 
   const goToAdminPage = (id) => {
+    // 사용 예시
+const allRequiredSatisfied = checkRequiredCategoriesInFormData();
+if (!allRequiredSatisfied) {
+  alert("필수 항목을 선택해 주세요.");
+  return;
+}  
+
     sessionStorage.setItem('formData', JSON.stringify(formData));
     sessionStorage.setItem('combinedInputs', JSON.stringify(combinedInputs));
     sessionStorage.setItem('formattedDate', date);
@@ -233,13 +263,10 @@ function UserReservationOption() {
   return (
     <div>
       <div className="user-main-container">
-        <div className="user-top-nav">
-          <div className="user-top-btns">
-            <button type="button">{"<"}</button>
-            <logo className="logo">HandyLink</logo>
-            <button type="button">{">"}</button>
-          </div>
-        </div>
+      <div className="search-top">
+        <div className='left'>     <i class="bi bi-chevron-left"> </i> 옵션 선택 </div>
+        <div className='right'></div>
+      </div>
 
         <div className="user-main-content">
 
@@ -298,11 +325,11 @@ function UserReservationOption() {
               {category.subCategoryType === "TEXT" && (
                 <div className="user-content-container3">
                   <div className="sub-title">
-                    <div>{category.serviceName} {category.servicePrice > 0 && ( // 가격이 0보다 큰 경우에만 출력
-                      <span>  (+ {category.servicePrice} )</span>
-                    )} </div>
+                    <div>{category.serviceName}  {category.isPaid === true && ( <span>  (+ {category.servicePrice} )</span>)} </div>
 
-                    <div className="option-title"> *필수</div>
+                    {category.isRequired === true  && (
+                        <div className="option-title"> *필수</div>
+                    )}
                   </div>
                   <div className="sub-container3">
                     <input
@@ -319,10 +346,12 @@ function UserReservationOption() {
               {category.subCategoryType === "NUMBER" && (
                 <div className="user-content-container3">
                   <div className="sub-title">
-                    <div>{category.serviceName} {category.servicePrice > 0 && ( // 가격이 0보다 큰 경우에만 출력
-                      <span>  (+ {category.servicePrice} )</span>
-                    )} </div>
-                    <div className="option-title"> *필수</div>
+                    <div>{category.serviceName} 
+                      {category.isPaid === true && ( <span>  (+ {category.servicePrice} )</span>)}
+                   </div>
+                    {category.isRequired === true  && (
+                        <div className="option-title"> *필수</div>
+                    )}
                   </div>
                   <div className="sub-container4">
                     <input
@@ -340,7 +369,9 @@ function UserReservationOption() {
                 <div className="user-content-container3">
                   <div className="sub-title">
                     <div>{category.serviceName}</div>
-                    <div className="option-title"> *필수</div>
+                    {category.isRequired === true  && (
+                        <div className="option-title"> *필수</div>
+                    )}
                   </div>
                   <div className="sub-container5">
                     {category.subCategories.map((subCategory, subIndex) => (
@@ -349,11 +380,11 @@ function UserReservationOption() {
                         className={`option-btn ${combinedInputs[index]?.[index]?.includes(subCategory) ? 'selected' : ''}`}
                         onClick={() =>
                           category.subCategoryType === "SELECT1"
-                            ? handleFlavorSelect1(subCategory, index, category.categoryId)
-                            : handleFlavorSelectN(subCategory, index, category.categoryId)
+                            ? handleFlavorSelect1(subCategory, index, category.categoryId,  category.isRequired)
+                            : handleFlavorSelectN(subCategory, index, category.categoryId,  category.isRequired)
                         }
                       >
-                        {subCategory.serviceName} <div> +{subCategory.servicePrice}</div>
+                        {subCategory.serviceName}  {category.isPaid === true && (<div> +{subCategory.servicePrice}</div>)}
                       </button>
                     ))}
                   </div>
@@ -362,51 +393,64 @@ function UserReservationOption() {
             </div>
           ))}
 
+
+   {/* <hr /> */}
           <div className="user-content-container2">
-            <div className="user-content-container3">
+            {/* <div className="user-content-container3">
               <div>기본 가격 :  {reserveModi.serviceName} (+  {reserveModi.servicePrice} ) </div>
               <div>
-                {categories.map((category, index) => (
-                  <div key={index}>
+              {categories.map((category, index) => (
+  <div key={index}>
 
-                    <span>
-                      <span>  {category.serviceName} :  {category.servicePrice > 0 && ( // 가격이 0보다 큰 경우에만 출력
-                        <span>  (+ {category.servicePrice} )</span>
-                      )}  </span>
+    {combinedInputs[index] && combinedInputs[index].inputValue && (
+      <span>
+     
+       
+      </span>
+    )}
+    
+    <span>
+      {combinedInputs[index] && (
+        <span>
+             <span>{category.serviceName} :  </span>
+          {Object.entries(combinedInputs[index]).map(([key, value]) => {
+            // 값이 배열인 경우
+            if (Array.isArray(value)) {
+              return value.map((item, itemIndex) => (
+                <span key={itemIndex}>
+                  {item.serviceName}  {item.servicePrice > 0 && (
+                    <span> (+ {item.servicePrice})</span>
+                  )}
+                </span>
+              ));
+            }
+            // 값이 문자열인 경우
+            else if (typeof value === 'string') {
+              return (
+                <span key={key}>
+                  
+                  {value} 
 
-                    </span>
-
-                    <span>
-                      {combinedInputs[index] && (
-                        <span>
-                          {Object.entries(combinedInputs[index]).map(([key, value]) => {
-                            // 값이 배열인 경우
-                            if (Array.isArray(value)) {
-                              return value.map((item, itemIndex) => (
-                                <span key={itemIndex}>
-                                  {item.serviceName} (+{item.servicePrice})
-                                </span>
-                              ));
-                            }
-                            // 값이 문자열인 경우
-                            else if (typeof value === 'string') {
-                              return (
-                                <span key={key}>
-                                  {value}
-                                </span>
-                              );
-                            }
-                            // 값이 undefined이거나 다른 경우
-                            return null;
-                          })}
-                        </span>
+                  <span>
+                      {combinedInputs[index]?.servicePrice > 0 && (
+                        <span>(+ {combinedInputs[index]?.servicePrice})</span>
                       )}
-
                     </span>
-                  </div>
-                ))}
+
+                </span>
+              );
+            }
+            // 값이 undefined이거나 다른 경우
+            return null;
+          })}
+        </span>
+      )}
+    </span>
+  </div>
+))}
+
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="user-content-container6">

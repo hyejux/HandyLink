@@ -539,10 +539,10 @@ console.log("가게정보 ",storeInfo);
              <div className="review-section">
                   <h2>포토 리뷰</h2>
                   <div className="photo-review">
-                  {reviewPhotoList.slice(0, 4).map((photo, index) => (
+                  {reviewPhotoList.slice(0, 3).map((photo, index) => (
                              <div className="photo-item" key={index}>
                              <img src={photo.reviewImgUrl} alt="Review Photo" />
-                             {index === 3 && (
+                             {index === 2 && (
                                <div className="photo-item more" onClick={() => setActiveSection('photo')}>
                                  +더보기
                                </div>

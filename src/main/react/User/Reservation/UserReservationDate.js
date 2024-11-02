@@ -281,12 +281,9 @@ function UserReservationDate() {
 
   return (
     <div className="user-main-container">
-      <div className="user-top-nav">
-        <div className="user-top-btns">
-          <button type="button"> &lt; </button>
-          <div className="logo">HandyLink</div>
-          <button type="button"> &gt; </button>
-        </div>
+      <div className="search-top">
+        <div className='left'> <i class="bi bi-chevron-left"> </i> 예약일 선택</div>
+        <div className='right'></div>
       </div>
 
       <div className="user-main-content">

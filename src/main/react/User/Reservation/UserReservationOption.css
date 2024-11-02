@@ -12,6 +12,30 @@
     font-style: normal;
   }
 
+  
+.search-top {
+  overflow: hidden;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-top .left {
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.search-top .right {
+  float: right;
+  font-size: 20px;
+}
+
+hr {
+  padding: 7px;
+  background-color: #f2f6f9;
+  border: none;
+}
+
 body {
   font-family: 'Pretendard-Regular';
     margin: 0px;

@@ -86,7 +86,7 @@ CREATE TABLE PAYMENT (
     payment_method VARCHAR(20) NULL CHECK (payment_method IN IN ('간편결제', '일반결제', '계좌이체'));
     payment_amount BIGINT NULL,
     payment_date TIMESTAMP NULL,
-    payment_status VARCHAR(10) NULL CHECK (payment_status IN ('Y', '입금대기', 'N')),
+    payment_status VARCHAR(10) NULL CHECK (payment_status IN ('결제완료', '입금대기', '결제취소')),
     reservation_no BIGINT NULL,
     PRIMARY KEY (payment_id)
 );

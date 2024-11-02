@@ -67,12 +67,21 @@ function UserMyReservationList() {
         {reservationList.map((value, index) => (
           <div className="user-content-container" key={index} onClick={() => { goToUserPage(value.reservationNo) }}>
             <div className="reservation-header">
-              <span className="reservation-status">{value.reservationStatus}</span>
+            <span className={`reservation-status ${
+                value.reservationStatus === '입금대기' || value.reservationStatus === '대기' ? 'status-pending' : 
+                value.reservationStatus === '확정' ? 'status-confirmed' :
+                value.reservationStatus === '완료' ? 'status-completed' :
+                value.reservationStatus === '취소' ? 'status-canceled' :
+                ''
+              }`}
+            >
+              {value.reservationStatus}
+            </span>
               <div className="reservation-time">{value.regTime} </div>
 
 
               {/* {value.reviewCount === 0 && value.reservationStatus === '확정' && ( */}
-              <button
+              <button className="review-write-btn"
                 onClick={(event) => {
                   event.stopPropagation(); // Prevents event bubbling
                   goToReview(value.reservationNo); // Call the function to navigate to the review page

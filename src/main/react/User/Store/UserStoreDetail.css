@@ -1,86 +1,95 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
 @font-face {
-    font-family: 'ghanachoco';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ghanachoco.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
-  @font-face {
-    font-family: 'Pretendard-Regular';
-    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-  }
-
-
-
-
-
-
-
-  .modal {
-    position: fixed;
-    z-index: 101;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* 반투명 배경 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal-image {
-    max-width: 90%;
-    max-height: 90%;
-  }
-  
-  .close-button {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    font-size: 30px;
-    color: white;
-    cursor: pointer;
-  }
-  
-
-
-
-
-  .user-content-container {
-    cursor: pointer; /* 기본적으로 포인터 커서 설정 */
+  font-family: 'ghanachoco';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ghanachoco.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
-.user-content-container > ul {
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+
+
+
+
+
+.modal {
+  position: fixed;
+  z-index: 101;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  /* 반투명 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-image {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+}
+
+
+
+
+
+.user-content-container {
+  cursor: pointer;
+  /* 기본적으로 포인터 커서 설정 */
+}
+
+.user-content-container>ul {
   list-style: none;
   padding-left: 0;
   margin-top: 10px;
   margin-bottom: 0;
 }
 
-.user-content-container > ul:nth-child(1){
+.user-content-container>ul:nth-child(1) {
   margin: 0;
 }
 
 .disabled {
-    opacity: 0.5; /* 반투명으로 표시 */
-    pointer-events: none; /* 클릭 이벤트 무시 */
+  opacity: 0.5;
+  /* 반투명으로 표시 */
+  pointer-events: none;
+  /* 클릭 이벤트 무시 */
 }
 
 
 .photo-review3 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3열로 배치 */
-  gap: 16px; /* 이미지 사이의 간격 */
+  grid-template-columns: repeat(3, 1fr);
+  /* 3열로 배치 */
+  gap: 16px;
+  /* 이미지 사이의 간격 */
 }
 
-.photo-item > img {
-  width: 100%;  
+.photo-item>img {
+  width: 100%;
   height: 100%;
 }
-        .review-section {
+
+.review-section {
   /* width: 100%; */
   padding: 20px;
   background-color: #fff;
@@ -107,7 +116,7 @@ h2 {
 
 }
 
-.photo-item:nth-last-child(1){
+.photo-item:nth-last-child(1) {
   position: relative;
 }
 
@@ -165,7 +174,8 @@ h2 {
 
 .review-rating {
   font-size: 14px;
-  color: #f4c150; /* Rating star color */
+  color: #f4c150;
+  /* Rating star color */
 }
 
 .review-details {
@@ -193,11 +203,13 @@ h2 {
 
 .review-text {
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* Show only 2 lines */
+  -webkit-line-clamp: 2;
+  /* Show only 2 lines */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 3.2em; /* Adjust based on line height and number of lines */
+  max-height: 3.2em;
+  /* Adjust based on line height and number of lines */
   line-height: 1.6em;
 }
 
@@ -234,10 +246,11 @@ h2 {
 
 body {
   font-family: 'Pretendard-Regular';
-    margin: 0px;
-    padding : 0px;
-    
+  margin: 0px;
+  padding: 0px;
+
 }
+
 .user-content-first-img {
   position: relative;
 }
@@ -248,11 +261,13 @@ body {
 } */
 
 .slide {
-  display: none; /* 기본적으로 모든 슬라이드를 숨김 */
+  display: none;
+  /* 기본적으로 모든 슬라이드를 숨김 */
 }
 
 .slide.active {
-  display: block; /* 현재 슬라이드만 보이도록 설정 */
+  display: block;
+  /* 현재 슬라이드만 보이도록 설정 */
 }
 
 .slide-button {
@@ -264,7 +279,8 @@ body {
   border-radius: 5px;
   padding: 10px;
   cursor: pointer;
-  z-index: 10; /* 버튼이 이미지 위에 위치하도록 설정 */
+  z-index: 10;
+  /* 버튼이 이미지 위에 위치하도록 설정 */
 }
 
 .prev-button {
@@ -278,21 +294,27 @@ body {
 
 .user-content-first-img {
   position: relative;
-  overflow: hidden; /* 내용이 넘치지 않도록 숨김 */
-  width: 100%; /* 부모 요소에 맞게 설정 */
-  height: 300px; /* 고정된 높이 설정 */
+  overflow: hidden;
+  /* 내용이 넘치지 않도록 숨김 */
+  width: 100%;
+  /* 부모 요소에 맞게 설정 */
+  height: 300px;
+  /* 고정된 높이 설정 */
 }
 
 .slide {
   position: absolute;
   width: 100%;
   height: 100%;
-  opacity: 0; /* 슬라이드가 처음에 보이지 않도록 설정 */
-  transition: opacity 0.5s ease; /* 부드러운 전환 효과 */
+  opacity: 0;
+  /* 슬라이드가 처음에 보이지 않도록 설정 */
+  transition: opacity 0.5s ease;
+  /* 부드러운 전환 효과 */
 }
 
 .slide.active {
-  opacity: 1; /* 활성화된 슬라이드만 보이도록 설정 */
+  opacity: 1;
+  /* 활성화된 슬라이드만 보이도록 설정 */
 }
 
 
@@ -314,51 +336,52 @@ body {
 
 
 
-  /* 상단 버튼 디자인 */
-.user-top-btns  {
-    margin : 10px 0px;
-    display: flex;
-    justify-content: space-between;
+/* 상단 버튼 디자인 */
+.user-top-btns {
+  margin: 10px 0px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.user-top-btns > button {
-    height: 30px;
-    width: 50px;
-    font-size: 25px;
-    background-color: #fff;
-    border: none;
-    
+.user-top-btns>button {
+  height: 30px;
+  width: 50px;
+  font-size: 25px;
+  background-color: #fff;
+  border: none;
+
 }
 
-  .user-main-content {
-    /* padding : 15px; */
-    margin-bottom: 100px;
-    /* border : 1px solid blue; */
-  }
+.user-main-content {
+  /* padding : 15px; */
+  margin-bottom: 100px;
+  /* border : 1px solid blue; */
+}
 
-  
+
 
 /* --------------------------------------------------- */
 
 
 @font-face {
-    font-family: 'ghanachoco';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ghanachoco.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
-  @font-face {
-    font-family: 'Pretendard-Regular';
-    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-  }
+  font-family: 'ghanachoco';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ghanachoco.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
 
 body {
   font-family: 'Pretendard-Regular';
-    margin: 0px;
-    padding : 0px;
-    
+  margin: 0px;
+  padding: 0px;
+
 }
 
 
@@ -371,72 +394,72 @@ body {
   /* background-image: linear-gradient(207deg, rgba(146, 169, 255, 1) 0%, rgba(53, 58, 148, 1) 100%); */
   /* font-family: 'ghanachoco'; */
   font-size: 20px;
-  
-  }
 
-  
-
-
-  /* 상단 버튼 디자인 */
-.user-top-btns  {
-    margin : 10px 0px;
-    display: flex;
-    justify-content: space-between;
 }
 
-.user-top-btns > button {
-    height: 30px;
-    width: 50px;
-    font-size: 25px;
-    background-color: #fff;
-    border: none;
-    
+
+
+
+/* 상단 버튼 디자인 */
+.user-top-btns {
+  margin: 10px 0px;
+  display: flex;
+  justify-content: space-between;
 }
 
-  .user-main-content {
-    /* padding : 15px; */
-    margin-bottom: 100px;
-    /* border : 1px solid blue; */
-  }
+.user-top-btns>button {
+  height: 30px;
+  width: 50px;
+  font-size: 25px;
+  background-color: #fff;
+  border: none;
 
- 
-  
+}
+
+.user-main-content {
+  /* padding : 15px; */
+  margin-bottom: 100px;
+  /* border : 1px solid blue; */
+}
+
+
+
 
 /* --------------------------------------------------- */
 
 
-  .user-content-container {
-    background-color: white;
-    border-radius: 10px;
-    margin: 20px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgb(0 0 0 / 5%);
-    margin-bottom: 20px;
-    border: 1px solid #d3d3d3;
-  }
+.user-content-container {
+  background-color: white;
+  border-radius: 10px;
+  margin: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 5%);
+  margin-bottom: 20px;
+  border: 1px solid #d3d3d3;
+}
 
 
 
-  .user-content-first{
-    /* border: 1px solid red; */
-    margin-bottom: 30px;
-  }
+.user-content-first {
+  /* border: 1px solid red; */
+  margin-bottom: 30px;
+}
 
-  .user-content-first-img > img {
-    position: relative;
-  }
+.user-content-first-img>img {
+  position: relative;
+}
 
-  .bi {
-    color : #2C348F;
-    margin: 0 10px 0 0;
-  }
+.bi {
+  color: #2C348F;
+  margin: 0 10px 0 0;
+}
 
 .store-basic-info {
   margin-top: 10px;
   display: flex;
 }
 
-.store-basic-info:nth-child(1){
+.store-basic-info:nth-child(1) {
   margin: 0;
 }
 
@@ -451,111 +474,118 @@ body {
 }
 
 
-  .user-content-first-content {
-    padding: 15px;
-  }
+.user-content-first-content {
+  padding: 15px;
+}
 
-  .store-name-box {
-    font-size: 30px;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-  .store-name-box button {
-    height: 50px;
-    font-size: 25px;
-    background-color: #fff;
-    border: none;
-    padding-left: 0;
-  }
-  .store-name-box button:active {
-    height: 50px;
-    font-size: 25px;
-    color : red;
-    background-color: #fff;
-    border: none;
-  }
+.store-name-box {
+  font-size: 30px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
 
-  .store-name{
+.store-name-box button {
+  height: 50px;
+  font-size: 25px;
+  background-color: #fff;
+  border: none;
+  padding-left: 0;
+}
+
+.store-name-box button:active {
+  height: 50px;
+  font-size: 25px;
+  color: red;
+  background-color: #fff;
+  border: none;
+}
+
+.store-name {
   display: flex;
   align-items: center;
   margin-left: 0;
 }
 
-  .store-detail-menu {
-    /* border: 1px solid red; */
-    display: flex;
-    justify-content: center;
+.store-detail-menu {
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: center;
 
-  }
-  .store-detail-menu > button {
-    width: 100%;
-    height: 50px;
-    font-weight: bold;
-    background-color: #fff;
-    border: none;
-    font-size: 16px;
-    font-family: 'Pretendard-Regular';
-    border-bottom: 3px solid #ddd;
-  }
+}
 
-  .store-detail-menu > button:active {
-    border-bottom: 3px solid #2C348F;
-    color : #2C348F;
-  }
+.store-detail-menu>button {
+  width: 100%;
+  height: 50px;
+  font-weight: bold;
+  background-color: #fff;
+  border: none;
+  font-size: 16px;
+  font-family: 'Pretendard-Regular';
+  border-bottom: 3px solid #ddd;
+}
 
-  .store-detail-menu {
-    position: sticky; /* 요소를 고정 */
-    top: 0; /* 고정될 위치 */
-    background-color: white; /* 배경색을 흰색으로 설정하여 다른 내용과 겹치지 않도록 함 */
-    z-index: 100; /* 다른 요소 위에 표시되도록 z-index를 설정 */
-  }
-  
+.store-detail-menu>button:active {
+  border-bottom: 3px solid #2C348F;
+  color: #2C348F;
+}
+
+.store-detail-menu {
+  position: sticky;
+  /* 요소를 고정 */
+  top: 0;
+  /* 고정될 위치 */
+  background-color: white;
+  /* 배경색을 흰색으로 설정하여 다른 내용과 겹치지 않도록 함 */
+  z-index: 100;
+  /* 다른 요소 위에 표시되도록 z-index를 설정 */
+}
+
 /* ----------------------------------------- */
-  .user-reserve-menu {
-    display: flex;
-    gap: 3%;
-    width: 100%;
-  }
-  .user-reserve-menu img{
-    width: 110px;
-    height: 110px;
-    border-radius: 5px;
-  }
-  .user-reserve-menu-content{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  
-  }
+.user-reserve-menu {
+  display: flex;
+  gap: 3%;
+  width: 100%;
+}
 
-  .user-reserve-menu-content  div {
-    
-  }
+.user-reserve-menu img {
+  width: 110px;
+  height: 110px;
+  border-radius: 5px;
+}
 
-  .user-reserve-menu-content div:nth-child(1) {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
+.user-reserve-menu-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 
-  .user-reserve-menu-content div:nth-child(2) {
-    height: 100%;
-    font-size: 13px;
-  }
+}
 
-  .user-reserve-menu-content div:nth-child(3) {
-    
-    text-align: right;
-    font-size: 16px;
-    font-weight: bold;
-  }
+.user-reserve-menu-content div {}
 
-.bi-heart {
-  color: red;
+.user-reserve-menu-content div:nth-child(1) {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.user-reserve-menu-content div:nth-child(2) {
+  height: 100%;
+  font-size: 13px;
+}
+
+.user-reserve-menu-content div:nth-child(3) {
+
+  text-align: right;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.bi-heart-fill {
+  color: #ccc;
 }
 
 .like {
-  color: blue;
+  color: #ff4d4d;
 }

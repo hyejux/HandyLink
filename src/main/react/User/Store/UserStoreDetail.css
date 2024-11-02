@@ -12,6 +12,43 @@
     font-style: normal;
   }
 
+
+
+
+
+
+
+  .modal {
+    position: fixed;
+    z-index: 101;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* 반투명 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-image {
+    max-width: 90%;
+    max-height: 90%;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+  }
+  
+
+
+
+
   .user-content-container {
     cursor: pointer; /* 기본적으로 포인터 커서 설정 */
 }

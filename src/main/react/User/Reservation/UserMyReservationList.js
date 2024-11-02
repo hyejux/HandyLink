@@ -71,7 +71,7 @@ function UserMyReservationList() {
                 <div className="reservation-time">{value.regTime} </div>
 
 
-                {value.reviewCount === 0 && value.reservationStatus === '확정' && (
+                {/* {value.reviewCount === 0 && value.reservationStatus === '확정' && ( */}
                 <button
                   onClick={(event) => {
                     event.stopPropagation(); // Prevents event bubbling
@@ -80,7 +80,7 @@ function UserMyReservationList() {
                 >
                   리뷰 작성하기
                 </button>
-              )}
+              {/* )} */}
 
 
               </div>

@@ -288,7 +288,7 @@ body {
 }
 .option-title {
   font-size: 15px;
-  color : #959595;
+  color : #2C348F;
 }
 .input-text {
   width: 100%;
@@ -325,6 +325,7 @@ body {
   /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
   margin-bottom: 20px;
   border: 1px solid #ddd;
+  font-size: 15px;
 
 }
 

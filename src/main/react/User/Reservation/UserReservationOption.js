@@ -78,7 +78,7 @@ function UserReservationOption() {
 
   // 입력값 변경 처리
   // 입력값 변경 처리
-  const handleCategoryInputChange = (index, value, servicePrice, categoryId) => {
+  const handleCategoryInputChange = (index, value, servicePrice, categoryId, isRequired) => {
     setCombinedInputs(prev => {
       const updatedInputs = [...prev];
       updatedInputs[index] = {
@@ -86,7 +86,8 @@ function UserReservationOption() {
 
         inputValue: value, // 입력값 업데이트
         servicePrice: servicePrice,// 서비스 가격 업데이트
-        categoryId: categoryId
+        categoryId: categoryId,
+        isRequired : isRequired
       };
       return updatedInputs;
     });
@@ -308,7 +309,7 @@ function UserReservationOption() {
                       className="input-text"
                       type="text"
                       value={combinedInputs[index]?.inputValue || ''}  // combinedInputs에서 value 가져오기
-                      onChange={(e) => handleCategoryInputChange(index, e.target.value, category.servicePrice, category.categoryId)}
+                      onChange={(e) => handleCategoryInputChange(index, e.target.value, category.servicePrice, category.categoryId, category.isRequired)}
                     />
                   </div>
                 </div>
@@ -328,7 +329,7 @@ function UserReservationOption() {
                       className="input-text2"
                       type="number"
                       value={combinedInputs[index]?.inputValue || ''}  // 통합된 상태에서 값 가져오기
-                      onChange={(e) => handleCategoryInputChange(index, e.target.value, category.servicePrice, category.categoryId)}
+                      onChange={(e) => handleCategoryInputChange(index, e.target.value, category.servicePrice, category.categoryId,  category.isRequired)}
                     />
                   </div>
                 </div>

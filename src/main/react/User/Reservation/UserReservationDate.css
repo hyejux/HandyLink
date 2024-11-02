@@ -255,17 +255,24 @@ body {
 /* --------------------------------------------------- */
 
 
-  .user-content-container {
+  .user-content-container2 {
     background-color: white;
     border-radius: 10px;
     margin: 20px;
-    padding: 20px;
+    padding: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    border: 1px solid #2C348F;
+    /* margin-bottom: 20px; */
+    border: 1px solid #ddd;
   }
 
 
+  .user-content-container3 {
+    background-color: white;
+    border-radius: 10px;
+    margin: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+  }
 
   .user-content-first{
     /* border: 1px solid red; */
@@ -364,14 +371,14 @@ body {
     margin-bottom: 20px;
   }
   .user-reserve-data{
-    border : 1px solid #2C348F;
+    /* border : 1px solid #2C348F; */
     border-radius: 50px;
     display: flex;
     justify-content: space-between;
     font-size: 15px;
     font-weight: bold;
-    padding: 9px 27px;
-    margin-bottom: 20px;
+    padding: 6px 25px;
+    /* margin-bottom: 20px; */
   }
   
   .user-reserve-data  .bi {
@@ -414,7 +421,7 @@ body {
 
 .user-content-last {
     /* border : 1px solid red; */
-    padding : 20px;
+    padding : 23px;
 }
 .user-content-last > button {
     float: right;
@@ -436,9 +443,9 @@ body {
 
 .react-calendar {
     font-family: 'Pretendard-Regular';
-    font-size: 20px;
-  width: 100%;
- max-width: 400px; /* 캘린더의 최대 너비 설정 */
+    font-size: 15px;
+  width: 90%;
+ max-width: 400px;
   background-color: #ffffff; /* 배경색 */
   border-radius: 10px; /* 부드러운 모서리 */
 /*  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); *//* 그림자 효과 */
@@ -453,7 +460,7 @@ body {
 
 .react-calendar__tile {
   max-width: 50px;
-      height: 54px;
+      height: 40px;
       background-color : #fff;
   border-radius: 50%; /* 타일의 부드러운 모서리 */
   display: flex;
@@ -468,7 +475,7 @@ body {
 }
 
 .react-calendar__tile:hover {
-  background-color: #bcc1ff; /* 호버 시 배경색 변화 */
+  background-color: #2C348F; /* 호버 시 배경색 변화 */
 }
 
 .react-calendar__tile--active {
@@ -491,7 +498,7 @@ body {
   background: none; /* 버튼 배경 제거 */
   border: none; /* 버튼 테두리 제거 */
   color: #2C348F; /* 버튼 텍스트 색상 */
-      font-size: 25px; /* 버튼 텍스트 크기 */
+      font-size: 22px; /* 버튼 텍스트 크기 */
       font-weight: bold;
         font-family: 'Pretendard-Regular';
         margin-bottom : 10px;

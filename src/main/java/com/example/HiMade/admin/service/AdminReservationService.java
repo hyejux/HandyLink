@@ -19,6 +19,7 @@ public interface AdminReservationService
 
   void setCategoryDel(int id);
   void setSlotAll(adminReserveAdd dto); // 슬롯 삽입
+
   public List<adminReserveMangeDTO> getManageList(int storeNo);
 
   //예약 상태 변경

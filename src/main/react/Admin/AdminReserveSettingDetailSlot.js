@@ -97,6 +97,7 @@ function AdminReserveSettingDetailSlot() {
                 axios.get(`/userReservation/getAllDateTime/${cateId}`)
                 .then(response => {
                     setReservationList(response.data);
+                
                 })
                
             })
@@ -209,6 +210,7 @@ function AdminReserveSettingDetailSlot() {
         console.log(localDateTimeString);
         axios.post('/userReservation/setUpdateStart', { serviceStart :  localDateTimeString , categoryId : cateId} )
         .then(response => {
+        
             console.log(response.data);
             
         }).catch(error => {
@@ -222,6 +224,7 @@ function AdminReserveSettingDetailSlot() {
               const firstServiceStart = response.data[0].serviceStart; // 첫 번째 객체의 serviceStart
               startDate = firstServiceStart; // 상태 업데이트
           }
+          
             const serviceStart = new Date(startDate);
             const formattedDate = `${serviceStart.getFullYear()}-${String(serviceStart.getMonth() + 1).padStart(2, '0')}-${String(serviceStart.getDate()).padStart(2, '0')}`; // YYYY-MM-DD 형식
             const formattedHour = `${String(serviceStart.getHours()).padStart(2, '0')}`; // HH 형식만 설정
@@ -229,6 +232,9 @@ function AdminReserveSettingDetailSlot() {
             setServiceDate(formattedDate); // 날짜 상태 설정
             setServiceHour(formattedHour); // 시간 상태 설정
             setReservationList(response.data);
+            alert('변경이 완료되었습니다.');
+            location.reload();
+
         })
         .catch(error => {
             console.log('Error fetching reservation list', error);

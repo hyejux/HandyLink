@@ -263,19 +263,48 @@ body {
 }
 
 .reservation-status {
-  color: #5a46db;
   font-weight: bold;
-  border: 1px solid #5a46db;
+  border: 1px solid;
   border-radius: 5px;
   display: inline-block;
   padding: 4px 8px;
   font-size: 12px;
 }
 
+.status-pending {
+  color: #b0b0b0;
+  border-color: #b0b0b0;
+}
+
+.status-confirmed {
+  color: #4CAF50; 
+  border-color: #4CAF50;
+}
+
+.status-completed {
+  color: #2196F3; 
+  border-color: #2196F3;
+}
+
+.status-canceled {
+  color: #F44336;
+  border-color: #F44336;
+}
+
 .reservation-time {
   text-align: right;
   color: #aaa;
   font-size: 12px;
+}
+
+.review-write-btn {
+  background-color: #2C348F;
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  padding: 4px 8px; 
+  font-size: 12px; 
+  cursor: pointer;
 }
 
 .store-name-title {
@@ -308,7 +337,7 @@ body {
   align-items: center;
   font-weight: bold;
   font-size: 14px;
-  border: 1px solid #5a46db;
+  border: 1px solid #2C348F;
   border-radius: 5px;
   padding: 5px 8px;
   justify-content: space-around;
@@ -317,7 +346,7 @@ body {
 
 
 .reservation-info-box > div i {
-  color: #5a46db;
+  color: #2C348F;
 }
 
 

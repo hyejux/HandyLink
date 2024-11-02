@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
 import ReactDOM from "react-dom/client";
 import useKakaoLoader from '../Payment/useKakaoLoader';
 import './UserSearchResult.css';
@@ -18,6 +19,7 @@ function UserSearchResult() {
   const [level1Categories, setLevel1Categories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredStores, setFilteredStores] = useState([]);
+  const [isBookmarked, setIsBookmarked] = useState([]); //찜
 
 
   useEffect(() => {
@@ -50,7 +52,7 @@ function UserSearchResult() {
         const formattedData = data.map(([serviceName, storeNo, servicePrice]) => ({
           serviceName,
           storeNo,
-          servicePrice, 
+          servicePrice,
         }));
         setLevel1Categories(formattedData);
       })
@@ -182,96 +184,170 @@ function UserSearchResult() {
     window.location.href = `/userStoreDetail.user/${id}`;
   }
 
+  //가게 찜하기
+  const handleStoreLike = async (store) => {
+    console.log("가게번호 ", store.storeNo);
+
+    try {
+      const resp = await axios.post('/userStoreList/storeLike', { storeNo: store.storeNo });
+      setIsBookmarked(prev =>
+        prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) //찜 해제
+          : [...prev, store.storeNo] //찜 추가
+      );
+
+    } catch (error) {
+      console.log("찜하던 중 error ", error);
+    }
+  };
+
+
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const dropdownRef = useRef(null); // 드롭다운 요소에 대한 참조
+
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+
+  const closeDropdown = () => {
+    setIsDropdownVisible(false);
+  };
+
+  // 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        closeDropdown();
+      }
+    };
+
+    // 마운트 시 이벤트 리스너 추가
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      // 언마운트 시 이벤트 리스너 제거
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div>
+      <div className="search-result-header">
+        <div className="search-box">
+          <div className="back-btn-container">
+            <button className="back-btn" onClick={() => window.history.back()}><i class="bi bi-chevron-left"></i></button>
+          </div>
+          <div className="store-search-bar">
+            <button className="search-btn" onClick={handleSearch}><i className="bi bi-search"></i></button>
+            <input type="text" placeholder="찾으시는 가게가 있나요?" value={searchTerm} onChange={handleInputChange}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  handleSearch();
+                }
+              }} />
+          </div>
+        </div>
 
-      <div className="search-result-top">
-        <div className="back-btn-container">
-          <button className="back-btn" onClick={() => window.history.back()}><i class="bi bi-chevron-left"></i></button>
+        <div className="search-result-filter">
+          <div className="left">검색결과 몇 개</div>
+
+          <div className="right" onClick={toggleDropdown}>추천순</div>
+          {isDropdownVisible && (
+            <div className="filter-dropdown" ref={dropdownRef}>
+
+              <div className="filter-list">
+                <div className="filter-list-btn"><span>주문 많은 순</span><i className="bi bi-check2"></i></div>
+                <div className="filter-list-btn">리뷰 많은 순</div>
+                <div className="filter-list-btn">별점 높은 순</div>
+                <div className="filter-list-btn">가까운 순</div>
+                <div className="filter-list-btn">가격 순</div>
+                <div className="filter-list-btn">찜 많은 순</div>
+              </div>
+
+
+              <div className="filter=close-btn-box">
+                <button className="filter-close-btn" onClick={closeDropdown}>닫기</button>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="store-search-bar">
-          <button className="search-btn" onClick={handleSearch}><i className="bi bi-search"></i></button>
-          <input type="text" placeholder="찾으시는 가게가 있나요?" value={searchTerm} onChange={handleInputChange}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                handleSearch();
-              }
-            }} />
-        </div>
+
       </div>
 
+      <div className="search-result-body-fix">
+        <div className="search-result-list-container">
+          <div className="search-result-list-content-box">
+            {filteredStores.length > 0 ? (
+              filteredStores.map((store) => {
+                const storeDistance = distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음';
+                const imageUrl = store.storeImages.length > 0
+                  ? store.storeImages[0].storeImgLocation
+                  : "/img/cake001.jpg"; // 기본 이미지 설정
 
-      <div className="search-result-list-container">
-        {filteredStores.length > 0 ? (
-          filteredStores.map((store) => {
-            const storeDistance = distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음';
-            const imageUrl = store.storeImages.length > 0
-            ? store.storeImages[0].storeImgLocation
-            : "/img/cake001.jpg"; // 기본 이미지 설정
+                return (
+                  <div className="search-result-list-content" key={store.storeId} onClick={() => goToStoreDetail(store.storeNo)}>
+                    <button className="button bookmark-btn2" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                      <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
+                    </button>
+                    <div className="result-list-content-img-box">
+                      <img src={imageUrl} alt={store.storeName} />
+                    </div>
 
-            return (
-              <div className="search-result-list-content" key={store.storeId} onClick={() => goToStoreDetail(store.storeNo)}>
-                <i className="bi bi-heart"></i>
-                <div className="result-list-content-img-box">
-                  <img src={imageUrl} alt={store.storeName} />
-                </div>
+                    <div className="result-list-top">
+                      <div className="result-list-container">
+                        <span className="result-list-title">{store.storeName}</span>
+                        <span className="result-list-category">{store.storeCate}</span>
+                      </div>
+                    </div>
 
-                <div className="result-list-top">
-                  <div className="result-list-container">
-                    <span className="result-list-title">{store.storeName}</span>
-                    <span className="result-list-category">{store.storeCate}</span>
-                  </div>
-                </div>
-
-                <div className="result-list-mid">
-                  <div className="result-list-date">
-                    <i className="bi bi-clock-fill"></i>영업시간: {store.storeOpenTime ? store.storeOpenTime.slice(0, 5) : ''} - {store.storeCloseTime ? store.storeCloseTime.slice(0, 5) : ''}
-                    <span className="result-list-location">
-                      <i className="bi bi-geo-alt-fill"></i>현재 위치에서 {storeDistance}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="result-list-bottom">
-                  <div className="result-list-option-container">
-                    {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category, index) => (
-                      <div key={index}>
-                        <span className="result-list-option">
-                          <i className="bi bi-hash"></i>
-                          {category.serviceName}
+                    <div className="result-list-mid">
+                      <div className="result-list-date">
+                        <i className="bi bi-clock-fill"></i>영업시간: {store.storeOpenTime ? store.storeOpenTime.slice(0, 5) : ''} - {store.storeCloseTime ? store.storeCloseTime.slice(0, 5) : ''}
+                        <span className="result-list-location">
+                          <i className="bi bi-geo-alt-fill"></i>현재 위치에서 {storeDistance}
                         </span>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </div>
 
-                <div className="result-list-bottom">
-                  <div className="result-list-review">
-                    <i className="bi bi-star-fill"></i> <span>{store.averageRating}</span>
-                    <span>({store.reviewCount})</span>
-                  </div>
-                  <div className="result-list-price">
-                    {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (
-                      <div key={index}>
-                        ₩ {category.servicePrice || '0,000'} ~
+                    <div className="result-list-bottom">
+                      <div className="result-list-option-container">
+                        {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category, index) => (
+                          <div key={index}>
+                            <span className="result-list-option">
+                              <i className="bi bi-hash"></i>
+                              {category.serviceName}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    </div>
+
+                    <div className="result-list-bottom">
+                      <div className="result-list-review">
+                        <i className="bi bi-star-fill"></i> <span>{store.averageRating}</span>
+                        <span>({store.reviewCount})</span>
+                      </div>
+                      <div className="result-list-price">
+                        {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (
+                          <div key={index}>
+                            ₩ {category.servicePrice || '0,000'} ~
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
                   </div>
-                </div>
+                );
+              })
+            ) : (
+              <div className="no-stores">Loading...</div>
+            )}
+          </div>
+        </div>
 
-              </div>
-            );
-          })
-        ) : (
-          <div className="no-stores">Loading...</div>
-        )}
-      </div>
-
-      {/* <div className='load-more-btn-wrap'>
+        {/* <div className='load-more-btn-wrap'>
           <button onClick={handleLoadMore} className="load-more-btn">추천 가게 더 보기</button>
         </div> */}
 
+      </div>
     </div>
   );
 }

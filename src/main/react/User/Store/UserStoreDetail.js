@@ -164,7 +164,18 @@ function UserStoreDetail() {
 
   }, []);
 
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(false);
 
+  const openModal = (imgUrl) => {
+    setSelectedImage(imgUrl);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedImage(null);
+  };
 
 
   // const formatServiceStartDate = (dateString) => {
@@ -358,7 +369,6 @@ function UserStoreDetail() {
                     <i className={`bi bi-heart-fill ${isBookmarked.includes(storeInfo.storeNo) ? 'like' : ''}`}></i>
                   </button>
 
-
                   <div className="store-name">{storeInfo.storeName}</div>
                 </div>
                 <button type="button" onClick={handleInquiryClick}><i className="bi bi-chat-dots"></i></button>{/*문의하기 버튼*/}
@@ -540,10 +550,10 @@ function UserStoreDetail() {
               <div className="review-section">
                 <h2>포토 리뷰</h2>
                 <div className="photo-review">
-                  {reviewPhotoList.slice(0, 4).map((photo, index) => (
+                  {reviewPhotoList.slice(0, 3).map((photo, index) => (
                     <div className="photo-item" key={index}>
                       <img src={photo.reviewImgUrl} alt="Review Photo" />
-                      {index === 3 && (
+                      {index === 2 && (
                         <div className="photo-item more" onClick={() => setActiveSection('photo')}>
                           +더보기
                         </div>
@@ -573,10 +583,15 @@ function UserStoreDetail() {
                           // 'blob:'를 제거한 URL 생성
                           const formattedUrl = imgUrl.replace('blob:', '');
                           return (
-                            <img key={index} className="photo-item2" src={formattedUrl} alt={`Review image ${index + 1}`} />
+                            <img key={index} className="photo-item2" src={formattedUrl} alt={`Review image ${index + 1}`}
+                              onClick={() => openModal(formattedUrl)} // 클릭 시 모달 열기
+                              style={{ cursor: 'pointer' }}
+                            />
                           );
                         })}
                       </div>
+
+
 
                       <div className="review-header">
                         <span className="reviewer-name">{review.userName}</span>
@@ -624,17 +639,30 @@ function UserStoreDetail() {
             </div>
           )}
 
+          {isModalOpen && (
+            <div className="modal" onClick={closeModal}>
+              <span className="close-button" onClick={closeModal}>×</span>
+              <img src={selectedImage} alt="Selected" className="modal-image" />
+            </div>
+          )}
+
+
 
           {/* 포토 리스트  */}
           {activeSection === 'photo' && (
             <div className="user-content-container5">
               <div className="review-section">
 
+
+
                 <i class="bi bi-chevron-left" onClick={() => setActiveSection('review')}></i>
                 <h2>포토 리뷰</h2>
                 <div className="photo-review3">
                   {reviewPhotoList.map((photo, index) => (
-                    <div className="photo-item"> <img key={index} src={photo.reviewImgUrl} alt="Review Photo" /></div>
+                    <div className="photo-item"> <img key={index} src={photo.reviewImgUrl} alt="Review Photo"
+                      onClick={() => openModal(photo.reviewImgUrl)} // 클릭 시 모달 열기
+                      style={{ cursor: 'pointer' }}
+                    /></div>
 
                   ))}
 
@@ -658,4 +686,3 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <UserStoreDetail />
 );
-

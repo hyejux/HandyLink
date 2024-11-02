@@ -106,6 +106,13 @@
         WHERE reservation_no = #{reservationId}
     </update>
 
+
+    <update id="setSlotActivated">
+        update reservation_slot
+        set reservation_active = 'N'
+        where store_no = #{StoreNo} AND category_id = #{categoryId} AND reservation_slot_date = #{reservationSlotDate}
+    </update>
+
     <insert id="setSlotAll" parameterType="com.example.HiMade.admin.dto.adminReserveAdd">
         INSERT INTO reservation_slot(
         reservation_slot_date,

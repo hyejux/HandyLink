@@ -14,6 +14,44 @@
   font-style: normal;
 }
 
+
+
+
+
+
+
+.modal {
+  position: fixed;
+  z-index: 101;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  /* 반투명 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-image {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+}
+
+
+
+
+
 .user-content-container {
   cursor: pointer;
   /* 기본적으로 포인터 커서 설정 */
@@ -40,7 +78,7 @@
 
 .photo-review3 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   /* 3열로 배치 */
   gap: 16px;
   /* 이미지 사이의 간격 */
@@ -72,7 +110,7 @@ h2 {
 
 .photo-item {
   width: 100%;
-  height: 150px;
+  height: 110px;
   background-color: #f0f0f0;
   border-radius: 8px;
 
@@ -296,19 +334,6 @@ body {
 }
 
 
-.user-bottom-nav a {
-  color: #000;
-  text-align: center;
-  text-decoration: none;
-  font-size: 15px;
-  flex: 1;
-}
-
-.user-bottom-nav a span {
-  display: block;
-  margin-top: 5px;
-}
-
 
 
 /* 상단 버튼 디자인 */
@@ -465,10 +490,8 @@ body {
   height: 50px;
   font-size: 25px;
   background-color: #fff;
-  color: #eee;
   border: none;
   padding-left: 0;
-  cursor: pointer;
 }
 
 .store-name-box button:active {

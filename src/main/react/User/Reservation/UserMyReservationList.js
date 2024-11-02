@@ -55,7 +55,7 @@ function UserMyReservationList() {
 
   return (
     <div>
-      <div className="user-main-content my-reservation-list" >
+      <div className="user-main-content" >
 
         <div className="user-top-nav">
           {/* <i className="bi bi-arrow-left"></i> */}
@@ -71,16 +71,16 @@ function UserMyReservationList() {
               <div className="reservation-time">{value.regTime} </div>
 
 
-              {value.reviewCount === 0 && value.reservationStatus === '확정' && (
-                <button
-                  onClick={(event) => {
-                    event.stopPropagation(); // Prevents event bubbling
-                    goToReview(value.reservationNo); // Call the function to navigate to the review page
-                  }}
-                >
-                  리뷰 작성하기
-                </button>
-              )}
+              {/* {value.reviewCount === 0 && value.reservationStatus === '확정' && ( */}
+              <button
+                onClick={(event) => {
+                  event.stopPropagation(); // Prevents event bubbling
+                  goToReview(value.reservationNo); // Call the function to navigate to the review page
+                }}
+              >
+                리뷰 작성하기
+              </button>
+              {/* )} */}
 
 
             </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './AdminChat.css';
+import ProfileCard from './ProfileCard.js';
 import ReactDOM from "react-dom/client";
 
 function AdminChat() {
@@ -18,6 +19,9 @@ function AdminChat() {
     const chatBoxRef = useRef(null);
     const websocket = useRef(null);
     const inputRef = useRef(null);
+    const [isProfileCardVisible, setIsProfileCardVisible] = useState(false);
+    const [profileCardUserInfo, setProfileCardUserInfo] = useState(null);
+
 
     // 시간 포맷팅 함수
     const formatTime = (timestamp) => {
@@ -100,27 +104,48 @@ function AdminChat() {
         }
     }, []);
 
+    const handleProfileClick = async (e) => {
+        e.stopPropagation();
+        if (selectedUserInfo && selectedUserInfo.userid) {
+            try {
+                const userInfo = await fetchUserDetail(selectedUserInfo.userid);
+                setProfileCardUserInfo(userInfo); // 프로필 카드에 표시할 정보 업데이트
+                setIsProfileCardVisible(true); // 프로필 카드 표시
+            } catch (error) {
+                console.error("프로필 정보를 불러올 수 없습니다:", error);
+            }
+        }
+    };
+
+
+
+    const closeProfileCard = () => {
+        setIsProfileCardVisible(false);
+    };
+
     // 사용자 프로필 정보 가져오기
     const fetchUserDetail = async (userId) => {
         try {
             const response = await axios.get(`/user/profile/${userId}`);
             console.log('User profile:', response.data);
+            return response.data;
         } catch (error) {
             console.error("사용자 정보를 불러오는데 실패했습니다:", error);
         }
     };
 
     // 프로필 클릭 핸들러
-    const handleProfileClick = (e) => {
-        e.stopPropagation();
-        if (selectedUserInfo && selectedUserInfo.userid) {  // userid로 수정 (소문자)
-            fetchUserDetail(selectedUserInfo.userid);
-        }
-    };
+    // const handleProfileClick = (e) => {
+    //     e.stopPropagation();
+    //     if (selectedUserInfo && selectedUserInfo.userid) {  // userid로 수정 (소문자)
+    //         fetchUserDetail(selectedUserInfo.userid);
+    //     }
+    // };
 
     // 채팅방 선택 시 메시지 불러오기
     const handleChatSelect = async (userId) => {
         setSelectedUserId(userId);
+        setIsProfileCardVisible(false);
         const selectedUser = chatList.find(chat => chat.userid === userId);
         setSelectedUserInfo(selectedUser);
 
@@ -152,26 +177,30 @@ function AdminChat() {
 
             websocket.current.onmessage = (event) => {
                 const received = JSON.parse(event.data);
-                if (received.storeId === storeId) {
-                    // 현재 채팅방의 메시지 업데이트
-                    setMessages(prevMessages => [...prevMessages, received]);
+                console.log("수신된 메시지:", received);
 
-                    // 채팅 목록 업데이트
-                    setChatList(prevList => {
-                        return prevList.map(chat => {
-                            if (chat.userid === received.userId) {
-                                return {
-                                    ...chat,
-                                    lastmessage: received.chatMessage,
-                                    lastmessagetime: received.sendTime
-                                };
-                            }
-                            return chat;
-                        }).sort((a, b) =>
-                            // 최신 메시지가 위로 오도록 정렬
-                            new Date(b.lastmessagetime) - new Date(a.lastmessagetime)
-                        );
-                    });
+                // 현재 선택된 채팅방의 메시지인지 확인
+                if (received.storeNo === storeNo && received.userId === selectedUserId) {
+                    // USER가 보낸 메시지일 때만 추가 (STORE가 보낸 건 이미 local state에 추가됨)
+                    if (received.senderType === 'USER') {
+                        setMessages(prevMessages => [...prevMessages, received]);
+
+                        // 채팅 목록 업데이트
+                        setChatList(prevList => {
+                            return prevList.map(chat => {
+                                if (chat.userid === received.userId) {
+                                    return {
+                                        ...chat,
+                                        lastmessage: received.chatMessage,
+                                        lastmessagetime: received.sendTime
+                                    };
+                                }
+                                return chat;
+                            }).sort((a, b) =>
+                                new Date(b.lastmessagetime) - new Date(a.lastmessagetime)
+                            );
+                        });
+                    }
                 }
             };
 
@@ -193,30 +222,7 @@ function AdminChat() {
                 websocket.current.close();
             }
         };
-    }, [storeId]);
-
-    // 메시지 전송
-    // const handleSend = async (e) => {
-    //     e.preventDefault();
-    //     if (!messageInput.trim() || !selectedUserId) return;
-    //
-    //     const message = {
-    //         senderType: 'STORE',
-    //         storeId,
-    //         storeNo,
-    //         userId: selectedUserId,
-    //         chatMessage: messageInput.trim(),
-    //         sendTime: new Date().toISOString()
-    //     };
-    //
-    //     try {
-    //         websocket.current.send(JSON.stringify(message));
-    //         await axios.post('/adminChat/save', message);
-    //         setMessageInput("");
-    //     } catch (error) {
-    //         console.error("메시지 전송 실패:", error);
-    //     }
-    // };
+    }, [storeId, selectedUserId]);
 
     const handleSend = async (e) => {
         e.preventDefault();
@@ -239,6 +245,7 @@ function AdminChat() {
                 console.log('메시지 전송 완료');
 
                 await axios.post('/adminChat/save', message);
+                console.log('메시지 저장 후 WebSocket 상태:', websocket.current.readyState);
                 setMessageInput("");
 
                 // 로컬에서 메시지 추가
@@ -337,6 +344,11 @@ function AdminChat() {
                                 </div>
                             ))}
                         </div>
+
+                        {isProfileCardVisible && profileCardUserInfo && (
+                            <ProfileCard user={profileCardUserInfo} onClose={closeProfileCard} />
+                        )}
+
                         <div className="message-input">
                             <input
                                 type="text"
@@ -350,6 +362,7 @@ function AdminChat() {
                     </>
                 )}
             </div>
+
         </div>
     );
 }

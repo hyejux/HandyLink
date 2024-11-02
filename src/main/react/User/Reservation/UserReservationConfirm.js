@@ -321,6 +321,23 @@ function UserReservationConfirm() {
 
         <div className="user-main-content">
 
+        <div className="user-content-container">
+            <div className="user-reserve-menu">
+              <div className="user-reserve-menu-img">
+                <img src={`${reserveModi.imageUrl}`} alt="My Image" />
+              </div>
+              <div className="user-reserve-menu-content">
+                <div>{reserveModi.serviceName} </div>
+                <div>
+                  {reserveModi.serviceContent}
+
+                </div>
+                <div> {reserveModi.servicePrice} 원 ~</div>
+
+              </div>
+            </div>
+          </div>
+          <hr />
 
           <div className="user-content-container2">
             <div className="user-reserve-title">예약자 정보</div>
@@ -339,23 +356,7 @@ function UserReservationConfirm() {
           <hr />
 
 
-          <div className="user-content-container">
-            <div className="user-reserve-menu">
-              <div className="user-reserve-menu-img">
-                <img src={`${reserveModi.imageUrl}`} alt="My Image" />
-              </div>
-              <div className="user-reserve-menu-content">
-                <div>{reserveModi.serviceName} </div>
-                <div>
-                  {reserveModi.serviceContent}
-
-                </div>
-                <div> {reserveModi.servicePrice} 원 ~</div>
-
-              </div>
-            </div>
-          </div>
-          <hr />
+      
 
 
           <div className="user-content-container2">
@@ -371,7 +372,7 @@ function UserReservationConfirm() {
           </div>
           <hr />
 
-          <div className="user-content-container6">
+          <div className="user-content-container2">
             <div className="user-reserve-title2">예약 정보</div>
           </div>
           <div className="user-content-container2">
@@ -484,7 +485,7 @@ function UserReservationConfirm() {
 
 
           {/* 결제 부분 */}
-          <div className="user-content-container3">
+          <div className="user-content-container2">
             <div className="user-payment-title">
               <h3>결제수단</h3>
             </div>

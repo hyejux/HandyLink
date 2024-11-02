@@ -495,7 +495,8 @@ body {
     width: 100%;
   }
   .user-reserve-menu img{
-    width: 150px;
+    width: 110px;
+    height: 110px;
     border-radius: 5px;
   }
   .user-reserve-menu-content{
@@ -510,19 +511,20 @@ body {
   }
 
   .user-reserve-menu-content div:nth-child(1) {
-    font-size: 25px;
+    font-size: 16px;
     font-weight: bold;
     margin-bottom: 10px;
   }
 
   .user-reserve-menu-content div:nth-child(2) {
     height: 100%;
+    font-size: 13px;
   }
 
   .user-reserve-menu-content div:nth-child(3) {
     
     text-align: right;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
   }
 

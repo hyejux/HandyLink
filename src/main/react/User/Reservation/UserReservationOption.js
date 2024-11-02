@@ -276,12 +276,12 @@ function UserReservationOption() {
             <div className="user-reserve-title">예약자 정보</div>
             <div className="user-content-container3">
               <div className="sub-container3">
-                <div className="bold-text">예약자 성함</div>
+                <div className="bold-text">성함</div>
                 <div>{userName}</div>
               </div>
 
               <div className="sub-container3">
-                <div className="bold-text">예약자 전화번호</div>
+                <div className="bold-text">전화번호</div>
                 <div>{userPhonenum}</div>
               </div>
             </div>

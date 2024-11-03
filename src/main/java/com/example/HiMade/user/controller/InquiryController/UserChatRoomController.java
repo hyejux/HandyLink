@@ -62,17 +62,21 @@ public class UserChatRoomController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    // 채팅 목록 조회
     @GetMapping("/list")
     public ResponseEntity<?> getChatList(@RequestParam String userId) {
         try {
-            // 현재 로그인한 사용자와 요청된 userId가 일치하는지 확인
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (!auth.getName().equals(userId)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("접근 권한이 없습니다.");
             }
 
             List<Map<String, Object>> chatList = userChatRoomService.getChatListForUser(userId);
+
+            // 전체 데이터 구조 확인
+            for (Map<String, Object> chat : chatList) {
+                logger.info("채팅방 데이터: {}", chat.toString());
+            }
+
             return ResponseEntity.ok(chatList);
         } catch (Exception e) {
             logger.error("채팅 목록 조회 중 오류 발생", e);
@@ -93,12 +97,19 @@ public class UserChatRoomController {
     }
 
 
-    @GetMapping("/checkNewMessages")
-    public List<UserChatDTO> checkNewMessages(
-            @RequestParam String userId,
-            @RequestParam Long storeNo,
-            @RequestParam Timestamp lastCheckedTime) {
-        return userChatRoomService.findNewMessages(userId, storeNo, lastCheckedTime);
+//    @GetMapping("/checkNewMessages")
+//    public List<UserChatDTO> checkNewMessages(
+//            @RequestParam String userId,
+//            @RequestParam Long storeNo,
+//            @RequestParam Timestamp lastCheckedTime) {
+//        return userChatRoomService.findNewMessages(userId, storeNo, lastCheckedTime);
+//    }
+
+    @PostMapping("/updateLastCheckedTime")
+    public ResponseEntity<Void> updateLastCheckedTime(@RequestParam Long storeNo, @RequestParam String userId) {
+        System.out.println("로그 updateLastCheckedTime - storeNo: " + storeNo + ", userId: " + userId);
+        userChatRoomService.updateLastCheckedTime(userId, storeNo);
+        return ResponseEntity.ok().build();
     }
 
 

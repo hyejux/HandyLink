@@ -7,8 +7,7 @@ function UserChatList() {
     const [userId, setUserId] = useState(null);
     const [chatList, setChatList] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [selectedStoreNo, setSelectedStoreNo] = useState(null);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -28,35 +27,21 @@ function UserChatList() {
         if (userId) {
             const fetchChatList = async () => {
                 try {
-                    setLoading(true);
                     const response = await axios.get(`/chat/list?userId=${userId}`);
-                    console.log('채팅 목록 데이터:', response.data); // 디버깅 로그
+                    console.log('채팅 목록:', response.data);
                     setChatList(response.data);
                 } catch (error) {
                     console.error("채팅 목록을 가져오는 중 오류가 발생했습니다:", error);
-                    setError("채팅 목록을 불러오는데 실패했습니다");
-                } finally {
-                    setLoading(false);
                 }
             };
             fetchChatList();
         }
     }, [userId]);
 
-
     // 검색 기능 구현
     const filteredChatList = chatList.filter(chat =>
         (chat.storename || "").toLowerCase().includes(searchTerm.toLowerCase())
     );
-
-    if (loading) {
-        return (
-            <div className="user-chat-container">
-                <div className="loading-spinner">로딩 중...</div>
-            </div>
-        );
-    }
-
 
     // 시간 포맷팅 함수
     const formatTime = (timestamp) => {
@@ -85,27 +70,10 @@ function UserChatList() {
         }
     };
 
-    if (loading) {
-        return (
-            <div className="user-chat-container">
-                <div className="loading-spinner">로딩 중...</div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="user-chat-container">
-                <div className="error-message">{error}</div>
-            </div>
-        );
-    }
-
     return (
         <div>
             <div className="user-chat-container">
                 <div className="user-chat-header">1:1 채팅 목록</div>
-
                 <div className="search-bar">
                     <input
                         type="text"
@@ -116,7 +84,6 @@ function UserChatList() {
                     />
                     <i className="bi bi-search search-icon"></i>
                 </div>
-
                 {filteredChatList.length === 0 ? (
                     <div className="no-results">
                         {searchTerm ? "검색 결과가 없습니다" : "채팅 내역이 없습니다"}
@@ -125,37 +92,38 @@ function UserChatList() {
                     <ul className="inquiry-list">
                         {filteredChatList.map((chat, index) => (
                             <li
-                                key={`${chat.storeno}-${index}`} // 각 항목에 고유한 key 부여
+                                key={`${chat.storeNo}-${index}`}
                                 className="inquiry-item"
-                                onClick={() => {
-                                    console.log("겟한 store_no", chat.storeno);
-                                    window.location.href = `/UserChatRoom.user?storeNo=${chat.storeno}`;
+                                onClick={async () => {
+                                    try {
+                                        console.log("클릭된 storeNo:", chat.storeNo);
+                                        console.log("현재 userId:", userId);
+                                        // 채팅방으로 이동하기 전에 마지막 확인 시간 업데이트
+                                        await axios.post(`/chat/updateLastCheckedTime?userId=${userId}&storeNo=${chat.storeNo}`);
+                                        setSelectedStoreNo(chat.storeNo);
+                                        window.location.href = `/UserChatRoom.user?storeNo=${chat.storeNo}`;
+                                    } catch (error) {
+                                        console.error("마지막 확인 시간 업데이트 실패:", error);
+                                        window.location.href = `/UserChatRoom.user?storeNo=${chat.storeNo}`;
+                                    }
                                 }}
                             >
                                 <img
-                                    src={chat.storeimgurl || '/img/user_basic_profile.jpg'}
-                                    alt={chat.storename}
+                                    src={chat.storeImgUrl || '/img/user_basic_profile.jpg'}
+                                    alt={chat.storeName}
                                     className="store-image"
-                                    onError={(e) => {
-                                        e.target.src = '/img/user_basic_profile.jpg'; // 기본 이미지로 대체
-                                    }}
                                 />
                                 <div className="inquiry-content">
-                                    <p className="inquiry-title">{chat.storename}</p>
+                                    <p className="inquiry-title">{chat.storeName}</p>
                                     <p className="chat-preview">
-                                        {chat.lastmessage.length > 30
-                                            ? `${chat.lastmessage.substring(0, 30)}...`
-                                            : chat.lastmessage}
+                                        {chat.lastMessage.length > 30 ? `${chat.lastMessage.substring(0, 30)}...` : chat.lastMessage}
                                     </p>
                                 </div>
-                                <span className="inquiry-time">
-                                    {formatTime(chat.lastmessagetime)}
-                                </span>
+                                <span className="inquiry-time">{formatTime(chat.lastMessageTime)}</span>
+                                {chat.isNewMessage && <span className="new-message-dot">●</span>}
                             </li>
                         ))}
-
                     </ul>
-
                 )}
             </div>
         </div>

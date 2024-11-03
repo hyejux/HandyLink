@@ -11,6 +11,7 @@
         from store_notice
         where  (status = 'Y' or status = 'D')
         and store_no = #{storeNo}
+        order by notice_no desc
 
     </select>
 <!-- 스토어 넘버 변경 -->

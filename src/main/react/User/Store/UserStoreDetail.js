@@ -128,14 +128,19 @@ function UserStoreDetail() {
       .catch(error => {
         console.log('Error Category', error);
       });
-    axios.get(`/adminStore/getNoticeList/${categoryId}`)
+      axios.get(`/adminStore/getNoticeList/${categoryId}`)
       .then(response => {
-        console.log(response.data);
-        setNoticeList(response.data);
+        const modifiedData = response.data.map(notice => ({
+          ...notice,
+          noticeRegdate: notice.noticeRegdate.split("T")[0] // 날짜 부분만 저장
+        }));
+        console.log(modifiedData);
+        setNoticeList(modifiedData);
       })
       .catch(error => {
         console.log('Error Category', error);
       });
+    
     axios.get(`/userReservation/getReviewList/${categoryId}`)
       .then(response => {
         console.log(response.data);
@@ -460,41 +465,51 @@ function UserStoreDetail() {
           {/* 소식 */}
           {activeSection === 'info' && (
 
-            <div>
+<div>
+  {noticeList.map((notice, index) => (
+    notice.status === 'Y' && (
+      <React.Fragment key={index}>
+        <div className="user-content-container11">
+  {/* 기본 정보는 항상 보이게 함 */}
+  <div className="notice-top">
+  <div
+  className="type-title"
+  style={{
+    backgroundColor: notice.noticeType === '소식' ? '#8dc4ff4a' : 
+                    notice.noticeType === '공지사항' ? '#ffdfdf' : 'transparent'
+  }}
+>
+  {notice.noticeType}
+</div>
+    <duv>{notice.noticeRegdate}</duv>
+  </div>
 
-              {noticeList.map((notice, index) => (
-                notice.status === 'Y' && ( // status가 'Y'인 경우에만 렌더링
-                  <React.Fragment key={index}>
-                    <div className="user-content-container">
-                      <i
-                        className="bi bi-chevron-down"
-                        style={{ float: 'right' }}
-                        onClick={() => handleToggleRow(index)}
-                      ></i>
-                      {expandedRows.includes(index) ? (
-                        <div>
-                          {/* 확장된 내용을 표시 */}
-                          <div className="expanded-content">
-                            <p>카테고리: {notice.noticeType}</p>
-                            <p>소식 내용: {notice.noticeContent}</p>
-                            <p>등록일: {notice.noticeRegdate}</p>
-                          </div>
-                        </div>
-                      ) : (
-                        <div>
-                          {/* 기본 내용, 확장되지 않았을 때 보이는 부분 */}
-                          <div>{notice.noticeType}</div>
-                          <div>{notice.noticeContent.slice(0, 50)}...</div>
-                          <div>{notice.noticeRegdate}</div>
-                        </div>
-                      )}
-                    </div>
-                  </React.Fragment>
-                )
-              ))}
+  {/* noticeContent는 토글로 표시 */}
+  {expandedRows.includes(index) ? (
+    <div>
+      <div className='notice-content1'>{notice.noticeContent}</div>
+      <span onClick={() => handleToggleRow(index)} style={{color : '#686868'}}>접기</span>
+    </div>
+  ) : (
+    <div>
+      <div>
+        {notice.noticeContent.length > 100
+          ? `${notice.noticeContent.slice(0, 100)}`
+          : notice.noticeContent}
+      </div>
+      {notice.noticeContent.length > 100 && (
+        <span onClick={() => handleToggleRow(index)} style={{color : '#686868'}} >... 더보기</span>
+      )}
+    </div>
+  )}
+</div>
+
+      </React.Fragment>
+    )
+  ))}
+</div>
 
 
-            </div>
 
           )}
 

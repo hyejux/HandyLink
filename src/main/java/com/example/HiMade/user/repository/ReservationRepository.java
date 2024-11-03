@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     Reservation findByReservationNo(Long reservationNo);
+    Long countByStore_StoreNo(Long storeNo);
 }
+

@@ -201,7 +201,7 @@ function UserSearch() {
 
       <div className="search-top">
         <div className='left'>검색</div>
-        <div className='right'><i className="bi bi-bell-fill"></i></div>
+        <div className='right'><i className="bi bi bi-heart"></i></div>
       </div>
 
       <div className="store-search-bar">
@@ -213,7 +213,7 @@ function UserSearch() {
             }
           }} />
       </div>
-      
+
 
       {/* 카테고리 배너 */}
       <div className="user-search-content">
@@ -253,20 +253,20 @@ function UserSearch() {
         </div>
       </div>
 
-
       {/* 이 달 인기가게 */}
       <div className="user-hit-search-list">
         <div className='list-header'>11월 인기 가게</div>
         <ol className="store-list">
-          {store.map((store, index) => (
-            <li key={store.storeId}> {/* 여기에 key 추가 */}
-              {index + 1} <a href={`/userStoreDetail.user/${store.storeNo}`}>{store.storeName}</a>
-            </li>
-          ))}
+          {store
+            .slice() // 원본 배열을 변형하지 않기 위해 복사
+            .sort((a, b) => (b.reservationCount || 0) - (a.reservationCount || 0)) // 예약 개수에 따라 내림차순 정렬
+            .map((store, index) => (
+              <li key={store.storeId}>
+                {index + 1} <a href={`/userStoreDetail.user/${store.storeNo}`}>{store.storeName}</a>
+              </li>
+            ))}
         </ol>
       </div>
-
-
 
     </div>
   );

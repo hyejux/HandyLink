@@ -100,6 +100,12 @@ function UserMyReservationDetail() {
     return `${date.getUTCFullYear()}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${String(date.getUTCDate()).padStart(2, '0')} ${String(date.getUTCHours() + 9).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}:${String(date.getUTCSeconds()).padStart(2, '0')}`;
   };
 
+  // 예약 일시 포맷 (년.월.일)
+  const formatDate3 = (isoDateString) => {
+    const date = new Date(isoDateString);
+    return `${date.getUTCFullYear()}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${String(date.getUTCDate()).padStart(2, '0')}`;
+  };
+
 
   // 예약 취소 버튼 클릭 시 결제 상태 업데이트
   const cancelReservation = async () => {
@@ -143,39 +149,45 @@ function UserMyReservationDetail() {
         <div className='payment-date'>{formatDate2(reservationDetail.regTime)}</div>
       </div>
 
+      <hr />
+
       {/* 입금정보 */}
       {reservationDetail.reservationStatus === "입금대기" && (
-        <div className="user-content-container">
-          <div className='payment-info-top'>
-            <div className='deposit-date'></div>
-          </div>
-          <div className="payment-info-top">
-            <div className="account-left">입금 대기금액</div>
-            <div className="account-right">
-              {paymentInfo.length > 0 ? paymentInfo[0].paymentAmount.toLocaleString() : '정보 없음'} 원
+        <>
+          <div className="user-content-container">
+            <div className='payment-info-top'>
+              <div className='deposit-date'></div>
+            </div>
+            <div className="payment-info-top">
+              <div className="account-left">입금 대기금액</div>
+              <div className="account-right">
+                {paymentInfo.length > 0 ? paymentInfo[0].paymentAmount.toLocaleString() : '정보 없음'} 원
+              </div>
+            </div>
+            <div className="payment-info-top">
+              <div className="account-left">입금 계좌</div>
+              <div className="account-right">
+                {reservationList.length > 0 ? reservationList[0].accountBank : '정보 없음'}
+                {reservationList.length > 0 ? reservationList[0].accountNumber : '정보 없음'}
+                <button className='account-number-copy-btn' onClick={copyToClipboard}>
+                  <i className="bi bi-copy"></i>
+                </button>
+              </div>
             </div>
           </div>
-          <div className="payment-info-top">
-            <div className="account-left">입금 계좌</div>
-            <div className="account-right">
-              {reservationList.length > 0 ? reservationList[0].accountBank : '정보 없음'}
-              {reservationList.length > 0 ? reservationList[0].accountNumber : '정보 없음'}
-              <button className='account-number-copy-btn' onClick={copyToClipboard}>
-                <i className="bi bi-copy"></i>
-              </button>
-            </div>
-          </div>
-        </div>
+          <hr />
+        </>
       )}
 
 
       <div className="user-content-container">
         <div className="info-row">
-          <div className="left"><i class="bi bi-calendar-check-fill"></i> {formatDate2(reservationDetail.regTime)} </div>
+          <div className="left"><i class="bi bi-calendar-check-fill"></i> {formatDate3(reservationDetail.regTime)} </div>
           <div className="right"><i class="bi bi-clock-fill"></i>{(reservationDetail.reservationTime || '정보 없음').slice(0, 5)} </div>
         </div>
       </div>
 
+      <hr />
 
       {/* 예약자정보 */}
       <div className="user-content-container">
@@ -190,6 +202,7 @@ function UserMyReservationDetail() {
         </div>
       </div>
 
+      <hr />
 
       {/* 예약 정보 */}
       <div className="user-content-container">
@@ -225,6 +238,7 @@ function UserMyReservationDetail() {
         </div>
       </div>
 
+      <hr />
 
       {/* 결제금액 또는 환불금액 */}
       <div className="user-content-container">
@@ -242,6 +256,7 @@ function UserMyReservationDetail() {
         </div>
       </div>
 
+      <hr />
 
       {/* 요청사항 */}
       <div className="user-content-container">
@@ -251,6 +266,7 @@ function UserMyReservationDetail() {
         </div>
       </div>
 
+      <hr />
 
       {/* 결제 / 환불 정보 */}
       <div className="user-content-container">
@@ -306,9 +322,11 @@ function UserMyReservationDetail() {
         )}
       </div>
 
+      <hr />
+
       {refundInfo.length === 0 && (
         <div className="user-content-container">
-          <button onClick={cancelReservation}>예약취소</button>
+          <button className="reservation-cancel-btn" onClick={cancelReservation}>예약취소</button>
         </div>
       )}
 
@@ -317,7 +335,6 @@ function UserMyReservationDetail() {
 
 
 
-      <hr />
 
       <hr />
 

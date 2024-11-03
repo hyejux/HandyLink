@@ -1,3 +1,14 @@
+/* styles.css 또는 userLayout.css에 추가 */
+.body-overlay {
+  overflow: hidden; /* 스크롤 비활성화 */
+  pointer-events: none; /* 클릭 비활성화 */
+}
+
+.body-overlay .user-main-container {
+  pointer-events: auto; /* 드롭다운 내부 클릭 가능 */
+}
+
+
 .search-result-header {
   overflow: hidden;
   width: 100%;
@@ -109,7 +120,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 66.6%;
+  height: 60%;
   background-color: white; /* 배경색 추가 */
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   border-top-left-radius: 15px;
@@ -128,8 +139,14 @@
   }
 }
 
+.filter-text {
+  padding: 15px 15px 0 15px;
+  text-align: center;
+}
+
 .filter-list {
-  padding: 20px;
+  padding: 15px;
+  overflow: hidden;
 }
 
 .filter-close-btn-box {
@@ -145,7 +162,24 @@
   border: none; 
   border-radius: 5px;
   font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
+}
+
+.filter-list-btn {
+  font-size: 16px;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.filter-list-btn.active {
+  font-weight: bold;
+  color: #738BE3;
+}
+
+.filter-list-btn .bi-check2 {
+  float: right;
+  color: #738BE3; 
 }
 
 

@@ -67,11 +67,12 @@ public class Store {
     @JsonManagedReference
     private List<StoreNotice> storeNotice = new ArrayList<>();
 
-    // 평균 리뷰
     @Transient // 이 필드는 데이터베이스에 저장하지 않음
     private BigDecimal averageRating;
 
-    // 리뷰 개수
-    @Transient // 이 필드도 데이터베이스에 저장하지 않음
+    @Transient
     private Long reviewCount;
+
+    @Transient
+    private Long reservationCount;
 }

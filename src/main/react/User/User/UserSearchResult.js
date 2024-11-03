@@ -20,7 +20,7 @@ function UserSearchResult() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredStores, setFilteredStores] = useState([]);
   const [isBookmarked, setIsBookmarked] = useState([]); //찜
-
+  const [sortCriterion, setSortCriterion] = useState('기본순');
 
   useEffect(() => {
     // URL에서 검색어 가져오기
@@ -33,6 +33,7 @@ function UserSearchResult() {
       .then((data) => {
         const activeStores = data.filter((store) => store.storeStatus === '활성화');
         setStore(activeStores);
+        setFilteredStores(activeStores);
         console.log('활성화된 업체:', activeStores);
       })
       .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
@@ -228,6 +229,38 @@ function UserSearchResult() {
     };
   }, []);
 
+
+  // 정렬
+  useEffect(() => {
+    if (sortCriterion) {
+      const sortedStores = [...filteredStores];
+
+      if (sortCriterion === '예약 많은 순') {
+        sortedStores.sort((a, b) => b.reservationCount - a.reservationCount);
+      } else if (sortCriterion === '리뷰 많은 순') {
+        sortedStores.sort((a, b) => b.reviewCount - a.reviewCount);
+      } else if (sortCriterion === '별점 높은 순') {
+        sortedStores.sort((a, b) => b.averageRating - a.averageRating);
+      } else if (sortCriterion === '가까운 순') {
+        sortedStores.sort((a, b) => (distances[a.addr] || Infinity) - (distances[b.addr] || Infinity));
+      } else if (sortCriterion === '가격 순') {
+        sortedStores.sort((a, b) =>
+          (level1Categories.find(category => category.storeNo === a.storeNo)?.servicePrice || Infinity) -
+          (level1Categories.find(category => category.storeNo === b.storeNo)?.servicePrice || Infinity)
+        );
+      }
+      setFilteredStores(sortedStores);
+    }
+  }, [sortCriterion]);
+
+
+  // 정렬 기준 변경 핸들러
+  const handleSortChange = (criterion) => {
+    setSortCriterion(criterion);
+    closeDropdown();
+  };
+
+
   return (
     <div>
       <div className="search-result-header">
@@ -247,21 +280,56 @@ function UserSearchResult() {
         </div>
 
         <div className="search-result-filter">
-          <div className="left">검색결과 몇 개</div>
+          <div className="left">검색결과 {filteredStores.length} 개</div>
 
-          <div className="right" onClick={toggleDropdown}>추천순</div>
+          <div className="right" onClick={toggleDropdown}>{sortCriterion}</div>
           {isDropdownVisible && (
             <div className="filter-dropdown" ref={dropdownRef}>
-
+              <div className="filter-text">정렬</div>
               <div className="filter-list">
-                <div className="filter-list-btn"><span>주문 많은 순</span><i className="bi bi-check2"></i></div>
-                <div className="filter-list-btn">리뷰 많은 순</div>
-                <div className="filter-list-btn">별점 높은 순</div>
-                <div className="filter-list-btn">가까운 순</div>
-                <div className="filter-list-btn">가격 순</div>
-                <div className="filter-list-btn">찜 많은 순</div>
-              </div>
 
+                
+              <div
+                  className={`filter-list-btn ${sortCriterion === '예약 많은 순' ? 'active' : ''}`}
+                  onClick={() => handleSortChange('예약 많은 순')}
+                >
+                  예약 많은 순
+                  {sortCriterion === '예약 많은 순' && <i className="bi bi-check2"></i>}
+                </div>
+
+                <div
+                  className={`filter-list-btn ${sortCriterion === '리뷰 많은 순' ? 'active' : ''}`}
+                  onClick={() => handleSortChange('리뷰 많은 순')}
+                >
+                  리뷰 많은 순
+                  {sortCriterion === '리뷰 많은 순' && <i className="bi bi-check2"></i>}
+                </div>
+
+                <div
+                  className={`filter-list-btn ${sortCriterion === '별점 높은 순' ? 'active' : ''}`}
+                  onClick={() => handleSortChange('별점 높은 순')}
+                >
+                  별점 높은 순
+                  {sortCriterion === '별점 높은 순' && <i className="bi bi-check2"></i>}
+                </div>
+
+                <div
+                  className={`filter-list-btn ${sortCriterion === '가까운 순' ? 'active' : ''}`}
+                  onClick={() => handleSortChange('가까운 순')}
+                >
+                  가까운 순
+                  {sortCriterion === '가까운 순' && <i className="bi bi-check2"></i>}
+                </div>
+
+                <div
+                  className={`filter-list-btn ${sortCriterion === '가격 순' ? 'active' : ''}`}
+                  onClick={() => handleSortChange('가격 순')}
+                >
+                  가격 순
+                  {sortCriterion === '가격 순' && <i className="bi bi-check2"></i>}
+                </div>
+
+              </div>
 
               <div className="filter=close-btn-box">
                 <button className="filter-close-btn" onClick={closeDropdown}>닫기</button>
@@ -328,7 +396,7 @@ function UserSearchResult() {
                       <div className="result-list-price">
                         {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (
                           <div key={index}>
-                            ₩ {category.servicePrice || '0,000'} ~
+                            ₩ {category.servicePrice} ~
                           </div>
                         ))}
                       </div>

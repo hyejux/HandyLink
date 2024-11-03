@@ -3,6 +3,7 @@ package com.example.HiMade.admin.controller;
 import com.example.HiMade.admin.dto.AdminChatDTO;
 import com.example.HiMade.admin.service.AdminChatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -40,6 +41,12 @@ public class AdminChatController {
             @RequestParam Long storeNo,
             @RequestParam Timestamp lastCheckedTime) {
         return adminChatService.findNewMessages(userId, storeNo, lastCheckedTime);
+    }
+
+    @PostMapping("/updateLastCheckedTime")
+    public ResponseEntity<Void> updateLastCheckedTime(@RequestParam Long storeNo, @RequestParam String userId) {
+        adminChatService.updateLastCheckedTime(userId, storeNo);
+        return ResponseEntity.ok().build();
     }
 
 

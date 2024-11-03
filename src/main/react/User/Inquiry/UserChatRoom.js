@@ -236,13 +236,17 @@ function UserChatRoom() {
 
                 {!isBusinessHours && (
                     <div className="business-hours-message">
-                        지금은 영업 시간이 아닙니다. 문의 가능한 시간은 {formatTimeToAMPM(storeInfo.storeOpenTime)} - {formatTimeToAMPM(storeInfo.storeCloseTime)} 입니다.
+                        지금은 영업 시간이 아닙니다. 문의 가능한
+                        시간은 {formatTimeToAMPM(storeInfo.storeOpenTime)} - {formatTimeToAMPM(storeInfo.storeCloseTime)} 입니다.
                     </div>
                 )}
 
+
                 <div className="chat-box" ref={chatBoxRef} onScroll={handleScroll}>
                     {messages.map((msg, index) => {
+                        // showDate 조건에서 isDateOlderThanToday 제거
                         const showDate = index === 0 || isDifferentDay(messages[index - 1].sendTime, msg.sendTime);
+
                         return (
                             <React.Fragment key={index}>
                                 {showDate && (
@@ -251,7 +255,18 @@ function UserChatRoom() {
                                     </div>
                                 )}
                                 <div className={`message-wrapper ${msg.senderType === 'USER' ? 'sent' : 'received'}`}>
+                                    {msg.senderType !== 'USER' && (
+                                        <div className="profile-section" onClick={handleImageClick}>
+                                            <img
+                                                className="profile-img"
+                                                src={storeInfo.storeImg[0]?.storeImgLocation || '/img/user_basic_profile.jpg'}
+                                                alt={`${storeInfo.storeName} 프로필`}
+                                            />
+                                        </div>
+                                    )}
                                     <div className="message-content">
+                                        {msg.senderType !== 'USER' &&
+                                            <div className="sender-name">{storeInfo.storeName}</div>}
                                         <div className="bubble">{msg.chatMessage}</div>
                                         <div className="timestamp">
                                             {new Date(msg.sendTime).toLocaleTimeString('ko-KR', {

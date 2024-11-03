@@ -37,7 +37,19 @@
 
     <!--    -->
     <select id="getManageList" resultType="com.example.HiMade.admin.dto.adminReserveMangeDTO">
-        select * from reservation where store_no = #{storeNo}
+        select r.reservation_no , r.*, main_c.*
+        FROM
+        reservation r
+
+        JOIN   reservation_form rf
+        ON rf.reservation_no = r.reservation_no
+        JOIN
+        category main_c ON rf.main_category_id = main_c.category_id
+        where r.store_no = #{storeNo}
+        group by r.reservation_no, main_c.category_id
+        order by r.reservation_no desc
+
+
     </select>
 
     <!--  서비스 대분류 (상세 가져오기)  -->

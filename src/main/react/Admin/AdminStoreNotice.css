@@ -197,12 +197,12 @@
   align-items: baseline;
 }
 
-.management-table button {
+/* .management-table button {
   width: 30px;
   height: 30px;
   margin-left: 10px;
   cursor: pointer;
-}
+} */
 
 
 
@@ -287,7 +287,7 @@
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
   font-size: 16px;
   /* 캘린더 전체 폰트 크기 */
   height: auto;
@@ -428,10 +428,10 @@
 
 /* 캘린더 옆 예약정보 리스트 */
 .reservation-info-container {
-  background-color: #f7f9fc;
+  background-color: #38414a0d;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
 }
 
 /* 예약정보 */
@@ -443,8 +443,8 @@
 /* 날짜 */
 .reservation-info-container h4 {
   font-size: 18px;
-  color: #007bff;
-  border-bottom: 2px solid #007bff;
+  color: #38414a;
+  border-bottom: 2px solid #38414a;
   padding-bottom: 5px;
 }
 
@@ -470,14 +470,11 @@
   /* 애니메이션 효과 */
 }
 
-.reservation-info-container li:hover {
+/* .reservation-info-container li:hover {
   transform: translateY(-2px);
-  /* 호버 시 약간의 상승 효과 */
   background-color: #e9f5ff;
-  /* 호버 시 배경색 변화 */
   cursor: pointer;
-  /* 커서 포인터로 변경 */
-}
+} */
 
 .expanded-content {
   border: 1px solid #ddd;
@@ -498,26 +495,28 @@
 .store-notice-top {
   overflow: hidden;
   padding: 5px;
+  margin-bottom: 15px;
 }
 
 .filter-btn-box {
   float: left;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 .filter-btn-box button {
   border: 1px solid #ddd;
   background-color: #fff;
   border-radius: 10px;
-  padding: 8px 10px;
+  padding: 6px 10px;
   white-space: nowrap;
   margin-right: 5px;
   cursor: pointer;
+  font-size: 15px;
 }
 
 .filter-btn-box button.active {
-  border-color: #738BE3;
-  background-color: #fff; 
+  border-color: #38414a;
+  background-color: #43607d29;
 }
 
 .select-filter-box {
@@ -528,13 +527,14 @@
   border: 1px solid #ddd;
   background-color: #fff;
   border-radius: 10px;
-  padding: 8px 10px;
+  padding: 6px 10px;
   white-space: nowrap;
   margin-right: 5px;
   cursor: pointer;
+  font-size: 15px;
 }
 
 .select-filter-box button.active {
-  border-color: #738BE3;
-  background-color: #fff; 
+  border-color: #38414a;
+  background-color: #43607d29;
 }

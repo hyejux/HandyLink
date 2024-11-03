@@ -219,10 +219,10 @@
   cursor: pointer;
   font-size: 24px;
 }
-
+/* 
 .icon-button:hover {
   color: #007BFF;
-}
+} */
 
 
 .main-content-title {
@@ -245,9 +245,9 @@
   font-size: 24px;
 }
 
-.icon-button:hover {
+/* .icon-button:hover {
   color: #007BFF;
-}
+} */
 
 
 
@@ -287,7 +287,7 @@
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
   font-size: 16px;
   /* 캘린더 전체 폰트 크기 */
   height: auto;
@@ -344,7 +344,7 @@
 
 /* 선택된 날짜의 스타일 */
 .react-calendar__tile.selected-date {
-  background-color: #add8e6 !important;
+  background-color: #e6f7ff !important;
   color: black;
   /* 선택된 날짜의 글자 색상 */
 }
@@ -357,7 +357,7 @@
 
 /* 현재 날짜 강조 */
 .react-calendar__tile--now {
-  background-color: #e6f7ff;
+  background-color: #38414a1c;
 }
 
 /* 날짜 타일 호버 시 스타일 */
@@ -420,7 +420,7 @@
   /* 호버 시 배경색 변경 */
   cursor: pointer;
   /* 커서 포인터로 변경 */
-  border-left: 4px solid #007bff;
+  border-left: 4px solid #38414a;
   /* 왼쪽 테두리 강조 */
 }
 
@@ -443,8 +443,8 @@
 /* 날짜 */
 .reservation-info-container h4 {
   font-size: 18px;
-  color: #007bff;
-  border-bottom: 2px solid #007bff;
+  color: #38414a;
+  border-bottom: 2px solid #38414a;
   padding-bottom: 5px;
 }
 
@@ -459,25 +459,19 @@
   background-color: #fff;
   /* 항목 배경색 */
   margin: 5px 0;
+  font-size: 16px;
   /* 항목 사이 여백 */
   padding: 10px;
   /* 항목 내부 여백 */
   border-radius: 5px;
   /* 항목 둥근 모서리 */
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); */
   /* 항목 그림자 */
   transition: transform 0.2s;
   /* 애니메이션 효과 */
 }
 
-.reservation-info-container li:hover {
-  transform: translateY(-2px);
-  /* 호버 시 약간의 상승 효과 */
-  background-color: #e9f5ff;
-  /* 호버 시 배경색 변화 */
-  cursor: pointer;
-  /* 커서 포인터로 변경 */
-}
+
 
 
 .sreserve-manage-top {
@@ -494,13 +488,20 @@
   border: 1px solid #ddd;
   background-color: #fff;
   border-radius: 10px;
-  padding: 8px 10px;
+  padding: 6px 10px;
   white-space: nowrap;
   margin-right: 5px;
   cursor: pointer;
+  font-size: 15px;
 }
 
 .filter-btn-box button.active {
-  border-color: #738BE3;
-  background-color: #fff; 
+  border-color: #38414a;
+  background-color: #43607d29;
+}
+
+.reserve-manage-top {
+  display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 }

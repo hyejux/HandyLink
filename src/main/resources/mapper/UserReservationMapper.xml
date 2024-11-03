@@ -24,7 +24,7 @@
         LEFT JOIN
         reservation r ON rf.reservation_no = r.reservation_no
         LEFT JOIN
-        store s ON r.store_id = s.store_id
+        store s ON r.store_no = s.store_no
         LEFT JOIN
         category main_c ON rf.main_category_id = main_c.category_id
         LEFT JOIN

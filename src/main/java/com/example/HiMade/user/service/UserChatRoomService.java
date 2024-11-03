@@ -13,4 +13,5 @@ public interface UserChatRoomService {
     List<Map<String, Object>> getChatListForUser(String userId);
     StoreRegistDTO getStoreInfoByStoreNo(Long storeNo);
     List<UserChatDTO> findNewMessages(String userId, Long storeNo, Timestamp lastCheckedTime);
+    void updateLastCheckedTime(String userId, Long storeNo);
 }

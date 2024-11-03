@@ -35,4 +35,9 @@ public class AdminChatServiceImpl implements AdminChatService {
     public List<AdminChatDTO> findNewMessages(String userId, Long storeNo, Timestamp lastCheckedTime) {
         return adminChatMapper.selectNewMessages(userId, storeNo, lastCheckedTime);
     }
+
+    @Override
+    public void updateLastCheckedTime(String userId, Long storeNo) {
+        adminChatMapper.updateLastCheckedTime(userId, storeNo);
+    }
 }

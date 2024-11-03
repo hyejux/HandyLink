@@ -47,4 +47,10 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
     public List<UserChatDTO> findNewMessages(String userId, Long storeNo, Timestamp lastCheckedTime) {
         return userChatRoomMapper.selectNewMessages(userId, storeNo, lastCheckedTime);
     }
+
+    @Override
+    public void updateLastCheckedTime(String userId, Long storeNo) {
+        System.out.println("DB 업데이트 시도 - userId: " + userId + ", storeNo: " + storeNo);
+        userChatRoomMapper.updateUserLastCheckedTime(userId, storeNo);
+    }
 }

@@ -29,10 +29,6 @@ function AdminReserveSettingDetailSlot() {
     // const maxDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
 
-    const disablePastDates = ({ date, view }) => {
-        // view가 "month"일 때만 비활성화 조건 적용
-        return view === "month" && date < new Date().setHours(0, 0, 0, 0);
-      };
 
 
     const [startDate, setStartDate] = useState(new Date()); // 시작일
@@ -127,6 +123,11 @@ function AdminReserveSettingDetailSlot() {
     const [serviceHour, setServiceHour] = useState(''); // 시간 상태
 
 
+    const disablePastDates = ({ date, view }) => {
+        // view가 "month"일 때만 비활성화 조건 적용
+        return view === "month" && date <= startDate;
+      };
+
     const [cateId, setCateId] = useState(0);
     useEffect(() => {
       const path = window.location.pathname;
@@ -140,7 +141,11 @@ function AdminReserveSettingDetailSlot() {
           if (response.data.length > 0) {
             const firstServiceStart = response.data[0].serviceStart; // 첫 번째 객체의 serviceStart
             startDate = firstServiceStart; // 상태 업데이트
+         
+        
         }
+
+
           const serviceStart = new Date(startDate);
           const formattedDate = `${serviceStart.getFullYear()}-${String(serviceStart.getMonth() + 1).padStart(2, '0')}-${String(serviceStart.getDate()).padStart(2, '0')}`; // YYYY-MM-DD 형식
           const formattedHour = `${String(serviceStart.getHours()).padStart(2, '0')}`; // HH 형식만 설정
@@ -516,7 +521,10 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
                             locale="en-US"
                             // minDate={today} // 오늘 이후만 선택 가능
                             // maxDate={maxDate} // 이번 달까지만 선택 가능
-                            tileDisabled={disablePastDates}
+                            tileDisabled={({ date }) => {
+                                // serviceDate가 설정되어 있을 때, serviceDate 이전의 날짜를 비활성화하고 serviceDate는 활성화합니다.
+                                return serviceDate && date < new Date(serviceDate).setHours(0, 0, 0, 0); // serviceDate 이전의 날짜만 비활성화
+                            }}
                             tileClassName={({ date, view }) => {
                                 if (view === 'month') {
                                     const dateString = date.toISOString().split('T')[0];

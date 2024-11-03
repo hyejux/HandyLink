@@ -128,14 +128,19 @@ function UserStoreDetail() {
       .catch(error => {
         console.log('Error Category', error);
       });
-    axios.get(`/adminStore/getNoticeList/${categoryId}`)
+      axios.get(`/adminStore/getNoticeList/${categoryId}`)
       .then(response => {
-        console.log(response.data);
-        setNoticeList(response.data);
+        const modifiedData = response.data.map(notice => ({
+          ...notice,
+          noticeRegdate: notice.noticeRegdate.split("T")[0] // 날짜 부분만 저장
+        }));
+        console.log(modifiedData);
+        setNoticeList(modifiedData);
       })
       .catch(error => {
         console.log('Error Category', error);
       });
+    
     axios.get(`/userReservation/getReviewList/${categoryId}`)
       .then(response => {
         console.log(response.data);
@@ -163,6 +168,10 @@ function UserStoreDetail() {
 
 
   }, []);
+
+  const totalRating = reviewList.length > 0 
+  ? reviewList.reduce((sum, review) => sum + review.reviewRating, 0) / reviewList.length 
+  : 0;
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -326,6 +335,44 @@ function UserStoreDetail() {
 
   console.log("가게정보 ", storeInfo);
 
+  // ------------------------------------------------
+
+  const [sortOrder, setSortOrder] = useState('latest'); // 기본 정렬 기준 설정
+
+
+
+  // 리뷰 정렬 함수
+ // 리뷰 정렬 함수
+const sortReviews = (reviews, order) => {
+  if (!Array.isArray(reviews)) {
+    console.warn('Reviews should be an array.'); // 디버깅용 경고 메시지
+    return []; // reviews가 배열이 아닐 경우 빈 배열 반환
+  }
+  
+  switch (order) {
+    case 'latest':
+      return [...reviews].sort((a, b) => new Date(b.reviewDate) - new Date(a.reviewDate)); // 최신순
+    case 'oldest':
+      return [...reviews].sort((a, b) => new Date(a.reviewDate) - new Date(b.reviewDate)); // 오래된순
+    case 'lowRating':
+      return [...reviews].sort((a, b) => a.reviewRating - b.reviewRating); // 별점 낮은순
+    case 'highRating':
+      return [...reviews].sort((a, b) => b.reviewRating - a.reviewRating); // 별점 높은순
+    default:
+      return reviews;
+  }
+};
+  // 정렬된 리뷰 목록
+  const sortedReviewList = sortReviews(reviewList, sortOrder);
+
+
+
+
+  // 정렬 기준 변경 함수
+  const handleSortChange = (event) => {
+    setSortOrder(event.target.value);
+  };
+
   return (
     <div>
       <div className="user-main-container">
@@ -460,41 +507,51 @@ function UserStoreDetail() {
           {/* 소식 */}
           {activeSection === 'info' && (
 
-            <div>
+<div>
+  {noticeList.map((notice, index) => (
+    notice.status === 'Y' && (
+      <React.Fragment key={index}>
+        <div className="user-content-container11">
+  {/* 기본 정보는 항상 보이게 함 */}
+  <div className="notice-top">
+  <div
+  className="type-title"
+  style={{
+    backgroundColor: notice.noticeType === '소식' ? '#8dc4ff4a' : 
+                    notice.noticeType === '공지사항' ? '#ffdfdf' : 'transparent'
+  }}
+>
+  {notice.noticeType}
+</div>
+    <duv>{notice.noticeRegdate}</duv>
+  </div>
 
-              {noticeList.map((notice, index) => (
-                notice.status === 'Y' && ( // status가 'Y'인 경우에만 렌더링
-                  <React.Fragment key={index}>
-                    <div className="user-content-container">
-                      <i
-                        className="bi bi-chevron-down"
-                        style={{ float: 'right' }}
-                        onClick={() => handleToggleRow(index)}
-                      ></i>
-                      {expandedRows.includes(index) ? (
-                        <div>
-                          {/* 확장된 내용을 표시 */}
-                          <div className="expanded-content">
-                            <p>카테고리: {notice.noticeType}</p>
-                            <p>소식 내용: {notice.noticeContent}</p>
-                            <p>등록일: {notice.noticeRegdate}</p>
-                          </div>
-                        </div>
-                      ) : (
-                        <div>
-                          {/* 기본 내용, 확장되지 않았을 때 보이는 부분 */}
-                          <div>{notice.noticeType}</div>
-                          <div>{notice.noticeContent.slice(0, 50)}...</div>
-                          <div>{notice.noticeRegdate}</div>
-                        </div>
-                      )}
-                    </div>
-                  </React.Fragment>
-                )
-              ))}
+  {/* noticeContent는 토글로 표시 */}
+  {expandedRows.includes(index) ? (
+    <div>
+      <div className='notice-content1'>{notice.noticeContent}</div>
+      <span onClick={() => handleToggleRow(index)} style={{color : '#686868'}}>접기</span>
+    </div>
+  ) : (
+    <div>
+      <div>
+        {notice.noticeContent.length > 100
+          ? `${notice.noticeContent.slice(0, 100)}`
+          : notice.noticeContent}
+      </div>
+      {notice.noticeContent.length > 100 && (
+        <span onClick={() => handleToggleRow(index)} style={{color : '#686868'}} >... 더보기</span>
+      )}
+    </div>
+  )}
+</div>
+
+      </React.Fragment>
+    )
+  ))}
+</div>
 
 
-            </div>
 
           )}
 
@@ -548,7 +605,18 @@ function UserStoreDetail() {
           {activeSection === 'review' && (
             <div className="user-content-container5">
               <div className="review-section">
-                <h2>포토 리뷰</h2>
+                <h2>포토 리뷰</h2>   <div className="total-rating">
+  
+  {[...Array(5)].map((_, index) => (
+    <span key={index} className={`star ${totalRating > index ? 'filled' : ''}`}>
+      &#9733; {/* 별 아이콘 */}
+    </span>
+  ))}
+  <span> {totalRating.toFixed(1)} / 5</span>
+        </div>
+
+
+
                 <div className="photo-review">
                   {reviewPhotoList.slice(0, 3).map((photo, index) => (
                     <div className="photo-item" key={index}>
@@ -560,22 +628,20 @@ function UserStoreDetail() {
                       )}
                     </div>
                   ))}
-
-
-
                 </div>
+             
                 <div className="sort-reviews">
-                  <label htmlFor="sortSelect">정렬:</label>
-                  <select id="sortSelect">
+                {/* <label htmlFor="sortOrder">정렬 기준: </label> */}
+                  <select id="sortOrder" value={sortOrder} onChange={handleSortChange}>
                     <option value="latest">최신순</option>
                     <option value="oldest">오래된순</option>
-                    <option value="rating-high">별점높은순</option>
-                    <option value="rating-low">별점낮은순</option>
+                    <option value="highRating">별점높은순</option>
+                    <option value="lowRating">별점낮은순</option>
                   </select>
                 </div>
 
                 <div className="reviews">
-                  {reviewList.map((review) => (
+                  {sortedReviewList.map((review) => (
                     <div key={review.reviewNo} className="review-item">
 
                       <div className="photo-review2">
@@ -598,16 +664,19 @@ function UserStoreDetail() {
 
                         <div className="review-rating">
                           <div className="rating-section">
-                            {[...Array(review.reviewRating)].map((_, index) => (
-                              <span key={index} className='review-rating'>
-                                &#9733;
+                            {/* 총 5개의 별을 기준으로 렌더링 */}
+                            {[...Array(5)].map((_, starIndex) => (
+                              <span key={starIndex} className='review-rating'>
+                                {starIndex < review.reviewRating ? (
+                                  <span>&#9733;</span> // 채워진 별
+                                ) : (
+                                  <span>&#9734;</span> // 비어 있는 별
+                                )}
                               </span>
                             ))}
-
-
                           </div>
-
                         </div>
+
                       </div>
                       <div className="review-details">
                         {/* <span className="review-title">{review.title}</span> */}
@@ -655,8 +724,8 @@ function UserStoreDetail() {
 
 
 
-                <i class="bi bi-chevron-left" onClick={() => setActiveSection('review')}></i>
-                <h2>포토 리뷰</h2>
+               
+                <h2> <i class="bi bi-chevron-left" onClick={() => setActiveSection('review')}></i> 포토 리뷰</h2>
                 <div className="photo-review3">
                   {reviewPhotoList.map((photo, index) => (
                     <div className="photo-item"> <img key={index} src={photo.reviewImgUrl} alt="Review Photo"

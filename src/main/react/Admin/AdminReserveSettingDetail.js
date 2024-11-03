@@ -411,11 +411,11 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
       <div className="main-contents">
       <div className="reserve-container">
       <div className="reserve-img">
-
+      {imagePreview && <img src={imagePreview} alt="미리보기" style={{ width: '100%', objectFit: 'cover' }} />}
         
       <div>
       <input type="file" className="btn-st btn-imgChg"  accept="image/*" onChange={handleImageChange} />
-      {imagePreview && <img src={imagePreview} alt="미리보기" style={{ width: '100px', height: '100px' }} />}
+    
    
     </div>
     {/* <button type="button" className="btn-st btn-imgChg" onClick={handleUpload}>

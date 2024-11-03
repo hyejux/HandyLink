@@ -141,16 +141,19 @@ const handleTimeNumChange = (e) => {
   };
   
   const isValid = () => {
-    if (reserveAdd.serviceName.trim() === '' || categories.some(category => {
-      return (
-        category.serviceName.trim() === '' ||
-        category.subCategories.some(sub => sub.serviceName.trim() === '')
-      );
-    })) {
-      return false; // Invalid if any service name or subcategory name is empty
+    if (
+        !reserveAdd.serviceName || reserveAdd.serviceName.trim() === '' || // reserveAdd.serviceName이 null 또는 빈 문자열인지 확인
+        categories.some(category => {
+            return (
+                !category.serviceName || category.serviceName.trim() === '' || // category.serviceName이 null 또는 빈 문자열인지 확인
+                category.subCategories.some(sub => !sub.serviceName || sub.serviceName.trim() === '') // sub.serviceName이 null 또는 빈 문자열인지 확인
+            );
+        })
+    ) {
+        return false; // Invalid if any service name or subcategory name is empty
     }
     return true; // Valid
-  };
+};
 
   //--------------------------------------------------
 
@@ -190,14 +193,7 @@ const handleTimeNumChange = (e) => {
       alert("서비스 가격을 입력해주세요.")
     }else if (selectedImage === null) {
       alert("사진은 필수입니다.")
-    }else if (dateNumCase === 0) {
-      alert("일별 건수 기본 값을 입력해주세요")
-    }else if (serviceDate === '') {
-      alert("시작일 을 입력해주세요")
-    }else if (serviceHour === '') {
-      alert("시작일의 시간을 입력해주세요")
-    }else if (serviceHour === '') {
-      alert("시작일의 시간을 입력해주세요")
+    
     }else if(reserveAdd.serviceContent === ''){
       alert("서비스 설명을 입력해주세요");
     }
@@ -217,7 +213,11 @@ const handleTimeNumChange = (e) => {
       isRequired: category.isRequired ? 'Y' : 'N'
     }));
 
-
+ 
+    const storeId = sessionStorage.getItem('storeId');
+    const storeNo = sessionStorage.getItem('storeNo');
+    console.log("세션 storeId: ", storeId);
+    console.log("세션 storeNo: ", storeNo);
 
 
     console.log(transformedCategories);
@@ -227,8 +227,7 @@ const handleTimeNumChange = (e) => {
       serviceContent: reserveAdd.serviceContent,
       categories: transformedCategories,
       ServiceStart: serviceStart,
-      StoreNo : 7,
-      StoreId: 'bbb123'
+      StoreNo : storeNo,
     };
 
     console.log(requestData);
@@ -380,11 +379,12 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
       <div className="main-contents">
       <div className="reserve-container">
       <div className="reserve-img">
-
+      {imagePreview && <img src={imagePreview} alt="미리보기" style={{ width: '100%', objectFit: 'cover' }} />}
         
       <div>
       <input type="file" className="btn-st btn-imgChg"  accept="image/*" onChange={handleImageChange} />
-      {imagePreview && <img src={imagePreview} alt="미리보기" style={{ width: '100px', height: '100px' }} />}
+      
+      
    
     </div>
     {/* <button type="button" className="btn-st btn-imgChg" onClick={handleUpload}>

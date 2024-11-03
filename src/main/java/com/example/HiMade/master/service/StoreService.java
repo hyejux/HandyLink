@@ -4,6 +4,7 @@ import com.example.HiMade.master.entity.Store;
 import com.example.HiMade.master.entity.StoreStatus;
 import com.example.HiMade.master.repository.ReviewRepository;
 import com.example.HiMade.master.repository.StoreRepository;
+import com.example.HiMade.user.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,13 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final ReviewRepository reviewRepository;
+    private final ReservationRepository reservationRepository;
 
     @Autowired
-    public StoreService(StoreRepository storeRepository, ReviewRepository reviewRepository) {
+    public StoreService(StoreRepository storeRepository, ReviewRepository reviewRepository, ReservationRepository reservationRepository) {
         this.storeRepository = storeRepository;
         this.reviewRepository = reviewRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     // 모든 가게 정보 가져오기
@@ -30,6 +33,7 @@ public class StoreService {
         for (Store store : stores) {
             Double averageRating = reviewRepository.findAverageRatingByStoreNo(store.getStoreNo());
             Long reviewCount = reviewRepository.countReviewsByStoreNo(store.getStoreNo());
+            Long reservationCount = reservationRepository.countByStore_StoreNo(store.getStoreNo());
 
             if (averageRating != null) {
                 // 소수점 첫째 자리까지 절삭
@@ -39,8 +43,8 @@ public class StoreService {
                 store.setAverageRating(BigDecimal.ZERO); // 리뷰가 없는 경우 0으로 설정
             }
 
-            // 리뷰 개수 설정
-            store.setReviewCount(reviewCount != null ? reviewCount : 0L); // 리뷰 개수 추가
+            store.setReviewCount(reviewCount != null ? reviewCount : 0L); // 리뷰 개수
+            store.setReservationCount(reservationCount != null ? reservationCount : 0L); // 예약 개수
         }
         return stores;
     }

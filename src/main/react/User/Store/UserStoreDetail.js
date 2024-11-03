@@ -169,6 +169,10 @@ function UserStoreDetail() {
 
   }, []);
 
+  const totalRating = reviewList.length > 0 
+  ? reviewList.reduce((sum, review) => sum + review.reviewRating, 0) / reviewList.length 
+  : 0;
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -330,6 +334,44 @@ function UserStoreDetail() {
 
 
   console.log("가게정보 ", storeInfo);
+
+  // ------------------------------------------------
+
+  const [sortOrder, setSortOrder] = useState('latest'); // 기본 정렬 기준 설정
+
+
+
+  // 리뷰 정렬 함수
+ // 리뷰 정렬 함수
+const sortReviews = (reviews, order) => {
+  if (!Array.isArray(reviews)) {
+    console.warn('Reviews should be an array.'); // 디버깅용 경고 메시지
+    return []; // reviews가 배열이 아닐 경우 빈 배열 반환
+  }
+  
+  switch (order) {
+    case 'latest':
+      return [...reviews].sort((a, b) => new Date(b.reviewDate) - new Date(a.reviewDate)); // 최신순
+    case 'oldest':
+      return [...reviews].sort((a, b) => new Date(a.reviewDate) - new Date(b.reviewDate)); // 오래된순
+    case 'lowRating':
+      return [...reviews].sort((a, b) => a.reviewRating - b.reviewRating); // 별점 낮은순
+    case 'highRating':
+      return [...reviews].sort((a, b) => b.reviewRating - a.reviewRating); // 별점 높은순
+    default:
+      return reviews;
+  }
+};
+  // 정렬된 리뷰 목록
+  const sortedReviewList = sortReviews(reviewList, sortOrder);
+
+
+
+
+  // 정렬 기준 변경 함수
+  const handleSortChange = (event) => {
+    setSortOrder(event.target.value);
+  };
 
   return (
     <div>
@@ -563,7 +605,18 @@ function UserStoreDetail() {
           {activeSection === 'review' && (
             <div className="user-content-container5">
               <div className="review-section">
-                <h2>포토 리뷰</h2>
+                <h2>포토 리뷰</h2>   <div className="total-rating">
+  
+  {[...Array(5)].map((_, index) => (
+    <span key={index} className={`star ${totalRating > index ? 'filled' : ''}`}>
+      &#9733; {/* 별 아이콘 */}
+    </span>
+  ))}
+  <span> {totalRating.toFixed(1)} / 5</span>
+        </div>
+
+
+
                 <div className="photo-review">
                   {reviewPhotoList.slice(0, 3).map((photo, index) => (
                     <div className="photo-item" key={index}>
@@ -575,22 +628,20 @@ function UserStoreDetail() {
                       )}
                     </div>
                   ))}
-
-
-
                 </div>
+             
                 <div className="sort-reviews">
-                  <label htmlFor="sortSelect">정렬:</label>
-                  <select id="sortSelect">
+                {/* <label htmlFor="sortOrder">정렬 기준: </label> */}
+                  <select id="sortOrder" value={sortOrder} onChange={handleSortChange}>
                     <option value="latest">최신순</option>
                     <option value="oldest">오래된순</option>
-                    <option value="rating-high">별점높은순</option>
-                    <option value="rating-low">별점낮은순</option>
+                    <option value="highRating">별점높은순</option>
+                    <option value="lowRating">별점낮은순</option>
                   </select>
                 </div>
 
                 <div className="reviews">
-                  {reviewList.map((review) => (
+                  {sortedReviewList.map((review) => (
                     <div key={review.reviewNo} className="review-item">
 
                       <div className="photo-review2">
@@ -613,16 +664,19 @@ function UserStoreDetail() {
 
                         <div className="review-rating">
                           <div className="rating-section">
-                            {[...Array(review.reviewRating)].map((_, index) => (
-                              <span key={index} className='review-rating'>
-                                &#9733;
+                            {/* 총 5개의 별을 기준으로 렌더링 */}
+                            {[...Array(5)].map((_, starIndex) => (
+                              <span key={starIndex} className='review-rating'>
+                                {starIndex < review.reviewRating ? (
+                                  <span>&#9733;</span> // 채워진 별
+                                ) : (
+                                  <span>&#9734;</span> // 비어 있는 별
+                                )}
                               </span>
                             ))}
-
-
                           </div>
-
                         </div>
+
                       </div>
                       <div className="review-details">
                         {/* <span className="review-title">{review.title}</span> */}
@@ -670,8 +724,8 @@ function UserStoreDetail() {
 
 
 
-                <i class="bi bi-chevron-left" onClick={() => setActiveSection('review')}></i>
-                <h2>포토 리뷰</h2>
+               
+                <h2> <i class="bi bi-chevron-left" onClick={() => setActiveSection('review')}></i> 포토 리뷰</h2>
                 <div className="photo-review3">
                   {reviewPhotoList.map((photo, index) => (
                     <div className="photo-item"> <img key={index} src={photo.reviewImgUrl} alt="Review Photo"

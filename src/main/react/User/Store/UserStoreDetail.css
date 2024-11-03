@@ -178,6 +178,17 @@ h2 {
   /* Rating star color */
 }
 
+.star {
+  cursor: pointer;
+  font-size: 24px; /* 별 크기 조정 */
+  color: lightgray; /* 기본 색상 */
+}
+
+.star.filled {
+  color: #f4c150; /* 선택된 별 색상 */
+}
+
+
 .review-details {
   display: flex;
   justify-content: space-between;
@@ -239,7 +250,9 @@ h2 {
 
 .sort-reviews select {
   padding: 5px 10px;
+  border: 1px solid #ddd;
   font-size: 14px;
+  border-radius: 10px;
 }
 
 
@@ -594,20 +607,20 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
-
+  /* font-size: 16px; */
 }
 
 .user-reserve-menu-content div {}
 
 .user-reserve-menu-content div:nth-child(1) {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .user-reserve-menu-content div:nth-child(2) {
   height: 100%;
-  font-size: 13px;
+  font-size: 16px;
 }
 
 .user-reserve-menu-content div:nth-child(3) {
@@ -623,4 +636,8 @@ body {
 
 .like {
   color: #ff4d4d;
+}
+
+.total-rating {
+  margin : 20px 0px; 
 }

@@ -22,4 +22,5 @@ public class adminReserveMangeDTO {
   private int reservationPrice;
   private String storeId;
   private String userId;
+  private String serviceName;
 }

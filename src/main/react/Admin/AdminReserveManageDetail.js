@@ -145,24 +145,26 @@ function AdminReserveManageDetail() {
           <div className="left">승인 상태</div>
           <div className="mid">{reservationDetail.reservationStatus}</div>
           <div className="right">
-            <select
-              value={newStatus}
-              onChange={(e) => {
-                const newStatusValue = e.target.value;
-                setNewStatus(newStatusValue);
-                handleStatusChange(reservationDetail.reservationNo, newStatusValue);
-              }}
-              disabled={
-                reservationDetail.reservationStatus === '완료' ||
-                reservationDetail.reservationStatus === '취소(업체)' ||
-                reservationDetail.reservationStatus === '취소(고객)'
-              }
-            >
-              <option value={reservationDetail.reservationStatus}>{reservationDetail.reservationStatus}</option>
-              {reservationDetail.reservationStatus !== '확정' && <option value="확정">확정</option>}
-              {reservationDetail.reservationStatus !== '완료' && <option value="완료">완료</option>}
-              {reservationDetail.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
-            </select>
+          <select
+  value={newStatus}
+  onChange={(e) => {
+    const newStatusValue = e.target.value;
+    setNewStatus(newStatusValue);
+    // 상태 변경 후 업데이트된 상태를 반영하기 위해 useEffect를 사용할 수 있습니다.
+    handleStatusChange(reservationDetail.reservationNo, newStatusValue);
+  }}
+  disabled={
+    reservationDetail.reservationStatus === '완료' ||
+    reservationDetail.reservationStatus === '취소(업체)' ||
+    reservationDetail.reservationStatus === '취소(고객)'
+  }
+>
+  <option value={reservationDetail.reservationStatus}>{reservationDetail.reservationStatus}</option>
+  {reservationDetail.reservationStatus !== '확정' && <option value="확정">확정</option>}
+  {reservationDetail.reservationStatus !== '완료' && <option value="완료">완료</option>}
+  {reservationDetail.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
+</select>
+
           </div>
         </div>
 
@@ -266,7 +268,8 @@ function AdminReserveManageDetail() {
         <table className="reserve-table">
           <tbody>
             <tr>
-              <th colSpan="6">예약 정보</th>
+              <th colSpan="5">예약 정보</th>
+              <th colSpan="1"></th>
             </tr>
             {/* 대분류 이름과 가격 출력 */}
             {reservationList.map((item, index) => {
@@ -275,8 +278,11 @@ function AdminReserveManageDetail() {
                 <React.Fragment key={index}>
                   {isFirstInGroup && (
                     <tr>
-                      <th colSpan="5">{item.mainCategoryName}</th>
+                      <th colSpan="2">{item.mainCategoryName}</th>
+                      <td colSpan="3"> </td>
                       <td colSpan="1">{item.mainPrice}원</td>
+                      
+                      
                     </tr>
                   )}
                   {/* 서브카테고리 출력 */}
@@ -289,18 +295,28 @@ function AdminReserveManageDetail() {
               );
             })}
             {/* 요청사항 및 총액 */}
+         
             <tr>
-              <th colSpan="2">요청사항</th>
-              <td colSpan="4">{reservationDetail.customerRequest || '없음'}</td>
-            </tr>
-            <tr>
-              <th colSpan="5">총액</th>
+              <th colSpan="5"></th>
               {paymentInfo.length > 0 && paymentInfo.map((payment, index) => (
                 <td colSpan="1" key={index}>{payment.paymentAmount.toLocaleString()} 원</td>
               ))}
             </tr>
+            
           </tbody>
+
+         
         </table>
+
+        <table className="reserve-table">
+  
+        <tbody>
+          <tr>
+              <th >요청사항</th>
+              <td >{reservationDetail.customerRequest || '없음'}</td>
+            </tr>
+          </tbody>
+</table>
 
 
 

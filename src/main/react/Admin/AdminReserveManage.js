@@ -269,6 +269,24 @@ function AdminReserveManage() {
 
 
 
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0'); // 초 추가
+    
+        return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`; // 초 포함
+    };
+    
+
+
+
+
+
     return (
         <div>
             <div className="main-content-title">
@@ -324,10 +342,11 @@ function AdminReserveManage() {
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>예약번호<button onClick={() => handleSort('reservationNo', 'number')}><i className="bi bi-chevron-expand"></i></button></th>
-                                    <th>고객 명<button onClick={() => handleSort('userId', 'string')}><i className="bi bi-chevron-expand"></i></button></th>
-                                    <th>예약일<button onClick={() => handleSort('regTime', 'date')}><i className="bi bi-chevron-expand"></i></button></th>
-                                    <th>총액<button onClick={() => handleSort('reservationPrice', 'number')}><i className="bi bi-chevron-expand"></i></button></th>
+                                    <th>예약번호<span onClick={() => handleSort('reservationNo', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
+                                    <th> 서비스명 </th>
+                                    <th>고객 명<span onClick={() => handleSort('userId', 'string')}><i className="bi bi-chevron-expand"></i></span></th>
+                                    <th>예약일<span onClick={() => handleSort('regTime', 'date')}><i className="bi bi-chevron-expand"></i></span></th>
+                                    <th>총액<span onClick={() => handleSort('reservationPrice', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
                                     <th>요청사항 </th>
                                     {/* <th>예약 상태</th> */}
                                     <th>상태 변경</th>
@@ -338,8 +357,9 @@ function AdminReserveManage() {
                                     <tr key={index} onDoubleClick={() => { goToDetail(value.reservationNo) }}>
                                         <td><input type="checkbox" /></td>
                                         <td>{value.reservationNo}</td>
+                                        <td> {value.serviceName}</td>
                                         <td>{value.userId}</td>
-                                        <td>{value.regTime}</td>
+                                        <td>{formatDate(value.regTime)}</td>
                                         <td>{value.reservationPrice}</td>
                                         <td>{value.customerRequest}</td>
                                         {/* <td>{value.reservationStatus}</td> */}
@@ -431,7 +451,7 @@ function AdminReserveManage() {
                                                     <strong>예약등록일시:</strong> {reservation.regTime} <br />
                                                     <strong>요청사항:</strong> {reservation.customerRequest} <br />
                                                     <strong>총액:</strong> {reservation.reservationPrice} <br />
-                                                    <strong>업체아이디:</strong> {reservation.storeId} <br />
+                                                    {/* <strong>업체아이디:</strong> {reservation.storeId} <br /> */}
                                                     <strong>사용자아이디:</strong> {reservation.userId} <br />
                                                 </li>
                                             ))}

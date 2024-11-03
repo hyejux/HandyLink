@@ -215,7 +215,7 @@ function AdminStoreNotice() {
                 <th></th>
                 <th>카테고리</th>
                 <th>소식내용</th>
-                <th>등록일<button onClick={handleDateSort}><i className="bi bi-chevron-expand"></i></button></th>
+                <th>등록일<span onClick={handleDateSort}><i className="bi bi-chevron-expand"></i></span></th>
                 <th>상태변경</th>
                 <th> 수정 </th>
               </tr>
@@ -241,9 +241,9 @@ function AdminStoreNotice() {
                       <td colSpan="6" className="expanded-content">
                         <div>
                           {/* 자세한 내용을 여기에 표시 */}
-                          <p>카테고리: {value.noticeType}</p>
-                          <p>소식 내용: {value.noticeContent}</p>
-                          <p>등록일: {value.noticeRegdate}</p>
+                          {/* <p> {value.noticeType}</p> */}
+                          <p>{value.noticeContent}</p>
+                          {/* <p>{formatDate(value.noticeRegdate)} </p> */}
                         </div>
                       </td>
                     </tr>

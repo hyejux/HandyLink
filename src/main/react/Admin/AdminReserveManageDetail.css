@@ -8,9 +8,12 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 230px;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
 }
-
+.main-contents {
+  font-size: 16px;
+}
 .reserve-status-container .left {
   font-size: 16px;
   font-weight: bold;
@@ -50,12 +53,12 @@
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
 }
 
 .reserve-table th,
 .reserve-table td {
-  padding: 12px 15px;
+  padding: 8px 15px;
   text-align: left;
   border: 1px solid #e0e0e0;
 }
@@ -82,7 +85,7 @@
 }
 
 .reserve-table {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
 }
 
 

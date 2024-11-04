@@ -565,3 +565,41 @@ body {
 .bi {
   color : #2C348F;
 }
+
+
+/* 로딩창 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* 반투명 검은색 배경 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* 다른 요소 위에 표시되도록 설정 */
+}
+
+.loading-spinner {
+  border: 8px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 8px solid #ffffff; /* 스피너 색상 */
+  width: 60px; /* 스피너 크기 */
+  height: 60px; /* 스피너 크기 */
+  animation: spin 1s linear infinite; /* 회전 애니메이션 */
+}
+
+.loading-text {
+  color: #ffffff; /* 텍스트 색상 */
+  margin-top: 20px; /* 스피너와 텍스트 간격 */
+  font-size: 20px; /* 텍스트 크기 */
+  font-weight: bold; /* 텍스트 두께 */
+}
+
+/* 회전 애니메이션 정의 */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

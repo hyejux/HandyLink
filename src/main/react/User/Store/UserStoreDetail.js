@@ -5,6 +5,7 @@ import DatePicker from 'react-datepicker';
 import Calendar from 'react-calendar';
 import { useState, useEffect } from 'react';
 import { format, addHours } from 'date-fns';
+import BasicMap from "../Payment/BasicMap";
 import "./UserStoreDetail.css";
 
 function UserStoreDetail() {
@@ -16,6 +17,8 @@ function UserStoreDetail() {
   const [reviewList, setReviewList] = useState({});
   const [reviewPhotoList, setReviewPhotoList] = useState([]);
   const [isBookmarked, setIsBookmarked] = useState([]); //찜
+  const [showMap, setShowMap] = useState(true); // 맵 표시 상태
+  const [storeLocation, setStoreLocation] = useState({ lat: 37.5709, lng: 126.9851 });
 
   //찜 데이터 가져오기
   useEffect(() => {
@@ -65,17 +68,33 @@ function UserStoreDetail() {
       .catch(error => console.error('사용자 정보를 가져오는데 실패했습니다:', error));
   }, []);
 
+
   useEffect(() => {
-    // 가게 정보 가져오기
     const pathSegments = window.location.pathname.split('/');
     const storeNo = pathSegments[pathSegments.length - 1];
     console.log("Store No from URL:", storeNo);
-    setStoreInfo(prevInfo => ({ ...prevInfo, storeNo }));
 
+    // 가게 정보 가져오기
     axios.get(`/UserStoreDetail/getStoreInfo/${storeNo}`)
-      .then(response => setStoreInfo(response.data))
+      .then(response => {
+        setStoreInfo(response.data);
+
+        // Kakao Maps API로 주소 좌표 검색
+        if (window.kakao && response.data.addr) {
+          const geocoder = new window.kakao.maps.services.Geocoder();
+          geocoder.addressSearch(response.data.addr, (result, status) => {
+            if (status === window.kakao.maps.services.Status.OK) {
+              const { x: lng, y: lat } = result[0];
+              setStoreLocation({ lat: parseFloat(lat), lng: parseFloat(lng) });
+            } else {
+              console.error('Kakao Maps 주소 검색 실패:', status);
+            }
+          });
+        }
+      })
       .catch(error => console.error('Error loading store info:', error));
   }, []);
+
 
 
   // 채팅방으로 이동
@@ -128,7 +147,7 @@ function UserStoreDetail() {
       .catch(error => {
         console.log('Error Category', error);
       });
-      axios.get(`/adminStore/getNoticeList/${categoryId}`)
+    axios.get(`/adminStore/getNoticeList/${categoryId}`)
       .then(response => {
         const modifiedData = response.data.map(notice => ({
           ...notice,
@@ -140,7 +159,7 @@ function UserStoreDetail() {
       .catch(error => {
         console.log('Error Category', error);
       });
-    
+
     axios.get(`/userReservation/getReviewList/${categoryId}`)
       .then(response => {
         console.log(response.data);
@@ -169,9 +188,9 @@ function UserStoreDetail() {
 
   }, []);
 
-  const totalRating = reviewList.length > 0 
-  ? reviewList.reduce((sum, review) => sum + review.reviewRating, 0) / reviewList.length 
-  : 0;
+  const totalRating = reviewList.length > 0
+    ? reviewList.reduce((sum, review) => sum + review.reviewRating, 0) / reviewList.length
+    : 0;
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -342,26 +361,26 @@ function UserStoreDetail() {
 
 
   // 리뷰 정렬 함수
- // 리뷰 정렬 함수
-const sortReviews = (reviews, order) => {
-  if (!Array.isArray(reviews)) {
-    console.warn('Reviews should be an array.'); // 디버깅용 경고 메시지
-    return []; // reviews가 배열이 아닐 경우 빈 배열 반환
-  }
-  
-  switch (order) {
-    case 'latest':
-      return [...reviews].sort((a, b) => new Date(b.reviewDate) - new Date(a.reviewDate)); // 최신순
-    case 'oldest':
-      return [...reviews].sort((a, b) => new Date(a.reviewDate) - new Date(b.reviewDate)); // 오래된순
-    case 'lowRating':
-      return [...reviews].sort((a, b) => a.reviewRating - b.reviewRating); // 별점 낮은순
-    case 'highRating':
-      return [...reviews].sort((a, b) => b.reviewRating - a.reviewRating); // 별점 높은순
-    default:
-      return reviews;
-  }
-};
+  // 리뷰 정렬 함수
+  const sortReviews = (reviews, order) => {
+    if (!Array.isArray(reviews)) {
+      console.warn('Reviews should be an array.'); // 디버깅용 경고 메시지
+      return []; // reviews가 배열이 아닐 경우 빈 배열 반환
+    }
+
+    switch (order) {
+      case 'latest':
+        return [...reviews].sort((a, b) => new Date(b.reviewDate) - new Date(a.reviewDate)); // 최신순
+      case 'oldest':
+        return [...reviews].sort((a, b) => new Date(a.reviewDate) - new Date(b.reviewDate)); // 오래된순
+      case 'lowRating':
+        return [...reviews].sort((a, b) => a.reviewRating - b.reviewRating); // 별점 낮은순
+      case 'highRating':
+        return [...reviews].sort((a, b) => b.reviewRating - a.reviewRating); // 별점 높은순
+      default:
+        return reviews;
+    }
+  };
   // 정렬된 리뷰 목록
   const sortedReviewList = sortReviews(reviewList, sortOrder);
 
@@ -372,6 +391,9 @@ const sortReviews = (reviews, order) => {
   const handleSortChange = (event) => {
     setSortOrder(event.target.value);
   };
+
+
+
 
   return (
     <div>
@@ -501,55 +523,65 @@ const sortReviews = (reviews, order) => {
                 ))}
               </div>
 
+              <div className="user-content-container">
+                <div></div>
+                {showMap && (
+                  <div>
+                    <BasicMap storeLocation={storeLocation}  storeName={storeInfo.storeName}/>
+                  </div>
+                )}
+              </div>
+
+
             </div>
           )}
 
           {/* 소식 */}
           {activeSection === 'info' && (
 
-<div>
-  {noticeList.map((notice, index) => (
-    notice.status === 'Y' && (
-      <React.Fragment key={index}>
-        <div className="user-content-container11">
-  {/* 기본 정보는 항상 보이게 함 */}
-  <div className="notice-top">
-  <div
-  className="type-title"
-  style={{
-    backgroundColor: notice.noticeType === '소식' ? '#8dc4ff4a' : 
-                    notice.noticeType === '공지사항' ? '#ffdfdf' : 'transparent'
-  }}
->
-  {notice.noticeType}
-</div>
-    <duv>{notice.noticeRegdate}</duv>
-  </div>
+            <div>
+              {noticeList.map((notice, index) => (
+                notice.status === 'Y' && (
+                  <React.Fragment key={index}>
+                    <div className="user-content-container11">
+                      {/* 기본 정보는 항상 보이게 함 */}
+                      <div className="notice-top">
+                        <div
+                          className="type-title"
+                          style={{
+                            backgroundColor: notice.noticeType === '소식' ? '#8dc4ff4a' :
+                              notice.noticeType === '공지사항' ? '#ffdfdf' : 'transparent'
+                          }}
+                        >
+                          {notice.noticeType}
+                        </div>
+                        <duv>{notice.noticeRegdate}</duv>
+                      </div>
 
-  {/* noticeContent는 토글로 표시 */}
-  {expandedRows.includes(index) ? (
-    <div>
-      <div className='notice-content1'>{notice.noticeContent}</div>
-      <span onClick={() => handleToggleRow(index)} style={{color : '#686868'}}>접기</span>
-    </div>
-  ) : (
-    <div>
-      <div>
-        {notice.noticeContent.length > 100
-          ? `${notice.noticeContent.slice(0, 100)}`
-          : notice.noticeContent}
-      </div>
-      {notice.noticeContent.length > 100 && (
-        <span onClick={() => handleToggleRow(index)} style={{color : '#686868'}} >... 더보기</span>
-      )}
-    </div>
-  )}
-</div>
+                      {/* noticeContent는 토글로 표시 */}
+                      {expandedRows.includes(index) ? (
+                        <div>
+                          <div className='notice-content1'>{notice.noticeContent}</div>
+                          <span onClick={() => handleToggleRow(index)} style={{ color: '#686868' }}>접기</span>
+                        </div>
+                      ) : (
+                        <div>
+                          <div>
+                            {notice.noticeContent.length > 100
+                              ? `${notice.noticeContent.slice(0, 100)}`
+                              : notice.noticeContent}
+                          </div>
+                          {notice.noticeContent.length > 100 && (
+                            <span onClick={() => handleToggleRow(index)} style={{ color: '#686868' }} >... 더보기</span>
+                          )}
+                        </div>
+                      )}
+                    </div>
 
-      </React.Fragment>
-    )
-  ))}
-</div>
+                  </React.Fragment>
+                )
+              ))}
+            </div>
 
 
 
@@ -606,14 +638,14 @@ const sortReviews = (reviews, order) => {
             <div className="user-content-container5">
               <div className="review-section">
                 <h2>포토 리뷰</h2>   <div className="total-rating">
-  
-  {[...Array(5)].map((_, index) => (
-    <span key={index} className={`star ${totalRating > index ? 'filled' : ''}`}>
-      &#9733; {/* 별 아이콘 */}
-    </span>
-  ))}
-  <span> {totalRating.toFixed(1)} / 5</span>
-        </div>
+
+                  {[...Array(5)].map((_, index) => (
+                    <span key={index} className={`star ${totalRating > index ? 'filled' : ''}`}>
+                      &#9733; {/* 별 아이콘 */}
+                    </span>
+                  ))}
+                  <span> {totalRating.toFixed(1)} / 5</span>
+                </div>
 
 
 
@@ -629,9 +661,9 @@ const sortReviews = (reviews, order) => {
                     </div>
                   ))}
                 </div>
-             
+
                 <div className="sort-reviews">
-                {/* <label htmlFor="sortOrder">정렬 기준: </label> */}
+                  {/* <label htmlFor="sortOrder">정렬 기준: </label> */}
                   <select id="sortOrder" value={sortOrder} onChange={handleSortChange}>
                     <option value="latest">최신순</option>
                     <option value="oldest">오래된순</option>
@@ -724,7 +756,7 @@ const sortReviews = (reviews, order) => {
 
 
 
-               
+
                 <h2> <i class="bi bi-chevron-left" onClick={() => setActiveSection('review')}></i> 포토 리뷰</h2>
                 <div className="photo-review3">
                   {reviewPhotoList.map((photo, index) => (

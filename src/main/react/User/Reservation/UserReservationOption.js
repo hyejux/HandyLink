@@ -94,8 +94,10 @@ function UserReservationOption() {
 
     setFormData(prev => {
       const updatedFormDatas = [...prev];
+      
       updatedFormDatas[index] = {
         ...updatedFormDatas[index],
+
         mainCategoryId: reserveModi.categoryId,
         middleCategoryId: categoryId,
         subCategoryId: null,

@@ -215,7 +215,7 @@ body {
   }
 
   .bi {
-    color : #2C348F;
+    color : #fd8517;
   }
 
   .user-content-first-img-num {
@@ -270,8 +270,8 @@ body {
   }
 
   .store-detail-menu > button:active {
-    border-bottom: 3px solid #2C348F;
-    color : #2C348F;
+    border-bottom: 3px solid #fd8517;
+    color : #fd8517;
   }
 /* ----------------------------------------- */
   /* .user-reserve-menu {
@@ -356,7 +356,7 @@ body {
 }
 .user-content-last > button {
     float: right;
-    background-color: #2C348F;
+    background-color: #fd8517;
     /* background: rgb(146,169,255);
     background: linear-gradient(207deg, rgba(146,169,255,1) 0%, rgba(53,58,148,1) 100%); */
     width: 100px;
@@ -407,11 +407,11 @@ body {
 }
 
 .react-calendar__tile:hover {
-  background-color: #2C348F; /* 호버 시 배경색 변화 */
+  background-color: #fd8517; /* 호버 시 배경색 변화 */
 }
 
 .react-calendar__tile--active {
-  background-color: #2C348F; /* 선택된 날짜 색상 */
+  background-color: #fd8517; /* 선택된 날짜 색상 */
   color: white; /* 선택된 날짜 텍스트 색상 */
 }
 
@@ -429,7 +429,7 @@ body {
 .react-calendar__navigation button {
   background: none; /* 버튼 배경 제거 */
   border: none; /* 버튼 테두리 제거 */
-  color: #2C348F; /* 버튼 텍스트 색상 */
+  color: #fd8517; /* 버튼 텍스트 색상 */
       font-size: 22px; /* 버튼 텍스트 크기 */
       font-weight: bold;
         font-family: 'Pretendard-Regular';
@@ -437,7 +437,7 @@ body {
 }
 
 .react-calendar__navigation button:hover {
-  color: #2C348F; /* 호버 시 텍스트 색상 */
+  color: #fd8517; /* 호버 시 텍스트 색상 */
 }
 .search-top {
   overflow: hidden;

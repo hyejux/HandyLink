@@ -28,16 +28,17 @@ function UserLoginPage () {
     const handleKakaoLogin = () => {
 
         // .env에서 REST API 키 가져오기
-        const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+        //const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+        const redirectUri = `http://${window.location.hostname}:8585/kakao/login/oauth2`;
         const REST_API_KEY = process.env.REACT_APP_KAKAO_CLIENT_ID;
 
-        if (!REST_API_KEY || !REDIRECT_URI) {
+        if (!REST_API_KEY || !redirectUri) {
             console.error("Kakao API 키 또는 리다이렉트 URI가 설정되지 않았습니다.");
             return;
         }
 
         // Kakao 인증 URL 생성
-        const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
+        const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code`;
 
         // 카카오 인증 페이지로 리다이렉트
         window.location.href = KAKAO_AUTH_URL;

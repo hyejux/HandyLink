@@ -61,14 +61,23 @@
           AND send_time > #{lastCheckedTime}
     </select>
 
-    <update id="updateUserLastCheckedTime">
-        INSERT INTO chat_status (user_id, store_no, user_last_checked_time)
-        VALUES (#{userId}, #{storeNo}, NOW())
-            ON CONFLICT (user_id, store_no)
-            DO UPDATE SET user_last_checked_time = NOW()
+    <update id="updateLastCheckedTime">
+        UPDATE chat_status
+        SET user_last_checked_time = #{lastCheckedTime}
+        WHERE user_id = #{userId}
+          AND store_no = #{storeNo}
     </update>
 
-    <!-- Chat list result map to maintain case sensitivity -->
+<!--    <select id="findLastCheckedTimesByUserId" resultType="com.example.HiMade.user.dto.ChatStatusDTO">-->
+<!--        SELECT-->
+<!--            user_id AS userId,-->
+<!--            store_no AS storeNo,-->
+<!--            user_last_checked_time AS userLastCheckedTime,-->
+<!--            store_last_checked_time AS storeLastCheckedTime-->
+<!--        FROM chat_status-->
+<!--        WHERE user_id = #{userId}-->
+<!--    </select>-->
+
     <resultMap id="chatListResultMap" type="map">
         <result property="storeNo" column="storeNo"/>
         <result property="storeName" column="storeName"/>

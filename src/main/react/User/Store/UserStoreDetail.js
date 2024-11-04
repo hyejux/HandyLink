@@ -574,8 +574,8 @@ function UserStoreDetail() {
                         <div
                           className="type-title"
                           style={{
-                            backgroundColor: notice.noticeType === '소식' ? 'rgb(237 237 237 / 29%)' :
-                              notice.noticeType === '공지사항' ? 'rgb(255 250 224 / 79%)' : 'transparent'
+                            backgroundColor: notice.noticeType === '소식' ? 'rgb(255 225 181)' :
+                              notice.noticeType === '공지사항' ? 'rgb(255 225 181)' : 'transparent'
                           }}
                         >
                           {notice.noticeType}

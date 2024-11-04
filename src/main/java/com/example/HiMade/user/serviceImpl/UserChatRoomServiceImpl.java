@@ -1,6 +1,7 @@
 package com.example.HiMade.user.serviceImpl;
 
 import com.example.HiMade.admin.dto.StoreRegistDTO;
+import com.example.HiMade.user.dto.ChatStatusDTO;
 import com.example.HiMade.user.dto.UserChatDTO;
 import com.example.HiMade.user.mapper.UserChatRoomMapper;
 import com.example.HiMade.user.service.UserChatRoomService;
@@ -49,8 +50,15 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
     }
 
     @Override
-    public void updateLastCheckedTime(String userId, Long storeNo) {
-        System.out.println("DB 업데이트 시도 - userId: " + userId + ", storeNo: " + storeNo);
-        userChatRoomMapper.updateUserLastCheckedTime(userId, storeNo);
+    public void updateLastCheckedTime(String userId, Long storeNo, Timestamp lastCheckedTime) {
+        System.out.println("DB 업데이트 시도 - userId: " + userId + ", storeNo: " + storeNo + ", lastCheckedTime : " + lastCheckedTime);
+        userChatRoomMapper.updateUserLastCheckedTime(userId, storeNo, lastCheckedTime);
     }
+
+//    @Override
+//    public List<ChatStatusDTO> getLastCheckedTimesByUserId(String userId) {
+//        System.out.println("로그 Service - userId: " + userId);
+//        return userChatRoomMapper.findLastCheckedTimesByUserId(userId);
+//    }
+
 }

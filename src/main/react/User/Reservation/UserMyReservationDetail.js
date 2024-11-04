@@ -223,14 +223,20 @@ function UserMyReservationDetail() {
                   </div>
                 )}
 
-                {/* 중분류 출력 (첫 번째 항목에만) */}
-                <div className="info-row info-row2">
-                  {isMiddleCategoryDifferent && (
-                    <div className="left"> <i class="bi bi-check2"></i> {item.middleCategoryName}</div>
-                  )}
-                  {/* 서브카테고리 출력 */}
-                  <div className="right">{item.subCategoryName} (+{item.subPrice}원)</div>
-                </div>
+
+<div className="info-row info-row2">
+  {isMiddleCategoryDifferent && (
+    <div className="left">
+      <i className="bi bi-check2"></i> {item.middleCategoryName}
+    </div>
+  )}
+  <div className="right">
+    {item.middleCategoryValue != null
+      ? `${item.middleCategoryValue} (+${item.middlePrice}원)`
+      : `${item.subCategoryName} (+${item.subPrice}원)`}
+  </div>
+</div>
+
 
               </div>
             );
@@ -299,7 +305,7 @@ function UserMyReservationDetail() {
             <div className="payment-info-top">
               <div className="payment-left">결제 정보</div>
               <div className="payment-right">
-                <a href={`/paymentInfo.user/${cateId}`}>결제 상세</a>
+                {/* <a href={`/paymentInfo.user/${cateId}`}>결제 상세</a> */}
               </div>
             </div>
             {paymentInfo.length > 0 && paymentInfo.map((payment, index) => (

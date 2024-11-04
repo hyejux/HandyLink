@@ -15,6 +15,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -64,37 +65,37 @@ public class UserSocialController {
         }
     }
 
-    // 카카오 로그인 처리
+    // 카카오 로그인
     @GetMapping("/login/oauth2")
-    public void kakaoLogin(@RequestParam String code, HttpSession session, HttpServletResponse response) {
+    public void kakaoLogin(@RequestParam String code, HttpSession session,
+                           HttpServletRequest request, HttpServletResponse response) {
         try {
-            // 1. 카카오 인가 코드를 통해 액세스 토큰을 요청
-            String accessToken = userAccountService.getKakaoAccessToken(code);
+            // 현재 요청의 호스트를 가져와서 동적으로 리다이렉트 URI 생성
+            String serverHost = request.getServerName();
+            String redirectUri = "http://" + serverHost + ":8585/kakao/login/oauth2";
+
+            // 1. 카카오 인가 코드를 통해 액세스 토큰을 요청 (리다이렉트 URI 전달)
+            String accessToken = userAccountService.getKakaoAccessToken(code, redirectUri);
             logger.info("로그 Access Token: {}", accessToken);
 
+            // 나머지 코드는 동일
             // 2. 액세스 토큰으로 카카오 사용자 정보 요청
             UserDTO kakaoUser = userAccountService.getKakaoUserInfo(accessToken);
             logger.info("로그 Kakao User Info: {}", kakaoUser);
 
             // 3. 사용자 정보가 DB에 있는지 확인
             UserDTO existingUser = userAccountService.getUserById(kakaoUser.getUserId());
-
             if (existingUser == null) {
-                // 카카오 사용자 정보 세션에 저장하고 회원가입 페이지로 리다이렉트
                 kakaoUser.setLoginType("KAKAO");
                 session.setAttribute("kakaoUser", kakaoUser);
                 session.setAttribute("kakaoAccessToken", accessToken);
                 response.sendRedirect("/UserSignUp.user?kakao=true");
             } else {
-                // Spring Security의 인증 정보 설정
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                         existingUser.getUserId(), null, AuthorityUtils.createAuthorityList("ROLE_USER"));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
                 session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
                 session.setAttribute("kakaoAccessToken", accessToken);
-
-                // accessToken을 포함해 클라이언트에 리다이렉트
                 response.sendRedirect("/UserMain.user?accessToken=" + accessToken);
             }
         } catch (Exception e) {

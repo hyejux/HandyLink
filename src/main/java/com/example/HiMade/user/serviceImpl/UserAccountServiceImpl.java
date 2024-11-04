@@ -132,7 +132,7 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
 
     // 카카오 토큰 발행
     @Override
-    public String getKakaoAccessToken(String code) {
+    public String getKakaoAccessToken(String code, String redirectUri) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -140,7 +140,7 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", CLIENT_ID);
-        body.add("redirect_uri", REDIRECT_URI);
+        body.add("redirect_uri", redirectUri);
         body.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);

@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebSocketHandler extends TextWebSocketHandler {
 
     private static final ConcurrentHashMap<String, Set<WebSocketSession>> userSessions = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Set<WebSocketSession>> storeSessions = new ConcurrentHashMap<>();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -30,51 +31,51 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        // Spring Security의 SecurityContext에서 인증 정보 가져오기
         String userId = extractUserIdFromSession(session);
+        String storeNo = extractStoreNoFromSession(session);  // 추가된 부분
+
         if (userId != null) {
             userSessions.computeIfAbsent(userId, k -> ConcurrentHashMap.newKeySet()).add(session);
             System.out.println("New WebSocket connection established for user: " + userId);
+        } else if (storeNo != null) {  // 추가된 부분
+            storeSessions.computeIfAbsent(storeNo, k -> ConcurrentHashMap.newKeySet()).add(session);
+            System.out.println("New WebSocket connection established for store: " + storeNo);
         } else {
-            session.close();  // 인증되지 않은 사용자는 연결 종료
+            session.close();
         }
     }
 
-        @Override
-        protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-            String sessionUserId = extractUserIdFromSession(session);
-            if (sessionUserId == null) {
-                session.close(CloseStatus.POLICY_VIOLATION);
-                return;
+    @Override
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
+        String userId = (String) payload.get("userId");
+        String storeNo = (String) payload.get("storeNo");
+        String senderType = (String) payload.get("senderType");
+
+        if ("USER".equals(senderType)) {
+            // 사용자가 보낸 메시지
+            Set<WebSocketSession> targetStoreSessions = storeSessions.get(storeNo);  // 변경된 부분
+            if (targetStoreSessions != null) {
+                sendMessageToSessions(targetStoreSessions, message, "store " + storeNo);
             }
 
-            Map<String, Object> payload = objectMapper.readValue(message.getPayload(), Map.class);
-            String userId = (String) payload.get("userId");
-            String storeNo = (String) payload.get("storeNo");
-            String senderType = (String) payload.get("senderType");
-
-            // 메시지를 받을 대상 결정
-            String recipientId;
-            if ("USER".equals(senderType)) {
-                recipientId = storeNo;  // USER가 보낸 메시지는 STORE에게
-            } else {
-                recipientId = userId;   // STORE가 보낸 메시지는 USER에게
+            Set<WebSocketSession> senderSessions = userSessions.get(userId);
+            if (senderSessions != null) {
+                sendMessageToSessions(senderSessions, message, "user " + userId);
+            }
+        } else {
+            // 스토어가 보낸 메시지
+            Set<WebSocketSession> targetUserSessions = userSessions.get(userId);
+            if (targetUserSessions != null) {
+                sendMessageToSessions(targetUserSessions, message, "user " + userId);
             }
 
-            // 메시지 전송
-            Set<WebSocketSession> sessions = userSessions.get(recipientId);
-            if (sessions != null) {
-                sessions.forEach(recipientSession -> {
-                    try {
-                        if (recipientSession.isOpen()) {
-                            recipientSession.sendMessage(message);
-                        }
-                    } catch (Exception e) {
-                        System.out.println("메시지 전송 중 오류 발생: " + e.getMessage());
-                    }
-                });
+            Set<WebSocketSession> senderStoreSessions = storeSessions.get(storeNo);  // 변경된 부분
+            if (senderStoreSessions != null) {
+                sendMessageToSessions(senderStoreSessions, message, "store " + storeNo);
             }
         }
+    }
 
     // 각 사용자 ID에 연결된 모든 세션에 메시지 전송
     private void sendMessageToUser(String userId, Map<String, Object> payload) throws Exception {
@@ -99,27 +100,36 @@ public class WebSocketHandler extends TextWebSocketHandler {
         System.out.println("WebSocket connection closed: " + session.getId());
     }
 
-    private String extractUserIdFromSession(WebSocketSession session) {
-        Map<String, Object> attributes = session.getAttributes();
+    private void sendMessageToSessions(Set<WebSocketSession> sessions, TextMessage message, String recipient) {
+        sessions.forEach(session -> {
+            try {
+                if (session.isOpen()) {
+                    session.sendMessage(message);
+                    System.out.println("Message sent successfully to " + recipient);
+                }
+            } catch (Exception e) {
+                System.err.println("Error sending message to " + recipient + ": " + e.getMessage());
+            }
+        });
+    }
 
-        // 1. 시큐리티로 로그인한 일반 사용자 체크
+    private String extractUserIdFromSession(WebSocketSession session) {
         Principal principal = session.getPrincipal();
         if (principal != null) {
-            System.out.println("Found user through security principal: " + principal.getName());
             return principal.getName();
         }
+        return null;
+    }
 
-        // 2. 일반 세션으로 로그인한 스토어 체크
+    private String extractStoreNoFromSession(WebSocketSession session) {
+        Map<String, Object> attributes = session.getAttributes();
         HttpSession httpSession = (HttpSession) attributes.get("HTTP.SESSION");
         if (httpSession != null) {
             String storeNo = (String) httpSession.getAttribute("storeNo");
             if (storeNo != null) {
-                System.out.println("Found store through session: " + storeNo);
                 return storeNo;
             }
         }
-
-        System.out.println("No user or store ID found");
         return null;
     }
 

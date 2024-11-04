@@ -445,18 +445,43 @@ function UserStoreDetail() {
               <div className="store-basic-info"><i className="bi bi-shop"></i>
                 <div className="store-addr"> {storeInfo.addr}   {storeInfo.addrdetail}</div>
               </div>
-              <hr />
+              {/* <hr /> */}
               <div className="store-basic-info"><i className="bi bi-alarm-fill"></i> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
               <div className="store-basic-info"><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
             </div>
           </div>
 
           <div className="store-detail-menu">
-            <button type="button" onClick={() => setActiveSection('home')}>홈</button>
-            <button type="button" onClick={() => setActiveSection('info')}>소식</button>
-            <button type="button" onClick={() => setActiveSection('reservation')}>예약</button>
-            <button type="button" onClick={() => setActiveSection('review')}>리뷰</button>
-          </div>
+  <button
+    type="button"
+    onClick={() => setActiveSection('home')}
+    className={activeSection === 'home' ? 'active' : ''}
+  >
+    홈
+  </button>
+  <button
+    type="button"
+    onClick={() => setActiveSection('info')}
+    className={activeSection === 'info' ? 'active' : ''}
+  >
+    소식
+  </button>
+  <button
+    type="button"
+    onClick={() => setActiveSection('reservation')}
+    className={activeSection === 'reservation' ? 'active' : ''}
+  >
+    예약
+  </button>
+  <button
+    type="button"
+    onClick={() => setActiveSection('review')}
+    className={activeSection === 'review' ? 'active' : ''}
+  >
+    리뷰
+  </button>
+</div>
+
 
           {/* 홈 */}
           {activeSection === 'home' && (
@@ -549,8 +574,8 @@ function UserStoreDetail() {
                         <div
                           className="type-title"
                           style={{
-                            backgroundColor: notice.noticeType === '소식' ? '#8dc4ff4a' :
-                              notice.noticeType === '공지사항' ? '#ffdfdf' : 'transparent'
+                            backgroundColor: notice.noticeType === '소식' ? 'rgb(237 237 237 / 29%)' :
+                              notice.noticeType === '공지사항' ? 'rgb(255 250 224 / 79%)' : 'transparent'
                           }}
                         >
                           {notice.noticeType}
@@ -637,18 +662,10 @@ function UserStoreDetail() {
           {activeSection === 'review' && (
             <div className="user-content-container5">
               <div className="review-section">
-                <h2>포토 리뷰</h2>   <div className="total-rating">
-
-                  {[...Array(5)].map((_, index) => (
-                    <span key={index} className={`star ${totalRating > index ? 'filled' : ''}`}>
-                      &#9733; {/* 별 아이콘 */}
-                    </span>
-                  ))}
-                  <span> {totalRating.toFixed(1)} / 5</span>
-                </div>
+           
 
 
-
+<div className='photo-rating-box'>
                 <div className="photo-review">
                   {reviewPhotoList.slice(0, 3).map((photo, index) => (
                     <div className="photo-item" key={index}>
@@ -661,6 +678,16 @@ function UserStoreDetail() {
                     </div>
                   ))}
                 </div>
+                <div className="total-rating">
+
+{[...Array(5)].map((_, index) => (
+  <span key={index} className={`star ${totalRating > index ? 'filled' : ''}`}>
+    &#9733; {/* 별 아이콘 */}
+  </span>
+))}
+<span> {totalRating.toFixed(1)} / 5  <span style={{color : '#999'}} >({sortedReviewList.length}) </span></span>
+              </div>
+  </div>
 
                 <div className="sort-reviews">
                   {/* <label htmlFor="sortOrder">정렬 기준: </label> */}

@@ -37,8 +37,6 @@ public class Reservation {
     @Column(name = "reservation_price")
     private Long reservationPrice;
 
-    @Column(name = "store_id")
-    private String storeId;
 
     @Column(name = "user_id")
     private String userId;

@@ -263,4 +263,10 @@
     border-radius: 50%;
 }
 
+.date-separator {
+    color: #333;
+    font-size: 12px;
+    margin: 0 auto;
+    text-align: center;
+}
 

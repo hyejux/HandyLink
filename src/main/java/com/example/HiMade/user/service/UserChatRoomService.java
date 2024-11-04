@@ -1,6 +1,7 @@
 package com.example.HiMade.user.service;
 
 import com.example.HiMade.admin.dto.StoreRegistDTO;
+import com.example.HiMade.user.dto.ChatStatusDTO;
 import com.example.HiMade.user.dto.UserChatDTO;
 
 import java.sql.Timestamp;
@@ -13,5 +14,6 @@ public interface UserChatRoomService {
     List<Map<String, Object>> getChatListForUser(String userId);
     StoreRegistDTO getStoreInfoByStoreNo(Long storeNo);
     List<UserChatDTO> findNewMessages(String userId, Long storeNo, Timestamp lastCheckedTime);
-    void updateLastCheckedTime(String userId, Long storeNo);
+    void updateLastCheckedTime(String userId, Long storeNo, Timestamp lastCheckedTime);
+//    List<ChatStatusDTO> getLastCheckedTimesByUserId(String userId);
 }

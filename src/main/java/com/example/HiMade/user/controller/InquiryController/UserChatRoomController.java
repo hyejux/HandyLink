@@ -1,6 +1,7 @@
 package com.example.HiMade.user.controller.InquiryController;
 
 import com.example.HiMade.admin.dto.StoreRegistDTO;
+import com.example.HiMade.user.dto.ChatStatusDTO;
 import com.example.HiMade.user.dto.UserChatDTO;
 import com.example.HiMade.user.service.UserChatRoomService;
 import lombok.RequiredArgsConstructor;
@@ -106,11 +107,17 @@ public class UserChatRoomController {
 //    }
 
     @PostMapping("/updateLastCheckedTime")
-    public ResponseEntity<Void> updateLastCheckedTime(@RequestParam Long storeNo, @RequestParam String userId) {
-        System.out.println("로그 updateLastCheckedTime - storeNo: " + storeNo + ", userId: " + userId);
-        userChatRoomService.updateLastCheckedTime(userId, storeNo);
+    public ResponseEntity<Void> updateLastCheckedTime(@RequestParam Long storeNo, @RequestParam String userId, Timestamp lastCheckedTime) {
+        System.out.println("로그 updateLastCheckedTime - storeNo: " + storeNo + ", userId: " + userId + ", lastCheckedTime: " + lastCheckedTime);
+        userChatRoomService.updateLastCheckedTime(userId, storeNo, lastCheckedTime);
         return ResponseEntity.ok().build();
     }
 
+
+//    @GetMapping("/lastCheckedTimes")
+//    public ResponseEntity<List<ChatStatusDTO>> getLastCheckedTimes(@RequestParam String userId) {
+//        List<ChatStatusDTO> lastCheckedTimes = userChatRoomService.getLastCheckedTimesByUserId(userId);
+//        return ResponseEntity.ok(lastCheckedTimes);
+//    }
 
 }

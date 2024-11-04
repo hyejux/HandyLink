@@ -11,7 +11,7 @@ public interface UserAccountService {
     boolean checkId(String userId);
     UserDTO getUserById(String userId);
     void updateUser(UserDTO userDTO);
-    String getKakaoAccessToken(String code);
+    String getKakaoAccessToken(String code, String redirectUri);
     UserDTO getKakaoUserInfo(String accessToken);
     String findUserId(String userName, String phonenum);
     boolean verifyUserForPasswordReset(String userId, String userName, String phonenum);

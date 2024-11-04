@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './AdminReserveManage.css';
+import { useRef } from 'react';
 
 function AdminReserveManage() {
     const [passengers, setPassengers] = useState([
@@ -284,11 +285,40 @@ function AdminReserveManage() {
     
 
 
+    const componentRef = useRef();
+
+    const handlePrint = () => {
+      const printContents = componentRef.current.innerHTML;
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Print</title>
+          </head>
+          <body>
+            ${printContents}
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.print();
+    };
+  
 
 
 
     return (
         <div>
+
+
+<div>
+      <div ref={componentRef}>
+        <h1>프린트할 내용</h1>
+        <p>이 영역의 내용을 프린트할 수 있습니다.</p>
+      </div>
+      <button onClick={handlePrint}>프린트</button>
+    </div>
+
             <div className="main-content-title">
                 <div className='header-title'> 예약 관리 </div>
                 <hr />

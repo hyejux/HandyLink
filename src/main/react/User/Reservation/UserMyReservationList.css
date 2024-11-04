@@ -12,6 +12,12 @@ body {
   padding: 0px;
 }
 
+.reservation-header {
+  display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
 
 .user-top-nav {
   display: flex;
@@ -245,11 +251,13 @@ body {
 
 }
 
+
+
 .user-main-content {
   /* padding : 15px; */
   margin-bottom: 100px;
   /* border : 1px solid blue; */
-  background-color: #eee;
+  background-color: #f0f4f8;
 }
 
 
@@ -302,9 +310,10 @@ body {
   color: white; 
   border: none; 
   border-radius: 5px; 
-  padding: 4px 8px; 
+  padding: 8px 8px; 
   font-size: 12px; 
   cursor: pointer;
+  width: 100%;
 }
 
 .store-name-title {
@@ -337,8 +346,8 @@ body {
   align-items: center;
   font-weight: bold;
   font-size: 14px;
-  border: 1px solid #2C348F;
-  border-radius: 5px;
+  border: 1px solid #2c348f63;
+  border-radius: 20px;
   padding: 5px 8px;
   justify-content: space-around;
 
@@ -375,4 +384,21 @@ body {
 
 .reservation-info i {
   margin-right: 5px;
+}
+
+.search-top {
+  overflow: hidden;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.search-top .left {
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.search-top .right {
+  float: right;
+  font-size: 20px;
 }

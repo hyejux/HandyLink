@@ -318,7 +318,7 @@ function UserReservationConfirm() {
 
         <div className="user-main-content">
 
-        <div className="user-content-container">
+        <div className="user-content-container11">
             <div className="user-reserve-menu">
               <div className="user-reserve-menu-img">
                 <img src={`${reserveModi.imageUrl}`} alt="My Image" />
@@ -337,15 +337,15 @@ function UserReservationConfirm() {
           <hr />
 
           <div className="user-content-container2">
-            <div className="user-reserve-title">예약자 정보</div>
+            <div className="user-reserve-title">예약자정보</div>
             <div className="user-content-container3">
               <div className="sub-container3">
-                <div className="bold-text">예약자 성함</div>
+                <div className="bold-text">성함</div>
                 <div>{userName}</div>
               </div>
 
               <div className="sub-container3">
-                <div className="bold-text">예약자 전화번호</div>
+                <div className="bold-text">전화번호</div>
                 <div>{userPhonenum}</div>
               </div>
             </div>
@@ -370,7 +370,7 @@ function UserReservationConfirm() {
           <hr />
 
           <div className="user-content-container2">
-            <div className="user-reserve-title2">예약 정보</div>
+            <div className="user-reserve-title2">예약정보</div>
           </div>
           <div className="user-content-container2">
             <div className="user-content-container3">

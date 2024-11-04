@@ -56,6 +56,8 @@ public class MainController {
 
 
 
+
+
   @GetMapping("/{pageName}.master")
   public String pageMaster(@PathVariable String pageName, Model model) {
     model.addAttribute("pageName", pageName);
@@ -82,6 +84,7 @@ public class MainController {
     System.out.println("로그인뷰이름:" + pageName);
     return "adminLogin";
   }
+  
 
   @PostMapping("/loginForm")
   public ResponseEntity<Map<String, Object>> loginForm(@RequestBody Map<String, String> loginData,

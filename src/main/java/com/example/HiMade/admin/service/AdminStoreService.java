@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AdminStoreService {
 
@@ -34,5 +35,8 @@ public interface AdminStoreService {
     void setNoticeModi(storeNoticeDTO dto); // 가게 소식 등록
     void setNoticeStatus(storeNoticeDTO dto);
     public storeNoticeDTO getNoticeDetail( int id);
+
+    Map<String , Integer> getReportCount(Long storeNo); //리포트 예약 정보
+
 
 }

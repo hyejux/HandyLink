@@ -43,4 +43,8 @@ public interface AdminStoreMapper {
     void setNoticeModi(storeNoticeDTO dto); // 가게 소식 등록
     void setNoticeStatus(storeNoticeDTO dto);
     public storeNoticeDTO getNoticeDetail( int id);
+
+    Integer getReviewCount(Long storeNo); //리뷰등록개수
+    Integer getCancledCount(Long storeNo); //예약취소건수
+
 }

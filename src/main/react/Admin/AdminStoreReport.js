@@ -10,13 +10,20 @@ import './AdminStoreReport.css';
 function AdminStoreReport(){
     const storeId = sessionStorage.getItem('storeId');
     const storeNo = sessionStorage.getItem('storeNo');
+    console.log("storeNo ", storeNo);
 
     useEffect(() => {
-        const fetchReport = async() => {
-            const resp = await axios.get(`/adminStore/getStoreReport?storeNo=${storeNo}`); //아직 서버 안함.
-            console.log("리포트정보 ", resp.data);
+        const fetchReport = async () => {
+            try {
+                const resp = await axios.get(`/adminStore/getReportCount?storeNo=${storeNo}`);
+                console.log("Report data: ", resp.data);
+            } catch (error) {
+                console.error("Error fetching report: ", error);
+            }
         };
-    },[]);
+
+        fetchReport();
+    }, []);
 
 
     return(
@@ -29,19 +36,19 @@ function AdminStoreReport(){
                     <div className="reservation-status">
                         <div className="reservation-field">
                             <p className="wait-count"> 0 </p>
-                            <p className=""> 예약 대기 </p>
+                            <p className=""> 리뷰 등록 </p>
                         </div>
                         <div className="reservation-field">
                             <p className="refund-count"> 0 </p>
-                            <p className=""> 환불 신청 </p>
+                            <p className=""> 예약 취소 </p>
                         </div>
                         <div className="reservation-field">
                             <p className="today-count"> 0 </p>
-                            <p className=""> 오늘 픽업 </p>
+                            <p className=""> 예약 대기 </p>
                         </div>
                         <div className="reservation-field">
                             <p className="doing-count"> 0 </p>
-                            <p className=""> 예약 진행 </p>
+                            <p className=""> 진행 중 </p>
                         </div>
                     </div>
                 </div>

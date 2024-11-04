@@ -157,6 +157,15 @@ public class AdminStoreController {
         }
     }
 
+    @GetMapping("/getReportCount")
+    public Map<String , Integer> getReportCount(@RequestParam Long storeNo){
+        Map<String , Integer>  reportCount = adminStoreService.getReportCount(storeNo);
+        Integer reviewCount = reportCount.get("reviewCount");
+        Integer canceledCount = reportCount.get("canceledCount");
+
+        return reportCount;
+    }
+
     @GetMapping("getNoticeList/{id}")
     public List<storeNoticeDTO> getNoticeList(@PathVariable int id) {
         return adminStoreService.getNoticeList(id);

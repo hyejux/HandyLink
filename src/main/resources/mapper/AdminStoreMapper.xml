@@ -234,7 +234,6 @@
             <result property="storeSnsNo" column="store_sns_no"/>
             <result property="snsLink" column="sns_link"/>
             <result property="snsName" column="sns_name"/>
-            <result property="storeId" column="store_id"/>
             <result property="storeNo" column="store_no"/>
         </collection>
 
@@ -242,7 +241,6 @@
         <collection property="storeImg" ofType="com.example.HiMade.admin.dto.StoreImgDTO" javaType="java.util.List">
             <result property="storeImgNo" column="store_img_no"/>
             <result property="storeImgLocation" column="store_img_location"/>
-            <result property="storeId" column="store_id"/>
             <result property="storeNo" column="store_no"/>
         </collection>
     </resultMap>
@@ -287,6 +285,19 @@
         delete from day_off_set
         where store_no = #{storeNo} and set_no = #{setNo} and day_off_end &gt; now()
     </delete>
+
+    <select id="getReviewCount" resultType="Integer">
+        select count(*)
+        from review
+        join reservation reserve on reserve.reservation_no = review.reservation_no
+        where reserve.store_no = #{storeNo}
+    </select>
+
+    <select id="getCancledCount" resultType="Integer">
+        select count(*)
+        from reservation
+        where store_no = #{storeNo} and reservation_status = '취소 (null)';
+    </select>
 
 
 </mapper>

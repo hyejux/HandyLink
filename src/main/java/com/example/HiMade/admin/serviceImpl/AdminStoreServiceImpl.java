@@ -197,4 +197,18 @@ public class AdminStoreServiceImpl implements AdminStoreService {
         return adminStoreMapper.getNoticeDetail(id);
     }
 
+    @Override
+    public Map<String , Integer> getReportCount(Long storeNo) {
+        Integer reviewCount = adminStoreMapper.getReviewCount(storeNo);
+        Integer cancledCount = adminStoreMapper.getCancledCount(storeNo);
+
+        System.out.println("리뷰개수: "+ reviewCount + "예약취소: " + cancledCount);
+
+        Map<String, Integer> resultMap = new HashMap<>();
+        resultMap.put("reviewCount", reviewCount);
+        resultMap.put("cancledCount", cancledCount);
+
+        return resultMap;
+    }
+
 }

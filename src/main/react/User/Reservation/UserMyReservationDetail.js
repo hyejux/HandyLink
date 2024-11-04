@@ -305,7 +305,7 @@ function UserMyReservationDetail() {
             <div className="payment-info-top">
               <div className="payment-left">결제 정보</div>
               <div className="payment-right">
-                <a href={`/paymentInfo.user/${cateId}`}>결제 상세</a>
+                {/* <a href={`/paymentInfo.user/${cateId}`}>결제 상세</a> */}
               </div>
             </div>
             {paymentInfo.length > 0 && paymentInfo.map((payment, index) => (

@@ -6,8 +6,13 @@ import { FaCalendar, FaClock } from 'react-icons/fa';
 import './userMyReservationList.css';
 
 
+
 function UserMyReservationList() {
 
+
+
+
+  // -------------
 
   const [reservationList, setReservationList] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
@@ -53,15 +58,45 @@ function UserMyReservationList() {
     window.location.href = `../UserReviewRegist.user/${id}`;
   };
 
+  const formatDate = (timeString) => {
+    // Create a Date object from the time string
+    const date = new Date(`1970-01-01T${timeString}`);
+    
+    // Format it to HH:mm
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+    return `${hours}:${minutes}`;
+  };
+  
+
+  const formatDate2 = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0'); // 초 추가
+
+    return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`; // 초 포함
+};
+
+
+
   return (
     <div>
+
+
+
+
+      
       <div className="user-main-content" >
 
-        <div className="user-top-nav">
-          {/* <i className="bi bi-arrow-left"></i> */}
-          <logo className="logo"> 내 예약 내역 (아이디 고정값으로 뿌리는 중) </logo>
-
-        </div>
+      <div className="search-top">
+            <div className='left'>예약 내역</div>
+            
+          </div>
 
 
         {reservationList.map((value, index) => (
@@ -77,22 +112,14 @@ function UserMyReservationList() {
             >
               {value.reservationStatus}
             </span>
-              <div className="reservation-time">{value.regTime} </div>
+              <div className="reservation-time">{formatDate2(value.regTime)} </div>
 
 
-              {/* {value.reviewCount === 0 && value.reservationStatus === '확정' && ( */}
-              <button className="review-write-btn"
-                onClick={(event) => {
-                  event.stopPropagation(); // Prevents event bubbling
-                  goToReview(value.reservationNo); // Call the function to navigate to the review page
-                }}
-              >
-                리뷰 작성하기
-              </button>
-              {/* )} */}
+            
 
 
             </div>
+            
             <div className="store-name-title">{value.storeName} <i class="bi bi-chevron-right"></i> </div>
             <div className="product-details">{value.serviceName} | {value.reservationPrice} 원</div>
 
@@ -105,11 +132,21 @@ function UserMyReservationList() {
                 </div>
                 <div className="time">
                   <i className="bi bi-clock-fill"></i>
-                  <span>{value.reservationTime}</span>
+                  <span>{formatDate(value.reservationTime)}</span>
                 </div>
               </div>
 
             </div>
+              {/* {value.reviewCount === 0 && value.reservationStatus === '확정' && ( */}
+              <button className="review-write-btn"
+                onClick={(event) => {
+                  event.stopPropagation(); // Prevents event bubbling
+                  goToReview(value.reservationNo); // Call the function to navigate to the review page
+                }}
+              >
+                리뷰 작성하기
+              </button>
+              {/* )} */}
           </div>
         ))}
 

@@ -306,7 +306,7 @@ body {
 }
 
 .review-write-btn {
-  background-color: #2C348F;
+  background-color: #fd8517;
   color: white; 
   border: none; 
   border-radius: 5px; 
@@ -346,7 +346,7 @@ body {
   align-items: center;
   font-weight: bold;
   font-size: 14px;
-  border: 1px solid #2c348f63;
+  border: 1px solid #ab650057;
   border-radius: 20px;
   padding: 5px 8px;
   justify-content: space-around;
@@ -355,7 +355,7 @@ body {
 
 
 .reservation-info-box > div i {
-  color: #2C348F;
+  color: #fd8517;
 }
 
 

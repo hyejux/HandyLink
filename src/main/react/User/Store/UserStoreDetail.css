@@ -185,7 +185,7 @@ h2 {
 
 .review-rating {
   font-size: 14px;
-  color: #f4c150;
+  color: #fd8517;
   /* Rating star color */
 }
 
@@ -196,7 +196,7 @@ h2 {
 }
 
 .star.filled {
-  color: #f4c150; /* 선택된 별 색상 */
+  color: #fd8517; /* 선택된 별 색상 */
 }
 
 
@@ -507,7 +507,7 @@ body {
 }
 
 .bi {
-  color: #2C348F;
+  color: #fd8517;
   margin: 0 10px 0 0;
 }
 
@@ -587,8 +587,8 @@ body {
 }
 
 .store-detail-menu > button.active {
-  border-bottom: 3px solid #2C348F;
-  color: #2C348F;
+  border-bottom: 3px solid #fd8517;
+  color: #fd8517;
 }
 
 .store-detail-menu {

@@ -649,7 +649,7 @@ body {
 .store-list li {
   padding: 10px;
   border-bottom: 0.5px solid #eee;
-  color: #2C348F;
+  color: #fe9e25;
   text-align: left;
   font-size: 12px;
   font-weight: bold;
@@ -719,6 +719,7 @@ body {
 
 .user-hashtag-container {
   position: relative;
+  font-family: 'Pretendard-Regular';
 }
 
 
@@ -741,8 +742,9 @@ body {
 }
 
 .btn-hashtag {
+  font-family: 'Pretendard-Regular';
   height: 40px;
-  border: 1px solid #738BE3;
+  border: 1px solid #fe9e25;
   border-radius: 40px;
   background-color: #fff;
   font-size: 14px;

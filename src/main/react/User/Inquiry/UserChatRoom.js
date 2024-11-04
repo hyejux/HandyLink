@@ -139,15 +139,21 @@ function UserChatRoom() {
                 console.log('WebSocket 연결됨 - 상태:', websocket.current.readyState);
             };
 
-            websocket.current.onmessage = (event) => {
+            websocket.current.onmessage = async (event) => {
                 const received = JSON.parse(event.data);
                 console.log("수신된 메시지:", received);
 
-                // 현재 채팅방의 메시지인지 확인
                 if (received.userId === userId && received.storeNo === storeNo) {
                     // STORE가 보낸 메시지일 때만 추가 (USER가 보낸 건 이미 local state에 추가됨)
                     if (received.senderType === 'STORE') {
                         setMessages(prevMessages => [...prevMessages, received]);
+
+                        // user_last_checked_time을 업데이트
+                        try {
+                            await axios.post(`/chat/updateLastCheckedTime?userId=${userId}&storeNo=${storeNo}`);
+                        } catch (error) {
+                            console.error("마지막 확인 시간 업데이트 실패:", error);
+                        }
                     }
                 }
             };

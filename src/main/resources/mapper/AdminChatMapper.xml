@@ -24,6 +24,7 @@
             u.user_img_url AS userImgUrl,
             CASE
                 WHEN lm.lastMessageTime > COALESCE(cs.store_last_checked_time, '1970-01-01')
+                    AND c.sender_type = 'USER'
                     THEN true
                 ELSE false
                 END AS isNewMessage

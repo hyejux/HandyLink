@@ -24,18 +24,63 @@ function UserChatList() {
     }, []);
 
     useEffect(() => {
-        if (userId) {
-            const fetchChatList = async () => {
-                try {
-                    const response = await axios.get(`/chat/list?userId=${userId}`);
-                    console.log('채팅 목록:', response.data);
-                    setChatList(response.data);
-                } catch (error) {
-                    console.error("채팅 목록을 가져오는 중 오류가 발생했습니다:", error);
-                }
-            };
-            fetchChatList();
-        }
+        if (!userId) return;
+
+        // 채팅 목록 가져오기
+        const fetchChatList = async () => {
+            try {
+                const response = await axios.get(`/chat/list?userId=${userId}`);
+                setChatList(response.data);
+            } catch (error) {
+                console.error("채팅 목록을 가져오는 중 오류가 발생했습니다:", error);
+            }
+        };
+        fetchChatList();
+
+        // WebSocket 연결 설정
+        const wsHost = window.location.hostname;
+        const wsUrl = `ws://${wsHost}:8585/ws/chat`;
+        const websocket = new WebSocket(wsUrl);
+
+        websocket.onmessage = (event) => {
+            const received = JSON.parse(event.data);
+            console.log("수신된 메시지:", received);
+
+            if (received.userId === userId) {
+                // 채팅 목록 업데이트
+                setChatList(prevList => {
+                    const updatedList = prevList.map(chat => {
+                        if (chat.storeNo === received.storeNo) {
+                            return {
+                                ...chat,
+                                lastMessage: received.chatMessage,
+                                lastMessageTime: received.sendTime,
+                                isNewMessage: true
+                            };
+                        }
+                        return chat;
+                    });
+                    return updatedList.sort((a, b) =>
+                        new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
+                    );
+                });
+            }
+        };
+
+
+
+        websocket.onerror = (error) => {
+            console.error("WebSocket 에러:", error);
+        };
+
+        websocket.onclose = () => {
+            console.log("WebSocket 연결 종료");
+        };
+
+        // WebSocket 연결 해제 시 닫기
+        return () => {
+            websocket.close();
+        };
     }, [userId]);
 
     // 검색 기능 구현
@@ -100,6 +145,12 @@ function UserChatList() {
                                         console.log("현재 userId:", userId);
                                         // 채팅방으로 이동하기 전에 마지막 확인 시간 업데이트
                                         await axios.post(`/chat/updateLastCheckedTime?userId=${userId}&storeNo=${chat.storeNo}`);
+                                        await axios.post(`/chat/resetNewMessage?userId=${userId}`);
+                                        setChatList(prevList =>
+                                            prevList.map(item =>
+                                                item.storeNo === chat.storeNo ? { ...item, isNewMessage: false } : item
+                                            )
+                                        );
                                         setSelectedStoreNo(chat.storeNo);
                                         window.location.href = `/UserChatRoom.user?storeNo=${chat.storeNo}`;
                                     } catch (error) {

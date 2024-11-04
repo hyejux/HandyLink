@@ -15,5 +15,5 @@ public interface UserChatRoomService {
     StoreRegistDTO getStoreInfoByStoreNo(Long storeNo);
     List<UserChatDTO> findNewMessages(String userId, Long storeNo, Timestamp lastCheckedTime);
     void updateLastCheckedTime(String userId, Long storeNo, Timestamp lastCheckedTime);
-//    List<ChatStatusDTO> getLastCheckedTimesByUserId(String userId);
+    boolean hasUnreadMessages(String userId);
 }

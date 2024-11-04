@@ -241,8 +241,7 @@ function UserChatRoom() {
 
                 {!isBusinessHours && (
                     <div className="business-hours-message">
-                        지금은 영업 시간이 아닙니다. 문의 가능한
-                        시간은 {formatTimeToAMPM(storeInfo.storeOpenTime)} - {formatTimeToAMPM(storeInfo.storeCloseTime)} 입니다.
+                        <span>지금은 영업 시간이 아닙니다. 문의 가능한 시간은 {formatTimeToAMPM(storeInfo.storeOpenTime)} - {formatTimeToAMPM(storeInfo.storeCloseTime)} 입니다.</span>
                     </div>
                 )}
 

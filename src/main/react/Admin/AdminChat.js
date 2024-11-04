@@ -74,13 +74,16 @@ function AdminChat() {
             );
             setMessages(sortedMessages);
 
-            if (chatBoxRef.current) {
-                chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-            }
         } catch (error) {
             console.error("채팅 내역을 불러오는데 실패했습니다:", error);
         }
     };
+
+    useEffect(() => {
+        if (selectedUserId && chatBoxRef.current) {
+            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+        }
+    }, [selectedUserId, messages]);
 
     // WebSocket 연결
     useEffect(() => {

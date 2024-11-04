@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './AdminChat.css';
+import ProfileCard from './ProfileCard.js';
 import ReactDOM from "react-dom/client";
 
 function AdminChat() {
@@ -14,6 +15,8 @@ function AdminChat() {
     const [selectedUserInfo, setSelectedUserInfo] = useState(null);
     const chatBoxRef = useRef(null);
     const websocket = useRef(null);
+    const [isProfileCardVisible, setIsProfileCardVisible] = useState(false);
+    const [profileCardUserInfo, setProfileCardUserInfo] = useState(null);
 
     // 세션 스토리지에서 스토어 정보 가져오기
     useEffect(() => {
@@ -24,6 +27,17 @@ function AdminChat() {
             setStoreNo(storedStoreNo);
         }
     }, []);
+
+    // 사용자 프로필 정보 가져오기
+    const fetchUserDetail = async (userId) => {
+        try {
+            const response = await axios.get(`/user/profile/${userId}`);
+            console.log('User profile:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error("사용자 정보를 불러오는데 실패했습니다:", error);
+        }
+    };
 
     // 채팅 목록 가져오기
     useEffect(() => {
@@ -44,8 +58,11 @@ function AdminChat() {
     const handleChatSelect = async (userId) => {
         try {
             setSelectedUserId(userId);
-            const selectedUser = chatList.find(chat => chat.userId === userId);
-            setSelectedUserInfo(selectedUser);
+
+            // 사용자의 전체 프로필 정보 가져오기
+            const userInfoResponse = await axios.get(`/user/profile/${userId}`);
+            const userInfo = userInfoResponse.data;
+            setSelectedUserInfo(userInfo);  // 선택한 사용자 정보 전체를 설정
 
             // 읽음 상태 업데이트
             await axios.post(`/adminChat/updateLastCheckedTime?userId=${userId}&storeNo=${storeNo}`);
@@ -57,20 +74,28 @@ function AdminChat() {
             );
             setMessages(sortedMessages);
 
-            if (chatBoxRef.current) {
-                chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-            }
         } catch (error) {
             console.error("채팅 내역을 불러오는데 실패했습니다:", error);
         }
     };
+
+    useEffect(() => {
+        if (selectedUserId && chatBoxRef.current) {
+            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+        }
+    }, [selectedUserId, messages]);
 
     // WebSocket 연결
     useEffect(() => {
         if (!storeId) return;
 
         const connectWebSocket = () => {
-            websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
+
+            // 현재 페이지의 호스트를 기반으로 웹소켓 URL 생성
+            const wsHost = window.location.hostname;
+            const wsUrl = `ws://${wsHost}:8585/ws/chat`;
+
+            websocket.current = new WebSocket(wsUrl);
 
             websocket.current.onopen = () => {
                 console.log('WebSocket 연결됨');
@@ -151,6 +176,21 @@ function AdminChat() {
         }
     };
 
+    // 날짜 구분을 추가하는 함수
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        });
+    };
+
+    // 두 날짜가 다른 날인지 확인하는 함수
+    const isDifferentDay = (date1, date2) => {
+        return formatDate(date1) !== formatDate(date2);
+    };
+
     // 시간 포맷팅
     const formatTime = (timestamp) => {
         const messageDate = new Date(timestamp);
@@ -178,6 +218,27 @@ function AdminChat() {
         chat.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         chat.userId?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    // 프로필 카드 열기 핸들러
+    const handleProfileClick = async (e) => {
+        e.stopPropagation();
+        if (selectedUserInfo && selectedUserInfo.userId) {
+            try {
+                const userInfo = await fetchUserDetail(selectedUserInfo.userId);
+                console.log("로그 Selected User Info:", selectedUserInfo);
+                setProfileCardUserInfo(userInfo); // 프로필 카드에 표시할 정보 업데이트
+                setIsProfileCardVisible(true); // 프로필 카드 표시
+            } catch (error) {
+                console.error("프로필 정보를 불러올 수 없습니다:", error);
+            }
+        }
+    };
+
+    // 프로필 카드 닫기 핸들러
+    const closeProfileCard = () => {
+        setIsProfileCardVisible(false);
+    };
+
 
     return (
         <div className="chat-container">
@@ -222,26 +283,45 @@ function AdminChat() {
                 ) : (
                     <>
                         <div className="messages" ref={chatBoxRef}>
-                            {messages.map((message, index) => (
-                                <div key={index}
-                                     className={`message ${message.senderType === 'STORE' ? 'sent' : 'received'}`}>
-                                    {message.senderType !== 'STORE' && (
-                                        <div className="message-profile">
-                                            <img
-                                                src={selectedUserInfo?.userImgUrl || '/img/user_basic_profile.jpg'}
-                                                alt="profile"
-                                                className="user-img"
-                                            />
-                                            <span className="sender-name">{selectedUserInfo?.userName}</span>
+                            {messages.map((message, index) => {
+                                const showDate = index === 0 || isDifferentDay(messages[index - 1].sendTime, message.sendTime);
+
+                                return (
+                                    <React.Fragment key={index}>
+                                        {/* 날짜 구분 */}
+                                        {showDate && (
+                                            <div className="date-separator">
+                                                {formatDate(message.sendTime)}
+                                            </div>
+                                        )}
+                                        <div
+                                            className={`message ${message.senderType === 'STORE' ? 'sent' : 'received'}`}>
+                                            {message.senderType !== 'STORE' && (
+                                                <div className="message-profile" onClick={handleProfileClick}>
+                                                    <img
+                                                        src={selectedUserInfo?.userImgUrl || '/img/user_basic_profile.jpg'}
+                                                        alt="profile"
+                                                        className="user-img"
+                                                    />
+                                                    <span className="sender-name">{selectedUserInfo?.userName}</span>
+                                                </div>
+                                            )}
+                                            <div className="bubble">
+                                                {message.chatMessage}
+                                            </div>
+                                            <span className="message-time">
+                        {new Date(message.sendTime).toLocaleTimeString('ko-KR', {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true
+                        })}
+                    </span>
                                         </div>
-                                    )}
-                                    <div className="bubble">{message.chatMessage}</div>
-                                    <span className="message-time">
-                            {formatTime(message.sendTime)}
-                        </span>
-                                </div>
-                            ))}
+                                    </React.Fragment>
+                                );
+                            })}
                         </div>
+
                         <div className="message-input">
                             <input
                                 type="text"
@@ -255,6 +335,11 @@ function AdminChat() {
                     </>
                 )}
             </div>
+
+            {/* 프로필 카드 팝업 */}
+            {isProfileCardVisible && selectedUserInfo && (
+                <ProfileCard user={selectedUserInfo} onClose={closeProfileCard}/>
+            )}
         </div>
     );
 }

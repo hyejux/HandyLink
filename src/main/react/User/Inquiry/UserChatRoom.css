@@ -152,12 +152,15 @@
 }
 
 .business-hours-message {
-    color: #333;
+    color: dimgray;
     margin: 0 auto;
+    font-size: 12px;
+    position: absolute;
 }
 
 .date-separator {
-    color: #ccc;
+    color: #333;
     text-align: center;
-    font-size: 13px;
+    font-size: 12px;
+    padding: 30px;
 }

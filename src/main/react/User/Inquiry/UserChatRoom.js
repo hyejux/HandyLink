@@ -128,7 +128,12 @@ function UserChatRoom() {
         if (!userId) return;
 
         const connectWebSocket = () => {
-            websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
+
+            // 현재 페이지의 호스트를 기반으로 웹소켓 URL 생성
+            const wsHost = window.location.hostname;
+            const wsUrl = `ws://${wsHost}:8585/ws/chat`;
+
+            websocket.current = new WebSocket(wsUrl);
 
             websocket.current.onopen = () => {
                 console.log('WebSocket 연결됨 - 상태:', websocket.current.readyState);
@@ -236,8 +241,7 @@ function UserChatRoom() {
 
                 {!isBusinessHours && (
                     <div className="business-hours-message">
-                        지금은 영업 시간이 아닙니다. 문의 가능한
-                        시간은 {formatTimeToAMPM(storeInfo.storeOpenTime)} - {formatTimeToAMPM(storeInfo.storeCloseTime)} 입니다.
+                        <span>지금은 영업 시간이 아닙니다. 문의 가능한 시간은 {formatTimeToAMPM(storeInfo.storeOpenTime)} - {formatTimeToAMPM(storeInfo.storeCloseTime)} 입니다.</span>
                     </div>
                 )}
 

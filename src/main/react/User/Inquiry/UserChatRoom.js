@@ -128,7 +128,12 @@ function UserChatRoom() {
         if (!userId) return;
 
         const connectWebSocket = () => {
-            websocket.current = new WebSocket('ws://localhost:8585/ws/chat');
+
+            // 현재 페이지의 호스트를 기반으로 웹소켓 URL 생성
+            const wsHost = window.location.hostname;
+            const wsUrl = `ws://${wsHost}:8585/ws/chat`;
+
+            websocket.current = new WebSocket(wsUrl);
 
             websocket.current.onopen = () => {
                 console.log('WebSocket 연결됨 - 상태:', websocket.current.readyState);

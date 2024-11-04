@@ -37,6 +37,7 @@ public class Reservation {
     @Column(name = "reservation_price")
     private Long reservationPrice;
 
+
     @Column(name = "user_id")
     private String userId;
 

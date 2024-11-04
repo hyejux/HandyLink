@@ -177,8 +177,8 @@ function UserReservationConfirm() {
       reservationPrice: totalPrice,  // 총액 정보
       storeNo: storeInfo.storeNo,
       reservationStatus: reservationStatus,
-      userId: userId
-
+      userId : userId
+      
     };
 
     try {
@@ -226,18 +226,12 @@ function UserReservationConfirm() {
       sessionStorage.setItem('reserveModi', JSON.stringify(reserveModi));
       sessionStorage.setItem('categories', JSON.stringify(categories));
 
-      // 로딩 시작
-      setLoading(true);
+      // 리다이렉트
+      const redirectUrl = paymentMethod === "bank_transfer" ?
+        `../UserMyReservationDetail.user/${reservationNum}` :
+        `../UserMyReservationList.user`;
 
-      // 리다이렉트 대기
-      setTimeout(() => {
-        const redirectUrl = paymentMethod === "bank_transfer" ?
-          `../UserMyReservationDetail.user/${reservationNum}` :
-          `../UserMyReservationList.user`;
-
-        window.location.href = redirectUrl;
-      }, 3000); // 3초 후 리다이렉트
-
+      window.location.href = redirectUrl;
     } catch (error) {
       console.error("결제 정보 저장 중 오류 발생:", error);
     }
@@ -313,20 +307,18 @@ function UserReservationConfirm() {
     }
   };
 
-  const [loading, setLoading] = useState(false);
-
 
   return (
     <div>
       <div className="user-main-container">
-        <div className="search-top">
-          <div className='left'> <i class="bi bi-chevron-left"> </i> 주문확인</div>
-          <div className='right'></div>
-        </div>
+      <div className="search-top">
+        <div className='left'> <i class="bi bi-chevron-left"> </i> 주문확인</div>
+        <div className='right'></div>
+      </div>
 
         <div className="user-main-content">
 
-          <div className="user-content-container">
+        <div className="user-content-container11">
             <div className="user-reserve-menu">
               <div className="user-reserve-menu-img">
                 <img src={`${reserveModi.imageUrl}`} alt="My Image" />
@@ -345,15 +337,15 @@ function UserReservationConfirm() {
           <hr />
 
           <div className="user-content-container2">
-            <div className="user-reserve-title">예약자 정보</div>
+            <div className="user-reserve-title">예약자정보</div>
             <div className="user-content-container3">
               <div className="sub-container3">
-                <div className="bold-text">예약자 성함</div>
+                <div className="bold-text">성함</div>
                 <div>{userName}</div>
               </div>
 
               <div className="sub-container3">
-                <div className="bold-text">예약자 전화번호</div>
+                <div className="bold-text">전화번호</div>
                 <div>{userPhonenum}</div>
               </div>
             </div>
@@ -361,7 +353,7 @@ function UserReservationConfirm() {
           <hr />
 
 
-
+      
 
 
           <div className="user-content-container2">
@@ -378,62 +370,62 @@ function UserReservationConfirm() {
           <hr />
 
           <div className="user-content-container2">
-            <div className="user-reserve-title2">예약 정보</div>
+            <div className="user-reserve-title2">예약정보</div>
           </div>
           <div className="user-content-container2">
             <div className="user-content-container3">
               <div>기본 가격 :  {reserveModi.serviceName} (+  {reserveModi.servicePrice} ) </div>
               <div>
-                {categories.map((category, index) => (
-                  <div key={index}>
-                    {/* 서비스 이름이 선택된 경우에만 출력 */}
-                    {combinedInputs[index] && combinedInputs[index].inputValue && (
-                      <span>
-
-                        {/* servicePrice 추가 출력 */}
-                        {/* <span> (+ {combinedInputs[index]?.servicePrice || 0}) </span> */}
-                      </span>
-                    )}
-
-                    <span>
-                      {combinedInputs[index] && (
-                        <span>
-                          <span>{category.serviceName} :  </span>
-                          {Object.entries(combinedInputs[index]).map(([key, value]) => {
-                            // 값이 배열인 경우
-                            if (Array.isArray(value)) {
-                              return value.map((item, itemIndex) => (
-                                <span key={itemIndex}>
-                                  {item.serviceName}  {item.servicePrice > 0 && (
-                                    <span> (+ {item.servicePrice})</span>
-                                  )}
-                                </span>
-                              ));
-                            }
-                            // 값이 문자열인 경우
-                            else if (typeof value === 'string') {
-                              return (
-                                <span key={key}>
-
-                                  {value}
-                                  {/* servicePrice 추가 출력 */}
-                                  <span>
-                                    {combinedInputs[index]?.servicePrice > 0 && (
-                                      <span>(+ {combinedInputs[index]?.servicePrice})</span>
-                                    )}
-                                  </span>
-
-                                </span>
-                              );
-                            }
-                            // 값이 undefined이거나 다른 경우
-                            return null;
-                          })}
-                        </span>
+              {categories.map((category, index) => (
+  <div key={index}>
+    {/* 서비스 이름이 선택된 경우에만 출력 */}
+    {combinedInputs[index] && combinedInputs[index].inputValue && (
+      <span>
+     
+        {/* servicePrice 추가 출력 */}
+        {/* <span> (+ {combinedInputs[index]?.servicePrice || 0}) </span> */}
+      </span>
+    )}
+    
+    <span>
+      {combinedInputs[index] && (
+        <span>
+             <span>{category.serviceName} :  </span>
+          {Object.entries(combinedInputs[index]).map(([key, value]) => {
+            // 값이 배열인 경우
+            if (Array.isArray(value)) {
+              return value.map((item, itemIndex) => (
+                <span key={itemIndex}>
+                  {item.serviceName}  {item.servicePrice > 0 && (
+                    <span> (+ {item.servicePrice})</span>
+                  )}
+                </span>
+              ));
+            }
+            // 값이 문자열인 경우
+            else if (typeof value === 'string') {
+              return (
+                <span key={key}>
+                  
+                  {value} 
+                  {/* servicePrice 추가 출력 */}
+                  <span>
+                      {combinedInputs[index]?.servicePrice > 0 && (
+                        <span>(+ {combinedInputs[index]?.servicePrice})</span>
                       )}
                     </span>
-                  </div>
-                ))}
+
+                </span>
+              );
+            }
+            // 값이 undefined이거나 다른 경우
+            return null;
+          })}
+        </span>
+      )}
+    </span>
+  </div>
+))}
               </div>
             </div>
           </div>
@@ -499,14 +491,6 @@ function UserReservationConfirm() {
             </div>
           </div> */}
 
-
-       {/* 로딩 컴포넌트 */}
-    {loading && (
-      <div className="loading-overlay">
-        <div className="loading-spinner"></div>
-        <p className="loading-text">로딩 중...</p>
-      </div>
-    )}
 
           {/* 결제 부분 */}
           <div className="user-content-container2">

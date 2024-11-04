@@ -82,7 +82,7 @@ function UserReservationDate() {
     console.log("실행됨 ----------");
 
     setSelectSlot2('00:00');
-    
+    setSelectedSlot(null);   // 선택된 슬롯 초기화
     setDate(newDate);
     const adjustedDate = addHours(newDate, 9);
     const formattedDate = format(adjustedDate, 'yyyy-MM-dd');
@@ -355,7 +355,7 @@ function UserReservationDate() {
                       }}
                       disabled={disabledTimes.includes(timeSlot.time)} // 비활성화 조건 추가
                       style={{
-                        backgroundColor: selectedSlot === index ? '#2C348F' : 'transparent',
+                        backgroundColor: selectedSlot === index ? '#fd8517' : 'transparent',
                         color: selectedSlot === index ? 'white' : 'black',
                         opacity: disabledTimes.includes(timeSlot.time) ? 0.5 : 1, // 비활성화된 슬롯의 투명도 조절
                       }}

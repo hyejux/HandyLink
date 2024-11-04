@@ -19,24 +19,6 @@ function PaymentInfo() {
         lng: 126.9851, // 가게의 경도
     };
 
-    useEffect(() => {
-        if (showMap) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    console.log("위치 정보 허용됨:", position);
-                    setUserLocation({
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    });
-                },
-                (error) => {
-                    console.error("위치 정보 거부됨:", error);
-                    alert("위치 정보를 허용해주세요.");
-                }
-            );
-        }
-    }, [showMap]);
-
     // URL에서 reservationNo 가져오기 및 결제 정보 및 예약 세부정보 가져오기
     useEffect(() => {
         const path = window.location.pathname;

@@ -202,6 +202,7 @@ body {
   color: #fff;
 }
 .option-btn {
+  color : #000;
   border: 2px solid #ddd;
   border-radius: 10px;
   font-size: 13px;
@@ -217,7 +218,7 @@ body {
 }
 
 .option-btn.selected  {
-  background-color: #E0F0FF;
+  background-color: #fe9e2533;
 }
 
 

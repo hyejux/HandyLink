@@ -272,28 +272,43 @@ function AdminReserveManageDetail() {
               <th colSpan="1"></th>
             </tr>
             {/* 대분류 이름과 가격 출력 */}
+
             {reservationList.map((item, index) => {
-              const isFirstInGroup = index === 0 || reservationList[index - 1].mainCategoryName !== item.mainCategoryName;
-              return (
-                <React.Fragment key={index}>
-                  {isFirstInGroup && (
-                    <tr>
-                      <th colSpan="2">{item.mainCategoryName}</th>
-                      <td colSpan="3"> </td>
-                      <td colSpan="1">{item.mainPrice}원</td>
-                      
-                      
-                    </tr>
-                  )}
-                  {/* 서브카테고리 출력 */}
-                  <tr>
-                    <th colSpan="2">{item.middleCategoryName}</th>
-                    <td colSpan="3">{item.subCategoryName}</td>
-                    <td colSpan="1">{item.subPrice}원</td>
-                  </tr>
-                </React.Fragment>
-              );
-            })}
+  const isFirstInGroup = index === 0 || reservationList[index - 1].mainCategoryName !== item.mainCategoryName;
+  const isMiddleCategoryDifferent = index === 0 || reservationList[index - 1].middleCategoryName !== item.middleCategoryName;
+
+  return (
+    <React.Fragment key={index}>
+      {isFirstInGroup && (
+        <tr>
+          <th colSpan="2">{item.mainCategoryName}</th>
+          <td colSpan="3"> </td>
+          <td colSpan="1">{item.mainPrice}원</td>
+        </tr>
+      )}
+      <tr>
+        <th colSpan="2">
+          {isMiddleCategoryDifferent && (
+            <div className="left">
+              <i className="bi bi-check2"></i> {item.middleCategoryName}
+            </div>
+          )}
+        </th>
+        <td colSpan="3">
+          <div className="right">
+            {item.middleCategoryValue != null
+              ? `${item.middleCategoryValue}`
+              : `${item.subCategoryName}`}
+          </div>
+        </td>
+        <td colSpan="1">
+          {item.middleCategoryValue != null ? `${item.middlePrice}원` : `${item.subPrice}원`}
+        </td>
+      </tr>
+    </React.Fragment>
+  );
+})}
+
             {/* 요청사항 및 총액 */}
          
             <tr>

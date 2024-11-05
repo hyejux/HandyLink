@@ -112,18 +112,13 @@ function UserSignUp() {
 
     // 유효성 검사
     const validateForm = () => {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
         const namePattern = /^[가-힣a-zA-Z]+$/;
         const phonePattern = /^[0-9-]+$/;
-        const birthPattern = /^(?:\d{6}|\d{8})$/;
+        const birthPattern = /^\d{8}$/;
 
-        if (!formData.userId || !emailPattern.test(formData.userId)) {
-            alert("아이디는 이메일 형식이어야 하며 필수 입력 항목입니다.");
-            return false;
-        }
         if (!isKakaoSignUp && (!formData.userPw || !passwordPattern.test(formData.userPw))) {
-            alert("비밀번호는 영문+특수문자+숫자 8자리 이상이어야 하며 필수 입력 항목입니다.");
+            alert("비밀번호는 영문+특수문자+숫자 8자리 이상이어야 합니다.");
             return false;
         }
         if (!isKakaoSignUp && formData.userPw !== formData.repassword) {
@@ -131,15 +126,15 @@ function UserSignUp() {
             return false;
         }
         if (!formData.userName || !namePattern.test(formData.userName)) {
-            alert("이름은 한글 또는 영어만 입력 가능하며 필수 입력 항목입니다.");
+            alert("이름은 한글 또는 영어만 입력 가능합니다.");
             return false;
         }
         if (!formData.userPhonenum || !phonePattern.test(formData.userPhonenum)) {
-            alert("연락처는 숫자 또는 숫자와 하이픈(-) 조합으로 입력해야 하며 필수 입력 항목입니다.");
+            alert("연락처는 숫자 또는 숫자와 하이픈(-) 조합으로 입력합니다.");
             return false;
         }
         if (!formData.userBirth || !birthPattern.test(formData.userBirth)) {
-            alert("생년월일은 8자리 또는 6자리 숫자만 입력 가능하며 필수 입력 항목입니다.");
+            alert("생년월일은 8자리 숫자만 입력 가능합니다.");
             return false;
         }
         return true;
@@ -149,8 +144,15 @@ function UserSignUp() {
     // 아이디 중복 확인
     const handleCheckId = async () => {
 
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
         if (!formData.userId) {
             alert("이메일을 입력해주세요.");
+            return;
+        }
+
+        if (!formData.userId || !emailPattern.test(formData.userId)) {
+            alert("아이디는 이메일 형식이어야 합니다.");
             return;
         }
 
@@ -176,12 +178,6 @@ function UserSignUp() {
         e.preventDefault();
 
         if (!validateForm()) return;
-
-        // 폼 데이터 유효성 검사
-        if (!isKakaoSignUp && formData.userPw !== formData.repassword) {
-            alert("비밀번호가 일치하지 않습니다.");
-            return;
-        }
 
         // 카카오 회원가입 시 ID(이메일) 중복 체크를 하지 않음
         if (!isKakaoSignUp && !idChecked) {
@@ -347,7 +343,7 @@ function UserSignUp() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="userBirth">BIRTHDATE (YYYY-MM-DD)</label>
+                        <label htmlFor="userBirth">BIRTHDATE (YYYYMMDD)</label>
                         <input
                             type="text"
                             id="userBirth"

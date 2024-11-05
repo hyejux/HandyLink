@@ -91,8 +91,8 @@
 }
 
 .new-message-dot {
-    color: red;      /* 빨간색 */
-    font-size: 16px; /* 적당한 크기 */
+    color: red;
+    font-size: 10px;
     margin-left: 5px;
     vertical-align: middle; /* 텍스트와 수평 정렬 */
 }

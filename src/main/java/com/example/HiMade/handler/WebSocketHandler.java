@@ -98,6 +98,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         // 닫힌 세션을 모든 사용자 세션 목록에서 제거
         userSessions.forEach((userId, sessions) -> sessions.remove(session));
+
         // 빈 세션 목록 제거
         userSessions.entrySet().removeIf(entry -> entry.getValue().isEmpty());
 

@@ -390,11 +390,11 @@
 
 /* 달력 숫자일 색상 */
 .sunday {
-  color: red;
+  /* color: red; */
 }
 
 .saturday {
-  color: black;
+  /* color: black; */
 }
 
 

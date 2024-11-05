@@ -48,6 +48,7 @@ public class PaymentService {
         if (!payments.isEmpty()) {
             payments.forEach(payment -> {
                 payment.setPaymentStatus(newStatus);
+                payment.setPaymentDate(LocalDateTime.now());
                 paymentRepository.save(payment); // 상태 저장
             });
         } else {

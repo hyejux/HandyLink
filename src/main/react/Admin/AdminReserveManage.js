@@ -126,7 +126,7 @@ function AdminReserveManage() {
         console.log(reservationNo, status);
         if (window.confirm(`${reservationNo} 주문건을 ${status}로 변경하시겠습니까?`)) {
             // 결제 상태 결정
-            const paymentStatus = (status === '확정') ? '결제완료' : (status === '취소(업체)' || status === '취소(고객)') ? '결제취소' : '';
+            const paymentStatus = (status === '확정') ? '결제완료' : (status.startsWith('취소')) ? '결제취소' : '';
 
             // 예약 상태 업데이트
             axios.post('/adminReservation/updateStatus', {
@@ -149,9 +149,11 @@ function AdminReserveManage() {
 
                     // 결제취소일 경우 환불 처리
                     if (paymentStatus === '결제취소') {
+                        const customerOrCompanyCancel = (status === '취소(업체)') ? '취소(업체)' : '취소(고객)';
                         return axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, {
                             paymentStatus: paymentStatus,
                             storeName: storeName,
+                            reservationStatus: customerOrCompanyCancel
                         });
                     }
                 })

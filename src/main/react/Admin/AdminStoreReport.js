@@ -100,10 +100,10 @@ function AdminStoreReport(){
                             <p className="cancled-count"> {reportCount.cancledCount} </p>
                             <p className=""> 예약 취소 </p>
                         </div>
-                        <div className="reservation-field">
+                    {/*<div className="reservation-field">
                             <p className="wait-count"> {reportCount.waitCount} </p>
                             <p className=""> 예약 대기 </p>
-                        </div>
+                        </div>*/}
                         <div className="reservation-field">
                             <p className="doing-count"> {reportCount.doingCount} </p>
                             <p className=""> 진행 중 </p>

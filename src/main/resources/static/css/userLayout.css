@@ -551,8 +551,8 @@ body {
 
 .nav-new-message-dot {
   position: absolute;
-  top: -2px;
-  right: -2px;
+  top: -5px;
+  right: 10px;
   width: 8px;
   height: 8px;
   background-color: #ff0000;

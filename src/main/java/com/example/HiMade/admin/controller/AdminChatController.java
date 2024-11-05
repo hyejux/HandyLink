@@ -25,8 +25,8 @@ public class AdminChatController {
 
     // 새로운 채팅 메시지 저장
     @PostMapping("/save")
-    public void saveChatMessage(@RequestBody AdminChatDTO chatMessage) {
-        adminChatService.saveChatMessage(chatMessage);
+    public void saveChatMessage(@RequestBody AdminChatDTO adminChatDTO) {
+        adminChatService.saveChatMessage(adminChatDTO);
     }
 
     // 업체 기준 채팅 목록 조회 (사용자별 최신 메시지)

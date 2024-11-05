@@ -178,14 +178,19 @@ function AdminChat() {
         };
 
         try {
+            // 먼저 DB에 저장
+            await axios.post('/adminChat/save', message);
+            // DB 저장 성공하면 UI 업데이트
+            setMessages(prevMessages => [...prevMessages, message]);
+            setMessageInput("");
+
+            // WebSocket 연결되어 있으면 전송 시도
             if (websocket.current?.readyState === WebSocket.OPEN) {
                 websocket.current.send(JSON.stringify(message));
-                await axios.post('/adminChat/save', message);
-                setMessages(prevMessages => [...prevMessages, message]);
-                setMessageInput("");
             }
         } catch (error) {
             console.error("메시지 전송 실패:", error);
+            alert("메시지 전송에 실패했습니다. 다시 시도해주세요.");
         }
     };
 

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface AdminChatService {
     List<AdminChatDTO> getChatHistory(String userId, Long storeNo, int limit);
-    void saveChatMessage(AdminChatDTO chatMessage);
+    void saveChatMessage(AdminChatDTO adminChatDTO);
     List<Map<String, Object>> getChatListForStore(Long storeNo);
     void updateLastCheckedTime(String userId, Long storeNo);
 }

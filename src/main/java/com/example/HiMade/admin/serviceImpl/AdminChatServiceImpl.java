@@ -22,8 +22,8 @@ public class AdminChatServiceImpl implements AdminChatService {
     }
 
     @Override
-    public void saveChatMessage(AdminChatDTO chatMessage) {
-        adminChatMapper.insertChatMessage(chatMessage);
+    public void saveChatMessage(AdminChatDTO adminChatDTO) {
+        adminChatMapper.insertChatMessage(adminChatDTO);
     }
 
     @Override

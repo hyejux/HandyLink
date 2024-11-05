@@ -7,7 +7,6 @@ import ReactDOM from "react-dom/client";
 function AdminChat() {
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState("");
-    const [storeId, setStoreId] = useState(null);
     const [storeNo, setStoreNo] = useState(null);
     const [chatList, setChatList] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState(null);
@@ -20,10 +19,8 @@ function AdminChat() {
 
     // 세션 스토리지에서 스토어 정보 가져오기
     useEffect(() => {
-        const storedStoreId = sessionStorage.getItem('storeId');
         const storedStoreNo = sessionStorage.getItem('storeNo');
-        if (storedStoreId && storedStoreNo) {
-            setStoreId(storedStoreId);
+        if (storedStoreNo) {
             setStoreNo(storedStoreNo);
         }
     }, []);
@@ -86,6 +83,7 @@ function AdminChat() {
         }
     };
 
+    // 스크롤 바
     useEffect(() => {
         if (selectedUserId && chatBoxRef.current) {
             chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
@@ -94,7 +92,7 @@ function AdminChat() {
 
     // WebSocket 연결
     useEffect(() => {
-        if (!storeId) return;
+        if (!storeNo) return;
 
         const connectWebSocket = () => {
 
@@ -165,7 +163,7 @@ function AdminChat() {
                 websocket.current.close();
             }
         };
-    }, [storeId, selectedUserId, storeNo]);
+    }, [selectedUserId, storeNo]);
 
     // 메시지 전송
     const handleSend = async () => {
@@ -173,7 +171,6 @@ function AdminChat() {
 
         const message = {
             senderType: 'STORE',
-            storeId,
             storeNo,
             userId: selectedUserId,
             chatMessage: messageInput.trim(),

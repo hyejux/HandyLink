@@ -11,6 +11,5 @@ public interface AdminChatService {
     List<AdminChatDTO> getChatHistory(String userId, Long storeNo, int limit);
     void saveChatMessage(AdminChatDTO chatMessage);
     List<Map<String, Object>> getChatListForStore(Long storeNo);
-    List<AdminChatDTO> findNewMessages(String userId, Long storeNo, Timestamp lastCheckedTime);
     void updateLastCheckedTime(String userId, Long storeNo);
 }

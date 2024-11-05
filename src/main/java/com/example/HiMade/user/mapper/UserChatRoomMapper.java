@@ -16,7 +16,6 @@ public interface UserChatRoomMapper {
     List<UserChatDTO> selectChat(String userId, Long storeNo);
     List<Map<String, Object>> getChatListForUser(String userId);
     StoreRegistDTO getStoreInfoByStoreNo(Long storeNo);
-    List<UserChatDTO> selectNewMessages(String userId, Long storeNo, Timestamp lastCheckedTime);
     void updateUserLastCheckedTime(String userId, Long storeNo, Timestamp lastCheckedTime );
     boolean hasUnreadMessages(String userId);
 }

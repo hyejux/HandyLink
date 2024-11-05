@@ -36,10 +36,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         if (userId != null) {
             userSessions.computeIfAbsent(userId, k -> ConcurrentHashMap.newKeySet()).add(session);
-            System.out.println("New WebSocket connection established for user: " + userId);
+            System.out.println("웹소켓 연결된 user ID : " + userId);
         } else if (storeNo != null) {  // 추가된 부분
             storeSessions.computeIfAbsent(storeNo, k -> ConcurrentHashMap.newKeySet()).add(session);
-            System.out.println("New WebSocket connection established for store: " + storeNo);
+            System.out.println("웹소켓 연결된 store ID: " + storeNo);
         } else {
             session.close();
         }
@@ -97,7 +97,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         // 빈 세션 목록 제거
         userSessions.entrySet().removeIf(entry -> entry.getValue().isEmpty());
 
-        System.out.println("WebSocket connection closed: " + session.getId());
+        System.out.println("웹 소켓 연결 종료 : " + session.getId());
     }
 
     private void sendMessageToSessions(Set<WebSocketSession> sessions, TextMessage message, String recipient) {
@@ -105,10 +105,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
             try {
                 if (session.isOpen()) {
                     session.sendMessage(message);
-                    System.out.println("Message sent successfully to " + recipient);
+                    System.out.println("메세지 전송 성공 " + recipient);
                 }
             } catch (Exception e) {
-                System.err.println("Error sending message to " + recipient + ": " + e.getMessage());
+                System.err.println("메세지 전송 실패 " + recipient + ": " + e.getMessage());
             }
         });
     }

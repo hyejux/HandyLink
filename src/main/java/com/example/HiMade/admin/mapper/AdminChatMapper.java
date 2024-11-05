@@ -13,6 +13,5 @@ public interface AdminChatMapper {
     List<AdminChatDTO> fetchChatHistory(String userId, Long storeNo, int limit);
     void insertChatMessage(AdminChatDTO chatMessage);
     List<Map<String, Object>> getChatListForStore(Long storeNo);
-    List<AdminChatDTO> selectNewMessages(String userId, Long storeNo, Timestamp lastCheckedTime);
     void updateLastCheckedTime(String userId, Long storeNo);
 }

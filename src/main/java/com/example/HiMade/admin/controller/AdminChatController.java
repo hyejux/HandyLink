@@ -35,14 +35,6 @@ public class AdminChatController {
         return adminChatService.getChatListForStore(storeNo);
     }
 
-    @GetMapping("/checkNewMessages")
-    public List<AdminChatDTO> checkNewMessages(
-            @RequestParam String userId,
-            @RequestParam Long storeNo,
-            @RequestParam Timestamp lastCheckedTime) {
-        return adminChatService.findNewMessages(userId, storeNo, lastCheckedTime);
-    }
-
     @PostMapping("/updateLastCheckedTime")
     public ResponseEntity<Void> updateLastCheckedTime(@RequestParam Long storeNo, @RequestParam String userId) {
         adminChatService.updateLastCheckedTime(userId, storeNo);

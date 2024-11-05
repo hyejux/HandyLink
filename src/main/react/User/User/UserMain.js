@@ -233,14 +233,6 @@ function UserMain() {
     }
   };
 
-
-  // 카테고리 아이콘 이미지
-  const categoryIcon = [
-    './img/category/bread.png', './img/category/cake.png', './img/category/candle.png', './img/category/confectionery.png', './img/category/cookie.png',
-    './img/category/flower.png', './img/category/design.png', './img/category/photo.png', './img/category/porcelain.png', './img/category/scarf.png'
-  ];
-
-
   const goToStoreDetail = (id) => {
     window.location.href = `/userStoreDetail.user/${id}`;
   }
@@ -359,13 +351,40 @@ function UserMain() {
 
           {/* 가게 카테고리 */}
           <div className="user-category-content">
-            {store.map((storeItem, index) => (
-              <div className="store-category-item" key={index} onClick={() => handleHashtagClick(storeItem.storeCate)}>
-                <img src={categoryIcon[index]} alt={storeItem.storeCate} />
-                <p>{storeItem.storeCate}</p>
-              </div>
-            ))}
+            <div className="store-category-item" onClick={() => handleHashtagClick("디저트")}>
+              <img src="./img/category/dessert.png" alt="디저트" />
+              <p>디저트</p>
+            </div>
+            <div className="store-category-item" onClick={() => handleHashtagClick("꽃")}>
+              <img src="./img/category/flower.png" alt="꽃" />
+              <p>꽃</p>
+            </div>
+            <div className="store-category-item" onClick={() => handleHashtagClick("공예")}>
+              <img src="./img/category/handcraft.png" alt="공예" />
+              <p>공예</p>
+            </div>
+            <div className="store-category-item" onClick={() => handleHashtagClick("뷰티")}>
+              <img src="./img/category/beauty.png" alt="뷰티" />
+              <p>뷰티</p>
+            </div>
+            <div className="store-category-item" onClick={() => handleHashtagClick("패션")}>
+              <img src="./img/category/fashion.png" alt="패션" />
+              <p>패션</p>
+            </div>
+            <div className="store-category-item" onClick={() => handleHashtagClick("주얼리")}>
+              <img src="./img/category/jewelry.png" alt="주얼리" />
+              <p>주얼리</p>
+            </div>
+            <div className="store-category-item" onClick={() => handleHashtagClick("디지털")}>
+              <img src="./img/category/digital.png" alt="디지털" />
+              <p>디지털</p>
+            </div>
+            <div className="store-category-item" onClick={() => handleHashtagClick("반려동물")}>
+              <img src="./img/category/pet.png" alt="반려동물" />
+              <p>반려동물</p>
+            </div>
           </div>
+
 
 
           {/* 위치 카테고리 */}

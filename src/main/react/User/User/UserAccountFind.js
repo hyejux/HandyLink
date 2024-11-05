@@ -2,8 +2,8 @@ import ReactDOM from "react-dom/client";
 import './UserAccountFind.css';
 import React, { useState, useEffect } from "react";
 
-function UserAccountFind () {
-    const [formType, setFormType] = useState("userId"); // 'id' 또는 'pw'
+function UserAccountFind() {
+    const [formType, setFormType] = useState("userId");
     const [userId, setUserId] = useState("");
     const [userName, setUserName] = useState("");
     const [phonenum, setPhonenum] = useState("");
@@ -13,7 +13,6 @@ function UserAccountFind () {
     const [isUserVerified, setIsUserVerified] = useState(false);
     const [message, setMessage] = useState("");
 
-    // 입력 필드를 초기화하는 함수
     const clearInputFields = () => {
         setUserId("");
         setUserName("");
@@ -25,27 +24,19 @@ function UserAccountFind () {
         setMessage("");
     };
 
-    // 아이디 찾기 폼 보이기
     const showIdForm = () => {
         setFormType("userId");
         clearInputFields();
-        setFoundId(null);
-        setMessage("");
     };
 
-    // 비밀번호 찾기 폼 보이기
     const showPwForm = () => {
         setFormType("userPw");
         clearInputFields();
-        setFoundId(null);
-        setMessage("");
     };
 
-    // input 필드에 값이 있을 경우 'used' 클래스 추가
     useEffect(() => {
         const inputs = document.querySelectorAll("input");
         inputs.forEach((input) => {
-            // 값이 있을 때 'used' 클래스 추가
             if (input.value) {
                 input.classList.add("used");
             } else {
@@ -62,8 +53,12 @@ function UserAccountFind () {
         });
     }, [userId, userName, phonenum, newPassword, confirmPassword]);
 
-    // 아이디 찾기 함수
     const handleFindId = async () => {
+        if (!userName.trim() || !phonenum.trim()) {
+            alert("모든 필드를 입력해주세요.");
+            return;
+        }
+
         setFoundId(null);
         setMessage("");
 
@@ -80,8 +75,12 @@ function UserAccountFind () {
         }
     };
 
-    // 비밀번호 찾기 함수
     const handleVerifyUser = async () => {
+        if (!userId.trim() || !userName.trim() || !phonenum.trim()) {
+            alert("모든 필드를 입력해 주세요.");
+            return;
+        }
+
         try {
             const response = await fetch("/user/verify-reset-password", {
                 method: "POST",
@@ -101,11 +100,21 @@ function UserAccountFind () {
         }
     };
 
-    // 비밀번호 초기화 함수
     const handleResetPassword = async () => {
+        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+        if (!newPassword || !confirmPassword) {
+            alert("모든 필드를 입력해주세요.");
+            return;
+        }
 
         if (newPassword !== confirmPassword) {
             alert("비밀번호가 일치하지 않습니다.");
+            return;
+        }
+
+        if (!passwordPattern.test(newPassword)) {
+            alert("비밀번호는 영문+특수문자+숫자 8자리 이상이어야 합니다.");
             return;
         }
 
@@ -159,11 +168,12 @@ function UserAccountFind () {
                 </div>
 
                 <div className="user-account-msg">
-                    가입 시 기입한 정보로 입력해 주세요.
+                    {isUserVerified
+                        ? '영문+특수문자+숫자 8자리 이상 입력해 주세요.'
+                        : '가입 시 기입한 정보로 입력해 주세요.'}
                 </div>
 
                 <form id="account-form">
-                    {/* 사용자 검증이 되지 않은 경우 아이디, 이름, 연락처 입력 폼 표시 */}
                     {!isUserVerified && (
                         <>
                             {formType === "userPw" && (
@@ -219,13 +229,10 @@ function UserAccountFind () {
                     )}
                 </form>
 
-
-                {/* 아이디 찾기 결과 표시 */}
                 <div className="message">
                     {foundId ? `찾은 아이디: ${foundId}` : message}
                 </div>
 
-                {/* 사용자 검증 완료 시 새 비밀번호 입력 폼 표시 */}
                 {isUserVerified && (
                     <form id="reset-password-form">
                         <div className="form-group">
@@ -261,7 +268,6 @@ function UserAccountFind () {
                         </button>
                     </form>
                 )}
-
             </div>
         </div>
     );

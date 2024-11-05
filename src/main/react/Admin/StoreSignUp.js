@@ -589,9 +589,14 @@ function StoreSignUp() {
                         <label htmlFor="category">업종</label>
                         <select id="storeCate" onChange={(e)=>handleChangeStore(e)}>
                             <option value="">업종 선택</option>
-                            <option value="케이크">케이크</option>
-                            <option value="공방체험">공방체험</option>
-                            <option value="꽃집">꽃집</option>
+                            <option value="디저트">디저트</option>
+                            <option value="공예">공예</option>
+                            <option value="꽃">꽃</option>
+                            <option value="뷰티">뷰티</option>
+                            <option value="패션">패션</option>
+                            <option value="주얼리">주얼리</option>
+                            <option value="디저트">디저트</option>
+                            <option value="반려동물">반려동물</option>
                         </select>
                     </div>
 

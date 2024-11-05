@@ -273,7 +273,7 @@ function UserChatRoom() {
                         <div className="message-text">
                             {storeInfo.storeStatus === '비활성화' ? (
                                 <>
-                                    <div>현재 서비스 영업이 중지된 상태입니다.</div>
+                                    <div>현재 영업이 중지된 상태입니다.</div>
                                     <div>빠른 답변 어려운 점 양해 부탁드립니다.</div>
                                 </>
                             ) : (

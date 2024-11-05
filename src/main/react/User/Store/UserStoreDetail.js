@@ -98,13 +98,24 @@ function UserStoreDetail() {
 
 
   // 채팅방으로 이동
-  const handleInquiryClick = () => {
-    if (userId && storeInfo.storeNo) {  // storeId → storeNo로 변경
-      window.location.href = `/UserChatRoom.user?userId=${userId}&storeNo=${storeInfo.storeNo}`;  // storeId → storeNo로 변경
+  const handleInquiryClick = async () => {
+
+    console.log('userId:', userId, 'storeNo:', storeInfo.storeNo); // 추가 로그
+
+    if (userId && storeInfo.storeNo) {
+      console.log(`로그 Reactivating chat for userId: ${userId}, storeNo: ${storeInfo.storeNo}`);
+
+      // 채팅 상태를 Y로 업데이트
+      await axios.post(`/chat/reactivate?userId=${userId}&storeNo=${storeInfo.storeNo}`);
+
+      // 채팅방으로 이동
+      window.location.href = `/UserChatRoom.user?userId=${userId}&storeNo=${storeInfo.storeNo}`;
     } else {
       console.error('userId 또는 storeNo가 정의되지 않았습니다.');
     }
   };
+
+
 
 
 

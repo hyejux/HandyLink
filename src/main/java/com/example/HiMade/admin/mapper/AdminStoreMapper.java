@@ -45,6 +45,8 @@ public interface AdminStoreMapper {
     void setNoticeStatus(storeNoticeDTO dto);
     public storeNoticeDTO getNoticeDetail( int id);
 
+    Integer getUserLikeCount(Long storeNo); //찜수
+    Integer getCompleteCount(Long storeNo); //완료된 예약건수-픽업완료
     Integer getReviewCount(Long storeNo); //리뷰등록개수
     Integer getCancledCount(Long storeNo); //예약취소건수
     Integer getWaitCount(Long storeNo); //예약대기건수-결제완료된

@@ -13,8 +13,15 @@ function AgeChart() {
         datasets: [
             {
                 label: '연령대 비율',
-                data: [], // 데이터를 동적으로 설정
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+                data: [],
+                backgroundColor: [
+                    '#81C784', // Light Green
+                    '#64B5F6', // Light Blue
+                    '#FFB74D', // Light Orange
+                    '#9575CD', // Light Purple
+                    '#E57373', // Light Red
+                    '#4DB6AC'  // Light Cyan
+                ],
                 borderColor: '#fff',
                 borderWidth: 1,
             },
@@ -24,15 +31,14 @@ function AgeChart() {
     useEffect(() => {
         const fetchAgeDistribution = async () => {
             try {
-                const response = await fetch(`/adminStore/getAgeDistribution?storeNo=${storeNo}`); // API 호출
-                const data = await response.json(); // JSON 변환
+                const response = await fetch(`/adminStore/getAgeDistribution?storeNo=${storeNo}`);
+                const data = await response.json();
 
-                // 예: data = { labels: ['10대', '20대', '30대', '40대 이상'], values: [15, 30, 25, 30] }
                 setChartData({
-                    labels: data.labels, // API 응답에서 레이블 설정
+                    labels: data.labels,
                     datasets: [{
                         ...chartData.datasets[0],
-                        data: data.values, // API 응답에서 데이터 설정
+                        data: data.values,
                     }],
                 });
             } catch (error) {
@@ -52,14 +58,20 @@ function AgeChart() {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [storeNo]); // 의존성 배열이 비어 있으므로 컴포넌트가 처음 마운트될 때만 호출됩니다.
+    }, [storeNo]);
 
     const options = {
         responsive: true,
+        maintainAspectRatio: true, // 비율 유지
+        aspectRatio: 1, // 정사각형으로 설정
         plugins: {
             legend: {
                 display: true,
                 position: 'top',
+                labels: {
+                    boxWidth: 20,
+                    padding: 20,
+                },
             },
             tooltip: {
                 callbacks: {
@@ -67,7 +79,7 @@ function AgeChart() {
                         const label = tooltipItem.label || '';
                         const value = tooltipItem.raw || 0;
                         const total = chartData.datasets[0].data.reduce((sum, val) => sum + val, 0);
-                        const percentage = ((value/total) * 100).toFixed(1);
+                        const percentage = ((value / total) * 100).toFixed(1);
                         return `${label}: ${percentage}%`;
                     },
                 },
@@ -76,6 +88,6 @@ function AgeChart() {
     };
 
     return <Pie ref={chartRef} data={chartData} options={options} />;
-};
+}
 
 export default AgeChart;

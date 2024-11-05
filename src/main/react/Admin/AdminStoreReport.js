@@ -57,7 +57,7 @@ function AdminStoreReport(){
         const fetchAge = async() => {
             try {
                 const response = await axios.get(`/adminStore/getAgeDistribution?storeNo=${storeNo}`);
-                setAgeDistribution(response.data); // Assumes response.data has the correct structure
+                setAgeDistribution(response.data);
             } catch (error) {
                 console.error("나이 별 top1 불러오는 중 error: ", error);
             }
@@ -71,10 +71,10 @@ function AdminStoreReport(){
 
     console.log("ageDistribution: ", ageDistribution);
 
-    const [selectedPeriod, setSelectedPeriod] = useState("이번달"); // 기본 기간 설정
+    const [selectedPeriod, setSelectedPeriod] = useState("이번달");
 
     const handlePeriodChange = (newPeriod) => {
-        setSelectedPeriod(newPeriod); // 선택된 기간 업데이트
+        setSelectedPeriod(newPeriod);
     };
 
     return(
@@ -85,8 +85,16 @@ function AdminStoreReport(){
                     <h2>우리 가게</h2>
                     <div className="reservation-status">
                         <div className="reservation-field">
+                            <p className="userLike-count"> {reportCount.userLikeCount} </p>
+                            <p className=""> 찜 수 </p>
+                        </div>
+                        <div className="reservation-field">
                             <p className="review-count"> {reportCount.reviewCount} </p>
-                            <p className=""> 리뷰 등록 </p>
+                            <p className=""> 리뷰 수 </p>
+                        </div>
+                        <div className="reservation-field">
+                            <p className="complete-count"> {reportCount.completeCount} </p>
+                            <p className=""> 완료 건 </p>
                         </div>
                         <div className="reservation-field">
                             <p className="cancled-count"> {reportCount.cancledCount} </p>
@@ -124,55 +132,59 @@ function AdminStoreReport(){
                 <div className="report-section">
                     <h2>고객 통계</h2>
                     <div className="customer-section-box">
-                
-                        <div className="customer mw">
-                            <h3>성비</h3>
-                            <div>
-                                <MwChart/>
+                        <div className="graph-section">
+                            <div className="customer mw">
+                                <h3>성비</h3>
+                                <div>
+                                    <MwChart/>
+                                </div>
+                            </div>
+
+
+                            <div className="customer age">
+                                <h3>나이</h3>
+                                <div>
+                                    <AgeChart data={ageDistribution} />
+                                </div>
                             </div>
                         </div>
-                
-                        <div className="mw-detail">
-                            <table className="mwtable table">
-                                <thead>
-                                    <tr>
-                                        <th>남자</th>
-                                        <th>여자</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{genderCount.males}</td>
-                                        <td>{genderCount.females}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                
-                        <div className="customer age">
-                            <h3>나이</h3>
-                            <div>
-                                <AgeChart data={ageDistribution} />
-                            </div>
-                        </div>
-                
-                        <div className="age-detail">
-                            <table className="agetable table">
-                                <thead>
-                                    <tr>
-                                        <th>나이</th>
-                                        <th>주로 찾는 서비스</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {ageDistribution.labels.map((label, index) => (
-                                        <tr key={index}>
-                                            <td>{label}</td>
-                                            <td>{ageDistribution.serviceName[index] || '정보 없음'}</td> {/* Fallback if no service name */}
+
+                        <div className="table-section">
+                            <div className="mw detail">
+                                <table className="mwtable">
+                                    <thead>
+                                        <tr>
+                                            <th>남자</th>
+                                            <th>여자</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{genderCount.males}</td>
+                                            <td>{genderCount.females}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div className="age detail">
+                                <table className="agetable">
+                                    <thead>
+                                        <tr>
+                                            <th>나이</th>
+                                            <th>주로 찾는 서비스</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {ageDistribution.labels.map((label, index) => (
+                                            <tr key={index}>
+                                                <td>{label}</td>
+                                                <td>{ageDistribution.serviceName[index] || '정보 없음'}</td> {/* Fallback if no service name */}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
             

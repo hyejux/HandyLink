@@ -108,11 +108,29 @@
     </select>
 
     <select id="getLikeInfo" parameterType="string" resultType="java.util.Map">
-        select ul.store_no, s.store_cate, s.store_name, s.addr, s.addrdetail, si.store_img_location
-        from user_likes ul
-        left join store s on ul.store_no = s.store_no
-        left join store_img si on s.store_no = si.store_no
-        where ul.user_id = #{userId}
+        WITH first_image AS (
+            SELECT
+                store_no,
+                store_img_location,
+            ROW_NUMBER() OVER(PARTITION BY store_no ORDER BY store_img.store_img_no) AS rn
+            FROM store_img
+        )
+        SELECT ul.store_no,
+            s.store_status,
+            s.store_cate,
+            s.store_name,
+            s.addr,
+            s.addrdetail,
+            fi.store_img_location,
+            COUNT(DISTINCT review.review_no) AS review_count,
+            ROUND(AVG(review.review_rating), 1) AS avg_rating
+        FROM user_likes ul
+        LEFT JOIN store s ON ul.store_no = s.store_no
+        LEFT JOIN first_image fi ON s.store_no = fi.store_no AND fi.rn = 1
+        LEFT JOIN reservation reserve ON reserve.store_no = s.store_no
+        LEFT JOIN review ON review.reservation_no = reserve.reservation_no
+        WHERE ul.user_id =#{userId}
+        GROUP BY ul.store_no, s.store_status, s.store_cate, s.store_name, s.addr, s.addrdetail, fi.store_img_location;
     </select>
 
 </mapper>

@@ -203,14 +203,23 @@ public class AdminStoreServiceImpl implements AdminStoreService {
         Integer cancledCount = adminStoreMapper.getCancledCount(storeNo);
         Integer waitCount = adminStoreMapper.getWaitCount(storeNo);
         Integer doingCount = adminStoreMapper.getDoingCount(storeNo);
+        Integer userLikeCount = adminStoreMapper.getUserLikeCount(storeNo);
+        Integer completeCount = adminStoreMapper.getCompleteCount(storeNo);
 
-        System.out.println("리뷰개수: "+ reviewCount + " 예약취소: " + cancledCount + " 예약대기: " + waitCount + " 진행 중: " + doingCount);
+        System.out.println("리뷰개수: "+ reviewCount +
+                " 예약취소: " + cancledCount +
+                " 예약대기: " + waitCount +
+                " 진행 중: " + doingCount+
+                " 찜 수: " + userLikeCount+
+                " 픽업 완료: " + completeCount);
 
         Map<String, Integer> resultMap = new HashMap<>();
         resultMap.put("reviewCount", reviewCount);
         resultMap.put("cancledCount", cancledCount);
         resultMap.put("waitCount", waitCount);
         resultMap.put("doingCount", doingCount);
+        resultMap.put("userLikeCount", userLikeCount);
+        resultMap.put("completeCount", completeCount);
 
         return resultMap;
     }
@@ -232,18 +241,14 @@ public class AdminStoreServiceImpl implements AdminStoreService {
 
     @Override
     public Map<String, Map<String, Long>> getAgeDistribution(Long storeNo) {
-        // Fetch data by age group
         List<Map<String, Object>> result = adminStoreMapper.getAgeDistribution(storeNo);
-        System.out.println("Age data: " + result);
 
-        // Transform results into a nested map
         Map<String, Map<String, Long>> ageDistributionMap = new HashMap<>();
         for (Map<String, Object> row : result) {
             String ageGroup = (String) row.get("age_group");
             String serviceName = (String) row.get("service_name");
             Long reservationCount = ((Number) row.get("reservation_count")).longValue(); // Convert to Long
 
-            // Get or create the nested map for each age group
             ageDistributionMap
                     .computeIfAbsent(ageGroup, k -> new HashMap<>())
                     .put(serviceName, reservationCount);

@@ -286,6 +286,12 @@
         where store_no = #{storeNo} and set_no = #{setNo} and day_off_end &gt; now()
     </delete>
 
+    <select id="getUserLikeCount" resultType="Integer">
+        select count(*)
+        from user_likes
+        where store_no = #{storeNo}
+    </select>
+
     <select id="getReviewCount" resultType="Integer">
         select count(*)
         from review
@@ -293,12 +299,18 @@
         where reserve.store_no = #{storeNo}
     </select>
 
+    <select id="getCompleteCount" resultType="Integer">
+        select count(*)
+        from reservation reserve
+        where reservation_status = '완료' and store_no = #{storeNo}
+    </select>
+
     <select id="getCancledCount" resultType="Integer">
         select count(*)
         from reservation reserve
         join payment pay on pay.reservation_no = reserve.reservation_no
         where store_no = #{storeNo}
-        and reservation_status = '취소 (null)'
+        and reservation_status = '취소(고객)'
 <!--        and pay.payment_status = '결제취소' 예약 취소도 승인이 있는지?-->
     </select>
 
@@ -308,7 +320,7 @@
         join reservation reserve on reserve.reservation_no = pay.reservation_no
         where reserve.store_no = #{storeNo}
         and reserve.reservation_status = '입금대기'
-        and pay.payment_status='결제완료';
+<!--        and pay.payment_status='결제완료';-->
     </select>
 
     <select id="getDoingCount" resultType="Integer">
@@ -349,45 +361,48 @@
 
     <select id="getAgeDistribution" resultType="map">
         <![CDATA[
-    WITH ranked_products AS (
-        SELECT
-            CASE
-                WHEN DATE_PART('year', AGE(CAST(users.user_birth AS DATE))) < 20 THEN '10대'
-                WHEN DATE_PART('year', AGE(CAST(users.user_birth AS DATE))) < 30 THEN '20대'
-                WHEN DATE_PART('year', AGE(CAST(users.user_birth AS DATE))) < 40 THEN '30대'
-                ELSE '40대 이상'
-            END AS age_group,
-            form.main_category_id,
-            COUNT(*) AS reservation_count,
-            ROW_NUMBER() OVER (PARTITION BY
+            WITH ranked_products AS (
+            SELECT
                 CASE
                     WHEN DATE_PART('year', AGE(CAST(users.user_birth AS DATE))) < 20 THEN '10대'
                     WHEN DATE_PART('year', AGE(CAST(users.user_birth AS DATE))) < 30 THEN '20대'
                     WHEN DATE_PART('year', AGE(CAST(users.user_birth AS DATE))) < 40 THEN '30대'
                     ELSE '40대 이상'
-                END
-            ORDER BY COUNT(*) DESC) AS rn
-        FROM reservation reserve
-        JOIN users ON users.user_id = reserve.user_id
-        JOIN reservation_form form ON form.reservation_no = reserve.reservation_no
-        WHERE reserve.store_no = #{storeNo}
-        GROUP BY age_group, form.main_category_id
-    ),
-    age_groups AS (
-        SELECT '10대' AS age_group UNION ALL
-        SELECT '20대' UNION ALL
-        SELECT '30대' UNION ALL
-        SELECT '40대 이상'
-    )
-    SELECT
-        ag.age_group,
-        c.service_name,
-        rp.main_category_id,
-        rp.reservation_count
-    FROM age_groups ag
-    LEFT JOIN ranked_products rp ON ag.age_group = rp.age_group AND rp.rn = 1
-    JOIN category c ON c.category_id = rp.main_category_id
-    ORDER BY ag.age_group;
+                END AS age_group,
+                form.main_category_id,
+                COUNT(*) AS reservation_count,
+                ROW_NUMBER() OVER (
+                    PARTITION BY
+                        CASE
+                            WHEN DATE_PART('year', AGE(CAST(users.user_birth AS DATE))) < 20 THEN '10대'
+                            WHEN DATE_PART('year', AGE(CAST(users.user_birth AS DATE))) < 30 THEN '20대'
+                            WHEN DATE_PART('year', AGE(CAST(users.user_birth AS DATE))) < 40 THEN '30대'
+                            ELSE '40대 이상'
+                        END
+                    ORDER BY COUNT(*) DESC
+                ) AS rn
+            FROM reservation reserve
+            JOIN users ON users.user_id = reserve.user_id
+            JOIN reservation_form form ON form.reservation_no = reserve.reservation_no
+            JOIN category c ON form.main_category_id = c.category_id AND c.category_level = 1
+            WHERE reserve.store_no = #{storeNo}
+            GROUP BY age_group, form.main_category_id
+        ),
+        age_groups AS (
+            SELECT '10대' AS age_group UNION ALL
+            SELECT '20대' UNION ALL
+            SELECT '30대' UNION ALL
+            SELECT '40대 이상'
+        )
+        SELECT
+            ag.age_group,
+            c.service_name,
+            rp.main_category_id,
+            rp.reservation_count
+        FROM age_groups ag
+        LEFT JOIN ranked_products rp ON ag.age_group = rp.age_group AND rp.rn = 1
+        JOIN category c ON c.category_id = rp.main_category_id
+        ORDER BY ag.age_group;
     ]]>
     </select>
 

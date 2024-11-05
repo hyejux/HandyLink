@@ -1,7 +1,7 @@
 .favorite-list {
-    max-width: 420px;
-    margin: 0 auto;
-    padding: 20px;
+    max-width: 360px;
+    width: 100%; /* 반응형 너비 설정 */
+    padding: 20px 20px 80px 20px;
     background-color: #f5f5f5;
     min-height: calc(100vh - 63px);
 }
@@ -34,17 +34,24 @@
     color: #ffffff;
 }
 
+.category-button.inactive {
+    background-color: #e0e0e0; /* 비활성 버튼 색상 */
+    color: #888; /* 비활성 버튼 글자 색상 */
+}
+
 .card-list {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.card {
+.likecard {
     background-color: #ffffff;
     border-radius: 10px;
     padding: 15px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    position: relative; /* 위치 속성 추가 */
+    z-index: 0;
 }
 
 .card-image {
@@ -61,7 +68,7 @@
 }
 
 .card-main {
-    display: flext;
+    display: flex; /* 수정된 부분 */
 }
 
 .card-content {
@@ -97,4 +104,20 @@
 .reviews {
     font-size: 0.9em;
     color: #888888;
+}
+
+.no-activate .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2); /* 투명도 조절 */
+    z-index: 1;
+    border-radius: 8px; /* 카드 모서리와 일치하도록 설정 */
+}
+
+.card {
+    position: relative;
+    z-index: 2; /* 오버레이 아래에 위치 */
 }

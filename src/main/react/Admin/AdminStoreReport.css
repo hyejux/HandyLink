@@ -76,15 +76,23 @@ h3 {
     margin: 10px;
 }
 
-
-.customer-section-box {
+.graph-section{
     display: flex;
+}
+
+.table-section{
+    display: flex;
+}
+
+.detail{
+    width: 48%;
+    margin: 10px;
 }
 
 .customer {
     border: 1px solid #ddd;
     border-radius: 5px;
-    width: 25%;
+    width: 47%;
     margin: 10px;
 }
 

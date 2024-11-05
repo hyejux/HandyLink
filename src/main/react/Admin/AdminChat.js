@@ -211,6 +211,7 @@ function AdminChat() {
 
     // 시간 포맷팅
     const formatTime = (timestamp) => {
+
         const messageDate = new Date(timestamp);
         const today = new Date();
         const messageDay = new Date(messageDate.getFullYear(), messageDate.getMonth(), messageDate.getDate());
@@ -257,7 +258,6 @@ function AdminChat() {
         setIsProfileCardVisible(false);
     };
 
-
     return (
         <div className="chat-container">
             {/* 채팅 목록 */}
@@ -282,15 +282,14 @@ function AdminChat() {
                             className="chat-profile-img"
                         />
                         <div className="chat-info">
-                            <span className="chat-name">{chat.userName}</span>
-                            {chat.isNewMessage && <span className="new-message-dot">●</span>}
+                            <span className="chat-name">{chat.userName}
+                                {chat.isNewMessage && <span className="new-message-dot">●</span>}</span>
                             <span className="chat-date">{formatTime(chat.lastMessageTime)}</span>
                             <p className="chat-preview">{chat.lastMessage}</p>
                         </div>
                     </div>
                 ))}
             </div>
-
 
             {/* 채팅창 */}
             <div className="chat-content">
@@ -312,8 +311,7 @@ function AdminChat() {
                                                 {formatDate(message.sendTime)}
                                             </div>
                                         )}
-                                        <div
-                                            className={`message ${message.senderType === 'STORE' ? 'sent' : 'received'}`}>
+                                        <div className={`message ${message.senderType === 'STORE' ? 'sent' : 'received'}`}>
                                             {message.senderType !== 'STORE' && (
                                                 <div className="message-profile" onClick={handleProfileClick}>
                                                     <img
@@ -327,13 +325,13 @@ function AdminChat() {
                                             <div className="bubble">
                                                 {message.chatMessage}
                                             </div>
-                                            <span className="message-time">
-                        {new Date(message.sendTime).toLocaleTimeString('ko-KR', {
-                            hour: 'numeric',
-                            minute: '2-digit',
-                            hour12: true
-                        })}
-                    </span>
+                                            <div className="message-time">
+                                                {new Date(message.sendTime).toLocaleTimeString('ko-KR', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: false
+                                                })}
+                                            </div>
                                         </div>
                                     </React.Fragment>
                                 );

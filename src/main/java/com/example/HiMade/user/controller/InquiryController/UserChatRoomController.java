@@ -39,7 +39,8 @@ public class UserChatRoomController {
         try {
             logger.info("메시지 저장 시도: {}", userChatDTO);
             userChatRoomService.insertChat(userChatDTO);
-            logger.info("메시지 저장 성공");
+            logger.info("메세지 저장 성공");
+
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             logger.error("메시지 저장 중 오류 발생", e);

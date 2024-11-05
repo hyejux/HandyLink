@@ -163,4 +163,57 @@
     text-align: center;
     font-size: 12px;
     padding: 30px;
+    display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.35);
+    margin: 8px 0px;
+}
+
+.date-separator::before,
+.date-separator::after {
+    content: "";
+    flex-grow: 1;
+    background: rgba(0, 0, 0, 0.35);
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+    margin: 0px 16px;
+}
+
+/*************/
+
+.business-hours-message {
+    display: flex;
+    padding: 10px 15px;
+    margin: 10px 50px;
+    border-radius: 15px;
+    background-color: #f9f9f9;
+    align-items: center;
+    max-width: 80%;
+    border: 1px solid #c3c3c3
+}
+
+.business-hours-message .profile-section {
+    margin-right: 10px;
+}
+
+.business-hours-message .profile-img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.business-hours-message .message-text {
+    color: #6c757d;
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+.business-hours-message .store-name {
+    font-size: 0.9em;
+    color: #495057;
+    margin-bottom: 4px;
+    font-weight: 500;
 }

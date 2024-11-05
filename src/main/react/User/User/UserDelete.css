@@ -4,7 +4,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 30px;
     text-align: center;
-    margin-top: 160px;
+    margin-top: 90px;
     width: 80%;
 }
 
@@ -66,8 +66,7 @@ h2 {
     width: 80%; /* Ensures inputs are consistent in width */
     padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1em;
+    font-size: 13px;
     margin-top: 5px;
     text-align: center; /* Centers placeholder text */
 }

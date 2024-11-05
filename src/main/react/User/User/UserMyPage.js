@@ -19,7 +19,6 @@ function UserMyPage () {
     });
     const [file, setFile] = useState(null);
 
-
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
     };
@@ -38,26 +37,21 @@ function UserMyPage () {
     };
 
     const validateForm = () => {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const namePattern = /^[가-힣a-zA-Z]+$/;
         const phonePattern = /^[0-9-]+$/;
-        const birthPattern = /^(?:\d{6}|\d{8})$/;
+        const birthPattern = /^\d{8}$/;
         const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
-        if (!userInfo.userId || !emailPattern.test(userInfo.userId)) {
-            alert("아이디는 이메일 형식이어야 하며 필수 입력 항목입니다.");
-            return false;
-        }
         if (userInfo.userName === '' || !namePattern.test(userInfo.userName)) {
-            alert("이름은 한글 또는 영어만 입력 가능하며 필수 입력 항목입니다.");
+            alert("이름은 한글 또는 영어만 입력 가능합니다.");
             return false;
         }
         if (userInfo.userPhonenum === '' || !phonePattern.test(userInfo.userPhonenum)) {
-            alert("연락처는 숫자 또는 숫자와 하이픈(-) 조합으로 입력해야 하며 필수 입력 항목입니다.");
+            alert("연락처는 숫자 또는 숫자와 하이픈(-) 조합으로 입력해야 합니다.");
             return false;
         }
         if (userInfo.userBirth === '' || !birthPattern.test(userInfo.userBirth)) {
-            alert("생년월일은 8자리 또는 6자리 숫자만 입력 가능하며 필수 입력 항목입니다.");
+            alert("생년월일은 8자리 숫자만 입력 가능합니다.");
             return false;
         }
 

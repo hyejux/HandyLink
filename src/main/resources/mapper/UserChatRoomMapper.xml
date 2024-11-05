@@ -34,8 +34,9 @@
                 COALESCE(i.storeImgLocation, '/img/user_basic_profile.jpg') AS storeImgUrl,
             CASE
                 WHEN MAX(c.send_time) OVER (PARTITION BY c.store_no) > COALESCE(cs.user_last_checked_time, '1970-01-01')
-                THEN true
-                ELSE false
+         AND FIRST_VALUE(c.sender_type) OVER (PARTITION BY c.store_no ORDER BY c.send_time DESC) = 'STORE'
+    THEN true
+    ELSE false
         END AS isNewMessage
         FROM public.chat c
             JOIN public.store s ON c.store_no = s.store_no
@@ -61,22 +62,25 @@
           AND send_time > #{lastCheckedTime}
     </select>
 
-    <update id="updateLastCheckedTime">
+    <update id="updateUserLastCheckedTime">
         UPDATE chat_status
         SET user_last_checked_time = #{lastCheckedTime}
         WHERE user_id = #{userId}
           AND store_no = #{storeNo}
     </update>
 
-<!--    <select id="findLastCheckedTimesByUserId" resultType="com.example.HiMade.user.dto.ChatStatusDTO">-->
-<!--        SELECT-->
-<!--            user_id AS userId,-->
-<!--            store_no AS storeNo,-->
-<!--            user_last_checked_time AS userLastCheckedTime,-->
-<!--            store_last_checked_time AS storeLastCheckedTime-->
-<!--        FROM chat_status-->
-<!--        WHERE user_id = #{userId}-->
-<!--    </select>-->
+    <!-- 사용자의 읽지 않은 메시지 존재 여부 체크 -->
+    <select id="hasUnreadMessages" parameterType="string" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM chat c
+                     LEFT JOIN chat_status cs ON c.store_no = cs.store_no AND c.user_id = cs.user_id
+            WHERE c.user_id = #{userId}
+              AND c.sender_type = 'STORE'
+              AND c.send_time > COALESCE(cs.user_last_checked_time, '1970-01-01')
+        )
+    </select>
+
 
     <resultMap id="chatListResultMap" type="map">
         <result property="storeNo" column="storeNo"/>

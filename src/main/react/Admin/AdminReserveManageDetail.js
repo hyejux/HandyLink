@@ -107,7 +107,7 @@ function AdminReserveManageDetail() {
           })
               .then(response => {
                   // 결제 상태 업데이트
-                  return axios.post('/userPayment/updateStatus', null, {
+                  return axios.post('/userPaymentStatus/updateStatus', null, {
                       params: {
                           reservationNo: reservationNo,
                           newStatus: paymentStatus,

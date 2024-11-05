@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface AdminStoreMapper {
@@ -46,5 +47,12 @@ public interface AdminStoreMapper {
 
     Integer getReviewCount(Long storeNo); //리뷰등록개수
     Integer getCancledCount(Long storeNo); //예약취소건수
+    Integer getWaitCount(Long storeNo); //예약대기건수-결제완료된
+    Integer getDoingCount(Long storeNo); //진행중인예약-주문승인된
+
+    List<Map<String , Object>> getDailyReportChart(@Param("storeNo") Long storeNo,@Param("year") int year, @Param("month") int month); //리포트 예약 정보
+    List<Map<String , Object>> getMonthlyReportChart(@Param("storeNo") Long storeNo,@Param("year") int year); //리포트 예약 정보
+    Map<String, Long> getGenderCount(Long storeNo); //고객성별
+    List<Map<String, Object>> getAgeDistribution(Long storeNo); //고객나이별
 
 }

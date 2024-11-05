@@ -37,6 +37,10 @@ public interface AdminStoreService {
     public storeNoticeDTO getNoticeDetail( int id);
 
     Map<String , Integer> getReportCount(Long storeNo); //리포트 예약 정보
+    List<Map<String , Object>> getDailyReportChart(Long storeNo, int year, int month); //리포트 차트-이번달
+    List<Map<String , Object>> getMonthlyReportChart(Long storeNo, int year); //리포트 차트-올해/작년
+    Map<String, Long> getGenderCount(Long storeNo); //고객성별
+    Map<String, Map<String, Long>> getAgeDistribution(Long storeNo); //고객나이별
 
 
 }

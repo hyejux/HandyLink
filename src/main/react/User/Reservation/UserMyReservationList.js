@@ -106,7 +106,7 @@ function UserMyReservationList() {
                 value.reservationStatus === '입금대기' || value.reservationStatus === '대기' ? 'status-pending' : 
                 value.reservationStatus === '확정' ? 'status-confirmed' :
                 value.reservationStatus === '완료' ? 'status-completed' :
-                value.reservationStatus === '취소' ? 'status-canceled' :
+                value.reservationStatus === '취소(고객)' || value.reservationStatus === '취소(업체)' ? 'status-canceled' :
                 ''
               }`}
             >

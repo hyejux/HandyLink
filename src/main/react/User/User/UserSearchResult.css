@@ -223,9 +223,9 @@
   padding: 5px;
   border-radius: 10px;
   position: relative;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   cursor: pointer;
+  border: 1px solid #e8e8e8;
 }
 
 .search-result-list-content:last-child {

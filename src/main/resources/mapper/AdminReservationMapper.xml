@@ -37,7 +37,7 @@
 
     <!--    -->
     <select id="getManageList" resultType="com.example.HiMade.admin.dto.adminReserveMangeDTO">
-        select r.reservation_no , r.*, main_c.*
+        select r.reservation_no , r.*, main_c.*, pm.*
         FROM
         reservation r
 
@@ -45,12 +45,30 @@
         ON rf.reservation_no = r.reservation_no
         JOIN
         category main_c ON rf.main_category_id = main_c.category_id
+
+        JOIN payment pm
+        ON pm.reservation_no = r.reservation_no
         where r.store_no = #{storeNo}
-        group by r.reservation_no, main_c.category_id
+        group by r.reservation_no, main_c.category_id, pm.payment_id
         order by r.reservation_no desc
 
 
     </select>
+
+    <select id="getManageFilterList" resultType="com.example.HiMade.admin.dto.adminReserveMangeDTO">
+        select main_c.*
+        FROM
+        reservation r
+        JOIN   reservation_form rf
+        ON rf.reservation_no = r.reservation_no
+        JOIN
+        category main_c ON rf.main_category_id = main_c.category_id
+        where r.store_no = #{storeNo}
+        group by main_c.category_id
+        order by main_c.service_start desc
+    </select>
+
+
 
     <!--  서비스 대분류 (상세 가져오기)  -->
     <select id="getListDetail" resultType="com.example.HiMade.admin.dto.adminReservationDTO">

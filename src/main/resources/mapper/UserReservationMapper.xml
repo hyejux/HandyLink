@@ -69,6 +69,7 @@
         GROUP BY
         r.reservation_no, s.store_name, r.reservation_status, r.reservation_price,
         r.reg_time, rs.reservation_slot_date, rf.main_category_id, c.service_name
+        ORDER BY r.reg_time desc
     </select>
 
     <select id="getDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">

@@ -23,4 +23,6 @@ public class adminReserveMangeDTO {
   private String storeId;
   private String userId;
   private String serviceName;
+
+  private String paymentStatus;
 }

@@ -36,7 +36,7 @@
 .management-table thead th {}
 
 .search-bar-box {
-  float: right;
+  /* float: right; */
   display: flex;
   justify-content: flex-end;
   gap: 1%;
@@ -112,7 +112,7 @@
   width: 100%;
   /* border: 1px solid #ddd; */
   border-collapse: collapse;
-  font-size: 17px;
+  font-size: 15px;
 
 
 }
@@ -197,12 +197,12 @@
   align-items: baseline;
 }
 
-.management-table button {
+/* .management-table button {
   width: 30px;
   height: 30px;
   margin-left: 10px;
   cursor: pointer;
-}
+} */
 
 
 
@@ -481,10 +481,21 @@
 
 .filter-btn-box {
   float: left;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 .filter-btn-box button {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 6px 10px;
+  white-space: nowrap;
+  margin-right: 5px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.date-selection button {
   border: 1px solid #ddd;
   background-color: #fff;
   border-radius: 10px;
@@ -500,8 +511,69 @@
   background-color: #43607d29;
 }
 
+
+.date-selection button.active {
+  border-color: #38414a;
+  background-color: #43607d29;
+}
+
 .reserve-manage-top {
   display: flex;
     justify-content: space-between;
     align-items: baseline;
+}
+
+.filter-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-range input {
+  border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.date-range button {
+  border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 6px 10px;
+    white-space: nowrap;
+    margin-right: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.dropdown-menu  select  {
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  border-radius: 10px;
+
+}
+
+.reservation-interface {
+  border: 1px solid #c3c3c3;
+  padding: 10px;
+  margin-bottom: 30px;
+  display: flex;
+  border-radius: 5px;
+  gap: 15px;
+  background-color: #f5f6f8;
+  flex-direction: column;
+}
+
+.print-btn {
+  border: 1px solid #ddd;
+  width: 100%;
+}
+
+.status-select {
+  font-size: 15px;
+  border: 1px solid #ddd;
+}
+
+.filter-top2 {
+  display: flex;
+  justify-content: space-between;
 }

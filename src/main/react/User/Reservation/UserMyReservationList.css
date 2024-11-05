@@ -290,8 +290,8 @@ body {
 }
 
 .status-completed {
-  color: #2196F3; 
-  border-color: #2196F3;
+  color: #fd8517; 
+  border-color: #fd8517;
 }
 
 .status-canceled {
@@ -352,6 +352,34 @@ body {
   justify-content: space-around;
 
 }
+
+.reservation-interface {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.date-selection button,
+.action-buttons button,
+.search-box button {
+  margin-right: 5px;
+}
+
+.date-range input {
+  margin: 0 5px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-menu select {
+  width: 100%;
+}
+
 
 
 .reservation-info-box > div i {

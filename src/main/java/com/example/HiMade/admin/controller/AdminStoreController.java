@@ -283,7 +283,6 @@ public class AdminStoreController {
         response.put("values", values);
         response.put("serviceName", serviceName);
 
-        System.out.println("나이별 top1 "+response);
         return response;
     }
 

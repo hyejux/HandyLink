@@ -137,7 +137,7 @@ function UserMyReservationList() {
               </div>
 
             </div>
-              {/* {value.reviewCount === 0 && value.reservationStatus === '확정' && ( */}
+              {value.reviewCount === 0 && value.reservationStatus === '확정' && (
               <button className="review-write-btn"
                 onClick={(event) => {
                   event.stopPropagation(); // Prevents event bubbling
@@ -146,7 +146,7 @@ function UserMyReservationList() {
               >
                 리뷰 작성하기
               </button>
-              {/* )} */}
+              )} 
           </div>
         ))}
 

@@ -1,5 +1,5 @@
 .admin-store-report-container{
-    padding: 30px;
+    padding: 80px;
 }
 
 h2 {
@@ -8,20 +8,22 @@ h2 {
 
 .report-section{
 /* border: 1px solid red; */
-    width: 80%;
+    width: 100%;
     margin-bottom: 60px;
 }
 
 .reservation-status{
     border: 1px solid #ddd;
-    width: 100%;
+/*    width: 100%;*/
     display: flex;
+    margin: 0 50px;
 }
 
 .reservation-field {
-    border-left: 1px solid #ddd;
+/*    border-left: 1px solid #ddd;*/
     width: 25%;
     padding: 10px;
+    text-align: center;
 }
 
 .reservation-field:nth-child(1){
@@ -29,8 +31,11 @@ h2 {
 }
 
 .reservation-graph{
-    margin: 35px 10px;
+/*    margin: 35px 10px;*/
+    padding: 50px;
+    padding-top: 0;
 }
+
 
 .graph-filter {
     border: 1px solid #ddd;
@@ -76,15 +81,27 @@ h3 {
     margin: 10px;
 }
 
-
-.customer-section-box {
+.graph-section{
     display: flex;
+    padding: 50px;
+    padding-top: 0;
+}
+
+.table-section{
+    display: flex;
+    padding: 50px;
+    padding-top: 0;
+}
+
+.detail{
+    width: 48%;
+    margin: 10px;
 }
 
 .customer {
     border: 1px solid #ddd;
     border-radius: 5px;
-    width: 25%;
+    width: 47%;
     margin: 10px;
 }
 

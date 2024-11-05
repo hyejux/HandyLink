@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+
 .main-content {
   margin: 50px;
 }
@@ -36,7 +45,7 @@
 .management-table thead th {}
 
 .search-bar-box {
-  float: right;
+  /* float: right; */
   display: flex;
   justify-content: flex-end;
   gap: 1%;
@@ -112,7 +121,7 @@
   width: 100%;
   /* border: 1px solid #ddd; */
   border-collapse: collapse;
-  font-size: 17px;
+  font-size: 15px;
 
 
 }
@@ -197,12 +206,12 @@
   align-items: baseline;
 }
 
-.management-table button {
+/* .management-table button {
   width: 30px;
   height: 30px;
   margin-left: 10px;
   cursor: pointer;
-}
+} */
 
 
 
@@ -307,6 +316,7 @@
 
 /* 날짜 타일 스타일 조정 */
 .react-calendar__tile {
+  font-family: 'Pretendard-Regular';
   width: 150px;
   /* 날짜 타일의 가로 크기 */
   height: 150px;
@@ -351,8 +361,10 @@
 
 /* 날짜 내용 스타일 조정 */
 .react-calendar__tile div {
+  font-family: 'Pretendard-Regular';
   margin: 0;
-  /* 기본 여백 제거 */
+  padding: 0px 8px;
+  margin: 3px;
 }
 
 /* 현재 날짜 강조 */
@@ -392,6 +404,7 @@
 /* 예약 리스트 스타일 */
 .reservation-list {
   margin-top: 20px;
+  text-align: left;
   font-size: 12px;
   list-style: none;
   padding-left: 0;
@@ -456,7 +469,9 @@
 }
 
 .reservation-info-container li {
+  font-family: 'Pretendard-Regular';
   background-color: #fff;
+  cursor: pointer;
   /* 항목 배경색 */
   margin: 5px 0;
   font-size: 16px;
@@ -465,7 +480,7 @@
   /* 항목 내부 여백 */
   border-radius: 5px;
   /* 항목 둥근 모서리 */
-  /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   /* 항목 그림자 */
   transition: transform 0.2s;
   /* 애니메이션 효과 */
@@ -481,10 +496,21 @@
 
 .filter-btn-box {
   float: left;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 .filter-btn-box button {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 6px 10px;
+  white-space: nowrap;
+  margin-right: 5px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.date-selection button {
   border: 1px solid #ddd;
   background-color: #fff;
   border-radius: 10px;
@@ -500,8 +526,70 @@
   background-color: #43607d29;
 }
 
+
+.date-selection button.active {
+  border-color: #38414a;
+  background-color: #43607d29;
+}
+
 .reserve-manage-top {
   display: flex;
     justify-content: space-between;
     align-items: baseline;
 }
+
+.filter-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-range input {
+  border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.date-range button {
+  border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 6px 10px;
+    white-space: nowrap;
+    margin-right: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.dropdown-menu  select  {
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  border-radius: 10px;
+
+}
+
+.reservation-interface {
+  border: 1px solid #c3c3c3;
+  padding: 10px;
+  margin-bottom: 30px;
+  display: flex;
+  border-radius: 5px;
+  gap: 15px;
+  background-color: #f5f6f8;
+  flex-direction: column;
+}
+
+.print-btn {
+  border: 1px solid #ddd;
+  width: 100%;
+}
+
+.status-select {
+  font-size: 15px;
+  border: 1px solid #ddd;
+}
+
+.filter-top2 {
+  display: flex;
+  justify-content: space-between;
+}
+

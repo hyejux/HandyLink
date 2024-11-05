@@ -71,6 +71,8 @@ function UserChatRoom() {
         setIsBusinessHours(currentTime >= open && currentTime <= close);
     };
 
+
+
     // 시간 포맷팅
     const formatTimeToAMPM = (time) => {
         const [hour, minute] = time.split(':');

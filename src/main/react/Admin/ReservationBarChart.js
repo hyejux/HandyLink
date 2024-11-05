@@ -39,7 +39,10 @@ function ReservationBarChart({period}) {
 
                     // 차트 데이터 업데이트
                     setChartData({
-                        labels: dates.map(date => date), // dates를 차트의 라벨로 설정
+                        labels: dates.map(date => {
+                            const day = date.split('-')[1];
+                            return `${parseInt(day)}일`;
+                        }), // dates를 차트의 라벨로 설정
                         datasets: [
                             {
                                 ...chartData.datasets[0],
@@ -90,6 +93,7 @@ function ReservationBarChart({period}) {
 
     const options = {
         responsive: true,
+        animations: false,
         plugins: {
             legend: {
                 display: true,

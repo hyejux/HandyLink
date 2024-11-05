@@ -17,6 +17,8 @@ function UserMyPage () {
         userPw: '',
         repassword: '',
     });
+
+
     const [file, setFile] = useState(null);
 
     const togglePasswordVisibility = () => {

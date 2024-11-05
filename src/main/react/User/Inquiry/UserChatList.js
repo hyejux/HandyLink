@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import './UserChatList.css';
 import ReactDOM from "react-dom/client";
@@ -9,6 +9,15 @@ function UserChatList() {
     const [chatList, setChatList] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedStoreNo, setSelectedStoreNo] = useState(null);
+
+    // 드래그 관련 상태 추가
+    const [dragStart, setDragStart] = useState(null);
+    const [dragOffset, setDragOffset] = useState({});
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState(null);
+
+    const touchStartX = useRef(0);
+    const currentTranslateX = useRef({});
 
     // 사용자 정보 가져오기
     useEffect(() => {
@@ -117,6 +126,52 @@ function UserChatList() {
         }
     };
 
+    // 아래부터는 드래그 활용한 채팅 목록에서의 삭제
+    const handleTouchStart = (e, storeNo) => {
+        touchStartX.current = e.touches[0].clientX;
+        currentTranslateX.current[storeNo] = dragOffset[storeNo] || 0;
+    };
+
+    const handleTouchMove = (e, storeNo) => {
+        if (!touchStartX.current) return;
+
+        const currentX = e.touches[0].clientX;
+        const diff = currentX - touchStartX.current;
+        const newTranslate = Math.min(0, Math.max(-100, currentTranslateX.current[storeNo] + diff));
+
+        setDragOffset(prev => ({
+            ...prev,
+            [storeNo]: newTranslate
+        }));
+    };
+
+    const handleTouchEnd = (e, storeNo) => {
+        const offset = dragOffset[storeNo] || 0;
+
+        if (offset < -50) {  // 왼쪽으로 충분히 드래그된 경우
+            setItemToDelete(storeNo);
+            if (window.confirm('목록에서 삭제하시겠습니까?')) {
+                setChatList(prev => prev.filter(chat => chat.storeNo !== storeNo));
+            } else {
+                // 드래그 초기화
+                setDragOffset(prev => ({
+                    ...prev,
+                    [storeNo]: 0
+                }));
+            }
+        } else {
+            // 충분히 드래그되지 않은 경우 원위치
+            setDragOffset(prev => ({
+                ...prev,
+                [storeNo]: 0
+            }));
+        }
+
+        touchStartX.current = 0;
+        currentTranslateX.current[storeNo] = 0;
+    };
+
+
     return (
         <div>
             <div className="user-chat-container">
@@ -141,16 +196,23 @@ function UserChatList() {
                             <li
                                 key={`${chat.storeNo}-${index}`}
                                 className="inquiry-item"
+                                style={{
+                                    transform: `translateX(${dragOffset[chat.storeNo] || 0}px)`,
+                                    transition: touchStartX.current ? 'none' : 'transform 0.3s ease'
+                                }}
+                                onTouchStart={(e) => handleTouchStart(e, chat.storeNo)}
+                                onTouchMove={(e) => handleTouchMove(e, chat.storeNo)}
+                                onTouchEnd={(e) => handleTouchEnd(e, chat.storeNo)}
                                 onClick={async () => {
+                                    // 드래그 중인 경우 클릭 이벤트 무시
+                                    if (dragOffset[chat.storeNo]) return;
+
                                     try {
-                                        console.log("클릭된 storeNo:", chat.storeNo);
-                                        console.log("현재 userId:", userId);
-                                        // 채팅방으로 이동하기 전에 마지막 확인 시간 업데이트
                                         await axios.post(`/chat/updateLastCheckedTime?userId=${userId}&storeNo=${chat.storeNo}`);
                                         await axios.post(`/chat/resetNewMessage?userId=${userId}`);
                                         setChatList(prevList =>
                                             prevList.map(item =>
-                                                item.storeNo === chat.storeNo ? { ...item, isNewMessage: false } : item
+                                                item.storeNo === chat.storeNo ? {...item, isNewMessage: false} : item
                                             )
                                         );
                                         setSelectedStoreNo(chat.storeNo);

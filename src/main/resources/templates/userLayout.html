@@ -82,6 +82,33 @@
         </div>
 </div>
 
+
+<script>
+    function checkNewMessages() {
+        fetch('/chat/hasNewMessage')
+            .then(response => response.json())
+            .then(hasNew => {
+                const chatNavIcon = document.querySelector('.user-bottom-nav a[href="../userChatList.user"]');
+                const existingDot = chatNavIcon.querySelector('.nav-new-message-dot');
+
+                if (hasNew && !existingDot && !window.location.pathname.includes('userChatList')) {
+                    // 채팅 목록 페이지가 아닐 때만 빨간 점 표시
+                    const dot = document.createElement('span');
+                    dot.className = 'nav-new-message-dot';
+                    chatNavIcon.appendChild(dot);
+                } else if (existingDot && window.location.pathname.includes('userChatList')) {
+                    // 채팅 목록 페이지면 빨간 점 제거
+                    existingDot.remove();
+                }
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        checkNewMessages();
+        setInterval(checkNewMessages, 30000);
+    });
+</script>
+
 <script th:src="@{'/bundle/' + ${pageName} + '.bundle.js'}"></script>
 
 

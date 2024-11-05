@@ -55,10 +55,9 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
         userChatRoomMapper.updateUserLastCheckedTime(userId, storeNo, lastCheckedTime);
     }
 
-//    @Override
-//    public List<ChatStatusDTO> getLastCheckedTimesByUserId(String userId) {
-//        System.out.println("로그 Service - userId: " + userId);
-//        return userChatRoomMapper.findLastCheckedTimesByUserId(userId);
-//    }
+    @Override
+    public boolean hasUnreadMessages(String userId) {
+        return userChatRoomMapper.hasUnreadMessages(userId);
+    }
 
 }

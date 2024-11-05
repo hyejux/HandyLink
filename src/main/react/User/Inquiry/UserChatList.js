@@ -4,11 +4,13 @@ import './UserChatList.css';
 import ReactDOM from "react-dom/client";
 
 function UserChatList() {
+    // useStat 관리
     const [userId, setUserId] = useState(null);
     const [chatList, setChatList] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedStoreNo, setSelectedStoreNo] = useState(null);
 
+    // 사용자 정보 가져오기
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
@@ -23,10 +25,10 @@ function UserChatList() {
         fetchUserInfo();
     }, []);
 
+    // 채팅 목록 가져오기
     useEffect(() => {
         if (!userId) return;
 
-        // 채팅 목록 가져오기
         const fetchChatList = async () => {
             try {
                 const response = await axios.get(`/chat/list?userId=${userId}`);

@@ -290,13 +290,13 @@ body {
 }
 
 .status-completed {
-  color: #2196F3; 
-  border-color: #2196F3;
+  color: #fd8517; 
+  border-color: #fd8517;
 }
 
 .status-canceled {
-  color: #fd8517;
-  border-color: #fd8517;
+  color: #F44336;
+  border-color: #F44336;
 }
 
 .reservation-time {

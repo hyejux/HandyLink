@@ -44,13 +44,23 @@ function UserMain() {
   const storeListRef1 = useRef(null);
   const storeListRef2 = useRef(null);
   const storeListRef3 = useRef(null);
+  const storeListRef4 = useRef(null);
+  const storeListRef5 = useRef(null);
+  const storeListRef6 = useRef(null);
 
   const btnLeftStoreRef1 = useRef(null);
   const btnLeftStoreRef2 = useRef(null);
   const btnLeftStoreRef3 = useRef(null);
+  const btnLeftStoreRef4 = useRef(null);
+  const btnLeftStoreRef5 = useRef(null);
+  const btnLeftStoreRef6 = useRef(null);
+
   const btnRightStoreRef1 = useRef(null);
   const btnRightStoreRef2 = useRef(null);
   const btnRightStoreRef3 = useRef(null);
+  const btnRightStoreRef4 = useRef(null);
+  const btnRightStoreRef5 = useRef(null);
+  const btnRightStoreRef6 = useRef(null);
 
   const setupScrollControls = (listWrap, btnLeft, btnRight) => {
     btnLeft.addEventListener('click', () => {
@@ -82,6 +92,7 @@ function UserMain() {
     setupScrollControls(storeListRef1.current, btnLeftStoreRef1.current, btnRightStoreRef1.current);
     setupScrollControls(storeListRef2.current, btnLeftStoreRef2.current, btnRightStoreRef2.current);
     setupScrollControls(storeListRef3.current, btnLeftStoreRef3.current, btnRightStoreRef3.current);
+    setupScrollControls(storeListRef4.current, btnLeftStoreRef4.current, btnRightStoreRef4.current);
   }, [store]);
 
 
@@ -443,46 +454,6 @@ function UserMain() {
             </div>
           </div>
 
-
-          {/* 인기 서비스/트렌드 */}
-          <div className="user-main-content">
-            <button className="nav-button left" ref={btnLeftStoreRef2} aria-label="왼쪽으로 이동">‹</button>
-            <button className="nav-button right" ref={btnRightStoreRef2} aria-label="오른쪽으로 이동">›</button>
-            <h3>인기 서비스/트렌드</h3>
-
-            <div className="user-main-list-wrap" ref={storeListRef2}>
-              {store.length > 0 ? (
-                store.map((store) => {
-                  const imageUrl = store.storeImages.length > 0
-                    ? store.storeImages[0].storeImgLocation
-                    : "/img/cake001.jpg"; // 기본 이미지 설정
-
-                  return (
-                    <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
-                      <div className="user-category-menu">
-                        <div className="user-category-menu-img">
-                          <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
-                            <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
-                          </button>
-                          <img src={imageUrl} alt={store.storeName} />
-                        </div>
-                        <div className="store-title-2">{store.storeName}</div>
-                        <div className="store-review-option">
-                          <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
-                          <span className="store-option">{store.storeCate || '미등록'}</span>
-                          {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })
-              ) : (
-                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
-              )}
-            </div>
-          </div>
-
-
           {/* 이벤트/할인 */}
           <div className="user-main-content">
             <button className="nav-button left" ref={btnLeftStoreRef3} aria-label="왼쪽으로 이동">‹</button>
@@ -505,6 +476,45 @@ function UserMain() {
                           </button>
                           <img src={imageUrl} alt={store.storeName} />
                           <div className="event-box">최대 40% 할인 이벤트</div>
+                        </div>
+                        <div className="store-title-2">{store.storeName}</div>
+                        <div className="store-review-option">
+                          <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                          <span className="store-option">{store.storeCate || '미등록'}</span>
+                          {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+              )}
+            </div>
+          </div>
+
+
+          {/* 인기 서비스/트렌드 */}
+          <div className="user-main-content">
+            <button className="nav-button left" ref={btnLeftStoreRef2} aria-label="왼쪽으로 이동">‹</button>
+            <button className="nav-button right" ref={btnRightStoreRef2} aria-label="오른쪽으로 이동">›</button>
+            <h3>인기 서비스/트렌드</h3>
+
+            <div className="user-main-list-wrap" ref={storeListRef2}>
+              {store.length > 0 ? (
+                store.map((store) => {
+                  const imageUrl = store.storeImages.length > 0
+                    ? store.storeImages[0].storeImgLocation
+                    : "/img/cake001.jpg"; // 기본 이미지 설정
+
+                  return (
+                    <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+                      <div className="user-category-menu">
+                        <div className="user-category-menu-img">
+                          <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                            <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
+                          </button>
+                          <img src={imageUrl} alt={store.storeName} />
                         </div>
                         <div className="store-title-2">{store.storeName}</div>
                         <div className="store-review-option">
@@ -549,12 +559,14 @@ function UserMain() {
                         <img src={imageUrl} alt={store.storeName} />
                       </div>
                       <div className='user-main-menu-info'>
-                        <div className="info-store-name">{store.storeName}</div>
-                        <div className="info-hashtag">
+                        <div className="menu-info-store-name">{store.storeName}</div>
+                        <div className="menu-info-hashtag">
                           {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
-                            <span key={category.id} className="result-list-option"><i className="bi bi-hash"></i> {category.serviceName}</span>))}
+                            <span key={category.id} className="menu-info-list-option"><i className="bi bi-hash"></i> {category.serviceName}</span>))}
                         </div>
-                        <div className="info-review-cate"><i className="bi bi-star-fill"></i> {store.averageRating} {store.storeCate}</div>
+                        <div className="menu-info-review-cate">
+                          <i className="bi bi-star-fill"></i> <span className="menu-info-review">{store.averageRating}</span> <span className="menu-info-cate">{store.storeCate}</span>
+                        </div>
                       </div>
                     </div>
                   );
@@ -604,6 +616,211 @@ function UserMain() {
             </div>
           )}
 
+
+          {/* 이벤트/할인 */}
+          <div className="user-main-content">
+            <button className="nav-button left" ref={btnLeftStoreRef4} aria-label="왼쪽으로 이동">‹</button>
+            <button className="nav-button right" ref={btnRightStoreRef4} aria-label="오른쪽으로 이동">›</button>
+            <h3>이벤트/할인</h3>
+
+            <div className="user-main-list-wrap" ref={storeListRef4}>
+              {store.length > 0 ? (
+                store.map((store) => {
+                  const imageUrl = store.storeImages.length > 0
+                    ? store.storeImages[0].storeImgLocation
+                    : "/img/cake001.jpg"; // 기본 이미지 설정
+
+                  return (
+                    <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+                      <div className="user-category-menu">
+                        <div className="user-category-menu-img user-category-menu-img2">
+                          <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                            <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
+                          </button>
+                          <img src={imageUrl} alt={store.storeName} />
+                          <div className="event-box">최대 40% 할인 이벤트</div>
+                        </div>
+                        <div className="store-title-2">{store.storeName}</div>
+                        <div className="store-review-option">
+                          <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                          <span className="store-option">{store.storeCate || '미등록'}</span>
+                          {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+              )}
+            </div>
+          </div>
+
+
+
+          {/* 배너 */}
+          <div className="advertisement-banner">
+            <img src='./img/banner/banner3.png' />
+          </div>
+
+          {/* 이벤트/할인 */}
+          <div className="user-main-content">
+            <button className="nav-button left" ref={btnLeftStoreRef5} aria-label="왼쪽으로 이동">‹</button>
+            <button className="nav-button right" ref={btnRightStoreRef5} aria-label="오른쪽으로 이동">›</button>
+            <h3>이벤트/할인</h3>
+
+            <div className="user-main-list-wrap" ref={storeListRef5}>
+              {store.length > 0 ? (
+                store.map((store) => {
+                  const imageUrl = store.storeImages.length > 0
+                    ? store.storeImages[0].storeImgLocation
+                    : "/img/cake001.jpg"; // 기본 이미지 설정
+
+                  return (
+                    <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+                      <div className="user-category-menu">
+                        <div className="user-category-menu-img">
+                          <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                            <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
+                          </button>
+                          <img src={imageUrl} alt={store.storeName} />
+                        </div>
+                        <div className="store-title-2">{store.storeName}</div>
+                        <div className="store-review-option">
+                          <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                          <span className="store-option">{store.storeCate || '미등록'}</span>
+                          {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+              )}
+            </div>
+          </div>
+
+
+          {/* 이벤트/할인 */}
+          <div className="user-main-content">
+            <button className="nav-button left">‹</button>
+            <button className="nav-button right">›</button>
+            <h3>이벤트/할인</h3>
+
+            <div className="user-main-list-wrap user-main-list-wrap-22">
+              {store.length > 0 ? (
+                store.slice(0, Math.floor(store.length / 2) * 2).map((store) => {
+                  const imageUrl = store.storeImages.length > 0
+                    ? store.storeImages[0].storeImgLocation
+                    : "/img/cake001.jpg"; // 기본 이미지 설정
+
+                  return (
+                    <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+                      <div className="user-category-menu">
+                        <div className="user-category-menu-img user-category-menu-img2">
+                          <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                            <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
+                          </button>
+                          <img src={imageUrl} alt={store.storeName} />
+                          <div className="event-box">최대 40% 할인 이벤트</div>
+                        </div>
+                        <div className="store-title-2">{store.storeName}</div>
+                        <div className="store-review-option">
+                          <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                          <span className="store-option">{store.storeCate || '미등록'}</span>
+                          {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+              )}
+            </div>
+          </div>
+
+          {/* 배너 */}
+          <div className="advertisement-banner">
+            <img src='./img/banner/banner2.png' />
+          </div>
+
+          {/* 이벤트/할인 */}
+          <div className="user-main-content">
+            <h3>이벤트/할인</h3>
+
+            <div className="user-main-list-wrap user-main-list-wrap-33">
+              {store.length > 0 ? (
+                store.slice(0, Math.floor(store.length / 2) * 2).map((store, index) => {
+                  const imageUrl = store.storeImages.length > 0
+                    ? store.storeImages[0].storeImgLocation
+                    : "/img/cake001.jpg"; // 기본 이미지 설정
+
+                  const classNames = ['s', 'l', 'l', 's', 's', 'l', 'l']; // 패턴 정의
+                  const className = classNames[index % 7] === 's'
+                    ? 'user-main-list-container-s'
+                    : 'user-main-list-container-l';
+
+                  return (
+                    <div
+                      className={`user-main-list-container ${className}`}
+                      key={store.storeNo}
+                      onClick={() => goToStoreDetail(store.storeNo)}
+                    >
+                      <div className="user-category-menu">
+                        <div className="user-category-menu-img user-category-menu-img2">
+                          <img src={imageUrl} alt={store.storeName} />
+                          <div className="store-service-name">서비스명</div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+              )}
+            </div>
+          </div>
+
+
+          {/* 인기 서비스/트렌드 */}
+          <div className="user-main-content">
+            <button className="nav-button left" ref={btnLeftStoreRef6} aria-label="왼쪽으로 이동">‹</button>
+            <button className="nav-button right" ref={btnRightStoreRef6} aria-label="오른쪽으로 이동">›</button>
+            <h3>인기 서비스/트렌드</h3>
+
+            <div className="user-main-list-wrap" ref={storeListRef6}>
+              {store.length > 0 ? (
+                store.map((store) => {
+                  const imageUrl = store.storeImages.length > 0
+                    ? store.storeImages[0].storeImgLocation
+                    : "/img/cake001.jpg"; // 기본 이미지 설정
+
+                  return (
+                    <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+                      <div className="user-category-menu">
+                        <div className="user-category-menu-img">
+                          <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                            <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
+                          </button>
+                          <img src={imageUrl} alt={store.storeName} />
+                        </div>
+                        <div className="store-title-2">{store.storeName}</div>
+                        <div className="store-review-option">
+                          <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                          <span className="store-option">{store.storeCate || '미등록'}</span>
+                          {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+              )}
+            </div>
+          </div>
 
 
           {/* 배너 */}

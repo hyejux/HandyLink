@@ -1,12 +1,79 @@
-import React, { useEffect, useRef } from 'react';
-import { Bar } from 'react-chartjs-2'; // Bar 차트를 가져옵니다.
+import React, { useEffect, useRef, useState } from 'react';
+import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
+import axios from 'axios';
 
 Chart.register(...registerables);
 
-function ReservationBarChart() {
+function ReservationBarChart({period}) {
+    const storeId = sessionStorage.getItem('storeId');
+    const storeNo = sessionStorage.getItem('storeNo');
+
+
 
     const chartRef = useRef(null);
+    const [chartData, setChartData] = useState({
+        labels: [],
+        datasets: [
+            {
+                label: '진행된 예약',
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                hoverBackgroundColor: 'rgba(75, 192, 192, 0.8)',
+                hoverBorderColor: 'rgba(75, 192, 192, 1)',
+                data: []
+            }
+        ]
+    });
+
+    useEffect(() => {
+        const fetchReportData = async () => {
+            try {
+                console.log("period ", period);
+
+                if (period === '이번달'){
+                    // 데이터를 가져올 API 엔드포인트를 호출합니다
+                    const response = await axios.get(`/adminStore/getDailyReportChart?storeNo=${storeNo}`);
+                    const { dates, counts } = response.data; // 날짜와 예약 건수를 포함한 데이터
+
+                    // 차트 데이터 업데이트
+                    setChartData({
+                        labels: dates.map(date => date), // dates를 차트의 라벨로 설정
+                        datasets: [
+                            {
+                                ...chartData.datasets[0],
+                                data: counts
+                            }
+                        ]
+                    });
+                } else {
+
+                    const response = await axios.get(`/adminStore/getYearlyReportChart?storeNo=${storeNo}&period=${period}`);
+                    const {months, counts} = response.data;
+
+                    // 차트 데이터 업데이트
+                    setChartData({
+                        labels: months.map(month => {
+                            const monthNumber = month.split('-')[1]; // "2024-05"에서 "05" 추출
+                            return `${parseInt(monthNumber)}월`; // 숫자로 변환 후 "월" 추가
+                        }),
+                        datasets: [
+                            {
+                                ...chartData.datasets[0],
+                                data: counts
+                            }
+                        ]
+                    });
+                }
+
+            } catch (error) {
+                console.error("차트 데이터를 불러오는 중 오류 발생: ", error);
+            }
+        };
+
+        fetchReportData();
+    }, [storeNo,period]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -20,29 +87,6 @@ function ReservationBarChart() {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
-    const labels = [
-        '10 / 01', '10 / 02', '10 / 03', '10 / 04', '10 / 05',
-        '10 / 06', '10 / 07', '10 / 08', '10 / 09', '10 / 10',
-        '10 / 11', '10 / 12', '10 / 13', '10 / 14', '10 / 15',
-        '10 / 16', '10 / 17', '10 / 18', '10 / 19', '10 / 20',
-        '10 / 21', '10 / 22', '10 / 23', '10 / 24', '10 / 25'
-    ];
-
-    const data = {
-        labels: labels,
-        datasets: [
-            {
-                label: '진행된 예약',
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                hoverBackgroundColor: 'rgba(75, 192, 192, 0.8)',
-                hoverBorderColor: 'rgba(75, 192, 192, 1)',
-                data: [5, 7, 4, 6, 8, 3, 5, 9, 2, 4, 7, 6, 8, 5, 7, 3, 4, 6, 9, 5, 7, 6, 4, 8, 9],
-            }
-        ]
-    };
 
     const options = {
         responsive: true,
@@ -76,7 +120,7 @@ function ReservationBarChart() {
             x: {
                 title: {
                     display: true,
-                    text: '날짜',
+                    //                    text: '날짜',
                     font: {
                         size: 16,
                         weight: 'bold'
@@ -94,7 +138,7 @@ function ReservationBarChart() {
             y: {
                 title: {
                     display: true,
-                    text: '건 수',
+                    //                    text: '건 수',
                     font: {
                         size: 16,
                         weight: 'bold'
@@ -112,7 +156,7 @@ function ReservationBarChart() {
         }
     };
 
-    return <Bar ref={chartRef} data={data} options={options} />;
-};
+    return <Bar ref={chartRef} data={chartData} options={options} />;
+}
 
 export default ReservationBarChart;

@@ -12,8 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.net.SocketTimeoutException;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RestController
 @RequestMapping("/adminStore")
@@ -156,6 +159,136 @@ public class AdminStoreController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이미지 파일을 찾을 수 없습니다.");
         }
     }
+
+    @GetMapping("/getReportCount")
+    public Map<String , Integer> getReportCount(@RequestParam Long storeNo){
+        Map<String , Integer>  reportCount = adminStoreService.getReportCount(storeNo);
+
+        return reportCount;
+    }
+
+    //그래프
+    @GetMapping("/getDailyReportChart")
+    public Map<String, Object> getDailyReportChart(@RequestParam Long storeNo) {
+        LocalDate today = LocalDate.now();
+        int year = today.getYear();
+        int month = today.getMonthValue();
+
+        List<String> dates = new ArrayList<>();
+        List<Integer> counts = new ArrayList<>();
+
+        // Call the service method
+        List<Map<String, Object>> chartCount = adminStoreService.getDailyReportChart(storeNo, year, month);
+
+        // Process the result to populate `dates` and `counts` as needed
+        Map<String, Integer> dateCountMap = new HashMap<>();
+        for (Map<String, Object> map : chartCount) {
+            String date = map.get("date").toString();
+            Integer count = ((Number) map.get("count")).intValue();
+            dateCountMap.put(date, count);
+        }
+
+        // Fill dates and counts
+        YearMonth currentMonth = YearMonth.of(year, month);
+        for (int day = 1; day <= currentMonth.lengthOfMonth(); day++) {
+            String date = String.format("%02d-%02d", month, day);
+            dates.add(date);
+            counts.add(dateCountMap.getOrDefault(date, 0));
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("dates", dates);
+        response.put("counts", counts);
+
+        System.out.println("확인 "+ response);
+        return response;
+    }
+
+    @GetMapping("/getYearlyReportChart")
+    public Map<String, Object> getYearlyReportChart(
+            @RequestParam Long storeNo,
+            @RequestParam String period) {
+
+        LocalDate today = LocalDate.now();
+        int year = period.equals("작년") ? today.getYear() - 1 : today.getYear();
+        List<String> months = new ArrayList<>();
+        List<Integer> counts = new ArrayList<>();
+
+        // 해당 연도의 월별 데이터 가져오기
+        List<Map<String, Object>> chartCount = adminStoreService.getMonthlyReportChart(storeNo, year);
+        Map<String, Integer> monthCountMap = new HashMap<>();
+
+        for (Map<String, Object> map : chartCount) {
+            String month = map.get("month").toString();
+            Integer count = ((Number) map.get("count")).intValue();
+            monthCountMap.put(month, count);
+        }
+
+        // 월별 데이터 생성
+        IntStream.rangeClosed(1, 12).forEach(month -> {
+            String monthKey = String.format("%04d-%02d", year, month);
+            months.add(monthKey);
+            counts.add(monthCountMap.getOrDefault(monthKey, 0));
+        });
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("months", months);
+        response.put("counts", counts);
+
+        System.out.println("올해/작년 "+response);
+        return response;
+    }
+
+    @GetMapping("/getGenderCount")
+    public Map<String, Long> getGenderCount(@RequestParam Long storeNo) {
+        Map<String, Long> result = adminStoreService.getGenderCount(storeNo);
+
+        Map<String, Long> response = new HashMap<>();
+        response.put("males", (result.get("male_count")));
+        response.put("females", (result.get("female_count")));
+
+        return response;
+    }
+
+    @GetMapping("/getAgeDistribution")
+    public Map<String, Object> getAgeDistribution(@RequestParam Long storeNo) {
+        Map<String, Map<String, Long>> result = adminStoreService.getAgeDistribution(storeNo);
+
+        // Initialize labels and values lists
+        List<String> labels = Arrays.asList("10대", "20대", "30대", "40대 이상");
+        List<Long> values = new ArrayList<>(Collections.nCopies(labels.size(), 0L));
+        List<String> serviceName = new ArrayList<>(Collections.nCopies(labels.size(), ""));
+
+        // Map the reservation counts from the result to the values list
+        for (String label : labels) {
+            if (result.containsKey(label)) {
+                Map<String, Long> services = result.get(label);
+
+                // Sum up the reservation counts
+                long sum = services.values().stream().mapToLong(Long::longValue).sum();
+                values.set(labels.indexOf(label), sum);
+
+                // Find the service name with the highest reservation count for this age group
+                String topService = services.entrySet().stream()
+                        .max(Map.Entry.comparingByValue())
+                        .map(Map.Entry::getKey)
+                        .orElse("");
+                serviceName.set(labels.indexOf(label), topService);
+            }
+        }
+
+        // Construct the final response
+        Map<String, Object> response = new HashMap<>();
+        response.put("labels", labels);
+        response.put("values", values);
+        response.put("serviceName", serviceName);
+
+        System.out.println("나이별 top1 "+response);
+        return response;
+    }
+
+
+
 
     @GetMapping("getNoticeList/{id}")
     public List<storeNoticeDTO> getNoticeList(@PathVariable int id) {

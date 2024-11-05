@@ -102,20 +102,20 @@ function UserAccountPage () {
 
                 <div className="settings-submenu">
                     <ul>
-                        <li><a href="#">고객 센터</a></li>
                         <li><a onClick={handleLogout}>로그아웃</a></li>
+                        <li><a onClick={() =>  window.location.href = '/UserDelete.user'}>탈퇴하기</a></li>
                     </ul>
                 </div>
 
-                <div className="settings-menu">
-                    <ul>
-                        <li>
-                            <div className="menu-delete" onClick={() =>  window.location.href = '/UserDelete.user'}>
-                                <span>탈퇴하기</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                {/*<div className="settings-menu" onClick={() =>  window.location.href = '/UserDelete.user'}>*/}
+                {/*    <ul>*/}
+                {/*        <li>*/}
+                {/*            <div className="menu-delete">*/}
+                {/*                <span>탈퇴하기</span>*/}
+                {/*            </div>*/}
+                {/*        </li>*/}
+                {/*    </ul>*/}
+                {/*</div>*/}
             </div>
         </div>
     );

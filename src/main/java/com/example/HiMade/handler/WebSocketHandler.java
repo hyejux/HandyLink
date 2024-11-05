@@ -32,14 +32,18 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String userId = extractUserIdFromSession(session);
-        String storeNo = extractStoreNoFromSession(session);  // 추가된 부분
+        String storeNo = extractStoreNoFromSession(session);
+
+        System.out.println("웹 소켓 연결 시도" + session.getId());
+        System.out.println("extractUserIdFromSession 결과 " + userId);
+        System.out.println("extractStoreNoFromSession 결과 " + storeNo);
 
         if (userId != null) {
             userSessions.computeIfAbsent(userId, k -> ConcurrentHashMap.newKeySet()).add(session);
-            System.out.println("New WebSocket connection established for user: " + userId);
-        } else if (storeNo != null) {  // 추가된 부분
+            System.out.println("웹소켓 연결된 user ID : " + userId);
+        } else if (storeNo != null) {
             storeSessions.computeIfAbsent(storeNo, k -> ConcurrentHashMap.newKeySet()).add(session);
-            System.out.println("New WebSocket connection established for store: " + storeNo);
+            System.out.println("웹소켓 연결된 store ID: " + storeNo);
         } else {
             session.close();
         }
@@ -78,26 +82,27 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
 
     // 각 사용자 ID에 연결된 모든 세션에 메시지 전송
-    private void sendMessageToUser(String userId, Map<String, Object> payload) throws Exception {
-        Set<WebSocketSession> sessions = userSessions.get(userId);
-        if (sessions != null) {
-            String messageString = objectMapper.writeValueAsString(payload);
-            for (WebSocketSession ws : sessions) {
-                if (ws.isOpen()) {
-                    ws.sendMessage(new TextMessage(messageString));
-                }
-            }
-        }
-    }
+//    private void sendMessageToUser(String userId, Map<String, Object> payload) throws Exception {
+//        Set<WebSocketSession> sessions = userSessions.get(userId);
+//        if (sessions != null) {
+//            String messageString = objectMapper.writeValueAsString(payload);
+//            for (WebSocketSession ws : sessions) {
+//                if (ws.isOpen()) {
+//                    ws.sendMessage(new TextMessage(messageString));
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         // 닫힌 세션을 모든 사용자 세션 목록에서 제거
         userSessions.forEach((userId, sessions) -> sessions.remove(session));
+
         // 빈 세션 목록 제거
         userSessions.entrySet().removeIf(entry -> entry.getValue().isEmpty());
 
-        System.out.println("WebSocket connection closed: " + session.getId());
+        System.out.println("웹 소켓 연결 종료 : " + session.getId());
     }
 
     private void sendMessageToSessions(Set<WebSocketSession> sessions, TextMessage message, String recipient) {
@@ -105,10 +110,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
             try {
                 if (session.isOpen()) {
                     session.sendMessage(message);
-                    System.out.println("Message sent successfully to " + recipient);
+                    System.out.println("메세지 전송 성공 " + recipient);
                 }
             } catch (Exception e) {
-                System.err.println("Error sending message to " + recipient + ": " + e.getMessage());
+                System.err.println("메세지 전송 실패 " + recipient + ": " + e.getMessage());
             }
         });
     }
@@ -123,15 +128,26 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     private String extractStoreNoFromSession(WebSocketSession session) {
         Map<String, Object> attributes = session.getAttributes();
+        System.out.println("세션 속성 확인: " + attributes);
+
+        // 직접 attributes에서 storeNo 가져오기 시도
+        Object storeNo = attributes.get("storeNo");
+        if (storeNo != null) {
+            System.out.println("직접 storeNo 찾음: " + storeNo);
+            return storeNo.toString();
+        }
+
+        System.out.println("HTTP.SESSION 찾기 시도");
+
+        // 기존 방식 유지
         HttpSession httpSession = (HttpSession) attributes.get("HTTP.SESSION");
         if (httpSession != null) {
-            String storeNo = (String) httpSession.getAttribute("storeNo");
-            if (storeNo != null) {
-                return storeNo;
-            }
+            storeNo = httpSession.getAttribute("storeNo");
+            System.out.println("HTTP Session에서 storeNo 찾음: " + storeNo);
+            return storeNo != null ? storeNo.toString() : null;
         }
+
         return null;
     }
-
     }
 

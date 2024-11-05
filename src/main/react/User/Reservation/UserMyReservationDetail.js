@@ -111,18 +111,23 @@ function UserMyReservationDetail() {
   const cancelReservation = async () => {
     const reservationNo = cateId;
     const storeName = reservationList.length > 0 ? reservationList[0].storeName : '정보 없음';
+    
     try {
-      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, { paymentStatus: "결제취소", storeName });
-      console.log("예약 취소 성공:", response.data);
-      alert("예약이 취소되었습니다.");
+        const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, { 
+            paymentStatus: "결제취소", 
+            storeName, 
+            reservationStatus: "취소(고객)" 
+        });
+        console.log("예약 취소 성공:", response.data);
+        alert("예약이 취소되었습니다.");
 
-      // 페이지를 새로 고침하거나 다른 작업 수행
-      window.location.reload();
+        window.location.reload();
     } catch (error) {
-      console.error("예약 취소 중 오류 발생:", error);
-      alert("예약 취소에 실패했습니다. 다시 시도해주세요.");
+        console.error("예약 취소 중 오류 발생:", error);
+        alert("예약 취소에 실패했습니다. 다시 시도해주세요.");
     }
-  };
+};
+
 
 
 
@@ -131,14 +136,14 @@ function UserMyReservationDetail() {
     if (reservationList.length > 0) {
       navigator.clipboard.writeText(reservationList[0].accountNumber)
         .then(() => {
-          console.log('계좌번호가 복사되었습니다.');
+          alert('계좌번호가 복사되었습니다.');
         })
         .catch(err => {
-          console.error('계좌번호 복사에 실패했습니다:', err);
+          alert('계좌번호 복사에 실패했습니다: ' + err);
         });
     }
   };
-
+  
 
   // ------------
 
@@ -156,7 +161,7 @@ function UserMyReservationDetail() {
         <>
           <div className="user-content-container">
             <div className='payment-info-top'>
-              <div className='deposit-date'></div>
+              <div className='deposit-date'>{formatDate2(reservationDetail.regTime)} 까지 입금해주세요.</div>
             </div>
             <div className="payment-info-top">
               <div className="account-left">입금 대기금액</div>
@@ -224,18 +229,18 @@ function UserMyReservationDetail() {
                 )}
 
 
-<div className="info-row info-row2">
-  {isMiddleCategoryDifferent && (
-    <div className="left">
-      <i className="bi bi-check2"></i> {item.middleCategoryName}
-    </div>
-  )}
-  <div className="right">
-    {item.middleCategoryValue != null
-      ? `${item.middleCategoryValue} (+${item.middlePrice}원)`
-      : `${item.subCategoryName} (+${item.subPrice}원)`}
-  </div>
-</div>
+                <div className="info-row info-row2">
+                  {isMiddleCategoryDifferent && (
+                    <div className="left">
+                      ⌞ {item.middleCategoryName}
+                    </div>
+                  )}
+                  <div className="right">
+                    {item.middleCategoryValue != null
+                      ? `${item.middleCategoryValue} (+${item.middlePrice}원)`
+                      : `${item.subCategoryName} (+${item.subPrice}원)`}
+                  </div>
+                </div>
 
 
               </div>

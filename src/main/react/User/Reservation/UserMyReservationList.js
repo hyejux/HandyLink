@@ -106,7 +106,7 @@ function UserMyReservationList() {
                 value.reservationStatus === '입금대기' || value.reservationStatus === '대기' ? 'status-pending' : 
                 value.reservationStatus === '확정' ? 'status-confirmed' :
                 value.reservationStatus === '완료' ? 'status-completed' :
-                value.reservationStatus === '취소' ? 'status-canceled' :
+                value.reservationStatus === '취소(고객)' || value.reservationStatus === '취소(업체)' ? 'status-canceled' :
                 ''
               }`}
             >
@@ -137,7 +137,7 @@ function UserMyReservationList() {
               </div>
 
             </div>
-              {/* {value.reviewCount === 0 && value.reservationStatus === '확정' && ( */}
+              {value.reviewCount === 0 && value.reservationStatus === '확정' && (
               <button className="review-write-btn"
                 onClick={(event) => {
                   event.stopPropagation(); // Prevents event bubbling
@@ -146,7 +146,7 @@ function UserMyReservationList() {
               >
                 리뷰 작성하기
               </button>
-              {/* )} */}
+              )} 
           </div>
         ))}
 

@@ -4,16 +4,18 @@ import './UserChatList.css';
 import ReactDOM from "react-dom/client";
 
 function UserChatList() {
+    // useStat 관리
     const [userId, setUserId] = useState(null);
     const [chatList, setChatList] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedStoreNo, setSelectedStoreNo] = useState(null);
 
+    // 사용자 정보 가져오기
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
                 const response = await axios.get('/chat/current');
-                console.log('현재 로그인된 사용자 ID:', response.data.userId); // 디버깅 로그
+                console.log('현재 로그인된 사용자 ID:', response.data.userId);
                 setUserId(response.data.userId);
             } catch (error) {
                 console.error('사용자 정보를 가져오는데 실패했습니다:', error);
@@ -23,13 +25,14 @@ function UserChatList() {
         fetchUserInfo();
     }, []);
 
+    // 채팅 목록 가져오기
     useEffect(() => {
         if (!userId) return;
 
-        // 채팅 목록 가져오기
         const fetchChatList = async () => {
             try {
                 const response = await axios.get(`/chat/list?userId=${userId}`);
+                console.log("채팅 목록", response.data);
                 setChatList(response.data);
             } catch (error) {
                 console.error("채팅 목록을 가져오는 중 오류가 발생했습니다:", error);
@@ -85,7 +88,7 @@ function UserChatList() {
 
     // 검색 기능 구현
     const filteredChatList = chatList.filter(chat =>
-        (chat.storename || "").toLowerCase().includes(searchTerm.toLowerCase())
+        (chat.storeName || "").toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // 시간 포맷팅 함수
@@ -96,7 +99,6 @@ function UserChatList() {
         // 날짜 비교를 위해 시간을 제외한 날짜만 비교
         const messageDay = new Date(messageDate.getFullYear(), messageDate.getMonth(), messageDate.getDate());
         const todayDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
         const diffDays = Math.floor((todayDay - messageDay) / (1000 * 60 * 60 * 24));
 
         if (diffDays === 0) {
@@ -165,13 +167,13 @@ function UserChatList() {
                                     className="store-image"
                                 />
                                 <div className="inquiry-content">
-                                    <p className="inquiry-title">{chat.storeName}</p>
+                                    <p className="inquiry-title">{chat.storeName}
+                                        {chat.isNewMessage && <span className="new-message-dot">●</span>}</p>
                                     <p className="chat-preview">
                                         {chat.lastMessage.length > 30 ? `${chat.lastMessage.substring(0, 30)}...` : chat.lastMessage}
                                     </p>
                                 </div>
                                 <span className="inquiry-time">{formatTime(chat.lastMessageTime)}</span>
-                                {chat.isNewMessage && <span className="new-message-dot">●</span>}
                             </li>
                         ))}
                     </ul>

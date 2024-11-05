@@ -31,6 +31,24 @@ public class AdminReservationController {
     return adminReservationService.getManageList(storeNo);
   }
 
+  @PostMapping("/getManageFilterList")
+  public List<adminReserveMangeDTO> getManageFilterList(@RequestBody Map<String, Integer> request) {
+    int storeNo = request.get("storeNo");
+    System.out.println(storeNo);
+    System.out.println(adminReservationService.getManageFilterList(storeNo));
+    return adminReservationService.getManageFilterList(storeNo);
+  }
+
+  @PostMapping("/getManageCalender")
+  public List<adminManagerCalDTO> getManageCalender(@RequestBody Map<String, Integer> request) {
+    int storeNo = request.get("storeNo");
+    System.out.println(storeNo);
+    System.out.println(adminReservationService.getManageCalender(storeNo));
+    return adminReservationService.getManageCalender(storeNo);
+  }
+
+
+
   @PostMapping("/getList")
   public List<adminReservationDTO> getList(@RequestBody Map<String, Integer> request) {
     int storeNo = request.get("storeNo");

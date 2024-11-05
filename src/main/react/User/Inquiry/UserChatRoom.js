@@ -4,6 +4,8 @@ import './UserChatRoom.css';
 import ReactDOM from "react-dom/client";
 
 function UserChatRoom() {
+
+    // useState 관리
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState("");
     const [showToast, setShowToast] = useState(false);
@@ -20,18 +22,19 @@ function UserChatRoom() {
         storeCloseTime: '',
     });
 
+    // Ref 관리
     const chatBoxRef = useRef(null);
     const websocket = useRef(null);
     const inputRef = useRef(null);
 
+    // storeNo 뽑아오기
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const storeNo = params.get("storeNo");
-        console.log("Received storeNo from URL:", storeNo); // 확인용 로그
         setStoreNo(storeNo);
     }, []);
 
-
+    // 스크롤
     const handleScroll = () => {
         if (!chatBoxRef.current) return;
 
@@ -61,16 +64,15 @@ function UserChatRoom() {
         setIsBusinessHours(currentTime >= open && currentTime <= close);
     };
 
+
+
+    // 시간 포맷팅
     const formatTimeToAMPM = (time) => {
         const [hour, minute] = time.split(':');
-        const intHour = parseInt(hour, 10);
-        const ampm = intHour >= 12 ? 'PM' : 'AM';
-        const formattedHour = intHour % 12 || 12; // 0시는 12로 표시
-        return `${ampm} ${String(formattedHour).padStart(2, '0')}:${minute}`;
+        return `${hour.padStart(2, '0')}:${minute}`;
     };
 
-
-
+    // 스크롤
     useEffect(() => {
         if (isAtBottom && chatBoxRef.current) {
             chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
@@ -80,6 +82,7 @@ function UserChatRoom() {
         }
     }, [messages]);
 
+    // 사용자 정보 가져오기
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
@@ -93,6 +96,7 @@ function UserChatRoom() {
         fetchUserInfo();
     }, []);
 
+    // 가게 정보 가져오기
     useEffect(() => {
         const fetchStoreInfo = async () => {
             if (storeNo) {  // storeNo가 정확히 설정되었는지 확인
@@ -109,6 +113,7 @@ function UserChatRoom() {
         fetchStoreInfo();
     }, [storeNo]);
 
+    // 기존 채팅 불러오기
     useEffect(() => {
         const loadChatHistory = async () => {
             if (userId && storeNo) {
@@ -178,6 +183,7 @@ function UserChatRoom() {
         };
     }, [userId, storeNo]);
 
+    // 메세지 전송
     const sendMessage = async () => {
         if (!userId) {
             window.location.href = '/UserLoginPage.user';
@@ -189,7 +195,7 @@ function UserChatRoom() {
                 userId,
                 storeNo,
                 senderType: "USER",
-                chatMessage: messageInput.trim(),  // trim() 추가
+                chatMessage: messageInput.trim(),
                 sendTime: new Date().toISOString(),
             };
 
@@ -215,23 +221,26 @@ function UserChatRoom() {
         }
     };
 
+    // 엔터
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             sendMessage(e);
         }
     };
 
+    // 자동 포커스
     useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus();
         }
     }, []);
 
+    // 업체 프로필 클릭 시
     const handleImageClick = () => {
         window.location.href = `/userStoreDetail.user/${storeInfo.storeNo}`;
     };
 
-    // 날ㅈ자로 구분하기
+    // 날짜 구분
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
@@ -247,14 +256,24 @@ function UserChatRoom() {
 
                 {!isBusinessHours && (
                     <div className="business-hours-message">
-                        <span>지금은 영업 시간이 아닙니다. 문의 가능한 시간은 {formatTimeToAMPM(storeInfo.storeOpenTime)} - {formatTimeToAMPM(storeInfo.storeCloseTime)} 입니다.</span>
+                        <div className="profile-section">
+                            <img
+                                className="profile-img"
+                                src={storeInfo.storeImg[0]?.storeImgLocation || '/img/user_basic_profile.jpg'}
+                                alt={`${storeInfo.storeName} 프로필`}
+                            />
+                        </div>
+                        <div className="message-text">
+                            {/*<div className="store-name">{storeInfo.storeName}</div>*/}
+                            <div>지금은 영업 시간이 아닙니다.</div>
+                            <div>문의 가능한 시간은 {formatTimeToAMPM(storeInfo.storeOpenTime)} - {formatTimeToAMPM(storeInfo.storeCloseTime)} 입니다.</div>
+                        </div>
                     </div>
                 )}
 
-
                 <div className="chat-box" ref={chatBoxRef} onScroll={handleScroll}>
                     {messages.map((msg, index) => {
-                        // showDate 조건에서 isDateOlderThanToday 제거
+
                         const showDate = index === 0 || isDifferentDay(messages[index - 1].sendTime, msg.sendTime);
 
                         return (
@@ -277,14 +296,14 @@ function UserChatRoom() {
                                     <div className="message-content">
                                         {msg.senderType !== 'USER' &&
                                             <div className="sender-name">{storeInfo.storeName}</div>}
-                                        <div className="bubble">{msg.chatMessage}</div>
-                                        <div className="timestamp">
-                                            {new Date(msg.sendTime).toLocaleTimeString('ko-KR', {
-                                                hour: 'numeric',
-                                                minute: '2-digit',
-                                                hour12: true
-                                            })}
-                                        </div>
+                                            <div className="bubble">{msg.chatMessage}</div>
+                                            <div className="timestamp">
+                                                {new Date(msg.sendTime).toLocaleTimeString('ko-KR', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: false
+                                                })}
+                                            </div>
                                     </div>
                                 </div>
                             </React.Fragment>

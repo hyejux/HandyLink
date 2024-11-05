@@ -548,7 +548,7 @@ function UserStoreDetail() {
                 ))}
               </div>
 
-              <div className="user-content-container">
+              <div className="user-store-map-box">
                 <div></div>
                 {showMap && (
                   <div>

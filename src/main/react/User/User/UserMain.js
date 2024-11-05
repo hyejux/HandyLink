@@ -504,7 +504,7 @@ function UserMain() {
                             <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
                           </button>
                           <img src={imageUrl} alt={store.storeName} />
-                          <div className="event-box">이벤트</div>
+                          <div className="event-box">최대 40% 할인 이벤트</div>
                         </div>
                         <div className="store-title-2">{store.storeName}</div>
                         <div className="store-review-option">

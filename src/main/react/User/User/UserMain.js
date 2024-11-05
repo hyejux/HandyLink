@@ -403,7 +403,7 @@ function UserMain() {
 
           {/* 배너 */}
           <div className="advertisement-banner">
-            <img src='./img/advertisement/banner.jpg' />
+            <img src='./img/banner/banner1.png' />
           </div>
 
           {/* 내 주변 가게 */}
@@ -525,7 +525,7 @@ function UserMain() {
 
           {/* 배너 */}
           <div className="advertisement-banner">
-            <img src='./img/advertisement/banner.jpg' />
+            <img src='./img/banner/banner2.png' />
           </div>
 
 
@@ -554,7 +554,7 @@ function UserMain() {
                           {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
                             <span key={category.id} className="result-list-option"><i className="bi bi-hash"></i> {category.serviceName}</span>))}
                         </div>
-                        <div className="info-review-cate"><i className="bi bi-star-fill"></i> {store.averageRating} 카테고리: {store.storeCate}</div>
+                        <div className="info-review-cate"><i className="bi bi-star-fill"></i> {store.averageRating} {store.storeCate}</div>
                       </div>
                     </div>
                   );
@@ -608,7 +608,7 @@ function UserMain() {
 
           {/* 배너 */}
           <div className="advertisement-banner">
-            <img src='./img/advertisement/banner.jpg' />
+            <img src='./img/banner/banner3.png' />
           </div>
 
 

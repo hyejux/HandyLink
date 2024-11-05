@@ -152,8 +152,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 25px;
-  margin: 25px;
+  gap: 20px;
+  margin: 30px 15px 20px 15px;
 }
 
 .store-category-item {
@@ -171,7 +171,6 @@
 .store-category-item img {
   width: 25px;
   height: 25px;
-  margin-bottom: 8px;
 }
 
 .store-category-item p {
@@ -555,7 +554,7 @@
 }
 
 .indicator.active {
-  background-color: rgb(115, 139, 227);
+  background-color: #fd8517;
 }
 
 
@@ -758,7 +757,7 @@
 .advertisement-banner {
   width: 100%;
   height: 70px;
-  margin: 15px 0;
+  margin: 25px 0;
 }
 
 .advertisement-banner img {
@@ -775,30 +774,27 @@
 
 /*  */
 .user-main-menu-bar {
+  width: 100%;
   height: 50px;
   display: inline-flex;
-  margin-left: 20px;
 }
 
 .user-main-menu-bar button {
   font-weight: bold;
-  width: 70px;
-  height: 50px;
+  width: 25%;
   border: none;
   background-color: #fff;
-  margin-right: 20px;
   transition: border-bottom 0.1s ease, color 0.1s ease;
   color: #000;
 }
 
 .user-main-menu-bar button.active {
-  border-bottom: 5px solid #738BE3;
-  color: #738BE3;
+  border-bottom: 5px solid #fd8517;
+  color: #fd8517;
 }
 
 .user-main-menu-content {
-  width: 100%;
-  height: 250px;
+  padding: 10px 5px;
 }
 
 .user-main-menu-content-list {

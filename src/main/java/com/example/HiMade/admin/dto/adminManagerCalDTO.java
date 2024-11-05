@@ -14,10 +14,12 @@ import java.time.LocalTime;
 @Setter
 @ToString
 @Builder
-public class adminReserveMangeDTO {
-  private int reservationNo;
-  private String reservationStatus;
+public class adminManagerCalDTO {
   private LocalDate reservationSlotDate;
+  private String reservationStatus;
+  private int count;
+
+  private int reservationNo;
   private LocalTime reservationTime;
   private LocalDateTime regTime	;
   private String customerRequest;
@@ -27,8 +29,4 @@ public class adminReserveMangeDTO {
   private String serviceName;
 
   private String paymentStatus;
-
-
-
-
 }

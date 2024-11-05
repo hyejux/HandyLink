@@ -22,6 +22,7 @@ public interface AdminReservationService
 
   public List<adminReserveMangeDTO> getManageList(int storeNo);
   public List<adminReserveMangeDTO> getManageFilterList(int storeNo);
+  public List<adminManagerCalDTO> getManageCalender(int storeNo);
 
   //예약 상태 변경
   void updateStatus(UpdateReservationStatusDTO dto);

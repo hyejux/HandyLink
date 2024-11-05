@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+
 .main-content {
   margin: 50px;
 }
@@ -307,6 +316,7 @@
 
 /* 날짜 타일 스타일 조정 */
 .react-calendar__tile {
+  font-family: 'Pretendard-Regular';
   width: 150px;
   /* 날짜 타일의 가로 크기 */
   height: 150px;
@@ -351,8 +361,10 @@
 
 /* 날짜 내용 스타일 조정 */
 .react-calendar__tile div {
+  font-family: 'Pretendard-Regular';
   margin: 0;
-  /* 기본 여백 제거 */
+  padding: 0px 8px;
+  margin: 3px;
 }
 
 /* 현재 날짜 강조 */
@@ -392,6 +404,7 @@
 /* 예약 리스트 스타일 */
 .reservation-list {
   margin-top: 20px;
+  text-align: left;
   font-size: 12px;
   list-style: none;
   padding-left: 0;
@@ -456,7 +469,9 @@
 }
 
 .reservation-info-container li {
+  font-family: 'Pretendard-Regular';
   background-color: #fff;
+  cursor: pointer;
   /* 항목 배경색 */
   margin: 5px 0;
   font-size: 16px;
@@ -465,7 +480,7 @@
   /* 항목 내부 여백 */
   border-radius: 5px;
   /* 항목 둥근 모서리 */
-  /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   /* 항목 그림자 */
   transition: transform 0.2s;
   /* 애니메이션 효과 */
@@ -577,3 +592,4 @@
   display: flex;
   justify-content: space-between;
 }
+

@@ -6,6 +6,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './AdminReserveManage.css';
 import { useRef } from 'react';
+import { isNull } from 'util';
 
 function AdminReserveManage() {
     const [passengers, setPassengers] = useState([
@@ -58,11 +59,12 @@ function AdminReserveManage() {
             destination: "RDU",
         },
     ]);
-
-    const [viewMode, setViewMode] = useState('list');
+    const today = new Date().toISOString().split('T')[0];
+    const [viewMode, setViewMode] = useState('calendar');
     const [reservationList, setReservationList] = useState([]);
     const [filterServiceName, setFilterServiceName] = useState([]);
-    const [selectedDates, setSelectedDates] = useState([]);
+    const [manageCalender, setManageCalender] = useState([]);
+    const [selectedDates, setSelectedDates] = useState([today]);
     const [displayedDates, setDisplayedDates] = useState([]); // 선택된 날짜를 표시할 상태 추가
     const [startMonth] = useState(new Date());
     const [updatingReservationId, setUpdatingReservationId] = useState(null); // 현재 업데이트 중인 예약 ID
@@ -100,34 +102,41 @@ function AdminReserveManage() {
                 console.log('Error Category', error);
             });
 
+            
+            axios.post('/adminReservation/getManageCalender', { storeNo: storeNo })
+            .then(response => {
+                console.log(response.data);
+                setManageCalender(response.data);
+            })
+            .catch(error => {
+                console.log('Error Category', error);
+            });
+
+
 
             
     }, []);
 
     // 캘린더에 예약건 반환
     const getReservationsForDate = (date) => {
-        return reservationList
+        return manageCalender
             // reservationList에서 각 예약(reservation)의 등록 시간(regTime)을 Date 객체로 변환합니다.
             .filter(reservation =>
                 // toLocaleDateString() 메서드를 사용하여 해당 날짜를 문자열로 변환합니다.
                 // 주어진 date와 같은 날짜인 예약만 필터링합니다.
-                new Date(reservation.regTime).toLocaleDateString() === date.toLocaleDateString()
+                new Date(reservation.reservationSlotDate).toLocaleDateString() === date.toLocaleDateString()
             )
             // 필터링된 예약 목록을 등록 시간에 따라 정렬합니다
-            .sort((a, b) => new Date(a.regTime) - new Date(b.regTime));
+            .sort((a, b) => new Date(a.reservationSlotDate) - new Date(b.reservationSlotDate));
     };
 
 
     const handleDateClick = (date) => {
-        const dateString = date.toLocaleDateString();
-        setSelectedDates((prevSelected) => {
-            if (prevSelected.includes(dateString)) {
-                return prevSelected.filter(d => d !== dateString);
-            } else {
-                return [...prevSelected, dateString];
-            }
-        });
+        const dateString = date.toLocaleDateString(); // 날짜를 문자열로 변환
+    
+        setSelectedDates([dateString]); // 선택한 날짜만 배열에 저장 (하나씩만 보이도록)
     };
+    
 
     // 선택된 날짜를 화면에 띄우고 선택된 날짜 초기화
     const handleShowSelectedDates = () => {
@@ -203,39 +212,39 @@ function AdminReserveManage() {
 
 
     // ------------------ 정렬 ------------------
-    const handleSort = (field, type) => {
-        let order = sortOrder === 'asc' ? 'desc' : 'asc';
-        setSortOrder(order);
+    // const handleSort = (field, type) => {
+    //     let order = sortOrder === 'asc' ? 'desc' : 'asc';
+    //     setSortOrder(order);
 
-        // 정렬 대상 리스트를 filteredReservationList로 설정
-        const sortedList = [...filteredReservationList].sort((a, b) => {
-            let valueA = a[field];
-            let valueB = b[field];
+    //     // 정렬 대상 리스트를 filteredReservationList로 설정
+    //     const sortedList = [...filteredReservationList].sort((a, b) => {
+    //         let valueA = a[field];
+    //         let valueB = b[field];
 
-            // 숫자 타입 정렬
-            if (type === 'number') {
-                valueA = parseFloat(valueA);
-                valueB = parseFloat(valueB);
-                return order === 'asc' ? valueA - valueB : valueB - valueA;
-            }
+    //         // 숫자 타입 정렬
+    //         if (type === 'number') {
+    //             valueA = parseFloat(valueA);
+    //             valueB = parseFloat(valueB);
+    //             return order === 'asc' ? valueA - valueB : valueB - valueA;
+    //         }
 
-            // 날짜 타입 정렬
-            if (type === 'date') {
-                valueA = new Date(valueA);
-                valueB = new Date(valueB);
-                return order === 'asc' ? valueA - valueB : valueB - valueA;
-            }
+    //         // 날짜 타입 정렬
+    //         if (type === 'date') {
+    //             valueA = new Date(valueA);
+    //             valueB = new Date(valueB);
+    //             return order === 'asc' ? valueA - valueB : valueB - valueA;
+    //         }
 
-            // 문자 타입 정렬
-            if (type === 'string') {
-                return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
-            }
+    //         // 문자 타입 정렬
+    //         if (type === 'string') {
+    //             return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+    //         }
 
-            return 0; // 기본적으로 같으면 0 반환
-        });
+    //         return 0; // 기본적으로 같으면 0 반환
+    //     });
 
-        setFilteredReservationList(sortedList); // 필터링된 리스트 업데이트
-    };
+    //     setFilteredReservationList(sortedList); // 필터링된 리스트 업데이트
+    // };
 
 
     // ------------------ 검색 ------------------
@@ -465,6 +474,8 @@ function AdminReserveManage() {
     }, [selectedDays, filterStatus, selectedServiceName, startDate, endDate, reservationList]);
     
 
+    // -----------------------------------------------------
+ 
     // --------------------------------------------------
 
     return (
@@ -627,7 +638,8 @@ function AdminReserveManage() {
                                         <td>{value.reservationNo}</td>
                                         <td> {value.serviceName}</td>
                                         <td>{value.userId}</td>
-                                        <td>{formatDate(value.regTime)}</td>
+                                        {/* <td>{formatDate(value.regTime)}</td> */}
+                                        <td>{value.reservationSlotDate} {value.reservationTime}</td>
                                         <td>{value.reservationPrice}</td>
                                         <td>{value.customerRequest}</td>
                                         <td> {value.paymentStatus} </td>
@@ -667,6 +679,7 @@ function AdminReserveManage() {
                     <div className="calendar-and-reservation-info">
                         <div className="custom-calendar">
                             <h3>{startMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</h3>
+            
                             <Calendar
                                 onChange={() => { }}
                                 value={startMonth}
@@ -682,27 +695,56 @@ function AdminReserveManage() {
                                 }}
                                 // tileContent: 각 날짜에 예약 정보를 표시하는 로직입니다. getReservationsForDate(date) 함수를 호출하여 현재 날짜의 예약 목록을 가져와서, 예약이 있을 경우 이를 <ul> 리스트로 렌더링합니다.
                                 tileContent={({ date, view }) => {
-                                    // tileClassName: 현재 월 뷰(view === 'month')일 때, 날짜가 선택된 날짜(selectedDates) 배열에 포함되어 있으면 selected-date 클래스를 반환하여 해당 날짜를 강조합니다.
+                                    // 월 뷰(view === 'month')일 때만 예약 상태 표시
                                     if (view === 'month') {
-                                        const reservations = getReservationsForDate(date);
+                                        const reservations = getReservationsForDate(date); // 해당 날짜의 예약 정보 가져오기
+                                        
                                         if (reservations.length > 0) {
+                                            // 상태 집계를 위한 객체
+                                          // 상태 집계를 위한 객체 초기화
+const statusCounts = {
+    '입금대기': 0,
+    '대기': 0,
+    '확정': 0,
+    '완료': 0,
+    '취소': 0,
+};
+
+// 예약 상태 집계
+reservations.forEach(reservation => {
+    const { reservationStatus } = reservation;
+
+    // 취소 상태 통합: '취소(업체)'와 '취소(고객)'를 '취소'로 집계
+    if (reservationStatus === '취소(업체)' || reservationStatus === '취소(고객)') {
+        statusCounts['취소'] += 1; // 예약 존재 시 +1
+    } else if (statusCounts.hasOwnProperty(reservationStatus)) {
+        statusCounts[reservationStatus] += 1; // 예약 존재 시 +1
+    } else {
+        console.warn(`알 수 없는 예약 상태: ${reservationStatus}`); // 예외 상태 처리
+    }
+});
+                                    
+                                            // 예약 상태를 포함한 JSX 반환
                                             return (
-                                                <ul className="reservation-list">
-                                                    {reservations.map((reservation) => {
-                                                        return (
-                                                            <li key={reservation.reservationNo}>
-                                                                {reservation.reservationTime} <br /> {reservation.userId} <br />{reservation.reservationStatus}
-                                                            </li>
-                                                        );
-                                                    })}
-                                                </ul>
+                                                <div className='reservation-list'>
+                                                    <div>입금대기: {statusCounts['입금대기']}</div>
+                                                    <div>대기: {statusCounts['대기']}</div>
+                                                    <div>확정: {statusCounts['확정']}</div>
+                                                    <div>완료: {statusCounts['완료']}</div>
+                                                    <div>취소: {statusCounts['취소']}</div> {/* 통합된 취소 상태 표시 */}
+                                                </div>
                                             );
+                                        } else {
+                                            return isNull; // 예약 정보가 없을 때 처리
                                         }
                                     }
+                                    
+                                    
+                                    // 예약이 없거나 월 뷰가 아닐 경우 null 반환
                                     return null;
                                 }}
-                                // onClickDay: 날짜를 클릭했을 때 호출되는 함수로, handleDateClick을 통해 선택된 날짜를 업데이트합니다.
-                                onClickDay={handleDateClick}
+                                
+                             onClickDay={handleDateClick}
                             />
                         </div>
 
@@ -713,17 +755,15 @@ function AdminReserveManage() {
                                 {selectedDates.map((dateString, index) => (
                                     <div key={index}>
                                         <h4>{dateString}</h4>
-                                        <ul>
+                                        <ul >
                                             {getReservationsForDate(new Date(dateString)).map(reservation => (
-                                                <li key={reservation.reservationNo}>
-                                                    <strong>예약번호:</strong> {reservation.reservationNo} <br />
-                                                    <strong>예약상태:</strong> {reservation.reservationStatus} <br />
-                                                    <strong>예약시간:</strong> {reservation.reservationTime} <br />
-                                                    <strong>예약등록일시:</strong> {reservation.regTime} <br />
-                                                    <strong>요청사항:</strong> {reservation.customerRequest} <br />
-                                                    <strong>총액:</strong> {reservation.reservationPrice} <br />
-                                                    {/* <strong>업체아이디:</strong> {reservation.storeId} <br /> */}
-                                                    <strong>사용자아이디:</strong> {reservation.userId} <br />
+                                                <li className='container-cal-detail' key={reservation.reservationNo} onClick={() => { goToDetail(reservation.reservationNo) }}>
+                                                    {reservation.userId} 님 예약 [ {reservation.reservationStatus} ] <br /> 
+                                                   
+                                                  {reservation.serviceName} <br />
+                                                  {reservation.reservationSlotDate}   {reservation.reservationTime} <br />
+            
+                                                   
                                                 </li>
                                             ))}
                                         </ul>

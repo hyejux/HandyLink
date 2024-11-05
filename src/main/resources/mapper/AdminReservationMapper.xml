@@ -37,22 +37,38 @@
 
     <!--    -->
     <select id="getManageList" resultType="com.example.HiMade.admin.dto.adminReserveMangeDTO">
-        select r.reservation_no , r.*, main_c.*, pm.*
+        select r.reservation_no , r.*, main_c.*, pm.*, rs.*
         FROM
         reservation r
-
         JOIN   reservation_form rf
         ON rf.reservation_no = r.reservation_no
         JOIN
         category main_c ON rf.main_category_id = main_c.category_id
-
+        JOIN reservation_slot rs
+        on rs.reservation_slot_key = r.reservation_slot_key
         JOIN payment pm
         ON pm.reservation_no = r.reservation_no
         where r.store_no = #{storeNo}
-        group by r.reservation_no, main_c.category_id, pm.payment_id
+        group by r.reservation_no, main_c.category_id, pm.payment_id, rs.reservation_slot_key
         order by r.reservation_no desc
 
 
+    </select>
+
+
+    <select id="getManageCalender" resultType="com.example.HiMade.admin.dto.adminManagerCalDTO">
+        select reservation_slot_date, r.* , main_c.service_name
+        from reservation r
+        join reservation_slot rs
+        on r.reservation_slot_key = rs.reservation_slot_key
+
+        LEFT JOIN
+        reservation_form rf ON rf.reservation_no = r.reservation_no
+        LEFT JOIN
+        category main_c ON rf.main_category_id = main_c.category_id
+        where r.store_no = #{storeNo}
+        group by reservation_slot_date,  r.reservation_no, main_c.service_name
+        order by reservation_slot_date
     </select>
 
     <select id="getManageFilterList" resultType="com.example.HiMade.admin.dto.adminReserveMangeDTO">

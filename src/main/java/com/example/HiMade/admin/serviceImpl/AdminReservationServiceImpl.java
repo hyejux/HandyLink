@@ -119,6 +119,11 @@ public class AdminReservationServiceImpl implements AdminReservationService {
     return adminReservationMapper.getManageFilterList(storeNo);
   }
 
+  @Override
+  public List<adminManagerCalDTO> getManageCalender(int storeNo) {
+    return adminReservationMapper.getManageCalender(storeNo);
+  }
+
   //예약 상태 변경
   @Override
   public void updateStatus(UpdateReservationStatusDTO dto) {

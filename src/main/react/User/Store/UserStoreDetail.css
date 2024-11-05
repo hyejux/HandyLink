@@ -656,3 +656,9 @@ body {
   margin : 20px 0px; 
 }
 
+.user-store-map-box {
+  background-color: white;
+  margin: 20px;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+}

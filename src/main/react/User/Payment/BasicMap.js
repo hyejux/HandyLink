@@ -112,7 +112,7 @@ export default function BasicMap({ storeLocation, storeName }) {
         <div style={{ position: "relative" }}>
             <div
                 id="map"
-                style={{ width: "100%", height: "320px" }}
+                style={{ width: "100%", height: "320px", borderRadius: "10px" }}
             ></div>
             <button
                 onClick={goToCurrentPosition}

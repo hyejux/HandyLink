@@ -31,7 +31,6 @@ function UserChatRoom() {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const storeNo = params.get("storeNo");
-        console.log("Received storeNo from URL:", storeNo); // 확인용 로그
         setStoreNo(storeNo);
     }, []);
 
@@ -65,13 +64,12 @@ function UserChatRoom() {
         setIsBusinessHours(currentTime >= open && currentTime <= close);
     };
 
+
+
     // 시간 포맷팅
     const formatTimeToAMPM = (time) => {
         const [hour, minute] = time.split(':');
-        const intHour = parseInt(hour, 10);
-        const ampm = intHour >= 12 ? 'PM' : 'AM';
-        const formattedHour = intHour % 12 || 12; // 0시는 12로 표시
-        return `${ampm} ${String(formattedHour).padStart(2, '0')}:${minute}`;
+        return `${hour.padStart(2, '0')}:${minute}`;
     };
 
     // 스크롤
@@ -197,7 +195,7 @@ function UserChatRoom() {
                 userId,
                 storeNo,
                 senderType: "USER",
-                chatMessage: messageInput.trim(),  // trim() 추가
+                chatMessage: messageInput.trim(),
                 sendTime: new Date().toISOString(),
             };
 
@@ -258,14 +256,24 @@ function UserChatRoom() {
 
                 {!isBusinessHours && (
                     <div className="business-hours-message">
-                        <span>지금은 영업 시간이 아닙니다. 문의 가능한 시간은 {formatTimeToAMPM(storeInfo.storeOpenTime)} - {formatTimeToAMPM(storeInfo.storeCloseTime)} 입니다.</span>
+                        <div className="profile-section">
+                            <img
+                                className="profile-img"
+                                src={storeInfo.storeImg[0]?.storeImgLocation || '/img/user_basic_profile.jpg'}
+                                alt={`${storeInfo.storeName} 프로필`}
+                            />
+                        </div>
+                        <div className="message-text">
+                            {/*<div className="store-name">{storeInfo.storeName}</div>*/}
+                            <div>지금은 영업 시간이 아닙니다.</div>
+                            <div>문의 가능한 시간은 {formatTimeToAMPM(storeInfo.storeOpenTime)} - {formatTimeToAMPM(storeInfo.storeCloseTime)} 입니다.</div>
+                        </div>
                     </div>
                 )}
 
-
                 <div className="chat-box" ref={chatBoxRef} onScroll={handleScroll}>
                     {messages.map((msg, index) => {
-                        // showDate 조건에서 isDateOlderThanToday 제거
+
                         const showDate = index === 0 || isDifferentDay(messages[index - 1].sendTime, msg.sendTime);
 
                         return (
@@ -288,14 +296,14 @@ function UserChatRoom() {
                                     <div className="message-content">
                                         {msg.senderType !== 'USER' &&
                                             <div className="sender-name">{storeInfo.storeName}</div>}
-                                        <div className="bubble">{msg.chatMessage}</div>
-                                        <div className="timestamp">
-                                            {new Date(msg.sendTime).toLocaleTimeString('ko-KR', {
-                                                hour: 'numeric',
-                                                minute: '2-digit',
-                                                hour12: true
-                                            })}
-                                        </div>
+                                            <div className="bubble">{msg.chatMessage}</div>
+                                            <div className="timestamp">
+                                                {new Date(msg.sendTime).toLocaleTimeString('ko-KR', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: false
+                                                })}
+                                            </div>
                                     </div>
                                 </div>
                             </React.Fragment>

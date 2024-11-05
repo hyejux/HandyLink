@@ -6,6 +6,7 @@ import './UserLikeList.css';
 function UserLikeList(){
 
     const [myLikeList, setMyLikeList] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("전체");
 
     useEffect(()=>{
         const fetchgetLike = async() => {
@@ -14,19 +15,7 @@ function UserLikeList(){
                 const resp = await axios.get('/userStoreList/getLikeInfo');
                 if (resp.status === 200) {
                     const data = resp.data;
-
-                    // 같은 store_no를 가진 첫 번째 항목 찾기
-                    const uniqueStores = {};
-                    data.forEach(item => {
-                        if (!uniqueStores[item.store_no]) {
-                            uniqueStores[item.store_no] = { ...item }; // 첫 번째 항목 저장
-                        }
-                    });
-
-                    // uniqueStores 객체를 배열로 변환
-                    const uniqueStoresArray = Object.values(uniqueStores);
-
-                    setMyLikeList(uniqueStoresArray); // 전체 찜 리스트 설정
+                    setMyLikeList(data); // 전체 찜 리스트 설정
                 }
 
             }catch (error){
@@ -38,36 +27,82 @@ function UserLikeList(){
 
     console.log("찜리스트 ", myLikeList);
 
+    // 선택된 카테고리에 따라 리스트 필터링
+    const filteredList = selectedCategory === "전체" ? myLikeList : myLikeList.filter(item => item.store_cate === selectedCategory);
+
+    const goToStoreDetail = (id) => {
+        window.location.href = `/userStoreDetail.user/${id}`;
+    };
+
     return (
         <div className="favorite-list">
             <h1 className="title">찜 리스트</h1>
             <div className="category-buttons">
-                <button className="category-button active">케이크</button>
-                <button className="category-button">공방</button>
-                <button className="category-button">꽃</button>
+                <button className={`category-button ${selectedCategory === "전체" ? "active" : ""}`} onClick={() => setSelectedCategory("전체")}>
+                    전체
+                </button>
+                <button  className={`category-button ${selectedCategory === "케이크" ? "active" : ""}`} onClick={() => setSelectedCategory("케이크")}>
+                    케이크
+                </button>
+                <button className={`category-button ${selectedCategory === "공방" ? "active" : ""}`} onClick={() => setSelectedCategory("공방")} >
+                    공방
+                </button>
+                <button className={`category-button ${selectedCategory === "꽃" ? "active" : ""}`} onClick={() => setSelectedCategory("꽃")} >
+                    꽃
+                </button>
             </div>
 
             <div className="card-list">
-                {myLikeList.length > 0 ? (
-                    myLikeList.map((likeList) => (
-                        <div className="card">
-                            <p className="category">{likeList.store_cate}</p>
-                            <div className="card-main">
-                                <img src={likeList.store_img_location} alt="store" className="card-image" />
-                                <div className="card-content">
-                                    <h2 className="store">{likeList.store_name}</h2>
-                                    <p className="address">{likeList.addr}</p>
-                                    <p className="addrdetail">{likeList.addrdetail}</p>
-                                    <div className="rating-section">
-                                        <span className="rating">⭐ 9.4</span>
-                                        <span className="reviews">120개</span>
+                {filteredList.length > 0 ? (
+                <>
+                    {filteredList
+                        .filter(likeList => likeList.store_status === '활성화') // 활성화된 카드만 필터링
+                        .map(likeList => (
+                            <div className="likecard activate" key={likeList.store_no} onClick={() => goToStoreDetail(likeList.store_no)}>
+                                <div className="card">
+                                    <p className="category">{likeList.store_cate}</p>
+                                    <div className="card-main">
+                                        <img src={likeList.store_img_location} alt="store" className="card-image" />
+                                        <div className="card-content">
+                                            <h2 className="store">{likeList.store_name}</h2>
+                                            <p className="address">{likeList.addr}</p>
+                                            <p className="addrdetail">{likeList.addrdetail}</p>
+                                            <div className="rating-section">
+                                                <span className="rating">⭐ {likeList.avg_rating ? likeList.avg_rating : "N/A"}</span>
+                                                <span className="reviews">리뷰 {likeList.review_count}개</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))
+                    ))}
 
-                ): null}
+                    {filteredList
+                        .filter(likeList => likeList.store_status !== '활성화') // 비활성화된 카드만 필터링
+                        .map(likeList => (
+                            <div className="likecard no-activate" key={likeList.store_no}>
+                                <div className="card">
+                                    <p className="category">{likeList.store_cate}</p>
+                                    <div className="card-main">
+                                        <img src={likeList.store_img_location} alt="store" className="card-image" />
+                                        <div className="card-content">
+                                            <h2 className="store">{likeList.store_name}</h2>
+                                            <p className="address">{likeList.addr}</p>
+                                            <p className="addrdetail">{likeList.addrdetail}</p>
+                                            <div className="rating-section">
+                                                <span className="rating">⭐ {likeList.avg_rating ? likeList.avg_rating : "N/A"}</span>
+                                                <span className="reviews">리뷰 {likeList.review_count}개</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="overlay"></div>
+                            </div>
+                        ))}
+                    </>
+                ) : (
+                    <p>해당 카테고리의 찜 리스트가 없습니다.</p>
+                )}
             </div>
         </div>
     );

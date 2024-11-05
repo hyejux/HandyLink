@@ -162,6 +162,29 @@ function UserReservationConfirm() {
   console.log(categories);
 
 
+  // 로딩화면 부분
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+  const [countdown, setCountdown] = useState(3);
+
+  useEffect(() => {
+    if (isLoading) {
+      let timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      // 컴포넌트 언마운트 시 타이머 정리
+      return () => clearInterval(timer);
+    }
+  }, [isLoading]);
+
+
+
   // ----------------------- 주문등록, 결제 부분 -----------------------
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(""); // 결제수단
 
@@ -177,8 +200,8 @@ function UserReservationConfirm() {
       reservationPrice: totalPrice,  // 총액 정보
       storeNo: storeInfo.storeNo,
       reservationStatus: reservationStatus,
-      userId : userId
-      
+      userId: userId
+
     };
 
     try {
@@ -226,12 +249,16 @@ function UserReservationConfirm() {
       sessionStorage.setItem('reserveModi', JSON.stringify(reserveModi));
       sessionStorage.setItem('categories', JSON.stringify(categories));
 
-      // 리다이렉트
-      const redirectUrl = paymentMethod === "bank_transfer" ?
-        `../UserMyReservationDetail.user/${reservationNum}` :
-        `../UserMyReservationList.user`;
-
-      window.location.href = redirectUrl;
+      // 로딩 화면 표시
+      setIsLoading(true);
+      setTimeout(() => {
+        // 3초 후에 리다이렉트
+        setIsLoading(false);
+        const redirectUrl = paymentMethod === "bank_transfer" ?
+          `../UserMyReservationDetail.user/${reservationNum}` :
+          `../UserMyReservationList.user`;
+        window.location.href = redirectUrl;
+      }, 3000); // 3초 대기
     } catch (error) {
       console.error("결제 정보 저장 중 오류 발생:", error);
     }
@@ -311,14 +338,14 @@ function UserReservationConfirm() {
   return (
     <div>
       <div className="user-main-container">
-      <div className="search-top">
-        <div className='left'> <i class="bi bi-chevron-left"> </i> 주문확인</div>
-        <div className='right'></div>
-      </div>
+        <div className="search-top">
+          <div className='left'> <i class="bi bi-chevron-left"> </i> 주문확인</div>
+          <div className='right'></div>
+        </div>
 
         <div className="user-main-content">
 
-        <div className="user-content-container11">
+          <div className="user-content-container11">
             <div className="user-reserve-menu">
               <div className="user-reserve-menu-img">
                 <img src={`${reserveModi.imageUrl}`} alt="My Image" />
@@ -353,7 +380,7 @@ function UserReservationConfirm() {
           <hr />
 
 
-      
+
 
 
           <div className="user-content-container2">
@@ -376,56 +403,56 @@ function UserReservationConfirm() {
             <div className="user-content-container3">
               <div>기본 가격 :  {reserveModi.serviceName} (+  {reserveModi.servicePrice} ) </div>
               <div>
-              {categories.map((category, index) => (
-  <div key={index}>
-    {/* 서비스 이름이 선택된 경우에만 출력 */}
-    {combinedInputs[index] && combinedInputs[index].inputValue && (
-      <span>
-     
-        {/* servicePrice 추가 출력 */}
-        {/* <span> (+ {combinedInputs[index]?.servicePrice || 0}) </span> */}
-      </span>
-    )}
-    
-    <span>
-      {combinedInputs[index] && (
-        <span>
-             <span>{category.serviceName} :  </span>
-          {Object.entries(combinedInputs[index]).map(([key, value]) => {
-            // 값이 배열인 경우
-            if (Array.isArray(value)) {
-              return value.map((item, itemIndex) => (
-                <span key={itemIndex}>
-                  {item.serviceName}  {item.servicePrice > 0 && (
-                    <span> (+ {item.servicePrice})</span>
-                  )}
-                </span>
-              ));
-            }
-            // 값이 문자열인 경우
-            else if (typeof value === 'string') {
-              return (
-                <span key={key}>
-                  
-                  {value} 
-                  {/* servicePrice 추가 출력 */}
-                  <span>
-                      {combinedInputs[index]?.servicePrice > 0 && (
-                        <span>(+ {combinedInputs[index]?.servicePrice})</span>
+                {categories.map((category, index) => (
+                  <div key={index}>
+                    {/* 서비스 이름이 선택된 경우에만 출력 */}
+                    {combinedInputs[index] && combinedInputs[index].inputValue && (
+                      <span>
+
+                        {/* servicePrice 추가 출력 */}
+                        {/* <span> (+ {combinedInputs[index]?.servicePrice || 0}) </span> */}
+                      </span>
+                    )}
+
+                    <span>
+                      {combinedInputs[index] && (
+                        <span>
+                          <span>{category.serviceName} :  </span>
+                          {Object.entries(combinedInputs[index]).map(([key, value]) => {
+                            // 값이 배열인 경우
+                            if (Array.isArray(value)) {
+                              return value.map((item, itemIndex) => (
+                                <span key={itemIndex}>
+                                  {item.serviceName}  {item.servicePrice > 0 && (
+                                    <span> (+ {item.servicePrice})</span>
+                                  )}
+                                </span>
+                              ));
+                            }
+                            // 값이 문자열인 경우
+                            else if (typeof value === 'string') {
+                              return (
+                                <span key={key}>
+
+                                  {value}
+                                  {/* servicePrice 추가 출력 */}
+                                  <span>
+                                    {combinedInputs[index]?.servicePrice > 0 && (
+                                      <span>(+ {combinedInputs[index]?.servicePrice})</span>
+                                    )}
+                                  </span>
+
+                                </span>
+                              );
+                            }
+                            // 값이 undefined이거나 다른 경우
+                            return null;
+                          })}
+                        </span>
                       )}
                     </span>
-
-                </span>
-              );
-            }
-            // 값이 undefined이거나 다른 경우
-            return null;
-          })}
-        </span>
-      )}
-    </span>
-  </div>
-))}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -491,7 +518,6 @@ function UserReservationConfirm() {
             </div>
           </div> */}
 
-
           {/* 결제 부분 */}
           <div className="user-content-container2">
             <div className="user-payment-title">
@@ -554,6 +580,23 @@ function UserReservationConfirm() {
               {totalPrice}원 결제하기
             </button>
           </div>
+
+          {/* 로딩 화면 */}
+          {isLoading && (
+            <div className="loading-overlay">
+              <div className="loading-spinner">
+                <div className="checkmark"></div>
+              </div>
+              <div className="countdown-timer">{countdown}</div>
+              <div className="loading-text">예약 완료</div>
+              <div className="loading-img-box">
+                <div className="loading-text2">블랙프라이데이</div>
+                <div className="loading-text3">11.05 ~ 11.10 최대 80% 특가</div>
+                <img src="../img/loading/loading1.jpg" />
+              </div>
+            </div>
+          )}
+
 
         </div>
       </div>

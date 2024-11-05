@@ -20,6 +20,7 @@ function UserChatRoom() {
         storeImg: [{ storeImgLocation: '/img/user_basic_profile.jpg' }],
         storeOpenTime: '',
         storeCloseTime: '',
+        storeStatus: '',
     });
 
     // Ref 관리
@@ -51,20 +52,24 @@ function UserChatRoom() {
 
     // 영업 시간 안내
     const checkBusinessHours = (openTime, closeTime) => {
+        if (!openTime || !closeTime) {
+            setIsBusinessHours(true);
+            return;
+        }
+
         const currentTime = new Date();
         const open = new Date();
         const close = new Date();
 
-        const [openHour, openMinute] = openTime.split(':');
-        const [closeHour, closeMinute] = closeTime.split(':');
+        // "HH:mm:ss" 형식에서 시간과 분만 추출
+        const [openHour, openMinute] = openTime.slice(0, 5).split(':');
+        const [closeHour, closeMinute] = closeTime.slice(0, 5).split(':');
 
         open.setHours(parseInt(openHour, 10), parseInt(openMinute, 10), 0);
         close.setHours(parseInt(closeHour, 10), parseInt(closeMinute, 10), 0);
 
         setIsBusinessHours(currentTime >= open && currentTime <= close);
     };
-
-
 
     // 시간 포맷팅
     const formatTimeToAMPM = (time) => {
@@ -254,7 +259,7 @@ function UserChatRoom() {
         <div>
             <div className="user-chat-room-container">
 
-                {!isBusinessHours && (
+                {(storeInfo.storeStatus === '비활성화' || !isBusinessHours) && (
                     <div className="business-hours-message">
                         <div className="profile-section">
                             <img
@@ -264,9 +269,17 @@ function UserChatRoom() {
                             />
                         </div>
                         <div className="message-text">
-                            {/*<div className="store-name">{storeInfo.storeName}</div>*/}
-                            <div>지금은 영업 시간이 아닙니다.</div>
-                            <div>문의 가능한 시간은 {formatTimeToAMPM(storeInfo.storeOpenTime)} - {formatTimeToAMPM(storeInfo.storeCloseTime)} 입니다.</div>
+                            {storeInfo.storeStatus === '비활성화' ? (
+                                <>
+                                    <div>현재 서비스 영업이 중지된 상태입니다.</div>
+                                    <div>빠른 답변 어려운 점 양해 부탁드립니다.</div>
+                                </>
+                            ) : (
+                                <>
+                                    <div>지금은 영업 시간이 아닙니다.</div>
+                                    <div>문의 가능한 시간은 {storeInfo.storeOpenTime?.slice(0, 5)} - {storeInfo.storeCloseTime?.slice(0, 5)} 입니다.</div>
+                                </>
+                            )}
                         </div>
                     </div>
                 )}

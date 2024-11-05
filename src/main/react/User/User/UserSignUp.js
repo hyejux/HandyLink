@@ -146,12 +146,12 @@ function UserSignUp() {
 
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!formData.userId) {
+        if (!isKakaoSignUp && !formData.userId) {
             alert("이메일을 입력해주세요.");
             return;
         }
 
-        if (!formData.userId || !emailPattern.test(formData.userId)) {
+        if (!isKakaoSignUp && !formData.userId || !emailPattern.test(formData.userId)) {
             alert("아이디는 이메일 형식이어야 합니다.");
             return;
         }
@@ -285,7 +285,7 @@ function UserSignUp() {
                                     id="userPw"
                                     name="userPw"
                                     className="effect-8"
-                                    placeholder="비밀번호 입력"
+                                    placeholder="영문+특수문자+숫자 8자리 이상"
                                     value={formData.userPw}
                                     onChange={handleInputChange}
                                 />
@@ -302,7 +302,7 @@ function UserSignUp() {
                                     id="repassword"
                                     name="repassword"
                                     className="effect-8"
-                                    placeholder="비밀번호 재입력"
+                                    placeholder="영문+특수문자+숫자 8자리 이상"
                                     value={formData.repassword}
                                     onChange={handleInputChange}
                                 />

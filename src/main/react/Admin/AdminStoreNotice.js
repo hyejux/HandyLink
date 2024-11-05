@@ -232,7 +232,7 @@ function AdminStoreNotice() {
                       <i class="bi bi-chevron-down" onClick={() => handleToggleRow(index)}></i>
                     </td>
                     <td>{formatDate(value.noticeRegdate)} {value.modi === 'Y' ? '(수정됨)' : ''}</td>
-                    <td><select value={value.status} onChange={(e) => handleStatus(e.target.value, value.noticeNo)}> <option value='Y'> 보이기 </option> <option value='D'> 숨기기 </option> <option value='N'> 삭제 </option></select></td>
+                    <td><select className='select-btn' value={value.status} onChange={(e) => handleStatus(e.target.value, value.noticeNo)}> <option value='Y'> 보이기 </option> <option value='D'> 숨기기 </option> <option value='N'> 삭제 </option></select></td>
                     <td> <button type='button' className="btn-st" onClick={() => noticeModi(value.noticeNo)}> 수정 </button></td>
                   </tr>
                   {/* 토글된 행에 대해 자세한 내용 표시 */}

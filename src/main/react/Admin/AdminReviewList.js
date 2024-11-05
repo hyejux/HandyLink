@@ -129,9 +129,9 @@ function AdminReviewList() {
                   <th style={{ width: '8%' }}>작성자</th>
                   <th style={{ width: '11%' }}>상품명</th>
                   <th style={{ width: '15%' }}>리뷰사진</th>
-                  <th style={{ width: '5%' }}>별점<button onClick={() => handleSort('reviewRating', 'number')}><i className="bi bi-chevron-expand"></i></button></th>
+                  <th style={{ width: '5%' }}>별점<span onClick={() => handleSort('reviewRating', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
                   <th style={{ width: '30%' }}>리뷰내용</th>
-                  <th style={{ width: '12%' }}>등록일<button onClick={() => handleSort('reviewDate', 'date')}><i className="bi bi-chevron-expand"></i></button></th>
+                  <th style={{ width: '12%' }}>등록일<span onClick={() => handleSort('reviewDate', 'date')}><i className="bi bi-chevron-expand"></i></span></th>
                   {/* <th style={{ width: '5%' }}>관리</th> */}
                 </tr>
               </thead>

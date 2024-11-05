@@ -97,27 +97,22 @@ public class UserChatRoomController {
         }
     }
 
-
-//    @GetMapping("/checkNewMessages")
-//    public List<UserChatDTO> checkNewMessages(
-//            @RequestParam String userId,
-//            @RequestParam Long storeNo,
-//            @RequestParam Timestamp lastCheckedTime) {
-//        return userChatRoomService.findNewMessages(userId, storeNo, lastCheckedTime);
-//    }
-
     @PostMapping("/updateLastCheckedTime")
-    public ResponseEntity<Void> updateLastCheckedTime(@RequestParam Long storeNo, @RequestParam String userId, Timestamp lastCheckedTime) {
+    public ResponseEntity<Void> updateLastCheckedTime(@RequestParam Long storeNo, @RequestParam String userId) {
+        Timestamp lastCheckedTime = Timestamp.valueOf(LocalDateTime.now()); // 현재 시간을 lastCheckedTime으로 설정
         System.out.println("로그 updateLastCheckedTime - storeNo: " + storeNo + ", userId: " + userId + ", lastCheckedTime: " + lastCheckedTime);
         userChatRoomService.updateLastCheckedTime(userId, storeNo, lastCheckedTime);
         return ResponseEntity.ok().build();
     }
 
-
-//    @GetMapping("/lastCheckedTimes")
-//    public ResponseEntity<List<ChatStatusDTO>> getLastCheckedTimes(@RequestParam String userId) {
-//        List<ChatStatusDTO> lastCheckedTimes = userChatRoomService.getLastCheckedTimesByUserId(userId);
-//        return ResponseEntity.ok(lastCheckedTimes);
-//    }
+    @GetMapping("/hasNewMessage")
+    public ResponseEntity<Boolean> hasNewMessage() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getPrincipal().equals("anonymousUser")) {
+            boolean hasNew = userChatRoomService.hasUnreadMessages(auth.getName());
+            return ResponseEntity.ok(hasNew);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
 
 }

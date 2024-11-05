@@ -54,6 +54,7 @@ function AdminChat() {
         fetchChatList();
     }, [storeNo]);
 
+
     // 채팅방 선택 시 메시지 불러오기
     const handleChatSelect = async (userId) => {
         try {
@@ -66,6 +67,12 @@ function AdminChat() {
 
             // 읽음 상태 업데이트
             await axios.post(`/adminChat/updateLastCheckedTime?userId=${userId}&storeNo=${storeNo}`);
+
+            setChatList(prevList =>
+                prevList.map(chat =>
+                    chat.userId === userId ? { ...chat, isNewMessage: false } : chat
+                )
+            );
 
             // 채팅 내역 가져오기
             const response = await axios.get(`/adminChat/history?userId=${userId}&storeNo=${storeNo}&limit=50`);
@@ -101,35 +108,44 @@ function AdminChat() {
                 console.log('WebSocket 연결됨');
             };
 
-            websocket.current.onmessage = (event) => {
+            websocket.current.onmessage = async (event) => {
                 const received = JSON.parse(event.data);
                 console.log("수신된 메시지:", received);
 
                 if (received.storeNo === storeNo) {
                     // 현재 선택된 채팅방의 메시지인 경우
                     if (received.userId === selectedUserId) {
+                        console.log("현재 선택된 채팅방에서 메시지가 도착했습니다.");
+
                         if (received.senderType === 'USER') {
                             setMessages(prevMessages => [...prevMessages, received]);
-                        }
-                    }
 
-                    // 채팅 목록 업데이트
-                    setChatList(prevList => {
-                        const newList = prevList.map(chat => {
-                            if (chat.userId === received.userId) {
-                                return {
-                                    ...chat,
-                                    lastMessage: received.chatMessage,
-                                    lastMessageTime: received.sendTime,
-                                    isNewMessage: true
-                                };
+                            // 실시간으로 메시지를 확인한 것으로 처리하여 DB에 업데이트
+                            try {
+                                await axios.post(`/adminChat/updateLastCheckedTime?userId=${selectedUserId}&storeNo=${storeNo}`);
+                            } catch (error) {
+                                console.error("마지막 확인 시간 업데이트 실패:", error);
                             }
-                            return chat;
+                        }
+                    } else {
+                        // 다른 채팅방에서 온 메시지 처리 (빨간 점 표시)
+                        setChatList(prevList => {
+                            const newList = prevList.map(chat => {
+                                if (chat.userId === received.userId) {
+                                    return {
+                                        ...chat,
+                                        lastMessage: received.chatMessage,
+                                        lastMessageTime: received.sendTime,
+                                        isNewMessage: true
+                                    };
+                                }
+                                return chat;
+                            });
+                            return newList.sort((a, b) =>
+                                new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
+                            );
                         });
-                        return newList.sort((a, b) =>
-                            new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
-                        );
-                    });
+                    }
                 }
             };
 

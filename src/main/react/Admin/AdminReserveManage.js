@@ -60,7 +60,7 @@ function AdminReserveManage() {
         },
     ]);
     const today = new Date().toISOString().split('T')[0];
-    const [viewMode, setViewMode] = useState('calendar');
+    const [viewMode, setViewMode] = useState('list');
     const [reservationList, setReservationList] = useState([]);
     const [filterServiceName, setFilterServiceName] = useState([]);
     const [manageCalender, setManageCalender] = useState([]);

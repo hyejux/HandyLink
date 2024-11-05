@@ -4,6 +4,8 @@ import './UserChatRoom.css';
 import ReactDOM from "react-dom/client";
 
 function UserChatRoom() {
+
+    // useState 관리
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState("");
     const [showToast, setShowToast] = useState(false);
@@ -20,10 +22,12 @@ function UserChatRoom() {
         storeCloseTime: '',
     });
 
+    // Ref 관리
     const chatBoxRef = useRef(null);
     const websocket = useRef(null);
     const inputRef = useRef(null);
 
+    // storeNo 뽑아오기
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const storeNo = params.get("storeNo");
@@ -31,7 +35,7 @@ function UserChatRoom() {
         setStoreNo(storeNo);
     }, []);
 
-
+    // 스크롤
     const handleScroll = () => {
         if (!chatBoxRef.current) return;
 
@@ -61,6 +65,7 @@ function UserChatRoom() {
         setIsBusinessHours(currentTime >= open && currentTime <= close);
     };
 
+    // 시간 포맷팅
     const formatTimeToAMPM = (time) => {
         const [hour, minute] = time.split(':');
         const intHour = parseInt(hour, 10);
@@ -69,8 +74,7 @@ function UserChatRoom() {
         return `${ampm} ${String(formattedHour).padStart(2, '0')}:${minute}`;
     };
 
-
-
+    // 스크롤
     useEffect(() => {
         if (isAtBottom && chatBoxRef.current) {
             chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
@@ -80,6 +84,7 @@ function UserChatRoom() {
         }
     }, [messages]);
 
+    // 사용자 정보 가져오기
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
@@ -93,6 +98,7 @@ function UserChatRoom() {
         fetchUserInfo();
     }, []);
 
+    // 가게 정보 가져오기
     useEffect(() => {
         const fetchStoreInfo = async () => {
             if (storeNo) {  // storeNo가 정확히 설정되었는지 확인
@@ -109,6 +115,7 @@ function UserChatRoom() {
         fetchStoreInfo();
     }, [storeNo]);
 
+    // 기존 채팅 불러오기
     useEffect(() => {
         const loadChatHistory = async () => {
             if (userId && storeNo) {
@@ -178,6 +185,7 @@ function UserChatRoom() {
         };
     }, [userId, storeNo]);
 
+    // 메세지 전송
     const sendMessage = async () => {
         if (!userId) {
             window.location.href = '/UserLoginPage.user';
@@ -215,23 +223,26 @@ function UserChatRoom() {
         }
     };
 
+    // 엔터
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             sendMessage(e);
         }
     };
 
+    // 자동 포커스
     useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus();
         }
     }, []);
 
+    // 업체 프로필 클릭 시
     const handleImageClick = () => {
         window.location.href = `/userStoreDetail.user/${storeInfo.storeNo}`;
     };
 
-    // 날ㅈ자로 구분하기
+    // 날짜 구분
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환

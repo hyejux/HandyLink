@@ -55,13 +55,6 @@
         WHERE sa.store_no = #{storeNo}
     </select>
 
-    <select id="selectNewMessages" resultType="com.example.HiMade.user.dto.UserChatDTO">
-        SELECT * FROM chat
-        WHERE user_id = #{userId}
-          AND store_no = #{storeNo}
-          AND send_time > #{lastCheckedTime}
-    </select>
-
     <update id="updateUserLastCheckedTime">
         UPDATE chat_status
         SET user_last_checked_time = #{lastCheckedTime}

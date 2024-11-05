@@ -10,38 +10,95 @@ import './AdminStoreReport.css';
 function AdminStoreReport(){
     const storeId = sessionStorage.getItem('storeId');
     const storeNo = sessionStorage.getItem('storeNo');
+    console.log("storeNo ", storeNo);
+
+    const [reportCount, setReportCount] = useState({
+        cancledCount: 0,
+        doingCount: 0,
+        waitCount: 0,
+        reviewCount: 0
+    });
+
+    const [genderCount, setGenderCount] = useState({});
+
+    const [ageDistribution, setAgeDistribution] = useState({
+        labels: [],
+        values: [],
+        serviceName: []
+    });
 
     useEffect(() => {
-        const fetchReport = async() => {
-            const resp = await axios.get(`/adminStore/getStoreReport?storeNo=${storeNo}`); //아직 서버 안함.
-            console.log("리포트정보 ", resp.data);
+        //우리가게
+        const fetchReport = async () => {
+            try {
+                const resp = await axios.get(`/adminStore/getReportCount?storeNo=${storeNo}`);
+                setReportCount(prev => ({
+                    ...prev,
+                    ...resp.data
+                }));
+            } catch (error) {
+                console.error("예약 건수 통계 중 error: ", error);
+            }
         };
-    },[]);
 
+        //고객통계 - 성별
+        const fetchGender = async() => {
+            try {
+                const response = await fetch(`/adminStore/getGenderCount?storeNo=${storeNo}`);
+                const data = await response.json(); // JSON으로 변환
+                setGenderCount(data); // genderCount 상태 업데이트
+
+            } catch (error) {
+                console.error("고객 성별 수를 불러오는 중 error:", error);
+            }
+        };
+
+        //나이대 별 인기상품
+        const fetchAge = async() => {
+            try {
+                const response = await axios.get(`/adminStore/getAgeDistribution?storeNo=${storeNo}`);
+                setAgeDistribution(response.data); // Assumes response.data has the correct structure
+            } catch (error) {
+                console.error("나이 별 top1 불러오는 중 error: ", error);
+            }
+        };
+
+        fetchReport();
+        fetchGender();
+        fetchAge();
+
+    }, [storeNo]);
+
+    console.log("ageDistribution: ", ageDistribution);
+
+    const [selectedPeriod, setSelectedPeriod] = useState("이번달"); // 기본 기간 설정
+
+    const handlePeriodChange = (newPeriod) => {
+        setSelectedPeriod(newPeriod); // 선택된 기간 업데이트
+    };
 
     return(
         <div className="admin-store-report-container">
-            <label htmlFor="store-report">데이터 아님</label>
             <div className="store-report">
 
                 <div className="report-section">
                     <h2>우리 가게</h2>
                     <div className="reservation-status">
                         <div className="reservation-field">
-                            <p className="wait-count"> 0 </p>
+                            <p className="review-count"> {reportCount.reviewCount} </p>
+                            <p className=""> 리뷰 등록 </p>
+                        </div>
+                        <div className="reservation-field">
+                            <p className="cancled-count"> {reportCount.cancledCount} </p>
+                            <p className=""> 예약 취소 </p>
+                        </div>
+                        <div className="reservation-field">
+                            <p className="wait-count"> {reportCount.waitCount} </p>
                             <p className=""> 예약 대기 </p>
                         </div>
                         <div className="reservation-field">
-                            <p className="refund-count"> 0 </p>
-                            <p className=""> 환불 신청 </p>
-                        </div>
-                        <div className="reservation-field">
-                            <p className="today-count"> 0 </p>
-                            <p className=""> 오늘 픽업 </p>
-                        </div>
-                        <div className="reservation-field">
-                            <p className="doing-count"> 0 </p>
-                            <p className=""> 예약 진행 </p>
+                            <p className="doing-count"> {reportCount.doingCount} </p>
+                            <p className=""> 진행 중 </p>
                         </div>
                     </div>
                 </div>
@@ -51,12 +108,15 @@ function AdminStoreReport(){
                     <h2>일일 통계</h2>
                     <div className="reservation-graph">
                         <div className="graph-filter">
-                            <span>이번 달</span>
-                            <span>올해</span>
-                            <span>작년</span>
+                            <span className={selectedPeriod === "이번달" ? 'active' : ''}
+                                    onClick={() => handlePeriodChange("이번달")}>이번 달</span>
+                            <span className={selectedPeriod === "올해" ? 'active' : ''}
+                                    onClick={() => handlePeriodChange("올해")}>올해</span>
+                            <span className={selectedPeriod === "작년" ? 'active' : ''}
+                                    onClick={() => handlePeriodChange("작년")}>작년</span>
                         </div>
                         <div className="graph">
-                            <ReservationBarChart/>
+                            <ReservationBarChart period={selectedPeriod} />
                         </div>
                     </div>
                 </div>
@@ -82,8 +142,8 @@ function AdminStoreReport(){
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>150명</td>
-                                        <td>200명</td>
+                                        <td>{genderCount.males}</td>
+                                        <td>{genderCount.females}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -92,7 +152,7 @@ function AdminStoreReport(){
                         <div className="customer age">
                             <h3>나이</h3>
                             <div>
-                                <AgeChart />
+                                <AgeChart data={ageDistribution} />
                             </div>
                         </div>
                 
@@ -105,18 +165,12 @@ function AdminStoreReport(){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>10대</td>
-                                        <td>하츄핑 케이크</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20대</td>
-                                        <td>빵빵이 케이크</td>
-                                    </tr>
-                                    <tr>
-                                        <td>30대</td>
-                                        <td>퇴사 케이크</td>
-                                    </tr>
+                                    {ageDistribution.labels.map((label, index) => (
+                                        <tr key={index}>
+                                            <td>{label}</td>
+                                            <td>{ageDistribution.serviceName[index] || '정보 없음'}</td> {/* Fallback if no service name */}
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>

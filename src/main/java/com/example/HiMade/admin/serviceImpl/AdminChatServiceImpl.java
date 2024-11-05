@@ -22,18 +22,13 @@ public class AdminChatServiceImpl implements AdminChatService {
     }
 
     @Override
-    public void saveChatMessage(AdminChatDTO chatMessage) {
-        adminChatMapper.insertChatMessage(chatMessage);
+    public void saveChatMessage(AdminChatDTO adminChatDTO) {
+        adminChatMapper.insertChatMessage(adminChatDTO);
     }
 
     @Override
     public List<Map<String, Object>> getChatListForStore(Long storeNo) {
         return adminChatMapper.getChatListForStore(storeNo);
-    }
-
-    @Override
-    public List<AdminChatDTO> findNewMessages(String userId, Long storeNo, Timestamp lastCheckedTime) {
-        return adminChatMapper.selectNewMessages(userId, storeNo, lastCheckedTime);
     }
 
     @Override

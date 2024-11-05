@@ -13,7 +13,6 @@ public interface UserChatRoomService {
     List<UserChatDTO> selectChat(String userId, Long storeNo);
     List<Map<String, Object>> getChatListForUser(String userId);
     StoreRegistDTO getStoreInfoByStoreNo(Long storeNo);
-    List<UserChatDTO> findNewMessages(String userId, Long storeNo, Timestamp lastCheckedTime);
     void updateLastCheckedTime(String userId, Long storeNo, Timestamp lastCheckedTime);
     boolean hasUnreadMessages(String userId);
 }

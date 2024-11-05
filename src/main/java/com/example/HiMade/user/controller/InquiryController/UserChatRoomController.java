@@ -29,6 +29,7 @@ public class UserChatRoomController {
     @Autowired
     private UserChatRoomService userChatRoomService;
 
+    // 메세지 DB에 저장하기
     @PostMapping("/save")
     public ResponseEntity<?> saveMessage(@RequestBody UserChatDTO userChatDTO) {
         // 들어온 요청 로그 찍기
@@ -46,7 +47,7 @@ public class UserChatRoomController {
         }
     }
 
-    // 채팅 기록 불러오기
+    // 기존 채팅 기록 불러오기
     @GetMapping("/history")
     public List<UserChatDTO> getChatHistory(@RequestParam String userId, @RequestParam Long storeNo) {
         logger.info("로그 Fetching chat history for userId: {} and storeNo: {}", userId, storeNo);
@@ -63,6 +64,7 @@ public class UserChatRoomController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+    // 채팅 목록 불러오기
     @GetMapping("/list")
     public ResponseEntity<?> getChatList(@RequestParam String userId) {
         try {
@@ -97,6 +99,7 @@ public class UserChatRoomController {
         }
     }
 
+    // 마지막 채팅 확인 시간
     @PostMapping("/updateLastCheckedTime")
     public ResponseEntity<Void> updateLastCheckedTime(@RequestParam Long storeNo, @RequestParam String userId) {
         Timestamp lastCheckedTime = Timestamp.valueOf(LocalDateTime.now()); // 현재 시간을 lastCheckedTime으로 설정
@@ -105,6 +108,7 @@ public class UserChatRoomController {
         return ResponseEntity.ok().build();
     }
 
+    // 새 메세지 확인
     @GetMapping("/hasNewMessage")
     public ResponseEntity<Boolean> hasNewMessage() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

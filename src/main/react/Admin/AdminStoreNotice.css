@@ -28,6 +28,12 @@
 
 }
 
+
+.select-btn {
+  font-size: 15px;
+    border: 1px solid #ddd;
+}
+
 .management-table tbody tr:hover {
   background-color: #c8d6e570;
   cursor: pointer;
@@ -112,7 +118,7 @@
   width: 100%;
   /* border: 1px solid #ddd; */
   border-collapse: collapse;
-  font-size: 17px;
+  font-size: 16px;
 
 
 }

@@ -21,6 +21,8 @@ public interface AdminReservationService
   void setSlotAll(adminReserveAdd dto); // 슬롯 삽입
 
   public List<adminReserveMangeDTO> getManageList(int storeNo);
+  public List<adminReserveMangeDTO> getManageFilterList(int storeNo);
+  public List<adminManagerCalDTO> getManageCalender(int storeNo);
 
   //예약 상태 변경
   void updateStatus(UpdateReservationStatusDTO dto);

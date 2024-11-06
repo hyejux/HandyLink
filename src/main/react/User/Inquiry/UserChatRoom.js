@@ -142,8 +142,7 @@ function UserChatRoom() {
         const connectWebSocket = () => {
 
             // 현재 페이지의 호스트를 기반으로 웹소켓 URL 생성
-            const wsHost = window.location.hostname;
-            const wsUrl = `ws://${wsHost}:8585/ws/chat`;
+            const wsUrl = `ws://172.30.1.99:8585/ws/chat`;
 
             websocket.current = new WebSocket(wsUrl);
 
@@ -261,7 +260,7 @@ function UserChatRoom() {
         <div>
             <div className="user-chat-room-container">
 
-                {(storeInfo.storeStatus === '비활성화' || !isBusinessHours) && (
+                {(storeInfo.storeStatus === '비활성화' || storeInfo.storeStatus === '정지' || !isBusinessHours) && (
                     <div className="business-hours-message">
                         <div className="profile-section">
                             <img
@@ -271,10 +270,10 @@ function UserChatRoom() {
                             />
                         </div>
                         <div className="message-text">
-                            {storeInfo.storeStatus === '비활성화' ? (
+                            {storeInfo.storeStatus === '비활성화' || storeInfo.storeStatus === '정지' ? (
                                 <>
                                     <div>현재 영업이 중지된 상태입니다.</div>
-                                    <div>빠른 답변 어려운 점 양해 부탁드립니다.</div>
+                                    <div>답변 어려운 점 양해 부탁드립니다.</div>
                                 </>
                             ) : (
                                 <>

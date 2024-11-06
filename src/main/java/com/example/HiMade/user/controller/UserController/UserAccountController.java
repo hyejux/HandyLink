@@ -41,16 +41,10 @@ public class UserAccountController {
 
     // 회원 가입 및 이미지 파일 저장
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@ModelAttribute UserDTO userDTO,
-                                         @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
+    public ResponseEntity<String> signUp(@RequestBody UserDTO userDTO) {
         try {
             userDTO.setLoginType("GENERAL");
-
-            // 프로필 이미지 처리
-            if (profileImage != null && !profileImage.isEmpty()) {
-                String filePath = saveProfileImage(profileImage);
-                userDTO.setUserImgUrl(filePath);
-            }
+            logger.info("회원가입 요청 - 사용자 정보: {}", userDTO);
 
             // 유저 등록
             userAccountService.insertUser(userDTO);
@@ -58,39 +52,6 @@ public class UserAccountController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원가입 중 오류 발생: " + e.getMessage());
         }
-    }
-
-    // 이미지 파일 경로 생성 메서드
-    private String saveProfileImage(MultipartFile profileImage) throws IOException {
-        if (profileImage == null || profileImage.isEmpty()) {
-            System.out.println("파일이 업로드되지 않았습니다.");
-            return null;
-        }
-
-        // 업로드 경로 설정
-        String uploadDir = "src/main/resources/static/uploads";
-        Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
-
-        // 경로가 없으면 디렉토리 생성
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-            System.out.println("업로드 폴더가 생성되었습니다: " + uploadPath);
-        }
-
-        // 파일명 생성 (타임스탬프 기반)
-        String originalFilename = profileImage.getOriginalFilename();
-        String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
-        String newFilename = System.currentTimeMillis() + fileExtension; // 타임스탬프를 파일명으로 사용
-
-        // 파일 저장 경로 생성
-        Path filePath = uploadPath.resolve(newFilename);
-        try (InputStream inputStream = profileImage.getInputStream()) {
-            Files.copy(inputStream, filePath);
-        }
-
-        System.out.println("파일이 저장되었습니다: " + filePath);
-
-        return newFilename;
     }
 
     // 정보 조회
@@ -105,11 +66,6 @@ public class UserAccountController {
                 // 프로필 이미지 URL 처리
                 if ("KAKAO".equals(user.getLoginType())) {
                     // 카카오 가입자는 카카오에서 제공한 URL 그대로 사용할듯?
-                } else {
-                    // 일반 회원가입자는 파일명만 저장된 경우
-                    if (user.getUserImgUrl() != null && !user.getUserImgUrl().isEmpty()) {
-                        user.setUserImgUrl("/uploads/" + Paths.get(user.getUserImgUrl()).getFileName().toString());
-                    }
                 }
                 return ResponseEntity.ok(user);
             }
@@ -121,14 +77,12 @@ public class UserAccountController {
     public ResponseEntity<UserDTO> getUserProfileById(@PathVariable String userId) {
         UserDTO user = userAccountService.getUserById(userId);
         if (user != null) {
+
             // 프로필 이미지 URL 처리
             if ("KAKAO".equals(user.getLoginType())) {
                 // 카카오 가입자는 카카오에서 제공한 URL 그대로 사용
-            } else {
-                if (user.getUserImgUrl() != null && !user.getUserImgUrl().isEmpty()) {
-                    user.setUserImgUrl("/uploads/" + Paths.get(user.getUserImgUrl()).getFileName().toString());
-                }
             }
+
             return ResponseEntity.ok(user);
         }
         return ResponseEntity.notFound().build();
@@ -137,18 +91,11 @@ public class UserAccountController {
 
     // 사용자 정보 수정 (비밀번호 포함)
     @PutMapping("/update")
-    public ResponseEntity<?> updateUser(@ModelAttribute UserDTO userDTO, @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
+    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO) {
         System.out.println("업데이트할 사용자 정보: " + userDTO.toString());
         try {
-            // 프로필 이미지 저장 로직
-            if (profileImage != null && !profileImage.isEmpty()) {
-                String savedFilePath = saveProfileImage(profileImage); // 이미지 저장
-                userDTO.setUserImgUrl(savedFilePath); // 이미지 URL 설정
-            }
-
             // 비밀번호 및 사용자 정보 업데이트
-            userAccountService.updateUser(userDTO);  // 비밀번호가 변경된 경우도 처리
-
+            userAccountService.updateUser(userDTO);
             return ResponseEntity.ok(userDTO);
         } catch (Exception e) {
             e.printStackTrace();

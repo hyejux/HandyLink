@@ -169,72 +169,72 @@ function UserSignUp() {
 
     // 회원 가입 처리
     const handleSubmit = async (e) => {
-
-    
         e.preventDefault();
-
-        const imageUrl = await handleUpload(); // 이미지 URL을 기다림
-        if (!imageUrl) return; // 업로드 실패 시 함수 종료
 
         if (!validateForm()) return;
 
-        // 카카오 회원가입 시 ID(이메일) 중복 체크를 하지 않음
-        if (!isKakaoSignUp && !idChecked) {
-            alert("이메일 중복 확인을 해주세요.");
-            return;
-        }
-
         try {
-            let response;
             const formatPhonenum = formData.userPhonenum.replace(/[^0-9]/g, '');
 
             if (isKakaoSignUp) {
                 // 카카오 회원가입
                 const kakaoData = {
-                    userId: formData.userId,
-                    userName: formData.userName,
                     userPhonenum: formatPhonenum,
                     userBirth: formData.userBirth,
-                    userGender: formData.userGender,
-                    userImgUrl: formData.userImgUrl // 카카오에서 제공한 이미지 URL
+                    userGender: formData.userGender
                 };
-                //console.log('전송될 데이터', kakaoData);
-                response = await fetch('/kakao/signup', {
+
+                console.log('카카오 회원가입 전송 데이터:', kakaoData);
+
+                const response = await fetch('/kakao/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    credentials: 'include', // 세션 쿠키 포함
                     body: JSON.stringify(kakaoData)
                 });
+
+                if (response.ok) {
+                    const result = await response.text();
+                    alert(result);
+                    window.location.href = '/UserSignUpFinish.user';
+                } else {
+                    const errorText = await response.text();
+                    console.error('카카오 회원가입 실패:', response.status, errorText);
+                    alert('회원가입 실패: ' + errorText);
+                }
             } else {
                 // 일반 회원가입
-                const data = new FormData();
-                data.append('userId', formData.userId);
-                data.append('userPw', formData.userPw);
-                data.append('userName', formData.userName);
-                data.append('userPhonenum', formatPhonenum);
-                data.append('userBirth', formData.userBirth);
-                data.append('userGender', formData.userGender);
+                const imageUrl = file ? await handleUpload() : null;
 
-                if (imageUrl) {
-                    data.append('profileImage', imageUrl);
-                    console.log('프로필 이미지 추가됨:', imageUrl);
-                }
+                const signupData = {
+                    userId: formData.userId,
+                    userPw: formData.userPw,
+                    userName: formData.userName,
+                    userPhonenum: formatPhonenum,
+                    userBirth: formData.userBirth,
+                    userGender: formData.userGender,
+                    userImgUrl: imageUrl || ''
+                };
 
-                response = await fetch('/user/signup', {
+                const response = await fetch('/user/signup', {
                     method: 'POST',
-                    body: data,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(signupData)
                 });
-            }
 
-            if (response.ok) {
-                const result = await response.text();
-                alert(result);
-                window.location.href = '/UserSignUpFinish.user';
-            } else {
-                const errorText = await response.text();
-                console.log('서버 응답 오류:', response.status, errorText);
-                alert(`회원가입 실패: ${errorText}`);
+                if (response.ok) {
+                    const result = await response.text();
+                    alert(result);
+                    window.location.href = '/UserSignUpFinish.user';
+                } else {
+                    const errorText = await response.text();
+                    console.error('서버 응답 오류:', response.status, errorText);
+                    alert('회원가입 실패: ' + errorText);
+                }
             }
         } catch (error) {
             console.error('Error:', error);
@@ -255,32 +255,12 @@ function UserSignUp() {
             formData
           );
           console.log('Uploaded Image URL:', response.data.secure_url);
-          alert(`Image uploaded successfully! URL: ${response.data.secure_url}`);
           return response.data.secure_url; // 업로드된 이미지 URL을 반환
         } catch (error) {
           console.error('Error uploading image:', error);
-          alert("이미지 업로드에 실패했습니다.");
           return null; // 업로드 실패 시 null 반환
         }
       };
-    
-      
-    
-    //   const [file, setFile] = useState(null);
-    
-    //   const handleFileChange = (e) => {
-    //     const file = e.target.files[0];
-    //     setFile(e.target.files[0]);
-    //     if (file) {
-    //       setSelectedImage(file);
-    //       // 이미지 미리보기
-    //       const previewUrl = URL.createObjectURL(file);
-    //       setImagePreview(previewUrl);
-    //       console.log(previewUrl);
-    //     }}
-      
-      
-
 
     // 프로필 사진 업로드 및 미리보기 처리
     const handleFileChange = (e) => {
@@ -297,8 +277,6 @@ function UserSignUp() {
             setFile(selectedFile);  // 파일 상태 저장
         }
     };
-
-
 
     // ---------------------------------------------------------------
 

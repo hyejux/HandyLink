@@ -25,7 +25,7 @@ function UserDelete() {
     const handleConfirmationTextChange = (e) => setConfirmationText(e.target.value);
 
 /*
-    // 비밀번호 표시 토글 함수 (UserMyPage와 동일한 방식)
+    // 비밀번호 표시 토글 함수
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
     };
@@ -69,9 +69,7 @@ function UserDelete() {
                     }
                 });
 
-                if (!unlinkResponse.ok) {
-                    throw new Error('카카오 연동 해제 실패');
-                }
+                console.log('카카오 연동 해제 응답:', unlinkResponse.status);
 
                 // 2. 서버에 탈퇴 요청
                 const deleteResponse = await fetch('/kakao/delete', {

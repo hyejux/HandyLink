@@ -102,6 +102,30 @@ function AdminReviewList() {
   };
 
 
+  // ------------------------------------
+
+  const [itemsPerPage , setItemsPerPage] = useState(10);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(reviewList.length / itemsPerPage);
+  
+  // 페이지 변경 함수
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+  
+  // 페이지네이션 데이터 계산
+  const paginatedReviewList = reviewList.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  
+
+
+
 
   return (
     <div>
@@ -119,71 +143,155 @@ function AdminReviewList() {
             <input type='text' placeholder='검색할 내용을 입력해주세요' />
             <button> <i className="bi bi-search"></i> </button>
           </div> */}
-          <div className="management-container">
-            <table className="management-table">
-              <thead>
 
-                <tr>
-                  <th style={{ width: '3%' }}>No</th>
+<div className="store-notice-top">
+          {/* <div className="filter-btn-box">
+            <button onClick={resetFilter}><i class="bi bi-arrow-clockwise"></i></button>
+            <button className={activeFilter === '소식' ? 'active' : ''} onClick={() => handleFilter('소식')}>소식</button>
+            <button className={activeFilter === '공지사항' ? 'active' : ''} onClick={() => handleFilter('공지사항')}>공지사항</button>
+          </div> */}
 
-                  <th style={{ width: '8%' }}>작성자</th>
-                  <th style={{ width: '11%' }}>상품명</th>
-                  <th style={{ width: '15%' }}>리뷰사진</th>
-                  <th style={{ width: '5%' }}>별점<span onClick={() => handleSort('reviewRating', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
-                  <th style={{ width: '30%' }}>리뷰내용</th>
-                  <th style={{ width: '12%' }}>등록일<span onClick={() => handleSort('reviewDate', 'date')}><i className="bi bi-chevron-expand"></i></span></th>
-                  {/* <th style={{ width: '5%' }}>관리</th> */}
-                </tr>
-              </thead>
-              <tbody>
-                {reviewList.map((value, index) => (
-                  <React.Fragment key={index}>
-                    <tr>
-                      <td>{index + 1}</td>
+          {/* 
+          <div className="search-bar-box">
+            <input type='text' placeholder='검색할 내용을 입력해주세요' />
+            <button> <i className="bi bi-search"></i> </button>
+          </div> 
+          */}
+          <div> {itemsPerPage} 건 </div>
+ 
+          <div className="dropdown-menu">
+                                    <select onChange={(e) => setItemsPerPage(e.target.value)} value={itemsPerPage}>
+                                        <option value="20" >20개씩 보기</option>
+                                        <option value="50">50개씩 보기</option>
+                                        <option value="100">100개씩 보기</option>
+                                    </select>
+                                </div>
 
-                      <td> {value.userName}</td>
-                      <td onClick={() => goToDetail(value.reservationNo)} className='detail-serviceName'> {value.serviceName} </td>
-                      <td>   {value.userReviewImg.map((imgUrl, index) => {
-                        const formattedUrl = imgUrl.replace('blob:', '');
-                        return (
-                          <img key={index} className="photo-item2" src={formattedUrl} alt={`Review image ${index + 1}`} />
-                        );
-                      })} </td>
-                      <td>         {[...Array(value.reviewRating)].map((_, index) => (
-                        <span key={index} className='review-rating'>
-                          &#9733;
-                        </span>
-                      ))} </td>
-                      <td onClick={() => handleToggleRow(index)}>
-                        {value.reviewContent.slice(0, 50)}
-                        <i class="bi bi-chevron-down" onClick={() => handleToggleRow(index)}></i>
-                      </td>
-                      <td>{formatDate(value.reviewDate)}</td>
-                      {/* <td></td> */}
+ 
 
-                    </tr>
-                    {/* 토글된 행에 대해 자세한 내용 표시 */}
-                    {expandedRows.includes(index) && (
-                      <tr>
-                        <td colSpan="8" className="expanded-content">
-                          <div>
-                            {/* 자세한 내용을 여기에 표시 */}
-                            <p>{value.reviewContent}</p>
-                            <p></p>
-                            <p></p>
-                            <p></p>
-                            <p></p>
-                            <p></p>
 
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </React.Fragment>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        </div>
+
+
+          
+       <div className="management-container">
+       
+  <table className="management-table">
+    <thead>
+      <tr>
+        <th style={{ width: '3%' }}>No</th>
+        <th style={{ width: '8%' }}>작성자</th>
+        <th style={{ width: '11%' }}>상품명</th>
+        <th style={{ width: '15%' }}>리뷰사진</th>
+        <th style={{ width: '5%' }}>
+          별점
+          <span onClick={() => handleSort('reviewRating', 'number')}>
+            <i className="bi bi-chevron-expand"></i>
+          </span>
+        </th>
+        <th style={{ width: '30%' }}>리뷰내용</th>
+        <th style={{ width: '12%' }}>
+          등록일
+          <span onClick={() => handleSort('reviewDate', 'date')}>
+            <i className="bi bi-chevron-expand"></i>
+          </span>
+        </th>
+        {/* <th style={{ width: '5%' }}>관리</th> */}
+      </tr>
+    </thead>
+    <tbody>
+      {paginatedReviewList.map((value, index) => (
+        <React.Fragment key={index}>
+          <tr>
+            <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+            <td>{value.userName}</td>
+            <td
+              onClick={() => goToDetail(value.reservationNo)}
+              className="detail-serviceName"
+            >
+              {value.serviceName}
+            </td>
+            <td>
+              {value.userReviewImg.map((imgUrl, index) => {
+                const formattedUrl = imgUrl.replace('blob:', '');
+                return (
+                  <img
+                    key={index}
+                    className="photo-item2"
+                    src={formattedUrl}
+                    alt={`Review image ${index + 1}`}
+                  />
+                );
+              })}
+            </td>
+            <td>
+              {[...Array(value.reviewRating)].map((_, index) => (
+                <span key={index} className="review-rating">
+                  &#9733;
+                </span>
+              ))}
+            </td>
+            <td onClick={() => handleToggleRow(index)}>
+              {value.reviewContent.slice(0, 50)}
+              <i
+                className="bi bi-chevron-down"
+                onClick={() => handleToggleRow(index)}
+              ></i>
+            </td>
+            <td>{formatDate(value.reviewDate)}</td>
+            {/* <td></td> */}
+          </tr>
+          {/* 토글된 행에 대해 자세한 내용 표시 */}
+          {expandedRows.includes(index) && (
+            <tr>
+              <td colSpan="8" className="expanded-content">
+                <div>
+                  {/* 자세한 내용을 여기에 표시 */}
+                  <p>{value.reviewContent}</p>
+                  <p></p>
+                  <p></p>
+                  <p></p>
+                  <p></p>
+                  <p></p>
+                </div>
+              </td>
+            </tr>
+          )}
+        </React.Fragment>
+      ))}
+    </tbody>
+  </table>
+
+  {/* 페이지네이션 버튼 */}
+  <div className="pagination">
+    <button
+      className="page-nav"
+      onClick={() => handlePageChange(currentPage - 1)}
+      disabled={currentPage === 1}
+    >
+      &lt; 이전
+    </button>
+
+    {[...Array(totalPages)].map((_, i) => (
+      <button
+        key={i + 1}
+        onClick={() => handlePageChange(i + 1)}
+        className={currentPage === i + 1 ? 'active' : ''}
+      >
+        {i + 1}
+      </button>
+    ))}
+
+    <button
+      className="page-nav"
+      onClick={() => handlePageChange(currentPage + 1)}
+      disabled={currentPage === totalPages}
+    >
+      다음 &gt;
+    </button>
+  </div>
+</div>
+
         </div>
       </div>
     </div>

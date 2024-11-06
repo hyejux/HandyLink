@@ -17,8 +17,6 @@ function MasterStore() {
             .then((data) => setStore(data))
             .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
     }, []);
-    
-    
 
     const activeStores = store.filter((store) => store.storeStatus === '활성화');
 
@@ -49,6 +47,33 @@ function MasterStore() {
         }
     };
 
+    const handleSuspend = (storeNo) => {
+        if (window.confirm("해당 업체를 정지하시겠습니까?")) {
+            fetch(`/getStoreInfo/${storeNo}/suspend`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        alert("업체가 정지되었습니다.");
+                        return fetch('/getStoreInfo');
+                    } else {
+                        return response.text().then((errorText) => {
+                            throw new Error(`업체 상태 업데이트에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
+                        });
+                    }
+                })
+                .then((response) => response.json())
+                .then((data) => setStore(data))
+                .catch((error) => {
+                    console.error('업체 상태 업데이트 중 오류 발생:', error);
+                    alert(`정지 처리에 실패했습니다. 오류 메시지: ${error.message}`);
+                });
+        }
+    };
+
     // 모달 열기 함수
     const handleShowModal = (store) => {
         setSelectedStore(store);
@@ -60,7 +85,6 @@ function MasterStore() {
         setIsModalOpen(false);
         setSelectedStore(null);
     };
-
 
     // 검색어 변경 핸들러
     const handleSearchInputChange = (event) => {
@@ -104,7 +128,6 @@ function MasterStore() {
                 </div>
             </div>
 
-
             <table>
                 <thead>
                     <tr>
@@ -118,6 +141,7 @@ function MasterStore() {
                         <th>업체정보</th>
                         <th>상태</th>
                         <th>비활성화</th>
+                        <th>정지</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -137,6 +161,15 @@ function MasterStore() {
                                 <td>{store.storeStatus}</td>
                                 <td>
                                     <button className="deactivate-button" onClick={() => handleDeactivate(store.storeNo)}>비활성화</button>
+                                </td>
+                                <td>
+                                    <button
+                                        className="suspend-button"
+                                        onClick={() => handleSuspend(store.storeNo)}
+                                        disabled={store.storeStatus === '정지'} // 정지 상태일 경우 버튼 비활성화
+                                    >
+                                        정지
+                                    </button>
                                 </td>
                             </tr>
                         );

@@ -55,10 +55,21 @@ public class StoreService {
                 .orElseThrow(() -> new RuntimeException("Store not found with storeNo: " + storeNo));
     }
 
-    // 가게 활성화
+    // 가게 승인 (대기 상태에서 비활성화로 변경)
     public Store approveStore(Long storeNo) {
-        storeRepository.updateStoreStatusByStoreNo(storeNo, StoreStatus.활성화);
-        return getStoreDetails(storeNo);
+        // 가게 상태 가져오기
+        Store store = storeRepository.findByStoreNo(storeNo)
+                .orElseThrow(() -> new RuntimeException("Store not found with storeNo: " + storeNo));
+
+        // 상태가 대기일 경우 비활성화로 변경
+        if (store.getStoreStatus() == StoreStatus.대기) {
+            storeRepository.updateStoreStatusByStoreNo(storeNo, StoreStatus.비활성화);
+        } else {
+            // 그 외의 상태는 활성화로 변경
+            storeRepository.updateStoreStatusByStoreNo(storeNo, StoreStatus.활성화);
+        }
+
+        return getStoreDetails(storeNo); // 변경된 가게 정보 반환
     }
 
     // 가게 비활성화
@@ -66,4 +77,11 @@ public class StoreService {
         storeRepository.updateStoreStatusByStoreNo(storeNo, StoreStatus.비활성화);
         return getStoreDetails(storeNo);
     }
+
+    // 가게 정지
+    public Store suspendStore(Long storeNo) {
+        storeRepository.updateStoreStatusByStoreNo(storeNo, StoreStatus.정지);
+        return getStoreDetails(storeNo);
+    }
+
 }

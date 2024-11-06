@@ -703,8 +703,6 @@ function UserMain() {
 
           {/* 이벤트/할인 */}
           <div className="user-main-content">
-            <button className="nav-button left">‹</button>
-            <button className="nav-button right">›</button>
             <h3>이벤트/할인</h3>
 
             <div className="user-main-list-wrap user-main-list-wrap-22">

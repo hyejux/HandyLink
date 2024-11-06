@@ -67,7 +67,6 @@ public class StoreService {
         return getStoreDetails(storeNo);
     }
 
-    // 활성화 상태인 가게에서 categoryLevel 1인 카테고리가 하나 이상 있는 가게를 가져오는 메서드
     public List<Store> getActiveStoresWithCategoryLevelOne() {
         // 활성화 상태이고 categoryLevel 1인 카테고리가 하나 이상 있는 가게들 가져오기
         List<Store> stores = storeRepository.findActiveStoresWithCategoryLevelOne();

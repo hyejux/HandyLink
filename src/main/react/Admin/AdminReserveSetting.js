@@ -78,11 +78,8 @@ const goToAdminPage2 = (id) => {
 
           <div className="reserve-container" key={index}>
                   <div className="reserve-img">
-                  <Image cloudName="dtzx9nu3d" publicId={value.imageUrl}>
-  <Transformation width="300" height="300" crop="fill" />
-</Image>
 
-                  {/* <img src={`${value.imageUrl}`} alt="My Image" /> */}
+                  <img src={`${value.imageUrl}`} alt="My Image" />
 
                    </div>
 

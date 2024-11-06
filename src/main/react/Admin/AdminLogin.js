@@ -36,7 +36,13 @@ function AdminLogin() {
 
             if (storeStatus === '정지') {
                 alert('해당 계정은 정지 상태입니다. 관리자에게 문의해주.');
-                window.location.href = '/adminlogin.login'; // 로그인 페이지로 리디렉션
+                window.location.href = '/adminlogin.login';
+                return;
+            }
+
+            if (storeStatus === '폐업') {
+                alert('해당 계정은 폐업 상태입니다. 관리자에게 문의해주.');
+                window.location.href = '/adminlogin.login'; 
                 return;
             }
 

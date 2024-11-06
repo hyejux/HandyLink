@@ -1,7 +1,6 @@
 package com.example.HiMade.admin.service;
 
 import com.example.HiMade.admin.dto.*;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -42,5 +41,8 @@ public interface AdminStoreService {
     Map<String, Long> getGenderCount(Long storeNo); //고객성별
     Map<String, Map<String, Long>> getAgeDistribution(Long storeNo); //고객나이별
 
+    Map<String, Integer> getMainCount(Long storeNo);//메인페이지 카운트 통계
+    List<Integer> getReservationNo(Long storeNo, String reservationSlotDate); //메인-날짜별 예약번호
+    List<CustomerReservationDTO> getTodayCustomer(List<Long> reservationNo); //예약자 정보
 
 }

@@ -56,4 +56,13 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
         return userChatRoomMapper.hasUnreadMessages(userId);
     }
 
+    @Override
+    public void deactivateChat(String userId, Long storeNo) {
+        userChatRoomMapper.deactivateChat(userId, storeNo);
+    }
+
+    @Override
+    public void reactivateChat(String userId, Long storeNo) {
+        userChatRoomMapper.reactivateChat(userId, storeNo);
+    }
 }

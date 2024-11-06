@@ -22,7 +22,7 @@ function AdminLogin() {
         console.log("id & pw : ", inputLogin);
     }, [inputLogin]);
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post('/loginForm', {
@@ -30,16 +30,22 @@ function AdminLogin() {
                 pw: inputLogin.pw
             });
 
-            const {storeId, storeNo, storeStatus} = response.data;
+            const { storeId, storeNo, storeStatus } = response.data;
             sessionStorage.setItem('storeId', storeId);
             sessionStorage.setItem('storeNo', storeNo);
 
-            if (response.status === 200 && storeId) { // storeId가 null 또는 빈 문자열이 아닌지 확인
+            if (storeStatus === '정지') {
+                alert('해당 계정은 정지 상태입니다. 관리자에게 문의해주.');
+                window.location.href = '/adminlogin.login'; // 로그인 페이지로 리디렉션
+                return;
+            }
+
+            if (response.status === 200 && storeId) {
                 alert(`로그인 성공 ${storeId} 상태 ${storeStatus}`);
 
-                if(storeStatus === '대기'){
+                if (storeStatus === '대기') {
                     window.location.href = `/adminsignupapproval.admin?${storeNo}`;
-                }else{
+                } else {
                     window.location.href = `/admin.admin?${storeNo}`;
                 }
             } else {
@@ -52,50 +58,52 @@ function AdminLogin() {
         }
     };
 
-    return (
-    <div className="parts">
-        <div className="part1">
-            <div className="top-text">편리한 주문 <br />편리한 제작</div>
-            <div className="bottom-text">HandyLink에서<br />경험해보세요.</div>
-        </div>
 
-        <div className="part2">
-            <form onSubmit={handleSubmit}>
-                <div className="login-container">
-                    <div className="login-title">HandyLink</div>
-                    <div className="login-box">
-                        <input
-                            type="text"
-                            name="id" // name 속성 추가
-                            placeholder="아이디"
-                            value={inputLogin.id}
-                            onChange={handleChange}
-                        />
-                        <input
-                            type="password"
-                            name="pw" // name 속성 추가
-                            placeholder="비밀번호"
-                            value={inputLogin.pw}
-                            onChange={handleChange}
-                        />
-                        <div className="find-msg">
-                            <a href="adminaccountfind.login">
-                                아이디/비밀번호 찾기
+
+    return (
+        <div className="parts">
+            <div className="part1">
+                <div className="top-text">편리한 주문 <br />편리한 제작</div>
+                <div className="bottom-text">HandyLink에서<br />경험해보세요.</div>
+            </div>
+
+            <div className="part2">
+                <form onSubmit={handleSubmit}>
+                    <div className="login-container">
+                        <div className="login-title">HandyLink</div>
+                        <div className="login-box">
+                            <input
+                                type="text"
+                                name="id" // name 속성 추가
+                                placeholder="아이디"
+                                value={inputLogin.id}
+                                onChange={handleChange}
+                            />
+                            <input
+                                type="password"
+                                name="pw" // name 속성 추가
+                                placeholder="비밀번호"
+                                value={inputLogin.pw}
+                                onChange={handleChange}
+                            />
+                            <div className="find-msg">
+                                <a href="adminaccountfind.login">
+                                    아이디/비밀번호 찾기
+                                </a>
+                            </div>
+                        </div>
+
+                        <button type="submit">로그인</button>
+
+                        <div className="singup-msg">
+                            <a href="storesignup.signup">
+                                <span>스토어 입점하기</span>
                             </a>
                         </div>
                     </div>
-
-                    <button type="submit">로그인</button>
-
-                    <div className="singup-msg">
-                        <a href="storesignup.signup">
-                            <span>스토어 입점하기</span>
-                        </a>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
     );
 }
 

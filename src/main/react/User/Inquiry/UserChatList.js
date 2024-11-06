@@ -145,13 +145,24 @@ function UserChatList() {
         }));
     };
 
-    const handleTouchEnd = (e, storeNo) => {
+    const handleTouchEnd = async (e, storeNo) => {
         const offset = dragOffset[storeNo] || 0;
 
         if (offset < -50) {  // 왼쪽으로 충분히 드래그된 경우
-            setItemToDelete(storeNo);
             if (window.confirm('목록에서 삭제하시겠습니까?')) {
-                setChatList(prev => prev.filter(chat => chat.storeNo !== storeNo));
+                try {
+                    // 서버에 삭제 요청
+                    await axios.post(`/chat/delete?userId=${userId}&storeNo=${storeNo}`);
+
+                    // 채팅 목록에서 해당 채팅 비활성화
+                    setChatList(prev =>
+                        prev.map(chat =>
+                            chat.storeNo === storeNo ? { ...chat, actived: 'N' } : chat
+                        )
+                    );
+                } catch (error) {
+                    console.error("채팅 삭제 중 오류 발생:", error);
+                }
             } else {
                 // 드래그 초기화
                 setDragOffset(prev => ({
@@ -172,6 +183,7 @@ function UserChatList() {
     };
 
 
+
     return (
         <div>
             <div className="user-chat-container">
@@ -186,63 +198,68 @@ function UserChatList() {
                     />
                     <i className="bi bi-search search-icon"></i>
                 </div>
-                {filteredChatList.length === 0 ? (
-                    <div className="no-results">
-                        {searchTerm ? "검색 결과가 없습니다" : "채팅 내역이 없습니다"}
-                    </div>
-                ) : (
-                    <ul className="inquiry-list">
-                        {filteredChatList.map((chat, index) => (
-                            <li
-                                key={`${chat.storeNo}-${index}`}
-                                className="inquiry-item"
-                                style={{
-                                    transform: `translateX(${dragOffset[chat.storeNo] || 0}px)`,
-                                    transition: touchStartX.current ? 'none' : 'transform 0.3s ease'
-                                }}
-                                onTouchStart={(e) => handleTouchStart(e, chat.storeNo)}
-                                onTouchMove={(e) => handleTouchMove(e, chat.storeNo)}
-                                onTouchEnd={(e) => handleTouchEnd(e, chat.storeNo)}
-                                onClick={async () => {
-                                    // 드래그 중인 경우 클릭 이벤트 무시
-                                    if (dragOffset[chat.storeNo]) return;
+                {/* 필터링된 채팅 목록 정의 */}
+                {(() => {
+                    const filteredChatList = chatList.filter(chat => chat.actived === 'Y');
+                    return filteredChatList.length === 0 ? (
+                        <div className="no-results">
+                            {searchTerm ? "검색 결과가 없습니다" : "채팅 내역이 없습니다"}
+                        </div>
+                    ) : (
+                        <ul className="inquiry-list">
+                            {filteredChatList.map((chat, index) => (
+                                <li
+                                    key={`${chat.storeNo}-${index}`}
+                                    className="inquiry-item"
+                                    style={{
+                                        transform: `translateX(${dragOffset[chat.storeNo] || 0}px)`,
+                                        transition: touchStartX.current ? 'none' : 'transform 0.3s ease'
+                                    }}
+                                    onTouchStart={(e) => handleTouchStart(e, chat.storeNo)}
+                                    onTouchMove={(e) => handleTouchMove(e, chat.storeNo)}
+                                    onTouchEnd={(e) => handleTouchEnd(e, chat.storeNo)}
+                                    onClick={async () => {
+                                        // 드래그 중인 경우 클릭 이벤트 무시
+                                        if (dragOffset[chat.storeNo]) return;
 
-                                    try {
-                                        await axios.post(`/chat/updateLastCheckedTime?userId=${userId}&storeNo=${chat.storeNo}`);
-                                        await axios.post(`/chat/resetNewMessage?userId=${userId}`);
-                                        setChatList(prevList =>
-                                            prevList.map(item =>
-                                                item.storeNo === chat.storeNo ? {...item, isNewMessage: false} : item
-                                            )
-                                        );
-                                        setSelectedStoreNo(chat.storeNo);
-                                        window.location.href = `/UserChatRoom.user?storeNo=${chat.storeNo}`;
-                                    } catch (error) {
-                                        console.error("마지막 확인 시간 업데이트 실패:", error);
-                                        window.location.href = `/UserChatRoom.user?storeNo=${chat.storeNo}`;
-                                    }
-                                }}
-                            >
-                                <img
-                                    src={chat.storeImgUrl || '/img/user_basic_profile.jpg'}
-                                    alt={chat.storeName}
-                                    className="store-image"
-                                />
-                                <div className="inquiry-content">
-                                    <p className="inquiry-title">{chat.storeName}
-                                        {chat.isNewMessage && <span className="new-message-dot">●</span>}</p>
-                                    <p className="chat-preview">
-                                        {chat.lastMessage.length > 30 ? `${chat.lastMessage.substring(0, 30)}...` : chat.lastMessage}
-                                    </p>
-                                </div>
-                                <span className="inquiry-time">{formatTime(chat.lastMessageTime)}</span>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                                        try {
+                                            await axios.post(`/chat/updateLastCheckedTime?userId=${userId}&storeNo=${chat.storeNo}`);
+                                            await axios.post(`/chat/resetNewMessage?userId=${userId}`);
+                                            setChatList(prevList =>
+                                                prevList.map(item =>
+                                                    item.storeNo === chat.storeNo ? {...item, isNewMessage: false} : item
+                                                )
+                                            );
+                                            setSelectedStoreNo(chat.storeNo);
+                                            window.location.href = `/UserChatRoom.user?storeNo=${chat.storeNo}`;
+                                        } catch (error) {
+                                            console.error("마지막 확인 시간 업데이트 실패:", error);
+                                            window.location.href = `/UserChatRoom.user?storeNo=${chat.storeNo}`;
+                                        }
+                                    }}
+                                >
+                                    <img
+                                        src={chat.storeImgUrl || '/img/user_basic_profile.jpg'}
+                                        alt={chat.storeName}
+                                        className="store-image"
+                                    />
+                                    <div className="inquiry-content">
+                                        <p className="inquiry-title">{chat.storeName}
+                                            {chat.isNewMessage && <span className="new-message-dot">●</span>}</p>
+                                        <p className="chat-preview">
+                                            {chat.lastMessage.length > 30 ? `${chat.lastMessage.substring(0, 30)}...` : chat.lastMessage}
+                                        </p>
+                                    </div>
+                                    <span className="inquiry-time">{formatTime(chat.lastMessageTime)}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    );
+                })()}
             </div>
         </div>
     );
+
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

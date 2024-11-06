@@ -120,4 +120,33 @@ public class UserChatRoomController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+    // 채팅 목록에서 감추기
+    @PostMapping("/delete")
+    public ResponseEntity<Void> deleteChat(@RequestParam String userId, @RequestParam Long storeNo) {
+        try {
+            logger.info("삭제 요청: userId={}, storeNo={}", userId, storeNo);
+            userChatRoomService.deactivateChat(userId, storeNo); // 채팅방 상태 비활성화
+            return ResponseEntity.ok().build(); // Void 반환
+        } catch (Exception e) {
+            logger.error("채팅방 삭제 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build(); // Void 반환
+        }
+    }
+
+    @PostMapping("/reactivate")
+    public ResponseEntity<Void> reactivateChat(@RequestParam String userId, @RequestParam Long storeNo) {
+        logger.info("로그 Reactivating chat for userId: {}, storeNo: {}", userId, storeNo);
+        try {
+            userChatRoomService.reactivateChat(userId, storeNo); // 채팅 상태를 Y로 변경
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            logger.error("채팅방 재활성화 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+
+
 }

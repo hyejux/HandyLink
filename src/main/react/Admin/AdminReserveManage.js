@@ -7,6 +7,9 @@ import 'react-calendar/dist/Calendar.css';
 import './AdminReserveManage.css';
 import { useRef } from 'react';
 import { isNull } from 'util';
+import PrintReservationInfo from './PrintReservationInfo';
+import './PrintReservationInfo.css';
+
 
 function AdminReserveManage() {
     const [passengers, setPassengers] = useState([
@@ -421,22 +424,27 @@ const handleStatusChange = (reservationNo, status, storeName) => {
     };
 
 
-
-
     const handlePrint = (reservation) => {
-        const printContent = `
-            예약 번호: ${reservation.reservationNo}
-            서비스 이름: ${reservation.serviceName}
-            사용자 ID: ${reservation.userId}
-            등록 시간: ${formatDate(reservation.regTime)}
-            예약 가격: ${reservation.reservationPrice}
-            고객 요청: ${reservation.customerRequest}
-            예약 상태: ${reservation.reservationStatus}
-        `;
-
         const printWindow = window.open('', '', 'width=600,height=400');
-        printWindow.document.write(`<pre>${printContent}</pre>`);
+        printWindow.document.write(`
+            <html>
+            <head>
+                <link rel="stylesheet" type="text/css" href="print-style.css">
+            </head>
+            <body>
+                <div id="print-content"></div>
+            </body>
+            </html>
+        `);
         printWindow.document.close();
+    
+        // React 18에서 createRoot()와 render() 사용
+        const root = ReactDOM.createRoot(printWindow.document.getElementById('print-content'));
+        root.render(
+            <PrintReservationInfo reservation={reservation} />
+        );
+    
+        // 프린트 실행
         printWindow.print();
     };
 

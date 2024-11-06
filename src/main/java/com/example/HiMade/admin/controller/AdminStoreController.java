@@ -174,9 +174,8 @@ public class AdminStoreController {
 
     //예약자정보
     @GetMapping("/getTodayCustomer")
-    public List<CustomerReservationDTO> getTodayCustomer(@RequestParam List<Long> reservationNo){
-        List<CustomerReservationDTO> result = adminStoreService.getTodayCustomer(reservationNo);
-        System.out.println("예약자정보 " + result);
+    public List<CustomerReservationDTO> getTodayCustomer(@RequestParam("reservationNo") List<Long> reservationNos){
+        List<CustomerReservationDTO> result = adminStoreService.getTodayCustomer(reservationNos);
 
         return result;
     }

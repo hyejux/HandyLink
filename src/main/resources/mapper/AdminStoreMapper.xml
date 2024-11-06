@@ -417,30 +417,33 @@
 
     <select id="getTodayCustomer" resultMap="customerReservationMap">
         select users.user_id,
-                users.user_name,
-                users.user_phonenum,
-                rs.reservation_slot_date,
-                reserve.reservation_time,
-                reserve.customer_request,
-                reserve.reservation_no,
-                cate.category_level,
-                cate.service_name,
-                rf.middle_category_value,
-                pay.payment_method,
-                pay.payment_amount
+        users.user_name,
+        users.user_phonenum,
+        rs.reservation_slot_date,
+        reserve.reservation_time,
+        reserve.customer_request,
+        reserve.reservation_no,
+        cate.parent_category_id,
+        cate.category_id,
+        cate.category_level,
+        cate.service_name,
+        rf.middle_category_value,
+        pay.payment_method,
+        pay.payment_amount
         from reservation reserve
         join reservation_slot rs on rs.reservation_slot_key = reserve.reservation_slot_key
         join users on users.user_id = reserve.user_id
         join payment pay on pay.reservation_no = reserve.reservation_no
         join reservation_form rf on rf.reservation_no = reserve.reservation_no
         join category cate on cate.category_id = rf.main_category_id
-                            or cate.category_id = rf.middle_category_id
-                            or cate.category_id = rf.sub_category_id
+        or cate.category_id = rf.middle_category_id
+        or cate.category_id = rf.sub_category_id
         where reserve.reservation_no IN
-        <foreach collection="reservationNo" item="reservationNo" open="(" separator="," close=")">
+        <foreach collection="reservationNos" item="reservationNo" open="(" separator="," close=")">
             #{reservationNo}
         </foreach>
     </select>
+
 
     <resultMap id="customerReservationMap" type="com.example.HiMade.admin.dto.CustomerReservationDTO">
         <result property="reservationNo" column="reservation_no"/>
@@ -453,6 +456,8 @@
         <result property="paymentMethod" column="payment_method"/>
         <result property="paymentAmount" column="payment_amount"/>
         <collection property="options" ofType="com.example.HiMade.admin.dto.OptionDTO">
+            <result property="parentCategoryId" column="parent_category_id"/>
+            <result property="categoryId" column="category_id"/>
             <result property="categoryLevel" column="category_level"/>
             <result property="serviceName" column="service_name"/>
             <result property="middleCategoryValue" column="middle_category_value"/>

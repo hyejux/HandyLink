@@ -214,8 +214,8 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
-    public List<CustomerReservationDTO> getTodayCustomer(List<Long> reservationNo) {
-        return adminStoreMapper.getTodayCustomer(reservationNo);
+    public List<CustomerReservationDTO> getTodayCustomer(List<Long> reservationNos) {
+        return adminStoreMapper.getTodayCustomer(reservationNos);
     }
 
     @Override

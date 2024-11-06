@@ -28,7 +28,7 @@ public interface AdminReservationService
   void updateStatus(UpdateReservationStatusDTO dto);
 
   //서비스 별 사진 등록
-  public void setMainCategoryImg(MultipartFile file, int categoryId);
+  public void setMainCategoryImg(String file, int categoryId);
   void setActivated(int id);
   void setSlotModi(int id,  int realId);
 }

@@ -4,6 +4,11 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import './AdminReserveSetting.css';
 import { useNavigate } from 'react-router-dom';
+import { Cloudinary } from '@cloudinary/url-gen';
+import { auto } from '@cloudinary/url-gen/actions/resize';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage } from '@cloudinary/react';
+import { CloudinaryContext, Image, Transformation } from 'cloudinary-react';
 
 
 function AdminReserveSetting() {
@@ -73,7 +78,11 @@ const goToAdminPage2 = (id) => {
 
           <div className="reserve-container" key={index}>
                   <div className="reserve-img">
-                  <img src={`${value.imageUrl}`} alt="My Image" />
+                  <Image cloudName="dtzx9nu3d" publicId={value.imageUrl}>
+  <Transformation width="300" height="300" crop="fill" />
+</Image>
+
+                  {/* <img src={`${value.imageUrl}`} alt="My Image" /> */}
 
                    </div>
 

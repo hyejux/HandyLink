@@ -203,8 +203,7 @@ const handlePageChange = (pageNumber) => {
   
 };
 
-
-
+// --------------------------------------------
 
 const cld = new Cloudinary({ cloud: { cloudName: 'dtzx9nu3d' } });
   
@@ -229,7 +228,7 @@ const img = cld
       // FormData를 사용하여 이미지 파일을 Cloudinary로 전송
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', 'YOUR_CLOUDINARY_UPLOAD_PRESET');  // Cloudinary에서 설정한 Upload Preset
+      formData.append('upload_preset', 'hye123');  // Cloudinary에서 설정한 Upload Preset
   
       try {
         const response = await axios.post(
@@ -245,28 +244,6 @@ const img = cld
   
   return (
     <div>
-
-<AdvancedImage cldImg={img}/>
-
-<Image cloudName="dtzx9nu3d" publicId="sample.jpg">
-  <Transformation width="300" height="300" crop="fill" />
-</Image>
-
-
-<div>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload to Cloudinary</button>
-    </div>
-
-
-
-
-
-
-
-
-
-
       {/* ------------------------------------------------ */}
       <div className="main-content-title"> <div className='header-title'> 가게 소식 </div>
         <button type="button" className="btn-st" onClick={handleAddClick}>

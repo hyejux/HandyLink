@@ -493,3 +493,39 @@
   cursor: pointer;
   text-decoration: underline;
 }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.pagination button:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.page-nav {
+  font-weight: bold;
+}
+
+.store-notice-top {
+  display: flex;
+  /* overflow: hidden; */
+  padding: 5px;
+  margin-bottom: 15px;
+  justify-content: space-between;
+}

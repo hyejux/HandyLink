@@ -140,20 +140,20 @@ const handleTimeNumChange = (e) => {
     }));
   };
   
-  const isValid = () => {
-    if (
-        !reserveAdd.serviceName || reserveAdd.serviceName.trim() === '' || // reserveAdd.serviceName이 null 또는 빈 문자열인지 확인
-        categories.some(category => {
-            return (
-                !category.serviceName || category.serviceName.trim() === '' || // category.serviceName이 null 또는 빈 문자열인지 확인
-                category.subCategories.some(sub => !sub.serviceName || sub.serviceName.trim() === '') // sub.serviceName이 null 또는 빈 문자열인지 확인
-            );
-        })
-    ) {
-        return false; // Invalid if any service name or subcategory name is empty
-    }
-    return true; // Valid
-};
+//   const isValid = () => {
+//     if (
+//         !reserveAdd.serviceName || reserveAdd.serviceName.trim() === '' || // reserveAdd.serviceName이 null 또는 빈 문자열인지 확인
+//         categories.some(category => {
+//             return (
+//                 !category.serviceName || category.serviceName.trim() === '' || // category.serviceName이 null 또는 빈 문자열인지 확인
+//                 category.subCategories.some(sub => !sub.serviceName || sub.serviceName.trim() === '') // sub.serviceName이 null 또는 빈 문자열인지 확인
+//             );
+//         })
+//     ) {
+//         return false; // Invalid if any service name or subcategory name is empty
+//     }
+//     return true; // Valid
+// };
 
   //--------------------------------------------------
 
@@ -166,45 +166,173 @@ const handleTimeNumChange = (e) => {
     }
   )}
 
-  const isValid2 = () => {
-    if (reserveAdd.serviceName.trim() === '' || categories.some(category => {
-      const hasEmptyServiceName = category.serviceName.trim() === '';
-      const hasEmptySubCategoryName = category.subCategories.some(sub => sub.serviceName.trim() === '');
-      const isSelectNType = category.subCategoryType === 'SELECTN' && category.subCategories.length < 2;
-      return hasEmptyServiceName || hasEmptySubCategoryName || isSelectNType;
-    })) {
-      return false; // Invalid if any service name or subcategory name is empty or if SELECT_N condition fails
+  // const isValid2 = () => {
+  //   if (reserveAdd.serviceName.trim() === '' || categories.some(category => {
+  //     const hasEmptyServiceName = category.serviceName.trim() === '';
+  //     const hasEmptySubCategoryName = category.subCategories.some(sub => sub.serviceName.trim() === '');
+  //     const isSelectNType = category.subCategoryType === 'SELECTN' && category.subCategories.length < 2;
+  //     return hasEmptyServiceName || hasEmptySubCategoryName || isSelectNType;
+  //   })) {
+  //     return false; // Invalid if any service name or subcategory name is empty or if SELECT_N condition fails
+  //   }
+  //   return true; // Valid
+  // };
+
+  const handleUpload = async () => {
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'hye123'); // Cloudinary에서 설정한 Upload Preset
+  
+    try {
+      const response = await axios.post(
+        'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
+        formData
+      );
+      console.log('Uploaded Image URL:', response.data.secure_url);
+      alert(`Image uploaded successfully! URL: ${response.data.secure_url}`);
+      return response.data.secure_url; // 업로드된 이미지 URL을 반환
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert("이미지 업로드에 실패했습니다.");
+      return null; // 업로드 실패 시 null 반환
     }
-    return true; // Valid
+  };
+
+  
+
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFile(e.target.files[0]);
+    if (file) {
+      setSelectedImage(file);
+      // 이미지 미리보기
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+      console.log(previewUrl);
+    }}
+  
+  
+
+    
+
+  const isValid5 = () => {
+    const isServiceNameEmpty = categories.some(category => category.serviceName.trim() === '');
+
+    return !isServiceNameEmpty;
+  }
+
+  const isValid = () => {
+  
+    // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우에만 카테고리 체크
+    const hasInvalidCategories = categories.some(category => {
+      // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우만 체크
+      if (category.subCategoryType === 'SELECTN' || category.subCategoryType === 'SELECT1') {
+        return (
+          category.serviceName.trim() === '' || // 카테고리 서비스 이름이 비어 있는지 체크
+          category.subCategories.some(sub => sub.serviceName.trim() === '') // 서브카테고리 이름이 비어 있는지 체크
+        );
+      }
+      return false; // 'SELECTN' 또는 'SELECT1'이 아닐 경우 유효하지 않다고 고려하지 않음
+    });
+  
+    return !hasInvalidCategories; // 유효하지 않은 카테고리가 없으면 유효함
+  };
+  
+  const isValid2 = () => {
+    // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우에만 카테고리 체크
+    const hasInvalidCategories = categories.some(category => {
+      // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우만 체크
+      if (category.subCategoryType === 'SELECTN' || category.subCategoryType === 'SELECT1') {
+        const hasEmptySubCategoryName = category.subCategories.some(sub => sub.serviceName.trim() === '');
+        const isSelectNType = category.subCategoryType === 'SELECTN' && category.subCategories.length < 2;
+        return hasEmptySubCategoryName || isSelectNType; // 비어 있는 서브카테고리 이름 또는 SELECT_N 조건 체크
+      }
+      return false; // 'SELECTN' 또는 'SELECT1'이 아닐 경우 유효하지 않다고 고려하지 않음
+    });
+  
+    return !hasInvalidCategories; // 유효하지 않은 카테고리가 없으면 유효함
+  };
+  
+   
+  const isValid3 = () => {
+    // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우에만 카테고리 체크
+    const hasInvalidCategories = categories.some(category => {
+      // subCategoryType이 'SELECTN' 또는 'SELECT1'인 경우만 체크
+      if (category.subCategoryType === 'SELECTN' || category.subCategoryType === 'SELECT1') {
+        const hasEmptySubCategoryName = category.subCategories.some(sub => sub.serviceName.trim() === '');
+        const isSelectNType = category.subCategoryType === 'SELECT1' && category.subCategories.length < 1;
+        return hasEmptySubCategoryName || isSelectNType; // 비어 있는 서브카테고리 이름 또는 SELECT_N 조건 체크
+      }
+      return false; // 'SELECTN' 또는 'SELECT1'이 아닐 경우 유효하지 않다고 고려하지 않음
+    });
+  
+    return !hasInvalidCategories; // 유효하지 않은 카테고리가 없으면 유효함
+  };
+  
+
+     
+  const isValid4 = () => {
+    // isPaid가 true이면서 servicePrice가 0인 경우 유효하지 않음
+    const hasInvalidPaidCategories = categories.some(category => {
+      // 카테고리의 서브 카테고리 타입이 'SELECTN' 또는 'SELECT1'일 때만 체크
+      if (category.subCategoryType === 'NUMBER' || category.subCategoryType === 'TEXT') {
+        return category.isPaid && category.servicePrice === 0; // 조건에 맞는지 체크
+      }
+      return false; // 'SELECTN' 또는 'SELECT1'이 아닐 경우는 무시
+    });
+  
+    return !hasInvalidPaidCategories; // 유효하지 않은 카테고리가 없으면 유효함
   };
 
 
 
 
   //-------------------------------------------
-  const handleComplete = () => {
+  const handleComplete = async () => {
 
-
+    const imageUrl = await handleUpload(); // 이미지 URL을 기다림
+    if (!imageUrl) return; // 업로드 실패 시 함수 종료
+   
 
    
     if (reserveAdd.serviceName === ''){
       alert("서비스 명을 입력해주세요.")
+      return;
     }else if (reserveAdd.servicePrice === 0) {
       alert("서비스 가격을 입력해주세요.")
-    }else if (selectedImage === null) {
+      return;
+    }else if (file === null) {
       alert("사진은 필수입니다.")
-    
+      return;
     }else if(reserveAdd.serviceContent === ''){
       alert("서비스 설명을 입력해주세요");
+      return;
     }
+
+ else if(!isValid5()) {
+  alert("모든 서비스 명을 입력해주세요.");
+  return;
+ }
     else if (!isValid()) {
-      alert("모든 서브카테고리 이름을 입력해주세요."); // Alert message for empty names
+      alert("모든 소분류명을 입력해주세요."); // Alert message for empty names
+      return;
       // return;
     }else if(!isValid2()){
       alert("다중선택은 소분류를 두개이상 입력해주세요");
+      return;
+    }else if(!isValid3()) {
+      alert("소분류 하나 이상 입력해주세요.");
+      return;
+    }else if(!isValid4()) {
+      alert("유료인 경우에는 가격을 입력해주세요!");
+      return;
     }
    
-   
+  
 
 
     const transformedCategories = categories.map(category => ({
@@ -242,7 +370,7 @@ const handleTimeNumChange = (e) => {
    
         console.log('메인 카테고리 설정 성공:', response.data);
         const formData = new FormData();
-        formData.append('file', selectedImage); // 'file'은 서버에서 기대하는 필드명입니다.
+        formData.append('dataUrl', imageUrl); // Cloudinary 이미지 URL을 추가
         formData.append('category_id', response.data);
     
         // 두 번째 요청: 카테고리 이미지 업로드
@@ -349,8 +477,6 @@ const [serviceDate, setServiceDate] = useState(''); // 날짜 상태
 const [serviceHour, setServiceHour] = useState(''); // 시간 상태
 
 
-  
-
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -382,7 +508,7 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
       {imagePreview && <img src={imagePreview} alt="미리보기" style={{ width: '100%', objectFit: 'cover' }} />}
         
       <div>
-      <input type="file" className="btn-st btn-imgChg"  accept="image/*" onChange={handleImageChange} />
+      <input type="file" className="btn-st btn-imgChg"  accept="image/*" onChange={handleFileChange} />
       
       
    

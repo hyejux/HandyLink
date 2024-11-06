@@ -25,10 +25,10 @@ function MasterApproval() {
   const filteredStores = store.filter((store) => {
     if (filter === '대기') {
       return store.storeStatus === '대기';
-    } else if (filter === '비활성화') {
-      return store.storeStatus === '비활성화';
+    } else if (filter === '정지') {
+      return store.storeStatus === '정지';
     } else if (filter === '전체') {
-      return store.storeStatus === '대기' || store.storeStatus === '비활성화';
+      return store.storeStatus === '대기' || store.storeStatus === '정지';
     }
     return true;
   });
@@ -54,7 +54,7 @@ function MasterApproval() {
   const handleApprove = (storeNo, currentStatus) => {
     const confirmationMessage = currentStatus === '대기'
       ? "승인 하시겠습니까?"
-      : "활성화 하시겠습니까?";
+      : "정지해제 하시겠습니까?";
 
     if (window.confirm(confirmationMessage)) {
       fetch(`/getStoreInfo/${storeNo}/approve`, {
@@ -113,7 +113,7 @@ function MasterApproval() {
           <select id="store-status-select" onChange={(e) => setFilter(e.target.value)} value={filter}>
             <option value="전체">전체</option>
             <option value="대기">대기</option>
-            <option value="비활성화">비활성화</option>
+            <option value="정지">정지</option>
           </select>
 
         </div>
@@ -154,7 +154,7 @@ function MasterApproval() {
                   {store.storeStatus === '대기' ? (
                     <button className="activate-button" onClick={() => handleApprove(store.storeNo, '대기')}>승인</button>
                   ) : (
-                    <button className="activate-button" onClick={() => handleApprove(store.storeNo, '비활성화')}>활성화</button>
+                    <button className="activate-button" onClick={() => handleApprove(store.storeNo, '정지해제')}>정지해제</button>
                   )}
                 </td>
               </tr>

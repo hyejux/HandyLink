@@ -4,7 +4,11 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import './AdminStoreNotice.css';
 import { useNavigate } from 'react-router-dom';
-
+import { Cloudinary } from '@cloudinary/url-gen';
+import { auto } from '@cloudinary/url-gen/actions/resize';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage } from '@cloudinary/react';
+import { CloudinaryContext, Image, Transformation } from 'cloudinary-react';
 
 function AdminStoreNotice() {
 
@@ -173,8 +177,74 @@ function AdminStoreNotice() {
   };
 
 
+
+  // ---------------------------------------
+
+  const [currentPage, setCurrentPage] = useState(1);
+// const itemsPerPage = 10; // 한 페이지에 표시할 아이템 수
+  const [itemsPerPage , setItemsPerPage] = useState(20);
+
+
+const paginatedData = getSortedFilteredList().slice(
+  (currentPage - 1) * itemsPerPage,
+  currentPage * itemsPerPage
+);
+
+const handleItemsPerPageChange = (newItemsPerPage) => {
+  setItemsPerPage(newItemsPerPage);
+  setCurrentPage(1);  // 페이지 번호를 1로 리셋
+};
+
+
+const totalPages = Math.ceil(getSortedFilteredList().length / itemsPerPage);
+
+const handlePageChange = (pageNumber) => {
+  setCurrentPage(pageNumber);
+  
+};
+
+// --------------------------------------------
+
+const cld = new Cloudinary({ cloud: { cloudName: 'dtzx9nu3d' } });
+  
+// Use this sample image or upload your own via the Media Explorer
+const img = cld
+      .image('cld-sample-5')
+      .format('auto') // Optimize delivery by resizing and applying auto-format and auto-quality
+      .quality('auto')
+      .resize(auto().gravity(autoGravity()).width(500).height(500)); // Transform the image: auto-crop to square aspect_ratio
+
+
+
+    const [file, setFile] = useState(null);
+
+    const handleFileChange = (e) => {
+      setFile(e.target.files[0]);
+    };
+  
+    const handleUpload = async () => {
+      if (!file) return;
+  
+      // FormData를 사용하여 이미지 파일을 Cloudinary로 전송
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'hye123');  // Cloudinary에서 설정한 Upload Preset
+  
+      try {
+        const response = await axios.post(
+          'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
+          formData
+        );
+        console.log('Uploaded Image URL: ', response.data.secure_url);
+        alert(`Image uploaded successfully! URL: ${response.data.secure_url}`);
+      } catch (error) {
+        console.error('Error uploading image: ', error);
+      }
+    };
+  
   return (
     <div>
+      {/* ------------------------------------------------ */}
       <div className="main-content-title"> <div className='header-title'> 가게 소식 </div>
         <button type="button" className="btn-st" onClick={handleAddClick}>
           추가하기
@@ -201,59 +271,105 @@ function AdminStoreNotice() {
           </div> 
           */}
 
-          <div className="select-filter-box">
+
+                                <div className="select-filter-box">
             <button onClick={() => handleVisibilityFilter('Y')} className={visibilityFilter === 'Y' ? 'active' : ''}>보이기</button>
             <button onClick={() => handleVisibilityFilter('D')} className={visibilityFilter === 'D' ? 'active' : ''}>숨기기</button>
           </div>
+
+
         </div>
 
+        <div className='store-notice-top'>
+         <div> {paginatedData.length} 건 ( 총 {noticeList.length} 건)</div>
+          <div className="dropdown-menu">
+                                    <select onChange={(e) => handleItemsPerPageChange(e.target.value)} value={itemsPerPage}>
+                                        <option value="20" >20개씩 보기</option>
+                                        <option value="50">50개씩 보기</option>
+                                        <option value="100">100개씩 보기</option>
+                                    </select>
+                                </div>
+          </div>
 
         <div className="management-container">
-          <table className="management-table">
-            <thead>
-              <tr>
-                <th></th>
-                <th>카테고리</th>
-                <th>소식내용</th>
-                <th>등록일<span onClick={handleDateSort}><i className="bi bi-chevron-expand"></i></span></th>
-                <th>상태변경</th>
-                <th> 수정 </th>
-              </tr>
-            </thead>
-            <tbody>
+       
+  <table className="management-table">
+  
+    <thead>
+      <tr>
+        <th><input type="checkbox" /></th>
+        <th>카테고리</th>
+        <th>소식내용</th>
+        <th>등록일<span onClick={handleDateSort}><i className="bi bi-chevron-expand"></i></span></th>
+        <th>상태변경</th>
+        <th>수정</th>
+      </tr>
+    </thead>
+    <tbody>
+      {paginatedData.map((value, index) => (
+        <React.Fragment key={index}>
+          <tr onDoubleClick={() => goToDetail(value.reservationNo)}>
+            <td><input type="checkbox" /></td>
+            <td>{value.noticeType}</td>
+            <td onClick={() => handleToggleRow(index)}>
+              {value.noticeContent.slice(0, 50)}
+              <i className="bi bi-chevron-down" onClick={() => handleToggleRow(index)}></i>
+            </td>
+            <td>{formatDate(value.noticeRegdate)} {value.modi === 'Y' ? '(수정됨)' : ''}</td>
+            <td>
+              <select className='select-btn' value={value.status} onChange={(e) => handleStatus(e.target.value, value.noticeNo)}>
+                <option value='Y'>보이기</option>
+                <option value='D'>숨기기</option>
+                <option value='N'>삭제</option>
+              </select>
+            </td>
+            <td><button type='button' className="btn-st" onClick={() => noticeModi(value.noticeNo)}>수정</button></td>
+          </tr>
+          {expandedRows.includes(index) && (
+            <tr>
+              <td colSpan="6" className="expanded-content">
+                <div>
+                  <p>{value.noticeContent}</p>
+                </div>
+              </td>
+            </tr>
+          )}
+        </React.Fragment>
+      ))}
+    </tbody>
+  </table>
 
-              {getSortedFilteredList().map((value, index) => (
-                <React.Fragment key={index}>
-                  <tr onDoubleClick={() => goToDetail(value.reservationNo)}>
-                    <td><input type="checkbox" /></td>
-                    <td>{value.noticeType}</td>
-                    <td onClick={() => handleToggleRow(index)}>
-                      {value.noticeContent.slice(0, 50)}
-                      <i class="bi bi-chevron-down" onClick={() => handleToggleRow(index)}></i>
-                    </td>
-                    <td>{formatDate(value.noticeRegdate)} {value.modi === 'Y' ? '(수정됨)' : ''}</td>
-                    <td><select className='select-btn' value={value.status} onChange={(e) => handleStatus(e.target.value, value.noticeNo)}> <option value='Y'> 보이기 </option> <option value='D'> 숨기기 </option> <option value='N'> 삭제 </option></select></td>
-                    <td> <button type='button' className="btn-st" onClick={() => noticeModi(value.noticeNo)}> 수정 </button></td>
-                  </tr>
-                  {/* 토글된 행에 대해 자세한 내용 표시 */}
-                  {expandedRows.includes(index) && (
-                    <tr>
-                      <td colSpan="6" className="expanded-content">
-                        <div>
-                          {/* 자세한 내용을 여기에 표시 */}
-                          {/* <p> {value.noticeType}</p> */}
-                          <p>{value.noticeContent}</p>
-                          {/* <p>{formatDate(value.noticeRegdate)} </p> */}
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </React.Fragment>
-              ))}
+  {/* 페이지네이션 버튼 */}
+  <div className="pagination">
+    <button
+      className="page-nav"
+      onClick={() => handlePageChange(currentPage - 1)}
+      disabled={currentPage === 1}
+    >
+      &lt;
+    </button>
 
-            </tbody>
-          </table>
-        </div>
+    {[...Array(totalPages)].map((_, i) => (
+      <button
+        key={i + 1}
+        onClick={() => handlePageChange(i + 1)}
+        className={currentPage === i + 1 ? 'active' : ''}
+      >
+        {i + 1}
+      </button>
+    ))}
+
+    <button
+      className="page-nav"
+      onClick={() => handlePageChange(currentPage + 1)}
+      disabled={currentPage === totalPages}
+    >
+       &gt;
+    </button>
+  </div>
+</div>
+
+
       </div>
     </div>
   )

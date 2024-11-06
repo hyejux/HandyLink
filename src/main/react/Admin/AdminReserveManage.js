@@ -251,14 +251,15 @@ const handleStatusChange = (reservationNo, status, storeName) => {
             return 0; // 기본적으로 같으면 0 반환
         });
 
-        setFilteredReservationList(sortedList); // 필터링된 리스트 업데이트
+        setPaginatedData(sortedList); // 필터링된 리스트 업데이트
     };
 
 
     // ------------------ 검색 ------------------
-    useEffect(() => {
-        setFilteredReservationList(reservationList);
-    }, [reservationList]);
+    // useEffect(() => {
+    //     setFilteredReservationList(reservationList);
+    // }, [reservationList]);
+
 
     // 검색
     const handleSearch = () => {
@@ -270,7 +271,7 @@ const handleStatusChange = (reservationNo, status, storeName) => {
             return reservationNoMatch || userIdMatch;
         });
 
-        setFilteredReservationList(filteredList); // 필터링된 리스트 상태 업데이트
+        setPaginatedData(filteredList); // 필터링된 리스트 상태 업데이트
     };
 
 
@@ -302,9 +303,8 @@ const handleStatusChange = (reservationNo, status, storeName) => {
     // };
 
 
-
-
     const formatDate = (dateString) => {
+        
         const date = new Date(dateString);
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -342,9 +342,9 @@ const handleStatusChange = (reservationNo, status, storeName) => {
     // 
     const [selectedDays, setSelectedDays] = useState(365);
 
-    // const handleDateFilter = (days) => {
 
-    // };
+// ----------------------------------------------------
+
 
     // 날짜 필터 핸들러 (상위 필터)
     const handleDateFilter = (days) => {
@@ -353,52 +353,60 @@ const handleStatusChange = (reservationNo, status, storeName) => {
 
         // days가 365인 경우 모든 예약을 반환
         if (days === 365) {
-            setFilteredReservationList(reservationList);
+            setPaginatedData(reservationList);
             setSelectedDays(days); // 현재 선택된 필터 값으로 업데이트
             return;
         }
-
+        
         const filteredList = reservationList.filter(reservation => {
-            const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
+            const regDate = new Date(`${reservation.reservationSlotDate}`);
             regDate.setHours(0, 0, 0, 0); // 자정을 기준으로 시간 초기화
-
+            
             const dayDifference = (now - regDate) / (1000 * 60 * 60 * 24);
-
+            
             return days === 0 ? dayDifference === 0 : dayDifference >= 0 && dayDifference <= days;
         });
-
-        setFilteredReservationList(filteredList);
+        
+        
+        setPaginatedData(filteredList);
         setSelectedDays(days); // 현재 선택된 필터 값으로 업데이트
     };
 
+
+
+    // ----------------------------------------------------
 
     // 상태 필터 핸들러 (하위 필터)
     const handleFilter = (status) => {
         setFilterStatus(status); // 선택한 상태 필터 값 설정
     };
 
-    // 필터링 로직: 날짜와 상태 기준으로 필터링
-    useEffect(() => {
-        const now = new Date();
-        now.setHours(0, 0, 0, 0); // 자정 기준으로 시간 초기화
+    // // 필터링 로직: 날짜와 상태 기준으로 필터링
+    // useEffect(() => {
+    //     const now = new Date();
+    //     now.setHours(0, 0, 0, 0); // 자정 기준으로 시간 초기화
 
-        const filteredList = reservationList.filter(reservation => {
-            // 날짜 필터링
-            const regDate = new Date(reservation.regTime);
-            regDate.setHours(0, 0, 0, 0);
-            const dayDifference = (now - regDate) / (1000 * 60 * 60 * 24);
-            const dateCondition = selectedDays === null ||
-                (selectedDays === 0 ? dayDifference === 0 : dayDifference >= 0 && dayDifference <= selectedDays);
+    //     const filteredList = reservationList.filter(reservation => {
+    //         // 날짜 필터링
+    //         const regDate = new Date(reservation.regTime);
+    //         regDate.setHours(0, 0, 0, 0);
+    //         const dayDifference = (now - regDate) / (1000 * 60 * 60 * 24);
+    //         const dateCondition = selectedDays === null ||
+    //             (selectedDays === 0 ? dayDifference === 0 : dayDifference >= 0 && dayDifference <= selectedDays);
 
-            // 상태 필터링
-            const statusCondition = !filterStatus || reservation.reservationStatus === filterStatus;
+    //         // 상태 필터링
+    //         const statusCondition = !filterStatus || reservation.reservationStatus === filterStatus;
 
-            // 두 조건 모두 만족하는 경우만 포함
-            return dateCondition && statusCondition;
-        });
+    //         // 두 조건 모두 만족하는 경우만 포함
+    //         return dateCondition && statusCondition;
+    //     });
 
-        setFilteredReservationList(filteredList); // 필터링된 리스트 상태 업데이트
-    }, [selectedDays, filterStatus, reservationList]);
+    //     setFilteredReservationList(filteredList); // 필터링된 리스트 상태 업데이트
+    // }, [selectedDays, filterStatus, reservationList]);
+
+
+
+
 
     // 초기화 함수
     const resetFilter = () => {
@@ -409,7 +417,7 @@ const handleStatusChange = (reservationNo, status, storeName) => {
         // setFilteredReservationList(reservationList); // 원래의 예약 목록으로 복원
         setFilterStatus(''); // 상태 필터 초기화
         // setSelectedDays(null); // 날짜 필터 초기화
-        setFilteredReservationList(reservationList); // 원래의 예약 목록으로 복원
+        setPaginatedData(reservationList); // 원래의 예약 목록으로 복원
     };
 
 
@@ -452,38 +460,74 @@ const handleStatusChange = (reservationNo, status, storeName) => {
                 const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
                 return regDate >= new Date(startDate) && regDate <= new Date(endDate);
             });
-            setFilteredReservationList(filteredList);
+            setPaginatedData(filteredList);
         }
     };
 
 
-    // 필터링 로직 업데이트
-    useEffect(() => {
-        const now = new Date();
-        now.setHours(0, 0, 0, 0); // 자정 기준으로 시간 초기화
+// 필터링 로직 업데이트
+useEffect(() => {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0); // 자정 기준으로 시간 초기화
 
-        const filteredList = reservationList.filter(reservation => {
-            // 날짜 필터링
-            const regDate = new Date(reservation.regTime);
-            regDate.setHours(0, 0, 0, 0);
-            const dayDifference = (now - regDate) / (1000 * 60 * 60 * 24);
-            const dateCondition = selectedDays === null ||
-                (selectedDays === 0 ? dayDifference === 0 : dayDifference >= 0 && dayDifference <= selectedDays);
+    // 날짜 범위가 선택되었으면 추가 필터링
+    const filteredList = reservationList.filter(reservation => {
+        const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
+        regDate.setHours(0, 0, 0, 0); // 자정 기준으로 시간 초기화
 
-            // 서비스명 필터링
-            const serviceCondition = !selectedServiceName || reservation.serviceName === selectedServiceName;
+        // 날짜 범위 필터링
+        const dateCondition = 
+            (startDate && endDate) 
+            ? regDate >= new Date(startDate) && regDate <= new Date(endDate)
+            : selectedDays === null ||
+                (selectedDays === 0 ? (now - regDate) / (1000 * 60 * 60 * 24) === 0 : (now - regDate) / (1000 * 60 * 60 * 24) >= 0 && (now - regDate) / (1000 * 60 * 60 * 24) <= selectedDays);
 
-            // 상태 필터링
-            const statusCondition = !filterStatus || reservation.reservationStatus === filterStatus;
+        // 서비스명 필터링
+        const serviceCondition = !selectedServiceName || reservation.serviceName === selectedServiceName;
 
-            return dateCondition && serviceCondition && statusCondition;
-        });
+        // 상태 필터링
+        const statusCondition = !filterStatus || reservation.reservationStatus === filterStatus;
 
-        setFilteredReservationList(filteredList); // 필터링된 리스트 상태 업데이트
-    }, [selectedDays, filterStatus, selectedServiceName, startDate, endDate, reservationList]);
+        return dateCondition && serviceCondition && statusCondition;
+    });
+
+    setPaginatedData(filteredList); // 필터링된 리스트 상태 업데이트
+}, [startDate, endDate, filterStatus, selectedServiceName, selectedDays, reservationList ]);
 
 
     // -----------------------------------------------------
+
+  // ------------------------------------
+
+  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginatedData, setPaginatedData] = useState([]); // 빈 배열로 초기화
+  
+  // 전체 페이지 수 계산
+  const totalPages = Math.ceil(reservationList.length / itemsPerPage);
+  
+  // 페이지 변경 처리
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+  
+  // 페이지네이션 데이터 업데이트 (필터링된 리스트를 기준으로 적용)
+  useEffect(() => {
+    // 필터링된 데이터 (예: filteredReservationList)에서 페이지네이션 적용
+    const filteredList = reservationList.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    );
+  
+    // 페이지네이션된 데이터 상태 업데이트
+    setPaginatedData(filteredList);
+  }, [currentPage, itemsPerPage, reservationList]); // currentPage, itemsPerPage, reservationList 변경 시마다 실행
+  
+
+// 총 페이지 수 계산
+
+
+  
 
     // --------------------------------------------------
 
@@ -612,82 +656,117 @@ const handleStatusChange = (reservationNo, status, storeName) => {
                                     <button className={filterStatus === '완료' ? 'active' : ''} onClick={() => handleFilter('완료')}>완료</button>
                                     <button className={filterStatus === '취소' ? 'active' : ''} onClick={() => handleFilter('취소')}>취소</button>
                                 </div>
-                                <div className="dropdown-menu">
-                                    <select>
-                                        <option value="옵션3">20개씩 보기</option>
-                                        <option value="옵션1">50개씩 보기</option>
-                                        <option value="옵션2">100개씩 보기</option>
-                                    </select>
-                                </div>
+                         
 
                             </div>
 
                         </div>
 
-                        <table className="management-table">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>예약번호<span onClick={() => handleSort('reservationNo', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
-                                    <th> 서비스명 </th>
-                                    <th>고객 명<span onClick={() => handleSort('userId', 'string')}><i className="bi bi-chevron-expand"></i></span></th>
-                                    <th>예약일<span onClick={() => handleSort('regTime', 'date')}><i className="bi bi-chevron-expand"></i></span></th>
-                                    <th>총액<span onClick={() => handleSort('reservationPrice', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
-                                    <th>요청사항 </th>
-                                    <th> 결제 상태 </th>
-                                    <th>상태 변경</th>
-                                    <th> <i className="bi bi-printer"></i></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredReservationList.map((value, index) => (
-                                    <tr key={index} onDoubleClick={() => { goToDetail(value.reservationNo) }}>
-                                        <td><input type="checkbox" /></td>
-                                        <td>{value.reservationNo}</td>
-                                        <td>{value.serviceName}</td>
-                                        <td>{value.userId}</td>
-                                        <td>{value.reservationSlotDate} {value.reservationTime}</td>
-                                        <td>{value.reservationPrice}</td>
-                                        <td>{value.customerRequest}</td>
-                                        <td>{value.paymentStatus}</td>
-                                        <td>
-                                            <div>
-                                                <select
-                                                    className='status-select'
-                                                    value={newStatusMap[value.reservationNo] || value.reservationStatus} // 각 예약 항목의 상태
-                                                    onChange={(e) => {
-                                                        const selectedStatus = e.target.value;
-                                                        setNewStatusMap(prev => ({ ...prev, [value.reservationNo]: selectedStatus })); // 개별 상태 업데이트
-                                                        handleStatusChange(value.reservationNo, selectedStatus, value.storeName);
-                                                    }}
-                                                    disabled={
-                                                        value.reservationStatus === '완료' ||
-                                                        value.reservationStatus === '취소(업체)' ||
-                                                        value.reservationStatus === '취소(고객)'
-                                                    }
-                                                >
-                                                    <option value={value.reservationStatus}>{value.reservationStatus}</option>
-                                                    {value.reservationStatus === '대기' || value.reservationStatus === '입금대기' ? (
-                                                        <>
-                                                            <option value="확정">확정</option>
-                                                            <option value="취소(업체)">취소(업체)</option>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            {value.reservationStatus !== '확정' && <option value="확정">확정</option>}
-                                                            {value.reservationStatus !== '완료' && <option value="완료">완료</option>}
-                                                            {value.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
-                                                        </>
-                                                    )}
-                                                </select>
-                                            </div>
-                                        </td>
-                                        <td><button className='print-btn' onClick={() => handlePrint(value)}><i className="bi bi-printer"></i></button></td>
-                                    </tr>
-                                ))}
-                            </tbody>
+                        <div className="dropdown-menu">
+                        <div className="store-notice-top">
+                        <div> {paginatedData.length} 건 ( 총 {reservationList.length} 건)</div>
+                                    <select onChange={(e) => setItemsPerPage(e.target.value)} value={itemsPerPage}>
+                                        <option value="20" >20개씩 보기</option>
+                                        <option value="50">50개씩 보기</option>
+                                        <option value="100">100개씩 보기</option>
+                                    </select>
+                                </div>
+                        </div>
 
-                        </table>
+
+
+                        <table className="management-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>예약번호<span onClick={() => handleSort('reservationNo', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
+            <th> 서비스명 </th>
+            <th>고객 명<span onClick={() => handleSort('userId', 'string')}><i className="bi bi-chevron-expand"></i></span></th>
+            <th>예약일<span onClick={() => handleSort('regTime', 'date')}><i className="bi bi-chevron-expand"></i></span></th>
+            <th>총액<span onClick={() => handleSort('reservationPrice', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
+            <th>요청사항 </th>
+            <th> 결제 상태 </th>
+            <th>상태 변경</th>
+            <th> <i className="bi bi-printer"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          {paginatedData.map((value, index) => (
+            <tr key={index} onDoubleClick={() => { goToDetail(value.reservationNo) }}>
+              <td><input type="checkbox" /></td>
+              <td>{value.reservationNo}</td>
+              <td>{value.serviceName}</td>
+              <td>{value.userId}</td>
+              <td>{value.reservationSlotDate} {value.reservationTime}</td>
+              <td>{value.reservationPrice}</td>
+              <td>{value.customerRequest}</td>
+              <td>{value.paymentStatus}</td>
+              <td>
+                <div>
+                  <select
+                    className='status-select'
+                    value={newStatusMap[value.reservationNo] || value.reservationStatus}
+                    onChange={(e) => {
+                      const selectedStatus = e.target.value;
+                      setNewStatusMap(prev => ({ ...prev, [value.reservationNo]: selectedStatus }));
+                      handleStatusChange(value.reservationNo, selectedStatus, value.storeName);
+                    }}
+                    disabled={
+                      value.reservationStatus === '완료' ||
+                      value.reservationStatus === '취소(업체)' ||
+                      value.reservationStatus === '취소(고객)'
+                    }
+                  >
+                    <option value={value.reservationStatus}>{value.reservationStatus}</option>
+                    {value.reservationStatus === '대기' || value.reservationStatus === '입금대기' ? (
+                      <>
+                        <option value="확정">확정</option>
+                        <option value="취소(업체)">취소(업체)</option>
+                      </>
+                    ) : (
+                      <>
+                        {value.reservationStatus !== '확정' && <option value="확정">확정</option>}
+                        {value.reservationStatus !== '완료' && <option value="완료">완료</option>}
+                        {value.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
+                      </>
+                    )}
+                  </select>
+                </div>
+              </td>
+              <td><button className='print-btn' onClick={() => handlePrint(value)}><i className="bi bi-printer"></i></button></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+            
+      <div className="pagination">
+    <button
+      className="page-nav"
+      onClick={() => handlePageChange(currentPage - 1)}
+      disabled={currentPage === 1}
+    >
+      &lt;
+    </button>
+
+    {[...Array(totalPages)].map((_, i) => (
+      <button
+        key={i + 1}
+        onClick={() => handlePageChange(i + 1)}
+        className={currentPage === i + 1 ? 'active' : ''}
+      >
+        {i + 1}
+      </button>
+    ))}
+
+    <button
+      className="page-nav"
+      onClick={() => handlePageChange(currentPage + 1)}
+      disabled={currentPage === totalPages}
+    >
+       &gt;
+    </button>
+  </div>
+
                     </div>
                 ) : (
                     <div className="calendar-and-reservation-info">

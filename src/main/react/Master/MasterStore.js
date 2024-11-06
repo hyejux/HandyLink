@@ -23,7 +23,7 @@ function MasterStore() {
     const activeStores = store.filter((store) => store.storeStatus === '활성화');
 
     const handleDeactivate = (storeNo) => {
-        if (window.confirm("업체를 비활성화 하시겠습니까?")) {
+        if (window.confirm("업체를 정지 하시겠습니까?")) {
             fetch(`/getStoreInfo/${storeNo}/deactivate`, {
                 method: 'POST',
                 headers: {
@@ -32,7 +32,7 @@ function MasterStore() {
             })
                 .then((response) => {
                     if (response.ok) {
-                        alert("업체가 비활성화 되었습니다.");
+                        alert("업체가 정지 되었습니다.");
                         return fetch('/getStoreInfo');
                     } else {
                         return response.text().then((errorText) => {
@@ -44,7 +44,7 @@ function MasterStore() {
                 .then((data) => setStore(data))
                 .catch((error) => {
                     console.error('업체 상태 업데이트 중 오류 발생:', error);
-                    alert(`비활성화에 실패했습니다. 오류 메시지: ${error.message}`);
+                    alert(`업체 정지에 실패했습니다. 오류 메시지: ${error.message}`);
                 });
         }
     };
@@ -117,7 +117,7 @@ function MasterStore() {
                         <th>사업자 번호</th>
                         <th>업체정보</th>
                         <th>상태</th>
-                        <th>비활성화</th>
+                        <th>정지</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -136,7 +136,7 @@ function MasterStore() {
                                 </td>
                                 <td>{store.storeStatus}</td>
                                 <td>
-                                    <button className="deactivate-button" onClick={() => handleDeactivate(store.storeNo)}>비활성화</button>
+                                    <button className="deactivate-button" onClick={() => handleDeactivate(store.storeNo)}>정지</button>
                                 </td>
                             </tr>
                         );

@@ -76,8 +76,7 @@ function UserSearch() {
   useKakaoLoader();
 
   useEffect(() => {
-    // 데이터 fetch
-    fetch('/getStoreInfo')
+    fetch('/getStoreInfo/activeWithCategory')
       .then((response) => {
         if (!response.ok) {
           throw new Error('네트워크 응답이 올바르지 않습니다.');
@@ -85,9 +84,8 @@ function UserSearch() {
         return response.json();
       })
       .then((data) => {
-        const activeStores = data.filter((store) => store.storeStatus === '활성화');
-        setStore(activeStores);
-        console.log('활성화된 업체 목록:', activeStores);
+        setStore(data);
+        console.log('활성화된 업체 목록:', data);
       })
       .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
   }, []);

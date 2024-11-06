@@ -1,6 +1,14 @@
 import ReactDOM from "react-dom/client";
 import React, {useState, useEffect} from "react";
 import './UserSignUp.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Cloudinary } from '@cloudinary/url-gen';
+import { auto } from '@cloudinary/url-gen/actions/resize';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage } from '@cloudinary/react';
+import { CloudinaryContext, Image, Transformation } from 'cloudinary-react';
+
 
 function UserSignUp() {
     // 이미지 미리보기
@@ -85,21 +93,6 @@ function UserSignUp() {
     };
 
 
-    // 프로필 사진 업로드 및 미리보기 처리
-    const handleFileChange = (e) => {
-        const selectedFile = e.target.files[0];
-
-        console.log('선택된 파일:', selectedFile);
-
-        if (selectedFile) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setPreviewImage(e.target.result); // 미리보기 이미지 변경
-            };
-            reader.readAsDataURL(selectedFile);
-            setFile(selectedFile);  // 파일 상태 저장
-        }
-    };
 
     // 비밀번호 감춤/보기 토글
     const togglePasswordVisibility = () => {
@@ -177,7 +170,11 @@ function UserSignUp() {
     // 회원 가입 처리
     const handleSubmit = async (e) => {
 
+    
         e.preventDefault();
+
+        const imageUrl = await handleUpload(); // 이미지 URL을 기다림
+        if (!imageUrl) return; // 업로드 실패 시 함수 종료
 
         if (!validateForm()) return;
 
@@ -219,9 +216,9 @@ function UserSignUp() {
                 data.append('userBirth', formData.userBirth);
                 data.append('userGender', formData.userGender);
 
-                if (file) {
-                    data.append('profileImage', file);
-                    console.log('프로필 이미지 추가됨:', file);
+                if (imageUrl) {
+                    data.append('profileImage', imageUrl);
+                    console.log('프로필 이미지 추가됨:', imageUrl);
                 }
 
                 response = await fetch('/user/signup', {
@@ -245,6 +242,65 @@ function UserSignUp() {
         }
     };
 
+    const handleUpload = async () => {
+        if (!file) return;
+      
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'hye123'); // Cloudinary에서 설정한 Upload Preset
+      
+        try {
+          const response = await axios.post(
+            'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
+            formData
+          );
+          console.log('Uploaded Image URL:', response.data.secure_url);
+          alert(`Image uploaded successfully! URL: ${response.data.secure_url}`);
+          return response.data.secure_url; // 업로드된 이미지 URL을 반환
+        } catch (error) {
+          console.error('Error uploading image:', error);
+          alert("이미지 업로드에 실패했습니다.");
+          return null; // 업로드 실패 시 null 반환
+        }
+      };
+    
+      
+    
+    //   const [file, setFile] = useState(null);
+    
+    //   const handleFileChange = (e) => {
+    //     const file = e.target.files[0];
+    //     setFile(e.target.files[0]);
+    //     if (file) {
+    //       setSelectedImage(file);
+    //       // 이미지 미리보기
+    //       const previewUrl = URL.createObjectURL(file);
+    //       setImagePreview(previewUrl);
+    //       console.log(previewUrl);
+    //     }}
+      
+      
+
+
+    // 프로필 사진 업로드 및 미리보기 처리
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+
+        console.log('선택된 파일:', selectedFile);
+
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setPreviewImage(e.target.result); // 미리보기 이미지 변경
+            };
+            reader.readAsDataURL(selectedFile);
+            setFile(selectedFile);  // 파일 상태 저장
+        }
+    };
+
+
+
+    // ---------------------------------------------------------------
 
     return (
         <div>

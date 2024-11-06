@@ -125,7 +125,7 @@ function UserChatRoom() {
         const loadChatHistory = async () => {
             if (userId && storeNo) {
                 try {
-                    const response = await axios.get(`/chat/history?userId=${userId}&storeNo=${storeNo}`); // 파라미터 이름 변경
+                    const response = await axios.get(`/chat/history?userId=${userId}&storeNo=${storeNo}`)
                     setMessages(response.data);
                 } catch (error) {
                     console.error('채팅 기록을 불러오는 중 오류가 발생했습니다:', error);
@@ -142,8 +142,7 @@ function UserChatRoom() {
         const connectWebSocket = () => {
 
             // 현재 페이지의 호스트를 기반으로 웹소켓 URL 생성
-            const wsHost = window.location.hostname;
-            const wsUrl = `ws://${wsHost}:8585/ws/chat`;
+            const wsUrl = `ws://172.30.1.99:8585/ws/chat`;
 
             websocket.current = new WebSocket(wsUrl);
 
@@ -261,7 +260,7 @@ function UserChatRoom() {
         <div>
             <div className="user-chat-room-container">
 
-                {(storeInfo.storeStatus === '비활성화' || !isBusinessHours) && (
+                {(storeInfo.storeStatus === '비활성화' || storeInfo.storeStatus === '정지' || !isBusinessHours) && (
                     <div className="business-hours-message">
                         <div className="profile-section">
                             <img
@@ -271,10 +270,10 @@ function UserChatRoom() {
                             />
                         </div>
                         <div className="message-text">
-                            {storeInfo.storeStatus === '비활성화' ? (
+                            {storeInfo.storeStatus === '비활성화' || storeInfo.storeStatus === '정지' ? (
                                 <>
-                                    <div>현재 서비스 영업이 중지된 상태입니다.</div>
-                                    <div>빠른 답변 어려운 점 양해 부탁드립니다.</div>
+                                    <div>현재 영업이 중지된 상태입니다.</div>
+                                    <div>답변 어려운 점 양해 부탁드립니다.</div>
                                 </>
                             ) : (
                                 <>

@@ -43,4 +43,10 @@ public class StoreController {
     public Double getAverageRatingByStoreNo(@PathVariable Long storeNo) {
         return reviewService.getAverageRatingByStoreNo(storeNo);
     }
+
+    @GetMapping("/activeWithCategory")
+    public List<Store> getActiveStoresWithCategoryLevelOne() {
+        return storeService.getActiveStoresWithCategoryLevelOne();
+    }
+
 }

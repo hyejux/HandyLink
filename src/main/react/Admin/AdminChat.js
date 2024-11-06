@@ -97,8 +97,7 @@ function AdminChat() {
         const connectWebSocket = () => {
 
             // 현재 페이지의 호스트를 기반으로 웹소켓 URL 생성
-            const wsHost = window.location.hostname;
-            const wsUrl = `ws://${wsHost}:8585/ws/chat`;
+            const wsUrl = `ws://172.30.1.99:8585/ws/chat`;
 
             websocket.current = new WebSocket(wsUrl);
 

@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "@adobe/react-spectrum": "^3.37.1",
+    "@cloudinary/react": "^1.13.1",
+    "@cloudinary/url-gen": "^1.21.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@fullcalendar/daygrid": "^6.1.15",
@@ -13,6 +15,9 @@
     "axios": "^1.7.7",
     "chart": "^0.1.2",
     "chart.js": "^4.4.6",
+    "cloudinary": "^2.5.1",
+    "cloudinary-core": "^2.13.1",
+    "cloudinary-react": "^1.8.1",
     "cors": "^2.8.5",
     "crypto-browserify": "^3.12.1",
     "date-fns": "^4.1.0",

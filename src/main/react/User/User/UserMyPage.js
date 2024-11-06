@@ -220,7 +220,7 @@ function UserMyPage () {
                                     type={passwordVisible ? "text" : "password"}
                                     id="userPw"
                                     name="userPw" // name 속성 추가
-                                    placeholder="비밀번호 입력"
+                                    placeholder="영문+특수문자+숫자 8자리 이상"
                                     value={userInfo.userPw}
                                     onChange={handleInputChange}
                                 />
@@ -235,7 +235,7 @@ function UserMyPage () {
                                     type={repasswordVisible ? "text" : "password"}
                                     id="repassword"
                                     name="repassword" // name 속성 추가
-                                    placeholder="비밀번호 재입력"
+                                    placeholder="영문+특수문자+숫자 8자리 이상"
                                     value={userInfo.repassword}
                                     onChange={handleInputChange}
                                 />

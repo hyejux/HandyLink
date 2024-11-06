@@ -31,6 +31,7 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
 
     @Override
     public List<UserChatDTO> selectChat(String userId, Long storeNo) {
+        logger.info("로그 selectChat userId: {}", userId);
         return userChatRoomMapper.selectChat(userId, storeNo);
     }
 
@@ -55,4 +56,13 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
         return userChatRoomMapper.hasUnreadMessages(userId);
     }
 
+    @Override
+    public void deactivateChat(String userId, Long storeNo) {
+        userChatRoomMapper.deactivateChat(userId, storeNo);
+    }
+
+    @Override
+    public void reactivateChat(String userId, Long storeNo) {
+        userChatRoomMapper.reactivateChat(userId, storeNo);
+    }
 }

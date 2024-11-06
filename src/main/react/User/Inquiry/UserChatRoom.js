@@ -125,7 +125,7 @@ function UserChatRoom() {
         const loadChatHistory = async () => {
             if (userId && storeNo) {
                 try {
-                    const response = await axios.get(`/chat/history?userId=${userId}&storeNo=${storeNo}`); // 파라미터 이름 변경
+                    const response = await axios.get(`/chat/history?userId=${userId}&storeNo=${storeNo}`)
                     setMessages(response.data);
                 } catch (error) {
                     console.error('채팅 기록을 불러오는 중 오류가 발생했습니다:', error);
@@ -273,7 +273,7 @@ function UserChatRoom() {
                         <div className="message-text">
                             {storeInfo.storeStatus === '비활성화' ? (
                                 <>
-                                    <div>현재 서비스 영업이 중지된 상태입니다.</div>
+                                    <div>현재 영업이 중지된 상태입니다.</div>
                                     <div>빠른 답변 어려운 점 양해 부탁드립니다.</div>
                                 </>
                             ) : (

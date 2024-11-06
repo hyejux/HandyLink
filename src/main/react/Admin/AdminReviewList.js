@@ -104,7 +104,7 @@ function AdminReviewList() {
 
   // ------------------------------------
 
-  const [itemsPerPage , setItemsPerPage] = useState(10);
+  const [itemsPerPage , setItemsPerPage] = useState(20);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -124,7 +124,10 @@ function AdminReviewList() {
   );
   
 
-
+  const handleItemsPerPageChange = (newItemsPerPage) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);  // 페이지 번호를 1로 리셋
+  };
 
 
   return (
@@ -157,10 +160,10 @@ function AdminReviewList() {
             <button> <i className="bi bi-search"></i> </button>
           </div> 
           */}
-          <div> {itemsPerPage} 건 </div>
+           <div> {paginatedReviewList.length} 건 ( 총 {reviewList.length} 건)</div>
  
           <div className="dropdown-menu">
-                                    <select onChange={(e) => setItemsPerPage(e.target.value)} value={itemsPerPage}>
+                                    <select onChange={(e) => handleItemsPerPageChange(e.target.value)} value={itemsPerPage}>
                                         <option value="20" >20개씩 보기</option>
                                         <option value="50">50개씩 보기</option>
                                         <option value="100">100개씩 보기</option>

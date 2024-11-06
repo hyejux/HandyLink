@@ -206,8 +206,9 @@ public class AdminReservationController {
 
   //사진등록
   @PostMapping("/setMainCategoryImg")
-    public void setMainCategoryImg(@RequestParam("file") MultipartFile file,  @RequestParam("category_id") int categoryId) {
-      adminReservationService.setMainCategoryImg(file, categoryId);
+    public void setMainCategoryImg(@RequestParam("dataUrl") String dataUrl,  @RequestParam("category_id") int categoryId) {
+    System.out.println("이미지삽입하기" + dataUrl + categoryId);
+      adminReservationService.setMainCategoryImg(dataUrl, categoryId);
     }
 
 

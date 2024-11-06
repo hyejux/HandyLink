@@ -4,7 +4,6 @@ import com.example.HiMade.admin.dto.*;
 import com.example.HiMade.admin.mapper.AdminStoreMapper;
 import com.example.HiMade.admin.service.AdminStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -198,25 +197,41 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
+    public Map<String, Integer> getMainCount(Long storeNo) {
+        Integer waitCount = adminStoreMapper.getWaitCount(storeNo);
+        Integer cancledCount = adminStoreMapper.getCancledCount(storeNo);
+
+        Map<String ,Integer> resultMap = new HashMap<>();
+        resultMap.put("cancledCount", cancledCount);
+        resultMap.put("waitCount", waitCount);
+
+        return resultMap;
+    }
+
+    @Override
+    public List<Integer> getReservationNo(Long storeNo, String reservationSlotDate) {
+        return adminStoreMapper.getReservationNo(storeNo, reservationSlotDate);
+    }
+
+    @Override
+    public List<CustomerReservationDTO> getTodayCustomer(List<Long> reservationNo) {
+        return adminStoreMapper.getTodayCustomer(reservationNo);
+    }
+
+    @Override
     public Map<String , Integer> getReportCount(Long storeNo) {
         Integer reviewCount = adminStoreMapper.getReviewCount(storeNo);
-        Integer cancledCount = adminStoreMapper.getCancledCount(storeNo);
-        Integer waitCount = adminStoreMapper.getWaitCount(storeNo);
         Integer doingCount = adminStoreMapper.getDoingCount(storeNo);
         Integer userLikeCount = adminStoreMapper.getUserLikeCount(storeNo);
         Integer completeCount = adminStoreMapper.getCompleteCount(storeNo);
 
         System.out.println("리뷰개수: "+ reviewCount +
-                " 예약취소: " + cancledCount +
-                " 예약대기: " + waitCount +
                 " 진행 중: " + doingCount+
                 " 찜 수: " + userLikeCount+
                 " 픽업 완료: " + completeCount);
 
         Map<String, Integer> resultMap = new HashMap<>();
         resultMap.put("reviewCount", reviewCount);
-        resultMap.put("cancledCount", cancledCount);
-        resultMap.put("waitCount", waitCount);
         resultMap.put("doingCount", doingCount);
         resultMap.put("userLikeCount", userLikeCount);
         resultMap.put("completeCount", completeCount);

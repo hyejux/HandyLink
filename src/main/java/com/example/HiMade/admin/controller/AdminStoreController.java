@@ -6,16 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.net.SocketTimeoutException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @RestController
@@ -160,6 +157,31 @@ public class AdminStoreController {
         }
     }
 
+    //메인페이지
+    @GetMapping("/getMainCount")
+    public Map<String, Integer> getMainCount(@RequestParam Long storeNo){
+        Map<String, Integer> mainCount = adminStoreService.getMainCount(storeNo);
+        return mainCount;
+    }
+
+    //예약번호가져오기
+    @GetMapping("/getReservationNo")
+    public List<Integer> getReservationNo(@RequestParam Long storeNo, @RequestParam String reservationSlotDate){
+        List<Integer> reservationNo = adminStoreService.getReservationNo(storeNo, reservationSlotDate);
+
+        return reservationNo;
+    }
+
+    //예약자정보
+    @GetMapping("/getTodayCustomer")
+    public List<CustomerReservationDTO> getTodayCustomer(@RequestParam List<Long> reservationNo){
+        List<CustomerReservationDTO> result = adminStoreService.getTodayCustomer(reservationNo);
+        System.out.println("예약자정보 " + result);
+
+        return result;
+    }
+
+    //통계페이지
     @GetMapping("/getReportCount")
     public Map<String , Integer> getReportCount(@RequestParam Long storeNo){
         Map<String , Integer>  reportCount = adminStoreService.getReportCount(storeNo);

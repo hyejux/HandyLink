@@ -10,14 +10,8 @@ import './AdminStoreReport.css';
 function AdminStoreReport(){
     const storeId = sessionStorage.getItem('storeId');
     const storeNo = sessionStorage.getItem('storeNo');
-    console.log("storeNo ", storeNo);
 
-    const [reportCount, setReportCount] = useState({
-        cancledCount: 0,
-        doingCount: 0,
-        waitCount: 0,
-        reviewCount: 0
-    });
+    const [reportCount, setReportCount] = useState({});
 
     const [genderCount, setGenderCount] = useState({});
 
@@ -70,6 +64,7 @@ function AdminStoreReport(){
     }, [storeNo]);
 
     console.log("ageDistribution: ", ageDistribution);
+    console.log("reportCount: ", reportCount);
 
     const [selectedPeriod, setSelectedPeriod] = useState("이번달");
 

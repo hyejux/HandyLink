@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import './AdminReserveSetting.css';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { auto } from '@cloudinary/url-gen/actions/resize';

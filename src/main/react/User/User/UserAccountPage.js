@@ -83,7 +83,6 @@ function UserAccountPage () {
                         <li>
                             <div className="menu-item">
                                 <span>내 후기</span>
-                                <span className="status">15건</span>
                             </div>
                         </li>
                     </ul>
@@ -94,7 +93,6 @@ function UserAccountPage () {
                         <li>
                             <div className="menu-item">
                                 <span>내가 찜한 가게</span>
-                                <span className="status">32건</span>
                             </div>
                         </li>
                     </ul>

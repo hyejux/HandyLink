@@ -18,4 +18,6 @@ public interface UserChatRoomMapper {
     StoreRegistDTO getStoreInfoByStoreNo(Long storeNo);
     void updateUserLastCheckedTime(String userId, Long storeNo, Timestamp lastCheckedTime );
     boolean hasUnreadMessages(String userId);
+    void deactivateChat(String userId, Long storeNo);
+    void reactivateChat(String userId, Long storeNo);
 }

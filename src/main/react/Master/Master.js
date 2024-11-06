@@ -23,7 +23,7 @@ function Master() {
     const updateStoreCounts = (data) => {
         setActiveStores(data.filter(store => store.storeStatus === '활성화'));
         setWaitingStores(data.filter(store => store.storeStatus === '대기'));
-        setInactiveStores(data.filter(store => store.storeStatus === '비활성화'));
+        setInactiveStores(data.filter(store => store.storeStatus === '정지'));
     };
 
     return (
@@ -39,7 +39,7 @@ function Master() {
                     <p>{activeStores.length}</p>
                 </div>
                 <div className="count-card">
-                    <h4>비활성화된 업체</h4>
+                    <h4>정지된 업체</h4>
                     <p>{inactiveStores.length}</p>
                 </div>
             </div>
@@ -95,7 +95,7 @@ function Master() {
                     <table>
                         <thead>
                             <tr>
-                                <th>비활성화된 업체</th>
+                                <th>정지된 업체</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -107,7 +107,7 @@ function Master() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="1">비활성화된 업체가 없습니다.</td>
+                                    <td colSpan="1">정지된 업체가 없습니다.</td>
                                 </tr>
                             )}
                         </tbody>

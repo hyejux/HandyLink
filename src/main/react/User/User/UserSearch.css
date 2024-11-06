@@ -73,7 +73,7 @@ body {
   padding: 0px;
   margin: 0 auto;
   /* border: 1px solid red; */
-  max-width: 600px;
+  max-width: 400px;
   min-height: calc(100vh - 63px);
 }
 

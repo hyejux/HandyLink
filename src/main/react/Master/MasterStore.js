@@ -17,11 +17,13 @@ function MasterStore() {
             .then((data) => setStore(data))
             .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
     }, []);
+    
+    
 
     const activeStores = store.filter((store) => store.storeStatus === '활성화');
 
     const handleDeactivate = (storeNo) => {
-        if (window.confirm("업체를 비활성화 하시겠습니까?")) {
+        if (window.confirm("업체를 정지 하시겠습니까?")) {
             fetch(`/getStoreInfo/${storeNo}/deactivate`, {
                 method: 'POST',
                 headers: {
@@ -30,7 +32,7 @@ function MasterStore() {
             })
                 .then((response) => {
                     if (response.ok) {
-                        alert("업체가 비활성화 되었습니다.");
+                        alert("업체가 정지 되었습니다.");
                         return fetch('/getStoreInfo');
                     } else {
                         return response.text().then((errorText) => {
@@ -42,34 +44,7 @@ function MasterStore() {
                 .then((data) => setStore(data))
                 .catch((error) => {
                     console.error('업체 상태 업데이트 중 오류 발생:', error);
-                    alert(`비활성화에 실패했습니다. 오류 메시지: ${error.message}`);
-                });
-        }
-    };
-
-    const handleSuspend = (storeNo) => {
-        if (window.confirm("해당 업체를 정지하시겠습니까?")) {
-            fetch(`/getStoreInfo/${storeNo}/suspend`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((response) => {
-                    if (response.ok) {
-                        alert("업체가 정지되었습니다.");
-                        return fetch('/getStoreInfo');
-                    } else {
-                        return response.text().then((errorText) => {
-                            throw new Error(`업체 상태 업데이트에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
-                        });
-                    }
-                })
-                .then((response) => response.json())
-                .then((data) => setStore(data))
-                .catch((error) => {
-                    console.error('업체 상태 업데이트 중 오류 발생:', error);
-                    alert(`정지 처리에 실패했습니다. 오류 메시지: ${error.message}`);
+                    alert(`업체 정지에 실패했습니다. 오류 메시지: ${error.message}`);
                 });
         }
     };
@@ -85,6 +60,7 @@ function MasterStore() {
         setIsModalOpen(false);
         setSelectedStore(null);
     };
+
 
     // 검색어 변경 핸들러
     const handleSearchInputChange = (event) => {
@@ -128,6 +104,7 @@ function MasterStore() {
                 </div>
             </div>
 
+
             <table>
                 <thead>
                     <tr>
@@ -140,7 +117,6 @@ function MasterStore() {
                         <th>사업자 번호</th>
                         <th>업체정보</th>
                         <th>상태</th>
-                        <th>비활성화</th>
                         <th>정지</th>
                     </tr>
                 </thead>
@@ -160,16 +136,7 @@ function MasterStore() {
                                 </td>
                                 <td>{store.storeStatus}</td>
                                 <td>
-                                    <button className="deactivate-button" onClick={() => handleDeactivate(store.storeNo)}>비활성화</button>
-                                </td>
-                                <td>
-                                    <button
-                                        className="suspend-button"
-                                        onClick={() => handleSuspend(store.storeNo)}
-                                        disabled={store.storeStatus === '정지'} // 정지 상태일 경우 버튼 비활성화
-                                    >
-                                        정지
-                                    </button>
+                                    <button className="deactivate-button" onClick={() => handleDeactivate(store.storeNo)}>정지</button>
                                 </td>
                             </tr>
                         );

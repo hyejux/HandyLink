@@ -25,12 +25,10 @@ function MasterApproval() {
   const filteredStores = store.filter((store) => {
     if (filter === '대기') {
       return store.storeStatus === '대기';
-    } else if (filter === '비활성화') {
-      return store.storeStatus === '비활성화';
     } else if (filter === '정지') {
       return store.storeStatus === '정지';
     } else if (filter === '전체') {
-      return ['대기', '비활성화', '정지'].includes(store.storeStatus);
+      return store.storeStatus === '대기' || store.storeStatus === '정지';
     }
     return true;
   });
@@ -38,8 +36,8 @@ function MasterApproval() {
   // 검색 필터링 (검색이 트리거되었을 때만)
   const searchFilteredStores = isSearched
     ? filteredStores.filter((store) =>
-      store.storeName.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+        store.storeName.toLowerCase().includes(searchTerm.toLowerCase())
+      )
     : filteredStores;
 
   const handleSearch = () => {
@@ -54,17 +52,12 @@ function MasterApproval() {
   };
 
   const handleApprove = (storeNo, currentStatus) => {
-    const confirmationMessage =
-      currentStatus === '대기'
-        ? "승인 하시겠습니까? (업체는 비활성화 상태로 변경됩니다)"
-        : "활성화 하시겠습니까?";
+    const confirmationMessage = currentStatus === '대기'
+      ? "승인 하시겠습니까?"
+      : "정지해제 하시겠습니까?";
 
     if (window.confirm(confirmationMessage)) {
-      // 대기 상태일 경우 비활성화로, 그 외에는 활성화로 처리
-      // 현재 상태가 '대기'이면 '비활성화'로 변경하고, 그 외는 '활성화'로 변경
-      const newStatus = currentStatus === '대기' ? '비활성화' : '활성화';
-
-      fetch(`/getStoreInfo/${storeNo}/approve`, {  // 'approve' 경로를 그대로 사용
+      fetch(`/getStoreInfo/${storeNo}/approve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,46 +65,17 @@ function MasterApproval() {
       })
         .then((response) => {
           if (response.ok) {
-            alert(
-              currentStatus === '대기'
-                ? "업체가 비활성화 상태로 변경되었습니다."
-                : "업체가 활성화되었습니다."
-            );
-            return fetch('/getStoreInfo');  // 최신 데이터 가져오기
+            alert(currentStatus === '대기' ? "승인이 완료되었습니다." : "업체가 활성화 되었습니다.");
+            return fetch('/getStoreInfo');
           }
           throw new Error('업체 상태 업데이트에 실패했습니다.');
         })
         .then((response) => response.json())
-        .then((data) => setStore(data))  // 상태 변경 후 store 업데이트
-        .catch((error) => {
-          alert("업체 상태 업데이트에 실패했습니다.");
-          console.error('업체 상태 업데이트 중 오류 발생:', error);
-        });
-    }
-  };
-
-
-
-  const handleSuspend = (storeNo) => {
-    if (window.confirm("정지 하시겠습니까?")) {
-      fetch(`/getStoreInfo/${storeNo}/suspend`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((response) => {
-          if (response.ok) {
-            alert("업체가 정지되었습니다.");
-            return fetch('/getStoreInfo');
-          }
-          throw new Error('업체 정지에 실패했습니다.');
-        })
-        .then((response) => response.json())
         .then((data) => setStore(data))
         .catch((error) => {
-          alert("업체 정지에 실패했습니다.");
-          console.error('업체 정지 중 오류 발생:', error);
+          alert(currentStatus === '대기' ? "승인에 실패했습니다." : "활성화에 실패했습니다.");
+          
+          error('업체 상태 업데이트 중 오류 발생:', error);
         });
     }
   };
@@ -133,24 +97,23 @@ function MasterApproval() {
       <div className="header-container">
         <h3>승인관리</h3>
 
-        {/* 검색바 추가 */}
-        <div className="search-bar">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={handleKeyPress}  // 엔터키로 검색 가능
-            placeholder="업체명 검색"
-          />
-          <button onClick={handleSearch}>검색</button>
-        </div>
+         {/* 검색바 추가 */}
+         <div className="search-bar">
+                <input
+                   type="text"
+                   value={searchQuery}
+                   onChange={(e) => setSearchQuery(e.target.value)}
+                   onKeyPress={handleKeyPress}  // 엔터키로 검색 가능
+                   placeholder="업체명 검색"
+                />
+               <button onClick={handleSearch}>검색</button>
+            </div>
 
         <div className="store-filter-container">
           <select id="store-status-select" onChange={(e) => setFilter(e.target.value)} value={filter}>
             <option value="전체">전체</option>
             <option value="대기">대기</option>
-            <option value="비활성화">비활성화</option>
-            <option value="정지">정지</option> {/* 정지 상태 추가 */}
+            <option value="정지">정지</option>
           </select>
 
         </div>
@@ -169,12 +132,11 @@ function MasterApproval() {
             <th>업체정보</th>
             <th>상태</th>
             <th>승인</th>
-            <th>정지</th> {/* 정지 버튼 추가 */}
           </tr>
         </thead>
         <tbody>
           {searchFilteredStores.map((store) => {
-
+            
             return (
               <tr key={store.storeNo}>
                 <td>{store.storeNo}</td>
@@ -192,12 +154,7 @@ function MasterApproval() {
                   {store.storeStatus === '대기' ? (
                     <button className="activate-button" onClick={() => handleApprove(store.storeNo, '대기')}>승인</button>
                   ) : (
-                    <button className="activate-button" onClick={() => handleApprove(store.storeNo, '비활성화')}>활성화</button>
-                  )}
-                </td>
-                <td>
-                  {store.storeStatus !== '정지' && (
-                    <button className="suspend-button" onClick={() => handleSuspend(store.storeNo)}>정지</button>
+                    <button className="activate-button" onClick={() => handleApprove(store.storeNo, '정지해제')}>정지해제</button>
                   )}
                 </td>
               </tr>

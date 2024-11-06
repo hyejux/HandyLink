@@ -81,10 +81,13 @@
 /* ----------------------------------------- */
 
 .user-main-header-fix {
-  width: 100%;
   position: fixed;
-  z-index: 10;
+  z-index: 100;
   background-color: #fff;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 400px;
 }
 
 .user-main-body-fix {

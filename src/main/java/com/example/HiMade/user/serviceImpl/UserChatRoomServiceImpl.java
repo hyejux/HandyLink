@@ -31,6 +31,7 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
 
     @Override
     public List<UserChatDTO> selectChat(String userId, Long storeNo) {
+        logger.info("로그 selectChat userId: {}", userId);
         return userChatRoomMapper.selectChat(userId, storeNo);
     }
 

@@ -125,7 +125,7 @@ function UserChatRoom() {
         const loadChatHistory = async () => {
             if (userId && storeNo) {
                 try {
-                    const response = await axios.get(`/chat/history?userId=${userId}&storeNo=${storeNo}`); // 파라미터 이름 변경
+                    const response = await axios.get(`/chat/history?userId=${userId}&storeNo=${storeNo}`)
                     setMessages(response.data);
                 } catch (error) {
                     console.error('채팅 기록을 불러오는 중 오류가 발생했습니다:', error);

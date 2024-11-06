@@ -200,7 +200,24 @@ const handleTimeNumChange = (e) => {
     }
   };
 
+  
 
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFile(e.target.files[0]);
+    if (file) {
+      setSelectedImage(file);
+      // 이미지 미리보기
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+      console.log(previewUrl);
+    }}
+  
+  
+
+    
 
   const isValid5 = () => {
     const isServiceNameEmpty = categories.some(category => category.serviceName.trim() === '');
@@ -459,21 +476,6 @@ const handleChangeSubCategory = (categoryIndex, subCategoryIndex, field, value) 
 const [serviceDate, setServiceDate] = useState(''); // 날짜 상태
 const [serviceHour, setServiceHour] = useState(''); // 시간 상태
 
-
-  
-
-const [file, setFile] = useState(null);
-
-const handleFileChange = (e) => {
-  const file = e.target.files[0];
-  setFile(e.target.files[0]);
-  if (file) {
-    setSelectedImage(file);
-    // 이미지 미리보기
-    const previewUrl = URL.createObjectURL(file);
-    setImagePreview(previewUrl);
-    console.log(previewUrl);
-  }}
 
 
   const onDragEnd = (result) => {

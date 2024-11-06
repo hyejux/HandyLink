@@ -27,14 +27,16 @@ function UserSearchResult() {
     const searchTermFromUrl = getSearchTermFromUrl();
     setSearchTerm(searchTermFromUrl);
 
-    // 데이터 fetch
-    fetch('/getStoreInfo')
-      .then((response) => response.json())
+    fetch('/getStoreInfo/activeWithCategory')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('네트워크 응답이 올바르지 않습니다.');
+        }
+        return response.json();
+      })
       .then((data) => {
-        const activeStores = data.filter((store) => store.storeStatus === '활성화');
-        setStore(activeStores);
-        setFilteredStores(activeStores);
-        console.log('활성화된 업체:', activeStores);
+        setStore(data);
+        console.log('활성화된 업체 목록:', data);
       })
       .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
   }, []);
@@ -266,7 +268,7 @@ function UserSearchResult() {
       <div className="search-result-header">
         <div className="search-box">
           <div className="back-btn-container">
-            <button className="back-btn" onClick={() => window.history.back()}><i class="bi bi-chevron-left"></i></button>
+            <button className="back-btn" onClick={() => window.history.back()}><i className="bi bi-chevron-left"></i></button>
           </div>
           <div className="store-search-bar">
             <button className="search-btn" onClick={handleSearch}><i className="bi bi-search"></i></button>
@@ -288,8 +290,8 @@ function UserSearchResult() {
               <div className="filter-text">정렬</div>
               <div className="filter-list">
 
-                
-              <div
+
+                <div
                   className={`filter-list-btn ${sortCriterion === '예약 많은 순' ? 'active' : ''}`}
                   onClick={() => handleSortChange('예약 많은 순')}
                 >

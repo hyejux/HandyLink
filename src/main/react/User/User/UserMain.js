@@ -100,8 +100,7 @@ function UserMain() {
   useKakaoLoader();
 
   useEffect(() => {
-    // 데이터 fetch
-    fetch('/getStoreInfo')
+    fetch('/getStoreInfo/activeWithCategory')
       .then((response) => {
         if (!response.ok) {
           throw new Error('네트워크 응답이 올바르지 않습니다.');
@@ -109,12 +108,12 @@ function UserMain() {
         return response.json();
       })
       .then((data) => {
-        const activeStores = data.filter((store) => store.storeStatus === '활성화');
-        setStore(activeStores);
-        console.log('활성화된 업체 목록:', activeStores); // 데이터 콘솔 출력
+        setStore(data);
+        console.log('활성화된 업체 목록:', data);
       })
       .catch((error) => console.error('업체 목록을 가져오는 중 오류 발생:', error));
   }, []);
+
 
   useEffect(() => {
     fetch('/userSearch/categories/level1')
@@ -539,8 +538,8 @@ function UserMain() {
           </div>
 
 
-          <div class="user-main-menu-bar-container">
-            <div class="user-main-menu-bar">
+          <div className="user-main-menu-bar-container">
+            <div className="user-main-menu-bar">
               <button type="button" className={activeSection === 'menu1' ? 'active' : ''} onClick={() => setActiveSection('menu1')}>menu1</button>
               <button type="button" className={activeSection === 'menu2' ? 'active' : ''} onClick={() => setActiveSection('menu2')}>menu2</button>
               <button type="button" className={activeSection === 'menu3' ? 'active' : ''} onClick={() => setActiveSection('menu3')}>menu3</button>

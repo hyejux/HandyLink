@@ -43,4 +43,11 @@ public class StoreController {
     public Double getAverageRatingByStoreNo(@PathVariable Long storeNo) {
         return reviewService.getAverageRatingByStoreNo(storeNo);
     }
+
+    // 활성화 상태인 가게에서 categoryLevel 1인 카테고리가 하나 이상 있는 가게 가져오기
+    @GetMapping("/activeWithCategory")
+    public List<Store> getActiveStoresWithCategoryLevelOne() {
+        return storeService.getActiveStoresWithCategoryLevelOne();
+    }
+
 }

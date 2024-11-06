@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
@@ -18,4 +19,10 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     @Query("SELECT s FROM Store s WHERE s.storeNo = :storeNo")
     Optional<Store> findByStoreNo(@Param("storeNo") Long storeNo);
+
+    // 활성화 상태인 가게에서 categoryLevel 1인 카테고리가 하나 이상 있는 가게 찾기
+    @Query("SELECT s FROM Store s WHERE s.storeStatus = '활성화' AND " +
+            "(SELECT COUNT(c.categoryId) FROM Category c WHERE c.storeNo = s.storeNo AND c.categoryLevel = 1) >= 1")
+    List<Store> findActiveStoresWithCategoryLevelOne();
+
 }

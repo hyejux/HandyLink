@@ -4,7 +4,11 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import './AdminStoreNotice.css';
 import { useNavigate } from 'react-router-dom';
-
+import { Cloudinary } from '@cloudinary/url-gen';
+import { auto } from '@cloudinary/url-gen/actions/resize';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage } from '@cloudinary/react';
+import { CloudinaryContext, Image, Transformation } from 'cloudinary-react';
 
 function AdminStoreNotice() {
 
@@ -196,9 +200,68 @@ const handlePageChange = (pageNumber) => {
 
 
 
+const cld = new Cloudinary({ cloud: { cloudName: 'dtzx9nu3d' } });
+  
+// Use this sample image or upload your own via the Media Explorer
+const img = cld
+      .image('cld-sample-5')
+      .format('auto') // Optimize delivery by resizing and applying auto-format and auto-quality
+      .quality('auto')
+      .resize(auto().gravity(autoGravity()).width(500).height(500)); // Transform the image: auto-crop to square aspect_ratio
 
+
+
+    const [file, setFile] = useState(null);
+
+    const handleFileChange = (e) => {
+      setFile(e.target.files[0]);
+    };
+  
+    const handleUpload = async () => {
+      if (!file) return;
+  
+      // FormData를 사용하여 이미지 파일을 Cloudinary로 전송
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'YOUR_CLOUDINARY_UPLOAD_PRESET');  // Cloudinary에서 설정한 Upload Preset
+  
+      try {
+        const response = await axios.post(
+          'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
+          formData
+        );
+        console.log('Uploaded Image URL: ', response.data.secure_url);
+        alert(`Image uploaded successfully! URL: ${response.data.secure_url}`);
+      } catch (error) {
+        console.error('Error uploading image: ', error);
+      }
+    };
+  
   return (
     <div>
+
+<AdvancedImage cldImg={img}/>
+
+<Image cloudName="dtzx9nu3d" publicId="sample.jpg">
+  <Transformation width="300" height="300" crop="fill" />
+</Image>
+
+
+<div>
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={handleUpload}>Upload to Cloudinary</button>
+    </div>
+
+
+
+
+
+
+
+
+
+
+      {/* ------------------------------------------------ */}
       <div className="main-content-title"> <div className='header-title'> 가게 소식 </div>
         <button type="button" className="btn-st" onClick={handleAddClick}>
           추가하기

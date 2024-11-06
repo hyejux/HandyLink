@@ -51,8 +51,10 @@ function AdminLogin() {
 
                 if (storeStatus === '대기') {
                     window.location.href = `/adminsignupapproval.admin?${storeNo}`;
-                } else {
-                    window.location.href = `/admin.admin?${storeNo}`;
+
+                }else{
+                    window.location.href = `/adminmain.admin?${storeNo}`;
+
                 }
             } else {
                 alert('해당 정보를 찾을 수 없습니다.');

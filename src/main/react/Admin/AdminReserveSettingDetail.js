@@ -4,14 +4,22 @@ import axios from 'axios';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import './AdminReserveSetting.css';
 import './AdminReserveSettingDetail.css';
+import { Cloudinary } from '@cloudinary/url-gen';
+import { auto } from '@cloudinary/url-gen/actions/resize';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage } from '@cloudinary/react';
+import { CloudinaryContext, Image, Transformation } from 'cloudinary-react';
 
 const AdminReserveSettingDetail = () => {
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFile(e.target.files[0]);
     if (file) {
       setSelectedImage(file);
       // 이미지 미리보기
@@ -19,7 +27,13 @@ const AdminReserveSettingDetail = () => {
       setImagePreview(previewUrl);
       console.log(previewUrl);
     }
+
+    
+ 
+    // 
+   
   };
+
 
 
 //사진업로드
@@ -148,12 +162,44 @@ const handleTimeNumChange = (e) => {
   
     return !hasInvalidPaidCategories; // 유효하지 않은 카테고리가 없으면 유효함
   };
+
+
+
+
+
+
+  const [dataUrl , setDataUrl] = useState();
   
   
- 
-    const handleComplete = () => {
-   
-   
+
+
+  const handleUpload = async () => {
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'hye123'); // Cloudinary에서 설정한 Upload Preset
+  
+    try {
+      const response = await axios.post(
+        'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
+        formData
+      );
+      console.log('Uploaded Image URL:', response.data.secure_url);
+      alert(`Image uploaded successfully! URL: ${response.data.secure_url}`);
+      return response.data.secure_url; // 업로드된 이미지 URL을 반환
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert("이미지 업로드에 실패했습니다.");
+      return null; // 업로드 실패 시 null 반환
+    }
+  };
+
+
+
+  const handleComplete = async () => {
+    const imageUrl = await handleUpload(); // 이미지 URL을 기다림
+    if (!imageUrl) return; // 업로드 실패 시 함수 종료
    
       if (reserveAdd.serviceName === ''){
         alert("서비스 명을 입력해주세요.")
@@ -161,7 +207,7 @@ const handleTimeNumChange = (e) => {
       }else if (reserveAdd.servicePrice === 0) {
         alert("서비스 가격을 입력해주세요.")
         return;
-      }else if (selectedImage === null) {
+      }else if (file === null) {
         alert("사진은 필수입니다.")
         return;
       }else if (dateNumCase === 0) {
@@ -202,27 +248,21 @@ const handleTimeNumChange = (e) => {
      
     
   
+  
     const storeId = sessionStorage.getItem('storeId');
     const storeNo = sessionStorage.getItem('storeNo');
     console.log("세션 storeId: ", storeId);
     console.log("세션 storeNo: ", storeNo);
-
+  
     const transformedCategories = categories.map(category => ({
       ...category,
       isPaid: category.isPaid ? 'Y' : 'N',
       isRequired: category.isRequired ? 'Y' : 'N'
-    
     }));
-
-
   
-
-    // 날짜와 시간을 결합하여 "YYYY-MM-DDTHH:00:00" 형식으로 만들기
     const combinedDateTime = `${serviceDate}T${serviceHour}:00`;
-    console.log(combinedDateTime); // 서버로 전송할 데이터
-
-
-    console.log(transformedCategories);
+    console.log(combinedDateTime);
+  
     const requestData = {
       serviceName: reserveAdd.serviceName,
       servicePrice: reserveAdd.servicePrice,
@@ -231,43 +271,44 @@ const handleTimeNumChange = (e) => {
       ServiceStart: combinedDateTime,
       DateNumCase: dateNumCase,
       TimeNumCase: timeNumCase,
-      StoreNo : storeNo
+      StoreNo: storeNo
     };
-
+  
     console.log(requestData);
-    
-    // 첫 번째 요청: 메인 카테고리 설정
+  
+    // 이미지 업로드를 기다림
+    // await handleUpload();
+  
+    // 이미지 URL이 설정된 후에 데이터 전송
     axios.post(`/adminReservation/setMainCategory`, requestData, {
         headers: {
             'Content-Type': 'application/json',
         },
     })
     .then(response => {
-   
         console.log('메인 카테고리 설정 성공:', response.data);
+  
         const formData = new FormData();
-        formData.append('file', selectedImage); // 'file'은 서버에서 기대하는 필드명입니다.
+        formData.append('dataUrl', imageUrl); // Cloudinary 이미지 URL을 추가
         formData.append('category_id', response.data);
-    
+  
         // 두 번째 요청: 카테고리 이미지 업로드
         return axios.post('/adminReservation/setMainCategoryImg', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         });
     })
     .then(response => {
         console.log('파일 업로드 성공:', response.data);
-        console.log('파일 업로드 성공:', response.data);
         alert("서비스 등록이 완료되었습니다.");
         // window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
-        
     })
     .catch(error => {
         console.error('에러 발생:', error);
     });
-    
   };
+  
 //-------------------------------------------------------
 
 // const handleUpload = async () => {
@@ -374,6 +415,17 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
 
   return (
     <div>
+
+      
+
+
+
+
+
+
+
+
+
       <div className="main-content-title">예약 서비스 추가</div>
       <div className="main-btns">
         <button type="button" className="btn-st" onClick={handleComplete}>완료</button>
@@ -414,8 +466,12 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
       {imagePreview && <img src={imagePreview} alt="미리보기" style={{ width: '100%', objectFit: 'cover' }} />}
         
       <div>
-      <input type="file" className="btn-st btn-imgChg"  accept="image/*" onChange={handleImageChange} />
+      {/* <input type="file" className="btn-st btn-imgChg"  accept="image/*" onChange={handleImageChange} /> */}
     
+      <div>
+      <input type="file" className="btn-st btn-imgChg"  accept="image/*" onChange={handleFileChange} />
+      {/* <button onClick={handleUpload}>Upload to Cloudinary</button> */}
+      </div>
    
     </div>
     {/* <button type="button" className="btn-st btn-imgChg" onClick={handleUpload}>

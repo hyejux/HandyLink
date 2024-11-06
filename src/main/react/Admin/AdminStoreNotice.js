@@ -4,7 +4,11 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import './AdminStoreNotice.css';
 import { useNavigate } from 'react-router-dom';
-
+import { Cloudinary } from '@cloudinary/url-gen';
+import { auto } from '@cloudinary/url-gen/actions/resize';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage } from '@cloudinary/react';
+import { CloudinaryContext, Image, Transformation } from 'cloudinary-react';
 
 function AdminStoreNotice() {
 
@@ -178,7 +182,7 @@ function AdminStoreNotice() {
 
   const [currentPage, setCurrentPage] = useState(1);
 // const itemsPerPage = 10; // 한 페이지에 표시할 아이템 수
-  const [itemsPerPage , setItemsPerPage] = useState(10);
+  const [itemsPerPage , setItemsPerPage] = useState(20);
 
 
 const paginatedData = getSortedFilteredList().slice(
@@ -186,19 +190,61 @@ const paginatedData = getSortedFilteredList().slice(
   currentPage * itemsPerPage
 );
 
+const handleItemsPerPageChange = (newItemsPerPage) => {
+  setItemsPerPage(newItemsPerPage);
+  setCurrentPage(1);  // 페이지 번호를 1로 리셋
+};
+
 
 const totalPages = Math.ceil(getSortedFilteredList().length / itemsPerPage);
 
 const handlePageChange = (pageNumber) => {
   setCurrentPage(pageNumber);
+  
 };
 
+// --------------------------------------------
+
+const cld = new Cloudinary({ cloud: { cloudName: 'dtzx9nu3d' } });
+  
+// Use this sample image or upload your own via the Media Explorer
+const img = cld
+      .image('cld-sample-5')
+      .format('auto') // Optimize delivery by resizing and applying auto-format and auto-quality
+      .quality('auto')
+      .resize(auto().gravity(autoGravity()).width(500).height(500)); // Transform the image: auto-crop to square aspect_ratio
 
 
 
+    const [file, setFile] = useState(null);
 
+    const handleFileChange = (e) => {
+      setFile(e.target.files[0]);
+    };
+  
+    const handleUpload = async () => {
+      if (!file) return;
+  
+      // FormData를 사용하여 이미지 파일을 Cloudinary로 전송
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'hye123');  // Cloudinary에서 설정한 Upload Preset
+  
+      try {
+        const response = await axios.post(
+          'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
+          formData
+        );
+        console.log('Uploaded Image URL: ', response.data.secure_url);
+        alert(`Image uploaded successfully! URL: ${response.data.secure_url}`);
+      } catch (error) {
+        console.error('Error uploading image: ', error);
+      }
+    };
+  
   return (
     <div>
+      {/* ------------------------------------------------ */}
       <div className="main-content-title"> <div className='header-title'> 가게 소식 </div>
         <button type="button" className="btn-st" onClick={handleAddClick}>
           추가하기
@@ -235,9 +281,9 @@ const handlePageChange = (pageNumber) => {
         </div>
 
         <div className='store-notice-top'>
-          <div> {itemsPerPage} 건 </div>
+         <div> {paginatedData.length} 건 ( 총 {noticeList.length} 건)</div>
           <div className="dropdown-menu">
-                                    <select onChange={(e) => setItemsPerPage(e.target.value)} value={itemsPerPage}>
+                                    <select onChange={(e) => handleItemsPerPageChange(e.target.value)} value={itemsPerPage}>
                                         <option value="20" >20개씩 보기</option>
                                         <option value="50">50개씩 보기</option>
                                         <option value="100">100개씩 보기</option>

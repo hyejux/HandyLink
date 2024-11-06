@@ -131,32 +131,32 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   }
 
   @Override
-  public void setMainCategoryImg(MultipartFile file, int categoryId) {
+  public void setMainCategoryImg(String file, int categoryId) {
 
-      String imageUrl = null;
-
-      try {
-        String uploadDir = "C:/Users/user/Desktop/HiMade/src/main/resources/static/uploads";
-
-// 원하는 경로로 변경
-        File dir = new File(uploadDir);
-        if (!dir.exists()) {
-          dir.mkdirs(); // 디렉토리가 존재하지 않으면 생성
-        }
-
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        File uploadFile = new File(uploadDir + "/" + fileName); // 파일 경로 설정
-        file.transferTo(uploadFile); // 파일 저장
-
-        // URL 반환
-        imageUrl = "http://localhost:8585/uploads/" + fileName; // 로컬 개발 환경
-        // imageUrl = "https://example.com/uploads/" + fileName; // 운영 환경
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-
+//      String imageUrl = null;
+//
+//      try {
+//        String uploadDir = "C:/Users/user/Desktop/HiMade/src/main/resources/static/uploads";
+//
+//// 원하는 경로로 변경
+//        File dir = new File(uploadDir);
+//        if (!dir.exists()) {
+//          dir.mkdirs(); // 디렉토리가 존재하지 않으면 생성
+//        }
+//
+//        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+//        File uploadFile = new File(uploadDir + "/" + fileName); // 파일 경로 설정
+//        file.transferTo(uploadFile); // 파일 저장
+//
+//        // URL 반환
+//        imageUrl = "http://localhost:8585/uploads/" + fileName; // 로컬 개발 환경
+//        // imageUrl = "https://example.com/uploads/" + fileName; // 운영 환경
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//      }
+//
       AdminCategoryImgDTO dto = new AdminCategoryImgDTO();
-      dto.setImageUrl(imageUrl);
+      dto.setImageUrl(file);
       dto.setCategoryId(categoryId);
 
       adminReservationMapper.setMainCategoryImg(dto);

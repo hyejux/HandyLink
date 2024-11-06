@@ -182,7 +182,7 @@ function AdminStoreNotice() {
 
   const [currentPage, setCurrentPage] = useState(1);
 // const itemsPerPage = 10; // 한 페이지에 표시할 아이템 수
-  const [itemsPerPage , setItemsPerPage] = useState(10);
+  const [itemsPerPage , setItemsPerPage] = useState(20);
 
 
 const paginatedData = getSortedFilteredList().slice(
@@ -190,11 +190,17 @@ const paginatedData = getSortedFilteredList().slice(
   currentPage * itemsPerPage
 );
 
+const handleItemsPerPageChange = (newItemsPerPage) => {
+  setItemsPerPage(newItemsPerPage);
+  setCurrentPage(1);  // 페이지 번호를 1로 리셋
+};
+
 
 const totalPages = Math.ceil(getSortedFilteredList().length / itemsPerPage);
 
 const handlePageChange = (pageNumber) => {
   setCurrentPage(pageNumber);
+  
 };
 
 
@@ -298,9 +304,9 @@ const img = cld
         </div>
 
         <div className='store-notice-top'>
-          <div> {itemsPerPage} 건 </div>
+         <div> {paginatedData.length} 건 ( 총 {noticeList.length} 건)</div>
           <div className="dropdown-menu">
-                                    <select onChange={(e) => setItemsPerPage(e.target.value)} value={itemsPerPage}>
+                                    <select onChange={(e) => handleItemsPerPageChange(e.target.value)} value={itemsPerPage}>
                                         <option value="20" >20개씩 보기</option>
                                         <option value="50">50개씩 보기</option>
                                         <option value="100">100개씩 보기</option>

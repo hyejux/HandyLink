@@ -27,16 +27,17 @@ font-style: normal;
     gap: 20px;
 }
 
-.header {
-    display: flex;
-    gap: 10px;
-    max-height: 500px;
-}
+/*.header {*/
+/*    display: flex;*/
+/*    gap: 10px;*/
+/*    max-height: 500px;*/
+/*}*/
 
-.calendar {
-    border: 1px solid green;
-    width: 70%;
-}
+/*.calendar {*/
+/*    border: 1px solid green;*/
+/*    width: 100%;*/
+/*    height: 500px;*/
+/*}*/
 
 .today-bookings {
     background: white;
@@ -172,9 +173,9 @@ td {
     gap: 15px;
 }
 
-.today-bookings2{
+.today-booking2{
     width: 25%;
-    max-height: 500px;
+    max-height: 517px;
     overflow: hidden;
 }
 
@@ -189,7 +190,7 @@ td {
     background-color: #f2f2f2;
     padding: 20px 30px;
     margin-top: 95px;
-    width: 70%;
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;

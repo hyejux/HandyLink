@@ -130,6 +130,13 @@ public class UserSocialController {
                 .build();
     }
 
+    // 토큰 조회
+    @GetMapping("/token")
+    public ResponseEntity<Map<String, String>> getKakaoToken(HttpSession session) {
+        String accessToken = (String) session.getAttribute("kakaoAccessToken");
+        return ResponseEntity.ok(Map.of("accessToken", accessToken));
+    }
+
     // 탈퇴
     @PostMapping("/delete")
     public ResponseEntity<?> deleteKakaoUser(@RequestBody Map<String, String> payload, HttpSession session) {

@@ -160,8 +160,6 @@ function UserMyPage () {
         fetchUserProfile();
     }, []);
 
-
-
     // 프로필 이미지 변경 및 미리보기
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];

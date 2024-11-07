@@ -247,6 +247,11 @@ body {
 .search-top .right {
   float: right;
   font-size: 20px;
+  cursor: pointer;
+}
+
+.search-top .right .bi-heart-fill {
+  color: #ff4d4d;
 }
 
 /* 검색바 */

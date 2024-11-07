@@ -20,4 +20,5 @@ public interface UserChatRoomMapper {
     boolean hasUnreadMessages(String userId);
     void deactivateChat(String userId, Long storeNo);
     void reactivateChat(String userId, Long storeNo);
+    Map<String, Object> getChatRoomStatus(String userId, Long storeNo);
 }

@@ -84,4 +84,19 @@
         DO UPDATE SET store_last_checked_time = NOW()
     </update>
 
+    <!-- 채팅방 상태 확인 -->
+    <select id="getChatRoomStatus" resultType="map">
+        SELECT user_id, store_no, actived
+        FROM chat_status
+        WHERE user_id = #{userId} AND store_no = #{storeNo}
+    </select>
+
+    <!-- 채팅방 재활성화 -->
+    <update id="reactivateChat">
+        UPDATE chat_status
+        SET actived = 'Y'
+        WHERE user_id = #{userId} AND store_no = #{storeNo}
+    </update>
+
+
 </mapper>

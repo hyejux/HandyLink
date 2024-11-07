@@ -15,4 +15,5 @@ public class ChatStatusDTO {
     private Long storeNo;
     private Timestamp userLastCheckedTime;
     private Timestamp storeLastCheckedTime;
+    private String actived;
 }

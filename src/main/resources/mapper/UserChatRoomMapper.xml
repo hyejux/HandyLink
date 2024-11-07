@@ -79,16 +79,22 @@
     <update id="deactivateChat">
         UPDATE chat_status
         SET actived = 'N'
-        WHERE user_id = #{userId} AND store_no = #{storeNo};
+        WHERE user_id = #{userId} AND store_no = #{storeNo}
     </update>
 
     <update id="reactivateChat">
         UPDATE chat_status
         SET actived = 'Y'
-        WHERE user_id = #{userId} AND store_no = #{storeNo};
+        WHERE user_id = #{userId} AND store_no = #{storeNo}
     </update>
 
 
+    <!-- 채팅방 상태 조회 -->
+    <select id="getChatRoomStatus" resultType="map">
+        SELECT user_id, store_no, actived
+        FROM chat_status
+        WHERE user_id = #{userId} AND store_no = #{storeNo}
+    </select>
 
     <resultMap id="chatListResultMap" type="map">
         <result property="storeNo" column="storeNo"/>

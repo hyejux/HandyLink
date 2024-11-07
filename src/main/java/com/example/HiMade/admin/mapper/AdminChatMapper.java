@@ -14,4 +14,6 @@ public interface AdminChatMapper {
     void insertChatMessage(AdminChatDTO adminChatDTO);
     List<Map<String, Object>> getChatListForStore(Long storeNo);
     void updateLastCheckedTime(String userId, Long storeNo);
+    Map<String, Object> getChatRoomStatus(String userId, Long storeNo);
+    void reactivateChat(String userId, Long storeNo);
 }

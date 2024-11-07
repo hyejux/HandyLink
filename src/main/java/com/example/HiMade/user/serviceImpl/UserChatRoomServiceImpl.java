@@ -24,10 +24,40 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
 
     @Override
     public void insertChat(UserChatDTO userChatDTO) {
+        try {
+            logger.info("로그 서비스 메시지 저장 시작: {}", userChatDTO);
 
-        logger.info("로그 서비스 insert user chat: {}", userChatDTO);
-        userChatRoomMapper.insertChat(userChatDTO);
+            // 메시지 저장
+            userChatRoomMapper.insertChat(userChatDTO);
+
+            // 사용자가 보낸 경우에만 actived 상태 업데이트
+            if ("USER".equals(userChatDTO.getSenderType())) {
+                String receiverId = userChatDTO.getStoreId();
+
+                // 채팅방 상태 확인
+                Map<String, Object> chatStatus = userChatRoomMapper.getChatRoomStatus(
+                        receiverId,
+                        userChatDTO.getStoreNo()
+                );
+
+                // actived가 'N'인 경우 재활성화
+                if (chatStatus != null && "N".equals(chatStatus.get("actived"))) {
+                    logger.info("비활성화된 채팅방 발견. 재활성화 시도 - userId: {}, storeNo: {}",
+                            receiverId,
+                            userChatDTO.getStoreNo()
+                    );
+
+                    userChatRoomMapper.reactivateChat(receiverId, userChatDTO.getStoreNo());
+                    logger.info("채팅방 재활성화 완료 - userId: {}, storeNo: {}", receiverId, userChatDTO.getStoreNo());
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("채팅 저장 또는 재활성화 중 오류 발생", e);
+            throw e;
+        }
     }
+
 
     @Override
     public List<UserChatDTO> selectChat(String userId, Long storeNo) {

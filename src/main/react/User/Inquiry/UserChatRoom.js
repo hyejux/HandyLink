@@ -260,6 +260,12 @@ function UserChatRoom() {
         <div>
             <div className="user-chat-room-container">
 
+                <div className="back-button">
+                    <i className="bi bi-arrow-left" onClick= {() => {
+                        window.location.href = '/userChatList.user';
+                    }}></i>
+                </div>
+
                 {(storeInfo.storeStatus === '비활성화' || storeInfo.storeStatus === '정지' || !isBusinessHours) && (
                     <div className="business-hours-message">
                         <div className="profile-section">
@@ -278,7 +284,9 @@ function UserChatRoom() {
                             ) : (
                                 <>
                                     <div>지금은 영업 시간이 아닙니다.</div>
-                                    <div>문의 가능한 시간은 {storeInfo.storeOpenTime?.slice(0, 5)} - {storeInfo.storeCloseTime?.slice(0, 5)} 입니다.</div>
+                                    <div>문의 가능한
+                                        시간은 {storeInfo.storeOpenTime?.slice(0, 5)} - {storeInfo.storeCloseTime?.slice(0, 5)} 입니다.
+                                    </div>
                                 </>
                             )}
                         </div>
@@ -310,14 +318,14 @@ function UserChatRoom() {
                                     <div className="message-content">
                                         {msg.senderType !== 'USER' &&
                                             <div className="sender-name">{storeInfo.storeName}</div>}
-                                            <div className="bubble">{msg.chatMessage}</div>
-                                            <div className="timestamp">
-                                                {new Date(msg.sendTime).toLocaleTimeString('ko-KR', {
-                                                    hour: '2-digit',
-                                                    minute: '2-digit',
-                                                    hour12: false
-                                                })}
-                                            </div>
+                                        <div className="bubble">{msg.chatMessage}</div>
+                                        <div className="timestamp">
+                                            {new Date(msg.sendTime).toLocaleTimeString('ko-KR', {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                hour12: false
+                                            })}
+                                        </div>
                                     </div>
                                 </div>
                             </React.Fragment>

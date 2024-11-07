@@ -11,14 +11,13 @@ function AdminMain() {
   const storeId = sessionStorage.getItem('storeId');
   const storeNo = sessionStorage.getItem('storeNo');
 
-  const events = [
-    { title: '예약 1', date: '2024-11-10' },
-    { title: '예약 23', date: '2024-11-10' },
-    { title: '예약 2', date: '2024-11-15' },
-  ]; //달력게 띄울 예약 건
-
+  const [events, setEvents] = useState([]); //캘린더 예약 표시
   const [count, setCount] = useState({}); //운영현황
-  const [selectedDate, setSelectedDate] = useState(''); //검색할 날짜 받기
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const today = new Date();
+    today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+    return today.toISOString().split('T')[0]; //날짜형식 포맷
+  }); //검색할 날짜
   const [reservationNo, setReservationNo] = useState([]); //해당날짜 예약번호
   const [customerBookInfo, setCustomerBookInfo] = useState([]); //해당 날짜 예약자정보
   const [selectedCustomerInfo, setSelectedCustomerInfo] = useState(null); //클릭한 예약자정보
@@ -30,7 +29,23 @@ function AdminMain() {
     };
 
     fetchCount();
+    handleClickBook();
   },[]);
+
+  //캘린더
+  useEffect(() => {
+    const fetchReservationCounts = async() => {
+      try{
+        const resp = await axios.get(`/adminStore/getReservationCounts?storeNo=${storeNo}`);
+        setEvents(resp.data);
+
+      }catch (error){
+        console.error("캘린더 예약 로딩 실패 error ",error);
+      }
+    }
+    fetchReservationCounts();
+  },[]);
+  console.log("날짜와 예약건수 ",events);
 
   //날짜 받기
   const handleChangeDate = (e) => {
@@ -40,7 +55,9 @@ function AdminMain() {
 
   //날짜별 예약정보 보기
   const handleClickBook = async() => {
-    const reservationSlotDate = selectedDate;
+    setSelectedCustomerInfo(null);
+
+    const reservationSlotDate = selectedDate || new Date().toISOString().split('T')[0];
     try {
       const resp = await axios.get(`/adminStore/getReservationNo?storeNo=${storeNo}&reservationSlotDate=${reservationSlotDate}`);
       const reservationNo = resp.data;
@@ -49,10 +66,10 @@ function AdminMain() {
       if (Array.isArray(reservationNo) && reservationNo.length > 0) {
         const response = await axios.get('/adminStore/getTodayCustomer', {
           params: {
-            reservationNo: reservationNo.join(',') // Convert array to comma-separated string
+            reservationNo: reservationNo.join(',')
           }
         });
-        setCustomerBookInfo(response?.data || []); // Optional chaining and fallback to empty array
+        setCustomerBookInfo(response?.data || []);
       }else{
         setCustomerBookInfo([]);
       }
@@ -63,6 +80,7 @@ function AdminMain() {
 
   //개별 예약정보 보기
   const handleChangeRadio = (e) => {
+
     const selectedReservationNo = e.target.value; // 예약 번호 (문자열일 수 있음)
     console.log("이거 예약번호", selectedReservationNo);
 
@@ -117,6 +135,16 @@ function AdminMain() {
               }}
               height="auto" // 여유 공간을 위한 높이 조정
               contentHeight="auto"
+//eventContent={(eventInfo) => (
+//<div style={{
+//  backgroundColor: '#FFDDC1', // Customize color here
+//  padding: '5px',
+//  borderRadius: '4px',
+//  color: '#333' // Text color
+//}}>
+//{eventInfo.event.title}
+//</div>
+//)}
             />
           </div>
         </div>
@@ -146,7 +174,7 @@ function AdminMain() {
                           <tr key={index}>
                             <td>{customer.userName}</td>
                             <td>{customer.reservationTime}</td>
-                            <td><input type="radio" name="reservation" value={customer.reservationNo} onChange={handleChangeRadio}/></td>
+                            <td><input type="radio" name="reservation" value={customer.reservationNo} checked={selectedCustomerInfo?.reservationNo === customer.reservationNo} onChange={handleChangeRadio}/></td>
                           </tr>
                       ))
                   ) : (
@@ -204,27 +232,29 @@ function AdminMain() {
                       .map((level2Option) => (
                         <div className="option" key={level2Option.categoryId}>
                           <p>{level2Option.serviceName}</p>
-                          {/* 레벨 2 하위에 해당하는 레벨 3 옵션 출력 */}
-                          {selectedCustomerInfo?.options
-                            ?.filter(option => option.parentCategoryId === level2Option.categoryId && (option.categoryLevel === '3' || option.categoryLevel === '0'))
-                            .map((level3Option) => (
-                              <div className="option-detail" key={level3Option.categoryId}>
-                                <p>
-                                {level3Option.categoryLevel === '3'
-                                  ? level3Option.serviceName
-                                  : level3Option.middleCategoryValue || '정보 없음'}
-                                </p>
-                              </div>
-                          ))}
-                        </div>
-                    ))}
+                          {level2Option.middleCategoryValue ? (
+                            <div className="option-detail">
+                              <p> {level2Option.middleCategoryValue} </p>
+                            </div>
+                            ) : (
+                            /* 레벨 2 하위에 해당하는 레벨 3 옵션 출력 */
+                            selectedCustomerInfo?.options
+                              ?.filter(option => option.parentCategoryId === level2Option.categoryId && option.categoryLevel === '3')
+                              .map((level3Option) => (
+                                <div className="option-detail" key={level3Option.categoryId}>
+                                  <p>{level3Option.serviceName}</p>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        ))}
 
                   </div>
                 </div>
 
                 <div className="reservation-content">
                   <label>요청사항</label>
-                  <div> <input type="text" value="모서리 둥글게 해주세요." disabled/> </div>
+                  <div> {selectedCustomerInfo?.options?.customerRequest ?? "없음"} </div>
                 </div>
 
               </div>

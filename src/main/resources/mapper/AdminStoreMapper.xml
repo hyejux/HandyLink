@@ -406,6 +406,15 @@
     ]]>
     </select>
 
+<!-- 메인 캘린더 예약 -->
+    <select id="getReservationCounts" resultType="map">
+        select reservation_slot_date as date, (count(reservation_slot_date)|| ' 건') as title
+        from reservation_slot rs
+        join reservation r on r.reservation_slot_key = rs.reservation_slot_key
+        where r.store_no = #{storeNo}
+        group by reservation_slot_date;
+    </select>
+
 <!-- 날짜별 예약번호 -->
     <select id="getReservationNo" resultType="int">
         select reservation_no

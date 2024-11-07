@@ -42,6 +42,7 @@ public interface AdminStoreService {
     Map<String, Map<String, Long>> getAgeDistribution(Long storeNo); //고객나이별
 
     Map<String, Integer> getMainCount(Long storeNo);//메인페이지 카운트 통계
+    List<Map<String, Object>> getReservationCounts(Long storeNo); //메인-캘린더 예약건수
     List<Integer> getReservationNo(Long storeNo, String reservationSlotDate); //메인-날짜별 예약번호
     List<CustomerReservationDTO> getTodayCustomer(List<Long> reservationNos); //예약자 정보
 

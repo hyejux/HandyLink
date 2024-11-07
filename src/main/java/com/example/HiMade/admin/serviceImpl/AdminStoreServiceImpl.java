@@ -209,6 +209,11 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
+    public List<Map<String, Object>> getReservationCounts(Long storeNo) {
+        return adminStoreMapper.getReservationCounts(storeNo);
+    }
+
+    @Override
     public List<Integer> getReservationNo(Long storeNo, String reservationSlotDate) {
         return adminStoreMapper.getReservationNo(storeNo, reservationSlotDate);
     }

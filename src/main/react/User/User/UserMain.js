@@ -456,7 +456,7 @@ function UserMain() {
                     );
                   })
               ) : (
-                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+                <div className="no-stores">정보를 불러오지 못 했습니다 </div>
               )}
             </div>
           </div>
@@ -498,7 +498,7 @@ function UserMain() {
                   );
                 })
               ) : (
-                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+                <div className="no-stores">정보를 불러오지 못 했습니다 </div>
               )}
             </div>
           </div>
@@ -540,7 +540,7 @@ function UserMain() {
                     );
                   })
               ) : (
-                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+                <div className="no-stores">정보를 불러오지 못 했습니다</div>
               )}
             </div>
           </div>
@@ -593,7 +593,7 @@ function UserMain() {
                     );
                   })
               ) : (
-                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+                <div className="no-stores">정보를 불러오지 못 했습니다 </div>
               )}
             </div>
           </div>
@@ -714,7 +714,7 @@ function UserMain() {
                   );
                 })
               ) : (
-                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+                <div className="no-stores">정보를 불러오지 못 했습니다 </div>
               )}
             </div>
           </div>
@@ -763,7 +763,7 @@ function UserMain() {
                     );
                   })
               ) : (
-                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+                <div className="no-stores">정보를 불러오지 못 했습니다 </div>
               )}
             </div>
           </div>
@@ -802,7 +802,7 @@ function UserMain() {
                   );
                 })
               ) : (
-                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+                <div className="no-stores">정보를 불러오지 못 했습니다 </div>
               )}
             </div>
           </div>
@@ -845,7 +845,7 @@ function UserMain() {
                     );
                   })
               ) : (
-                <div className="no-stores">정보를 불러오지 못 했습니다 😭</div>
+                <div className="no-stores">정보를 불러오지 못 했습니다</div>
               )}
             </div>
           </div>

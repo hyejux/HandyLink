@@ -185,7 +185,7 @@ function UserSearch() {
 
       <div className="search-top">
         <div className='left'>검색</div>
-        <div className='right'><i className="bi bi bi-heart"></i></div>
+        <div className='right' onClick={() => window.location.href = '/userlikelist.user'}><i className="bi bi-heart-fill"></i></div>
       </div>
 
       <div className="store-search-bar">

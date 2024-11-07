@@ -161,13 +161,12 @@
 .date-separator {
     color: #333;
     text-align: center;
-    font-size: 12px;
-    padding: 30px;
+    font-size: 10px;
+    padding: 15px 60px;
     display: flex;
     flex-basis: 100%;
     align-items: center;
     color: rgba(0, 0, 0, 0.35);
-    margin: 8px 0px;
 }
 
 .date-separator::before,
@@ -216,4 +215,17 @@
     color: #495057;
     margin-bottom: 4px;
     font-weight: 500;
+}
+
+
+
+.back-button {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.bi-arrow-left {
+    font-size: 25px;
 }

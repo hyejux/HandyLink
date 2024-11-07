@@ -32,19 +32,28 @@ public class UserChatRoomController {
     // 메세지 DB에 저장하기
     @PostMapping("/save")
     public ResponseEntity<?> saveMessage(@RequestBody UserChatDTO userChatDTO) {
-        // 들어온 요청 로그 찍기
         logger.info("로그 컨트롤러 Received message data: {}", userChatDTO);
 
-        // 메시지 저장 시도
         try {
             logger.info("메시지 저장 시도: {}", userChatDTO);
-            userChatRoomService.insertChat(userChatDTO);
-            logger.info("메세지 저장 성공");
 
-            return ResponseEntity.ok().build();
+            // insertChat 내부에서 채팅방 재활성화 처리
+            userChatRoomService.insertChat(userChatDTO);
+            logger.info("메세지 저장 및 채팅방 상태 처리 완료");
+
+            // 채팅 목록 새로고침을 위한 데이터 반환
+            String receiverId = "USER".equals(userChatDTO.getSenderType())
+                    ? userChatDTO.getStoreId()
+                    : userChatDTO.getUserId();
+
+            List<Map<String, Object>> updatedChatList =
+                    userChatRoomService.getChatListForUser(receiverId);
+
+            return ResponseEntity.ok(updatedChatList);
         } catch (Exception e) {
             logger.error("메시지 저장 중 오류 발생", e);
-            return ResponseEntity.status(500).body("메시지 저장 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500)
+                    .body("메시지 저장 중 오류가 발생했습니다.");
         }
     }
 

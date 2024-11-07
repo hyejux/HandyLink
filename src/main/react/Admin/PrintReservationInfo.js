@@ -1,92 +1,130 @@
 import React from 'react';
 
 const PrintReservationInfo = ({ reservation }) => {
-    const printContainerStyle = {
-        width: '210mm', // A4 가로 크기
-        height: '297mm', // A4 세로 크기
-        padding: '20mm', // 여백 설정
+    const containerStyle = {
+        width: '210mm',
+        height: '297mm',
+        padding: '20mm',
         border: '1px solid #ddd',
         backgroundColor: 'white',
-        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        fontFamily: "'Noto Sans KR', sans-serif",
     };
 
     const headerStyle = {
         textAlign: 'center',
-        marginBottom: '10px'
+        marginBottom: '10px',
+        color: '#333',
     };
 
-    const smallTextStyle = {
-        fontSize: '14px',
+    const reservationNumberStyle = {
+        fontSize: '20px',
         color: '#777',
-        textAlign: 'center'
     };
 
-    const reservationInfoStyle = {
-        marginTop: '30px'
+    const infoContainerStyle = {
+        marginTop: '30px',
     };
 
     const infoItemStyle = {
         display: 'flex',
         justifyContent: 'space-between',
-        marginBottom: '12px',
-        fontSize: '16px'
+        marginBottom: '16px',
+        fontSize: '16px',
     };
 
     const labelStyle = {
-        fontWeight: 'bold',
-        color: '#333'
+        color: '#777',
     };
 
     const valueStyle = {
-        color: '#555',
-        textAlign: 'right'
+        color: '#000',
+        textAlign: 'right',
+        fontSize: '20px',
     };
 
     const footerStyle = {
-        marginTop: '20px',
-        textAlign: 'center'
+        marginTop: '30px',
+        textAlign: 'left',
+        fontSize: '12px',
+        color: '#777',
+    };
+
+    const hrStyle = {
+        border: 'none',
+        height: '5px',
+        backgroundColor: '#F5F5F5',
+        margin: '30px 0',
+    };
+
+    const hrStyle2 = {
+        border: 'none',
+        height: '2px',
+        background: 'linear-gradient(to right, #000 0%, #333 50%, #000 100%)',
+        marginTop: '50px',
+        marginBottom: '10px',
+    };
+
+    const formatDate = (isoDateString) => {
+        const date = new Date(isoDateString);
+        return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')} ${String(date.getUTCHours() + 9).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}:${String(date.getUTCSeconds()).padStart(2, '0')}`;
     };
 
     return (
-        <div style={printContainerStyle}>
+        <div style={containerStyle}>
             <div style={headerStyle}>
                 <h1>예약 정보</h1>
-                <p style={smallTextStyle}>고객님의 예약 내용을 확인하세요.</p>
+                <p style={reservationNumberStyle}>{reservation.reservationNo} ({reservation.reservationStatus})</p>
             </div>
-            <div style={reservationInfoStyle}>
+
+            <hr style={hrStyle} />
+
+            <div style={infoContainerStyle}>
                 <div style={infoItemStyle}>
-                    <span style={labelStyle}>예약 번호:</span>
-                    <span style={valueStyle}>{reservation.reservationNo}</span>
+                    <span style={labelStyle}>예약일시</span>
+                    <span style={valueStyle}>{formatDate(reservation.regTime)}</span>
                 </div>
+
                 <div style={infoItemStyle}>
-                    <span style={labelStyle}>서비스 이름:</span>
+                    <span style={labelStyle}>픽업시간</span>
+                    <span style={valueStyle}>{reservation.reservationSlotDate} {reservation.reservationTime}</span>
+                </div>
+
+                <hr style={hrStyle} />
+
+                <div style={infoItemStyle}>
+                    <span style={labelStyle}>서비스이름</span>
                     <span style={valueStyle}>{reservation.serviceName}</span>
                 </div>
+
                 <div style={infoItemStyle}>
-                    <span style={labelStyle}>사용자 ID:</span>
+                    <span style={labelStyle}>사용자ID</span>
                     <span style={valueStyle}>{reservation.userId}</span>
                 </div>
+
+                <hr style={hrStyle} />
+
                 <div style={infoItemStyle}>
-                    <span style={labelStyle}>등록 시간:</span>
-                    <span style={valueStyle}>{reservation.regTime}</span>
+                    <span style={labelStyle}>고객요청</span>
+                    <span style={valueStyle}>{reservation.customerRequest || '요청사항 없음'}</span>
                 </div>
+
                 <div style={infoItemStyle}>
-                    <span style={labelStyle}>예약 가격:</span>
+                    <span style={labelStyle}>예약가격</span>
                     <span style={valueStyle}>{reservation.reservationPrice} 원</span>
                 </div>
-                <div style={infoItemStyle}>
-                    <span style={labelStyle}>고객 요청:</span>
-                    <span style={valueStyle}>{reservation.customerRequest}</span>
-                </div>
-                <div style={infoItemStyle}>
-                    <span style={labelStyle}>예약 상태:</span>
-                    <span style={valueStyle}>{reservation.reservationStatus}</span>
-                </div>
+
             </div>
+
+            <hr style={hrStyle} />
+
+            {/* 영수증 느낌을 주는 구간 */}
             <div style={footerStyle}>
-                <p style={smallTextStyle}>감사</p>
+                <p>HadnyLink는 업체를 응원합니다.</p>
+                <p>HadnyLink는 어쩌고 어쩌고 어쩌고</p>
             </div>
+
+            <hr style={hrStyle2} />
         </div>
     );
 };

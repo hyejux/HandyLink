@@ -111,13 +111,15 @@ h3 {
 
 .search-top {
   overflow: hidden;
-  padding: 10px;
+  padding: 10px 10px 0px 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+
 }
 
 .left > img {
-  width: 25px;
+  width: 35px;
   margin-right: 10px;
 }
 

@@ -1,9 +1,17 @@
-.admin-store-report-container{
-    padding: 80px;
+h2 {
+    margin-left: 50px;
 }
 
-h2 {
-    margin-left: 10px;
+.store-report {
+    display: flex;
+}
+
+.flex-left {
+    width: 50%;
+}
+
+.flex-right {
+    width: 50%;
 }
 
 .report-section{
@@ -14,7 +22,6 @@ h2 {
 
 .reservation-status{
     border: 1px solid #ddd;
-/*    width: 100%;*/
     display: flex;
     margin: 0 50px;
 }
@@ -28,6 +35,27 @@ h2 {
 
 .reservation-field:nth-child(1){
     border: none;
+}
+
+
+.userLike {
+    color: #ff4d4d;
+}
+
+.review {
+    color: #FFD700;
+}
+
+.complete {
+    color: #fd8517;
+}
+
+.cancled {
+    color: #F44336;
+}
+
+.doing {
+    color: #4CAF50;
 }
 
 .reservation-graph{

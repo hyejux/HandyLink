@@ -217,6 +217,11 @@ function UserAccountFind() {
                                 <div className="highlight"></div>
                                 <div className="bar"></div>
                             </div>
+
+                            <div className="result-message">
+                                {foundId ? `찾은 아이디: ${foundId}` : message}
+                            </div>
+
                             <button
                                 type="button"
                                 className="btn-findaccount"
@@ -228,10 +233,6 @@ function UserAccountFind() {
                         </>
                     )}
                 </form>
-
-                <div className="message">
-                    {foundId ? `찾은 아이디: ${foundId}` : message}
-                </div>
 
                 {isUserVerified && (
                     <form id="reset-password-form">

@@ -9,7 +9,7 @@ function UserDelete() {
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const [isKakaoLogin, setIsKakaoLogin] = useState(false);
     const [confirmationText, setConfirmationText] = useState('');
-
+    const [kakaoAccessToken, setKakaoAccessToken] = useState(null);
 
     // 사용자 로그인 방식 확인
     useEffect(() => {
@@ -25,7 +25,7 @@ function UserDelete() {
     const handleConfirmationTextChange = (e) => setConfirmationText(e.target.value);
 
 /*
-    // 비밀번호 표시 토글 함수 (UserMyPage와 동일한 방식)
+    // 비밀번호 표시 토글 함수
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
     };
@@ -35,35 +35,79 @@ function UserDelete() {
     };
 */
 
+    useEffect(() => {
+        // 사용자 정보와 카카오 액세스 토큰 조회
+        fetch('/user/profile', { credentials: 'include' })
+            .then(response => response.json())
+            .then(data => {
+                setIsKakaoLogin(data.loginType === 'KAKAO');
+                // 세션에서 카카오 액세스 토큰 가져오기
+                if (data.loginType === 'KAKAO') {
+                    fetch('/kakao/token', { credentials: 'include' })
+                        .then(response => response.json())
+                        .then(tokenData => {
+                            setKakaoAccessToken(tokenData.accessToken);
+                        });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }, []);
+
     const handleDeleteAccount = async () => {
         try {
-            let response;
             if (isKakaoLogin) {
-                response = await fetch('/kakao/delete', {
+                if (confirmationText.toLowerCase() !== 'delete') {
+                    alert('올바른 텍스트를 입력해 주세요.');
+                    return;
+                }
+
+                // 1. 카카오 연동 해제
+                const unlinkResponse = await fetch('https://kapi.kakao.com/v1/user/unlink', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${kakaoAccessToken}`
+                    }
+                });
+
+                console.log('카카오 연동 해제 응답:', unlinkResponse.status);
+
+                // 2. 서버에 탈퇴 요청
+                const deleteResponse = await fetch('/kakao/delete', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
                     body: JSON.stringify({ confirmationText })
                 });
+
+                if (deleteResponse.ok) {
+                    const data = await deleteResponse.json();
+                    alert(data.message || '탈퇴가 완료되었습니다.');
+                    window.location.href = '/UserLoginPage.user';
+                } else {
+                    const errorData = await deleteResponse.json();
+                    alert(errorData.error || '탈퇴 처리 중 오류가 발생했습니다.');
+                }
             } else {
-                response = await fetch('/user/delete', {
+                // 일반 회원 탈퇴 로직
+                const response = await fetch('/user/delete', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
                     body: JSON.stringify({ password })
                 });
-            }
 
-            if (response.ok) {
-                const data = await response.json();
-                alert(data.message || '탈퇴가 완료되었습니다.');
-                window.location.href = '/UserLoginPage.user';
-            } else {
-                const errorData = await response.json();
-                alert(errorData.error || '입력 정보가 올바르지 않습니다.');
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(data.message || '탈퇴가 완료되었습니다.');
+                    window.location.href = '/UserLoginPage.user';
+                } else {
+                    const errorData = await response.json();
+                    alert(errorData.error || '입력 정보가 올바르지 않습니다.');
+                }
             }
         } catch (error) {
-            console.error('탈퇴 요청 중 오류 발생:', error);
+            console.error('탈퇴 처리 중 오류 발생:', error);
+            alert('탈퇴 처리 중 오류가 발생했습니다.');
         }
     };
 

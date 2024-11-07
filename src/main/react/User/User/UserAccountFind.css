@@ -210,3 +210,8 @@ input:focus ~ .highlight {
 #reset-password-form {
     margin: -100px;
 }
+
+.result-message {
+    font-size: 14px;
+    color: #333;
+}

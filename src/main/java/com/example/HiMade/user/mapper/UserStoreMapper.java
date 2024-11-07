@@ -13,6 +13,7 @@ import java.util.Map;
 @Mapper
 public interface UserStoreMapper {
   public List<UserCateDTO> getStoreMainCategory(int id);
+  public UserCateDTO getStoreMainCategory2(int id);
   public StoreRegistDTO getStoreInfo(int id);
   public void clickLike(UserLikesDTO userLikesDTO); //가게찜
   public void deleteLike(@Param("userId") String userId,@Param("storeNo") Long storeNo); //가게찜-삭제

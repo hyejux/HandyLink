@@ -28,6 +28,7 @@ public class  UserRD {
   private String accountBank;
   private String accountNumber;
 
-
+  private String imageUrl;
+  
 
 }

@@ -17,6 +17,19 @@
         AND store_no = #{id};
     </select>
 
+    <select id="getStoreMainCategory2" resultType="com.example.HiMade.user.dto.UserCateDTO">
+    select *
+    from category c
+    left join category_image ci
+    on c.category_id = ci.category_id
+    left join reservation_form rf
+    on rf.main_category_id = c.category_id
+    where category_level = 1
+    AND rf.reservation_no = #{id}
+        LIMIT 1
+    </select>
+
+
     <select id="getStoreInfo" resultMap="storeRegistResultMap">
         SELECT *
         FROM store sa

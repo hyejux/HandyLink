@@ -7,11 +7,13 @@ import { FaCalendar, FaClock } from 'react-icons/fa';
 import { Rating } from '@mui/material';
 
 
+
 function UserReviewRegist () {
 
 
       
 const [cateId,setCateId] = useState();
+const [reservationList, setReservationList] = useState();
   
 // reservation_id
 useEffect(() => {
@@ -19,6 +21,16 @@ useEffect(() => {
   const pathSegments = path.split('/');
   const categoryId = pathSegments[pathSegments.length - 1];
   setCateId(categoryId);
+
+
+      axios.get(`/UserStoreDetail/getStoreMainCategory2/${categoryId}`)
+      .then(response => {
+        console.log(response.data);
+        setReservationList(response.data);
+      })
+      .catch(error => {
+        console.log('Error Category', error);
+      });
 },[]);
 
 // --------------------------------------------- 이미지 업로드
@@ -114,8 +126,11 @@ useEffect(() => {
     }
 
     return (
+
+  
         <div>
-          리뷰 작성 페이지 
+       
+
           <div className="user-content-container2">
           <div className="review-container">
           <div className="rating-section">
@@ -129,6 +144,7 @@ useEffect(() => {
               </span>
             ))}
           </div>
+          {reservationList}
 
       <textarea
         className="review-text"

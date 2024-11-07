@@ -26,6 +26,18 @@ public class UserStoreDetailController {
     return userStoreService.getStoreMainCategory(id);
   }
 
+
+  @GetMapping("/getStoreMainCategory2/{id}")
+  public UserCateDTO getStoreMainCategory2(@PathVariable int id) {
+    System.out.println("gg" + id);
+//    System.out.println( userStoreService.getStoreMainCategory2(id));
+    return userStoreService.getStoreMainCategory2(id);
+  }
+
+
+
+
+
   @GetMapping("/getStoreInfo/{id}")
   public StoreRegistDTO getStoreInfo(@PathVariable int id) {
     StoreRegistDTO storeInfo = userStoreService.getStoreInfo(id);

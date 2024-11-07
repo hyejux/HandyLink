@@ -34,6 +34,10 @@ public class UserMyReservationController {
   public List<UserRD> getMyReservationDetail(@PathVariable int id){
     return userReservationService.getMyReservationDetail(id);
   }
+  @GetMapping("/getMyReservationDetail2/{id}")
+  public List<UserRD> getMyReservationDetail2(@PathVariable int id){
+    return userReservationService.getMyReservationDetail2(id);
+  }
 
 
   @PostMapping("setReview/{id}")

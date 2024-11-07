@@ -8,7 +8,7 @@ import './AdminReserveManage.css';
 import { useRef } from 'react';
 import { isNull } from 'util';
 import PrintReservationInfo from './PrintReservationInfo';
-import './PrintReservationInfo.css';
+//import './PrintReservationInfo.css';
 
 
 function AdminReserveManage() {

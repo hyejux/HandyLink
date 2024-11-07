@@ -11,17 +11,16 @@ function AdminMain() {
   const storeId = sessionStorage.getItem('storeId');
   const storeNo = sessionStorage.getItem('storeNo');
 
-  const events = [
-    { title: '예약 1', date: '2024-11-10' },
-    { title: '예약 23', date: '2024-11-10' },
-    { title: '예약 2', date: '2024-11-15' },
-  ]; //달력게 띄울 예약 건
-
+  const [events, setEvents] = useState([]); //캘린더 예약 표시
   const [count, setCount] = useState({}); //운영현황
-  const [selectedDate, setSelectedDate] = useState(''); //검색할 날짜 받기
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const today = new Date();
+    today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+    return today.toISOString().split('T')[0]; //날짜형식 포맷
+  }); //검색할 날짜
   const [reservationNo, setReservationNo] = useState([]); //해당날짜 예약번호
-
-
+  const [customerBookInfo, setCustomerBookInfo] = useState([]); //해당 날짜 예약자정보
+  const [selectedCustomerInfo, setSelectedCustomerInfo] = useState(null); //클릭한 예약자정보
 
   useEffect(()=>{
     const fetchCount = async() => {
@@ -30,7 +29,23 @@ function AdminMain() {
     };
 
     fetchCount();
+    handleClickBook();
   },[]);
+
+  //캘린더
+  useEffect(() => {
+    const fetchReservationCounts = async() => {
+      try{
+        const resp = await axios.get(`/adminStore/getReservationCounts?storeNo=${storeNo}`);
+        setEvents(resp.data);
+
+      }catch (error){
+        console.error("캘린더 예약 로딩 실패 error ",error);
+      }
+    }
+    fetchReservationCounts();
+  },[]);
+  console.log("날짜와 예약건수 ",events);
 
   //날짜 받기
   const handleChangeDate = (e) => {
@@ -38,24 +53,49 @@ function AdminMain() {
     setSelectedDate(value);
   };
 
-  useEffect(()=>{
-    console.log("날짜 ", selectedDate);
-  },[selectedDate]);
-
+  //날짜별 예약정보 보기
   const handleClickBook = async() => {
-    const reservationSlotDate = selectedDate;
+    setSelectedCustomerInfo(null);
+
+    const reservationSlotDate = selectedDate || new Date().toISOString().split('T')[0];
     try {
       const resp = await axios.get(`/adminStore/getReservationNo?storeNo=${storeNo}&reservationSlotDate=${reservationSlotDate}`);
       const reservationNo = resp.data;
       setReservationNo(reservationNo);
 
-      const response = await axios.get(`/adminStore/getTodayCustomer?$reservationNo=${reservationNo}`);
-      console.log(response.data);
-
+      if (Array.isArray(reservationNo) && reservationNo.length > 0) {
+        const response = await axios.get('/adminStore/getTodayCustomer', {
+          params: {
+            reservationNo: reservationNo.join(',')
+          }
+        });
+        setCustomerBookInfo(response?.data || []);
+      }else{
+        setCustomerBookInfo([]);
+      }
     }catch (error){
       console.error("해당날짜 예약정보 부르는 중 error ", error);
     }
   };
+
+  //개별 예약정보 보기
+  const handleChangeRadio = (e) => {
+
+    const selectedReservationNo = e.target.value; // 예약 번호 (문자열일 수 있음)
+    console.log("이거 예약번호", selectedReservationNo);
+
+    // 예약 번호를 기준으로 예약자 정보를 찾음
+    const selectedCustomer = customerBookInfo.find(customer => {
+      return customer.reservationNo.toString() === selectedReservationNo;//문자열 비교
+    });
+
+    setSelectedCustomerInfo(selectedCustomer || null);
+  };
+
+  console.log("클릭한 예약자 ",selectedCustomerInfo);
+
+
+
 
   return(
   <div className="admin-store-regist-container">
@@ -95,6 +135,16 @@ function AdminMain() {
               }}
               height="auto" // 여유 공간을 위한 높이 조정
               contentHeight="auto"
+//eventContent={(eventInfo) => (
+//<div style={{
+//  backgroundColor: '#FFDDC1', // Customize color here
+//  padding: '5px',
+//  borderRadius: '4px',
+//  color: '#333' // Text color
+//}}>
+//{eventInfo.event.title}
+//</div>
+//)}
             />
           </div>
         </div>
@@ -119,22 +169,19 @@ function AdminMain() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>김철수</td>
-                    <td>12:00</td>
-                    <td><input type="radio"/></td>
-                  </tr>
-                  <tr>
-                    <td>이영희</td>
-                    <td>12:30</td>
-                    <td><input type="radio"/></td>
-                  </tr>
-                  <tr>
-                    <td>박민수</td>
-                    <td>13:00</td>
-                    <td><input type="radio"/></td>
-                  </tr>
-
+                  {customerBookInfo.length > 0 ? (
+                      customerBookInfo.map((customer, index)=>(
+                          <tr key={index}>
+                            <td>{customer.userName}</td>
+                            <td>{customer.reservationTime}</td>
+                            <td><input type="radio" name="reservation" value={customer.reservationNo} checked={selectedCustomerInfo?.reservationNo === customer.reservationNo} onChange={handleChangeRadio}/></td>
+                          </tr>
+                      ))
+                  ) : (
+                        <tr>
+                          <td colSpan="3">예약정보가 없습니다.</td>
+                        </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -146,52 +193,68 @@ function AdminMain() {
               <div className="customer-detail">
                 <div className="customer-group">
                   <label>예약자</label>
-                  <div>  <input type="text" value="박민수" disabled/> </div>
+                  <div>  <input type="text" value={selectedCustomerInfo?.userName || ''} disabled/> </div>
                 </div>
                 <div className="customer-group">
                   <label>연락처</label>
-                  <div> <input type="text" value="010-2252-6598" disabled/> </div>
+                  <div> <input type="text" value={selectedCustomerInfo?.userPhoneNum || ''} disabled/> </div>
                 </div>
                 <div className="customer-group">
                   <label>방문시간</label>
-                  <div> <input type="text" value="13:00" disabled/> </div>
+                  <div> <input type="text" value={selectedCustomerInfo?.reservationTime || ''} disabled/> </div>
                 </div>
                 <div className="customer-group">
                   <label>결제방식</label>
-                  <div> <input type="text" value="계좌이체" disabled/> </div>
+                  <div> <input type="text" value={selectedCustomerInfo?.paymentMethod || ''} disabled/> </div>
                 </div>
                 <div className="customer-group">
                   <label>결제금액</label>
-                  <div> <input type="text" value="32,000원" disabled/> </div>
+                  <div> <input type="text" value={selectedCustomerInfo?.paymentAmount || ''} disabled/> </div>
                 </div>
               </div>
 
               <div className="customer-reservation">
+
                 <div className="reservation-content">
                   <label>상품명</label>
-                  <div> <input type="text" value="의자" disabled/> </div>
+                  <div>
+                    <input type="text" value={selectedCustomerInfo?.options?.find(option => option.categoryLevel === '1')?.serviceName || ''} disabled/>
+                  </div>
                 </div>
+
                 <div className="reservation-content">
                   <label>옵션</label>
                   <div className="reservation-option">
-                    <div className="option">
-                      <p>색상</p> <input type="text" value="애쉬" disabled/>
-                    </div>
-                    <div className="option">
-                      <p>사이즈</p> <input type="text" value="M" disabled/>
-                    </div>
-  <div className="option">
-  <p>색상</p> <input type="text" value="애쉬" disabled/>
-  </div>
-  <div className="option">
-  <p>사이즈</p> <input type="text" value="M" disabled/>
-  </div>
+
+                    {/* 레벨 2 옵션과 그 하위 레벨 3 옵션을 묶어서 출력 */}
+                    {selectedCustomerInfo?.options
+                      ?.filter(option => option.categoryLevel === '2')
+                      .map((level2Option) => (
+                        <div className="option" key={level2Option.categoryId}>
+                          <p>{level2Option.serviceName}</p>
+                          {level2Option.middleCategoryValue ? (
+                            <div className="option-detail">
+                              <p> {level2Option.middleCategoryValue} </p>
+                            </div>
+                            ) : (
+                            /* 레벨 2 하위에 해당하는 레벨 3 옵션 출력 */
+                            selectedCustomerInfo?.options
+                              ?.filter(option => option.parentCategoryId === level2Option.categoryId && option.categoryLevel === '3')
+                              .map((level3Option) => (
+                                <div className="option-detail" key={level3Option.categoryId}>
+                                  <p>{level3Option.serviceName}</p>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        ))}
 
                   </div>
                 </div>
+
                 <div className="reservation-content">
                   <label>요청사항</label>
-                  <div> <input type="text" value="모서리 둥글게 해주세요." disabled/> </div>
+                  <div> {selectedCustomerInfo?.options?.customerRequest ?? "없음"} </div>
                 </div>
 
               </div>

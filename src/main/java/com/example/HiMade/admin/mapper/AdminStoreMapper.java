@@ -56,7 +56,8 @@ public interface AdminStoreMapper {
     Map<String, Long> getGenderCount(Long storeNo); //고객성별
     List<Map<String, Object>> getAgeDistribution(Long storeNo); //고객나이별
 
+    List<Map<String, Object>> getReservationCounts(Long storeNo); //메인-캘린더 예약건수
     List<Integer> getReservationNo(@Param("storeNo") Long storeNo,@Param("reservationSlotDate") String reservationSlotDate); //메인-날짜별 예약번호
-    List<CustomerReservationDTO> getTodayCustomer(List<Long> reservationNo); //예약자 정보
+    List<CustomerReservationDTO> getTodayCustomer(@Param("reservationNos") List<Long> reservationNos);
 
 }

@@ -164,6 +164,15 @@ public class AdminStoreController {
         return mainCount;
     }
 
+    //메인-캘린더
+    @GetMapping("/getReservationCounts")
+    public List<Map<String, Object>> getReservationCounts(@RequestParam Long storeNo){
+        List<Map<String, Object>> result = adminStoreService.getReservationCounts(storeNo);
+        System.out.println("날짜별 예약count "+result);
+
+        return result;
+    }
+
     //예약번호가져오기
     @GetMapping("/getReservationNo")
     public List<Integer> getReservationNo(@RequestParam Long storeNo, @RequestParam String reservationSlotDate){
@@ -174,9 +183,8 @@ public class AdminStoreController {
 
     //예약자정보
     @GetMapping("/getTodayCustomer")
-    public List<CustomerReservationDTO> getTodayCustomer(@RequestParam List<Long> reservationNo){
-        List<CustomerReservationDTO> result = adminStoreService.getTodayCustomer(reservationNo);
-        System.out.println("예약자정보 " + result);
+    public List<CustomerReservationDTO> getTodayCustomer(@RequestParam("reservationNo") List<Long> reservationNos){
+        List<CustomerReservationDTO> result = adminStoreService.getTodayCustomer(reservationNos);
 
         return result;
     }

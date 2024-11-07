@@ -79,8 +79,6 @@ function UserChatList() {
             }
         };
 
-
-
         websocket.onerror = (error) => {
             console.error("WebSocket 에러:", error);
         };

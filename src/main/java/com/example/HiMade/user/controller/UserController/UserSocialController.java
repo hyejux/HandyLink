@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.View;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +31,8 @@ public class UserSocialController {
 
     @Autowired
     private UserAccountService userAccountService;
+    @Autowired
+    private View error;
 
     // 카카오 회원가입 처리
     @PostMapping("/signup")
@@ -112,10 +115,12 @@ public class UserSocialController {
     @GetMapping("/info")
     public ResponseEntity<UserDTO> getKakaoUserInfo(HttpSession session) {
         UserDTO kakaoUser = (UserDTO) session.getAttribute("kakaoUser");
-        if (kakaoUser != null) {
-            return ResponseEntity.ok(kakaoUser);
+
+        if (kakaoUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        logger.error("카카오 회원 가입 오류", error);
+        return ResponseEntity.ok(kakaoUser);
     }
 
     // 로그아웃
@@ -130,30 +135,41 @@ public class UserSocialController {
                 .build();
     }
 
+    // 토큰 조회
+    @GetMapping("/token")
+    public ResponseEntity<Map<String, String>> getKakaoToken(HttpSession session) {
+        String accessToken = (String) session.getAttribute("kakaoAccessToken");
+        return ResponseEntity.ok(Map.of("accessToken", accessToken));
+    }
+
     // 탈퇴
     @PostMapping("/delete")
     public ResponseEntity<?> deleteKakaoUser(@RequestBody Map<String, String> payload, HttpSession session) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userId = auth.getName();
         String confirmationText = payload.get("confirmationText");
-        String accessToken = (String) session.getAttribute("kakaoAccessToken");
 
         try {
-            boolean isDeleted = userAccountService.deleteKakaoUser(userId, accessToken, confirmationText);
-            if (isDeleted) {
-                SecurityContextHolder.clearContext();
-                session.invalidate();
-                return ResponseEntity.ok(Map.of("message", "카카오 회원 탈퇴가 성공적으로 완료되었습니다."));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            if (!"delete".equalsIgnoreCase(confirmationText)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(Map.of("error", "올바른 텍스트를 입력해 주세요."));
             }
+
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String userId = auth.getName();
+
+            // DB에서 회원 정보 삭제
+            userAccountService.deleteKakaoUser(userId, null, confirmationText);
+
+            // Spring Security 컨텍스트 및 세션 정리
+            SecurityContextHolder.clearContext();
+            session.invalidate();
+
+            return ResponseEntity.ok(Map.of("message", "탈퇴가 완료되었습니다."));
         } catch (Exception e) {
+            logger.error("카카오 회원 탈퇴 처리 중 오류 발생", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "카카오 탈퇴 처리 중 오류가 발생했습니다: " + e.getMessage()));
+                    .body(Map.of("error", "탈퇴 처리 중 오류가 발생했습니다: " + e.getMessage()));
         }
     }
-
 
 
 

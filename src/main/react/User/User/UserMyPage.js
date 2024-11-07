@@ -1,6 +1,7 @@
 import './UserMyPage.css';
 import ReactDOM from "react-dom/client";
 import React, {useState, useEffect} from "react";
+import axios from "axios";
 
 function UserMyPage () {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -70,57 +71,82 @@ function UserMyPage () {
         return true;
     };
 
+    // 이미지 처리
+    const handleUpload = async () => {
+        if (!file) return null;
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'hye123');
+
+        try {
+            const response = await axios.post(
+                'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
+                formData
+            );
+            console.log('업로드된 이미지 URL:', response.data.secure_url);
+            return response.data.secure_url;
+        } catch (error) {
+            console.error('이미지 업로드 실패:', error);
+            alert("이미지 업로드에 실패했습니다.");
+            return null;
+        }
+    };
+
     // 수정 처리
     const handleSubmit = async (e) => {
-
         e.preventDefault();
 
         if (!validateForm()) return;
 
-        // 비밀번호 확인 로직
-        if (!isKakaoLogin && userInfo.userPw && userInfo.userPw !== userInfo.repassword) {
-            alert("비밀번호가 일치하지 않습니다.");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('userId', userInfo.userId);
-        formData.append('userName', userInfo.userName);
-        formData.append('userPhonenum', userInfo.userPhonenum);
-        formData.append('userBirth', userInfo.userBirth);
-        formData.append('userGender', userInfo.userGender);
-
-        // 비밀번호가 있는 경우만 FormData에 추가
-        if (!isKakaoLogin && userInfo.userPw) {
-            formData.append('userPw', userInfo.userPw); // 새 비밀번호 추가
-        }
-
-        // 카카오 로그인 사용자는 파일 업로드를 처리하지 않음
-        if (!isKakaoLogin && file) {
-            formData.append('profileImage', file);
-        } else if (userInfo.userImgUrl) {
-            formData.append('userImgUrl', userInfo.userImgUrl);
-        }
-
         try {
+            // 이미지 업로드 처리
+            let imgUrl = null;
+            if (!isKakaoLogin && file) {
+                imgUrl = await handleUpload();
+                if (!imgUrl && file) {
+                    alert("이미지 업로드에 실패했습니다.");
+                    return;
+                }
+            }
+
+            // 수정할 데이터 준비
+            const updateData = {
+                userId: userInfo.userId,
+                userName: userInfo.userName,
+                userPhonenum: userInfo.userPhonenum.replace(/[^0-9]/g, ''),
+                userBirth: userInfo.userBirth,
+                userGender: userInfo.userGender,
+                userImgUrl: imgUrl || userInfo.userImgUrl // 새로 업로드된 이미지 URL 또는 기존 URL
+            };
+
+            // 비밀번호가 입력된 경우에만 추가
+            if (!isKakaoLogin && userInfo.userPw) {
+                if (userInfo.userPw !== userInfo.repassword) {
+                    alert("비밀번호가 일치하지 않습니다.");
+                    return;
+                }
+                updateData.userPw = userInfo.userPw;
+            }
+
             const response = await fetch('/user/update', {
                 method: 'PUT',
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updateData)
             });
 
             if (response.ok) {
-                const result = await response.json();
                 alert("정보 수정이 완료되었습니다.");
-                setUserInfo({
-                    ...userInfo,
-                    profileImage: result.userImgUrl || userInfo.profileImage, // 기존 이미지 유지
-                });
-                window.location.href='/UserAccountPage.user';
+                window.location.href = '/UserAccountPage.user';
             } else {
-                alert("정보 수정에 실패했습니다.");
+                const errorText = await response.text();
+                alert("정보 수정에 실패했습니다: " + errorText);
             }
         } catch (error) {
             console.error('Error:', error);
+            alert("정보 수정 중 오류가 발생했습니다.");
         }
     };
 
@@ -159,8 +185,6 @@ function UserMyPage () {
 
         fetchUserProfile();
     }, []);
-
-
 
     // 프로필 이미지 변경 및 미리보기
     const handleFileChange = (e) => {

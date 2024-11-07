@@ -29,12 +29,13 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService, UserDetailsService {
 
-    // application-secret.properties 파일에서 값 가져오기
     private final Dotenv dotenv = Dotenv.load(); // .env 파일 로드
     private final String CLIENT_ID = dotenv.get("REACT_APP_KAKAO_CLIENT_ID");
     private final String REDIRECT_URI = dotenv.get("REACT_APP_KAKAO_REDIRECT_URI");
@@ -211,50 +212,34 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
         userAccountMapper.updatePassword(userId, encodedPassword);
     }
 
-    // 탈퇴
+    // 일반 탈퇴
     @Override
     @Transactional
     public boolean deleteUser(String userId, String password) {
-        // 1. 사용자 검증
         UserDTO user = userAccountMapper.getUserById(userId);
-        if (user == null) {
-            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
-        }
-
-        // 2. 비밀번호 확인
-        if (!passwordEncoder.matches(password, user.getUserPw())) {
+        if (user == null || !passwordEncoder.matches(password, user.getUserPw())) {
             return false;
         }
 
         try {
-/*            // 3. 새로운 userId 생성 (맨 앞에 del_ 추가)
-            String newUserId = "del_" + userId;
+            // ID 처리 (예시 - DEL(20241106)_test@naver.com로 업데이트 처리)
+            String deletedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            String newUserId = String.format("DEL(%s)_%s", deletedAt, userId);
 
-            // 4. 매퍼에 전달할 파라미터 설정
-            Map<String, String> params = new HashMap<>();
-            params.put("originalUserId", userId);
-            params.put("newUserId", newUserId);*/
-
-            // 3. 새로운 userId 생성 (고유한 del_ 접두어와 타임스탬프 추가)
-            String newUserId = "del_" + System.currentTimeMillis() + "_" + userId;
-
-            // 4. 매퍼에 전달할 파라미터 설정
             Map<String, String> params = new HashMap<>();
             params.put("originalUserId", userId);
             params.put("newUserId", newUserId);
 
-            // 5. 업데이트 실행
             userAccountMapper.deleteUser(params);
-
             logger.info("회원 탈퇴 처리 완료 - 기존 ID: {}, 변경된 ID: {}", userId, newUserId);
             return true;
-
         } catch (Exception e) {
             logger.error("회원 탈퇴 처리 중 오류 발생", e);
             throw new RuntimeException("회원 탈퇴 처리 중 오류가 발생했습니다.", e);
         }
     }
 
+    // 카카오 탈퇴
     @Override
     @Transactional
     public boolean deleteKakaoUser(String userId, String accessToken, String confirmationText) throws Exception {
@@ -283,14 +268,9 @@ public class UserAccountServiceImpl implements UserAccountService, UserDetailsSe
             }
         }
 
-/*        // 2. DB 탈퇴 처리
-        String newUserId = "del_" + userId;
-        Map<String, String> params = new HashMap<>();
-        params.put("originalUserId", userId);
-        params.put("newUserId", newUserId);*/
+        String deletedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String newUserId = String.format("DEL(%s)_%s", deletedAt, userId);
 
-        // 2. DB 탈퇴 처리 (고유한 del_ 접두어와 타임스탬프 추가)
-        String newUserId = "del_" + System.currentTimeMillis() + "_" + userId;
         Map<String, String> params = new HashMap<>();
         params.put("originalUserId", userId);
         params.put("newUserId", newUserId);

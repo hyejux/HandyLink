@@ -79,12 +79,12 @@
 @import url('//fonts.googleapis.com/earlyaccess/notosanskr.css');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 
-.noto-sans-kr-<uniquifier> {
+/* .noto-sans-kr-<uniquifier> {
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: auto;
   font-weight: <weight>;
   font-style: normal;
-}
+} */
 
 
 .app-title {
@@ -107,6 +107,12 @@ body {
   color: #fff;
       margin-left: 10px;
 }
+
+.logo > img {
+  width: 113px;
+    display: flex;
+}
+
 
   .mainBox {
     margin: 0;

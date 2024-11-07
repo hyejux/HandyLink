@@ -217,15 +217,28 @@ function UserStoreDetail() {
   };
 
 
-  // const formatServiceStartDate = (dateString) => {
-  //   const date = new Date(dateString);
-  //   const year = date.getFullYear();
-  //   const month = String(date.getMonth() + 1).padStart(2, '0');
-  //   const day = String(date.getDate()).padStart(2, '0');
-  //   const hours = String(date.getHours()).padStart(2, '0');
 
-  //   return `${year}/${month}/${day} ${hours}시 `;
-  // };
+  const formatServiceStartDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+
+    const currentTime = new Date(); // 현재 시간
+
+    // serviceStart 시간과 현재 시간을 비교
+    const serviceStartDate = new Date(dateString);
+    const isPast = serviceStartDate < currentTime; // 이미 지난 시간이라면 true
+  
+    // 시간이 지난 경우 아무것도 렌더링하지 않음
+    if (isPast) {
+      return null; // 해당 시간이 지나면 아무것도 렌더링하지 않음
+    }
+  
+
+    return ` ${year}/${month}/${day} ${hours}시 OPEN `;
+  };
 
   // ------------------------------------------------------
 
@@ -650,11 +663,12 @@ function UserStoreDetail() {
                         </div>
                         <div className="user-reserve-menu-content">
                           {/* 남은 일수 계산 및 표시 */}
-                          {remainingTime.days !== 0 && remainingTime.hours !== 0 && remainingTime.minutes !== 0 && remainingTime.seconds !== 0 && (
+                          {/* {remainingTime.days !== 0 && remainingTime.hours !== 0 && remainingTime.minutes !== 0 && remainingTime.seconds !== 0 && (
                             <> 남은 시간: {remainingTime.days}일 {remainingTime.hours}시간 {remainingTime.minutes}분 {remainingTime.seconds}초
                               (실시간 반영할 예정)</>
-                          )}
-                          {/* 오픈까지 {daysUntilServiceStart}일 남음 ( {formatServiceStartDate(value.serviceStart)} ) */}
+                          )} */}
+                          {/* 오픈까지 {daysUntilServiceStart}일 남음  */}
+                         <div className='open-date'>{formatServiceStartDate(value.serviceStart)}  </div> 
                           <div>{value.serviceName}</div>
                           <div>{value.serviceContent}</div>
                           <div>{value.servicePrice} 원 ~</div>

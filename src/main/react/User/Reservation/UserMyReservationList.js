@@ -99,6 +99,10 @@ function UserMyReservationList() {
           </div>
 
 
+
+
+
+
         {reservationList.map((value, index) => (
           <div className="user-content-container" key={index} onClick={() => { goToUserPage(value.reservationNo) }}>
             <div className="reservation-header">
@@ -137,7 +141,7 @@ function UserMyReservationList() {
               </div>
 
             </div>
-              {value.reviewCount === 0 && value.reservationStatus === '확정' && (
+              {value.reviewCount === 0 && value.reservationStatus === '완료' && (
               <button className="review-write-btn"
                 onClick={(event) => {
                   event.stopPropagation(); // Prevents event bubbling

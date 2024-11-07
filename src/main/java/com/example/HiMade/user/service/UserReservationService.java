@@ -21,6 +21,7 @@ UserReservationService {
   public List<UserReservationDTO> getSlotTime(int slotkey);
   public void setReservationFormDetail(List<UserReservationFormDTO> dto);
   public List<UserRD> getMyReservationDetail(int id);
+  public List<UserRD> getMyReservationDetail2(int id);
 
   public List<LocalDate> getNoSlot(int id);
 

@@ -18,6 +18,7 @@ import java.util.Map;
 public interface UserReservationMapper {
 
   public List<UserRL> getMyReserveList(UserRL dto);
+
   public List<UserRSlotDTO> getDateTime(UserRSlotDTO Date);
   public List<UserRSlotDTO> getAllDateTime(int id);
   public int setReservationForm(UserReservationDTO dto);
@@ -25,6 +26,7 @@ public interface UserReservationMapper {
   public void setMainCategoryImg(AdminCategoryImgDTO dto);
   public int setReservationFormDetail(UserReservationFormDTO dto);
   public List<UserRD> getMyReservationDetail(int id);
+  public List<UserRD> getMyReservationDetail2(int id);
   public List<LocalDate> getNoSlot(int id);
   void setUpdateStart(UserRSlotDTO dto);
   void setUpdateSlot(@RequestBody UserUSlotDTO dto);

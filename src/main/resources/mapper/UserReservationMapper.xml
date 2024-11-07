@@ -35,6 +35,20 @@
         r.reservation_no = #{id};
     </select>
 
+    <select id="getMyReservationDetail2" resultType="com.example.HiMade.user.dto.UserRD" parameterType="int">
+        SELECT
+        *
+        FROM
+        reservation_form rf
+        LEFT JOIN
+        reservation r ON rf.reservation_no = r.reservation_no
+        LEFT JOIN
+        category c
+        ON c.category_id = rf.main_category_id
+        WHERE
+        r.reservation_no = #{id}
+    </select>
+
 
 <!-- 수정 필요함 고정 값 뿌리는 중 -->
     <select id="getMyReserveList" resultType="com.example.HiMade.user.dto.UserRL">

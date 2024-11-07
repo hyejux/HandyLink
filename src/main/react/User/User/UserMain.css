@@ -97,10 +97,11 @@ h3 {
   position: fixed;
   z-index: 100;
   background-color: #fff;
-  left: 50%;
-  transform: translateX(-50%);
+  /* left: 50%; */
+  /* transform: translateX(-50%); */
   width: 100%;
   max-width: 400px;
+  top: 0;
 }
 
 .user-main-body-fix {
@@ -110,7 +111,16 @@ h3 {
 
 .search-top {
   overflow: hidden;
-  padding: 10px;
+  padding: 10px 10px 0px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.left > img {
+  width: 35px;
+  margin-right: 10px;
 }
 
 .search-top .left {

@@ -26,6 +26,11 @@ public class UserStoreServiceImpl implements UserStoreService {
   }
 
   @Override
+  public UserCateDTO getStoreMainCategory2(int id) {
+    return userStoreMapper.getStoreMainCategory2(id);
+  }
+
+  @Override
   public StoreRegistDTO getStoreInfo(int id) {
     return userStoreMapper.getStoreInfo(id);
   }

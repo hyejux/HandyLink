@@ -357,7 +357,10 @@ body {
   z-index: 100; */
 }
 
-
+.open-date {    color: #FF9800;
+  font-size: 14px;
+  font-style: italic;
+  margin-bottom: 5px;}
 
 
 /* 상단 버튼 디자인 */
@@ -624,18 +627,18 @@ body {
 
 .user-reserve-menu-content div {}
 
-.user-reserve-menu-content div:nth-child(1) {
+.user-reserve-menu-content div:nth-child(2) {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
-.user-reserve-menu-content div:nth-child(2) {
+.user-reserve-menu-content div:nth-child(3) {
   height: 100%;
   font-size: 16px;
 }
 
-.user-reserve-menu-content div:nth-child(3) {
+.user-reserve-menu-content div:nth-child(4) {
 
   text-align: right;
   font-size: 16px;

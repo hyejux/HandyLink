@@ -64,9 +64,10 @@ body {
 .user-main-container {
   padding: 0px;
   margin: 0 auto;
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
   max-width: 400px;
   min-height: calc(100vh - 63px);
+  margin-bottom: 50px;
 }
 
 

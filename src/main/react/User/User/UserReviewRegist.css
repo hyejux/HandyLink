@@ -1,4 +1,43 @@
 
+/* ----------------------------------------- */
+.user-reserve-menu {
+  display: flex;
+  gap: 3%;
+  width: 100%;
+}
+
+.user-reserve-menu img {
+  width: 110px;
+  height: 110px;
+  border-radius: 5px;
+}
+
+.user-reserve-menu-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* font-size: 16px; */
+}
+
+.user-reserve-menu-content div {}
+
+.user-reserve-menu-content div:nth-child(1) {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.user-reserve-menu-content div:nth-child(2) {
+  height: 100%;
+  font-size: 16px;
+}
+
+.user-reserve-menu-content div:nth-child(3) {
+
+  text-align: right;
+  font-size: 16px;
+  font-weight: bold;
+}
 .review-container {
   /* width: 300px; */
   /* margin: 0 auto; */
@@ -37,8 +76,11 @@
 
 .media-section {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   margin-top: 15px;
+  overflow: auto;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .media-placeholder {
@@ -58,6 +100,20 @@
     border-radius: 10px;
 }
 
+
+.btn-del2 {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background-color: #ff000000;
+  color: #343434;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
 .camera-placeholder {
   width: 60px;
   height: 60px;
@@ -71,26 +127,35 @@
 .camera-icon {
   font-size: 24px;
   color: #ccc;
+  width: 100px;
+  font-size: 50px;
+  color: gray;
+  text-align: center;
 }
 
 .submit-btn {
   width: 100%;
   padding: 10px 0;
-  background-color: #2C348F;
-  border: none;
-  border-radius: 20px;
+  background-color:#fd8517;
+  border-radius: 15px;
   color: white;
   font-size: 16px;
   margin-top: 20px;
   cursor: pointer;
+  border: none;
 }
 
 .submit-btn:hover {
-  background-color: #3c50d9;
+  background-color: #fd8517;
+}
+
+.main-content-css {
+  margin-bottom: 100px;
 }
 
 .rating-section {
-    display: flex;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .star {
@@ -100,7 +165,7 @@
 }
 
 .star.selected {
-    color: gold; /* 선택된 별 색상 */
+    color: #fd8517; /* 선택된 별 색상 */
 }
 
 .camera-placeholder {
@@ -109,7 +174,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px dashed lightgray; /* 경계선 스타일 */
+    border: 1px dashed lightgray;
     border-radius: 10px; /* 둥글게 */
     cursor: pointer; /* 커서 변경 */
     position: relative; /* 위치 설정 */
@@ -124,6 +189,41 @@
 .user-content-container2{
   background-color: white;
   border-radius: 10px;
-  margin: 20px;
-  padding: 20px;
+  /* margin: 20px; */
+  padding: 0px 20px;
 } 
+
+
+
+.user-top-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  /* text-align: center; */
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+  /* position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 100; */
+}
+
+
+
+
+/* 상단 버튼 디자인 */
+.user-top-btns {
+  margin: 10px 0px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.user-top-btns>button {
+  height: 30px;
+  width: 50px;
+  font-size: 25px;
+  background-color: #fff;
+  border: none;
+
+}

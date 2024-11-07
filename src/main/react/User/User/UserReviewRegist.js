@@ -51,22 +51,22 @@ useEffect(() => {
   };
 
   
-  const handleFileUpload = (event) => {
-    const files = event.target.files; // 선택한 파일들
-    const newImages = []; // 새로운 이미지 URL을 저장할 배열
+//   const handleFileUpload = (event) => {
+//     const files = event.target.files; // 선택한 파일들
+//     const newImages = []; // 새로운 이미지 URL을 저장할 배열
 
-    if (files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const previewUrl = URL.createObjectURL(file); // Blob URL 생성
-            newImages.push(previewUrl); // 미리보기 URL을 배열에 추가
-        }
+//     if (files.length > 0) {
+//         for (let i = 0; i < files.length; i++) {
+//             const file = files[i];
+//             const previewUrl = URL.createObjectURL(file); // Blob URL 생성
+//             newImages.push(previewUrl); // 미리보기 URL을 배열에 추가
+//         }
 
-        // 상태 업데이트: 새 이미지 URL 추가
-        setNewImages((prev) => [...prev, ...newImages]); // 새 이미지 미리보기 URL 추가
-        setImages((prevImages) => [...prevImages, ...Array.from(files)]); // 기존 파일과 병합
-    }
-};
+//         // 상태 업데이트: 새 이미지 URL 추가
+//         setNewImages((prev) => [...prev, ...newImages]); // 새 이미지 미리보기 URL 추가
+//         setImages((prevImages) => [...prevImages, ...Array.from(files)]); // 기존 파일과 병합
+//     }
+// };
 
 
 
@@ -125,11 +125,84 @@ useEffect(() => {
       
     }
 
+    const handleFileUpload = (event) => {
+      const files = event.target.files; // Selected files
+      const newImages = []; // Array to store new image preview URLs
+    
+      // Check if the number of selected files exceeds 4
+      if (files.length + newImages.length > 4) {
+        alert("You can only upload up to 4 images.");
+        return; // Prevent further processing if more than 4 files are selected
+      }
+    
+      // Loop through the selected files and create preview URLs
+      if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const previewUrl = URL.createObjectURL(file); // Create a preview URL
+          newImages.push(previewUrl); // Add the preview URL to the array
+        }
+    
+        // Update the state with new images and files
+        setNewImages((prev) => [...prev, ...newImages]);
+        setImages((prevImages) => [
+          ...prevImages,
+          ...Array.from(files),
+        ]);
+      }
+    };
+    
+
+
+
+    const handleImageDelete = (index) => {
+      // 선택된 이미지 삭제
+      setNewImages((prevImages) => prevImages.filter((_, i) => i !== index));
+      setImages((prevImages) => prevImages.filter((_, i) => i !== index)); // 실제 이미지 파일도 상태에서 삭제
+    };
+    
+
+
+
+
+
+
+
+
+
     return (
 
   
-        <div>
+        <div className='main-content-css'> 
+          
+          <div className="user-top-nav">
+          <i className="bi bi-arrow-left"></i>
+          <logo className="logo"> 리뷰 작성 </logo>
+        </div>
+
+          <div>
+        {reservationList ? (
+   <div
+   className='user-content-container'
+ >
+   <div className="user-reserve-menu">
+     <div className="user-reserve-menu-img">
+       <img src={`${reservationList.imageUrl}`} alt="My Image" />
+     </div>
+     <div className="user-reserve-menu-content">
+       <div>{reservationList.serviceName}</div>
+       <div>{reservationList.serviceContent}</div>
+       <div>{reservationList.servicePrice} 원 ~</div>
+     </div>
+   </div>
+ </div>
+
+        ) : (
+          <div>Loading...</div> // Display loading message until data is fetched
+        )}
+      </div>
        
+      
 
           <div className="user-content-container2">
           <div className="review-container">
@@ -144,44 +217,59 @@ useEffect(() => {
               </span>
             ))}
           </div>
-          {reservationList}
+
 
       <textarea
         className="review-text"
         value={review}
         onChange={handleReviewChange}
         maxLength="1000"
-        placeholder="Write your review..."
+        placeholder="최소 10자 이상 작성해주세요. "
       ></textarea>
 
       <div className="char-count">
         <span>{`${charCount}/1000`}</span>
       </div>
-
       <div className="media-section">
-      {newImages.map((image, index) => (
-          <img
-            key={index}
-            src={image}
-            alt={`Preview ${index}`}
-            style={{ width: '100px', height: '100px', margin: '10px' }}
-          />
-        ))}
-        <div
-          className="camera-placeholder"
-          onClick={() => document.getElementById('file-input').click()}
-        >
-          <i className="camera-icon">+</i>
-          <input
-            type="file"
-            id="file-input"
-            accept="image/*"
-            multiple
-            style={{ display: 'none' }}
-            onChange={handleFileUpload}
-          />
-        </div>
-      </div>
+         {/* + 버튼을 4개 이하일 때만 보이도록 조건 추가 */}
+  {newImages.length < 4 && (
+    <div
+      className="camera-placeholder"
+      onClick={() => document.getElementById('file-input').click()}
+    >
+      <p className="camera-icon">+</p>
+      <input
+        type="file"
+        id="file-input"
+        accept="image/*"
+        multiple
+        style={{ display: 'none' }}
+        onChange={handleFileUpload}
+      />
+    </div>
+  )}
+  {newImages.map((image, index) => (
+    <div key={index} style={{ position: 'relative', margin: '10px' }}>
+      <img
+        src={image}
+        alt={`Preview ${index}`}
+        style={{ width: '100px', height: '100px' }}
+      />
+      {/* 삭제 버튼 */}
+      <button
+        onClick={() => handleImageDelete(index)}
+   className='btn-del2'
+      >
+        X
+      </button>
+    </div>
+  ))}
+  
+ 
+</div>
+
+
+
 
       <button className="submit-btn" onClick={() => reviewSubmit()}>
         작성하기

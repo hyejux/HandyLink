@@ -149,3 +149,37 @@ hr {
   font-size: 16px;
   cursor: pointer;
 }
+
+
+.user-top-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  /* text-align: center; */
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+  /* position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 100; */
+}
+
+
+
+
+/* 상단 버튼 디자인 */
+.user-top-btns {
+  margin: 10px 0px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.user-top-btns>button {
+  height: 30px;
+  width: 50px;
+  font-size: 25px;
+  background-color: #fff;
+  border: none;
+
+}

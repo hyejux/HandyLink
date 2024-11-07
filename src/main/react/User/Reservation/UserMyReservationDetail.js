@@ -149,7 +149,16 @@ function UserMyReservationDetail() {
 
   return (
     <div>
+
+
+<div className="user-top-nav">
+          <i className="bi bi-arrow-left"></i>
+          <logo className="logo"> 주문 상세  </logo>
+        </div>
+
       <div className="user-content-container">
+
+
         <div className='store-name'>{reservationList.length > 0 ? reservationList[0].storeName : '정보 없음'}</div>
         <div className='payment-date'>{formatDate2(reservationDetail.regTime)}</div>
       </div>

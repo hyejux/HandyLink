@@ -57,36 +57,47 @@ public class UserMyReservationController {
 //  }
 private final String uploadDir = "src/main/resources/static/uploads/";
 
-  @PostMapping("/setReviewImg")
-  public void setReviewImg(@RequestParam("files") MultipartFile[] files, @RequestParam("reviewNoId") String reviewNoId) {
-    for (MultipartFile file : files) {
-      try {
-        // 파일을 저장하고 URL을 얻는 로직
-        if (file.isEmpty()) {
+//  @PostMapping("/setReviewImg")
+//  public void setReviewImg(@RequestParam("files") MultipartFile[] files, @RequestParam("reviewNoId") String reviewNoId) {
+//    for (MultipartFile file : files) {
+//      try {
+//        // 파일을 저장하고 URL을 얻는 로직
+//        if (file.isEmpty()) {
+//
+//        }
+//        int id = Integer.parseInt(reviewNoId);
+//        // 저장할 경로
+//        String uploadDir = new File("src/main/resources/static/uploads/").getAbsolutePath() + File.separator;
+//        // 파일을 지정한 경로에 저장
+//        try {
+//          File destinationFile = new File(uploadDir + file.getOriginalFilename());
+//          file.transferTo(destinationFile); // 파일 저장
+////          return ResponseEntity.ok("파일이 성공적으로 업로드되었습니다: " + destinationFile.getAbsolutePath());
+//        } catch (IOException e) {
+//          e.printStackTrace();
+////          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 중 오류가 발생했습니다.");
+//        }
+//        String fileUrl = saveFileAndGetUrl(file); // 파일을 저장하고 URL을 반환하는 메서
+//        System.out.println(reviewNoId);
+////        int id = (int)reviewNoId;
+//        // MyBatis 매퍼에 URL과 리뷰 번호를 전달
+//        userReservationService.setReviewImg(fileUrl, id);
+////        userReservationService.setReviewImg(files);
+//      } catch (IOException e) {
+//        // 예외 처리
+//        e.printStackTrace();
+//      }
+//    }
+//
+//  }
 
-        }
-        int id = Integer.parseInt(reviewNoId);
-        // 저장할 경로
-        String uploadDir = new File("src/main/resources/static/uploads/").getAbsolutePath() + File.separator;
-        // 파일을 지정한 경로에 저장
-        try {
-          File destinationFile = new File(uploadDir + file.getOriginalFilename());
-          file.transferTo(destinationFile); // 파일 저장
-//          return ResponseEntity.ok("파일이 성공적으로 업로드되었습니다: " + destinationFile.getAbsolutePath());
-        } catch (IOException e) {
-          e.printStackTrace();
-//          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 중 오류가 발생했습니다.");
-        }
-        String fileUrl = saveFileAndGetUrl(file); // 파일을 저장하고 URL을 반환하는 메서
-        System.out.println(reviewNoId);
-//        int id = (int)reviewNoId;
-        // MyBatis 매퍼에 URL과 리뷰 번호를 전달
-        userReservationService.setReviewImg(fileUrl, id);
-//        userReservationService.setReviewImg(files);
-      } catch (IOException e) {
-        // 예외 처리
-        e.printStackTrace();
-      }
+  @PostMapping("/setReviewImg")
+  public void setReviewImg(@RequestParam("files") String[] files, @RequestParam("reviewNoId") String reviewNoId) {
+    for (String file : files) {
+
+      int id = Integer.parseInt(reviewNoId);
+      userReservationService.setReviewImg(file, id);
+
     }
 
   }

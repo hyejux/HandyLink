@@ -25,7 +25,17 @@ public class MainController {
   public String page(@PathVariable String pageName, Model model) {
     model.addAttribute("pageName", pageName);
     System.out.println("뷰이름:" + pageName);
-    return "userLayout";
+
+    // 하단바 없는 레이아웃 적용할 페이지
+    if ("UserChatRoom".equals(pageName) ||
+            "UserSignUp".equals(pageName) ||
+            "UserLoginPage".equals(pageName) ||
+            "UserMyPage".equals(pageName) ||
+            "UserDelete".equals(pageName) || "UserAccountFind".equals(pageName)) {
+      return "userLayoutNoNav";
+    }
+
+    return "userLayout"; // 기본 사용자 레이아웃
   }
 
   @GetMapping("/{pageName}.admin")
@@ -50,6 +60,11 @@ public class MainController {
     model.addAttribute("id", id); // id를 모델에 추가
     System.out.println("뷰이름: " + pageName + ", ID: " + id);
     System.out.println("id ------------" + id);
+
+    // 하단바 없는 레이아웃 적용할 페이지
+    if ("userStoreDetail".equals(pageName)) {
+      return "userLayoutNoNav";
+    }
 
     return "userLayout"; // 반환할 뷰 이름
   }

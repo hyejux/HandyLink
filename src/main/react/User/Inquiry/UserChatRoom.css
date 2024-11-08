@@ -125,7 +125,6 @@
     border-top: 1px solid #ccc;
     position: relative;
     background-color: white;
-    margin-bottom: 60px;
 }
 
 .input-box input {
@@ -215,17 +214,4 @@
     color: #495057;
     margin-bottom: 4px;
     font-weight: 500;
-}
-
-
-
-.back-button {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #f9f9f9;
-}
-
-.bi-arrow-left {
-    font-size: 25px;
 }

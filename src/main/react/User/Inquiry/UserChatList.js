@@ -28,7 +28,6 @@ function UserChatList() {
                 setUserId(response.data.userId);
             } catch (error) {
                 console.error('사용자 정보를 가져오는데 실패했습니다:', error);
-                window.location.href = '/UserLoginPage.user';
             }
         };
         fetchUserInfo();

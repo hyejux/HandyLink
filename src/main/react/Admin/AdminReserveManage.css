@@ -610,14 +610,14 @@
 }
 
 .pagination button {
-  padding: 8px 12px;
+  padding: 4px 8px;
   margin: 0 5px;
   border: 1px solid #ccc;
   cursor: pointer;
 }
 
 .pagination button.active {
-  background-color: #007bff;
+  background-color: #2e3133;
   color: white;
 }
 
@@ -628,4 +628,8 @@
 
 .page-nav {
   font-weight: bold;
+}
+
+.totalpage {
+  font-size: 16px;
 }

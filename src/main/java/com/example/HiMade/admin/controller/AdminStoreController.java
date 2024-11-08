@@ -134,39 +134,60 @@ public class AdminStoreController {
         return adminStoreService.getOffSet(storeNo);
     }
 
+    @PostMapping("/adminStore/deleteImage")
+    public ResponseEntity<String> deleteImage(@RequestBody Map<String, String> payload) {
+        String storeImgLocation = (String) payload.get("storeImgLocation");
+        int storeNo = Integer.parseInt(payload.get("storeNo"));
+
+        try {
+            // 이미지 삭제 서비스 로직 호출
+            adminStoreService.deleteImage(storeNo, storeImgLocation);
+            return ResponseEntity.ok("이미지 삭제 성공");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 삭제 실패");
+        }
+    }
+
     // 파일 업로드 메서드
     @PostMapping("/uploadImageToServer")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+    public void uploadImage(@RequestParam("file") String[] file, @RequestParam("id") String id) {
         // 파일 저장 로직 (S3에 저장하거나 로컬 저장)
-        String imageUrl = adminStoreService.uploadImage(file);
-        System.out.println("이미지 "+imageUrl);
-        return ResponseEntity.ok(imageUrl);
-    }
 
-    // 이미지 삭제 메서드
-    @DeleteMapping("/deleteImage")
-    public ResponseEntity<String> deleteImage(@RequestBody Map<String, String> payload) {
-        System.out.println("Received payload: " + payload);
-        String imageUrl = payload.get("imageUrl");
+        int storeId = Integer.parseInt(id);
 
-        if (imageUrl == null) {
-            return ResponseEntity.badRequest().body("imageUrl is missing in the request");
+        for(String f : file){
+            System.out.println(f + storeId + "================");
+            adminStoreService.uploadImage(f, storeId);
         }
 
-        String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1); // 파일 이름 추출
-        String uploadDir = "C:/Users/admin/Desktop/HandyLink/src/main/resources/static/uploads/storeImg"; // 이미지 저장 경로
-
-        File file = new File(uploadDir + "/" + fileName);
-        if (file.exists()) {
-            if (file.delete()) {
-                return ResponseEntity.ok("이미지 삭제 성공");
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 삭제 실패");
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이미지 파일을 찾을 수 없습니다.");
-        }
+//        System.out.println("이미지 "+imageUrl);
+//        return ResponseEntity.ok(imageUrl);
     }
+
+//    // 이미지 삭제 메서드
+//    @DeleteMapping("/deleteImage")
+//    public ResponseEntity<String> deleteImage(@RequestBody Map<String, String> payload) {
+//        System.out.println("Received payload: " + payload);
+//        String imageUrl = payload.get("imageUrl");
+//
+//        if (imageUrl == null) {
+//            return ResponseEntity.badRequest().body("imageUrl is missing in the request");
+//        }
+//
+//        String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1); // 파일 이름 추출
+//        String uploadDir = "C:/Users/admin/Desktop/HandyLink/src/main/resources/static/uploads/storeImg"; // 이미지 저장 경로
+//
+//        File file = new File(uploadDir + "/" + fileName);
+//        if (file.exists()) {
+//            if (file.delete()) {
+//                return ResponseEntity.ok("이미지 삭제 성공");
+//            } else {
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 삭제 실패");
+//            }
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이미지 파일을 찾을 수 없습니다.");
+//        }
+//    }
 
     //메인페이지
     @GetMapping("/getMainCount")

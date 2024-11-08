@@ -20,4 +20,5 @@ public interface UserStoreMapper {
   public Integer existingLike(@Param("userId") String userId,@Param("storeNo") Long storeNo); //가게찜-삭제
   public List<UserLikesDTO> getLike(String userId); //찜 데이터 가져오기
   public List<Map<String ,Object>> getLikeInfo(String userId); //찜 가게정보 가져오기
+
 }

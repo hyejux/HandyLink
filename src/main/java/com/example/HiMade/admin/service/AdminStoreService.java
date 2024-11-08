@@ -26,9 +26,9 @@ public interface AdminStoreService {
     List<DayOffSet> getOffSet(Long storeNo); //지정휴무-select
     Integer deleteOffSet(Long storeNo, Long setNo); //지정휴무-delete
 
-    String uploadImage(MultipartFile file); // 이미지 업로드
+    void uploadImage(String file , int id); // 이미지 업로드
     Integer duplicatedId(String storeId); //아이디 중복검사
-
+    void deleteImage(int id , String file);
     List<storeNoticeDTO> getNoticeList(int storeNo); // 가게소식
     void setNotice(storeNoticeDTO dto); // 가게 소식 등록
     void setNoticeModi(storeNoticeDTO dto); // 가게 소식 등록

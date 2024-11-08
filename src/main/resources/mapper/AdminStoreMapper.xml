@@ -5,6 +5,9 @@
 
 <mapper namespace="com.example.HiMade.admin.mapper.AdminStoreMapper">
 
+    <insert id="uploadImage">
+        insert into store_img (store_img_location, store_no) values (#{file}, #{id})
+    </insert>
 
     <select id="getNoticeList" resultType="com.example.HiMade.admin.dto.storeNoticeDTO">
         select *
@@ -170,9 +173,11 @@
         insert into store_sns_link
         values (#{snsLink}, #{snsName}, #{storeNo})
     </insert>
-
+    <delete id="deleteImage">
+        DELETE FROM store_img WHERE store_no = #{id} AND store_img_location = #{file}
+    </delete>
 <!-- img입력 -->
-<!-- data != DB면 (DB에서 delete & data insert) -->
+<!--&lt;!&ndash; data != DB면 (DB에서 delete & data insert) &ndash;&gt;-->
     <delete id="deleteStoreImg" parameterType="com.example.HiMade.admin.dto.StoreImgDTO">
         DELETE FROM store_img
         WHERE store_no = #{storeNo}
@@ -184,16 +189,16 @@
         </if>
     </delete>
 
-    <select id="selectExistingStoreImg" resultType="string" parameterType="Long">
-        SELECT store_img_location
-        FROM store_img
-        WHERE store_no = #{storeNo}
-    </select>
+<!--    <select id="selectExistingStoreImg" resultType="string" parameterType="Long">-->
+<!--        SELECT store_img_location-->
+<!--        FROM store_img-->
+<!--        WHERE store_no = #{storeNo}-->
+<!--    </select>-->
 
-    <insert id="addStoreImg" parameterType="com.example.HiMade.admin.dto.StoreImgDTO">
-        insert into store_img (store_img_location, store_no)
-        values (#{storeImgLocation}, #{storeNo})
-    </insert>
+<!--    <insert id="addStoreImg" parameterType="com.example.HiMade.admin.dto.StoreImgDTO">-->
+<!--        insert into store_img (store_img_location, store_no)-->
+<!--        values (#{storeImgLocation}, #{storeNo})-->
+<!--    </insert>-->
 
     <select id="getMyStore" resultMap="storeRegistResultMap">
         SELECT

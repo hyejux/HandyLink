@@ -42,13 +42,28 @@ function UserLikeList(){
                     전체
                 </button>
                 <button  className={`category-button ${selectedCategory === "케이크" ? "active" : ""}`} onClick={() => setSelectedCategory("케이크")}>
-                    케이크
+                    디저트
                 </button>
                 <button className={`category-button ${selectedCategory === "공방" ? "active" : ""}`} onClick={() => setSelectedCategory("공방")} >
-                    공방
+                    공예
                 </button>
                 <button className={`category-button ${selectedCategory === "꽃" ? "active" : ""}`} onClick={() => setSelectedCategory("꽃")} >
                     꽃
+                </button>
+                <button className={`category-button ${selectedCategory === "뷰티" ? "active" : ""}`} onClick={() => setSelectedCategory("뷰티")}>
+                    뷰티
+                </button>
+                <button  className={`category-button ${selectedCategory === "패션" ? "active" : ""}`} onClick={() => setSelectedCategory("패션")}>
+                    패션
+                </button>
+                <button className={`category-button ${selectedCategory === "주얼리" ? "active" : ""}`} onClick={() => setSelectedCategory("주얼리")} >
+                    주얼리
+                </button>
+                <button className={`category-button ${selectedCategory === "디저트" ? "active" : ""}`} onClick={() => setSelectedCategory("디저트")} >
+                    디저트
+                </button>
+                <button className={`category-button ${selectedCategory === "반려동물" ? "active" : ""}`} onClick={() => setSelectedCategory("반려동물")}>
+                    반려동물
                 </button>
             </div>
 
@@ -84,15 +99,10 @@ function UserLikeList(){
                                 <div className="card">
                                     <p className="category">{likeList.store_cate}</p>
                                     <div className="card-main">
-                                        <img src={likeList.store_img_location} alt="store" className="card-image" />
+                                        <img src="../img/logo2.png" alt="store" className="card-image" />
                                         <div className="card-content">
                                             <h2 className="store">{likeList.store_name}</h2>
-                                            <p className="address">{likeList.addr}</p>
-                                            <p className="addrdetail">{likeList.addrdetail}</p>
-                                            <div className="rating-section">
-                                                <span className="rating">⭐ {likeList.avg_rating ? likeList.avg_rating : "N/A"}</span>
-                                                <span className="reviews">리뷰 {likeList.review_count}개</span>
-                                            </div>
+                                            <p>더이상 운영하지 않습니다.</p>
                                         </div>
                                     </div>
                                 </div>

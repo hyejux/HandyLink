@@ -23,6 +23,17 @@ public class AdminStoreController {
     @Qualifier("adminStoreService")
     private AdminStoreService adminStoreService;
 
+    //업체탈퇴
+    @PostMapping("/updateUnSubcribe")
+    public ResponseEntity<Integer> updateUnSubcribe(@RequestParam Long storeNo){
+        Integer result = adminStoreService.updateUnSubcribe(storeNo);
+        if(result > 0){
+            return ResponseEntity.ok(result);
+        }else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(0); //삭제 조건에 안맞음
+        }
+    }
+
     //아이디중복체크
     @PostMapping("/duplicatedIdCheck")
     public Integer duplicatedId(@RequestBody StoreRegistDTO storeRegistDTO) {

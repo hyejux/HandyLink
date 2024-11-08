@@ -10,6 +10,7 @@ import java.util.Map;
 @Mapper
 public interface AdminStoreMapper {
 
+    Integer updateUnSubcribe(Long storeNo); //탈퇴
     StoreRegistDTO loginCheck(@Param("id") String id,@Param("pw") String pw); //로그인
     void registStore(StoreRegistDTO storeRegistDTO); //업체등록
     void insertDay(DayOffDay dayOffDay); //가게등록시 고정휴무 세팅

@@ -5,9 +5,18 @@
 
 <mapper namespace="com.example.HiMade.admin.mapper.AdminStoreMapper">
 
+
     <insert id="uploadImage">
         insert into store_img (store_img_location, store_no) values (#{file}, #{id})
     </insert>
+
+<!--탈퇴-->
+    <update id="updateUnSubcribe" parameterType="Long">
+        update store
+        set store_status = '폐업'
+        where store_no = #{storeNo}
+    </update>
+
 
     <select id="getNoticeList" resultType="com.example.HiMade.admin.dto.storeNoticeDTO">
         select *

@@ -22,6 +22,11 @@ public class AdminStoreServiceImpl implements AdminStoreService {
 
 
     @Override
+    public Integer updateUnSubcribe(Long storeNo) {
+        return adminStoreMapper.updateUnSubcribe(storeNo);
+    }
+
+    @Override
     public StoreRegistDTO loginCheck(String id, String pw) {
         StoreRegistDTO result = adminStoreMapper.loginCheck(id,pw);
         return result;

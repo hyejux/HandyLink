@@ -511,7 +511,7 @@ function UserStoreDetail() {
           {activeSection === 'home' && (
             <div>
 
-              <div className="user-content-container"> {/*위치, 번호, 영업시간, 주차, 가까운 지하철 정보*/}
+              <div className="user-content-container"> {/*위치, 번호, 영업시간, 주차, sns*/}
                 <div>
                   <div className="store-basic-info"><i className="bi bi-shop"></i>
                     <div className="store-addr">{storeInfo.addr}   {storeInfo.addrdetail} </div>
@@ -525,7 +525,7 @@ function UserStoreDetail() {
                           매주 {storeInfo.dayOffDayList.map(day => day.dayOffDay).join(', ')} 휴무
                         </div>
                       ) : (
-                        <div>고정 휴무 없음</div>
+                        <div>연중무휴</div>
                       )}
                       {Array.isArray(storeInfo.dayOffSetList) && storeInfo.dayOffSetList.some(dayOffSet =>
                         dayOffSet.dayOffStart && dayOffSet.dayOffEnd) > 0 ? (
@@ -539,17 +539,31 @@ function UserStoreDetail() {
 
                           return (
                             <div key={index}>
-                              {formattedStartDate} ~ {formattedEndDate}
+                              {formattedStartDate} ~ {formattedEndDate} 휴무
                             </div>
                           );
                         })
                       ) : (
-                        <div>지정된 휴무 없음</div>
+                        null
                       )}
                     </div>
                   </div>
                   <div className="store-basic-info"><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
                   <div className="store-basic-info"><i className="bi bi-p-square-fill"></i> {storeInfo.storeParkingYn === 'Y' ? '주차가능' : '주차불가'}</div>
+                  <div className="store-basic-info">
+                    <i class="bi bi-phone"></i>
+                    <div>
+                    {storeInfo.storeSns ? (
+                      storeInfo.storeSns.map((sns, index) => {
+                        return (
+                          <div key={index} style={{ marginBottom: '5px' }}>
+                            <a href={sns.snsLink} className="sns-name">{sns.snsName}</a>
+                          </div>
+                        );
+                      })
+                    ) : null}
+                    </div>
+                  </div>
                 </div>
               </div>
 

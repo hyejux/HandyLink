@@ -8,6 +8,7 @@ import java.util.Map;
 
 public interface AdminStoreService {
 
+    Integer updateUnSubcribe(Long storeNo); //탈퇴
     StoreRegistDTO loginCheck(String id, String pw); //로그인
     void registStore(StoreRegistDTO storeRegistDTO); //업체등록
     void updateStoreInfo(StoreRegistDTO storeRegistDTO); //마이페이지 update

@@ -20,6 +20,63 @@ body {
   padding: 0px;
 
 }
+.nav-link {
+  fill-rule: evenodd;
+  fill: #000000; /* or any other color for active state */
+}
+
+.nav-link.active  {
+  fill-rule:nonzero;
+  fill: #fd8517; /
+}
+
+.nav-link2 {
+  /* fill-rule: evenodd; */
+  fill: #000000; /* or any other color for active state */
+}
+
+.nav-link2.active  {
+  /* fill-rule:nonzero; */
+  fill: #fd8517; /
+}
+
+
+.nav-link3 {
+  /* fill-rule: evenodd; */
+  fill: #000000; /* or any other color for active state */
+}
+
+.nav-link3.active  {
+  /* fill-rule:nonzero; */
+  fill: #fd8517; /
+}
+
+
+.nav-link4 {
+  /* fill-rule: evenodd; */
+  fill: #000000; /* or any other color for active state */
+}
+
+.nav-link4.active  {
+  /* fill-rule:nonzero; */
+  fill: #fd8517; /
+}
+
+
+.nav-link5 {
+  fill-rule: evenodd;
+  fill: #000000; /* or any other color for active state */
+}
+
+.nav-link5.active  {
+  fill-rule:nonzero;
+  fill: #fd8517; /
+}
+.nav-link5 .icon-fill.active  {
+  /* fill-rule:nonzero; */
+  fill: #fd8517; /
+}
+
 
 
 .user-bottom-nav {

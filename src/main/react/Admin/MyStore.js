@@ -109,6 +109,8 @@ function MyStore() {
             fixSns[index].snsName = '페이스북';
         } else if (snsLink.includes('youtube')) {
             fixSns[index].snsName = '유튜브';
+        } else if (snsLink.includes('naver')) {
+            fixSns[index].snsName = '네이버';
         } else {
             alert('등록이 불가능한 SNS입니다.');
             return; // 유효하지 않으면 저장 중단
@@ -284,10 +286,40 @@ function MyStore() {
         }
     };
 
+    //탈퇴하기
+    const handleClickUnSubscribe = async() => {
+        const isConfirmed = confirm('탈퇴하시겠습니까?');  // 사용자가 "확인"을 클릭했는지 확인
+
+        if (isConfirmed) {  // "확인" 클릭 시에만 상태 변경
+            try {
+                const resp = await axios.post(`/adminStore/updateUnSubcribe?storeNo=${storeNo}`);
+                const unSubscribe = resp.data;
+                if(unSubscribe > 0){
+                    alert('탈퇴되었습니다.');
+                    window.location.href='/adminlogin.login';
+                }else{
+                    alert('탈퇴 처리에 실패하였습니다.');
+                }
+            }catch (error){
+                alert('탈퇴 요청 중 오류 발생');
+                console.log("탈퇴 처리 중 error ", error);
+            }
+        }
+    };
+
 
     return (
     <div className="admin-store-info-container">
         <h1>My Store</h1>
+
+        <div className="btn-box">
+        {isDisabled && (
+            <button type="button" className="modify-btn" onClick={handleClickSet}>
+                수정하기
+            </button>
+        )}
+
+        </div>
 
         {/* 기본 정보 섹션 */}
         <div className="section-container">
@@ -296,7 +328,7 @@ function MyStore() {
             <span className="small-text">*필수</span>
             </div>
             <div className="section-content">
-                <div className="form-group">
+            {/*<div className="form-group">
                     <label htmlFor="storeStatus">공개 여부</label>
                     <div className="radio-group public-yn">
                         <label htmlFor="storeStatusY">
@@ -306,7 +338,7 @@ function MyStore() {
                             <input type="radio" name="storeStatus" id="storeStatusN" value="비활성화" checked={myStoreInfo.storeStatus === '비활성화'} onChange={handleChangeInform} disabled={isDisabled} /> 비공개
                         </label>
                     </div>
-                </div>
+                </div>*/}
 
                 <div className="form-group">
                     <label htmlFor="parking">주차 여부</label>
@@ -456,13 +488,18 @@ function MyStore() {
 
 
         <div className="btn-box">
-            <button type="button" className="modify-btn" onClick={handleClickSet}>
-                {isDisabled ? '수정하기' : '수정완료'}
-            </button>
-
-            {!isDisabled && (
-                <button type="button" className="cancel-btn" onClick={() => window.location.href = '/mystore.admin'}>
-                    취소
+            {!isDisabled ? (
+                <>
+                    <button type="button" className="cancel-btn" onClick={() => window.location.href = '/mystore.admin'}>
+                        취소
+                    </button>
+                    <button type="button" className="modify-btn" onClick={handleClickSet}>
+                        수정완료
+                    </button>
+                </>
+            ):(
+                <button type="button" className="unsubscribe-btn" onClick={handleClickUnSubscribe}>
+                    탈퇴하기
                 </button>
             )}
         </div>

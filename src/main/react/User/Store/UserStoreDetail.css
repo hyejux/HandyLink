@@ -468,8 +468,8 @@ body {
   text-align: center;
   width: 65px;
   padding: 1px 5px;
-  border-radius: 30px;
-  border: 1px solid #5c5c5c;
+  border-radius: 5px;
+  border: 1px solid #cbcbcb;
   margin-bottom: 10px;
   /* background-color: #ffdfdf; */
 }
@@ -673,4 +673,18 @@ body {
   margin: 20px;
   border: 1px solid #e8e8e8;
   border-radius: 10px;
+}
+
+
+/* 배너 */
+.advertisement-banner {
+  width: 100%;
+  height: 100px;
+  /* margin: 25px 0; */
+}
+
+.advertisement-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

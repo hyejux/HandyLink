@@ -529,3 +529,36 @@
   margin-bottom: 15px;
   justify-content: space-between;
 }
+
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 4px 8px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #2e3133;
+  color: white;
+}
+
+.pagination button:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.page-nav {
+  font-weight: bold;
+}
+
+.totalpage {
+  font-size: 16px;
+}

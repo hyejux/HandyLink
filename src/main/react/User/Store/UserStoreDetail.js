@@ -580,15 +580,25 @@ function UserStoreDetail() {
                 </div>
               </div>
 
-              <div className="user-content-container">
-                {noticeList.map((notice, index) => (
-                  notice.status === 'Y' && (
-                    <ul key={index}>
-                      <li> <i class="bi bi-bell"></i> {notice.noticeType}  | {notice.noticeContent.slice(0, 20)}...</li>
-                    </ul>
-                  )
-                ))}
-              </div>
+      
+              {noticeList.length === 0 ? (
+  <></>
+) : (
+  <div className="user-content-container">
+    {noticeList.slice(0, 5).map((notice, index) => (
+      notice.status === 'Y' && (
+        <ul key={index}>
+          <li>
+            <i className="bi bi-bell"></i> {notice.noticeType} | {notice.noticeContent.slice(0, 20)}...
+          </li>
+        </ul>
+      )
+    ))}
+  </div>
+)}
+
+                
+        
 
               <div className="user-store-map-box">
                 <div></div>
@@ -607,7 +617,22 @@ function UserStoreDetail() {
           {activeSection === 'info' && (
 
             <div>
-              {noticeList.map((notice, index) => (
+                {/* 배너 */}
+          <div className="advertisement-banner">
+            <img src='https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731039442/pbc4moqfrdcsxmipvbgw.jpg' />
+          </div>
+
+
+              {noticeList.length === 0 ? (
+                  <div className="user-content-container11" style={{marginBottom : '50%'}}>
+                  {/* 기본 정보는 항상 보이게 함 */}
+                      <div className='notice-content1'>등록된 소식이 없습니다.</div>
+                        
+                    </div>
+                
+
+) : (
+              noticeList.map((notice, index) => (
                 notice.status === 'Y' && (
                   <React.Fragment key={index}>
                     <div className="user-content-container11">
@@ -616,8 +641,8 @@ function UserStoreDetail() {
                         <div
                           className="type-title"
                           style={{
-                            backgroundColor: notice.noticeType === '소식' ? 'rgb(255 225 181)' :
-                              notice.noticeType === '공지사항' ? 'rgb(255 225 181)' : 'transparent'
+                            backgroundColor: notice.noticeType === '소식' ? 'rgb(255 255 255)' :
+                              notice.noticeType === '공지사항' ? 'rgb(255 242 224)' : 'transparent'
                           }}
                         >
                           {notice.noticeType}
@@ -647,7 +672,8 @@ function UserStoreDetail() {
 
                   </React.Fragment>
                 )
-              ))}
+              )))}
+
             </div>
 
 

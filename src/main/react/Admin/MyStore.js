@@ -28,6 +28,19 @@ function MyStore() {
 
     const [initialMyStore, setInitialMyStore] = useState(myStoreInfo);
 
+    const convertUrlsToFiles = async (imageUrls) => {
+        const files = await Promise.all(
+            imageUrls.map(async (url, index) => {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const file = new File([blob], `image${index}.jpg`, { type: blob.type });
+                return file;
+            })
+        );
+        return files;
+    };
+    
+
     //해당가게정보가져오기
     useEffect(() => {
         const fetchMyStoreInfo = async () => {
@@ -39,11 +52,16 @@ function MyStore() {
                     const formattedOpenTime = new Date(`1970-01-01T${resp.data.storeOpenTime}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
                     const formattedCloseTime = new Date(`1970-01-01T${resp.data.storeCloseTime}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 
-                    const storeImg = Array.isArray(resp.data.storeImg)
-                    ? resp.data.storeImg
-                        .filter(img => img.storeImgLocation !== null) // storeImgLocation이 null이 아닌 것만 필터링
-                        .map(img => ({ storeImgLocation: img.storeImgLocation }))
-                    : [];
+               // URL 배열을 { previewUrl: <URL> } 형식의 객체 배열로 변환
+const storeImg = Array.isArray(resp.data.storeImg)
+? resp.data.storeImg
+    .filter(img => img.storeImgLocation !== null) // null이 아닌 URL만 필터링
+    .map(img => ({ previewUrl: img.storeImgLocation })) // 객체로 변환
+: [];
+
+// 변환된 객체 배열을 newImages에 설정
+setNewImages(storeImg);
+                  
 
                     const storeSns = Array.isArray(resp.data.storeSns)
                     ? resp.data.storeSns
@@ -60,6 +78,7 @@ function MyStore() {
                         storeImg: storeImg
                     }));
 
+                    
                 } else {
                     console.log("세션에 아이디정보가 없습니다.");
                 }
@@ -143,71 +162,39 @@ function MyStore() {
         return times;
     };
 
-    //step03 사진 업로드
-    const [selectedImages, setSelectedImages] = useState([]); // 화면에 보여질 파일 리스트 (미리보기 URL)
-    const [newImgUrls, setNewImgUrls] = useState([]); //업로드할 새 이미지
+    const [images, setImages] = useState([]);
+    const [newImages, setNewImages] = useState([]);
 
-    const onSelectFile = async (e) => {
-        e.preventDefault();
-        const files = Array.from(e.target.files); // 선택된 파일들 배열로 변환
-        const imgLength = myStoreInfo.storeImg.length + selectedImages.length + files.length;
-        // 이미지는 8장 이하일 때만 추가
-        if (imgLength < 9 ) {
-
-            // 미리보기
-            const selectImgs = files.map(file => URL.createObjectURL(file));
-            setSelectedImages(prev => [...prev, ...selectImgs]);
-
-            // 파일 업로드
-            const uploadPromises = files.map(async (file) => {
-                const formData = new FormData();
-                formData.append('file', file);
-
-                try {
-                    // 서버에 파일 업로드
-                    const response = await axios.post('/adminStore/uploadImageToServer', formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    });
-
-                    // 서버에서 반환된 URL
-                    return response.data; // imageUrl만 반환해야 합니다.
-                } catch (error) {
-                    console.error("파일 업로드 오류: ", error); // 오류 로그 추가
-                    alert("파일 업로드에 실패했습니다. 다시 시도해 주세요."); // 사용자에게 오류 알림
-                    return null; // 오류가 발생할 경우 null 반환
+    const handleUpload = async () => {
+        if (!newImages || newImages.length === 0) return []; // 파일이 없으면 빈 배열 반환
+    
+        const uploadedUrls = []; // 업로드된 이미지 URL을 저장할 배열
+    
+        // 각 파일에 대해 Cloudinary 업로드 요청을 비동기로 수행
+        for (let i = 0; i < newImages.length; i++) {
+            const formData = new FormData();
+            formData.append('file', newImages[i].file);
+            formData.append('upload_preset', 'hye123'); // Cloudinary에서 설정한 Upload Preset
+    
+            try {
+                const response = await axios.post(
+                    'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
+                    formData
+                );
+    
+                // Cloudinary 응답 데이터에서 URL들을 추출하여 배열에 추가
+                if (response.data && response.data.secure_url) {
+                    uploadedUrls.push(response.data.secure_url);
                 }
-            });
-
-            // 모든 URL을 받아서 상태 업데이트
-            const imageUrls = await Promise.all(uploadPromises);
-
-            // null 값 필터링
-            const filteredUrls = imageUrls.filter(url => url !== null);
-            console.log("업로드된 이미지 filteredUrls들: ", filteredUrls); // 확인 로그 추가
-
-            if (filteredUrls.length > 0 && filteredUrls !== null) {
-                setNewImgUrls(filteredUrls); //새 이미지들 상태 저장
+            } catch (error) {
+                console.error('이미지 업로드 오류:', error);
             }
-
-        } else {
-            alert('이미지는 최대 8장까지 업로드 가능합니다.');
         }
+    
+        console.log('Uploaded Images:', uploadedUrls);
+        return uploadedUrls; // 모든 업로드된 이미지 URL 배열 반환
     };
-
-    const removeImage = (url, isUploadedImage) => {
-        if (isUploadedImage) {
-            // 서버에서 가져온 이미지 삭제
-            setMyStoreInfo((prev) => ({
-                ...prev,
-                storeImg: prev.storeImg.filter(img => img.storeImgLocation !== url),
-            }));
-        } else {
-            // 미리보기 상태의 이미지 삭제
-            setSelectedImages((prevImages) => prevImages.filter(imageUrl => imageUrl !== url));
-        }
-    };
+    
 
     //사진업로드
 
@@ -216,10 +203,12 @@ function MyStore() {
 
     //입력하기
     const handleClickSet = async() => {
+        
         if(isDisabled == true){
             setIsDisabled(!isDisabled);
         }
         console.log("수정", isDisabled);
+
 
         try {
             if (!isDisabled){
@@ -240,23 +229,27 @@ function MyStore() {
                     return;
                 }
 
-                const updatedImgs = [
-                    ...myStoreInfo.storeImg.map(img => ({
-                        storeId: myStoreInfo.storeId,
-                        storeNo: myStoreInfo.storeNo,
-                        storeImgLocation: img.storeImgLocation
-                    })),
-                    ...newImgUrls.map(url =>({
-                        storeId: myStoreInfo.storeId,
-                        storeNo: myStoreInfo.storeNo,
-                        storeImgLocation: url
-                    }))
-                ];
+                // const updatedImgs = [
+                //     ...myStoreInfo.storeImg.map(img => ({
+                //         storeId: myStoreInfo.storeId,
+                //         storeNo: myStoreInfo.storeNo,
+                //         storeImgLocation: img.storeImgLocation
+                //     })),
+                //     ...newImgUrls.map(url =>({
+                //         storeId: myStoreInfo.storeId,
+                //         storeNo: myStoreInfo.storeNo,
+                //         storeImgLocation: url
+                //     }))
+                // ];
 
-                if(updatedImgs.length < 1){
-                    alert('이미지는 최소 1장 입력해 주세요.');
-                    return;
-                }
+                // if(updatedImgs.length < 1){
+                //     alert('이미지는 최소 1장 입력해 주세요.');
+                //     return;
+                // }
+
+           
+                const imageUrls = await handleUpload(); // 이미지 URL 배열을 기다림
+                if (imageUrls.length === 0) return; // 업로드 실패 시 함수 종료
 
                 const response = await axios.post('/adminStore/updateStore',{ //update
                     storeId: myStoreInfo.storeId,
@@ -274,19 +267,85 @@ function MyStore() {
                         snsLink: sns.snsLink,
                         snsName: sns.snsName
                     })),
-                    storeImg: updatedImgs,
+                    // storeImg: updatedImgs,
                     storeStatus: myStoreInfo.storeStatus
-                });
-                console.log("등록성공 ", response.data);
-                window.location.href='/mystore.admin';
-            }
 
+                    
+                });
+                    // 이미지 파일을 추가할 FormData
+
+
+                    const formData = new FormData();
+                    formData.append('id', storeNo);
+                    
+                    // 배열의 각 URL을 개별적으로 추가
+                    imageUrls.forEach((url, index) => {
+                    formData.append('file', url); // 'file' 필드에 각 이미지를 추가
+                    });
+                    
+                    // FormData의 내용을 확인 (Array.from을 사용하여 배열로 변환)
+                    console.log([...formData]);
+                    
+                    axios.post(`/adminStore/uploadImageToServer`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data', // 헤더 설정
+                    },
+                    })
+                    .then(response => {
+                    console.log('파일 업로드 성공:', response.data);
+                    // alert("리뷰 등록이 완료되었습니다.");
+                    // window.location.href = '/userMyReservationList.user'; // 페이지 이동;
+                    })
+                    .catch(error => {
+                    console.error('에러 발생:', error);
+                    });
+                    
+
+
+                console.log("등록성공 ", response.data);
+                alert('가게 정보 수정이 완료되었습니다.');
+                // window.location.href='/mystore.admin';
+            }
         }catch (error){
             console.log("error발생 ", error);
         }
     };
 
-    //탈퇴하기
+
+    
+    // 이미지 파일 업로드 핸들러
+    const handleFileUpload = (event) => {
+        const files = Array.from(event.target.files); // 선택된 파일들
+        const totalImagesCount = files.length + newImages.length;
+
+        // 이미지 개수 제한: 최대 8개
+        if (totalImagesCount > 8) {
+            alert("이미지는 최대 8개까지 업로드할 수 있습니다.");
+            return;
+        }
+
+        // 파일을 객체와 URL로 변환하여 newImages 상태에 추가
+        const newImagesWithUrl = files.map((file) => ({
+            file,
+            previewUrl: URL.createObjectURL(file),
+        }));
+
+        // 상태 업데이트: 새 이미지 객체 추가
+        setNewImages((prev) => [...prev, ...newImagesWithUrl]);
+
+        console.log("newImages:", newImagesWithUrl);
+    };
+
+    // 이미지 삭제 핸들러
+    const handleImageDelete = (index) => {
+        // 선택된 이미지 삭제 (URL과 파일 둘 다 삭제)
+        setNewImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    };
+      
+    useEffect(()=> {
+        console.log(newImages, images);
+    },[newImages, images])
+
     const handleClickUnSubscribe = async() => {
         const isConfirmed = confirm('탈퇴하시겠습니까?');  // 사용자가 "확인"을 클릭했는지 확인
 
@@ -308,9 +367,10 @@ function MyStore() {
     };
 
 
+
     return (
     <div className="admin-store-info-container">
-        <h1>My Store</h1>
+           <div className="main-content-title"> <div className='header-title'> 가게 관리 </div></div>
 
         <div className="btn-box">
         {isDisabled && (
@@ -379,16 +439,21 @@ function MyStore() {
 
         {/* SNS 관리 섹션 */}
         <div className="section-container">
+            <div  className="sns-btn">
             <h2>SNS 관리</h2>
-            <div className="sns-content sns-management">
-                {myStoreInfo.storeSns.length < 3 && !isDisabled && (
+            {myStoreInfo.storeSns.length < 3 && !isDisabled && (
                     <button type="button" onClick={() => setMyStoreInfo(prevState => ({
                             ...prevState,
                             storeSns: [...prevState.storeSns, { snsLink: ''}]
-                        }))}>
+                        }))}
+                       >
                         SNS 링크 추가
                     </button>
                 )}
+            </div>
+           
+            <div className="sns-content sns-management">
+             
                 {myStoreInfo.storeSns.map((sns, index) => (
                     (sns.snsLink || !isDisabled) ? ( //링크가 잇거나 수정상태
                         <div key={index} className="sns-row">
@@ -410,7 +475,7 @@ function MyStore() {
                             )}
                             {!isDisabled &&  index > -1 && (
                                 <>
-                                    <button type="button" onClick={() => handleFixSns(index)}>
+                                    <button className='modify-btn' type="button" onClick={() => handleFixSns(index)}>
                                         {sns.isDisabled ? '수정':'저장'}
                                     </button>
                                     <button type="button" className="snsDelete-btn" onClick={() => handleDeleteSns(index)}>
@@ -452,38 +517,68 @@ function MyStore() {
                 <h2>사진 관리</h2>
                 <span className="small-text">* 필수 (최대 8장)</span>
             </div>
-            <label htmlFor="file-upload" className="custom-file-upload">
+            {/* <label htmlFor="file-upload" className="custom-file-upload">
                 파일 업로드
-            </label>
-            <input
-                id="file-upload"
-                type="file"
-                multiple // 여러 파일 선택 가능
-                onChange={onSelectFile}
-                accept=".png, .jpg, .jpeg, image/*"
-                style={{ display: 'none', marginTop: '10px' }}
-                disabled={isDisabled}
-            />
-            <div className="photo-grid">
-                {/* DB에서 가져온 이미지 */}
+            </label> */}
+            <div className="media-section">
+         {/* + 버튼을 4개 이하일 때만 보이도록 조건 추가 */}
+    
+            {newImages.length < 8 && !isDisabled && (
+                <div
+                className="camera-placeholder"
+                onClick={() => document.getElementById('file-input').click()}
+                >
+                <p className="camera-icon">+</p>
+                <input
+                    type="file"
+                    id="file-input"
+                    accept="image/*"
+                    multiple
+                    style={{ display: 'none' }}
+                    onChange={handleFileUpload}
+                />
+                </div>
+            )}
+            {newImages.map((image, index) => (
+                <div key={index} style={{ position: 'relative', margin: '10px' }}>
+                <img
+                    src={image.previewUrl} alt={`preview-${index}`} 
+                    style={{ width: '100px', height: '100px' }}
+                />
+                {/* 삭제 버튼 */}
+                { !isDisabled && (
+                <button
+                    onClick={() => handleImageDelete(index)}
+            className='btn-del2'
+                >
+                    X
+                </button>
+                 )}
+                </div>
+            ))}
+  
+ 
+</div>
+
+            {/* <div className="photo-grid">
+   
                 {myStoreInfo.storeImg.length > 0 && myStoreInfo.storeImg.map((imgurl, index) => (
                     <div key={imgurl.storeImgLocation} className="photo-item">
                         <img src={imgurl.storeImgLocation} alt={`DB 이미지 ${index + 1}`} />
                         {!isDisabled && (
-                            <i className="bi bi-x-circle-fill" onClick={() => removeImage(imgurl.storeImgLocation, true)}></i>
+                            <i className="bi bi-x-circle-fill" onClick={() => handleImageDelete(imgurl.storeImgLocation, true)}></i>
                         )}
                     </div>
-                ))}
+                ))} 
 
-                {/* 선택된 이미지 */}
                 {!isDisabled && selectedImages.length > 0 && selectedImages.map((url, index) => (
                     <div key={url} className="photo-item">
                         <img src={url} alt={`첨부파일 ${index + 1}`} />
-                            <i className="bi bi-x-circle-fill" onClick={() => removeImage(url, false)}></i>
+                            <i className="bi bi-x-circle-fill" onClick={() => handleImageDelete(index)}></i>
                     </div>
                 ))}
-            </div>
-        </div>
+            </div> */}
+        </div> 
 
 
 

@@ -281,7 +281,7 @@ const img = cld
         </div>
 
         <div className='store-notice-top'>
-         <div> {paginatedData.length} 건 ( 총 {noticeList.length} 건)</div>
+         <div className='totalpage'> {paginatedData.length} 건 ( 총 {noticeList.length} 건)</div>
           <div className="dropdown-menu">
                                     <select onChange={(e) => handleItemsPerPageChange(e.target.value)} value={itemsPerPage}>
                                         <option value="20" >20개씩 보기</option>

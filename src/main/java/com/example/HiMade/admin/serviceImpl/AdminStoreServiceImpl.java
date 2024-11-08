@@ -146,26 +146,30 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
-    public String uploadImage(MultipartFile file) { //이미지 URL 변환해서 리턴
-        String imageUrl = null;
-        try {
-            String uploadDir = "C:/Users/admin/Desktop/HandyLink/src/main/resources/static/uploads/storeImg"; // 원하는 경로로 변경
-            File dir = new File(uploadDir);
-            if (!dir.exists()) {
-                dir.mkdirs(); // 디렉토리가 존재하지 않으면 생성
-            }
+    public void uploadImage(String file, int id) { //이미지 URL 변환해서 리턴
+    adminStoreMapper.uploadImage(file, id);
 
-            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            File uploadFile = new File(uploadDir + "/" + fileName); // 파일 경로 설정
-            file.transferTo(uploadFile); // 파일 저장
 
-            // URL 반환
-            imageUrl = "http://localhost:8585/uploads/storeImg/" + fileName; // 로컬 개발 환경
-            // imageUrl = "https://example.com/uploads/" + fileName; // 운영 환경
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return imageUrl; // 업로드된 파일의 URL 반환
+
+//        String imageUrl = null;
+//        try {
+//            String uploadDir = "C:/Users/admin/Desktop/HandyLink/src/main/resources/static/uploads/storeImg"; // 원하는 경로로 변경
+//            File dir = new File(uploadDir);
+//            if (!dir.exists()) {
+//                dir.mkdirs(); // 디렉토리가 존재하지 않으면 생성
+//            }
+//
+//            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+//            File uploadFile = new File(uploadDir + "/" + fileName); // 파일 경로 설정
+//            file.transferTo(uploadFile); // 파일 저장
+//
+//            // URL 반환
+//            imageUrl = "http://localhost:8585/uploads/storeImg/" + fileName; // 로컬 개발 환경
+//            // imageUrl = "https://example.com/uploads/" + fileName; // 운영 환경
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return imageUrl; // 업로드된 파일의 URL 반환
     }
 
 
@@ -174,6 +178,10 @@ public class AdminStoreServiceImpl implements AdminStoreService {
         return adminStoreMapper.duplicatedId(storeId);
     }
 
+    @Override
+    public void deleteImage(int id, String file) {
+       adminStoreMapper.deleteImage(id, file);
+    }
 
 
     @Override

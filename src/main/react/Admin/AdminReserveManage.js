@@ -671,9 +671,9 @@ useEffect(() => {
 
                         <div className="dropdown-menu">
                         <div className="store-notice-top">
-                        <div> {paginatedData.length} 건 ( 총 {reservationList.length} 건)</div>
+                        <div className='totalpage'> {paginatedData.length} 건 ( 총 {reservationList.length} 건)</div>
                                     <select onChange={(e) => setItemsPerPage(e.target.value)} value={itemsPerPage}>
-                                        <option value="20" >20개씩 보기</option>
+                                         <option value="20" >20개씩 보기</option>
                                         <option value="50">50개씩 보기</option>
                                         <option value="100">100개씩 보기</option>
                                     </select>

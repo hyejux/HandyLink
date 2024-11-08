@@ -160,7 +160,7 @@ function AdminReviewList() {
             <button> <i className="bi bi-search"></i> </button>
           </div> 
           */}
-           <div> {paginatedReviewList.length} 건 ( 총 {reviewList.length} 건)</div>
+           <div className='totalpage'> {paginatedReviewList.length} 건 ( 총 {reviewList.length} 건)</div>
  
           <div className="dropdown-menu">
                                     <select onChange={(e) => handleItemsPerPageChange(e.target.value)} value={itemsPerPage}>
@@ -272,7 +272,7 @@ function AdminReviewList() {
       onClick={() => handlePageChange(currentPage - 1)}
       disabled={currentPage === 1}
     >
-      &lt; 이전
+      &lt; 
     </button>
 
     {[...Array(totalPages)].map((_, i) => (
@@ -290,7 +290,7 @@ function AdminReviewList() {
       onClick={() => handlePageChange(currentPage + 1)}
       disabled={currentPage === totalPages}
     >
-      다음 &gt;
+       &gt;
     </button>
   </div>
 </div>

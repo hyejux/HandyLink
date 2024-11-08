@@ -1,5 +1,4 @@
 .user-account-find {
-    margin: 100px auto;
     background-color: white;
     padding: 20px;
     text-align: center;
@@ -7,12 +6,12 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-top: 50px;
 }
 
 .user-account-find form {
     width: 100%;
     margin: 50px;
-    margin-bottom: 100px;
 }
 
 .user-account-find-toggle {

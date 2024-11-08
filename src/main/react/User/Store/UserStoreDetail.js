@@ -416,16 +416,20 @@ function UserStoreDetail() {
     setSortOrder(event.target.value);
   };
 
-
-
+  // 뒤로가기 추가
+  const handleGoBack = () => {
+    window.history.back();
+  };
 
   return (
     <div>
       <div className="user-main-container">
+{/*     잠시 주석 처리하겠습니다..
         <div className="user-top-nav">
-          <i className="bi bi-arrow-left"></i>
+          <i className="bi bi-arrow-left" onClick={handleGoBack}></i>
           <logo className="logo"> 상단바 고민중 </logo>
         </div>
+*/}
 
         <div className="user-main-content">
           <div className="user-content-first">

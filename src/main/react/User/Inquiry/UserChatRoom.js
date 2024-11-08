@@ -256,16 +256,13 @@ function UserChatRoom() {
         return formatDate(date1) !== formatDate(date2);
     };
 
+    const handleGoBack = () => {
+        window.history.back();
+    };
+
     return (
         <div>
             <div className="user-chat-room-container">
-
-                <div className="back-button">
-                    <i className="bi bi-arrow-left" onClick= {() => {
-                        window.location.href = '/userChatList.user';
-                    }}></i>
-                </div>
-
                 {(storeInfo.storeStatus === '비활성화' || storeInfo.storeStatus === '정지' || !isBusinessHours) && (
                     <div className="business-hours-message">
                         <div className="profile-section">

@@ -242,6 +242,22 @@ td {
     gap: 10px;
 }
 
-.option-detail{
+.calendar-day-cell {
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 부드러운 전환 효과 */
+}
 
+.calendar-day-cell:hover {
+    background-color: #FFDDC1; /* 원하는 색상 */
+}
+
+.customer-info-title{
+    display: flex;
+    position: relative;
+    align-items: center;
+}
+
+.done{
+    position: absolute;
+    right: 0;
 }

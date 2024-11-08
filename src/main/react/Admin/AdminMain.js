@@ -23,17 +23,13 @@ function AdminMain() {
   const [selectedCustomerInfo, setSelectedCustomerInfo] = useState(null); //클릭한 예약자정보
 
   useEffect(()=>{
+    //main-count
     const fetchCount = async() => {
       const resp = await axios.get(`/adminStore/getMainCount?storeNo=${storeNo}`);
       setCount(resp.data);
     };
 
-    fetchCount();
-    handleClickBook();
-  },[]);
-
-  //캘린더
-  useEffect(() => {
+    //오늘 예약건 조회
     const fetchReservationCounts = async() => {
       try{
         const resp = await axios.get(`/adminStore/getReservationCounts?storeNo=${storeNo}`);
@@ -43,9 +39,17 @@ function AdminMain() {
         console.error("캘린더 예약 로딩 실패 error ",error);
       }
     }
+
+    fetchCount();
+    handleClickBook();
     fetchReservationCounts();
+
   },[]);
-  console.log("날짜와 예약건수 ",events);
+
+  //날짜 클릭으로 예약 조회하기
+  useEffect(() => {
+    handleClickBook();
+  },[selectedDate]);
 
   //날짜 받기
   const handleChangeDate = (e) => {
@@ -123,6 +127,10 @@ function AdminMain() {
               initialView="dayGridMonth"
               locale="ko" // 한글로 설정
               events={events}
+              dateClick={(info) => {
+                setSelectedDate(info.dateStr)
+              }}
+              dayCellClassNames={() => 'calendar-day-cell'}
               dayCellContent={(arg) => (
                 <div style={{ padding: '10px' }}>
                   <span>{arg.dayNumberText}</span>
@@ -188,7 +196,12 @@ function AdminMain() {
           </div>
 
           <div className="customer-info-container">
-            <h3>예약 정보</h3>
+        <div className="customer-info-title">
+          <h3>예약 정보</h3>
+          {selectedCustomerInfo && (
+            <button type="button" className="done">픽업완료</button>
+          )}
+        </div>
             <div className="customer-info">
               <div className="customer-detail">
                 <div className="customer-group">

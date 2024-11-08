@@ -413,7 +413,7 @@ function UserMain() {
 
           {/* 배너 */}
           <div className="advertisement-banner">
-            <img src='./img/banner/banner1.png' />
+            <img src='https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731039573/nh8d2u43ldav5tetglsb.png' />
           </div>
 
           {/* 내 주변 가게 */}
@@ -548,7 +548,7 @@ function UserMain() {
           
           {/* 배너 */}
           <div className="advertisement-banner">
-            <img src='./img/banner/banner2.png' />
+            <img src='https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731039573/hgsu9ohdoygw2ysrkcsg.jpg' />
           </div>
 
 
@@ -722,7 +722,7 @@ function UserMain() {
 
           {/* 배너 */}
           <div className="advertisement-banner">
-            <img src='./img/banner/banner1.png' />
+            <img src='https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731039573/fuwqrgrxuqtho4exgpk5.jpg' />
           </div>
 
 

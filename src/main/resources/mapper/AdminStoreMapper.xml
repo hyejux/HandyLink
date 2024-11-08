@@ -426,6 +426,7 @@
         from reservation_slot rs
         join reservation r on r.reservation_slot_key = rs.reservation_slot_key
         where r.store_no = #{storeNo}
+            and (r.reservation_status = '확정' or r.reservation_status='완료')
         group by reservation_slot_date;
     </select>
 
@@ -436,6 +437,8 @@
         join reservation_slot rs on rs.reservation_slot_key = reserve.reservation_slot_key
         where rs.reservation_slot_date = #{reservationSlotDate}::DATE
             and reserve.store_no = #{storeNo}
+            and (reserve.reservation_status = '확정'
+            or reserve.reservation_status='완료')
     </select>
 
     <select id="getTodayCustomer" resultMap="customerReservationMap">
@@ -487,6 +490,18 @@
         </collection>
     </resultMap>
 
+    <select id="getReservationStatus" resultType="int">
+        select reservation_no
+        from reservation
+        where reservation_status = '완료'
+            and store_no = #{storeNo}
+    </select>
 
+    <update id="completeReservationStatus">
+        update reservation
+        set reservation_status = '완료'
+        where store_no = #{storeNo}
+            and reservation_no = #{reservationNo}
+    </update>
 
 </mapper>

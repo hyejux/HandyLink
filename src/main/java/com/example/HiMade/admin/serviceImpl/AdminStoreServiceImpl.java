@@ -237,6 +237,16 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
+    public List<Integer> getReservationStatus(Long storeNo) {
+        return adminStoreMapper.getReservationStatus(storeNo);
+    }
+
+    @Override
+    public Integer completeReservationStatus(Long storeNo, Long reservationNo) {
+        return adminStoreMapper.completeReservationStatus(storeNo, reservationNo);
+    }
+
+    @Override
     public Map<String , Integer> getReportCount(Long storeNo) {
         Integer reviewCount = adminStoreMapper.getReviewCount(storeNo);
         Integer doingCount = adminStoreMapper.getDoingCount(storeNo);

@@ -35,6 +35,12 @@ public class UserReservationServiceImpl implements UserReservationService {
     return userReservationMapper.getDateTime(Date);
   }
 
+
+  @Override
+  public List<UserRSlotDTO> getDateTime2(int id) {
+//    System.out.println(userReservationMapper.getDateTime(id));
+    return userReservationMapper.getDateTime2(id);
+  }
   @Override
   public List<UserRSlotDTO> getAllDateTime(int id) {
 

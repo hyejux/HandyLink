@@ -869,6 +869,7 @@ h3 {
 }
 
 .user-main-menu-bar button {
+  font-size: 14px;
   font-weight: bold;
   width: 25%;
   border: none;

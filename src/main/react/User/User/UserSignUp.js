@@ -137,14 +137,12 @@ function UserSignUp() {
     // 아이디 중복 확인
     const handleCheckId = async () => {
 
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+        const emailPattern = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
         if (!isKakaoSignUp && !formData.userId) {
             alert("이메일을 입력해주세요.");
             return;
         }
-
 
         if (!isKakaoSignUp && !formData.userId || !emailPattern.test(formData.userId)) {
             alert("아이디는 이메일 형식이어야 합니다.");

@@ -35,6 +35,9 @@ body {
     justify-content: space-between;
     padding: 10px;
     background-color: #ffffff;
+    z-index: 50;
+    width: 100%;
+    position: fixed;
 }
 
 /* 상단 버튼 디자인 */

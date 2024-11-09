@@ -209,7 +209,7 @@ function UserSearch() {
           <div className="user-main-list-container event-container">
             <div className="user-category-menu" onClick={() => handleHashtagClick("디저트")}>
               <div className="user-category-menu-img">
-                <img src="./img/advertisement/advertisement3.jpg" alt="디저트 배너" />
+                <img src="./img/search-category/dessert.jpg" alt="디저트 배너" />
                 <div className="store-category-name">디저트</div>
               </div>
             </div>
@@ -217,7 +217,7 @@ function UserSearch() {
           <div className="user-main-list-container event-container">
             <div className="user-category-menu" onClick={() => handleHashtagClick("꽃")}>
               <div className="user-category-menu-img">
-                <img src="./img/advertisement/advertisement4.jpg" alt="꽃 배너" />
+                <img src="./img/search-category/flower.jpg" alt="꽃 배너" />
                 <div className="store-category-name">꽃</div>
               </div>
             </div>
@@ -225,7 +225,7 @@ function UserSearch() {
           <div className="user-main-list-container event-container">
             <div className="user-category-menu" onClick={() => handleHashtagClick("공예")}>
               <div className="user-category-menu-img">
-                <img src="./img/advertisement/advertisement5.jpg" alt="공예 배너" />
+                <img src="./img/search-category/handcraft.jpg" alt="공예 배너" />
                 <div className="store-category-name">공예</div>
               </div>
             </div>
@@ -233,7 +233,7 @@ function UserSearch() {
           <div className="user-main-list-container event-container">
             <div className="user-category-menu" onClick={() => handleHashtagClick("뷰티")}>
               <div className="user-category-menu-img">
-                <img src="./img/advertisement/advertisement6.jpg" alt="뷰티 배너" />
+                <img src="./img/search-category/beauty.jpg" alt="뷰티 배너" />
                 <div className="store-category-name">뷰티</div>
               </div>
             </div>
@@ -241,7 +241,7 @@ function UserSearch() {
           <div className="user-main-list-container event-container">
             <div className="user-category-menu" onClick={() => handleHashtagClick("패션")}>
               <div className="user-category-menu-img">
-                <img src="./img/advertisement/advertisement7.jpg" alt="패션 배너" />
+                <img src="./img/search-category/fashion.jpg" alt="패션 배너" />
                 <div className="store-category-name">패션</div>
               </div>
             </div>
@@ -249,7 +249,7 @@ function UserSearch() {
           <div className="user-main-list-container event-container">
             <div className="user-category-menu" onClick={() => handleHashtagClick("주얼리")}>
               <div className="user-category-menu-img">
-                <img src="./img/advertisement/advertisement8.jpg" alt="주얼리 배너" />
+                <img src="./img/search-category/jewelry.jpg" alt="주얼리 배너" />
                 <div className="store-category-name">주얼리</div>
               </div>
             </div>
@@ -257,7 +257,7 @@ function UserSearch() {
           <div className="user-main-list-container event-container">
             <div className="user-category-menu" onClick={() => handleHashtagClick("디지털")}>
               <div className="user-category-menu-img">
-                <img src="./img/advertisement/advertisement1.jpg" alt="디지털 배너" />
+                <img src="./img/search-category/digital.jpg" alt="디지털 배너" />
                 <div className="store-category-name">디지털</div>
               </div>
             </div>
@@ -265,7 +265,7 @@ function UserSearch() {
           <div className="user-main-list-container event-container">
             <div className="user-category-menu" onClick={() => handleHashtagClick("반려동물")}>
               <div className="user-category-menu-img">
-                <img src="./img/advertisement/advertisement2.jpg" alt="반려동물 배너" />
+                <img src="./img/search-category/pet.jpg" alt="반려동물 배너" />
                 <div className="store-category-name">반려동물</div>
               </div>
             </div>
@@ -276,9 +276,6 @@ function UserSearch() {
 
       {/* 추천 해시태그 */}
       <div className='"user-search-content' ref={storeListRef2}>
-        <button className="nav-button left" ref={btnLeftStoreRef2} aria-label="왼쪽으로 이동">‹</button>
-        <button className="nav-button right" ref={btnRightStoreRef2} aria-label="오른쪽으로 이동">›</button>
-
         <div className="list-header">추천 해시태그</div>
         <div className="user-hashtag-list-wrap">
           <div className="user-hashtag-list">

@@ -127,6 +127,7 @@ h3 {
   float: left;
   font-size: 20px;
   font-weight: bold;
+  color: #fd8517;
 }
 
 .search-top .right {
@@ -341,25 +342,26 @@ h3 {
 }
 
 .store-title-1 {
-  font-size: 12px;
+  font-size: 14px;
   text-align: center;
   margin-top: 5px;
 }
 
 .store-category {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   text-align: center;
 }
 
 .store-distance {
-  font-size: 10px;
+  font-size: 12px;
   text-align: center;
-  color: #bbb;
+  color: #555;
 }
 
 .store-title-2 {
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: bold;
   margin-top: 5px;
 }
 
@@ -373,8 +375,14 @@ h3 {
   font-size: 12px;
 }
 
+.review-count {
+  font-size: 12px;
+  color: #999;
+  margin-left: 2px;
+}
+
 .store-option {
-  font-size: 10px;
+  font-size: 12px;
   margin-left: 5px;
 }
 
@@ -915,12 +923,12 @@ h3 {
 }
 
 .menu-info-store-name {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 }
 
 .menu-info-hashtag {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .menu-info-review-cate .menu-info-review {
@@ -928,6 +936,6 @@ h3 {
 }
 
 .menu-info-review-cate .menu-info-cate {
-  font-size: 14px;
+  font-size: 12px;
 }
 

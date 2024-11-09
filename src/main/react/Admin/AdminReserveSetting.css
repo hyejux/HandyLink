@@ -43,24 +43,20 @@
 }
 
 .btn-modi {
-  height: 100%;
+  border: 1px solid #ddd;
+  /* background-color: #1d2830; */
   width: 100%;
-  border: 2px solid #1d2830;
-  color : #ffffff;
+  height: 157px;
+  border-radius: 3px;
+  /* border: 2px solid #1d2830; */
+  color: #2a2a2a;
+  background: #fff;
   font-weight: bold;
-
+  font-size: 20px;
  
 }
 
-.btn-modi:nth-child(1){
-  background-color: #505f69;
-  border-top-right-radius: 10px;
-}
 
-.btn-modi:nth-child(2){
-  background-color: #2e3133;
-  border-bottom-right-radius: 10px;
-}
 
 
 .btn-del:hover {
@@ -93,30 +89,31 @@
 .reserve-content-text-box {
   /* border : 1px solid red; */
   overflow: auto;
-  height: 84px;
+  /* height: 84px; */
 }
 
 .reserve-container {
   border: 1px solid #ddd;
-  box-shadow: 0 2px 4px 0 #eee, 0 3px 5px 0 #eee;
+  /* box-shadow: 0 2px 4px 0 #eee, 0 3px 5px 0 #eee; */
   border-radius: 10px;
   display: flex;
   /* margin: 2% 10%; */
   width: 100%;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
   height: 155px;
 }
 
 .reserve-img {
-  margin: 20px;
-  width: 40%;
-  height: 80%;
+  /* margin: 20px; */
+  /* width: 40%;
+  height: 80%; */
   position: relative;
 }
 
 .reserve-img > img {
+  border: 1px solid #ddd;
   width: 100%;
-  height: 100%;
+  height: 150px;
   object-fit: cover;
   border-radius: 10px;
 
@@ -143,3 +140,65 @@
 
 
 
+
+.management-table {
+  width: 100%;
+  /* border: 1px solid #ddd; */
+  border-collapse: collapse;
+  font-size: 15px;
+
+
+}
+
+.management-table thead {
+  /* background: linear-gradient(360deg, rgb(230 230 230) 0%, #f4f4f5 100%); */
+  background: #e7eaef69;
+  box-shadow: unset;
+  color: #38414a;
+  border-top: 2px solid #38414a;
+  border-bottom: 2px solid #ddd;
+
+}
+
+
+
+.management-table th,
+.management-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  border-right: 1px solid #ddd;
+}
+
+.management-table th:last-child,
+.management-table td:last-child {
+  border-right: none;
+  /* color : red; */
+}
+
+
+.management-table th {
+  font-weight: bold;
+}
+
+
+
+th:nth-child(1), td:nth-child(1) {
+  width: 3%; /* No 열 너비를 10%로 고정 */
+}
+
+th:nth-child(2), td:nth-child(2) {
+  width: 13%; /* 이미지 열 너비를 20%로 고정 */
+}
+
+th:nth-child(3), td:nth-child(3) {
+  width: 30%; /* 상품정보 열 너비를 30%로 고정 */
+}
+
+th:nth-child(4), td:nth-child(4) {
+  width: 3%; /* 상품수정 열 너비를 20%로 고정 */
+}
+
+th:nth-child(5), td:nth-child(5) {
+  width: 3%; /* 슬롯관리 열 너비를 20%로 고정 */
+}

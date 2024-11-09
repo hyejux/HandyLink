@@ -25,6 +25,12 @@ public class UserReservationController {
     System.out.println(userReservationService.getDateTime(dto));
     return userReservationService.getDateTime(dto);
   }
+  @GetMapping("/getDateTime2/{id}")
+  public List<UserRSlotDTO> getDateTime2(@PathVariable int id){
+//    dto.setCategoryId(id);
+//    System.out.println(userReservationService.getDateTime2(id));
+    return userReservationService.getDateTime2(id);
+  }
 
   @GetMapping("/getAllDateTime/{id}")
   public List<UserRSlotDTO> getAllDateTime(@PathVariable int id){

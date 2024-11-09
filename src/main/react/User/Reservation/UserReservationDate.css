@@ -17,6 +17,13 @@
     color: #946666;
   }
 
+  button:disabled {
+    background-color: rgba(239, 239, 239, 0.3) !important;
+    color: rgba(16, 16, 16, 0.3) !important;
+    border-color: rgba(118, 118, 118, 0.3) !important;
+}
+
+
 body {
   font-family: 'Pretendard-Regular';
     margin: 0px;
@@ -454,4 +461,37 @@ body {
 .search-top .right {
   float: right;
   font-size: 20px;
+}
+
+
+
+.react-calendar__tile.disabled-tile {
+  background-color: #f0f0f0; /* 배경 색상 */
+  color: #aaa; /* 텍스트 색상 */
+  cursor: not-allowed; /* 마우스 커서를 비활성화 상태로 변경 */
+}
+
+
+/* 예약이 가득 찬 날짜에 대한 스타일 */
+/* 예약이 가득 찬 날짜에 대한 스타일 */
+.reserved {
+  background-color: #c8c8c8  !important;
+  color: white !important; /* 텍스트 색상 변경 */
+}
+
+
+/* 기본 캘린더 스타일 */
+.react-calendar__tile {
+  max-width: 50px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  color: #000;
 }

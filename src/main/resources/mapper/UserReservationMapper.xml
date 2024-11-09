@@ -91,6 +91,11 @@
         AND category_id = #{categoryId}
     </select>
 
+    <select id="getDateTime2" resultType="com.example.HiMade.user.dto.UserRSlotDTO">
+        select * from reservation_slot where
+        category_id = #{categoryId}
+    </select>
+
     <select id="getAllDateTime" resultType="com.example.HiMade.user.dto.UserRSlotDTO">
         <![CDATA[
     SELECT *

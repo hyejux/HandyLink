@@ -15,6 +15,7 @@ UserReservationService {
 
   public List<UserRL> getMyReserveList(UserRL dto);
   public List<UserRSlotDTO> getDateTime(UserRSlotDTO Date);
+  public List<UserRSlotDTO> getDateTime2(int id);
   public List<UserRSlotDTO> getAllDateTime(int id);
 
   public int setReservationForm(UserReservationDTO dto);

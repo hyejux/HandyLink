@@ -55,8 +55,18 @@ function UserReservationDate() {
 
         // 상태 업데이트
         setDisabledDates(response.data);
-        console.log('비활성화할 날짜:', response.data); // 비활성화할 날짜 확인
+        console.log('비활성화할 날짜ssssssss:', response.data); // 비활성화할 날짜 확인
       })
+
+
+      axios
+      .get(`/userReservation/getDateTime2/${categoryId}`)
+      .then(response => {
+        console.log('첫 번째 API 응답 데이터:', response.data); // 응답 데이터 전체를 출력
+        setDateTime2(response.data);
+      }
+      )
+       
 
 
 
@@ -69,6 +79,9 @@ function UserReservationDate() {
     const threeMonthsLater = new Date();
     threeMonthsLater.setMonth(today.getMonth() + 3);
 
+          //     const formattedDate = date.toISOString().split('T')[0];
+      //     return disabledDates.includes(formattedDate);
+
     // 오늘과 3개월 후의 날짜 사이의 날짜는 비활성화 하지 않음
     return date < today || date > threeMonthsLater;
   };
@@ -77,6 +90,7 @@ function UserReservationDate() {
 
   const [date, setDate] = useState(new Date());
   const [dateTime, setDateTime] = useState([]);
+  const [dateTime2, setDateTime2] = useState([]);
 
   const handleDateChange = (newDate) => { 
     console.log("실행됨 ----------");
@@ -101,6 +115,7 @@ function UserReservationDate() {
 
         setRSloyKey(reservationSlotKey);
         setDateTime(response.data);
+
         console.log('reservationSlotKey:', reservationSlotKey); // reservationSlotKey 값을 확인
 
         // reservationSlotKey를 받아온 후에 두 번째 API 호출
@@ -264,12 +279,7 @@ function UserReservationDate() {
       
       
       
-      // const tileDisabled = ({ date, view }) => {
-        //   // 날짜가 비활성화할 날짜 리스트에 포함되어 있으면 true 반환
-        //   const formattedDate = date.toISOString().split('T')[0];
-        //   return disabledDates.includes(formattedDate);
-        // };
-        
+     
         
         // const isDateDisabled = (date) => {
           //   // 선택한 날짜의 슬롯을 확인하여 disabled 여부를 반환
@@ -277,7 +287,22 @@ function UserReservationDate() {
           //   const slot = dateTime.find(slot => slot.date === formattedDate); // 해당 날짜의 슬롯 찾기
   //   return slot && slot.slotStatusCount === slot.slotCount; // 슬롯이 모두 채워졌다면 true 반환
   // };
-
+  const getTileClass = ({ date }) => {
+    const formattedDate = date.toLocaleDateString('en-CA'); // 'yyyy-mm-dd' 형식으로 변환 (로컬 시간 기준)
+    const slot = dateTime2.find((slot) => slot.reservationSlotDate === formattedDate); // 해당 날짜의 예약 정보 찾기
+    
+    // slot을 찾았는지, 그리고 slotStatusCount와 slotCount가 정확히 일치하는지 확인
+    if (slot) {
+      console.log(`Checking slot for date ${formattedDate}:`, slot);
+      if (slot.slotStatusCount === slot.slotCount) {
+        return 'reserved'; // 예약이 모두 찼다면 'reserved' 클래스 반환
+      }
+    }
+    
+    return ''; // 예약이 찼지 않거나 slot이 없으면 빈 문자열 반환
+  };
+  
+  
 
   return (
     <div className="user-main-container">
@@ -330,7 +355,7 @@ function UserReservationDate() {
               next2Label={null}
               prev2Label={null}
               tileDisabled={tileDisabled}
-
+              tileClassName={getTileClass} // tileClassName을 사용하여 날짜 스타일링
             // 비활성화 로직 적용
 
             // formatDay={(locale, date) => moment(date).format('D')}

@@ -421,6 +421,11 @@ function UserStoreDetail() {
     window.history.back();
   };
 
+
+  const uniquePhotos = reviewPhotoList
+  .map((photo) => photo.reviewImgUrl) // reviewImgUrl만 추출
+  .filter((url, index, self) => self.indexOf(url) === index); // 중복 제거
+
   return (
     <div>
       <div className="user-main-container">
@@ -773,16 +778,20 @@ function UserStoreDetail() {
                     <div key={review.reviewNo} className="review-item">
 
                       <div className="photo-review2">
-                        {review.userReviewImg.map((imgUrl, index) => {
-                          // 'blob:'를 제거한 URL 생성
+                      {[...new Set(review.userReviewImg)].map((imgUrl, index) => {
                           const formattedUrl = imgUrl.replace('blob:', '');
                           return (
-                            <img key={index} className="photo-item2" src={formattedUrl} alt={`Review image ${index + 1}`}
-                              onClick={() => openModal(formattedUrl)} // 클릭 시 모달 열기
+                            <img
+                              key={index}
+                              className="photo-item2"
+                              src={formattedUrl}
+                              alt={`Review image ${index + 1}`}
+                              onClick={() => openModal(formattedUrl)}
                               style={{ cursor: 'pointer' }}
                             />
                           );
                         })}
+
                       </div>
 
 
@@ -855,13 +864,16 @@ function UserStoreDetail() {
 
                 <h2> <i class="bi bi-chevron-left" onClick={() => setActiveSection('review')}></i> 포토 리뷰</h2>
                 <div className="photo-review3">
-                  {reviewPhotoList.map((photo, index) => (
-                    <div className="photo-item"> <img key={index} src={photo.reviewImgUrl} alt="Review Photo"
-                      onClick={() => openModal(photo.reviewImgUrl)} // 클릭 시 모달 열기
-                      style={{ cursor: 'pointer' }}
-                    /></div>
-
-                  ))}
+                {uniquePhotos.map((url, index) => (
+      <div key={index} className="photo-item">
+        <img
+          src={url}
+          alt="Review Photo"
+          onClick={() => openModal(url)} // 클릭 시 모달 열기
+          style={{ cursor: 'pointer' }}
+        />
+      </div>
+    ))}
 
                 </div>
 

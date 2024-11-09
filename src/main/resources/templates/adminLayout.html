@@ -119,6 +119,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentPath = window.location.pathname.split('/').pop(); // 현재 URL에서 마지막 부분 (페이지 이름)
     console.log(currentPath);
 
+
+    
     const menuItems = document.querySelectorAll('.menu-btn a');
     menuItems.forEach(item => {
         const linkPath = item.getAttribute('href').split('/').pop();
@@ -141,6 +143,9 @@ document.addEventListener('DOMContentLoaded', function() {
             item.style.backgroundColor = '#c7ddea94'; // 배경색 빨간색으로 활성화
         }
     });
+
+
+
     // 다른 페이지로 이동 시 드롭다운 해제
     menuItems.forEach(item => {
         item.addEventListener('click', function() {

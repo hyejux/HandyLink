@@ -92,12 +92,6 @@
   color : red;
 }
 
-.menu-btn a.active,
-.dropdown-btn a.active {
-    color: red;
-}
-
-
 body {
   font-family: "Noto Sans KR", sans-serif;
     margin: 0;
@@ -117,8 +111,6 @@ cursor: pointer;
 color : #fff;
       margin-left: 10px;
 }
-
-
 
 .logo > span {
   font-size: 18px;

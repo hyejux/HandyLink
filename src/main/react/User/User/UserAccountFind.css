@@ -36,6 +36,7 @@
     text-align: center;
     font-size: 14px;
     color: #333;
+    margin-bottom: 50px;
 }
 .user-account-find-toggle > button:nth-child(2) {
     width: 60%;

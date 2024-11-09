@@ -151,10 +151,12 @@ function UserMyReservationDetail() {
     <div>
 
 
-<div className="user-top-nav">
+{/*
+        <div className="user-top-nav">
           <i className="bi bi-arrow-left"></i>
           <logo className="logo"> 주문 상세  </logo>
         </div>
+*/}
 
       <div className="user-content-container">
 

@@ -62,11 +62,11 @@ public class MainController {
     System.out.println("id ------------" + id);
 
     // 하단바 없는 레이아웃 적용할 페이지
-    if ("userStoreDetail".equals(pageName)) {
+    if ("userStoreDetail".equals(pageName) || "UserMyReservationDetail".equals(pageName)) {
       return "userLayoutNoNav";
     }
 
-    return "userLayout"; // 반환할 뷰 이름
+    return "userLayout";
   }
 
 

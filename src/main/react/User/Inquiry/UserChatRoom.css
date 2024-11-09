@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'Pretendard-Light';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+}
+
 .user-chat-room-container  {
     max-width: 600px;
     margin: 0 auto;
@@ -6,6 +13,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
 }
 
 .shop-name {
@@ -19,7 +27,7 @@
     flex-grow: 1;
     overflow-y: auto;
     padding: 10px;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
 }
 
 .message-wrapper {
@@ -64,22 +72,24 @@
 }
 
 .bubble {
-    padding: 10px 20px;
+    padding: 7px 12px;
     border-radius: 15px;
     word-break: break-word;
     line-height: 25px;
     max-width: 100%;
+    letter-spacing: 0.5px;
+    word-spacing: 0.5px;
 }
 
 .message-wrapper.sent .bubble {
-    background-color: #eee;
-    color: #333;
+    background-color: #FE8517;
+    color: #fff;
     border-top-right-radius: 0px;
 }
 
 .message-wrapper.received .bubble {
-    background-color: #434EBD;
-    color: #fff;
+    background-color: #eee;
+    color: #333;
     border-top-left-radius: 0px;
 }
 
@@ -100,7 +110,7 @@
 
 .toast-message {
     position: fixed;
-    bottom: 135px;
+    bottom: 11%;
     left: 50%;
     transform: translateX(-50%);
     background-color: #444;
@@ -143,18 +153,11 @@
     margin-left: 10px;
     cursor: pointer;
     font-size: 30px;
-    color : #434EBD;
+    color :#FE8517;
     position: absolute;
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
-}
-
-.business-hours-message {
-    color: dimgray;
-    margin: 0 auto;
-    font-size: 12px;
-    position: absolute;
 }
 
 .date-separator {
@@ -166,8 +169,10 @@
     flex-basis: 100%;
     align-items: center;
     color: rgba(0, 0, 0, 0.35);
+    flex-direction: column;
 }
 
+/*
 .date-separator::before,
 .date-separator::after {
     content: "";
@@ -178,8 +183,10 @@
     line-height: 0px;
     margin: 0px 16px;
 }
+*/
 
 /*************/
+
 
 .business-hours-message {
     display: flex;
@@ -189,7 +196,11 @@
     background-color: #f9f9f9;
     align-items: center;
     max-width: 80%;
-    border: 1px solid #c3c3c3
+    border: 1px solid #c3c3c3;
+    color: dimgray;
+    font-size: 12px;
+    position: absolute;
+    top: 5%;
 }
 
 .business-hours-message .profile-section {

@@ -92,6 +92,12 @@
   color : red;
 }
 
+.menu-btn a.active,
+.dropdown-btn a.active {
+    color: red;
+}
+
+
 body {
   font-family: "Noto Sans KR", sans-serif;
     margin: 0;
@@ -102,10 +108,20 @@ body {
 }
 
 .logo {
-  font-family: 'ghanachoco';
-  font-size: 30px;
-  color: #fff;
+  /* font-family: "Black Han Sans", serif;
+  font-family: "Black Han Sans", sans-serif; */
+  font-family: 'FlightSans-Title';
+font-size: 38px;
+font-weight: bold;
+cursor: pointer;
+color : #fff;
       margin-left: 10px;
+}
+
+
+
+.logo > span {
+  font-size: 18px;
 }
 
 .logo > img {
@@ -314,7 +330,7 @@ width : 110px;
 .layout-profile-button{
   /*버튼*/
   /*padding: 10px 16px;*/
-  border: 1px solid #1d2830;
+  border: 1px solid #575e63;
   background-color: #575e63;
   color: white;
   font-size: 14px;

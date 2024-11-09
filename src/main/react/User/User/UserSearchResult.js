@@ -408,7 +408,14 @@ function UserSearchResult() {
                 );
               })
             ) : (
-              <div className="no-stores">Loading...</div>
+              <div className="no-search-wrap">
+              <div className="no-search-img-box">
+                <img src="./img/user-search-result/search-result2.png" alt="검색 결과 없음"/>
+              </div>
+              <div className="no-search-text">검색 결과가 없습니다.</div>
+              <div className="no-search-text">다른 검색어를 입력해 보세요.</div>
+            </div>
+            
             )}
           </div>
         </div>

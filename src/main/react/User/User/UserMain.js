@@ -251,14 +251,14 @@ function UserMain() {
   // --------------- 광고 슬라이더 ---------------
   // 광고 슬라이더 이미지
   const slides = [
-    { id: 1, imageUrl: './img/advertisement/advertisement1.jpg' },
-    { id: 2, imageUrl: './img/advertisement/advertisement2.jpg' },
-    { id: 3, imageUrl: './img/advertisement/advertisement3.jpg' },
-    { id: 4, imageUrl: './img/advertisement/advertisement4.jpg' },
-    { id: 5, imageUrl: './img/advertisement/advertisement5.jpg' },
-    { id: 6, imageUrl: './img/advertisement/advertisement6.jpg' },
-    { id: 7, imageUrl: './img/advertisement/advertisement7.jpg' },
-    { id: 8, imageUrl: './img/advertisement/advertisement8.jpg' },
+    { id: 1, imageUrl: './img/main-banner/banner1.jpg' },
+    { id: 2, imageUrl: './img/main-banner/banner2.jpg' },
+    { id: 3, imageUrl: './img/main-banner/banner3.jpg' },
+    { id: 4, imageUrl: './img/main-banner/banner1.jpg' },
+    { id: 5, imageUrl: './img/main-banner/banner2.jpg' },
+    { id: 6, imageUrl: './img/main-banner/banner3.jpg' },
+    { id: 7, imageUrl: './img/main-banner/banner1.jpg' },
+    { id: 8, imageUrl: './img/main-banner/banner2.jpg' },
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -974,7 +974,7 @@ function UserMain() {
 
           {/* 배너 */}
           <div className="advertisement-banner">
-            <img src='./img/banner/banner2.png' />
+            <img src='./img/web-banner/banner2.png' />
           </div>
 
 

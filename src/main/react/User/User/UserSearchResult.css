@@ -360,6 +360,36 @@
 }
 
 
+/* 검색 결과 없음 */
+.no-search-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 250px;
+}
+
+.no-search-img-box {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+.no-search-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-search-text {
+  font-size: 12px;
+  font-weight: bold;
+  color: #555;
+  margin: 5px 0;
+}
+
+
 /* 더 보기 버튼 */
 .load-more-btn-wrap {
   display: flex;
@@ -381,6 +411,8 @@
 .load-more-btn:hover {
   background-color: rgba(44, 52, 143, 0.30);
 }
+
+
 
 
 

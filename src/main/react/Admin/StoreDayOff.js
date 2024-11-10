@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import { formatISO } from 'date-fns';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios';
@@ -13,8 +13,6 @@ import './StoreDayOff.css';
 function StoreDayOff() {
     const storeId = sessionStorage.getItem('storeId');
     const storeNo = sessionStorage.getItem('storeNo');
-
-    const calendarRef = useRef(null);  // FullCalendar ref
 
     //고정휴무
     const [dayOffDayList, setDayOffDayList] = useState([]); //고정휴무 저장하기
@@ -38,7 +36,7 @@ function StoreDayOff() {
                 setOffDay(respDay.data);
 
                 const respSet = await axios.get(`/adminStore/getOffSet?storeNo=${storeNo}`);
-                setOffSet(Array.isArray(respSet.data) ? respSet.data : []);
+                setOffSet(respSet.data);
 
             } catch (error) {
                 console.log("휴무 부르는 중 error", error);
@@ -47,7 +45,7 @@ function StoreDayOff() {
         fetchDay();
     }, []);
 
-
+    console.log("offset ", offSet);
     //고정휴무 수정상태
     const handleEditClick = () => {
         setIsEditing(prev => !prev);
@@ -103,23 +101,20 @@ function StoreDayOff() {
         }
     };
 
-    const handleDeleteSetList = (index) => {//지정된 지정휴무 삭제
-        // Confirm deletion
+    const handleDeleteSetList = (setNo) => {//지정된 지정휴무 삭제
+        console.log("setNO ",setNo);
         const confirmDelete = window.confirm("해당 지정 휴무일을 삭제하시겠습니까?");
 
         if (confirmDelete) {
-            const setNoToDelete = offSet[index].setNo;
-
-
-
             const fetchSetList = async () => {
                 try {
-                    const resp = await axios.delete(`/adminStore/deleteOffSet?storeNo=${storeNo}&setNo=${setNoToDelete}`);
+                    const setNumber = Number(setNo);
+                    const resp = await axios.delete(`/adminStore/deleteOffSet?storeNo=${storeNo}&setNo=${setNumber}`);
 
                     if (resp.data){
                         console.log("삭제 성공");
 
-                        const updatedSetList = offSet.filter((_, idx) => idx !== index);
+                        const updatedSetList = offSet.filter(item => item.setNo !== setNo);
                         setOffSet(updatedSetList);
 
                     } else {
@@ -143,12 +138,10 @@ function StoreDayOff() {
             const dayOffDayObjects = dayOffDayList.map(day => ({
                 dayOffDay: day,
                 dayOffFixStatus: 'Y',
-                storeId,
                 storeNo,
             }));
 
             await axios.post('/adminStore/updateDay', {
-                storeId,
                 storeNo,
                 dayOffDayList: dayOffDayObjects,
             });
@@ -168,25 +161,14 @@ function StoreDayOff() {
                     dayOffSetList: [{
                         dayOffStart,
                         dayOffEnd,
-                        storeId,
                         storeNo,
                     }],
                 });
                 console.log("지정휴무 등록 성공");
 
-                // Reset form after successful submission
                 setDayOffSet({ dayOffStart: '', dayOffEnd: '' });
 
-                // Add new event to offSet state
-                setOffSet(prevOffSet => [
-                    ...prevOffSet,
-                    { dayOffStart, dayOffEnd },
-                ]);
-
-                // Force FullCalendar to re-render after adding new event
-                if (calendarRef.current) {
-                    calendarRef.current.getApi().refetchEvents();  // 새로 추가된 이벤트를 반영하도록 FullCalendar 이벤트를 리패치
-                }
+                window.location.href="/storedayoff.admin";
 
             } catch (error) {
                 console.log("지정휴무 등록 중 error ", error);
@@ -232,7 +214,6 @@ function StoreDayOff() {
             <div className="calendar-wrapper">
                 <FullCalendar
                     key={offSet.length}  // `key`를 `offSet`의 길이로 설정하여 상태 변경 시 강제 리렌더링
-                    ref={calendarRef}  // FullCalendar에 ref 추가
                     plugins={[dayGridPlugin, interactionPlugin]}
                     initialView="dayGridMonth"
                     events={events}  // 이벤트 목록을 전달
@@ -248,7 +229,9 @@ function StoreDayOff() {
                     }}
                 />
                 <div className="calendar-add">
+                    <span>시작일</span>
                     <input type="date" value={dayOffSet.dayOffStart || ''} onChange={(e) => setDayOffSet(prev => ({ ...prev, dayOffStart: e.target.value }))}/>
+                    <span>종료일</span>
                     <input type="date" value={dayOffSet.dayOffEnd || ''} onChange={(e) => setDayOffSet(prev => ({ ...prev, dayOffEnd: e.target.value }))}/>
                     <button type="button" className="day-off add" onClick={handleRegistSet}>
                         추가
@@ -304,14 +287,19 @@ function StoreDayOff() {
                     </thead>
                     <tbody>
                         {offSet.map((offSetItem, index) => (
-                            <tr key={index}>
+console.log("offSetItem:", offSetItem),
+                            <tr key={offSetItem.setNo}> {/* 각 항목의 고유 key 사용 */}
                                 <td>{index + 1}</td>
                                 <td>{offSetItem.dayOffStart}</td>
                                 <td>{offSetItem.dayOffEnd}</td>
-                                <td style={{textAlign:'center', padding:'0'}}>
-                                <button className="trash-btn" type="button" onClick={() => handleDeleteSetList(index)}>
-                                    <i className="bi bi-trash"></i>
-                                </button>
+                                <td style={{ textAlign: 'center', padding: '0' }}>
+                                    <button
+                                        className="trash-btn"
+                                        type="button"
+                                        onClick={() => handleDeleteSetList(offSetItem.setNo)} // 삭제 시 setNo 전달
+                                    >
+                                        <i className="bi bi-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         ))}

@@ -117,5 +117,19 @@ input[type="checkbox"] {
 
 .calendar-add {
     margin-top: 10px;
+    position: relative;
 }
 
+.calendar-add > input {
+    margin-left: 10px;
+}
+
+.calendar-add > span {
+    margin-left: 10px;
+
+}
+
+.day-off{
+    position: absolute;
+    right: 0;
+}

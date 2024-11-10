@@ -31,8 +31,8 @@ public interface AdminStoreMapper {
     List<String> selectExistingSns(Long storeNo); // DB에 저장된 이미지 경로 확인
     void addStoreSns(StoreSnsDTO storeSnsDTO); //가게img 추가
 
-    void updateNoDayOff(Long storeNo); //고정휴무 없앨때
     void updateDay(StoreRegistDTO storeRegistDTO); //고정휴무-update
+    void updateNoDayOff(Long storeNo);//고정휴무-update
     List<DayOffDay> getOffDay(Long storeNo);//고정휴무-select
     void registDayOffSet(DayOffSet dayOffSet); //지정휴무
     List<DayOffSet> getOffSet(Long storeNo); //지정휴무-select
@@ -62,7 +62,8 @@ public interface AdminStoreMapper {
     List<Integer> getReservationNo(@Param("storeNo") Long storeNo,@Param("reservationSlotDate") String reservationSlotDate); //메인-날짜별 예약번호
     List<CustomerReservationDTO> getTodayCustomer(@Param("reservationNos") List<Long> reservationNos);
     List<Integer> getReservationStatus(Long storeNo);
-    Integer completeReservationStatus(@Param("storeNo") Long storeNo,@Param("reservationNo")  Long reservationNo); //예약완료 update
+    Integer completeReservationStatus(@Param("storeNo") Long storeNo, @Param("reservationNo")Long reservationNo); //예약완료 update
+
 
     void uploadImage(@Param("file") String file , @Param("id") int id);
      void deleteImage( @Param("id") int id, @Param("file") String file);

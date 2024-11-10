@@ -74,14 +74,30 @@ const goToAdminPage2 = (id) => {
       </div>
 
       <div className="main-contents">
+      <table className='management-table'>
+      <thead>
+        <th> No</th>
+        <th> 이미지 </th>
+        <th> 상품정보 </th>
+        <th> 수정 </th>
+        <th> 슬롯 </th>
+      </thead>
+      <tbody>
         {reservationList.map((value, index) => (
+           <tr key={index}>
+            <td>
+              {index + 1}
+            </td>
+              <td>
+              <div className="reserve-img">
 
-          <div className="reserve-container" key={index}>
-                  <div className="reserve-img">
+                <img src={`${value.imageUrl}`} alt="My Image" />
 
-                  <img src={`${value.imageUrl}`} alt="My Image" />
-
-                   </div>
+                </div>
+              </td>
+                <td>
+                <div className="reserve-container" >
+              
 
                    <div className="reserve-content">
                      <div className="reserve-content-title">
@@ -97,18 +113,32 @@ const goToAdminPage2 = (id) => {
                                           
                    </div>
 
-                        <div className='btn-ali'>
-                        <button  type="button" class="btn-modi" onClick={() => goToAdminPage(value.categoryId)}>
-                            <i className="bi bi-pencil-square"></i>
-                        </button>
-                         <button  type="button" class="btn-modi" onClick={() => goToAdminPage2(value.categoryId)}>
-                         <i class="bi bi-clock-history"></i>
-                         </button>
-  </div>
+                        {/* <div className='btn-ali'>
+                    
+  </div> */}
 
            
                  </div>
+                </td>
+                <td>
+                <button  type="button" class="btn-modi" onClick={() => goToAdminPage(value.categoryId)}>
+                            <i className="bi bi-pencil-square"></i>
+                        </button>
+                </td>
+                <td>
+
+                <button  type="button" class="btn-modi" onClick={() => goToAdminPage2(value.categoryId)}>
+                         <i class="bi bi-clock-history"></i>
+                         </button>
+                </td>
+           </tr>
+          
+         
+       
              ))}
+            </tbody>
+      </table>
+      
       </div>
 
 

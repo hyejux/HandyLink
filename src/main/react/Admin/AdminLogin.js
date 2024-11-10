@@ -70,15 +70,17 @@ function AdminLogin() {
 
     return (
         <div className="parts">
-            <div className="part1">
+            {/* <div className="part1">
                 <div className="top-text">편리한 주문 <br />편리한 제작</div>
                 <div className="bottom-text">HandyLink에서<br />경험해보세요.</div>
-            </div>
+            </div> */}
 
             <div className="part2">
                 <form onSubmit={handleSubmit}>
                     <div className="login-container">
-                        <div className="login-title">HandyLink</div>
+                        <div className="login-title"> NEEZ </div>
+                        {/* <img src="../img/logo5.png"></img> */}
+                        <div className="login-title2"> 니즈 셀러 분들을 위한 관리자 페이지입니다.  </div>
                         <div className="login-box">
                             <input
                                 type="text"
@@ -108,9 +110,21 @@ function AdminLogin() {
                                 <span>스토어 입점하기</span>
                             </a>
                         </div>
+       
                     </div>
                 </form>
+
+
             </div>
+
+
+                <div className='footer'> 
+                    <div> © 2024 Nezz. All rights reserved. </div>
+                    <div>  (주)니즈컴퍼니 | 대표: 장소영 | 사업자등록번호: 123-45-78910 | 06221 서울특별시 강남구 에스코빌딩 6층 | 고객센터: 02-1234-1234  </div>
+              
+
+                </div> 
+    
         </div>
     );
 }

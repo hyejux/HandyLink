@@ -215,17 +215,15 @@ function AdminReviewList() {
               {value.serviceName}
             </td>
             <td>
-              {value.userReviewImg.map((imgUrl, index) => {
-                const formattedUrl = imgUrl.replace('blob:', '');
-                return (
-                  <img
-                    key={index}
-                    className="photo-item2"
-                    src={formattedUrl}
-                    alt={`Review image ${index + 1}`}
-                  />
-                );
-              })}
+            {[...new Set(value.userReviewImg.map((imgUrl) => imgUrl.replace('blob:', '')))].map((formattedUrl, index) => (
+  <img
+    key={index}
+    className="photo-item2"
+    src={formattedUrl}
+    alt={`Review image ${index + 1}`}
+  />
+))}
+
             </td>
             <td>
               {[...Array(value.reviewRating)].map((_, index) => (

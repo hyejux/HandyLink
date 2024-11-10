@@ -251,14 +251,14 @@ function UserMain() {
   // --------------- 광고 슬라이더 ---------------
   // 광고 슬라이더 이미지
   const slides = [
-    { id: 1, imageUrl: './img/advertisement/advertisement1.jpg' },
-    { id: 2, imageUrl: './img/advertisement/advertisement2.jpg' },
-    { id: 3, imageUrl: './img/advertisement/advertisement3.jpg' },
-    { id: 4, imageUrl: './img/advertisement/advertisement4.jpg' },
-    { id: 5, imageUrl: './img/advertisement/advertisement5.jpg' },
-    { id: 6, imageUrl: './img/advertisement/advertisement6.jpg' },
-    { id: 7, imageUrl: './img/advertisement/advertisement7.jpg' },
-    { id: 8, imageUrl: './img/advertisement/advertisement8.jpg' },
+    { id: 1, imageUrl: './img/main-banner/banner1.jpg' },
+    { id: 2, imageUrl: './img/main-banner/banner2.jpg' },
+    { id: 3, imageUrl: './img/main-banner/banner3.jpg' },
+    { id: 4, imageUrl: './img/main-banner/banner1.jpg' },
+    { id: 5, imageUrl: './img/main-banner/banner2.jpg' },
+    { id: 6, imageUrl: './img/main-banner/banner3.jpg' },
+    { id: 7, imageUrl: './img/main-banner/banner1.jpg' },
+    { id: 8, imageUrl: './img/main-banner/banner2.jpg' },
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -321,7 +321,7 @@ function UserMain() {
 
         <div className="user-main-header-fix">
           <div className="search-top">
-            <div className='left'> <img src="../img/logo2.png"></img></div>
+            <div className='left'> NEEZ </div>
             <div className='right' onClick={() => window.location.href = '/userlikelist.user'}><i className="bi bi-heart-fill"></i></div>
           </div>
 
@@ -490,6 +490,7 @@ function UserMain() {
                         <div className="store-title-2">{store.storeName}</div>
                         <div className="store-review-option">
                           <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                          <span className="review-count">({store.reviewCount})</span>
                           <span className="store-option">{store.storeCate || '미등록'}</span>
                           {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
                         </div>
@@ -503,7 +504,7 @@ function UserMain() {
             </div>
           </div>
 
-          
+
           {/* 예약 많은 순 */}
           <div className="user-main-content">
             <h3>
@@ -533,6 +534,7 @@ function UserMain() {
                           <div className="store-title-2">{store.storeName}</div>
                           <div className="store-review-option">
                             <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                            <span className="review-count">({store.reviewCount})</span>
                             <span className="store-option">{store.storeCate || '미등록'}</span>
                           </div>
                         </div>
@@ -545,7 +547,7 @@ function UserMain() {
             </div>
           </div>
 
-          
+
           {/* 배너 */}
           <div className="advertisement-banner">
             <img src='https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731039573/hgsu9ohdoygw2ysrkcsg.jpg' />
@@ -586,6 +588,7 @@ function UserMain() {
                           <div className="store-title-2">{store.storeName}</div>
                           <div className="store-review-option">
                             <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                            <span className="review-count">({store.reviewCount})</span>
                             <span className="store-option">{store.storeCate || '미등록'}</span>
                           </div>
                         </div>
@@ -612,68 +615,189 @@ function UserMain() {
           {activeSection === 'menu1' && (
             <div className="user-main-menu-content">
               {store.length > 0 ? (
-                store.slice(0, 3).map((store) => {
-                  const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg";
-                  return (
-                    <div className="user-main-menu-content-list" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
-                      <div className="user-main-menu-img" >
-                        <img src={imageUrl} alt={store.storeName} />
-                      </div>
-                      <div className='user-main-menu-info'>
-                        <div className="menu-info-store-name">{store.storeName}</div>
-                        <div className="menu-info-hashtag">
-                          {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
-                            <span key={category.id} className="menu-info-list-option"><i className="bi bi-hash"></i> {category.serviceName}</span>))}
+                store
+                  .filter((store) => {
+                    // 해당 store에 대한 level1Categories 중 servicePrice가 20,000 이하인 항목이 하나라도 있으면 해당 store 표시
+                    return level1Categories
+                      .filter(category => category.storeNo === store.storeNo && category.servicePrice <= 20000)
+                      .length > 0;
+                  })
+                  .slice(0, 3)
+                  .map((store) => {
+                    const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg";
+
+                    return (
+                      <div className="user-main-menu-content-list" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+                        <div className="user-main-menu-img">
+                          <img src={imageUrl} alt={store.storeName} />
                         </div>
-                        <div className="menu-info-review-cate">
-                          <i className="bi bi-star-fill"></i> <span className="menu-info-review">{store.averageRating}</span> <span className="menu-info-cate">{store.storeCate}</span>
-                        </div>
-                      </div>
+                        <div className='user-main-menu-info'>
+                          <div className="menu-info-store-name">{store.storeName}</div>
+                          <div className="menu-info-hashtag">
+                            {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
+                              <span key={category.id} className="menu-info-list-option"><i className="bi bi-hash"></i> {category.serviceName}</span>
+                            ))}
+                          </div>
+
+                          <div className="menu-info-bottom-box">
+                            <div className="menu-info-review-cate">
+                              <i className="bi bi-star-fill"></i> <span className="menu-info-review">{store.averageRating}</span> <span className="menu-info-cate">{store.storeCate}</span>
+                            </div>
+                            {/* <div className="menu-info-category-price">
+                  {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (
+                    <div key={index}>
+                      ₩ {category.servicePrice || '0,000'} ~
                     </div>
-                  );
-                })
+                  ))}
+                </div> */}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
               ) : (
                 <div>정보를 불러오지 못했습니다</div>
               )}
             </div>
           )}
 
+
+
           {activeSection === 'menu2' && (
             <div className="user-main-menu-content">
-              메뉴3
+              {store.length > 0 ? (
+                store
+                  .filter((store) => {
+                    return level1Categories
+                      .filter(category => category.storeNo === store.storeNo && category.servicePrice > 20000 && category.servicePrice <= 30000)
+                      .length > 0;
+                  })
+                  .slice(0, 3)
+                  .map((store) => {
+                    const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg";
+
+                    return (
+                      <div className="user-main-menu-content-list" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+                        <div className="user-main-menu-img">
+                          <img src={imageUrl} alt={store.storeName} />
+                        </div>
+                        <div className='user-main-menu-info'>
+                          <div className="menu-info-store-name">{store.storeName}</div>
+                          <div className="menu-info-hashtag">
+                            {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
+                              <span key={category.id} className="menu-info-list-option"><i className="bi bi-hash"></i> {category.serviceName}</span>
+                            ))}
+                          </div>
+                          <div className="menu-info-review-cate">
+                            <i className="bi bi-star-fill"></i> <span className="menu-info-review">{store.averageRating}</span> <span className="menu-info-cate">{store.storeCate}</span>
+                          </div>
+                          {/* <div className="result-list-price">
+                  {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (
+                    <div key={index}>
+                      ₩ {category.servicePrice || '0,000'} ~
+                    </div>
+                  ))}
+                </div> */}
+                        </div>
+                      </div>
+                    );
+                  })
+              ) : (
+                <div>정보를 불러오지 못했습니다</div>
+              )}
             </div>
           )}
+
 
           {activeSection === 'menu3' && (
             <div className="user-main-menu-content">
               {store.length > 0 ? (
-                store.slice(0, 3).map((store) => {
-                  const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg";
-                  return (
-                    <div className="user-main-menu-content-list" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
-                      <div className="user-main-menu-img" >
-                        <img src={imageUrl} alt={store.storeName} />
-                      </div>
-                      <div className='user-main-menu-info'>
-                        <div className="info-store-name">{store.storeName}</div>
-                        <div className="info-hashtag">
-                          {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
-                            <span key={category.id} className="result-list-option"><i className="bi bi-hash"></i> {category.serviceName}</span>))}
+                store
+                  .filter((store) => {
+                    return level1Categories
+                      .filter(category => category.storeNo === store.storeNo && category.servicePrice > 30000 && category.servicePrice < 50000)
+                      .length > 0;
+                  })
+                  .slice(0, 3)
+                  .map((store) => {
+                    const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg";
+
+                    return (
+                      <div className="user-main-menu-content-list" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+                        <div className="user-main-menu-img">
+                          <img src={imageUrl} alt={store.storeName} />
                         </div>
-                        <div className="info-review-cate"><i className="bi bi-star-fill"></i> {store.averageRating} 카테고리: {store.storeCate}</div>
-                      </div>
+                        <div className='user-main-menu-info'>
+                          <div className="menu-info-store-name">{store.storeName}</div>
+                          <div className="menu-info-hashtag">
+                            {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
+                              <span key={category.id} className="menu-info-list-option"><i className="bi bi-hash"></i> {category.serviceName}</span>
+                            ))}
+                          </div>
+                          <div className="menu-info-review-cate">
+                            <i className="bi bi-star-fill"></i> <span className="menu-info-review">{store.averageRating}</span> <span className="menu-info-cate">{store.storeCate}</span>
+                          </div>
+                          {/* <div className="result-list-price">
+                  {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (
+                    <div key={index}>
+                      ₩ {category.servicePrice || '0,000'} ~
                     </div>
-                  );
-                })
+                  ))}
+                </div> */}
+                        </div>
+                      </div>
+                    );
+                  })
               ) : (
                 <div>정보를 불러오지 못했습니다</div>
               )}
             </div>
           )}
 
+
           {activeSection === 'menu4' && (
             <div className="user-main-menu-content">
-              메뉴4
+              {store.length > 0 ? (
+                store
+                  .filter((store) => {
+                    // 해당 store에 대한 level1Categories 중 servicePrice가 20,000 이하인 항목이 하나라도 있으면 해당 store 표시
+                    return level1Categories
+                      .filter(category => category.storeNo === store.storeNo && category.servicePrice >= 50000)
+                      .length > 0;
+                  })
+                  .slice(0, 3)
+                  .map((store) => {
+                    const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg";
+
+                    return (
+                      <div className="user-main-menu-content-list" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+                        <div className="user-main-menu-img">
+                          <img src={imageUrl} alt={store.storeName} />
+                        </div>
+                        <div className='user-main-menu-info'>
+                          <div className="menu-info-store-name">{store.storeName}</div>
+                          <div className="menu-info-hashtag">
+                            {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
+                              <span key={category.id} className="menu-info-list-option"><i className="bi bi-hash"></i> {category.serviceName}</span>
+                            ))}
+                          </div>
+                          <div className="menu-info-review-cate">
+                            <i className="bi bi-star-fill"></i> <span className="menu-info-review">{store.averageRating}</span> <span className="menu-info-cate">{store.storeCate}</span>
+                          </div>
+                          {/* <div className="result-list-price">
+                  {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (
+                    <div key={index}>
+                      ₩ {category.servicePrice || '0,000'} ~
+                    </div>
+                  ))}
+                </div> */}
+                        </div>
+                      </div>
+                    );
+                  })
+              ) : (
+                <div>정보를 불러오지 못했습니다</div>
+              )}
             </div>
           )}
 
@@ -706,6 +830,7 @@ function UserMain() {
                         <div className="store-title-2">{store.storeName}</div>
                         <div className="store-review-option">
                           <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                          <span className="review-count">({store.reviewCount})</span>
                           <span className="store-option">{store.storeCate || '미등록'}</span>
                           {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
                         </div>
@@ -756,6 +881,7 @@ function UserMain() {
                           <div className="store-title-2">{store.storeName}</div>
                           <div className="store-review-option">
                             <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                            <span className="review-count">({store.reviewCount})</span>
                             <span className="store-option">{store.storeCate || '미등록'}</span>
                           </div>
                         </div>
@@ -838,6 +964,7 @@ function UserMain() {
                           <div className="store-title-2">{store.storeName}</div>
                           <div className="store-review-option">
                             <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                            <span className="review-count">({store.reviewCount})</span>
                             <span className="store-option">{store.storeCate || '미등록'}</span>
                           </div>
                         </div>
@@ -853,7 +980,7 @@ function UserMain() {
 
           {/* 배너 */}
           <div className="advertisement-banner">
-            <img src='./img/banner/banner2.png' />
+            <img src='./img/web-banner/banner2.png' />
           </div>
 
 

@@ -1,19 +1,12 @@
 package com.example.HiMade.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import javax.servlet.http.HttpSession;
 
 @Configuration
 @EnableWebSecurity
@@ -29,32 +22,48 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
+                // 로그인 없이 접근 가능한 페이지
+                .antMatchers("/userMain.user", "/userSearch.user", "/userStoreDetail.user/**").permitAll()
+
+                // 로그인 필수 페이지
+                .antMatchers("/userMyReservationList.user", "/userChatList.user", "/userAccountPage.user").authenticated()
+                .antMatchers("/userlikelist.user").authenticated()
+
+                .antMatchers("/userStoreList/storeLike/**").authenticated()  // 찜하기 기능
+                .antMatchers("/UserChatRoom.user/**").authenticated()        // 문의하기 기능
+                .antMatchers("/UserReservationDate.user/**").authenticated() // 예약 기능
+
+                // 정적 리소스는 로그인 없이 접근 허용
                 .antMatchers("/css/**", "/uploads/**", "/img/**", "/bundle/**").permitAll()
-                .antMatchers("/**").permitAll()  // 모든 경로에 접근 허용 (임시 설정)
-                //.antMatchers("/userMain.user").permitAll() // 로그인 필요없이 접근 가능한 요청
-                //.anyRequest().authenticated()  // 그 외 요청은 로그인 필요
+
+                // 나머지 경로 설정
+                .anyRequest().permitAll() // 추가적인 경로 필요 시 설정
+
                 .and()
                 .formLogin()
                 .loginPage("/UserLoginPage.user")
-                    .permitAll()
-                    .loginProcessingUrl("/login")
-                    .usernameParameter("userId")
-                    .passwordParameter("userPw")
-                    .defaultSuccessUrl("/UserMain.user", true) // 로그인 성공 후 이동할 페이지
-                    .failureUrl("/UserLoginPage.user?error=true")
+                .permitAll()
+                .loginProcessingUrl("/login")
+                .usernameParameter("userId")
+                .passwordParameter("userPw")
+                .defaultSuccessUrl("/UserMain.user", true)
+                .failureUrl("/UserLoginPage.user?error=true")
+
                 .and()
                 .logout()
-                    .logoutUrl("/logout")
-                    .permitAll()
-                    .logoutSuccessUrl("/UserLoginPage.user")
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID")
+                .logoutUrl("/logout")
+                .permitAll()
+                .logoutSuccessUrl("/UserLoginPage.user")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 기본 세션 관리 방식
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+
                 .and()
                 .authenticationProvider(customAuthenticationProvider);
+
         return http.build();
     }
-
 }

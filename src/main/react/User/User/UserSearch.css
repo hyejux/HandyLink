@@ -214,6 +214,7 @@ body {
   float: left;
   font-size: 20px;
   font-weight: bold;
+  color: #fd8517;
 }
 
 .search-top .right {
@@ -307,6 +308,7 @@ body {
   bottom: 7px;
   color: #ffffff;
   font-size: 14px;
+  font-weight: bold;
 }
 
 .user-category-menu img {
@@ -724,7 +726,7 @@ body {
   border: 1px solid #fe9e25;
   border-radius: 40px;
   background-color: #fff;
-  font-size: 14px;
+  font-size: 12px;
   margin-right: 10px;
   padding: 0 15px;
   display: inline-flex;

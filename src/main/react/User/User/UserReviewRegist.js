@@ -84,43 +84,51 @@ useEffect(() => {
   },[rating,review,charCount,images])
 
 
-  const handleUpload = async () => {
-    if (charCount < 10 ){
-      alert("10자 이상 입력해주세요.");
-      retrun;
-    } 
-    if (!images || images.length === 0) return []; // 파일이 없으면 빈 배열 반환
-  
-    const formData = new FormData();
+
+
+
+
+const handleUpload = async () => {
+    // charCount가 10자 미만일 경우 경고 메시지 출력 후 함수 종료
+    if (charCount < 10) {
+        alert("10자 이상 입력해주세요.");
+        return; // 오타 수정: 'retrun' -> 'return'
+    }
+    console.log(images);
+    // 이미지가 없으면 빈 배열 반환
+    if (!images || images.length === 0) {
+        return [];
+    }
+
     const uploadedUrls = []; // 업로드된 이미지 URL을 저장할 배열
-  
-    // 여러 파일을 formData에 추가
+
+    // 각 파일에 대해 Cloudinary 업로드 요청을 비동기로 수행
     for (let i = 0; i < images.length; i++) {
-      formData.append('file', images[i]);
+        const formData = new FormData();
+        formData.append('file', images[i]);
+        formData.append('upload_preset', 'hye123'); // Cloudinary에서 설정한 Upload Preset
+
+        try {
+            const response = await axios.post(
+                'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
+                formData
+            );
+
+            // Cloudinary 응답 데이터에서 URL들을 추출하여 배열에 추가
+            if (response.data && response.data.secure_url) {
+                uploadedUrls.push(response.data.secure_url);
+            }
+        } catch (error) {
+            console.error('이미지 업로드 오류:', error);
+        }
     }
-  
-    formData.append('upload_preset', 'hye123'); // Cloudinary에서 설정한 Upload Preset
-  
-    try {
-      const response = await axios.post(
-        'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
-        formData
-      );
-  
-      // Cloudinary 응답 데이터에서 URL들을 추출하여 배열에 추가
-      if (response.data && response.data.secure_url) {
-        uploadedUrls.push(response.data.secure_url);
-      }
-  
-      console.log('Uploaded Images:', uploadedUrls);
-      // alert('이미지 업로드 성공!');
-      return uploadedUrls; // 업로드된 이미지 URL 배열 반환
-    } catch (error) {
-      console.error('이미지 업로드 오류:', error);
-      // alert('이미지 업로드에 실패했습니다.');
-      return []; // 실패 시 빈 배열 반환
-    }
-  };
+
+    console.log('Uploaded Images:', uploadedUrls);
+    return uploadedUrls; // 모든 업로드된 이미지 URL 배열 반환
+};
+
+
+ 
   
   
   // // 파일 배열을 저장할 상태 추가
@@ -154,7 +162,10 @@ useEffect(() => {
   
   
         formData.append('reviewNoId', reviewNoId);
-        formData.append('files', imageUrls);
+          // imageUrls 배열에 있는 파일들을 FormData에 추가
+    imageUrls.forEach((image, index) => {
+      formData.append('files', image); // 각각의 파일을 'files'라는 키로 추가
+  });
         console.log([...formData]); // FormData의 내용을 확인 (Array.from을 사용하여 배열로 변환)
   
         axios.post(`/userMyReservation/setReviewImg`, formData, {
@@ -165,7 +176,7 @@ useEffect(() => {
         .then(response => {
           console.log('파일 업로드 성공:', response.data);
           alert("리뷰 등록이 완료되었습니다.");
-          window.location.href = '/userMyReservationList.user'; // 페이지 이동;
+          // window.location.href = '/userMyReservationList.user'; // 페이지 이동;
         })
         .catch(error => {
           console.error('에러 발생:', error);
@@ -197,6 +208,7 @@ useEffect(() => {
     
         // 상태 업데이트: 새 이미지 URL 추가
         setNewImages((prev) => [...prev, ...newImages]);
+        
         setImages((prevImages) => [
           ...prevImages,
           ...Array.from(files), // 새로 선택된 파일들을 images 상태에 추가

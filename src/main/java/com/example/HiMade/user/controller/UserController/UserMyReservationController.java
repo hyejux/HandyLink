@@ -93,11 +93,11 @@ private final String uploadDir = "src/main/resources/static/uploads/";
 
   @PostMapping("/setReviewImg")
   public void setReviewImg(@RequestParam("files") String[] files, @RequestParam("reviewNoId") String reviewNoId) {
-    for (String file : files) {
 
+    for (String file : files) {
+      System.out.println(file);
       int id = Integer.parseInt(reviewNoId);
       userReservationService.setReviewImg(file, id);
-
     }
 
   }

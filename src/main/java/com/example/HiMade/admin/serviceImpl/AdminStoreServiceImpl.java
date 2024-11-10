@@ -122,7 +122,11 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     @Override
     public void updateDay(StoreRegistDTO storeRegistDTO) {
 
-        adminStoreMapper.updateDay(storeRegistDTO);
+        if (storeRegistDTO.getDayOffDayList() == null || storeRegistDTO.getDayOffDayList().isEmpty()){
+            adminStoreMapper.updateNoDayOff(storeRegistDTO.getStoreNo());
+        } else{
+            adminStoreMapper.updateDay(storeRegistDTO);
+        }
     }
 
     @Override

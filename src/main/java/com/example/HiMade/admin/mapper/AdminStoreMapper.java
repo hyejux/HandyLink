@@ -31,6 +31,7 @@ public interface AdminStoreMapper {
     List<String> selectExistingSns(Long storeNo); // DB에 저장된 이미지 경로 확인
     void addStoreSns(StoreSnsDTO storeSnsDTO); //가게img 추가
 
+    void updateNoDayOff(Long storeNo); //고정휴무 없앨때
     void updateDay(StoreRegistDTO storeRegistDTO); //고정휴무-update
     List<DayOffDay> getOffDay(Long storeNo);//고정휴무-select
     void registDayOffSet(DayOffSet dayOffSet); //지정휴무

@@ -271,6 +271,12 @@
         where store_no = #{storeNo}
     </select>
 
+    <update id="updateNoDayOff" parameterType="Long">
+        update day_off_day
+        set day_off_fix_status = 'N'
+        where store_no = #{storeNo}
+    </update>
+
     <update id="updateDay" parameterType="com.example.HiMade.admin.dto.StoreRegistDTO">
         <!-- 휴무가 아닌 경우 상태를 'N'으로 업데이트 -->
         update day_off_day

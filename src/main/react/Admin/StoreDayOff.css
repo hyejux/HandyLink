@@ -1,84 +1,121 @@
-/*.store-day-off-container {*/
-/*    padding: 20px;*/
-/*    background-color: #f4f6f8;*/
-/*    font-family: 'Arial', sans-serif;*/
-/*}*/
+.store-day-off-container {
+    font-family: 'Arial', sans-serif;
+    display: grid;
+    grid-template-columns: 40% 60%; /* 두 열 설정 */
+    grid-template-rows: auto auto;
+    gap: 30px;
+    padding: 20px;
+}
 
-.day-off {
-    margin-bottom: 20px;
+.day-off-calendar{
+    grid-row: 1 / span 2; /* 1번은 첫 번째와 두 번째 행에 걸쳐서 배치 */
+    grid-column: 1;
+}
+
+.day-off-fix {
+    grid-row:1;
+    grid-column: 2;
+    padding: 20px;
+}
+
+.day-off-set-list {
+    grid-row: 2;
+    grid-column: 2;
 }
 
 label {
     display: block;
-    margin-bottom: 10px;
     font-weight: bold;
+    margin: 20px 0;
 }
 
 input[type="checkbox"] {
     margin-right: 10px;
 }
 
-.day-off-set-list {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px 0;
-}
-
-.calendar-wrapper {
-    margin-bottom: 20px;
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.day-off-list ul {
-    list-style: none;
-    padding: 0;
-}
-
-.day-off-list li {
+.day-off-title {
     display: flex;
-    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.check-day-off {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.check-day {
     background-color: #fff;
+    cursor: pointer;
+    text-align: center;
+    border-right: 1px solid #ccc;
     padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1 0 14.28%; /* 한 줄에 7개의 요소가 들어가도록 설정 */
+    box-sizing: border-box;
+    font-weight: bold;
 }
 
-button.day-off-btn, button.day-off.add {
-    background-color: #007bff;
+.check-day:last-child {
+    border: none;
+}
+
+.check-day.off-day {
+    background-color: #38414a;
     color: white;
-    border: none;
+}
+
+.check-day.active {
+    background-color: #38414a;
+    color: white;
+}
+
+.check-day.editable {
+    cursor: pointer;
+}
+
+.day-off-btn {
+    border: 1px solid #0057b3;
+    border-radius: 3px;
+    padding: 2 5px;
+    cursor: pointer;
+}
+
+.day-off-btn:hover {
+    background-color: #0057b3;
+    border-radius: 3px;
+    color: white;
+}
+
+.day-off-set-list {
+    padding: 20px;
+}
+
+.day-off-set-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.day-off-set-list th,
+.day-off-set-list td {
+    border: 1px solid #ccc;
     padding: 10px;
-    cursor: pointer;
-    border-radius: 5px;
+    text-align: left;
 }
 
-button.day-off-btn:hover, button.day-off.add:hover {
-    background-color: #0056b3;
+.day-off-set-list th {
+    background-color: #f1f1f1;
 }
 
-button.day-off.add {
+.trash-btn {
+    background-color: white;
+    border:none;
+}
+
+.calendar-add {
     margin-top: 10px;
-}
-
-button {
-    border: none;
-    background: none;
-    cursor: pointer;
-    /*    color: #ff6b6b;*/
-}
-
-button:hover {
-    color: #c20e0e;
-}
-
-/* Highlight the selected date range */
-.highlight {
-    background-color: #ddd;
-    color: #000;
 }
 

@@ -27,7 +27,7 @@
 .section-content {
     display: grid;
     grid-template-columns: 1fr 2fr; /* 두 열 설정 */
-    grid-template-rows: repeat(2, auto); /* 첫 번째 열 3행 */
+    grid-template-rows: repeat(2, auto); /* 첫 번째 열 2행 */
     grid-gap: 30px;
 }
 

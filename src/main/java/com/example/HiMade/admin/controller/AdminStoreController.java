@@ -200,7 +200,6 @@ public class AdminStoreController {
     @GetMapping("/getReservationCounts")
     public List<Map<String, Object>> getReservationCounts(@RequestParam Long storeNo){
         List<Map<String, Object>> result = adminStoreService.getReservationCounts(storeNo);
-        System.out.println("날짜별 예약count "+result);
 
         return result;
     }
@@ -219,6 +218,24 @@ public class AdminStoreController {
         List<CustomerReservationDTO> result = adminStoreService.getTodayCustomer(reservationNos);
 
         return result;
+    }
+
+    //전달 완료된 예약번호
+    @GetMapping("/getReservationStatus")
+    public List<Integer> getReservationStatus(@RequestParam Long storeNo){
+        List<Integer> completeResNo = adminStoreService.getReservationStatus(storeNo);
+        return completeResNo;
+    }
+
+    @PostMapping("/completeReservationStatus")
+    public ResponseEntity<Integer> completeReservationStatus(@RequestParam Long storeNo, @RequestParam Long reservationNo){
+        Integer result = adminStoreService.completeReservationStatus(storeNo, reservationNo);
+
+        if (result > 0){
+            return ResponseEntity.ok(result);
+        }else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(0); //삭제 조건에 안맞음
+        }
     }
 
     //통계페이지

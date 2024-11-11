@@ -23,17 +23,13 @@ function AdminMain() {
   const [selectedCustomerInfo, setSelectedCustomerInfo] = useState(null); //클릭한 예약자정보
 
   useEffect(()=>{
+    //main-count
     const fetchCount = async() => {
       const resp = await axios.get(`/adminStore/getMainCount?storeNo=${storeNo}`);
       setCount(resp.data);
     };
 
-    fetchCount();
-    handleClickBook();
-  },[]);
-
-  //캘린더
-  useEffect(() => {
+    //오늘 예약건 조회
     const fetchReservationCounts = async() => {
       try{
         const resp = await axios.get(`/adminStore/getReservationCounts?storeNo=${storeNo}`);
@@ -43,9 +39,33 @@ function AdminMain() {
         console.error("캘린더 예약 로딩 실패 error ",error);
       }
     }
+
+    const fetchCompletedReservations = async () => {
+      try {
+        const resp = await axios.get(`/adminStore/getReservationStatus?storeNo=${storeNo}`);
+        const completeReservations = resp.data; // 완료된 예약 번호 리스트
+
+        const initialStatus = completeReservations.reduce((acc, reservationNo) => {
+          acc[reservationNo] = true;
+          return acc;
+        }, {});
+
+        setCheckedStatus(initialStatus);
+      } catch (error) {
+        console.error("완료된 예약건 요청 중 error ", error);
+      }
+    };
+
+    fetchCount();
+    handleClickBook();
     fetchReservationCounts();
+    fetchCompletedReservations();
   },[]);
-  console.log("날짜와 예약건수 ",events);
+
+  //날짜 클릭으로 예약 조회하기
+  useEffect(() => {
+    handleClickBook();
+  },[selectedDate]);
 
   //날짜 받기
   const handleChangeDate = (e) => {
@@ -95,7 +115,26 @@ function AdminMain() {
   console.log("클릭한 예약자 ",selectedCustomerInfo);
 
 
+  const [checkedStatus, setCheckedStatus] = useState({});
 
+  // 전달완료 체크박스 상태 변경 함수
+  const handleCheck = async (reservationNo) => {
+    try {
+      // 예약 상태 업데이트
+      const resp = await axios.post(`/adminStore/completeReservationStatus?storeNo=${storeNo}&reservationNo=${reservationNo}`);
+      const complete = resp.data;
+
+      if (complete > 0) {
+        // 상태를 업데이트하여 UI에 반영
+        setCheckedStatus((prevStatus) => ({
+          ...prevStatus,
+          [reservationNo]: true, // 완료 상태로 업데이트
+        }));
+      }
+    } catch (error) {
+      console.log("전달완료 요청 중 error ", error);
+    }
+  };
 
   return(
   <div className="admin-store-regist-container">
@@ -123,6 +162,10 @@ function AdminMain() {
               initialView="dayGridMonth"
               locale="ko" // 한글로 설정
               events={events}
+              dateClick={(info) => {
+                setSelectedDate(info.dateStr)
+              }}
+              dayCellClassNames={() => 'calendar-day-cell'}
               dayCellContent={(arg) => (
                 <div style={{ padding: '10px' }}>
                   <span>{arg.dayNumberText}</span>
@@ -187,29 +230,51 @@ function AdminMain() {
             </div>
           </div>
 
+
           <div className="customer-info-container">
-            <h3>예약 정보</h3>
+            <div className="customer-info-title">
+              <h3>예약 정보</h3>
+              {selectedCustomerInfo ? (
+                <label className={`custom-checkbox ${checkedStatus[selectedCustomerInfo.reservationNo] ? 'checked' : ''}`}>
+                  {checkedStatus[selectedCustomerInfo.reservationNo] ? (
+                    // 완료된 경우, "전달완료" 텍스트만 표시
+                    <span>전달완료</span>
+                    ) : (
+                    // 완료되지 않은 경우, 체크박스를 클릭 가능하게 표시
+                    <>
+                      <input
+                        type="checkbox"
+                        checked={!!checkedStatus[selectedCustomerInfo.reservationNo]}
+                        onChange={() => handleCheck(selectedCustomerInfo.reservationNo)}
+                        style={{ display: 'none' }} // 체크박스 숨김
+                      />
+                      고객님께 전달되었나요?
+                    </>
+                  )}
+                </label>
+              ) : null}
+            </div>
             <div className="customer-info">
               <div className="customer-detail">
                 <div className="customer-group">
                   <label>예약자</label>
-                  <div>  <input type="text" value={selectedCustomerInfo?.userName || ''} disabled/> </div>
+                  <div>  {selectedCustomerInfo?.userName || ''} </div>
                 </div>
                 <div className="customer-group">
                   <label>연락처</label>
-                  <div> <input type="text" value={selectedCustomerInfo?.userPhoneNum || ''} disabled/> </div>
+                  <div> {selectedCustomerInfo?.userPhoneNum || ''} </div>
                 </div>
                 <div className="customer-group">
                   <label>방문시간</label>
-                  <div> <input type="text" value={selectedCustomerInfo?.reservationTime || ''} disabled/> </div>
+                  <div> {selectedCustomerInfo?.reservationTime || ''} </div>
                 </div>
                 <div className="customer-group">
                   <label>결제방식</label>
-                  <div> <input type="text" value={selectedCustomerInfo?.paymentMethod || ''} disabled/> </div>
+                  <div> {selectedCustomerInfo?.paymentMethod || ''} </div>
                 </div>
                 <div className="customer-group">
                   <label>결제금액</label>
-                  <div> <input type="text" value={selectedCustomerInfo?.paymentAmount || ''} disabled/> </div>
+                  <div> {selectedCustomerInfo?.paymentAmount || ''} </div>
                 </div>
               </div>
 
@@ -218,7 +283,7 @@ function AdminMain() {
                 <div className="reservation-content">
                   <label>상품명</label>
                   <div>
-                    <input type="text" value={selectedCustomerInfo?.options?.find(option => option.categoryLevel === '1')?.serviceName || ''} disabled/>
+                    {selectedCustomerInfo?.options?.find(option => option.categoryLevel === '1')?.serviceName || ''}
                   </div>
                 </div>
 
@@ -247,8 +312,8 @@ function AdminMain() {
                               ))
                             )}
                           </div>
-                        ))}
-
+                        ))
+                    }
                   </div>
                 </div>
 
@@ -265,7 +330,6 @@ function AdminMain() {
       </div>
     </div>
   </div>
-
   )
 }
 

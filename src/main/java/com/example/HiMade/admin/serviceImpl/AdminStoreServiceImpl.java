@@ -122,7 +122,11 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     @Override
     public void updateDay(StoreRegistDTO storeRegistDTO) {
 
-        adminStoreMapper.updateDay(storeRegistDTO);
+        if (storeRegistDTO.getDayOffDayList() == null || storeRegistDTO.getDayOffDayList().isEmpty()){
+            adminStoreMapper.updateNoDayOff(storeRegistDTO.getStoreNo());
+        } else{
+            adminStoreMapper.updateDay(storeRegistDTO);
+        }
     }
 
     @Override
@@ -234,6 +238,16 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     @Override
     public List<CustomerReservationDTO> getTodayCustomer(List<Long> reservationNos) {
         return adminStoreMapper.getTodayCustomer(reservationNos);
+    }
+
+    @Override
+    public List<Integer> getReservationStatus(Long storeNo) {
+        return adminStoreMapper.getReservationStatus(storeNo);
+    }
+
+    @Override
+    public Integer completeReservationStatus(Long storeNo, Long reservationNo) {
+        return adminStoreMapper.completeReservationStatus(storeNo, reservationNo);
     }
 
     @Override

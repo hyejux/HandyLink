@@ -34,7 +34,8 @@ public class MainController {
             "UserMyPage".equals(pageName) ||
             "UserDelete".equals(pageName) ||
             "UserAccountFind".equals(pageName) ||
-            "UserSignUpFinish".equals(pageName)) {
+            "UserSignUpFinish".equals(pageName) ||
+            "UserMyReview".equals(pageName)) {
       return "userLayoutNoNav";
     }
 

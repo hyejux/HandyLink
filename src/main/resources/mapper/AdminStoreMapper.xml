@@ -328,19 +328,16 @@
     <select id="getCancledCount" resultType="Integer">
         select count(*)
         from reservation reserve
-        join payment pay on pay.reservation_no = reserve.reservation_no
         where store_no = #{storeNo}
         and reservation_status = '취소(고객)'
-<!--        and pay.payment_status = '결제취소' 예약 취소도 승인이 있는지?-->
     </select>
 
     <select id="getWaitCount" resultType="Integer">
         select count(*)
-        from payment pay
-        join reservation reserve on reserve.reservation_no = pay.reservation_no
-        where reserve.store_no = #{storeNo}
-        and reserve.reservation_status = '입금대기'
-<!--        and pay.payment_status='결제완료';-->
+        from reservation
+        where store_no = #{storeNo}
+        and reservation_status = '입금대기' <!--계좌이체-->
+        or reservation_status = '대기' <!--그외결제완료-->
     </select>
 
     <select id="getDoingCount" resultType="Integer">
@@ -350,6 +347,24 @@
         where reserve.store_no = #{storeNo}
         and reserve.reservation_status = '확정'
         and pay.payment_status='결제완료';
+    </select>
+
+    <select id="getTodayCompleteCount" resultType="Integer">
+        select count(*)
+        from reservation r
+        join reservation_slot rs on rs.reservation_slot_key = r.reservation_slot_key
+        where r.store_no = #{storeNo}
+        and r.reservation_status='완료'
+        and rs.reservation_slot_date = current_date
+    </select>
+
+    <select id="getTodayRemainCount" resultType="Integer">
+        select count(*)
+        from reservation r
+        join reservation_slot rs on rs.reservation_slot_key = r.reservation_slot_key
+        where r.store_no = #{storeNo}
+        and r.reservation_status='확정'
+        and rs.reservation_slot_date = current_date
     </select>
 
     <select id="getDailyReportChart" parameterType="map" resultType="map">
@@ -444,7 +459,7 @@
         where rs.reservation_slot_date = #{reservationSlotDate}::DATE
             and reserve.store_no = #{storeNo}
             and (reserve.reservation_status = '확정'
-            or reserve.reservation_status='완료')
+                or reserve.reservation_status='완료')
     </select>
 
     <select id="getTodayCustomer" resultMap="customerReservationMap">
@@ -466,8 +481,8 @@
         join reservation_slot rs on rs.reservation_slot_key = reserve.reservation_slot_key
         join users on users.user_id = reserve.user_id
         join payment pay on pay.reservation_no = reserve.reservation_no
-        join reservation_form rf on rf.reservation_no = reserve.reservation_no
-        join category cate on cate.category_id = rf.main_category_id
+        left join reservation_form rf on rf.reservation_no = reserve.reservation_no
+        left join category cate on cate.category_id = rf.main_category_id
         or cate.category_id = rf.middle_category_id
         or cate.category_id = rf.sub_category_id
         where reserve.reservation_no IN

@@ -12,6 +12,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+    public SecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+    }
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -56,6 +62,10 @@ public class SecurityConfig {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
 
                 .and()
                 .authenticationProvider(customAuthenticationProvider);

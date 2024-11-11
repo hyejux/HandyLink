@@ -148,7 +148,7 @@ function UserChatList() {
             <div className="user-main-header-fix">
                 <div className="search-top">
                     <div className='left'>
-                        <img src="../img/logo2.png" alt="Logo" />
+                        채팅 목록
                     </div>
                     <div className='right' onClick={() => window.location.href = '/userlikelist.user'}>
                         <i className="bi bi-heart-fill"></i>

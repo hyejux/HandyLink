@@ -10,7 +10,7 @@
 
 .search-top {
     overflow: hidden;
-    padding: 10px 10px 0px 10px;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -25,6 +25,7 @@
     float: left;
     font-size: 20px;
     font-weight: bold;
+    color: #fd8517;
 }
 
 .search-top .right {

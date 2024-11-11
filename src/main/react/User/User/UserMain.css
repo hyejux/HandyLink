@@ -74,7 +74,7 @@
 .user-main-content h3 {
   font-size: 18px;
   font-weight: bold;
-  margin-left: 5px;
+  margin-left: 15px;
   display: flex;
 }
 
@@ -89,9 +89,6 @@
 
 
 /* ----------------------------------------- */
-h3 {
-  margin-left: 5px;
-}
 
 .user-main-header-fix {
   position: fixed;
@@ -144,10 +141,10 @@ h3 {
 .store-search-bar {
   margin: 10px;
   height: 25px;
-  border-radius: 10px;
+  border-radius: 5px;
   text-align: center;
   display: flex;
-  padding: 10px;
+  padding: 8px;
   align-items: center;
   position: relative;
   background-color: #eee;
@@ -156,6 +153,13 @@ h3 {
 .search-btn {
   border: none;
   cursor: pointer;
+  font-size: 15px;
+  background: #eeeeee;
+  padding: 0;
+}
+
+.search-btn .bi-search {
+  color: #777;
 }
 
 .store-search-bar img {
@@ -243,6 +247,7 @@ h3 {
 .user-main-list-wrap {
   display: flex;
   overflow-x: auto;
+  padding-left: 10px;
 }
 
 .user-main-list-wrap-22 {
@@ -250,6 +255,7 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  padding: 0;
 }
 
 .user-main-list-wrap-33 {
@@ -257,6 +263,7 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  padding: 0;
 }
 
 .user-main-list-container {
@@ -319,7 +326,7 @@ h3 {
   font-size: 20px;
   color: #eee;
   top: 5px;
-  left: 95px;
+  left: 100px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -656,6 +663,9 @@ h3 {
   position: relative;
 }
 
+.search-result-list-container h3 {
+  margin-left: 15px;
+}
 
 .result-list-top,
 .result-list-mid,
@@ -688,10 +698,9 @@ h3 {
 }
 
 .search-result-list-content {
-  padding: 5px;
+  margin: 0px 15px 25px 15px;
   border-radius: 10px;
   position: relative;
-  margin-bottom: 20px;
   cursor: pointer;
   border: 1px solid #e8e8e8;
 }
@@ -862,10 +871,15 @@ h3 {
 
 
 /*  */
+.user-main-menu-bar-container h3 {
+  margin-left: 15px;
+}
+
 .user-main-menu-bar {
-  width: 100%;
+  width: 90%;
   height: 50px;
   display: inline-flex;
+  padding: 0 5%;
 }
 
 .user-main-menu-bar button {
@@ -878,26 +892,23 @@ h3 {
 }
 
 .user-main-menu-bar button.active {
-  border-bottom: 5px solid #fd8517;
+  border-bottom: 2px solid #fd8517;
   color: #fd8517;
 }
 
 .user-main-menu-content {
-  padding: 10px 5px;
+  padding: 10px 15px;
 }
 
 .user-main-menu-content-list {
   display: flex;
-  padding: 5px;
+  padding: 8px;
   cursor: pointer;
 }
 
 .user-main-menu-content-list:hover {
-  /* box-shadow: 1px -1px 12px 0px rgba(0, 0, 0, 0.1); */
   cursor: pointer;
 }
-
-
 
 .user-main-menu-img {
   width: 70px;

@@ -282,7 +282,7 @@ function UserSearchResult() {
         </div>
 
         <div className="search-result-filter">
-          <div className="left">검색결과 {filteredStores.length} 개</div>
+          <div className="left">검색결과 {filteredStores.length}개</div>
 
           <div className="right" onClick={toggleDropdown}>{sortCriterion}</div>
           {isDropdownVisible && (

@@ -74,25 +74,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 sendMessageToSessions(targetUserSessions, message, "user " + userId);
             }
 
-            Set<WebSocketSession> senderStoreSessions = storeSessions.get(storeNo);  // 변경된 부분
+            Set<WebSocketSession> senderStoreSessions = storeSessions.get(storeNo);
             if (senderStoreSessions != null) {
                 sendMessageToSessions(senderStoreSessions, message, "store " + storeNo);
             }
         }
     }
-
-    // 각 사용자 ID에 연결된 모든 세션에 메시지 전송
-//    private void sendMessageToUser(String userId, Map<String, Object> payload) throws Exception {
-//        Set<WebSocketSession> sessions = userSessions.get(userId);
-//        if (sessions != null) {
-//            String messageString = objectMapper.writeValueAsString(payload);
-//            for (WebSocketSession ws : sessions) {
-//                if (ws.isOpen()) {
-//                    ws.sendMessage(new TextMessage(messageString));
-//                }
-//            }
-//        }
-//    }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {

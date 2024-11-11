@@ -29,10 +29,6 @@ public class SecurityConfig {
                 .antMatchers("/userMyReservationList.user", "/userChatList.user", "/userAccountPage.user").authenticated()
                 .antMatchers("/userlikelist.user").authenticated()
 
-                .antMatchers("/userStoreList/storeLike/**").authenticated()  // 찜하기 기능
-                .antMatchers("/UserChatRoom.user/**").authenticated()        // 문의하기 기능
-                .antMatchers("/UserReservationDate.user/**").authenticated() // 예약 기능
-
                 // 정적 리소스는 로그인 없이 접근 허용
                 .antMatchers("/css/**", "/uploads/**", "/img/**", "/bundle/**").permitAll()
 

@@ -82,7 +82,7 @@ function UserDelete() {
                 if (deleteResponse.ok) {
                     const data = await deleteResponse.json();
                     alert(data.message || '탈퇴가 완료되었습니다.');
-                    window.location.href = '/UserLoginPage.user';
+                    window.location.href = '/UserMain.user';
                 } else {
                     const errorData = await deleteResponse.json();
                     alert(errorData.error || '탈퇴 처리 중 오류가 발생했습니다.');
@@ -99,7 +99,7 @@ function UserDelete() {
                 if (response.ok) {
                     const data = await response.json();
                     alert(data.message || '탈퇴가 완료되었습니다.');
-                    window.location.href = '/UserLoginPage.user';
+                    window.location.href = '/UserMain.user';
                 } else {
                     const errorData = await response.json();
                     alert(errorData.error || '입력 정보가 올바르지 않습니다.');

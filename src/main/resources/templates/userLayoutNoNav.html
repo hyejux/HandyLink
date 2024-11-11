@@ -21,9 +21,12 @@
 </div>
 
 <script>
-  /*일단 이렇게 두고 권한 설정하면 그에 맞는 조건도 추가해야 할듯*/
   function handleGoBack() {
-    window.history.back();
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = '/userMain.user';
+    }
   }
 </script>
 

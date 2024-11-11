@@ -7,6 +7,10 @@
   border: none;
 }
 
+.user-content-container:first-child {
+  margin-top: 40px;
+}
+
 .payment-info-top {
   display: flex;
   justify-content: space-between;

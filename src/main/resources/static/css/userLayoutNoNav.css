@@ -14,6 +14,12 @@
     font-style: normal;
 }
 
+#root {
+    width: 100%;
+    height: calc(100% - 50px); /* 뒤로가기 버튼 높이만큼 뺌 */
+    overflow-y: auto;
+}
+
 body {
     font-family: 'Pretendard-Regular';
     margin: 0px;
@@ -27,6 +33,7 @@ body {
     max-width: 400px;
     min-height: 100vh;
     position: relative;
+    padding-top: 39px;
 }
 
 /* 최상단 좌측에 뒤로가기 버튼 */
@@ -35,9 +42,10 @@ body {
     justify-content: space-between;
     padding: 10px;
     background-color: #ffffff;
-    z-index: 50;
+    z-index: 10;
     width: 100%;
     position: fixed;
+    top: 0px;
 }
 
 /* 상단 버튼 디자인 */

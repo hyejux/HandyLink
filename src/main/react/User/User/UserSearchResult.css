@@ -105,17 +105,19 @@
   overflow: hidden;
   display: flex;
   justify-content: space-between;
-  padding: 10px;
+  padding: 10px 15px;
 }
 
 .search-result-filter .left {
   float: left;
-  font-size: 14px
+  font-size: 14px;
 }
 
 .search-result-filter .right {
   float: right;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 /* 드롭다운  */
@@ -226,10 +228,9 @@
 }
 
 .search-result-list-content {
-  padding: 5px;
+  margin: 0px 5px 25px 5px;
   border-radius: 10px;
   position: relative;
-  margin-bottom: 20px;
   cursor: pointer;
   border: 1px solid #e8e8e8;
 }

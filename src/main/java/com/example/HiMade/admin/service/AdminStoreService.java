@@ -1,6 +1,7 @@
 package com.example.HiMade.admin.service;
 
 import com.example.HiMade.admin.dto.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -46,5 +47,7 @@ public interface AdminStoreService {
     List<Map<String, Object>> getReservationCounts(Long storeNo); //메인-캘린더 예약건수
     List<Integer> getReservationNo(Long storeNo, String reservationSlotDate); //메인-날짜별 예약번호
     List<CustomerReservationDTO> getTodayCustomer(List<Long> reservationNos); //예약자 정보
+    List<Integer> getReservationStatus(Long storeNo);
+    Integer completeReservationStatus(Long storeNo, Long reservationNo); //예약완료 update
 
 }

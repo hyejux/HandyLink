@@ -396,36 +396,8 @@ body {
       text-align: center;
 }
 
-.react-calendar__tile {
-  max-width: 50px;
-      height: 40px;
-      background-color : #fff;
-  border-radius: 50%; /* 타일의 부드러운 모서리 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 5px;
-  font-size : 15px;
-  border: 1px solid #ddd;
-  cursor : pointer;
-  color: #000;
 
 
-}
-
-.react-calendar__tile:hover {
-  background-color: #fd8517; /* 호버 시 배경색 변화 */
-}
-
-.react-calendar__tile--active {
-  background-color: #fd8517; /* 선택된 날짜 색상 */
-  color: white; /* 선택된 날짜 텍스트 색상 */
-}
-
-.react-calendar__tile--now {
-  background-color:#ebebeb; /* 오늘 날짜 배경색 */
-  color : #000;
-}
 
 .react-calendar__navigation {
   margin-bottom: 10px; /* 네비게이션 바와 캘린더 사이의 여백 */
@@ -472,13 +444,6 @@ body {
 }
 
 
-/* 예약이 가득 찬 날짜에 대한 스타일 */
-/* 예약이 가득 찬 날짜에 대한 스타일 */
-.reserved {
-  background-color: #c8c8c8  !important;
-  color: white !important; /* 텍스트 색상 변경 */
-}
-
 
 /* 기본 캘린더 스타일 */
 .react-calendar__tile {
@@ -494,4 +459,28 @@ body {
   border: 1px solid #ddd;
   cursor: pointer;
   color: #000;
+}
+
+
+
+.react-calendar__tile:hover {
+  background-color: #fd8517; /* 호버 시 배경색 변화 */
+}
+
+.react-calendar__tile--active {
+  background-color: #fd8517; /* 선택된 날짜 색상 */
+  color: white; /* 선택된 날짜 텍스트 색상 */
+}
+
+.react-calendar__tile--now {
+  background-color:#ebebeb; /* 오늘 날짜 배경색 */
+  color : #000;
+}
+
+
+/* 예약이 가득 찬 날짜에 대한 스타일 */
+/* 예약이 가득 찬 날짜에 대한 스타일 */
+.reserved {
+  background-color: #c8c8c8  !important;
+  color: white !important; /* 텍스트 색상 변경 */
 }

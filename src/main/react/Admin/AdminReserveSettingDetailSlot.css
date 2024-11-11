@@ -7,6 +7,7 @@
   border: 1px solid #ddd;
     border-radius: 30px;
     padding: 10px;
+    width: 150px;
 }
 
   .main-content-title {
@@ -25,7 +26,38 @@
     border-radius: 10px;
   }
   
+  .start-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   
+  .end-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+.slotbtn {
+  border: 1px solid #38414a;
+  background-color: #38414a;
+  color: white;
+  font-size: 16px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.slotbtn2 {
+  border: 1px solid #38414a;
+  background-color:#383c4ad9;
+  color: white;
+  font-size: 16px;
+  border-radius: 2px;
+  width: 100%;
+  cursor: pointer;
+}
+
   .btn-st {
     border: 1px solid #1d2830;
     color: #ffffff;
@@ -105,6 +137,8 @@
      border-radius: 15px;
      padding: 20px;
      margin-bottom: 30px;
+     background-color: #fff;
+     height: 35px;
   }
   
 
@@ -118,7 +152,7 @@
  
  .date-box > div {
   display: flex;
-  font-size: 15px;
+  font-size: 25px;
   font-weight: bold;
   gap: 6%;
   justify-content: space-around;
@@ -467,7 +501,7 @@
   }
   
   .equal-slot-count {
-    background-color: #ddd; /* 기본 배경색 */
+      background-color: #38414a14;
 }
 
 
@@ -527,7 +561,10 @@
   
 
 .slot-num-status {
-    display: flex;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-around;
+  margin-bottom: 30px;
 
 }
 .slot-num-status > input{

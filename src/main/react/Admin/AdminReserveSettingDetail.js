@@ -185,12 +185,12 @@ const handleTimeNumChange = (e) => {
         'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
         formData
       );
-      console.log('Uploaded Image URL:', response.data.secure_url);
-      alert(`Image uploaded successfully! URL: ${response.data.secure_url}`);
+      // console.log('Uploaded Image URL:', response.data.secure_url);
+      // alert(`Image uploaded successfully! URL: ${response.data.secure_url}`);
       return response.data.secure_url; // 업로드된 이미지 URL을 반환
     } catch (error) {
-      console.error('Error uploading image:', error);
-      alert("이미지 업로드에 실패했습니다.");
+      // console.error('Error uploading image:', error);
+      // alert("이미지 업로드에 실패했습니다.");
       return null; // 업로드 실패 시 null 반환
     }
   };
@@ -302,7 +302,7 @@ const handleTimeNumChange = (e) => {
     .then(response => {
         console.log('파일 업로드 성공:', response.data);
         alert("서비스 등록이 완료되었습니다.");
-        // window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
+        window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
     })
     .catch(error => {
         console.error('에러 발생:', error);
@@ -352,11 +352,66 @@ const handleTimeNumChange = (e) => {
     setCategories(prev => prev.filter((_, i) => i !== index));
   };
 
+  //  const handleChangeCategory = (index, field, value) => {
+  //    setCategories(prev => prev.map((category, i) =>
+  //      i === index ? { ...category, [field]: value } : category
+  //    ));
+
+
+
+  // };
+
+
   const handleChangeCategory = (index, field, value) => {
-    setCategories(prev => prev.map((category, i) =>
-      i === index ? { ...category, [field]: value } : category
-    ));
+    setCategories(prev =>
+      prev.map((category, i) =>
+        i === index
+          ? {
+              ...category,
+              [field]: value,
+              // 'subCategoryType' 변경 시, 'SELECT1' 또는 'SELECTN'일 때 servicePrice를 0으로 초기화
+              ...(field === 'subCategoryType' && (value === 'SELECT1' || value === 'SELECTN') && category.servicePrice !== 0
+                ? { servicePrice: 0 }  // 초기 설정만 0으로 하고 이후 수정 가능하게 유지
+                : {}),
+              // 'isPaid' 변경 시, 유료/무료 값에 따라 servicePrice를 0으로 초기화 (서브카테고리 가격 초기화 포함)
+              ...(field === 'isPaid' && value !== category.isPaid
+                ? { 
+                    servicePrice: 0,  // 서비스 가격을 0으로 초기화
+                    subCategories: category.subCategories.map(subCategory => ({
+                      ...subCategory,
+                      servicePrice: 0, // 서브카테고리 가격도 0으로 초기화
+                    }))
+                } : {}),
+            }
+          : category
+      )
+    );
   };
+  
+  const handleChangeSubCategory = (categoryIndex, subCategoryIndex, field, value) => {
+    setCategories(prev =>
+      prev.map((category, index) =>
+        index === categoryIndex
+          ? {
+              ...category,
+              subCategories: category.subCategories.map((sub, i) =>
+                i === subCategoryIndex
+                  ? {
+                      ...sub,
+                      // 필드명이 'serviceName' 또는 'servicePrice'일 경우에만 값을 변경
+                      ...(field === 'serviceName' || field === 'servicePrice'
+                        ? { [field]: value }
+                        : {}) // 해당 필드가 아니면 변경하지 않음
+                    }
+                  : sub
+              )
+            }
+          : category
+      )
+    );
+  };
+  
+  const defaultImage = 'https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731331851/bznpxzxdgutdtextodq0.png';
 
 // subCategory 객체를 { serviceName: '', servicePrice: 0 } 형태로 수정
 const handleAddSubCategory = (categoryIndex) => {
@@ -376,19 +431,6 @@ const handleRemoveSubCategory = (categoryIndex, subCategoryIndex) => {
   ));
 };
 
-// 필드명이 serviceName 또는 servicePrice일 경우에만 값을 변경하도록 수정
-const handleChangeSubCategory = (categoryIndex, subCategoryIndex, field, value) => {
-  setCategories(prev => prev.map((category, index) =>
-    index === categoryIndex
-      ? {
-        ...category,
-        subCategories: category.subCategories.map((sub, i) =>
-          i === subCategoryIndex ? { ...sub, [field]: value } : sub
-        )
-      }
-      : category
-  ));
-};
 
 const [serviceDate, setServiceDate] = useState(''); // 날짜 상태
 const [serviceHour, setServiceHour] = useState(''); // 시간 상태
@@ -410,7 +452,27 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
 
   useEffect(() => {
     console.log('Category :', categories);
+    console.log(serviceDate,serviceHour,serviceStart);
 }, [categories]);
+
+
+
+
+
+useEffect(() => {
+  // 현재 시간을 HH:mm 형식으로 설정
+  const now = new Date();
+  setCurrentTime(`${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`);
+}, []);
+
+const handleRegisterNow = () => {
+  // "바로 등록" 클릭 시, 현재 시간으로 `serviceHour` 설정
+  setServiceHour(currentTime);
+};
+// const [serviceDate, setServiceDate] = useState('');
+// const [serviceHour, setServiceHour] = useState('');
+const [currentTime, setCurrentTime] = useState('');
+
 
 
   return (
@@ -431,27 +493,32 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
         <button type="button" className="btn-st" onClick={handleComplete}>완료</button>
       </div>
       <div className="main-slot">
-        <div> 서비스 시작일 </div>
-       {/* 날짜 입력 필드 */}
-       <input 
-                type="date" 
-                value={serviceDate} 
-                onChange={(e) => setServiceDate(e.target.value)} 
-            />
+      <div>서비스 시작일</div>
 
-            {/* 시간 입력을 위한 드롭다운 */}
-            <select 
-                value={serviceHour} 
-                onChange={(e) => setServiceHour(e.target.value)}
-            >
-                <option value="">시간 선택</option>
-                {[...Array(24)].map((_, index) => (
-                    <option key={index} value={String(index).padStart(2, '0')}>
-                        {String(index).padStart(2, '0')}:00 {/* 두 자리로 표현 */}
-                    </option>
-                ))}
-            </select>
-      </div>
+      {/* 날짜 입력 필드 */}
+      <input 
+        type="date" 
+        value={serviceDate} 
+        onChange={(e) => setServiceDate(e.target.value)} 
+        min={new Date().toISOString().split("T")[0]} // 오늘 이전 날짜 선택 불가
+      />
+
+      {/* 시간 입력을 위한 드롭다운 */}
+      <select 
+        value={serviceHour} 
+        onChange={(e) => setServiceHour(e.target.value)}
+      >
+        <option value="">시간 선택</option>
+        {[...Array(24)].map((_, index) => (
+          <option key={index} value={String(index).padStart(2, '0')}>
+            {String(index).padStart(2, '0')}:00
+          </option>
+        ))}
+      </select>
+
+      {/* 바로 등록 버튼 */}
+      {/* <button onClick={handleRegisterNow}>바로 등록</button> */}
+    </div>
       <div className="main-slot">
         <div> 일별 건수 </div>
         <input type="number" value={dateNumCase} onChange={handleDateNumChange} />
@@ -463,7 +530,11 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
       <div className="main-contents">
       <div className="reserve-container">
       <div className="reserve-img">
-      {imagePreview && <img src={imagePreview} alt="미리보기" style={{ width: '100%', objectFit: 'cover' }} />}
+      <img 
+        src={imagePreview || defaultImage}  // imagePreview가 없으면 기본 이미지 사용
+        alt="미리보기"
+        style={{ width: '400px', objectFit: 'cover' }}
+      />
         
       <div>
       {/* <input type="file" className="btn-st btn-imgChg"  accept="image/*" onChange={handleImageChange} /> */}
@@ -562,20 +633,21 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
 
                   </div>
                   <div className="type-category-sub">
+                    
   <input
     type="text"
     placeholder="이름"
     value={category.serviceName}
     onChange={(e) => handleChangeCategory(index, 'serviceName', e.target.value)}
   />
-  <input
-    type="number"
-    placeholder="가격"
-    value={category.isPaid ? category.servicePrice : 0} // isPaid가 false일 경우 가격을 0으로 설정
-    onChange={(e) => handleChangeCategory(index, 'servicePrice', category.isPaid ? Number(e.target.value) : 0)}
-    disabled={!category.isPaid || category.subCategoryType === 'SELECT1' || category.subCategoryType === 'SELECTN'}
-    
-  />
+<input
+  type="number"
+  placeholder="가격"
+  value={category.isPaid ? category.servicePrice : 0} // 표시용으로만 0
+  onChange={(e) => handleChangeCategory(index, 'servicePrice', category.isPaid ? Number(e.target.value) : 0)}
+  disabled={!category.isPaid || category.subCategoryType === 'SELECT1' || category.subCategoryType === 'SELECTN'}
+/>
+
 </div>
 
 
@@ -604,30 +676,31 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
 
                   {/* 조건부 렌더링 추가 */}
                   {category.subCategoryType !== 'NUMBER' && category.subCategoryType !== 'TEXT' && (
-                    <div className="category-sub-sub">
-                      {category.subCategories.map((subCategory, subIndex) => (
-                        <div key={subIndex} className="type-category-sub-sub">
-                          <input
-                            type="text"
-                            placeholder="서브카테고리 이름"
-                            value={subCategory.serviceName}
-                            onChange={(e) => handleChangeSubCategory(index, subIndex, 'serviceName', e.target.value)}
-                          />
-                          <input
-                            type="number"
-                            placeholder="서브카테고리 가격"
-                            value={category.isPaid ? subCategory.servicePrice : 0} // isPaid가 false일 경우 가격을 0으로 설정
-                            onChange={(e) => handleChangeSubCategory(index, subIndex, 'servicePrice', Number(e.target.value))}
-                            disabled={!category.isPaid} // isPaid가 false일 경우 비활성화
-                          />
-                          <button type="button" className="btn-sub-del" onClick={() => handleRemoveSubCategory(index, subIndex)}>
-                            <i className="bi bi-x-lg"></i>
-                          </button>
-                        </div>
-                      ))}
-                      <button type="button" className="btn-sub-add" onClick={() => handleAddSubCategory(index)}> + </button>
-                    </div>
-                  )}
+  <div className="category-sub-sub">
+    {category.subCategories.map((subCategory, subIndex) => (
+      <div key={subIndex} className="type-category-sub-sub">
+        <input
+          type="text"
+          placeholder="서브카테고리 이름"
+          value={subCategory.serviceName}
+          onChange={(e) => handleChangeSubCategory(index, subIndex, 'serviceName', e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="서브카테고리 가격"
+          value={category.isPaid ? subCategory.servicePrice : 0} // isPaid가 false일 경우 가격을 0으로 설정
+          onChange={(e) => handleChangeSubCategory(index, subIndex, 'servicePrice', Number(e.target.value))}
+          disabled={!category.isPaid} // isPaid가 false일 경우 비활성화
+        />
+        <button type="button" className="btn-sub-del" onClick={() => handleRemoveSubCategory(index, subIndex)}>
+          <i className="bi bi-x-lg"></i>
+        </button>
+      </div>
+    ))}
+    <button type="button" className="btn-sub-add" onClick={() => handleAddSubCategory(index)}> + </button>
+  </div>
+)}
+
 
                 
                 </div>

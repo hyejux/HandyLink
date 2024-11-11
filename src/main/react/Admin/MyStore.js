@@ -170,10 +170,18 @@ setNewImages(storeImg);
     
         const uploadedUrls = []; // 업로드된 이미지 URL을 저장할 배열
     
-        // 각 파일에 대해 Cloudinary 업로드 요청을 비동기로 수행
         for (let i = 0; i < newImages.length; i++) {
+            const image = newImages[i];
+    
+            // file 속성이 없는 경우 (이미 업로드된 URL)라면 해당 URL을 그대로 사용
+            if (!image.file && image.previewUrl) {
+                uploadedUrls.push(image.previewUrl);
+                continue;
+            }
+    
+            // file 속성이 있는 경우 업로드 진행
             const formData = new FormData();
-            formData.append('file', newImages[i].file);
+            formData.append('file', image.file); // 파일 추가
             formData.append('upload_preset', 'hye123'); // Cloudinary에서 설정한 Upload Preset
     
             try {
@@ -182,7 +190,6 @@ setNewImages(storeImg);
                     formData
                 );
     
-                // Cloudinary 응답 데이터에서 URL들을 추출하여 배열에 추가
                 if (response.data && response.data.secure_url) {
                     uploadedUrls.push(response.data.secure_url);
                 }
@@ -192,8 +199,9 @@ setNewImages(storeImg);
         }
     
         console.log('Uploaded Images:', uploadedUrls);
-        return uploadedUrls; // 모든 업로드된 이미지 URL 배열 반환
+        return uploadedUrls;
     };
+    
     
 
     //사진업로드
@@ -304,6 +312,7 @@ setNewImages(storeImg);
 
                 console.log("등록성공 ", response.data);
                 alert('가게 정보 수정이 완료되었습니다.');
+                setIsDisabled(!isDisabled);
                 // window.location.href='/mystore.admin';
             }
         }catch (error){

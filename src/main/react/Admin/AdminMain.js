@@ -12,7 +12,7 @@ function AdminMain() {
   const storeNo = sessionStorage.getItem('storeNo');
 
   const [events, setEvents] = useState([]); //캘린더 예약 표시
-  const [count, setCount] = useState({}); //운영현황
+  const [count, setCount] = useState([]); //운영현황
   const [selectedDate, setSelectedDate] = useState(() => {
     const today = new Date();
     today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
@@ -89,7 +89,14 @@ function AdminMain() {
             reservationNo: reservationNo.join(',')
           }
         });
-        setCustomerBookInfo(response?.data || []);
+
+        // 시간 형식을 12:00 형태로 변경
+        const formattedData = response?.data?.map(customer => ({
+          ...customer,
+          reservationTime: customer.reservationTime.slice(0, 5) // "HH:MM:SS" -> "HH:MM"
+        })) || [];
+
+        setCustomerBookInfo(formattedData);
       }else{
         setCustomerBookInfo([]);
       }
@@ -136,25 +143,13 @@ function AdminMain() {
     }
   };
 
+  console.log("count ", count);
+
   return(
   <div className="admin-store-regist-container">
     <div className="container">
-      <div className="operation-status">
-        <h3><i className="bi bi-bar-chart-line-fill"></i>운영 현황</h3>
-        <div className="status-container">
-          <div className="status-item">
-            <p>{count.waitCount}</p> <p className="new">New</p>
-          </div>
-          <div className="status-item">
-            <p>{count.cancledCount}</p> <p className="cancle">예약취소</p>
-          </div>
-          <div className="status-item">
-            <p>5</p> <p className="chat">채팅문의</p>
-          </div>
-        </div>
-      </div>
 
-      <div className="operation-status">
+      <div className="schedule">
         <div className="calendar">
           <div className="calendar-header">
             <FullCalendar
@@ -176,24 +171,44 @@ function AdminMain() {
                 center: 'title',
                 right: 'dayGridMonth,dayGridWeek'
               }}
-              height="auto" // 여유 공간을 위한 높이 조정
+              height="auto"
               contentHeight="auto"
-//eventContent={(eventInfo) => (
-//<div style={{
-//  backgroundColor: '#FFDDC1', // Customize color here
-//  padding: '5px',
-//  borderRadius: '4px',
-//  color: '#333' // Text color
-//}}>
-//{eventInfo.event.title}
-//</div>
-//)}
             />
+          </div>
+        </div>
+
+
+        <div className="status-container main-count">
+          <div className="today-reservation">
+          <i className="bi bi-chevron-double-right"><h3>Today 현황</h3></i>
+
+          <div className="status-item">
+          <p className="complete" >전달완료</p>
+          <p>{count.todayCompleteCount} 건</p>
+          </div>
+          <div className="status-item">
+          <p className="remain" >남은예약</p>
+          <p>{count.todayRemainCount} 건</p>
+          </div>
+          </div>
+
+          <div className="check-reservation">
+          <i className="bi bi-chevron-double-right"><h3>운영 현황</h3></i>
+          <div className="status-item">
+          <p className="new" >예약대기</p>
+          <p>{count.waitCount} 건</p>
+          </div>
+          <div className="status-item">
+          <p className="cancle">예약확정</p>
+          <p>{count.doingCount} 건</p>
+          </div>
           </div>
         </div>
       </div>
 
-      <div className="operation-status today-customer">
+
+
+      <div className="today-customer">
         <div className="customer-reservation-check">
           <div className="today-booking2">
             <h3><i className="bi bi-shop-window"></i>Today 예약</h3>
@@ -221,9 +236,9 @@ function AdminMain() {
                           </tr>
                       ))
                   ) : (
-                        <tr>
-                          <td colSpan="3">예약정보가 없습니다.</td>
-                        </tr>
+                      <tr>
+                        <td colSpan="3">예약정보가 없습니다.</td>
+                      </tr>
                   )}
                 </tbody>
               </table>
@@ -279,7 +294,6 @@ function AdminMain() {
               </div>
 
               <div className="customer-reservation">
-
                 <div className="reservation-content">
                   <label>상품명</label>
                   <div>
@@ -290,7 +304,6 @@ function AdminMain() {
                 <div className="reservation-content">
                   <label>옵션</label>
                   <div className="reservation-option">
-
                     {/* 레벨 2 옵션과 그 하위 레벨 3 옵션을 묶어서 출력 */}
                     {selectedCustomerInfo?.options
                       ?.filter(option => option.categoryLevel === '2')
@@ -319,15 +332,14 @@ function AdminMain() {
 
                 <div className="reservation-content">
                   <label>요청사항</label>
-                  <div> {selectedCustomerInfo?.options?.customerRequest ?? "없음"} </div>
+                  <div> {selectedCustomerInfo?.customerRequest ?? "없음"} </div>
                 </div>
-
               </div>
             </div>
           </div>
-
         </div>
       </div>
+
     </div>
   </div>
   )

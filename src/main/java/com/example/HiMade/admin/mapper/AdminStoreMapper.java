@@ -52,6 +52,8 @@ public interface AdminStoreMapper {
     Integer getCancledCount(Long storeNo); //예약취소건수
     Integer getWaitCount(Long storeNo); //예약대기건수-결제완료된
     Integer getDoingCount(Long storeNo); //진행중인예약-주문승인된
+    Integer getTodayCompleteCount(Long storeNo); //오늘 완료된 예약
+    Integer getTodayRemainCount(Long storeNo); //오늘 남은 예약
 
     List<Map<String , Object>> getDailyReportChart(@Param("storeNo") Long storeNo,@Param("year") int year, @Param("month") int month); //리포트 예약 정보
     List<Map<String , Object>> getMonthlyReportChart(@Param("storeNo") Long storeNo,@Param("year") int year); //리포트 예약 정보

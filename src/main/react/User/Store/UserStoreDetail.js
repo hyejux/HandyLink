@@ -101,7 +101,7 @@ function UserStoreDetail() {
 
     if (!userId) {
       alert("로그인 후 이용 가능한 서비스입니다.");
-      window.location.href = "/UserLoginPage.user";
+      //window.location.href = "/UserLoginPage.user";
       return;
     }
 
@@ -135,7 +135,7 @@ function UserStoreDetail() {
 
     if (!userId) {
       alert("로그인 후 이용 가능한 서비스입니다.");
-      window.location.href = "/UserLoginPage.user";
+      //window.location.href = "/UserLoginPage.user";
       return;
     }
 

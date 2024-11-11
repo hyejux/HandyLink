@@ -100,10 +100,12 @@ function UserSearch() {
       })
       .then((data) => {
         console.log(data);
-        const formattedData = data.map(([serviceName, storeNo, servicePrice]) => ({
+        const formattedData = data.map(([serviceName, storeNo, servicePrice, serviceContent, imageUrl]) => ({
           serviceName,
           storeNo,
           servicePrice,
+          serviceContent,
+          imageUrl,
         }));
         setLevel1Categories(formattedData);
       })
@@ -185,7 +187,7 @@ function UserSearch() {
 
       <div className="search-top">
         <div className='left'>검색</div>
-        <div className='right' onClick={() => window.location.href = '/userlikelist.user'}><i className="bi bi-heart-fill"></i></div>
+        <div className='right' onClick={() => window.location.href = '/userlikelist.user'}><img src="/img/user-main/heart.png" /></div>
       </div>
 
       <div className="store-search-bar">
@@ -275,19 +277,27 @@ function UserSearch() {
 
 
       {/* 추천 해시태그 */}
-      <div className='"user-search-content' ref={storeListRef2}>
-        <div className="list-header">추천 해시태그<i className="bi bi-hash"></i> </div>
+      <div className="user-search-content" ref={storeListRef2}>
+        <div className="list-header">추천 해시태그</div>
         <div className="user-hashtag-list-wrap">
           <div className="user-hashtag-list">
-            {level1Categories.map((category, index) => (
-              <button type="button" className="btn-hashtag" key={index} onClick={() => handleHashtagClick(category.serviceName)}>
+            {/* storeNo 기준으로 중복 제거 */}
+            {[
+              ...new Map(level1Categories.map((category) => [category.storeNo, category])).values(),
+            ].map((category, index) => (
+              <button
+                type="button"
+                className="btn-hashtag"
+                key={index}
+                onClick={() => handleHashtagClick(category.serviceName)}
+              >
                 <i className="bi bi-hash"></i> {category.serviceName}
               </button>
             ))}
           </div>
-
         </div>
       </div>
+
 
       {/* 인기가게 */}
       <div className="user-hit-search-list">
@@ -296,6 +306,7 @@ function UserSearch() {
           {store
             .slice() // 원본 배열을 변형하지 않기 위해 복사
             .sort((a, b) => (b.reservationCount || 0) - (a.reservationCount || 0)) // 예약 개수에 따라 내림차순 정렬
+            .slice(0, 10)
             .map((store, index) => (
               <li key={store.storeId}>
                 {index + 1} <a href={`/userStoreDetail.user/${store.storeNo}`}>{store.storeName}</a>

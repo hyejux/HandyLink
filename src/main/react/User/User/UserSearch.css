@@ -219,9 +219,14 @@ body {
 
 .search-top .right {
   float: right;
-  font-size: 20px;
   cursor: pointer;
 }
+
+.search-top .right img {
+  width: 24px;
+  height: 24px;
+}
+
 
 .search-top .right .bi-heart-fill {
   color: #ff4d4d;
@@ -643,13 +648,16 @@ body {
   border-bottom: 1px solid #eee;
   color: #fe9e25;
   text-align: left;
-  font-size: 12px;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
 }
 
 .store-list li a {
   text-decoration: none;
   color: #000000;
-  font-size: 12px;
+  font-size: 14px;
   margin-left: 15px;
 }
 
@@ -737,7 +745,7 @@ body {
   border: 1px solid #fe9e25;
   border-radius: 40px;
   background-color: #fff;
-  font-size: 12px;
+  font-size: 14px;
   margin-right: 10px;
   padding: 0 10px;
   display: inline-flex;

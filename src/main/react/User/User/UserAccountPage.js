@@ -73,7 +73,22 @@ function UserAccountPage () {
 
     return (
         <div>
+
+<div className="search-top">
+            <div className='left'> 마이페이지 </div>
+             
+          </div>
+
+
+
+
+            
             <div className="settings-container">
+
+
+    
+
+
                 <div className="user-info" onClick={() =>
                     isLoggedIn ? window.location.href = '/UserMyPage.user' : window.location.href = '/UserLoginPage.user'
                 }>
@@ -85,13 +100,19 @@ function UserAccountPage () {
                     </div>
                 </div>
 
+
+
+
+                <div className='setting-box'>
+
                 <div className="settings-menu" onClick={() =>
                     isLoggedIn ? window.location.href = '/UserMyReview.user' : window.location.href = '/UserLoginPage.user'
                 }>
                     <ul>
                         <li>
                             <div className="menu-item">
-                                <span>내 후기</span>
+                            <img src="https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731338833/nv5uigrzdx9fhgrvlb8p.png"></img>
+                                <span>후기</span>
                             </div>
                         </li>
                     </ul>
@@ -103,13 +124,45 @@ function UserAccountPage () {
                     <ul>
                         <li>
                             <div className="menu-item">
-                                <span>내가 찜한 가게</span>
+                            <img src="https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731338833/we7age9sr7kalzuo67wc.png"></img>
+                                <span>찜</span>
                             </div>
                         </li>
                     </ul>
                 </div>
 
 
+                <div className="settings-menu" onClick={() =>
+                    isLoggedIn ? window.location.href = '/UserMyReview.user' : window.location.href = '/UserLoginPage.user'
+                }>
+                    <ul>
+                        <li>
+                            <div className="menu-item">
+                                <img src="https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731338833/x7k7z0qcijjgkfbu6i5y.png"></img>
+                                <span>주문내역</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+
+                </div>
+
+
+      
+
+
+                <div className="settings-submenu">
+                    <ul>
+                        
+                        <li><a >자주묻는질문</a></li>
+                        <li><a >서비스이용약관</a></li>
+                        <li><a
+                            >고객센터</a>
+                        </li>
+                        <li><a >설정</a></li>
+                    </ul>
+                </div>
                 <div className="settings-submenu">
                     <ul>
                         <li><a onClick={handleLogout}>로그아웃</a></li>

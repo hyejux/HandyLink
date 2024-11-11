@@ -10,6 +10,7 @@ import './UserMyReservationDetail.css';
 function UserMyReservationDetail() {
   const [cateId, setCateId] = useState(0);
   const [reservationList, setReservationList] = useState([]);
+  const [reservationList2, setReservationList2] = useState([]);
   const [paymentInfo, setPaymentInfo] = useState([]);
   const [refundInfo, setRefundInfo] = useState([]);
   const [reservationDetail, setReservationDetail] = useState({});
@@ -17,11 +18,23 @@ function UserMyReservationDetail() {
   const [userInfo, setUserInfo] = useState({});
 
 
+
+  
   useEffect(() => {
     const path = window.location.pathname;
     const pathSegments = path.split('/');
     const categoryId = pathSegments[pathSegments.length - 1];
     setCateId(categoryId);
+
+    axios.get(`/UserStoreDetail/getStoreMainCategory2/${categoryId}`)
+    .then(response => {
+      console.log(response.data);
+      setReservationList2(response.data);
+    })
+    .catch(error => {
+      console.log('Error Category', error);
+    });
+
 
     // 예약 정보 가져오기
     axios.get(`/userMyReservation/getMyReservationDetail/${categoryId}`)
@@ -158,11 +171,48 @@ function UserMyReservationDetail() {
         </div>
 */}
 
+
+
+<div className="user-content-container">
+
+<div className='payment-date'> 주문번호 : {(reservationDetail.reservationNo)}</div>
+      <div className='payment-date'> 주문일 : {formatDate2(reservationDetail.regTime)}</div>
+  </div>
+   
+ 
+      <hr />
+
       <div className="user-content-container">
 
+      {/* <hr /> */}
 
-        <div className='store-name'>{reservationList.length > 0 ? reservationList[0].storeName : '정보 없음'}</div>
-        <div className='payment-date'>{formatDate2(reservationDetail.regTime)}</div>
+   <div className='store-name2'>    <i class="bi bi-shop-window"></i>  {reservationList.length > 0 ? reservationList[0].storeName : '정보 없음'}</div>
+
+        <div className='service-box'>
+        {reservationList2 ? (
+   <div
+   className='user-content-container'
+ >
+   <div className="user-reserve-menu">
+     <div className="user-reserve-menu-img">
+       <img src={`${reservationList2.imageUrl}`} alt="My Image" />
+     </div>
+     <div className="user-reserve-menu-content">
+       <div>{reservationList2.serviceName}</div>
+       <div>{reservationList2.serviceContent}</div>
+       {/* <div>{reservationList2.servicePrice} 원 ~</div> */}
+     </div>
+   </div>
+ </div>
+
+        ) : (
+          <div>Loading...</div> // Display loading message until data is fetched
+        )}
+      </div>
+   
+
+
+        
       </div>
 
       <hr />
@@ -360,11 +410,25 @@ function UserMyReservationDetail() {
 
       <hr />
 
-      <h1> 주의사항 </h1>
+      <div className="user-content-container">
+
+      <div className="info-row">
+          <div className="left">주의사항</div>
+          <div className="right"> {reservationDetail.customerRequest} </div>
+        </div>
+
+  </div>
+   
 
       <hr />
 
-      <h1> 환불규정 </h1>
+      <div className="user-content-container">
+      <div className="info-row">
+          <div className="left">환불규정</div>
+          <div className="right"> {reservationDetail.customerRequest} </div>
+        </div>
+  </div>
+   
 
       <hr />
 

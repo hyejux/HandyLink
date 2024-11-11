@@ -138,7 +138,7 @@
 
 .message-input button {
     padding: 10px 15px;
-    background-color: #007aff;
+    background-color: #fd8517;
     border: none;
     color: #fff;
     border-radius: 4px;
@@ -231,7 +231,7 @@
 }
 
 .sent .bubble {
-    background-color: #007aff;
+    background-color: #fd8517;
     color: #fff;
     border-top-right-radius: 0px;
 }

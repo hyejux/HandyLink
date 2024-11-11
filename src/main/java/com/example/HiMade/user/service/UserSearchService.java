@@ -13,7 +13,7 @@ public class UserSearchService {
     private UserSearchRepository userSearchRepository;
 
     public List<Object[]> getLevel1Categories() {
-        return userSearchRepository.findServiceNameStoreNoAndServicePriceByCategoryLevel(1);
+        return userSearchRepository.findServiceNameStoreNoServicePriceServiceContentAndImageUrlByCategoryLevel(1);
     }
 }
 

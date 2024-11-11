@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import React, {useState, useEffect} from "react";
 
 function UserAccountPage () {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isKakaoLogin, setIsKakaoLogin] = useState(false);
     const [userInfo, setUserInfo] = useState({
         userImgUrl: '/img/user_basic_profile.jpg',
@@ -25,11 +26,15 @@ function UserAccountPage () {
                         userName: data.userName,
                     });
 
+                    setIsLoggedIn(true);
+
                     if (data.loginType === 'KAKAO') {
                         setIsKakaoLogin(true);
+                        setIsLoggedIn(true);
                     }
 
                 } else {
+                    setIsLoggedIn(false);
                     console.error('정보 가져오기 실패');
                 }
             } catch (error) {
@@ -68,52 +73,104 @@ function UserAccountPage () {
 
     return (
         <div>
+
+<div className="search-top">
+            <div className='left'> 마이페이지 </div>
+             
+          </div>
+
+
+
+
+            
             <div className="settings-container">
-                <div className="user-info" onClick={() =>  window.location.href = '/UserMyPage.user'}>
+
+
+    
+
+
+                <div className="user-info" onClick={() =>
+                    isLoggedIn ? window.location.href = '/UserMyPage.user' : window.location.href = '/UserLoginPage.user'
+                }>
                     <img className="profile-img" src={userInfo.userImgUrl} alt="Profile Image" id="profileImage"/>
                     <div className="user-details">
-                        <h2>{userInfo.userName}</h2>
-                        <p>프로필 편집</p>
+                        <h2>{isLoggedIn ? userInfo.userName : '로그인 하러 가기'}</h2>
+                        <p>{isLoggedIn ? '프로필 편집' : ''}</p>
                         <span className="arrow">></span>
                     </div>
                 </div>
 
-                <div className="settings-menu">
+
+
+
+                <div className='setting-box'>
+
+                <div className="settings-menu" onClick={() =>
+                    isLoggedIn ? window.location.href = '/UserMyReview.user' : window.location.href = '/UserLoginPage.user'
+                }>
                     <ul>
                         <li>
                             <div className="menu-item">
-                                <span>내 후기</span>
+                            <img src="https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731338833/nv5uigrzdx9fhgrvlb8p.png"></img>
+                                <span>후기</span>
                             </div>
                         </li>
                     </ul>
                 </div>
 
-                <div className="settings-menu" onClick={() =>  window.location.href = '/userlikelist.user'}>
+                <div className="settings-menu" onClick={() =>
+                    isLoggedIn ? window.location.href = '/userlikelist.user' : window.location.href = '/UserLoginPage.user'
+                }>
                     <ul>
                         <li>
                             <div className="menu-item">
-                                <span>내가 찜한 가게</span>
+                            <img src="https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731338833/we7age9sr7kalzuo67wc.png"></img>
+                                <span>찜</span>
                             </div>
                         </li>
                     </ul>
                 </div>
+
+
+                <div className="settings-menu" onClick={() =>
+                    isLoggedIn ? window.location.href = '/UserMyReview.user' : window.location.href = '/UserLoginPage.user'
+                }>
+                    <ul>
+                        <li>
+                            <div className="menu-item">
+                                <img src="https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731338833/x7k7z0qcijjgkfbu6i5y.png"></img>
+                                <span>주문내역</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+
+                </div>
+
+
+      
+
 
                 <div className="settings-submenu">
                     <ul>
-                        <li><a onClick={handleLogout}>로그아웃</a></li>
-                        <li><a onClick={() =>  window.location.href = '/UserDelete.user'}>탈퇴하기</a></li>
+                        
+                        <li><a >자주묻는질문</a></li>
+                        <li><a >서비스이용약관</a></li>
+                        <li><a
+                            >고객센터</a>
+                        </li>
+                        <li><a >설정</a></li>
                     </ul>
                 </div>
-
-                {/*<div className="settings-menu" onClick={() =>  window.location.href = '/UserDelete.user'}>*/}
-                {/*    <ul>*/}
-                {/*        <li>*/}
-                {/*            <div className="menu-delete">*/}
-                {/*                <span>탈퇴하기</span>*/}
-                {/*            </div>*/}
-                {/*        </li>*/}
-                {/*    </ul>*/}
-                {/*</div>*/}
+                <div className="settings-submenu">
+                    <ul>
+                        <li><a onClick={handleLogout}>로그아웃</a></li>
+                        <li><a
+                            onClick={() => isLoggedIn ? window.location.href = '/UserDelete.user' : window.location.href = '/UserLoginPage.user'}>탈퇴하기</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     );

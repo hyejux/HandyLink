@@ -206,6 +206,7 @@
         left join users u
         on rn.user_id = u.user_id
         where rn.store_no = ${id}
+        order by rw.review_no desc
     </select>
 
     <select id="getReviewPhotoList" resultType="com.example.HiMade.user.dto.UserReviewDTO">
@@ -222,7 +223,49 @@
         left join users u
         on rn.user_id = u.user_id
         where rn.store_no = ${id}
+        order by rw.review_no desc
     </select>
+
+    <resultMap id="UserReviewResultMap" type="com.example.HiMade.user.dto.UserReviewDTO">
+        <id property="reviewNo" column="review_no"/>
+        <result property="reviewRating" column="review_rating"/>
+        <result property="reviewContent" column="review_content"/>
+        <result property="reviewDate" column="review_date"/>
+        <result property="storeNo" column="store_no"/>
+        <result property="storeName" column="store_name"/>
+        <result property="userName" column="user_name"/>
+        <result property="serviceName" column="service_name"/>
+
+        <!-- review_img 테이블에서 여러 이미지 가져오기 -->
+        <collection property="userReviewImg" ofType="String">
+            <result column="review_img_url" />
+        </collection>
+
+        <collection property="storeImg" ofType="com.example.HiMade.admin.dto.StoreImgDTO">
+            <id property="storeImgNo" column="store_img_no"/>
+            <result property="storeImgLocation" column="store_img_location"/>
+            <result property="storeNo" column="store_no"/>
+        </collection>
+    </resultMap>
+
+    <select id="getReviewListByUserId" resultMap="UserReviewResultMap">
+        SELECT rw.review_no, rw.review_rating, rw.review_content, rw.review_date,
+               rn.store_no, s.store_name, rwi.review_img_url, u.user_name, u.user_id, c.service_name,
+               si.store_img_no, si.store_img_location
+        FROM review rw
+                 LEFT JOIN review_img rwi ON rwi.review_no = rw.review_no
+                 LEFT JOIN reservation rn ON rn.reservation_no = rw.reservation_no
+                 LEFT JOIN reservation_form rf ON rf.reservation_no = rn.reservation_no
+                 LEFT JOIN category c ON rf.main_category_id = c.category_id
+                 LEFT JOIN users u ON rn.user_id = u.user_id
+                 LEFT JOIN store s ON s.store_no = rn.store_no
+                 LEFT JOIN store_img si ON s.store_no = si.store_no
+        WHERE rn.user_id = #{userId}
+    </select>
+
+
+
+
 
 
 </mapper>

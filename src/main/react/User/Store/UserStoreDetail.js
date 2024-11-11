@@ -38,19 +38,18 @@ function UserStoreDetail() {
     getBookmarked();
   }, []);
 
-  //가게 찜하기
+  //가게 찜하기 (수정)
   const handleStoreLike = async (store) => {
-    console.log("가게번호 ", store.storeNo);
-
     try {
-      const resp = await axios.post('/userStoreList/storeLike', { storeNo: store.storeNo });
+      await axios.post('/userStoreList/storeLike', { storeNo: store.storeNo });
       setIsBookmarked(prev =>
-        prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) //찜 해제
-          : [...prev, store.storeNo] //찜 추가
+          prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) : [...prev, store.storeNo]
       );
-
     } catch (error) {
-      console.log("찜하던 중 error ", error);
+      if (error.response && error.response.status === 401) {
+        alert("로그인 후 이용 가능한 서비스입니다.");
+        // window.location.href = "/UserLoginPage.user";
+      }
     }
   };
 
@@ -100,21 +99,31 @@ function UserStoreDetail() {
   // 채팅방으로 이동
   const handleInquiryClick = async () => {
 
-    console.log('userId:', userId, 'storeNo:', storeInfo.storeNo); // 추가 로그
+    if (!userId) {
+      alert("로그인 후 이용 가능한 서비스입니다.");
+      //window.location.href = "/UserLoginPage.user";
+      return;
+    }
 
     if (userId && storeInfo.storeNo) {
-      console.log(`로그 Reactivating chat for userId: ${userId}, storeNo: ${storeInfo.storeNo}`);
+      try {
+        // 채팅 상태를 Y로 업데이트
+        await axios.post(`/chat/reactivate?userId=${userId}&storeNo=${storeInfo.storeNo}`);
 
-      // 채팅 상태를 Y로 업데이트
-      await axios.post(`/chat/reactivate?userId=${userId}&storeNo=${storeInfo.storeNo}`);
-
-      // 채팅방으로 이동
-      window.location.href = `/UserChatRoom.user?userId=${userId}&storeNo=${storeInfo.storeNo}`;
+        // 채팅방으로 이동
+        window.location.href = `/UserChatRoom.user?userId=${userId}&storeNo=${storeInfo.storeNo}`;
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          alert("로그인 후 이용 가능한 서비스입니다.");
+          // window.location.href = "/UserLoginPage.user";
+        } else {
+          console.error("문의하기 중 에러 발생:", error);
+        }
+      }
     } else {
-      console.error('userId 또는 storeNo가 정의되지 않았습니다.');
+      console.error('문의하기 중 에러 발생');
     }
   };
-
 
 
 
@@ -123,6 +132,13 @@ function UserStoreDetail() {
 
 
   const goToAdminPage = (id) => {
+
+    if (!userId) {
+      alert("로그인 후 이용 가능한 서비스입니다.");
+      //window.location.href = "/UserLoginPage.user";
+      return;
+    }
+
     sessionStorage.setItem('storeCloseTime', storeInfo.storeCloseTime);
     sessionStorage.setItem('storeOpenTime', storeInfo.storeOpenTime);
     sessionStorage.setItem('storeNo', storeInfo.storeNo);
@@ -447,7 +463,7 @@ function UserStoreDetail() {
                         key={index}
                         className={`slide ${index === currentSlide ? 'active' : ''}`}
                       >
-                        <img src={store.storeImgLocation} alt="가게 이미지" width="100%" height="300px" />
+                        <img src={store.storeImgLocation} alt="가게 이미지" width="100%" height="300px " object-fit="cover" />
                       </div>
                     ))}
                   </div>
@@ -741,16 +757,17 @@ function UserStoreDetail() {
 
 <div className='photo-rating-box'>
                 <div className="photo-review">
-                  {reviewPhotoList.slice(0, 3).map((photo, index) => (
-                    <div className="photo-item" key={index}>
-                      <img src={photo.reviewImgUrl} alt="Review Photo" />
-                      {index === 2 && (
-                        <div className="photo-item more" onClick={() => setActiveSection('photo')}>
-                          +더보기
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                {Array.from(new Set(reviewPhotoList.map(photo => photo.reviewImgUrl))).slice(0, 3).map((uniqueUrl, index) => (
+  <div className="photo-item" key={index}>
+    <img src={uniqueUrl} alt="Review Photo" />
+    {index === 2 && (
+      <div className="photo-item more" onClick={() => setActiveSection('photo')}>
+        +더보기
+      </div>
+    )}
+  </div>
+))}
+
                 </div>
                 <div className="total-rating">
 

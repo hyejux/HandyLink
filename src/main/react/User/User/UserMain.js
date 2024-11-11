@@ -16,7 +16,6 @@ function UserMain() {
   const [isBookmarked, setIsBookmarked] = useState([]); //찜
   const [activeSection, setActiveSection] = useState('menu1');
 
-
   // 검색어 입력 핸들러
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -125,10 +124,12 @@ function UserMain() {
       })
       .then((data) => {
         console.log(data);
-        const formattedData = data.map(([serviceName, storeNo, servicePrice]) => ({
+        const formattedData = data.map(([serviceName, storeNo, servicePrice, serviceContent, imageUrl]) => ({
           serviceName,
           storeNo,
           servicePrice,
+          serviceContent,
+          imageUrl,
         }));
         setLevel1Categories(formattedData);
       })
@@ -251,14 +252,14 @@ function UserMain() {
   // --------------- 광고 슬라이더 ---------------
   // 광고 슬라이더 이미지
   const slides = [
-    { id: 1, imageUrl: './img/main-banner/banner1.jpg' },
-    { id: 2, imageUrl: './img/main-banner/banner2.jpg' },
-    { id: 3, imageUrl: './img/main-banner/banner3.jpg' },
-    { id: 4, imageUrl: './img/main-banner/banner1.jpg' },
-    { id: 5, imageUrl: './img/main-banner/banner2.jpg' },
-    { id: 6, imageUrl: './img/main-banner/banner3.jpg' },
-    { id: 7, imageUrl: './img/main-banner/banner1.jpg' },
-    { id: 8, imageUrl: './img/main-banner/banner2.jpg' },
+    { id: 1, imageUrl: 'https://ugc-images.catchtable.co.kr/admin/marketing/banner/images/3bd07d6ef62c467ea30cfe61e0ee07dd' },
+    { id: 2, imageUrl: 'https://ugc-images.catchtable.co.kr/admin/marketing/banner/images/a36659bd0f5f4ac4a7fa8da410f4c3fe' },
+    { id: 3, imageUrl: 'https://ugc-images.catchtable.co.kr/admin/marketing/banner/images/0532d8bf721e42a59a49d79bb78db54a' },
+    { id: 4, imageUrl: 'https://ugc-images.catchtable.co.kr/admin/marketing/banner/images/986e4206814741629306bf1d85e6de06' },
+    { id: 5, imageUrl: 'https://image.idus.com/image/files/8e017c9e650a48ea89c443a46fd4446f_720.jpg' },
+    { id: 6, imageUrl: 'https://image.idus.com/image/files/1d02be1cfc264156947c3f44b7193afc_1080.jpg' },
+    { id: 7, imageUrl: 'https://image.idus.com/image/files/f7a382d62af644e5bf93d94b3280bc1e.jpg' },
+    { id: 8, imageUrl: 'https://image.idus.com/image/files/b43ecba302cb4b79a8ac3eeb1c2f8ae7_1080.jpg' },
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -297,23 +298,28 @@ function UserMain() {
     setCurrentIndex(index);
   };
 
+  useEffect(() => {
+    const slideContainer = document.querySelector('.slide-container');
+    slideContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+  }, [currentIndex]);
+
   // ----------------------------------------------------------
 
-  //가게 찜하기
+  //가게 찜하기 (수정)
   const handleStoreLike = async (store) => {
-    console.log("가게번호 ", store.storeNo);
-
     try {
-      const resp = await axios.post('/userStoreList/storeLike', { storeNo: store.storeNo });
+      await axios.post('/userStoreList/storeLike', { storeNo: store.storeNo });
       setIsBookmarked(prev =>
-        prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) //찜 해제
-          : [...prev, store.storeNo] //찜 추가
+          prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) : [...prev, store.storeNo]
       );
-
     } catch (error) {
-      console.log("찜하던 중 error ", error);
+      if (error.response && error.response.status === 401) {
+        alert("로그인 후 이용 가능한 서비스입니다.");
+        // window.location.href = "/UserLoginPage.user";
+      }
     }
   };
+
 
   return (
     <div>
@@ -322,9 +328,8 @@ function UserMain() {
         <div className="user-main-header-fix">
           <div className="search-top">
             <div className='left'> NEEZ </div>
-            <div className='right' onClick={() => window.location.href = '/userlikelist.user'}><i className="bi bi-heart-fill"></i></div>
+            <div className='right' onClick={() => window.location.href = '/userlikelist.user'}><img src="/img/user-main/heart.png" /></div>
           </div>
-
 
           {/* 검색바 */}
           <div className="store-search-bar">
@@ -343,8 +348,15 @@ function UserMain() {
 
           {/* 광고 슬라이더 */}
           <div className="slider" {...handlers}>
-            <div className="slide">
-              <img src={slides[currentIndex].imageUrl} alt={`Slide ${currentIndex + 1}`} />
+            <div className="slide-container">
+              {slides.map((slide, index) => (
+                <div
+                  key={slide.id}
+                  className={`slide ${index === currentIndex ? 'active' : ''}`}
+                >
+                  <img src={slide.imageUrl} alt={`Slide ${index + 1}`} />
+                </div>
+              ))}
             </div>
 
             <div className="indicator-container">
@@ -421,7 +433,8 @@ function UserMain() {
             <button className="nav-button left" ref={btnLeftStoreRef1} aria-label="왼쪽으로 이동">‹</button>
             <button className="nav-button right" ref={btnRightStoreRef1} aria-label="오른쪽으로 이동">›</button>
             <h3>
-              <div className="title-name"><img src="/img/user-main/shop.png" /></div> <div className="title-name">고객님 주변 이런 가게는 어떠신가요?</div>
+              <div className="title-name"><img src="/img/user-main/shop.png" /></div>
+              <div className="title-name">고객님 주변 이런 가게는 어떠신가요?</div>
             </h3>
 
             <div className="user-main-list-wrap" ref={storeListRef1}>
@@ -447,7 +460,11 @@ function UserMain() {
                             <img src={imageUrl} alt={store.storeName} />
                           </div>
                           <div className="store-title-1">{store.storeName}</div>
-                          <div className="store-category">{store.storeCate || '미등록'}</div>
+                          <div className="store-review-option-1">
+                            <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                            <span className="review-count">({store.reviewCount})</span>
+                            <span className="store-option">{store.storeCate || '미등록'}</span>
+                          </div>
                           <div className="store-distance">
                             내 위치에서 {distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음'}
                           </div>
@@ -462,47 +479,44 @@ function UserMain() {
           </div>
 
 
-          {/* 이벤트/할인 */}
+          {/* 서비스 랜덤으로 뿌리기 */}
           <div className="user-main-content">
             <button className="nav-button left" ref={btnLeftStoreRef3} aria-label="왼쪽으로 이동">‹</button>
             <button className="nav-button right" ref={btnRightStoreRef3} aria-label="오른쪽으로 이동">›</button>
             <h3>
-              <div className="title-name"><img src="/img/user-main/sale.png" /></div> <div className="title-name">이벤트/할인이 끝나기 전에 예약하세요!</div>
+              <div className="title-name"><img src="/img/user-main/unicorn.png" alt="smile" /></div>
+              <div className="title-name">특별한 서비스가 고객님을 기다립니다!</div>
             </h3>
-
             <div className="user-main-list-wrap" ref={storeListRef3}>
-              {store.length > 0 ? (
-                store.map((store) => {
-                  const imageUrl = store.storeImages.length > 0
-                    ? store.storeImages[0].storeImgLocation
-                    : "/img/cake001.jpg"; // 기본 이미지 설정
+              {level1Categories.length > 0 ? (
+                // 이미지 URL이 있는 카테고리만 필터링 후, storeNo 중복 제거 및 랜덤으로 섞기
+                [...new Map(level1Categories.filter(category => category.imageUrl)  // 이미지가 있는 카테고리만 필터링
+                  .map(category => [category.storeNo, category])).values()]
+                  .sort(() => Math.random() - 0.5)  // 배열을 랜덤으로 섞기
+                  .map((category) => {
+                    const imageUrl = category.imageUrl;
+                    const serviceName = category.serviceName;
+                    const servicePrice = category.servicePrice;
+                    const serviceContent = category.serviceContent;
 
-                  return (
-                    <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
-                      <div className="user-category-menu">
-                        <div className="user-category-menu-img">
-                          <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
-                            <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
-                          </button>
-                          <img src={imageUrl} alt={store.storeName} />
-                          <div className="event-box">최대 40% 할인 이벤트</div>
-                        </div>
-                        <div className="store-title-2">{store.storeName}</div>
-                        <div className="store-review-option">
-                          <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
-                          <span className="review-count">({store.reviewCount})</span>
-                          <span className="store-option">{store.storeCate || '미등록'}</span>
-                          {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
+                    return (
+                      <div className="user-main-list-container" key={category.storeNo} onClick={() => goToStoreDetail(category.storeNo)}>
+                        <div className="user-category-menu">
+                          <div className="user-category-menu-img">
+                            <img src={imageUrl} alt={serviceName} />
+                            <div className="event-box3">{serviceName}</div>
+                          </div>
+                          <div className="category-service-content">{serviceContent}</div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })
+                    );
+                  })
               ) : (
-                <div className="no-stores">정보를 불러오지 못 했습니다 </div>
+                <div className="no-stores">정보를 불러오지 못 했습니다</div>
               )}
             </div>
           </div>
+
 
 
           {/* 예약 많은 순 */}
@@ -516,6 +530,7 @@ function UserMain() {
                 store
                   .sort((a, b) => b.reservationCount - a.reservationCount) // 예약 많은 순으로 정렬
                   .slice(0, Math.floor(store.length / 2) * 2) // 길이를 반으로 자르기
+                  // .slice(0, 8)
                   .map((store) => {
                     const imageUrl = store.storeImages.length > 0
                       ? store.storeImages[0].storeImgLocation
@@ -529,7 +544,7 @@ function UserMain() {
                               <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
                             </button>
                             <img src={imageUrl} alt={store.storeName} />
-                            <div className="event-box2">Hot Place</div>
+                            <div className="event-box">Hot Place</div>
                           </div>
                           <div className="store-title-2">{store.storeName}</div>
                           <div className="store-review-option">
@@ -584,6 +599,7 @@ function UserMain() {
                               <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
                             </button>
                             <img src={imageUrl} alt={store.storeName} />
+                            <div className="event-box2">Newly Opened</div>
                           </div>
                           <div className="store-title-2">{store.storeName}</div>
                           <div className="store-review-option">
@@ -622,7 +638,7 @@ function UserMain() {
                       .filter(category => category.storeNo === store.storeNo && category.servicePrice <= 20000)
                       .length > 0;
                   })
-                  .slice(0, 3)
+                  .slice(0, 5)
                   .map((store) => {
                     const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg";
 
@@ -661,8 +677,6 @@ function UserMain() {
             </div>
           )}
 
-
-
           {activeSection === 'menu2' && (
             <div className="user-main-menu-content">
               {store.length > 0 ? (
@@ -672,7 +686,7 @@ function UserMain() {
                       .filter(category => category.storeNo === store.storeNo && category.servicePrice > 20000 && category.servicePrice <= 30000)
                       .length > 0;
                   })
-                  .slice(0, 3)
+                  .slice(0, 5)
                   .map((store) => {
                     const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg";
 
@@ -707,7 +721,6 @@ function UserMain() {
               )}
             </div>
           )}
-
 
           {activeSection === 'menu3' && (
             <div className="user-main-menu-content">
@@ -718,7 +731,7 @@ function UserMain() {
                       .filter(category => category.storeNo === store.storeNo && category.servicePrice > 30000 && category.servicePrice < 50000)
                       .length > 0;
                   })
-                  .slice(0, 3)
+                  .slice(0, 5)
                   .map((store) => {
                     const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg";
 
@@ -753,7 +766,6 @@ function UserMain() {
               )}
             </div>
           )}
-
 
           {activeSection === 'menu4' && (
             <div className="user-main-menu-content">
@@ -765,7 +777,7 @@ function UserMain() {
                       .filter(category => category.storeNo === store.storeNo && category.servicePrice >= 50000)
                       .length > 0;
                   })
-                  .slice(0, 3)
+                  .slice(0, 5)
                   .map((store) => {
                     const imageUrl = store.storeImages.length > 0 ? store.storeImages[0].storeImgLocation : "/img/cake001.jpg";
 
@@ -802,42 +814,42 @@ function UserMain() {
           )}
 
 
-          {/* 이벤트/할인 */}
+          {/* 그냥 가게 랜덤으로 뿌리기 */}
           <div className="user-main-content">
             <button className="nav-button left" ref={btnLeftStoreRef4} aria-label="왼쪽으로 이동">‹</button>
             <button className="nav-button right" ref={btnRightStoreRef4} aria-label="오른쪽으로 이동">›</button>
             <h3>
-              <div className="title-name"><img src="/img/user-main/sale.png" /></div> <div className="title-name">이벤트/할인이 끝나기 전에 예약하세요!</div>
+              <div className="title-name"><img src="/img/user-main/smile.png" /></div> <div className="title-name">고객님을 위한 특별한 추천 리스트입니다!</div>
             </h3>
-
             <div className="user-main-list-wrap" ref={storeListRef4}>
               {store.length > 0 ? (
-                store.map((store) => {
-                  const imageUrl = store.storeImages.length > 0
-                    ? store.storeImages[0].storeImgLocation
-                    : "/img/cake001.jpg"; // 기본 이미지 설정
+                store.sort(() => Math.random() - 0.5)
+                  .map((store) => {
+                    const imageUrl = store.storeImages.length > 0
+                      ? store.storeImages[0].storeImgLocation
+                      : "/img/cake001.jpg"; // 기본 이미지 설정
 
-                  return (
-                    <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
-                      <div className="user-category-menu">
-                        <div className="user-category-menu-img user-category-menu-img2">
-                          <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
-                            <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
-                          </button>
-                          <img src={imageUrl} alt={store.storeName} />
-                          <div className="event-box">최대 40% 할인 이벤트</div>
-                        </div>
-                        <div className="store-title-2">{store.storeName}</div>
-                        <div className="store-review-option">
-                          <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
-                          <span className="review-count">({store.reviewCount})</span>
-                          <span className="store-option">{store.storeCate || '미등록'}</span>
-                          {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
+                    return (
+                      <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+                        <div className="user-category-menu">
+                          <div className="user-category-menu-img user-category-menu-img2">
+                            <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                              <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
+                            </button>
+                            <img src={imageUrl} alt={store.storeName} />
+                            {/* <div className="event-box">최대 40% 할인 이벤트</div> */}
+                          </div>
+                          <div className="store-title-2">{store.storeName}</div>
+                          <div className="store-review-option">
+                            <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                            <span className="review-count">({store.reviewCount})</span>
+                            <span className="store-option">{store.storeCate || '미등록'}</span>
+                            {/* • <span className="store-option">{store.storeCate || '미등록'}</span> */}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })
+                    );
+                  })
               ) : (
                 <div className="no-stores">정보를 불러오지 못 했습니다 </div>
               )}
@@ -895,43 +907,47 @@ function UserMain() {
           </div>
 
 
-          {/* 서비스명 랜덤으로 */}
+          {/* 서비스명 랜덤으로 뿌리기 */}
           <div className="user-main-content">
             <h3>
-              <div className="title-name"><img src="/img/user-main/hot3.png" /></div> <div className="title-name">고객님을 위한 최고의 선택, 추천해 드립니다!</div>
+              <div className="title-name"><img src="/img/user-main/hot3.png" alt="Hot" /></div>
+              <div className="title-name">고객님께 딱 맞는 서비스, 추천드립니다!</div>
             </h3>
             <div className="user-main-list-wrap user-main-list-wrap-33">
-              {store.length > 0 ? (
-                store.slice(0, Math.floor(store.length / 2) * 2).map((store, index) => {
-                  const imageUrl = store.storeImages.length > 0
-                    ? store.storeImages[0].storeImgLocation
-                    : "/img/cake001.jpg"; // 기본 이미지 설정
+              {level1Categories.length > 0 ? (
+                // 이미지 URL이 있는 카테고리만 필터링 후, storeNo 중복 제거 및 랜덤으로 하나만 선택
+                [...new Map(level1Categories.filter(category => category.imageUrl)  // 이미지가 있는 카테고리만 필터링
+                  .map(category => [category.storeNo, category])).values()]
+                  .sort(() => Math.random() - 0.5)
+                  .slice(0, 10)
+                  .map((category, index) => {
+                    const imageUrl = category.imageUrl;
 
-                  const classNames = ['s', 'l', 'l', 's', 's', 'l', 'l']; // 패턴 정의
-                  const className = classNames[index % 7] === 's'
-                    ? 'user-main-list-container-s'
-                    : 'user-main-list-container-l';
-
-                  return (
-                    <div
-                      className={`user-main-list-container ${className}`}
-                      key={store.storeNo}
-                      onClick={() => goToStoreDetail(store.storeNo)}
-                    >
-                      <div className="user-category-menu">
-                        <div className="user-category-menu-img user-category-menu-img2">
-                          <img src={imageUrl} alt={store.storeName} />
-                          <div className="store-service-name">서비스명</div>
+                    const classNames = ['s', 'l', 'l', 's', 's', 'l', 'l']; // 패턴 정의
+                    const className = classNames[index % 7] === 's'
+                      ? 'user-main-list-container-s'
+                      : 'user-main-list-container-l';
+                    return (
+                      <div
+                        className={`user-main-list-container ${className}`}
+                        key={category.storeNo}
+                        onClick={() => goToStoreDetail(category.storeNo)}
+                      >
+                        <div className="user-category-menu">
+                          <div className="user-category-menu-img user-category-menu-img2">
+                            <img src={imageUrl} alt={category.serviceName} />
+                            <div className="store-service-price">{category.servicePrice.toLocaleString()}</div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })
+                    );
+                  })
               ) : (
-                <div className="no-stores">정보를 불러오지 못 했습니다 </div>
+                <div className="no-stores">정보를 불러오지 못 했습니다</div>
               )}
             </div>
           </div>
+
 
 
           {/* 리뷰 많은 순 */}
@@ -980,7 +996,7 @@ function UserMain() {
 
           {/* 배너 */}
           <div className="advertisement-banner">
-            <img src='./img/web-banner/banner2.png' />
+            <img src='https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731039573/hgsu9ohdoygw2ysrkcsg.jpg' />
           </div>
 
 
@@ -1038,7 +1054,7 @@ function UserMain() {
                       <div className="result-list-price">
                         {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (
                           <div key={index}>
-                            ₩ {category.servicePrice || '0,000'} ~
+                            {category.servicePrice.toLocaleString()}~
                           </div>
                         ))}
                       </div>

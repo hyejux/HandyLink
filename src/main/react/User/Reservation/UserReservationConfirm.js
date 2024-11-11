@@ -94,6 +94,10 @@ function UserReservationConfirm() {
       }
     }, 0);
   };
+    // 뒤로가기 추가
+    const handleGoBack = () => {
+      window.history.back();
+    };
 
 
   //   
@@ -163,7 +167,7 @@ function UserReservationConfirm() {
 
 
   // 로딩화면 부분
-  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태
   const [countdown, setCountdown] = useState(3);
   
 
@@ -340,7 +344,7 @@ function UserReservationConfirm() {
     <div>
       <div className="user-main-container">
         <div className="search-top">
-          <div className='left'> <i class="bi bi-chevron-left"> </i> 주문확인</div>
+          <div className='left'> <i class="bi bi-chevron-left" onClick={handleGoBack}> </i> 주문확인</div>
           <div className='right'></div>
         </div>
 
@@ -586,14 +590,14 @@ function UserReservationConfirm() {
           {isLoading && (
             <div className="loading-overlay">
               <div className="loading-spinner">
-                <div className="checkmark"></div>
+                <img src="../img/loading/loading.png"/>
               </div>
               <div className="countdown-timer">{countdown}</div>
               <div className="loading-text">예약 완료</div>
               <div className="loading-img-box">
-                <div className="loading-text2">블랙프라이데이</div>
-                <div className="loading-text3">11.05 ~ 11.10 최대 80% 특가</div>
-                <img src="../img/loading/loading1.jpg" />
+                <div className="loading-text2">[크리스마스홈데코] 지금부터 X-mas 분위기</div>
+                <div className="loading-text3">~ 2024.12.24 최대 30% 특가</div>
+                <img src="https://image.idus.com/image/files/4a28ea95cd9f4343bdabfb18f2d788c7_1080.jpg" />
               </div>
             </div>
           )}

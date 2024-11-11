@@ -193,4 +193,26 @@ public class UserReservationServiceImpl implements UserReservationService {
 
     userReservationMapper.setReviewImg(params); // 이제 params를 매퍼로 전달합니다.
   }
+
+  @Override
+  public List<UserReviewDTO> getReviewListByUserId(String userId) {
+    List<UserReviewDTO> reviewList = userReservationMapper.getReviewListByUserId(userId);
+
+    Map<Integer, UserReviewDTO> reviewMap = new HashMap<>();
+    for (UserReviewDTO review : reviewList) {
+      if (!reviewMap.containsKey(review.getReviewNo())) {
+        reviewMap.put(review.getReviewNo(), review);
+      }
+      UserReviewDTO userReviewDTO = reviewMap.get(review.getReviewNo());
+      if (userReviewDTO.getUserReviewImg() == null) {
+        userReviewDTO.setUserReviewImg(new ArrayList<>());
+      }
+      if (review.getReviewImgUrl() != null) {
+        userReviewDTO.getUserReviewImg().add(review.getReviewImgUrl());
+      }
+    }
+
+    return new ArrayList<>(reviewMap.values());
+  }
+
 }

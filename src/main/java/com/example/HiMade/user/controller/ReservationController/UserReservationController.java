@@ -5,6 +5,8 @@ import com.example.HiMade.admin.dto.adminReserveMangeDTO;
 import com.example.HiMade.user.dto.*;
 import com.example.HiMade.user.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -149,6 +151,14 @@ public class UserReservationController {
 //    System.out.println(userReservationService.getReviewList(id) + "리뷰 리스트");
     return userReservationService.getReviewPhotoList(id);
   }
+
+  @GetMapping("/getMyReviews")
+  public List<UserReviewDTO> getMyReviews(Authentication auth) {
+    auth = SecurityContextHolder.getContext().getAuthentication();
+    String userId = auth.getName();
+    return userReservationService.getReviewListByUserId(userId);
+  }
+
 
 
 

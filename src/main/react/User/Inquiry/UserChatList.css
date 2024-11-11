@@ -10,7 +10,7 @@
 
 .search-top {
     overflow: hidden;
-    padding: 10px 10px 0px 10px;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -25,6 +25,7 @@
     float: left;
     font-size: 20px;
     font-weight: bold;
+    color: #fd8517;
 }
 
 .search-top .right {
@@ -102,7 +103,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 70px;
+    height: 80px;
     background-color: #fff;
     border: 1px solid #eee;
     border-radius: 12px;
@@ -138,7 +139,7 @@
 .chat-preview {
     font-size: 14px;
     color: #000;
-    margin: 5px 0 0 0;
+    margin: 7px 0 0 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -158,4 +159,23 @@
     font-size: 10px;
     margin-left: 5px;
     vertical-align: middle;
+}
+
+.no-results {
+    text-align: center;
+    color: gray;
+    margin-top: 50%;
+    padding-bottom: 20px; /* 버튼 여유 공간 추가 */
+}
+
+.login-button {
+    display: inline-block;
+    margin-top: 10px; /* '채팅 내역이 없습니다' 아래 간격 */
+    padding: 10px 20px;
+    background-color: #fd8517;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
 }

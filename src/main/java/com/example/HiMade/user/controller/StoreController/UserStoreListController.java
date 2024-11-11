@@ -28,18 +28,18 @@ public class UserStoreListController {
 
     //가게 찜하기
     @PostMapping("/storeLike")
-    public void clickLike(@RequestBody UserLikesDTO dto){
+    public ResponseEntity<Void> clickLike(@RequestBody UserLikesDTO dto) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
-
-            String userId = auth.getName(); // 로그인한 사용자 ID
-
+            String userId = auth.getName();
             dto.setUserId(userId);
-            System.out.println("확인 "+dto);
-
             userStoreService.clickLike(dto);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
 
     //찜 데이터 가져오기
     @GetMapping("/getLike")

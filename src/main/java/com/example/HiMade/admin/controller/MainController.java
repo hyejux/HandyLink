@@ -24,6 +24,7 @@ public class MainController {
   @GetMapping("/{pageName}.user")
   public String page(@PathVariable String pageName, Model model) {
     model.addAttribute("pageName", pageName);
+
     System.out.println("뷰이름:" + pageName);
 
     // 하단바 없는 레이아웃 적용할 페이지
@@ -31,7 +32,10 @@ public class MainController {
             "UserSignUp".equals(pageName) ||
             "UserLoginPage".equals(pageName) ||
             "UserMyPage".equals(pageName) ||
-            "UserDelete".equals(pageName) || "UserAccountFind".equals(pageName)) {
+            "UserDelete".equals(pageName) ||
+            "UserAccountFind".equals(pageName) ||
+            "UserSignUpFinish".equals(pageName) ||
+            "UserMyReview".equals(pageName)) {
       return "userLayoutNoNav";
     }
 
@@ -62,7 +66,7 @@ public class MainController {
     System.out.println("id ------------" + id);
 
     // 하단바 없는 레이아웃 적용할 페이지
-    if ("userStoreDetail".equals(pageName) || "UserMyReservationDetail".equals(pageName)) {
+    if ("userStoreDetail".equals(pageName)) {
       return "userLayoutNoNav";
     }
 

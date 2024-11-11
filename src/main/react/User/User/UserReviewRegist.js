@@ -317,7 +317,7 @@ const handleUpload = async () => {
       <img
         src={image}
         alt={`Preview ${index}`}
-        style={{ width: '100px', height: '100px' }}
+        style={{ width: '100px', height: '100px'  ,objectFit: 'cover'}}
       />
       {/* 삭제 버튼 */}
       <button

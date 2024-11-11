@@ -302,12 +302,15 @@ function UserReservationDate() {
     return ''; // 예약이 찼지 않거나 slot이 없으면 빈 문자열 반환
   };
   
-  
+    // 뒤로가기 추가
+    const handleGoBack = () => {
+      window.history.back();
+    };
 
   return (
     <div className="user-main-container">
-      <div className="search-top">
-        <div className='left'> <i class="bi bi-chevron-left"> </i> 예약일 선택</div>
+      <div className="search-top"> 
+        <div className='left'> <i class="bi bi-chevron-left"  onClick={handleGoBack}> </i> 예약일 선택</div>
         <div className='right'></div>
       </div>
 
@@ -362,7 +365,7 @@ function UserReservationDate() {
             />
           </div>
           {dateTime.map((slot) => (
-            slot.slotStatusCount !== slot.slotCount ? (
+            slot.slotStatusCount !== slot.slotCount || slot.slotCount !== 0 ? (
               <div key={slot.reservationSlotKey}>
                 {/* <button type="button">
                   <div>임시) 해당 날짜 슬롯 상태: ({slot.slotStatusCount} / {slot.slotCount})</div>

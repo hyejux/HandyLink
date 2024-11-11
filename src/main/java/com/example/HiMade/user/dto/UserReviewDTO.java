@@ -1,6 +1,7 @@
 package com.example.HiMade.user.dto;
 
 
+import com.example.HiMade.admin.dto.StoreImgDTO;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,6 +23,7 @@ public class UserReviewDTO {
   private int reservationNo;
 
   private int storeNo;
+  private String storeName;
   private String userName;
   private String userId;
   private String serviceName;
@@ -29,6 +31,7 @@ public class UserReviewDTO {
   private String reviewImgUrl;
   private List<String> userReviewImg;
 
+  private List<StoreImgDTO> storeImg;
 //  private List<String> reviewImgUrls;
 
 }

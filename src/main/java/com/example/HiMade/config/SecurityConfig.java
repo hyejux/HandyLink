@@ -12,6 +12,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+    public SecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+    }
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -26,18 +32,13 @@ public class SecurityConfig {
                 .antMatchers("/userMain.user", "/userSearch.user", "/userStoreDetail.user/**").permitAll()
 
                 // 로그인 필수 페이지
-                .antMatchers("/userMyReservationList.user", "/userChatList.user", "/userAccountPage.user").authenticated()
+                .antMatchers("/userMyReservationList.user").authenticated()
                 .antMatchers("/userlikelist.user").authenticated()
-
-                .antMatchers("/userStoreList/storeLike/**").authenticated()  // 찜하기 기능
-                .antMatchers("/UserChatRoom.user/**").authenticated()        // 문의하기 기능
-                .antMatchers("/UserReservationDate.user/**").authenticated() // 예약 기능
 
                 // 정적 리소스는 로그인 없이 접근 허용
                 .antMatchers("/css/**", "/uploads/**", "/img/**", "/bundle/**").permitAll()
 
-                // 나머지 경로 설정
-                .anyRequest().permitAll() // 추가적인 경로 필요 시 설정
+                .anyRequest().permitAll()
 
                 .and()
                 .formLogin()
@@ -60,6 +61,10 @@ public class SecurityConfig {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
 
                 .and()
                 .authenticationProvider(customAuthenticationProvider);

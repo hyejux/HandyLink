@@ -49,7 +49,7 @@ body {
   margin-bottom: 20px;
 }
 .user-reserve-data{
-  border : 1px solid #2C348F;
+  border : 1px solid #ddd;
   border-radius: 50px;
   display: flex;
   justify-content: space-between;
@@ -139,20 +139,6 @@ body {
 }
 
 
-.logo {
-    color: transparent;
-    -webkit-background-clip: text;
-    /* background-image: linear-gradient(to right, #94b6e9, #56c9ef, #33d8d7, #73e0a7, #bfdf77); */
-    background-image: linear-gradient(207deg, rgba(146,169,255,1) 0%, rgba(53,58,148,1) 100%);
-    font-family: 'ghanachoco';
-    font-size: 25px;
-    /* margin-bottom: 20px; */
-  }
-
-
-
-
-
   /* 상단 버튼 디자인 */
 .user-top-btns  {
     margin : 10px 0px;
@@ -191,7 +177,7 @@ body {
 }
 .user-content-last > button {
     text-align: center;
-    background-color: #2C348F;
+    background-color: #fd8517;
     width: 100px;
     height: 35px;
     border: none;
@@ -211,10 +197,10 @@ body {
   background-color: #fff;
 }
 .option-btn:hover {
-  background-color: #E0F0FF;
+  background-color: #fe9e2533;
 }
 .option-btn:active {
-  background-color: #E0F0FF;
+  background-color: #fe9e2533;
 }
 
 .option-btn.selected  {
@@ -227,11 +213,7 @@ body {
 }
 
 
-.ertical-bar {
-  background-attachment: red;
-  width: 100%;
-  height: 10px;
-}
+
 .bold-text {
   font-weight: bold;
 }
@@ -245,7 +227,7 @@ body {
 }
 .option-title {
   font-size: 15px;
-  color : #2C348F;
+  color : #fd8517;
 }
 .input-text {
   width: 100%;
@@ -328,14 +310,14 @@ body {
   margin-bottom: 20px;
   /* border: 1px solid #2C348F; */
 }
-  .user-content-container {
+  .user-content-container10 {
     background-color: white;
     border-radius: 10px;
     margin: 20px;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
     margin-bottom: 20px;
-    border: 1px solid #2C348F;
+    border: 1px solid #ddd;
   }
 
 
@@ -350,7 +332,7 @@ body {
   }
 
   .bi {
-    color : #2C348F;
+    color : #fd8517;
   }
 
   .user-content-first-img-num {

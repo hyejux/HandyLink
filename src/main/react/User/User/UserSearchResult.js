@@ -398,7 +398,7 @@ function UserSearchResult() {
                       <div className="result-list-price">
                         {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (
                           <div key={index}>
-                            ₩ {category.servicePrice} ~
+                            {category.servicePrice.toLocaleString()}~
                           </div>
                         ))}
                       </div>

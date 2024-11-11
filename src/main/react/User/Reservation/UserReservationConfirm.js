@@ -94,6 +94,10 @@ function UserReservationConfirm() {
       }
     }, 0);
   };
+    // 뒤로가기 추가
+    const handleGoBack = () => {
+      window.history.back();
+    };
 
 
   //   
@@ -340,7 +344,7 @@ function UserReservationConfirm() {
     <div>
       <div className="user-main-container">
         <div className="search-top">
-          <div className='left'> <i class="bi bi-chevron-left"> </i> 주문확인</div>
+          <div className='left'> <i class="bi bi-chevron-left" onClick={handleGoBack}> </i> 주문확인</div>
           <div className='right'></div>
         </div>
 

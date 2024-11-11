@@ -463,7 +463,7 @@ function UserStoreDetail() {
                         key={index}
                         className={`slide ${index === currentSlide ? 'active' : ''}`}
                       >
-                        <img src={store.storeImgLocation} alt="가게 이미지" width="100%" height="300px" />
+                        <img src={store.storeImgLocation} alt="가게 이미지" width="100%" height="300px " object-fit="cover" />
                       </div>
                     ))}
                   </div>
@@ -757,16 +757,17 @@ function UserStoreDetail() {
 
 <div className='photo-rating-box'>
                 <div className="photo-review">
-                  {reviewPhotoList.slice(0, 3).map((photo, index) => (
-                    <div className="photo-item" key={index}>
-                      <img src={photo.reviewImgUrl} alt="Review Photo" />
-                      {index === 2 && (
-                        <div className="photo-item more" onClick={() => setActiveSection('photo')}>
-                          +더보기
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                {Array.from(new Set(reviewPhotoList.map(photo => photo.reviewImgUrl))).slice(0, 3).map((uniqueUrl, index) => (
+  <div className="photo-item" key={index}>
+    <img src={uniqueUrl} alt="Review Photo" />
+    {index === 2 && (
+      <div className="photo-item more" onClick={() => setActiveSection('photo')}>
+        +더보기
+      </div>
+    )}
+  </div>
+))}
+
                 </div>
                 <div className="total-rating">
 

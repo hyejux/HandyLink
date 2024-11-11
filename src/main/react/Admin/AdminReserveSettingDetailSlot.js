@@ -52,6 +52,7 @@ function AdminReserveSettingDetailSlot() {
     };
 
     const [slotCounts, setSlotCounts] = useState(0);
+    const [slotStatusCount, setSlotStatusCount] = useState(0);
     const [limitTimes, setLimitTimes] = useState(0);
 
         
@@ -109,7 +110,56 @@ function AdminReserveSettingDetailSlot() {
 
 
     
+    const handleSaveChanges2 = () => {
+        const kstDate = new Date(date.getTime() + (9 * 60 * 60 * 1000)); // KST로 변환
+        const kstDateString = kstDate.toISOString().split('T')[0]; // "YYYY-MM-DD" 형식
 
+
+        const kstDate2 = new Date(endDate.getTime() + (9 * 60 * 60 * 1000)); // KST로 변환
+        const kstDateString2 = kstDate2.toISOString().split('T')[0]; // "YYYY-MM-DD" 형식
+
+        if (slotFlag === true){ //두개 
+
+            const reservationSlotDates = [startDate, kstDateString2];
+
+           axios.post(`/userReservation/updateSlotCount1/${cateId}`, {reservationSlotDates : reservationSlotDates, slotCount : slotStatusCount}
+            )
+            .then(response => {
+                console.log("성공");
+                alert('변경이 완료되었습니다.');
+                axios.get(`/userReservation/getAllDateTime/${cateId}`)
+                .then(response => {
+                    setReservationList(response.data);
+                })
+               
+            })
+            .catch(error => {
+                console.log('Error fetching reservation list', error);
+            });
+
+
+        }else if (slotFlag === false){ // 한개 
+            axios.post(`/userReservation/updateSlotCount1/${cateId}`, {reservationSlotDate : kstDateString, slotCount : slotStatusCount}
+            )
+            .then(response => {
+                console.log("성공");
+                alert('변경이 완료되었습니다.');
+                axios.get(`/userReservation/getAllDateTime/${cateId}`)
+                .then(response => {
+                    setReservationList(response.data);
+                
+                })
+               
+            })
+            .catch(error => {
+                console.log('Error fetching reservation list', error);
+            });
+        }else {
+            console.log("오류");
+        }
+        
+  
+    };
 
 
     // -----------------------------------------------------
@@ -190,12 +240,14 @@ function AdminReserveSettingDetailSlot() {
 
 
 
-        const handleDateClick = (date, slotCount) => {
+        const handleDateClick = (date, slotCount, slotStatusCount) => {
             console.log('Clicked Date:', date);
             console.log('Slot Count:', slotCount); // slotCount가 제대로 전달되고 있는지 확인
-
+            console.log(slotStatusCount);
+            
             if (slotCount !== undefined && slotCount !== null) {
                 setSlotCounts(slotCount);
+                setSlotStatusCount(slotStatusCount)
             } else {
                 console.error('Invalid slotCount:', slotCount);
             }
@@ -252,7 +304,7 @@ function AdminReserveSettingDetailSlot() {
     const currentMinute = today.getMinutes();
     const currentSecond = today.getSeconds();
  // 날짜와 시간을 비교하여 비활성화 조건 확인
- const isDatePastOrToday =  serviceDate < formattedToday; // Adjusted to include today
+ const isDatePastOrToday =  serviceDate <= formattedToday; // Adjusted to include today
 //  const isTimePast = serviceDate === formattedToday && serviceHour !== "" && 
 //                      (parseInt(serviceHour) < currentHour || 
 //                      (parseInt(serviceHour) === currentHour && 
@@ -401,7 +453,7 @@ const handleEndDateChange = (date) => {
                 </>
             ) : (
                 selectedDates.map((dateString, index) => (
-                    <h1 key={index}>{dateString}</h1>
+                    <div key={index}>{dateString}</div>
                 ))
             )}
         </div>
@@ -535,11 +587,16 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
                                 return null;
                             }}
                             tileContent={({ date, view }) => {
+                            
                                 if (view === 'month') {
                                     const reservations = getReservationsForDate(date);
                                     if (reservations.length > 0) {
                                         return (
+                                        
                                             <ul className="reservation-list">
+                                                    <button className='slotbtn2' type="button" onDoubleClick={handleSaveChanges2} >
+                                            예약 막기
+                                           </button>
                                                 {reservations.map((reservation) => (
                                                     <li key={reservation.reservationSlotKey} className={reservation.slotCount === reservation.slotStatusCount ? 'equal-slot-count' : ''}>
                                                         {/* {reservation.reservationSlotDate} <br />
@@ -558,9 +615,9 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
                                 // 선택한 날짜에 해당하는 예약 데이터를 찾음
                                 const reservationsForDate = getReservationsForDate(date);
                                 const slotCount = reservationsForDate.length > 0 ? reservationsForDate[0].slotCount : null;
-                            
+                                const slotStatusCount = reservationsForDate.length > 0 ? reservationsForDate[0].slotStatusCount : null;
                                 // handleDateClick 호출, slotCount 전달
-                                handleDateClick(date, slotCount);
+                                handleDateClick(date, slotCount,slotStatusCount);
                               }}
                             // selectRange={isRange}
                             // selectRange={true} // 범위 선택을 허용
@@ -569,9 +626,10 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
                     </div>
 
                     <div className="reservation-info-container">
-                        <h3>예약 정보</h3>
+                        <h3>기간 지정</h3>   <hr/>
                         <div className='date-range'>
 
+                        <div className='start-box'>
                             <div> 시작일 </div>
                         <DatePicker
                             className='date-picker'
@@ -584,6 +642,10 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
                             endDate={endDate}
                             minDate={startDate}
                         />  
+                        </div>
+
+                        <div className='end-box'>
+                            
                         <div> 종료일 </div>
                         <DatePicker
                             className='date-picker'
@@ -596,20 +658,20 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
                             endDate={endDate}
                             minDate={startDate} // 시작일 이후로만 선택 가능
                         />
+                        </div>
+                    
                       </div>
-                        
-                        <h3> </h3>
-              
-                      
+
                         <div className='date-box'> {displayContent}  </div>
                               
                         <div>
  
         <div>
-
+        <h3>예약 슬롯 수정</h3>  <hr/>
             <div className='slot-num-status'>
-                    <strong>일별 예약 제한</strong>
-                    <input
+          
+            <div className='box2'>
+            <input
                         type='number'
                         value={slotCounts}
                         onChange={(e) => setSlotCounts(e.target.value)}
@@ -622,12 +684,21 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
                         // onChange={}
                     /> */}
                 </div>
-                <button type="button" onClick={handleSaveChanges}>
+                
+     
+            </div>
+                  
+                <button className='slotbtn' type="button" onClick={handleSaveChanges}>
                     수정 완료
                 </button>
             </div>
+           
 
         </div>
+
+        <h3>예약 막기</h3>
+                        <hr/>
+ 
 </div>
                     </div>
 

@@ -133,9 +133,14 @@ function AdminReserveManageDetail() {
           console.log('환불 처리 완료:', response.data);
           setUpdatingReservationId(null); // 업데이트 완료 후 ID 초기화
           setNewStatus(''); // 새로운 상태 초기화
+         
+          location.reload();
+
         })
         .catch(error => {
           console.error('Error updating reservation, payment, or refund status:', error);
+          location.reload();
+
         });
     } else {
       setUpdatingReservationId(null);

@@ -260,19 +260,23 @@ if (!allRequiredSatisfied) {
 
   sessionStorage.setItem('storeNo', storeNo);
 
+    // 뒤로가기 추가
+    const handleGoBack = () => {
+      window.history.back();
+    };
 
 
   return (
     <div>
       <div className="user-main-container">
       <div className="search-top">
-        <div className='left'>     <i class="bi bi-chevron-left"> </i> 옵션 선택 </div>
+        <div className='left'>     <i class="bi bi-chevron-left" onClick={handleGoBack}> </i> 옵션 선택 </div>
         <div className='right'></div>
       </div>
 
         <div className="user-main-content">
 
-          <div className="user-content-container">
+          <div className="user-content-container10">
             <div className="user-reserve-menu">
               <div className="user-reserve-menu-img">
                 <img src={`${reserveModi.imageUrl}`} alt="My Image" />

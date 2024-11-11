@@ -194,7 +194,7 @@ body {
 
 .user-content-last>button {
   text-align: center;
-  background-color: #2C348F;
+  background-color: #fd8517;
   width: 100px;
   height: 35px;
   border: none;
@@ -524,7 +524,7 @@ hr {
 .payment-button {
   width: 100%;
   padding: 10px;
-  background-color: #2C348F;
+  background-color: #fd8517;
   color: white;
   border: none;
   border-radius: 5px;
@@ -588,7 +588,7 @@ hr {
 }
 
 .bi {
-  color: #2C348F;
+  color: #fd8517;
 }
 
 

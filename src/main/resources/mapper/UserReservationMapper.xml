@@ -206,6 +206,7 @@
         left join users u
         on rn.user_id = u.user_id
         where rn.store_no = ${id}
+        order by rw.review_no desc
     </select>
 
     <select id="getReviewPhotoList" resultType="com.example.HiMade.user.dto.UserReviewDTO">
@@ -222,6 +223,7 @@
         left join users u
         on rn.user_id = u.user_id
         where rn.store_no = ${id}
+        order by rw.review_no desc
     </select>
 
     <resultMap id="UserReviewResultMap" type="com.example.HiMade.user.dto.UserReviewDTO">

@@ -32,14 +32,13 @@ public class SecurityConfig {
                 .antMatchers("/userMain.user", "/userSearch.user", "/userStoreDetail.user/**").permitAll()
 
                 // 로그인 필수 페이지
-                .antMatchers("/userMyReservationList.user", "/userChatList.user", "/userAccountPage.user").authenticated()
+                .antMatchers("/userMyReservationList.user").authenticated()
                 .antMatchers("/userlikelist.user").authenticated()
 
                 // 정적 리소스는 로그인 없이 접근 허용
                 .antMatchers("/css/**", "/uploads/**", "/img/**", "/bundle/**").permitAll()
 
-                // 나머지 경로 설정
-                .anyRequest().permitAll() // 추가적인 경로 필요 시 설정
+                .anyRequest().permitAll()
 
                 .and()
                 .formLogin()

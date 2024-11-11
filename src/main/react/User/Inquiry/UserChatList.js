@@ -175,9 +175,17 @@ function UserChatList() {
             </div>
 
             <div className="user-chat-container">
-                {filteredChatList.length === 0 ? (
+                {(!userId || filteredChatList.length === 0) ? (
                     <div className="no-results">
-                        {searchTerm ? "검색 결과가 없습니다" : "채팅 내역이 없습니다"}
+                        <p>{userId ? (searchTerm ? "검색 결과가 없습니다" : "채팅 내역이 없습니다") : "채팅 내역이 없습니다."}</p>
+                        {!userId && (
+                            <button
+                                className="login-button"
+                                onClick={() => window.location.href = '/UserLoginPage.user'}
+                            >
+                                로그인 하기
+                            </button>
+                        )}
                     </div>
                 ) : (
                     <ul className="inquiry-list">

@@ -299,21 +299,21 @@ function UserMain() {
 
   // ----------------------------------------------------------
 
-  //가게 찜하기
+  //가게 찜하기 (수정)
   const handleStoreLike = async (store) => {
-    console.log("가게번호 ", store.storeNo);
-
     try {
-      const resp = await axios.post('/userStoreList/storeLike', { storeNo: store.storeNo });
+      await axios.post('/userStoreList/storeLike', { storeNo: store.storeNo });
       setIsBookmarked(prev =>
-        prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) //찜 해제
-          : [...prev, store.storeNo] //찜 추가
+          prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) : [...prev, store.storeNo]
       );
-
     } catch (error) {
-      console.log("찜하던 중 error ", error);
+      if (error.response && error.response.status === 401) {
+        alert("로그인 후 이용 가능한 서비스입니다.");
+        // window.location.href = "/UserLoginPage.user";
+      }
     }
   };
+
 
   return (
     <div>

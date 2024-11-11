@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -162,7 +164,7 @@ public class UserAccountController {
 
     // 탈퇴
     @PostMapping("/delete")
-    public ResponseEntity<?> deleteUser(@RequestBody Map<String, String> payload) {
+    public ResponseEntity<?> deleteUser(@RequestBody Map<String, String> payload, HttpSession session) {
         String password = payload.get("password");
 
         // 현재 로그인한 사용자 ID를 SecurityContext에서 가져오기
@@ -173,6 +175,8 @@ public class UserAccountController {
 
         boolean isDeleted = userAccountService.deleteUser(userId, password);
         if (isDeleted) {
+            SecurityContextHolder.clearContext();
+            session.invalidate();
             System.out.println("Controller - deleteUser 성공");
             return ResponseEntity.ok("{\"message\": \"탈퇴가 성공적으로 완료되었습니다.\"}");
         } else {

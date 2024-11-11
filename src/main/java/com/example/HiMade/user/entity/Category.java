@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -31,4 +32,7 @@ public class Category {
 
     private String imageUrl;
     private String imageDescription;
+
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<CategoryImage> categoryImages;
 }

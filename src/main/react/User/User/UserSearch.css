@@ -231,10 +231,10 @@ body {
 .store-search-bar {
   margin: 10px;
   height: 25px;
-  border-radius: 10px;
+  border-radius: 5px;
   text-align: center;
   display: flex;
-  padding: 10px;
+  padding: 8px;
   align-items: center;
   position: relative;
   background-color: #eee;
@@ -243,6 +243,13 @@ body {
 .search-btn {
   border: none;
   cursor: pointer;
+  font-size: 15px;
+  background: #eeeeee;
+  padding: 0;
+}
+
+.search-btn .bi-search {
+  color: #777;
 }
 
 .store-search-bar img {
@@ -268,11 +275,16 @@ body {
 /* ------- */
 
 .list-header {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
-  margin: 10px;
+  margin: 25px 15px 10px 15px;
+  color: #777;
 }
 
+.list-header-hot {
+  font-size: 16px;
+  font-weight: bold;
+}
 
 .user-main-list-wrap {
   display: flex;
@@ -304,10 +316,10 @@ body {
 
 .store-category-name {
   position: absolute;
-  left: 5px;
-  bottom: 7px;
+  right: 8px;
+  bottom: 8px;
   color: #ffffff;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
 }
 
@@ -605,8 +617,9 @@ body {
 
 /* 인기 검색어 리스트 */
 .user-hit-search-list {
+  margin-top: 15px;
   margin-bottom: 100px;
-  padding: 10px;
+  padding: 15px;
   position: relative;
 }
 
@@ -621,17 +634,16 @@ body {
   grid-template-rows: repeat(5, auto);
   gap: 15px 20px;
   list-style: none;
-  padding: 0;
+  padding: 0 5px;
 }
 
 
 .store-list li {
   padding: 10px;
-  border-bottom: 0.5px solid #eee;
+  border-bottom: 1px solid #eee;
   color: #fe9e25;
   text-align: left;
   font-size: 12px;
-  font-weight: bold;
 }
 
 .store-list li a {
@@ -711,9 +723,8 @@ body {
 }
 
 .user-hashtag-list {
-  height: 50px;
   display: inline-flex;
-  margin-left: 10px;
+  margin-left: 15px;
 }
 
 .user-hashtag-list img {
@@ -722,13 +733,13 @@ body {
 
 .btn-hashtag {
   font-family: 'Pretendard-Regular';
-  height: 40px;
+  height: 35px;
   border: 1px solid #fe9e25;
   border-radius: 40px;
   background-color: #fff;
   font-size: 12px;
   margin-right: 10px;
-  padding: 0 15px;
+  padding: 0 10px;
   display: inline-flex;
   align-items: center;
   cursor: pointer;

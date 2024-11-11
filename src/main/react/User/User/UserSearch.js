@@ -276,7 +276,7 @@ function UserSearch() {
 
       {/* 추천 해시태그 */}
       <div className='"user-search-content' ref={storeListRef2}>
-        <div className="list-header">추천 해시태그</div>
+        <div className="list-header">추천 해시태그<i className="bi bi-hash"></i> </div>
         <div className="user-hashtag-list-wrap">
           <div className="user-hashtag-list">
             {level1Categories.map((category, index) => (
@@ -289,9 +289,9 @@ function UserSearch() {
         </div>
       </div>
 
-      {/* 이 달 인기가게 */}
+      {/* 인기가게 */}
       <div className="user-hit-search-list">
-        <div className='list-header'>11월 인기 가게</div>
+        <div className='list-header-hot'>인기 가게</div>
         <ol className="store-list">
           {store
             .slice() // 원본 배열을 변형하지 않기 위해 복사

@@ -355,7 +355,7 @@
         join reservation_slot rs on rs.reservation_slot_key = r.reservation_slot_key
         where r.store_no = #{storeNo}
         and r.reservation_status='완료'
-        and rs.reservation_slot_date = '2024-11-21';
+        and rs.reservation_slot_date = current_date
     </select>
 
     <select id="getTodayRemainCount" resultType="Integer">
@@ -364,7 +364,7 @@
         join reservation_slot rs on rs.reservation_slot_key = r.reservation_slot_key
         where r.store_no = #{storeNo}
         and r.reservation_status='확정'
-        and rs.reservation_slot_date = '2024-11-21';
+        and rs.reservation_slot_date = current_date
     </select>
 
     <select id="getDailyReportChart" parameterType="map" resultType="map">

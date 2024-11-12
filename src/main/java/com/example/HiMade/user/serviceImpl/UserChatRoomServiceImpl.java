@@ -30,26 +30,31 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
             // 메시지 저장
             userChatRoomMapper.insertChat(userChatDTO);
 
-            // 사용자가 보낸 경우에만 actived 상태 업데이트
-            if ("USER".equals(userChatDTO.getSenderType())) {
-                String receiverId = userChatDTO.getStoreId();
+            // 채팅방 상태 확인
+            Map<String, Object> chatStatus = userChatRoomMapper.getChatRoomStatus(
+                    userChatDTO.getUserId(),
+                    userChatDTO.getStoreNo()
+            );
 
-                // 채팅방 상태 확인
-                Map<String, Object> chatStatus = userChatRoomMapper.getChatRoomStatus(
-                        receiverId,
+            // 채팅방이 없는 경우 신규 생성
+            if (chatStatus == null) {
+                logger.info("기존 채팅방이 없습니다. 신규 생성 시도 - userId: {}, storeNo: {}",
+                        userChatDTO.getUserId(),
                         userChatDTO.getStoreNo()
                 );
 
-                // actived가 'N'인 경우 재활성화
-                if (chatStatus != null && "N".equals(chatStatus.get("actived"))) {
-                    logger.info("비활성화된 채팅방 발견. 재활성화 시도 - userId: {}, storeNo: {}",
-                            receiverId,
-                            userChatDTO.getStoreNo()
-                    );
+                // 새로운 채팅방을 `actived` Y 값으로 삽입
+                userChatRoomMapper.insertChatRoomStatus(userChatDTO.getUserId(), userChatDTO.getStoreNo());
+                logger.info("신규 채팅방 생성 완료 - userId: {}, storeNo: {}", userChatDTO.getUserId(), userChatDTO.getStoreNo());
+            } else if ("N".equals(chatStatus.get("actived"))) {
+                // 기존 채팅방이 비활성화 상태인 경우 재활성화
+                logger.info("비활성화된 채팅방 발견. 재활성화 시도 - userId: {}, storeNo: {}",
+                        userChatDTO.getUserId(),
+                        userChatDTO.getStoreNo()
+                );
 
-                    userChatRoomMapper.reactivateChat(receiverId, userChatDTO.getStoreNo());
-                    logger.info("채팅방 재활성화 완료 - userId: {}, storeNo: {}", receiverId, userChatDTO.getStoreNo());
-                }
+                userChatRoomMapper.reactivateChat(userChatDTO.getUserId(), userChatDTO.getStoreNo());
+                logger.info("채팅방 재활성화 완료 - userId: {}, storeNo: {}", userChatDTO.getUserId(), userChatDTO.getStoreNo());
             }
 
         } catch (Exception e) {

@@ -54,8 +54,11 @@ function MonthlySalesBarChart({ period }) {
                     const response = await axios.get(`/adminReservation/priceDay/${storeNo}`);
                     const salesData = response.data;
 
+                    // Filter sales data for the current month and year
+                    const filteredData = salesData.filter(item => item.year === currentYear && item.month === currentMonth);
+
                     const updatedData = Array(31).fill(0);
-                    salesData.forEach(item => {
+                    filteredData.forEach(item => {
                         updatedData[item.day - 1] = item.totalSales;
                     });
 

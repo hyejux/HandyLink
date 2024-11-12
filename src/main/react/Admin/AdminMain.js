@@ -11,6 +11,10 @@ function AdminMain() {
   const storeId = sessionStorage.getItem('storeId');
   const storeNo = sessionStorage.getItem('storeNo');
 
+
+
+
+
   const [events, setEvents] = useState([]); //캘린더 예약 표시
   const [count, setCount] = useState([]); //운영현황
   const [selectedDate, setSelectedDate] = useState(() => {
@@ -21,6 +25,7 @@ function AdminMain() {
   const [reservationNo, setReservationNo] = useState([]); //해당날짜 예약번호
   const [customerBookInfo, setCustomerBookInfo] = useState([]); //해당 날짜 예약자정보
   const [selectedCustomerInfo, setSelectedCustomerInfo] = useState(null); //클릭한 예약자정보
+
 
   useEffect(()=>{
     //main-count
@@ -149,196 +154,205 @@ function AdminMain() {
   <div className="admin-store-regist-container">
     <div className="container">
 
-      <div className="schedule">
-        <div className="calendar">
-          <div className="calendar-header">
-            <FullCalendar
-              plugins={[dayGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
-              locale="ko" // 한글로 설정
-              events={events}
-              dateClick={(info) => {
-                setSelectedDate(info.dateStr)
-              }}
-              dayCellClassNames={() => 'calendar-day-cell'}
-              dayCellContent={(arg) => (
-                <div style={{ padding: '10px' }}>
-                  <span>{arg.dayNumberText}</span>
+        <div className="main-grid">
+          <div className="main-grid-container">
+
+              <div className="status-container main-count">
+                <div className="reservation-status">
+                  <div className="status-item">
+                    <p className="new" >예약대기</p>
+                    <p>{count.waitCount} 건</p>
+                  </div>
+
+                  <div className="status-item">
+                    <p className="cancle">예약확정</p>
+                    <p>{count.doingCount} 건</p>
+                  </div>
+
+                  <div className="status-item">
+                    <p className="complete" >전달완료</p>
+                    <p>{count.todayCompleteCount} 건</p>
+                  </div>
+
+                  <div className="status-item">
+                    <p className="remain" >남은예약</p>
+                    <p>{count.todayRemainCount} 건</p>
+                  </div>
+
+                  <div className="status-item">
+                    <p className="userLikeCount" >찜</p>
+                    <p>{count.userLikeCount} 개</p>
+                  </div>
+
+                  <div className="status-item">
+                    <p className="reviewCount" >리뷰</p>
+                    <p>{count.reviewCount} 개</p>
+                  </div>
                 </div>
-              )}
-              headerToolbar={{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,dayGridWeek'
-              }}
-              height="auto"
-              contentHeight="auto"
-            />
-          </div>
-        </div>
+              </div>
 
+              <div className="today-booking2">
+                <h3><i className="bi bi-shop-window"></i>Today 예약</h3>
+                <div className="date-search-box">
+                  <input type="date" value={selectedDate} onChange={handleChangeDate}/>
+                  <button type="button" className="btn-today" onClick={handleClickBook}>예약보기</button>
+                </div>
 
-        <div className="status-container main-count">
-          <div className="today-reservation">
-            <i className="bi bi-chevron-double-right"><h3>Today 현황</h3></i>
-
-            <div className="status-item">
-              <p className="complete" >전달완료</p>
-              <p>{count.todayCompleteCount} 건</p>
-            </div>
-            <div className="status-item">
-              <p className="remain" >남은예약</p>
-              <p>{count.todayRemainCount} 건</p>
-            </div>
-          </div>
-
-          <div className="check-reservation">
-            <i className="bi bi-chevron-double-right"><h3>운영 현황</h3></i>
-            <div className="status-item">
-              <p className="new" >예약대기</p>
-              <p>{count.waitCount} 건</p>
-            </div>
-            <div className="status-item">
-              <p className="cancle">예약확정</p>
-              <p>{count.doingCount} 건</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-
-      <div className="today-customer">
-        <div className="customer-reservation-check">
-          <div className="today-booking2">
-            <h3><i className="bi bi-shop-window"></i>Today 예약</h3>
-            <div className="date-search-box">
-              <input type="date" value={selectedDate} onChange={handleChangeDate}/>
-              <button type="button" className="btn today" onClick={handleClickBook}>예약보기</button>
-            </div>
-
-            <div className="table-wrapper2">
-              <table>
-                <thead>
-                  <tr>
-                    <th>이름</th>
-                    <th>예약시간</th>
-                    <th>보기</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {customerBookInfo.length > 0 ? (
-                      customerBookInfo.map((customer, index)=>(
+                <div className="table-wrapper2">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>이름</th>
+                        <th>예약시간</th>
+                        <th>보기</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {customerBookInfo.length > 0 ? (
+                        customerBookInfo.map((customer, index)=>(
                           <tr key={index}>
                             <td>{customer.userName}</td>
                             <td>{customer.reservationTime}</td>
                             <td><input type="radio" name="reservation" value={customer.reservationNo} checked={selectedCustomerInfo?.reservationNo === customer.reservationNo} onChange={handleChangeRadio}/></td>
                           </tr>
-                      ))
-                  ) : (
-                      <tr>
-                        <td colSpan="3">예약정보가 없습니다.</td>
-                      </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-
-          <div className="customer-info-container">
-            <div className="customer-info-title">
-              <h3>예약 정보</h3>
-              {selectedCustomerInfo ? (
-                <label className={`custom-checkbox ${checkedStatus[selectedCustomerInfo.reservationNo] ? 'checked' : ''}`}>
-                  {checkedStatus[selectedCustomerInfo.reservationNo] ? (
-                    // 완료된 경우, "전달완료" 텍스트만 표시
-                    <span>전달완료</span>
-                    ) : (
-                    // 완료되지 않은 경우, 체크박스를 클릭 가능하게 표시
-                    <>
-                      <input
-                        type="checkbox"
-                        checked={!!checkedStatus[selectedCustomerInfo.reservationNo]}
-                        onChange={() => handleCheck(selectedCustomerInfo.reservationNo)}
-                        style={{ display: 'none' }} // 체크박스 숨김
-                      />
-                      고객님께 전달되었나요?
-                    </>
-                  )}
-                </label>
-              ) : null}
-            </div>
-            <div className="customer-info">
-              <div className="customer-detail">
-                <div className="customer-group">
-                  <label>예약자</label>
-                  <div>  {selectedCustomerInfo?.userName || ''} </div>
-                </div>
-                <div className="customer-group">
-                  <label>연락처</label>
-                  <div> {selectedCustomerInfo?.userPhoneNum || ''} </div>
-                </div>
-                <div className="customer-group">
-                  <label>방문시간</label>
-                  <div> {selectedCustomerInfo?.reservationTime || ''} </div>
-                </div>
-                <div className="customer-group">
-                  <label>결제방식</label>
-                  <div> {selectedCustomerInfo?.paymentMethod || ''} </div>
-                </div>
-                <div className="customer-group">
-                  <label>결제금액</label>
-                  <div> {selectedCustomerInfo?.paymentAmount || ''} </div>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="3">예약정보가 없습니다.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
+          </div>
 
-              <div className="customer-reservation">
-                <div className="reservation-content">
-                  <label>상품명</label>
-                  <div>
-                    {selectedCustomerInfo?.options?.find(option => option.categoryLevel === '1')?.serviceName || ''}
+          <div className="main-grid-container2">
+
+            <div className="calendar" style={{ width: 'auto', margin: 'auto' }}>
+              <div className="calendar-header">
+                <FullCalendar
+                  plugins={[dayGridPlugin, interactionPlugin]}
+                  initialView="dayGridMonth"
+                  locale="ko"
+                  events={events}
+                  dateClick={(info) => setSelectedDate(info.dateStr)}
+                  dayCellClassNames={() => 'calendar-day-cell'}
+                  dayCellContent={(arg) => (
+                    <div style={{ padding: '5px', fontSize: '0.8em' }}>
+                      <span>{arg.dayNumberText}</span>
+                    </div>
+                  )}
+                  headerToolbar={{
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth',
+                  }}
+                  height="auto" // 높이를 자동으로 맞추기
+
+                />
+              </div>
+            </div>
+
+
+
+
+
+
+
+            <div className="customer-info-container">
+              <div className="customer-info-title">
+                <h3>예약 정보</h3>
+                {selectedCustomerInfo ? (
+                  <label className={`custom-checkbox ${checkedStatus[selectedCustomerInfo.reservationNo] ? 'checked' : ''}`}>
+                    {checkedStatus[selectedCustomerInfo.reservationNo] ? (
+                      // 완료된 경우, "전달완료" 텍스트만 표시
+                      <span>전달완료</span>
+                      ) : (
+                      // 완료되지 않은 경우, 체크박스를 클릭 가능하게 표시
+                      <>
+                        <input
+                          type="checkbox"
+                          checked={!!checkedStatus[selectedCustomerInfo.reservationNo]}
+                          onChange={() => handleCheck(selectedCustomerInfo.reservationNo)}
+                          style={{ display: 'none' }} // 체크박스 숨김
+                        />
+                        고객님께 전달되었나요?
+                      </>
+                    )}
+                  </label>
+                ) : null}
+              </div>
+              <div className="customer-info">
+                <div className="customer-detail">
+                  <div className="customer-group">
+                    <label>예약자</label>
+                    <div>  {selectedCustomerInfo?.userName || ''} </div>
+                  </div>
+                  <div className="customer-group">
+                    <label>연락처</label>
+                    <div> {selectedCustomerInfo?.userPhoneNum || ''} </div>
+                  </div>
+                  <div className="customer-group">
+                    <label>방문시간</label>
+                    <div> {selectedCustomerInfo?.reservationTime || ''} </div>
+                  </div>
+                  <div className="customer-group">
+                    <label>결제방식</label>
+                    <div> {selectedCustomerInfo?.paymentMethod || ''} </div>
+                  </div>
+                  <div className="customer-group">
+                    <label>결제금액</label>
+                    <div> {selectedCustomerInfo?.paymentAmount || ''} </div>
                   </div>
                 </div>
 
-                <div className="reservation-content">
-                  <label>옵션</label>
-                  <div className="reservation-option">
-                    {/* 레벨 2 옵션과 그 하위 레벨 3 옵션을 묶어서 출력 */}
-                    {selectedCustomerInfo?.options
-                      ?.filter(option => option.categoryLevel === '2')
-                      .map((level2Option) => (
-                        <div className="option" key={level2Option.categoryId}>
-                          <p>{level2Option.serviceName}</p>
-                          {level2Option.middleCategoryValue ? (
-                            <div className="option-detail">
-                              <p> {level2Option.middleCategoryValue} </p>
+                <div className="customer-reservation">
+                  <div className="reservation-content">
+                    <label>상품명</label>
+                    <div>
+                      {selectedCustomerInfo?.options?.find(option => option.categoryLevel === '1')?.serviceName || ''}
+                    </div>
+                  </div>
+
+                  <div className="reservation-content">
+                    <label>옵션</label>
+                    <div className="reservation-option">
+                      {/* 레벨 2 옵션과 그 하위 레벨 3 옵션을 묶어서 출력 */}
+                      {selectedCustomerInfo?.options
+                        ?.filter(option => option.categoryLevel === '2')
+                        .map((level2Option) => (
+                          <div className="option" key={level2Option.categoryId}>
+                            <p>{level2Option.serviceName}</p>
+                            {level2Option.middleCategoryValue ? (
+                              <div className="option-detail">
+                                <p> {level2Option.middleCategoryValue} </p>
+                              </div>
+                              ) : (
+                              /* 레벨 2 하위에 해당하는 레벨 3 옵션 출력 */
+                              selectedCustomerInfo?.options
+                                ?.filter(option => option.parentCategoryId === level2Option.categoryId && option.categoryLevel === '3')
+                                .map((level3Option) => (
+                                  <div className="option-detail" key={level3Option.categoryId}>
+                                    <p>{level3Option.serviceName}</p>
+                                  </div>
+                                ))
+                              )}
                             </div>
-                            ) : (
-                            /* 레벨 2 하위에 해당하는 레벨 3 옵션 출력 */
-                            selectedCustomerInfo?.options
-                              ?.filter(option => option.parentCategoryId === level2Option.categoryId && option.categoryLevel === '3')
-                              .map((level3Option) => (
-                                <div className="option-detail" key={level3Option.categoryId}>
-                                  <p>{level3Option.serviceName}</p>
-                                </div>
-                              ))
-                            )}
-                          </div>
-                        ))
-                    }
+                          ))
+                      }
+                    </div>
                   </div>
-                </div>
 
-                <div className="reservation-content">
-                  <label>요청사항</label>
-                  <div> {selectedCustomerInfo?.customerRequest ?? "없음"} </div>
+                  <div className="reservation-content">
+                    <label>요청사항</label>
+                    <div> {selectedCustomerInfo?.customerRequest ?? "없음"} </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
     </div>
   </div>

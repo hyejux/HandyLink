@@ -330,7 +330,7 @@ function AdminStoreInfo() {
                     <div className="input-field">
                         <div className="btn-group">
                             <input type="text" id="zipcode" value={storeInfo.zipcode} ref={postcodeRef} placeholder="우편번호" style={{ width: '35%' }} placeholder="우편번호" readOnly />
-                            <input type="button" className="btn-postcode" onClick={openPostcode} style={{ width: '27%' }} value="주소검색" />
+                            <button type="button" className="btn-postcode" onClick={openPostcode} value="주소검색">주소검색</button>
                         </div>
                         <input type="text" id="addr" value={storeInfo.addr} ref={addressRef} placeholder="주소" style={{ marginBottom: '5px' }} readOnly />
                         <input type="text" id="addrdetail" value={storeInfo.addrdetail} ref={detailAddressRef} placeholder="상세주소"

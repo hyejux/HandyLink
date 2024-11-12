@@ -281,7 +281,6 @@ function UserSignUp() {
     return (
         <div>
             <div className="signup-container">
-                <h2>회원 가입</h2>
                 <div className="profile-img">
                     <img src={previewImage} alt="Profile Picture" id="profileImage"/>
                     {!isKakaoSignUp && (

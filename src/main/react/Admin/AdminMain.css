@@ -1,40 +1,46 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
 
-.admin-store-regist-container {
-    margin: 15px;
-}
-
 .container {
     width: 100%;
-    margin: 40px auto;
+    margin: 20px auto;
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
-
-.today-bookings {
-    background: white;
-    padding: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 30%;
     position: relative;
-    overflow: hidden;
 }
 
-.today-bookings h3 {
-    margin: 0;
-    margin-bottom: 20px;
+.toggle-main {
+    display: flex;
+    right: 0;
+    position: absolute;
+}
+
+.main-pick-info,
+.main-count-info{
+    border-right: 2px solid #ddd;
+    padding: 3px 10px;
+    border-radius: 3px;
+}
+
+.main-pick-info:hover,
+.main-count-info:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #515B66;
+}
+
+.main-pick-info.active,
+.main-count-info.active {
+    color: white;
+    background-color: #14202C;
+}
+
+.main-count-info{
+    border: none;
 }
 
 h3 > .bi {
     padding-right: 10px;
-}
-
-.table-wrapper {
-    max-height: 100%;
-    overflow-y: auto;
-    padding-right: 10px;
-    scrollbar-width: thin;
 }
 
 table {
@@ -65,11 +71,31 @@ td {
     font-size: 15px;
 }
 
-.schedule {
+.main-grid{
     display: grid;
-    grid-template-columns: 70% 1fr;
-    gap: 15px;
+    grid-template-columns: 35% 65%;
+    gap: 10px;
 }
+
+.main-grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 40% 60%;
+}
+
+.main-grid-container2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+}
+
+
+/*.schedule {*/
+/*    display: grid;*/
+/*    grid-template-columns: 40% 1fr;*/
+/*    gap: 15px;*/
+/*    margin-top: 80px;*/
+/*}*/
 
 .status-container {
     display: flex;
@@ -82,29 +108,25 @@ td {
     margin-top: 45px;
 }
 
-.today-reservation,
-.check-reservation {
-    border: 2px solid #ddd;
-    padding: 22px 10px;
-    margin: 15px;
-    margin-top: 20px;
+.reservation-status {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, auto);
 }
 
-.bi-chevron-double-right {
-    display: flex;
-    align-items: center;
-    margin: 0 0 32px 5px;
-}
 
 .status-item {
-    padding: 10px 15px;
-    text-align: center;
+    padding: 10px;
     flex: 1;
-    margin: 10px 10px; /* 항목 간 간격 */
+    margin: 10px;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 30px;
-    height: 45px;
+    height: 50px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 20px;
     background-color: #38414a;
     color: white;
 }
@@ -141,6 +163,16 @@ td {
 
 .date-search-box {
     margin: 20px 0 10px;
+    overflow: hidden;
+    padding-right: 5px;
+}
+
+.date-search-box > input {
+    float: left;
+}
+
+.date-search-box > button {
+    float: right;
 }
 
 .sales-search-box {
@@ -155,18 +187,10 @@ td {
 
 
 
-
-
-
-.customer-reservation-check{
-    display: flex;
-    gap: 15px;
-}
-
 .today-booking2{
-    width: 25%;
-    max-height: 517px;
+    max-height: 572px;
     overflow: hidden;
+    padding: 0 20px;
 }
 
 .table-wrapper2 {
@@ -179,8 +203,6 @@ td {
 .customer-info-container{
     background-color: #f2f2f2;
     padding: 20px 30px;
-    margin-top: 95px;
-    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
@@ -244,6 +266,16 @@ td {
 .calendar-day-cell:hover {
     background-color: #c1daff; /* 원하는 색상 */
 }
+
+.calendar .fc-toolbar-title {
+    font-size: 1.3rem; /* 제목 글씨 크기 조정 */
+}
+.calendar .fc-toolbar button {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.2rem;
+}
+
+
 
 .customer-info-title{
     display: flex;

@@ -1,5 +1,6 @@
 h2 {
     /* margin-left: 50px; */
+
 }
 
 .store-report {
@@ -44,7 +45,7 @@ h2 {
 }
 
 .review {
-    color: #FFD700;
+    color: #d8b70a;
 }
 
 .complete {
@@ -112,15 +113,18 @@ h3 {
 
 .graph-section{
     display: flex;
+
     /* padding: 50px; */
-    padding-top: 0;
+
 }
 
 .table-section{
     display: flex;
+
     /* padding: 50px; */
     padding-top: 0;
     flex-direction: column;
+
 }
 
 .detail{
@@ -128,10 +132,18 @@ h3 {
     margin: 10px;
 }
 
+.customer-section-box{
+    border: 2px solid #ddd;
+    padding: 10px;
+    border-radius: 3px;
+}
+
 .customer {
+
     border: 1px solid #ddd;
     border-radius: 5px;
     width: 250px;
+
     margin: 10px;
 }
 

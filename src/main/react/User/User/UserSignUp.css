@@ -1,6 +1,6 @@
 .signup-container {
     background-color: white;
-    padding: 20px;
+    padding: 10px 30px;
 }
 
 h2 {
@@ -18,6 +18,7 @@ h2 {
     margin-bottom: 50px;
     position: relative;
 }
+
 .profile-img img {
     width: 100px;
     height: 100px;
@@ -29,7 +30,7 @@ h2 {
     right: 41%;
     width: 25px;
     height: 25px;
-    background-color: #2C348F;
+    background-color: #676767;
     border-radius: 50%;
     color: white;
     display: flex;
@@ -39,17 +40,11 @@ h2 {
 }
 
 .form-signup {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
 }
 
 .form-group {
-    margin-bottom: 15px;
-    position: relative;
-    width: 400px;
-    text-align: center;
+    margin-bottom: 30px;
 }
 
 .form-group input:-webkit-autofill {
@@ -62,23 +57,21 @@ h2 {
     font-size: 14px;
     margin-bottom: 5px;
     text-align: left;
-    padding-left: 15%;
 }
 
 .form-group input, .form-group select {
-    width: 70%;
+    width: 100%;
+    height: 45px;
     padding: 10px;
-    font-size: 16px;
-    border: 1px solid #e3e3e3;
-    border-radius: 6px;
+    font-size: 17px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     box-sizing: border-box;
-    margin-bottom: 10px;
     outline: none;
 }
 
 .form-group select {
     background-color: #ffffff;
-    height: 40px;
 }
 
 .btn-checkid {
@@ -86,12 +79,12 @@ h2 {
     height: 30px;
     padding: 0;
     position: absolute;
-    top: 60%;
-    transform: translateY(-50%);  /* 버튼 높이의 절반만큼 위로 올림 */
-    left: 65%;
+    top: 23.5%;
+    transform: translateY(-50%);
+    left: 71%;
     border: 0;
     border-radius: 5px;
-    background-color: #4551BF;
+    background-color: #FE8517;
     color: #fff;
     font-size: 12px;
     cursor: pointer;
@@ -114,8 +107,7 @@ h2 {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    background: rgb(146,169,255);
-    background: linear-gradient(207deg, rgba(146,169,255,1) 0%, rgba(53,58,148,1) 100%);
+    background: #FE8517;
 }
 
 .password-group {
@@ -124,22 +116,22 @@ h2 {
 
 .password-group .invisible-icon1 {
     position: absolute;
-    top: 45%;
-    left: 78%;
+    top: 50%;
+    left: 90%;
 }
 
 .password-group .invisible-icon2 {
     position: absolute;
-    top: 45%;
-    left: 78%;
+    top: 50%;
+    left: 90%;
 }
 
 /* 테두리 애니메이션 */
 /* 테두리 애니메이션 효과 */
-.effect-8 ~ .focus-border {
+/*.effect-8 ~ .focus-border {
     position: absolute;
-    width: 100%; /* input 요소의 너비에 맞게 설정 */
-    height: 56%; /* input 요소의 높이에 맞게 설정 */
+    width: 100%; !* input 요소의 너비에 맞게 설정 *!
+    height: 56%; !* input 요소의 높이에 맞게 설정 *!
     top: 30%;
     left: 0;
     pointer-events: none;
@@ -155,7 +147,7 @@ h2 {
     left: 0;
     width: 0;
     height: 1px;
-    background-color: #2C348F;
+    background-color: #FE8517;
     transition: 0.2s;
     border-radius: 3px;
 }
@@ -173,7 +165,7 @@ h2 {
     left: 0;
     width: 1px;
     height: 0;
-    background-color: #2C348F;
+    background-color: #FE8517;
     transition: 0.2s;
     border-radius: 3px;
 }
@@ -192,4 +184,4 @@ h2 {
 .effect-8:focus ~ .focus-border i:after {
     height: 100%;
     transition: 0.3s;
-}
+}*/

@@ -66,7 +66,6 @@ function UserMyReview () {
             <div className="reviews-container">
                 <div className="header">
                     {/*<h2>내가 쓴 후기 총 {reviews.length}건</h2>*/}
-                    <h2>내가 쓴 후기</h2>
                 </div>
 
                 {reviews.map((review) => (

@@ -310,7 +310,7 @@ function UserMain() {
     try {
       await axios.post('/userStoreList/storeLike', { storeNo: store.storeNo });
       setIsBookmarked(prev =>
-          prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) : [...prev, store.storeNo]
+        prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) : [...prev, store.storeNo]
       );
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -936,7 +936,7 @@ function UserMain() {
                         <div className="user-category-menu">
                           <div className="user-category-menu-img user-category-menu-img2">
                             <img src={imageUrl} alt={category.serviceName} />
-                            <div className="store-service-price">{category.servicePrice.toLocaleString()}</div>
+                            <div className="store-service-name">{category.serviceName}</div>
                           </div>
                         </div>
                       </div>
@@ -1052,12 +1052,13 @@ function UserMain() {
                         <span>({store.reviewCount})</span>
                       </div>
                       <div className="result-list-price">
-                        {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (
-                          <div key={index}>
-                            {category.servicePrice.toLocaleString()}~
-                          </div>
-                        ))}
+                        {Math.min(
+                          ...level1Categories
+                            .filter(category => category.storeNo === store.storeNo)
+                            .map(category => category.servicePrice)
+                        ).toLocaleString()}~
                       </div>
+
                     </div>
 
                   </div>

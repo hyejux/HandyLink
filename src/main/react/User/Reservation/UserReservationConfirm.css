@@ -598,18 +598,21 @@ hr {
   top: 0;
   left: 0;
   width: 100%;
-  height: 94%;
-  background: #f0f0f0;
+  height: 100%;
+  background: #fff;
   display: flex;
   flex-direction: column;
+  justify-content: center; 
   align-items: center;
   z-index: 9999;
+  overflow: hidden;
 }
 
+/* 스피너 */
 .loading-spinner {
-  width: 100px;
-  height: 100px;
-  margin-top: 200px;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
 }
 
 .loading-spinner img {
@@ -617,64 +620,104 @@ hr {
   height: 100%;
 }
 
+/* 카운트다운 타이머 */
 .countdown-timer {
   position: absolute;
   top: 20px;
   left: 20px;
   color: #999;
-  font-size: 20px;
+  font-size: 16px;
   border: 0.5px solid #999;
   border-radius: 50%;
   width: 25px;
   height: 25px;
   text-align: center;
-  line-height: 25px;
-}
-
-.loading-text {
-  color: #000;
-  margin-top: 20px;
-  font-size: 20px;
+  line-height: 27px;
   font-weight: bold;
 }
 
-/* 화면 애니메이션 */
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+/* 예약 완료 텍스트 */
+.loading-text {
+  color: #000;
+  font-size: 18px;
+  font-weight: bold;
 }
 
+/* 로딩 이미지 박스 */
 .loading-img-box {
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 390px;
-  height: 300px;
+  position: relative;
+  margin-top: 30px;
+  width: 95%;
+  text-align: center;
 }
 
 .loading-text2 {
   color: #000;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
-  text-align: center;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .loading-text3 {
-  color: #000;
-  font-size: 16px;
-  text-align: center;
-  margin-bottom: 5px;
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 15px;
 }
 
 .loading-img-box img {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
+  border-radius: 5px;
+}
+
+
+.user-content-container {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px 25px;
+  box-shadow: none;
+  margin: 0;
+  border: none;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.info-row .left {
+  text-align: left;
+  flex: 1;
+}
+
+.info-row .right {
+  text-align: right;
+  flex: 1;
+}
+
+.info-row .bi {
+  /* color: #fd8517; */
+  margin-right: 10px;
+}
+
+
+.info-content {
+  padding: 10px 15px;
+  background-color: #f9f9f9;
+  font-size: 14px;
+}
+
+.bi-chevron-up,
+.bi-chevron-down {
+  transition: transform 0.3s ease;
+  margin: 0;
+  font-size: 14px;
+}
+
+.info-row:hover .bi-chevron-up,
+.info-row:hover .bi-chevron-down {
+  transform: scale(1.2);
 }

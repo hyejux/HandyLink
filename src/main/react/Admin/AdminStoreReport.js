@@ -57,6 +57,35 @@ function AdminStoreReport() {
             }
         };
 
+
+        const fetchMonthlySales = async () => {
+            try {
+                // 서버에서 월별 매출 데이터를 가져옵니다.
+                const response = await axios.get(`/adminReservation/priceMonth/${storeNo}`);
+                console.log(response.data);
+                setSalesData(response.data);
+            } catch (error) {
+                console.error('Error fetching sales data:', error);
+            } finally {
+                // setLoading(false);
+            }
+        };
+
+        const fetchMonthlySales2 = async () => {
+            try {
+                // 서버에서 월별 매출 데이터를 가져옵니다.
+                const response = await axios.get(`/adminReservation/priceDay/${storeNo}`);
+                console.log(response.data);
+                setSalesData2(response.data);
+            } catch (error) {
+                console.error('Error fetching sales data:', error);
+            } finally {
+                // setLoading(false);
+            }
+        };
+
+        fetchMonthlySales();
+        fetchMonthlySales2();
         fetchReport();
         fetchGender();
         fetchAge();
@@ -72,12 +101,30 @@ function AdminStoreReport() {
         setSelectedPeriod(newPeriod);
     };
 
+    const [salesData, setSalesData] = useState([]);
+    const [salesData2, setSalesData2] = useState([]);
+ 
+
+ // 상태 변수를 사용하여 현재 선택된 테이블을 관리
+   // 상태 변수를 사용하여 현재 선택된 테이블을 관리
+   const [viewMode, setViewMode] = useState('monthly');  // 'monthly' 또는 'daily'
+
+   // 월별 매출 테이블을 보여주는 버튼 클릭 시
+   const showMonthlySales = () => {
+       setViewMode('monthly');
+   };
+
+   // 일별 매출 테이블을 보여주는 버튼 클릭 시
+   const showDailySales = () => {
+       setViewMode('daily');
+   };
+
     return (
         <div className="admin-store-report-container">
             <div className="store-report">
 
                 <div className="flex-left">
-                    <div className="report-section">
+                    {/* <div className="report-section">
                         <h2>우리 가게</h2>
                         <div className="reservation-status">
                             <div className="reservation-field">
@@ -96,19 +143,18 @@ function AdminStoreReport() {
                                 <p className="complete-count"> {reportCount.completeCount} </p>
                                 <p className="complete"> 완료 </p>
                             </div>
-                            {/*<div className="reservation-field">
+                            <div className="reservation-field">
                             <p className="wait-count"> {reportCount.waitCount} </p>
                             <p className=""> 예약 대기 </p>
-                            </div>*/}
+                            </div>
                             <div className="reservation-field">
                                 <p className="cancled-count"> {reportCount.cancledCount} </p>
                                 <p className="cancled"> 취소 </p>
                             </div>
                         </div>
-                    </div>
-
+                    </div> */}
                     <div className="report-section">
-                        <h2>일일 통계</h2>
+                        <h2>매출 통계</h2>
                         <div className="reservation-graph">
                             <div className="graph-filter">
                                 <span className={selectedPeriod === "이번달" ? 'active' : ''}
@@ -123,10 +169,6 @@ function AdminStoreReport() {
                             </div>
                         </div>
                     </div>
-                </div>
-
-
-                <div className="flex-right">
                     <div className="report-section">
                         <h2>고객 통계</h2>
                         <div className="customer-section-box">
@@ -145,9 +187,8 @@ function AdminStoreReport() {
                                         <AgeChart data={ageDistribution} />
                                     </div>
                                 </div>
-                            </div>
 
-                            <div className="table-section">
+                                <div className="table-section">
                                 <div className="mw detail">
                                     <table className="mwtable">
                                         <thead>
@@ -185,11 +226,119 @@ function AdminStoreReport() {
                                 </div>
                             </div>
                             
+                            </div>
+
+                         
                         </div>
+
+                        
+                    </div>
+                   
+                </div>
+
+
+                <div className="flex-right">
+                 
+                    <div className="report-section">
+                        <h2>주문 통계</h2>
+                        <div className="reservation-graph">
+                            <div className="graph-filter">
+                                <span className={selectedPeriod === "이번달" ? 'active' : ''}
+                                    onClick={() => handlePeriodChange("이번달")}>이번 달</span>
+                                <span className={selectedPeriod === "올해" ? 'active' : ''}
+                                    onClick={() => handlePeriodChange("올해")}>올해</span>
+                                <span className={selectedPeriod === "작년" ? 'active' : ''}
+                                    onClick={() => handlePeriodChange("작년")}>작년</span>
+                            </div>
+                            <div className="graph">
+                                <ReservationBarChart period={selectedPeriod} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='report-section'>
+
+
+
+                    <div>
+            {/* 일별 / 월별 전환 버튼 */}
+           
+
+            {/* 월별 매출 테이블 */}
+            {viewMode === 'monthly' && (
+                <div className="table-container">
+                    <div className='month-day'>
+                    <h2>월별 매출</h2>
+                    <div className="toggle-buttons">
+                        <button onClick={showMonthlySales} className={viewMode === 'monthly' ? 'active' : ''}>
+                            월별
+                        </button>
+                        <button onClick={showDailySales} className={viewMode === 'daily' ? 'active' : ''}>
+                            일별
+                        </button>
+                    </div>
+                        </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>년도</th>
+                                <th>월</th>
+                                <th>총 매출</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {salesData.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.year}</td>
+                                    <td>{item.month}</td>
+                                    <td>{item.totalSales}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {/* 일별 매출 테이블 */}
+            {viewMode === 'daily' && (
+                <div className="table-container">
+                    <h2>일별 매출</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>년도</th>
+                                <th>월</th>
+                                <th>일</th>
+                                <th>총 매출</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {salesData2.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.year}</td>
+                                    <td>{item.month}</td>
+                                    <td>{item.day}</td>
+                                    <td>{item.totalSales}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
+
                     </div>
                 </div>
 
+
+
+             
             </div>
+
+       
+
+ 
         </div>
     )
 }

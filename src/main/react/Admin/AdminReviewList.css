@@ -18,6 +18,9 @@
   border-radius: 10px;
 }
 
+.fc-event-main {
+  color : #000;
+}
 
 .btn-st {
   border: 1px solid #1d2830;
@@ -536,6 +539,12 @@
   align-items: center;
   justify-content: center;
   margin-top: 20px;
+}
+
+.dropdown-menu > select {
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  border-radius: 10px;
 }
 
 .pagination button {

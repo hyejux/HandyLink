@@ -534,14 +534,14 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
 
   return (
     <div>
-      <div className="main-content-title">예약 서비스 수정</div>
+      <div className="main-content-title">주문 상품 수정</div>
       <div className="main-btns">
         <button type="button" className="btn-st" onClick={handleComplete}>완료</button>
         <button type="button" className="btn-st" onClick={handleDelete}>삭제</button>
       </div>
 
       <div className="main-contents">
-      <div className="reserve-container">
+      <div className="reserve-container22">
       <div className="reserve-img">
       {imagePreview && <img src={imagePreview} alt="미리보기"    style={{ width: '400px', objectFit: 'cover' }}/>}
         

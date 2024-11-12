@@ -4,8 +4,10 @@ package com.example.HiMade.admin.controller;
 import com.example.HiMade.admin.dto.*;
 import com.example.HiMade.admin.service.AdminMainService;
 import com.example.HiMade.admin.service.AdminReservationService;
+import com.example.HiMade.user.entity.Reservation;
 import com.example.HiMade.user.service.UserService;
 import org.apache.ibatis.annotations.Param;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
@@ -22,6 +24,27 @@ public class AdminReservationController {
   @Autowired
   private AdminReservationService adminReservationService;
 
+
+  @GetMapping("/priceMonth/{id}")
+  public List<priceMonthDTO> priceMonth(@PathVariable int id){
+    return adminReservationService.priceMonth(id);
+  }
+
+  @GetMapping("/priceDay/{id}")
+  public List<priceMonthDTO> priceDay(@PathVariable int id){
+    return adminReservationService.priceDay(id);
+  }
+
+  @PostMapping("/save-order")
+  public ResponseEntity<String> saveOrder(@RequestBody OrderDTO orderRequest) {
+    // orderRequest에서 orderedList를 받아서 처리
+    List<adminReservationDTO> orderedList = orderRequest.getOrderedList();
+
+    // 순서 변경 처리 로직 (예: DB에 저장)
+     adminReservationService.saveOrder(orderedList);
+
+    return ResponseEntity.ok("순서가 성공적으로 저장되었습니다.");
+  }
 
   @PostMapping("/getManageList")
   public List<adminReserveMangeDTO> getManageList(@RequestBody Map<String, Integer> request) {

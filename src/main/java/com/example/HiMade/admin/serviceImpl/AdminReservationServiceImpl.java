@@ -5,6 +5,7 @@ import com.example.HiMade.admin.mapper.AdminReservationMapper;
 import com.example.HiMade.admin.service.AdminReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
@@ -122,6 +123,28 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   @Override
   public List<adminManagerCalDTO> getManageCalender(int storeNo) {
     return adminReservationMapper.getManageCalender(storeNo);
+  }
+
+  @Override
+  public List<priceMonthDTO> priceMonth(int id) {
+    return adminReservationMapper.priceMonth(id);
+  }
+
+  @Override
+  public List<priceMonthDTO> priceDay(int id) {
+    return adminReservationMapper.priceDay(id);
+  }
+
+  @Transactional
+  @Override
+  public void saveOrder(List<adminReservationDTO> orderedList) {
+
+      for (adminReservationDTO r : orderedList) {
+        adminReservationMapper.updateOrder(r);
+      }
+
+
+//    adminReservationMapper.updateOrder(orderedList);
   }
 
   //예약 상태 변경

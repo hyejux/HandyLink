@@ -2,6 +2,7 @@ package com.example.HiMade.admin.mapper;
 
 
 import com.example.HiMade.admin.dto.*;
+import com.example.HiMade.user.entity.Reservation;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +39,10 @@ public interface AdminReservationMapper {
 
  void setCategoryDel(int id);
  void setSlotDel(int id);
+  void updateOrder(@Param("orderedList") adminReservationDTO r);
 
+  List<priceMonthDTO> priceMonth(int id);
+  List<priceMonthDTO> priceDay(int id);
 
 
 }

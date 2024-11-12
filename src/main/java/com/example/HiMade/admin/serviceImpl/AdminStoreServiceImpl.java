@@ -259,30 +259,6 @@ public class AdminStoreServiceImpl implements AdminStoreService {
     }
 
     @Override
-    public Map<String , Integer> getReportCount(Long storeNo) {
-        Integer reviewCount = adminStoreMapper.getReviewCount(storeNo);
-        Integer doingCount = adminStoreMapper.getDoingCount(storeNo);
-        Integer userLikeCount = adminStoreMapper.getUserLikeCount(storeNo);
-        Integer completeCount = adminStoreMapper.getCompleteCount(storeNo);
-        Integer cancledCount = adminStoreMapper.getCancledCount(storeNo);
-
-        System.out.println("리뷰개수: "+ reviewCount +
-                " 진행 중: " + doingCount+
-                " 찜 수: " + userLikeCount+
-                " 픽업 완료: " + completeCount+
-                "예약 취소: " + cancledCount);
-
-        Map<String, Integer> resultMap = new HashMap<>();
-        resultMap.put("reviewCount", reviewCount);
-        resultMap.put("doingCount", doingCount);
-        resultMap.put("userLikeCount", userLikeCount);
-        resultMap.put("completeCount", completeCount);
-        resultMap.put("cancledCount", cancledCount);
-
-        return resultMap;
-    }
-
-    @Override
     public List<Map<String, Object>> getDailyReportChart(Long storeNo, int year, int month) {
         return adminStoreMapper.getDailyReportChart(storeNo, year, month);
     }

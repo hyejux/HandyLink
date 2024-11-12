@@ -287,7 +287,7 @@ function UserChatRoom() {
                             ) : (
                                 <>
                                     <div>지금은 영업 시간이 아닙니다.</div>
-                                    <div>문의 가능한
+                                    <div>답변 가능한
                                         시간은 {storeInfo.storeOpenTime?.slice(0, 5)} - {storeInfo.storeCloseTime?.slice(0, 5)} 입니다.
                                     </div>
                                 </>

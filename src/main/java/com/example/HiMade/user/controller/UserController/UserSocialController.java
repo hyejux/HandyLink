@@ -131,7 +131,7 @@ public class UserSocialController {
         session.invalidate();
 
         return ResponseEntity.status(HttpStatus.FOUND)
-                .header("Location", "/UserLoginPage.user") // 로그아웃 후 이동할 페이지
+                .header("Location", "/UserMain.user")
                 .build();
     }
 

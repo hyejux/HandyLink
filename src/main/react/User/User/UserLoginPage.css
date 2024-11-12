@@ -1,18 +1,20 @@
 .user-login-container {
     margin: 10px auto;
     background-color: white;
+    overflow-y: hidden;
 }
 
 .user-login-container  form {
     /* margin: 50px; */
     /* margin-top: 100px; */
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 h2 {
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 30px;
+    margin-bottom: 50px;
+    font-size: 25px;
     color: #333;
+    margin-top: 10px;
 }
 
 .login-form {
@@ -49,7 +51,7 @@ h2 {
 
 /* 포커스 시 하단 테두리 애니메이션 */
 .form-group input:focus {
-    border-bottom-color: #434EBD; /* 포커스 시 테두리 색상 */
+    border-bottom-color: #FE8517; /* 포커스 시 테두리 색상 */
 }
 
 /* 입력 필드 포커스 시 또는 값이 입력된 경우 레이블 이동 */
@@ -57,7 +59,7 @@ h2 {
 .form-group input:not(:placeholder-shown) + label {
     top: -10px;
     font-size: 15px;
-    color: #434EBD; /* 활성화된 상태의 레이블 색상 */
+    color: #FE8517; /* 활성화된 상태의 레이블 색상 */
 }
 
 /* 자동 완성으로 input 필드 채우면 색상이 제멋대로 변경되는 걸 방지 */
@@ -75,10 +77,9 @@ h2 {
 .btn-dologin {
     width: 75%;
     height: 60px;
-    /* margin-top: 50px; */
+    margin-top: 20px;
     padding: 10px;
-    background: rgb(146,169,255);
-    background: linear-gradient(207deg, rgba(146,169,255,1) 0%, rgba(53,58,148,1) 100%);
+    background: #FE8517;
     color: white;
     font-size: 16px;
     border: none;
@@ -99,7 +100,7 @@ h2 {
 }
 .social-login img {
     width: 75%;
-    height: 55px;
+    height: 50px;
     cursor: pointer;
 }
 .divider {

@@ -150,9 +150,6 @@ function UserChatList() {
                     <div className='left'>
                         채팅 목록
                     </div>
-                    <div className='right' onClick={() => window.location.href = '/userlikelist.user'}>
-                        <i className="bi bi-heart-fill"></i>
-                    </div>
                 </div>
 
                 <div className="search-bar">
@@ -161,7 +158,7 @@ function UserChatList() {
                     </button>
                     <input
                         type="text"
-                        placeholder="업체명 또는 메시지 검색"
+                        placeholder="업체명 검색"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="search-input"

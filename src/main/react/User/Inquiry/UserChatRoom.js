@@ -111,6 +111,12 @@ function UserChatRoom() {
                     const response = await axios.get(`/chat/getStoreInfoByStoreNo/${storeNo}`);
                     console.log("가게 정보", response.data);
                     setStoreInfo(response.data);
+
+                    // 가게 이름을 localStorage에 저장
+                    if (response.data.storeName) {
+                        localStorage.setItem('storeName', response.data.storeName);
+                    }
+
                     checkBusinessHours(response.data.storeOpenTime, response.data.storeCloseTime);
                 } catch (error) {
                     console.error('가게 정보를 가져오는데 실패했습니다:', error);
@@ -268,7 +274,7 @@ function UserChatRoom() {
                         <div className="profile-section">
                             <img
                                 className="profile-img"
-                                src={storeInfo.storeImg[0]?.storeImgLocation || '/img/user_basic_profile.jpg'}
+                                src={storeInfo.storeImg[0]?.storeImgLocation}
                                 alt={`${storeInfo.storeName} 프로필`}
                             />
                         </div>

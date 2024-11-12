@@ -70,10 +70,11 @@ function AdminLogin() {
 
     return (
         <div className="parts">
-            {/* <div className="part1">
-                <div className="top-text">편리한 주문 <br />편리한 제작</div>
-                <div className="bottom-text">HandyLink에서<br />경험해보세요.</div>
-            </div> */}
+            <div className="part1">
+            <div className="top-text">주문, 이제 더 편리하게 <br />관리도 손쉽게</div>
+<div className="bottom-text">NEEZ에서 경험해보세요</div>
+
+            </div>
 
             <div className="part2">
                 <form onSubmit={handleSubmit}>

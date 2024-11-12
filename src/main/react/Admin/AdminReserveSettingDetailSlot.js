@@ -667,7 +667,7 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
                         <div>
  
         <div>
-        <h3>예약 슬롯 수정</h3>  <hr/>
+        <h3> 예약 슬롯 수정</h3>  <hr/>
             <div className='slot-num-status'>
           
             <div className='box2'>
@@ -695,9 +695,9 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
            
 
         </div>
-
+{/* 
         <h3>예약 막기</h3>
-                        <hr/>
+                        <hr/> */}
  
 </div>
                     </div>

@@ -142,7 +142,7 @@ font-weight: 600;
 /*  padding-left: 35px;*/
  box-shadow: 0 5px 4px rgb(191 191 191 / 25%), 0px 0px 1px 0px rgba(0, 0, 0, 0.22);
   /* position: absolute; */
-  min-height: 100vh;
+  min-height: 91.5vh;
   /* height: 100%; */
   box-sizing: border-box;
   z-index: 100;
@@ -308,7 +308,7 @@ width : 110px;
   background-color: #fff;
   /* border: 1px solid red; */
   border-radius: 8px;
-  min-height: 100vh;
+  min-height:70vh;
 }
 
 

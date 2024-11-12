@@ -1,7 +1,7 @@
 /* ChatApp.css */
 .chat-container {
     display: flex;
-    height: 100vh;
+    height : 75vh;
 }
 
 .chat-list {

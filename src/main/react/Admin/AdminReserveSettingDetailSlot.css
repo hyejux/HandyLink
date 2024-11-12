@@ -439,6 +439,7 @@
   /* 캘린더 전체 크기 조정 */
   .react-calendar {
     width: 100%;
+    border: none;
     /* 캘린더의 너비 설정 */
   }
   

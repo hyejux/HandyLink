@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -25,9 +26,10 @@ public class AdminStoreController {
 
     //업체탈퇴
     @PostMapping("/updateUnSubcribe")
-    public ResponseEntity<Integer> updateUnSubcribe(@RequestParam Long storeNo){
+    public ResponseEntity<Integer> updateUnSubcribe(@RequestParam Long storeNo, HttpSession session){
         Integer result = adminStoreService.updateUnSubcribe(storeNo);
         if(result > 0){
+            session.invalidate();
             return ResponseEntity.ok(result);
         }else {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(0); //삭제 조건에 안맞음
@@ -79,7 +81,6 @@ public class AdminStoreController {
     //마이페이지 - update
     @PostMapping("/updateStoreInfo")
     public void updateStoreInfo(@RequestBody StoreRegistDTO storeRegistDTO){
-        System.out.println("마이페이지 수정 "+storeRegistDTO);
         adminStoreService.updateStoreInfo(storeRegistDTO);
     }
 
@@ -93,7 +94,6 @@ public class AdminStoreController {
     //가게관리-등록
     @PostMapping("/updateStore")
     public void updateStore(@RequestBody StoreRegistDTO storeRegistDTO){
-        System.out.println("내가게 " + storeRegistDTO);
         adminStoreService.updateStore(storeRegistDTO);
     }
 
@@ -279,7 +279,6 @@ public class AdminStoreController {
         response.put("dates", dates);
         response.put("counts", counts);
 
-        System.out.println("확인 "+ response);
         return response;
     }
 
@@ -314,7 +313,6 @@ public class AdminStoreController {
         response.put("months", months);
         response.put("counts", counts);
 
-        System.out.println("올해/작년 "+response);
         return response;
     }
 

@@ -95,10 +95,12 @@ public class MainController {
   //업체로그인
   @GetMapping("/{pageName}.login")
   public String login(@RequestParam(value = "err", required = false) String err,
-                      @PathVariable String pageName, Model model) {
+                      @PathVariable String pageName, Model model, HttpSession session) {
+    session.invalidate();
     if(err != null) {
       model.addAttribute("msg", "아이디 비밀번호를 확인하세요");
     }
+
     model.addAttribute("pageName", pageName);
     System.out.println("로그인뷰이름:" + pageName);
     return "adminLogin";

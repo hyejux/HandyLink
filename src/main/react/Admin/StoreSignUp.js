@@ -15,6 +15,7 @@ function StoreSignUp() {
     const idRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/;
     const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,13}$/;
     const businessNoRegex = /^\d{10}$/;
+    const storeCallRegex = /^(\d{2,3})-(\d{3,4})-(\d{4})$/;
 
     //step02
     const [storeInfoData, setStoreInfoData] = useState ({
@@ -54,9 +55,11 @@ function StoreSignUp() {
     const [idError, setIdError] = useState('');
     const [pwError, setPwError] = useState('');
     const [businessNoError, setBusinessNoError] = useState('');
+    const [managerPhoneError, setManagerPhoneError] = useState('');
     const [isIdValid, setIsIdValid] = useState(false);
     const [isPwValid, setIsPwValid] = useState(false);
     const [isBusinessNoValid, setIsBusinessNoValid] = useState(false);
+    const [isManagerPhone, setIsManagerPhon] = useState(false);
 
     //step02 - input상태값 저장
     const handleChangeStore = (e) => {
@@ -74,7 +77,11 @@ function StoreSignUp() {
         } else if (id === "storeBusinessNo"){
             setStoreInfoData({ ...storeInfoData, storeBusinessNo: value });
             setIsBusinessNoValid(businessNoRegex.test(value));
-            setBusinessNoError(businessNoRegex.test(value) ? "" : "형식에 맞게 입력해 주세요.");
+            setBusinessNoError(businessNoRegex.test(value) ? "" : "10자리를 입력해 주세요.");
+        } else if (id === "managerPhone"){
+            setStoreInfoData({ ...storeInfoData, managerPhone: value});
+            setIsManagerPhon(storeCallRegex.test(value));
+            setManagerPhoneError(storeCallRegex.test(value) ? "" : "전화번호를 다시 확인해 주세요.")
         }
 
 
@@ -595,7 +602,7 @@ function StoreSignUp() {
                             <option value="뷰티">뷰티</option>
                             <option value="패션">패션</option>
                             <option value="주얼리">주얼리</option>
-                            <option value="디저트">디저트</option>
+                            <option value="디지털">디지털</option>
                             <option value="반려동물">반려동물</option>
                         </select>
                     </div>
@@ -617,7 +624,8 @@ function StoreSignUp() {
 
                     <div className="input-group">
                         <label htmlFor="managerPhone">휴대전화번호</label>
-                        <input type="text" id="managerPhone" placeholder="- 제외하고 입력" onChange={(e)=>handleChangeStore(e)} />
+                        <input type="text" id="managerPhone" placeholder="- 포함하여 입력" onChange={(e)=>handleChangeStore(e)} />
+                        {!isManagerPhone && managerPhoneError && <p style={{ color: 'red' }} className="small-text">{managerPhoneError}</p>}
                     </div>
 
                     <div className="input-group">

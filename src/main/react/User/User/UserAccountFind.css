@@ -1,12 +1,12 @@
 .user-account-find {
     background-color: white;
-    padding: 20px;
+    padding: 10px;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 .user-account-find form {
@@ -36,7 +36,7 @@
     text-align: center;
     font-size: 14px;
     color: #333;
-    margin-bottom: 50px;
+    margin-bottom: 10px;
 }
 .user-account-find-toggle > button:nth-child(2) {
     width: 60%;
@@ -47,7 +47,7 @@
 
 #find-id-btn {
     font-size: 15px;
-    background-color: #4653C0;
+    background-color: #727272;
     color: #fff;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -88,7 +88,7 @@
 }
 
 .form-group input {
-    width: 60%;
+    width: 80%;
     padding: 10px 10px 10px 5px;
     font-size: 16px;
     border: none;
@@ -97,6 +97,7 @@
     box-sizing: border-box;
     outline: none;
     color: #333;
+    margin-bottom: 10px;
 }
 
 /* 자동 완성으로 input 필드 채우면 색상이 제멋대로 변경되는 걸 방지시킴 */
@@ -111,7 +112,7 @@
     font-weight: normal;
     position: absolute;
     pointer-events: none;
-    left: 20%;
+    left: 10%;
     top: 10px;
     transition: all 0.2s ease;
 }
@@ -120,8 +121,8 @@
 input:focus ~ label, input.used ~ label {
     top: -20px;
     transform: scale(0.75);
-    left: 20%;
-    color: #4a89dc;
+    left: 10%;
+    color: #727272;
     font-size: 20px;
     font-weight: bold;
 }
@@ -130,8 +131,9 @@ input:focus ~ label, input.used ~ label {
 .bar {
     position: relative;
     display: block;
-    width: 60%;
+    width: 80%;
     margin: 0 auto;
+    margin-bottom: 10px;
 }
 
 .bar:before, .bar:after {
@@ -140,8 +142,9 @@ input:focus ~ label, input.used ~ label {
     width: 0;
     bottom: 1px;
     position: absolute;
-    background: #4a89dc;
+    background: #727272;
     transition: all 0.2s ease;
+    margin-bottom: 10px;
 }
 
 .bar:before {
@@ -172,7 +175,7 @@ input:focus ~ .highlight {
 }
 
 @keyframes inputHighlighter {
-    from { background: #4a89dc; }
+    from { background: #727272; }
     to   { width: 0; background: transparent; }
 }
 
@@ -182,8 +185,7 @@ input:focus ~ .highlight {
     width: 60%;
     height: 50px;
     padding: 10px;
-    background: rgb(146,169,255);
-    background: linear-gradient(207deg, rgba(146,169,255,1) 0%, rgba(53,58,148,1) 100%);
+    background: #727272;
     color: white;
     font-size: 16px;
     border: none;

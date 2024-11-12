@@ -135,7 +135,7 @@ function UserStoreDetail() {
 
     if (!userId) {
       alert("로그인 후 이용 가능한 서비스입니다.");
-      //window.location.href = "/UserLoginPage.user";
+      window.location.href = "/UserLoginPage.user";
       return;
     }
 
@@ -232,7 +232,12 @@ function UserStoreDetail() {
     setSelectedImage(null);
   };
 
-
+  const defaultPhotos = [
+    'https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731331851/bznpxzxdgutdtextodq0.png', // 기본 사진 경로 1
+    'https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731331851/bznpxzxdgutdtextodq0.png', // 기본 사진 경로 2
+    'https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731331851/bznpxzxdgutdtextodq0.png'  // 기본 사진 경로 3
+  ];
+  
 
   const formatServiceStartDate = (dateString) => {
     const date = new Date(dateString);
@@ -436,7 +441,10 @@ function UserStoreDetail() {
   const handleGoBack = () => {
     window.history.back();
   };
-
+  const photosToDisplay = [
+    ...Array.from(new Set(reviewPhotoList.map(photo => photo.reviewImgUrl))),
+    ...defaultPhotos
+  ].slice(0, 3);
 
   const uniquePhotos = reviewPhotoList
   .map((photo) => photo.reviewImgUrl) // reviewImgUrl만 추출
@@ -756,19 +764,19 @@ function UserStoreDetail() {
 
 
 <div className='photo-rating-box'>
-                <div className="photo-review">
-                {Array.from(new Set(reviewPhotoList.map(photo => photo.reviewImgUrl))).slice(0, 3).map((uniqueUrl, index) => (
-  <div className="photo-item" key={index}>
-    <img src={uniqueUrl} alt="Review Photo" />
-    {index === 2 && (
-      <div className="photo-item more" onClick={() => setActiveSection('photo')}>
-        +더보기
-      </div>
-    )}
-  </div>
-))}
 
-                </div>
+<div className="photo-review">
+  {photosToDisplay.map((url, index) => (
+    <div className="photo-item" key={index}>
+      <img src={url} alt="Review Photo" />
+      {index === 2 && reviewPhotoList.length > 3 && (
+        <div className="photo-item more" onClick={() => setActiveSection('photo')}>
+          +더보기
+        </div>
+      )}
+    </div>
+  ))}
+</div>
                 <div className="total-rating">
 
 {[...Array(5)].map((_, index) => (

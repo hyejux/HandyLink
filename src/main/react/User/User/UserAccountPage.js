@@ -133,7 +133,7 @@ function UserAccountPage () {
 
 
                 <div className="settings-menu" onClick={() =>
-                    isLoggedIn ? window.location.href = '/UserMyReview.user' : window.location.href = '/UserLoginPage.user'
+                    isLoggedIn ? window.location.href = '/UserMyReservationList.user' : window.location.href = '/UserLoginPage.user'
                 }>
                     <ul>
                         <li>

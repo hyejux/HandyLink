@@ -10,7 +10,7 @@
 
 .search-top {
     overflow: hidden;
-    padding: 10px;
+    padding: 10px 10px 0px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -25,7 +25,6 @@
     float: left;
     font-size: 20px;
     font-weight: bold;
-    color: #fd8517;
 }
 
 .search-top .right {
@@ -63,11 +62,14 @@
 .search-btn {
     border: none;
     cursor: pointer;
+    font-size: 15px;
+    background: #eeeeee;
+    padding: 0;
 }
 
 .search-bar .bi {
     font-size: 15px;
-    margin: 10px;
+    color: #777;
 }
 
 /* 채팅 목록 컨테이너 */
@@ -105,14 +107,13 @@
     align-items: center;
     height: 80px;
     background-color: #fff;
-    border: 1px solid #eee;
+    border: 1px solid #b3b3b3;
     border-radius: 12px;
     padding: 0px 10px;
     cursor: pointer;
     touch-action: pan-x;
     user-select: none;
-    margin: 18px 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 18px 10px;
 }
 
 .inquiry-item:hover {
@@ -133,7 +134,7 @@
 .inquiry-title {
     font-size: 16px;
     font-weight: bold;
-    margin: 0;
+    margin: 1px;
 }
 
 .chat-preview {

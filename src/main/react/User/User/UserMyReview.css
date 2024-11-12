@@ -1,6 +1,6 @@
 
 .reviews-container {
-    background-color: #ffffff;
+    background-color: #f0f4f8;
     width: 90%;
     max-width: 500px;
     border-radius: 8px;
@@ -26,7 +26,7 @@
     align-items: flex-start;
     margin-top: 20px;
     padding: 10px;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     border-radius: 8px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }

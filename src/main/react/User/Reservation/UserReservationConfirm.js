@@ -94,10 +94,10 @@ function UserReservationConfirm() {
       }
     }, 0);
   };
-    // 뒤로가기 추가
-    const handleGoBack = () => {
-      window.history.back();
-    };
+  // 뒤로가기 추가
+  const handleGoBack = () => {
+    window.history.back();
+  };
 
 
   //   
@@ -166,10 +166,8 @@ function UserReservationConfirm() {
   console.log(categories);
 
 
-  // 로딩화면 부분
- const [isLoading, setIsLoading] = useState(false); // 로딩 상태
- const [countdown, setCountdown] = useState(3);
-  
+
+
 
   useEffect(() => {
     if (isLoading) {
@@ -340,6 +338,27 @@ function UserReservationConfirm() {
   };
 
 
+  // 로딩 화면
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+  const [countdown, setCountdown] = useState(3); // 카운트다운 초기값 3초
+
+  useEffect(() => {
+    // 카운트다운 시작
+    if (isLoading && countdown > 0) {
+      const timer = setInterval(() => {
+        setCountdown(prev => prev - 1);
+      }, 1000);
+      // 카운트다운이 0에 도달하면 타이머 종료
+      if (countdown === 1) {
+        clearInterval(timer);
+        setIsLoading(false);
+      }
+      return () => clearInterval(timer);
+    }
+  }, [isLoading, countdown]);
+
+  
+
   return (
     <div>
       <div className="user-main-container">
@@ -383,9 +402,6 @@ function UserReservationConfirm() {
             </div>
           </div>
           <hr />
-
-
-
 
 
           <div className="user-content-container2">
@@ -570,6 +586,10 @@ function UserReservationConfirm() {
               </div>
             </div>
             <button className="payment-button" onClick={async () => {
+              if (!selectedPaymentMethod) {
+                alert("결제수단을 선택해주세요.");
+                return;
+              }
               if (selectedPaymentMethod === "bank_transfer") {
                 try {
                   const reservationNum = await handleReservation(selectedPaymentMethod);
@@ -590,14 +610,14 @@ function UserReservationConfirm() {
           {isLoading && (
             <div className="loading-overlay">
               <div className="loading-spinner">
-                <img src="../img/loading/loading.png"/>
+                <img src="../img/loading/loading.png" alt="Loading Spinner" />
               </div>
               <div className="countdown-timer">{countdown}</div>
               <div className="loading-text">예약 완료</div>
               <div className="loading-img-box">
                 <div className="loading-text2">[크리스마스홈데코] 지금부터 X-mas 분위기</div>
                 <div className="loading-text3">~ 2024.12.24 최대 30% 특가</div>
-                <img src="https://image.idus.com/image/files/4a28ea95cd9f4343bdabfb18f2d788c7_1080.jpg" />
+                <img src="https://image.idus.com/image/files/4a28ea95cd9f4343bdabfb18f2d788c7_1080.jpg" alt="Christmas Home Decor" />
               </div>
             </div>
           )}

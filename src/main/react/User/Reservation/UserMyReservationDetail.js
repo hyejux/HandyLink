@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { FaCalendar, FaClock } from 'react-icons/fa';
+import { format } from 'date-fns'
 import './UserMyReservationDetail.css';
 
 
@@ -16,10 +17,10 @@ function UserMyReservationDetail() {
   const [reservationDetail, setReservationDetail] = useState({});
   const [userId, setUserId] = useState('');
   const [userInfo, setUserInfo] = useState({});
+  const [showTerms, setShowTerms] = useState(false);
+  const [showRefund, setShowRefund] = useState(false);
 
 
-
-  
   useEffect(() => {
     const path = window.location.pathname;
     const pathSegments = path.split('/');
@@ -27,13 +28,13 @@ function UserMyReservationDetail() {
     setCateId(categoryId);
 
     axios.get(`/UserStoreDetail/getStoreMainCategory2/${categoryId}`)
-    .then(response => {
-      console.log(response.data);
-      setReservationList2(response.data);
-    })
-    .catch(error => {
-      console.log('Error Category', error);
-    });
+      .then(response => {
+        console.log(response.data);
+        setReservationList2(response.data);
+      })
+      .catch(error => {
+        console.log('Error Category', error);
+      });
 
 
     // 예약 정보 가져오기
@@ -119,29 +120,35 @@ function UserMyReservationDetail() {
     return `${date.getUTCFullYear()}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${String(date.getUTCDate()).padStart(2, '0')}`;
   };
 
+  const formatDate4 = (isoDateString) => {
+    const date = new Date(isoDateString);
+    date.setDate(date.getDate() + 2); // 1일 더하기
+    date.setHours(23, 59, 59, 999); // 자정 전, 23:59:59.999로 설정
+    const koreaTime = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+    return `${koreaTime.getFullYear()}.${String(koreaTime.getMonth() + 1).padStart(2, '0')}.${String(koreaTime.getDate()).padStart(2, '0')} ${String(koreaTime.getHours()).padStart(2, '0')}:${String(koreaTime.getMinutes()).padStart(2, '0')}:${String(koreaTime.getSeconds()).padStart(2, '0')}`;
+  };
+
 
   // 예약 취소 버튼 클릭 시 결제 상태 업데이트
   const cancelReservation = async () => {
     const reservationNo = cateId;
     const storeName = reservationList.length > 0 ? reservationList[0].storeName : '정보 없음';
-    
+
     try {
-        const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, { 
-            paymentStatus: "결제취소", 
-            storeName, 
-            reservationStatus: "취소(고객)" 
-        });
-        console.log("예약 취소 성공:", response.data);
-        alert("예약이 취소되었습니다.");
+      const response = await axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, {
+        paymentStatus: "결제취소",
+        storeName,
+        reservationStatus: "취소(고객)"
+      });
+      console.log("예약 취소 성공:", response.data);
+      alert("예약이 취소되었습니다.");
 
-        window.location.reload();
+      window.location.reload();
     } catch (error) {
-        console.error("예약 취소 중 오류 발생:", error);
-        alert("예약 취소에 실패했습니다. 다시 시도해주세요.");
+      console.error("예약 취소 중 오류 발생:", error);
+      alert("예약 취소에 실패했습니다. 다시 시도해주세요.");
     }
-};
-
-
+  };
 
 
   // 계좌번호 복사
@@ -156,63 +163,50 @@ function UserMyReservationDetail() {
         });
     }
   };
-  
+
+  const goToStoreDetail = (id) => {
+    window.location.href = `/userStoreDetail.user/${id}`;
+  }
+
+  // 토글 함수
+  const toggleTerms = () => setShowTerms(!showTerms);
+  const toggleRefund = () => setShowRefund(!showRefund);
 
   // ------------
 
   return (
     <div>
-
-
-{/*
+      {/*
         <div className="user-top-nav">
           <i className="bi bi-arrow-left"></i>
           <logo className="logo"> 주문 상세  </logo>
         </div>
-*/}
+        */}
 
+      <div className="user-content-container">
+        <div className='payment-date'>{formatDate2(reservationDetail.regTime)}</div>
+        <div className='payment-num'> 주문번호 {(reservationDetail.reservationNo)}</div>
+      </div>
 
-
-<div className="user-content-container">
-
-<div className='payment-date'> 주문번호 : {(reservationDetail.reservationNo)}</div>
-      <div className='payment-date'> 주문일 : {formatDate2(reservationDetail.regTime)}</div>
-  </div>
-   
- 
       <hr />
 
       <div className="user-content-container">
-
-      {/* <hr /> */}
-
-   <div className='store-name2'>    <i class="bi bi-shop-window"></i>  {reservationList.length > 0 ? reservationList[0].storeName : '정보 없음'}</div>
-
         <div className='service-box'>
-        {reservationList2 ? (
-   <div
-   className='user-content-container'
- >
-   <div className="user-reserve-menu">
-     <div className="user-reserve-menu-img">
-       <img src={`${reservationList2.imageUrl}`} alt="My Image" />
-     </div>
-     <div className="user-reserve-menu-content">
-       <div>{reservationList2.serviceName}</div>
-       <div>{reservationList2.serviceContent}</div>
-       {/* <div>{reservationList2.servicePrice} 원 ~</div> */}
-     </div>
-   </div>
- </div>
-
-        ) : (
-          <div>Loading...</div> // Display loading message until data is fetched
-        )}
-      </div>
-   
-
-
-        
+          {reservationList2 ? (
+            <div className="user-reserve-menu">
+              <div className="user-reserve-menu-img" onClick={() => goToStoreDetail(reservationList2.storeNo)}>
+                <img src={`${reservationList2.imageUrl}`} alt="My Image" />
+              </div>
+              <div className="user-reserve-menu-content">
+                <div className='store-name2' onClick={() => goToStoreDetail(reservationList2.storeNo)}><img src="../img/store.png" /> {reservationList.length > 0 ? reservationList[0].storeName : '정보 없음'}</div>
+                <div className="service-name2">{reservationList2.serviceName}</div>
+                <div className="service-content2">{reservationList2.serviceContent}</div>
+              </div>
+            </div>
+          ) : (
+            <div>Loading...</div>
+          )}
+        </div>
       </div>
 
       <hr />
@@ -222,7 +216,7 @@ function UserMyReservationDetail() {
         <>
           <div className="user-content-container">
             <div className='payment-info-top'>
-              <div className='deposit-date'>{formatDate2(reservationDetail.regTime)} 까지 입금해주세요.</div>
+              <div className='deposit-date'>{formatDate4(reservationDetail.regTime)} 까지 입금해주세요.</div>
             </div>
             <div className="payment-info-top">
               <div className="account-left">입금 대기금액</div>
@@ -233,8 +227,7 @@ function UserMyReservationDetail() {
             <div className="payment-info-top">
               <div className="account-left">입금 계좌</div>
               <div className="account-right">
-                {reservationList.length > 0 ? reservationList[0].accountBank : '정보 없음'}
-                {reservationList.length > 0 ? reservationList[0].accountNumber : '정보 없음'}
+                {reservationList.length > 0 ? reservationList[0].accountBank : '정보 없음'} {reservationList.length > 0 ? reservationList[0].accountNumber : '정보 없음'}
                 <button className='account-number-copy-btn' onClick={copyToClipboard}>
                   <i className="bi bi-copy"></i>
                 </button>
@@ -248,8 +241,8 @@ function UserMyReservationDetail() {
 
       <div className="user-content-container">
         <div className="info-row">
-          <div className="left"><i class="bi bi-calendar-check-fill"></i> {formatDate3(reservationDetail.regTime)} </div>
-          <div className="right"><i class="bi bi-clock-fill"></i>{(reservationDetail.reservationTime || '정보 없음').slice(0, 5)} </div>
+          <div className="left2"><i class="bi bi-calendar-check-fill"></i> {formatDate3(reservationDetail.regTime)} </div>
+          <div className="right2"><i class="bi bi-clock-fill"></i>{(reservationDetail.reservationTime || '정보 없음').slice(0, 5)} </div>
         </div>
       </div>
 
@@ -290,7 +283,7 @@ function UserMyReservationDetail() {
                 )}
 
 
-                <div className="info-row info-row2">
+                <div className="info-row2">
                   {isMiddleCategoryDifferent && (
                     <div className="left">
                       ⌞ {item.middleCategoryName}
@@ -316,7 +309,7 @@ function UserMyReservationDetail() {
       <div className="user-content-container">
         <div className='totalPrice'>
           <div className="info-row">
-            <div className="left">{refundInfo.length > 0 ? '환불금액' : '결제금액'}</div>
+            <div className="left3">{refundInfo.length > 0 ? '환불금액' : '결제금액'}</div>
             <div className="right">
               {refundInfo.length > 0 ? (
                 `${refundInfo[0].refundAmount.toLocaleString()} 원` // 환불금액
@@ -333,7 +326,7 @@ function UserMyReservationDetail() {
       {/* 요청사항 */}
       <div className="user-content-container">
         <div className="info-row">
-          <div className="left">요청사항</div>
+          <div className="left3">요청사항</div>
           <div className="right"> {reservationDetail.customerRequest} </div>
         </div>
       </div>
@@ -395,42 +388,45 @@ function UserMyReservationDetail() {
       </div>
 
       <hr />
-
+      
       {refundInfo.length === 0 && (
         <div className="user-content-container">
           <button className="reservation-cancel-btn" onClick={cancelReservation}>예약취소</button>
         </div>
       )}
 
-
-
-
-
-
-
       <hr />
 
       <div className="user-content-container">
-
-      <div className="info-row">
-          <div className="left">주의사항</div>
-          <div className="right"> {reservationDetail.customerRequest} </div>
+        <div className="info-row">
+          <div className="left">유의사항</div>
+          <div className="right" onClick={toggleTerms}>
+            <i className={`bi bi-chevron-${showTerms ? 'up' : 'down'}`}></i>
+          </div>
         </div>
-
-  </div>
-   
-
-      <hr />
+        {showTerms && (
+          <div className="info-content">
+            <p> <i className="bi bi-dot"></i> 예약 변경이나 취소는 고객과 업체 간의 협의를 통해 결정됩니다. </p>
+            <p> <i className="bi bi-dot"></i> 고객은 예약 전, 서비스 제공 조건 및 변경 가능 여부를 반드시 업체와 상의하여야 하며, 이로 인한 불이익을 방지하기 위해 사전에 충분히 확인해 주시기 바랍니다. </p>
+          </div>
+        )}
+      </div>
 
       <div className="user-content-container">
-      <div className="info-row">
+        <div className="info-row">
           <div className="left">환불규정</div>
-          <div className="right"> {reservationDetail.customerRequest} </div>
+          <div className="right" onClick={toggleRefund}>
+            <i className={`bi bi-chevron-${showRefund ? 'up' : 'down'}`}></i>
+          </div>
         </div>
-  </div>
-   
-
-      <hr />
+        {showRefund && (
+          <div className="info-content">
+            <p> <i className="bi bi-dot"></i> 예약 취소 및 변경은 고객과 업체 간의 합의에 의해 진행됩니다. </p>
+            <p> <i className="bi bi-dot"></i> 고객은 예약 후 변경이나 취소를 원할 경우, 해당 업체와 직접 연락하여 상호 협의 후 처리해야 합니다. </p>
+            <p> <i className="bi bi-dot"></i> 각 업체는 개별적인 취소 및 변경 정책을 운영하므로, 예약 전에 반드시 확인하시기 바랍니다. </p>
+          </div>
+        )}
+      </div>
 
 
     </div>

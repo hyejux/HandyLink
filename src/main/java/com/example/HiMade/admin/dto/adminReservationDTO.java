@@ -23,5 +23,6 @@ public class adminReservationDTO {
   private LocalDateTime ServiceStart;
   private String imageUrl;
   private String activated;
+  private Integer orderIndex;
 
 }

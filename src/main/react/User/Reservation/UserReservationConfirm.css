@@ -670,3 +670,54 @@ hr {
   object-fit: cover;
   border-radius: 5px;
 }
+
+
+.user-content-container {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px 25px;
+  box-shadow: none;
+  margin: 0;
+  border: none;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.info-row .left {
+  text-align: left;
+  flex: 1;
+}
+
+.info-row .right {
+  text-align: right;
+  flex: 1;
+}
+
+.info-row .bi {
+  /* color: #fd8517; */
+  margin-right: 10px;
+}
+
+
+.info-content {
+  padding: 10px 15px;
+  background-color: #f9f9f9;
+  font-size: 14px;
+}
+
+.bi-chevron-up,
+.bi-chevron-down {
+  transition: transform 0.3s ease;
+  margin: 0;
+  font-size: 14px;
+}
+
+.info-row:hover .bi-chevron-up,
+.info-row:hover .bi-chevron-down {
+  transform: scale(1.2);
+}

@@ -86,7 +86,7 @@ function AdminReserveManage() {
 
 
         axios.post('/adminReservation/getManageList', { storeNo: storeNo })
-        
+
             .then(response => {
                 console.log(response.data);
                 setReservationList(response.data);
@@ -179,13 +179,22 @@ function AdminReserveManage() {
     const handleStatusChange = (reservationNo, status, storeName) => {
         console.log(reservationNo, status);
         if (window.confirm(`${reservationNo} 주문건을 ${status}로 변경하시겠습니까?`)) {
-            const paymentStatus = (status === '확정') ? '결제완료' : (status.startsWith('취소')) ? '결제취소' : '';
+            // 결제 상태 결정
+            let paymentStatus = '';
+            if (status === '확정' || status === '완료') {
+                paymentStatus = '결제완료';  // '확정'일 때 결제완료로 설정
+            } else if (status.startsWith('취소')) {
+                paymentStatus = '결제취소';  // '취소'일 때 결제취소로 설정
+            }
 
+
+            // 예약 상태 업데이트
             axios.post('/adminReservation/updateStatus', {
                 reservationId: reservationNo,
                 newStatus: status,
             })
                 .then(response => {
+                    // 결제 상태 업데이트
                     return axios.post('/userPaymentStatus/updateStatus', null, {
                         params: {
                             reservationNo: reservationNo,
@@ -194,10 +203,12 @@ function AdminReserveManage() {
                     });
                 })
                 .then(response => {
+                    // 예약 상태 리스트 업데이트
                     setReservationList(prevList => prevList.map(item =>
                         item.reservationNo === reservationNo ? { ...item, reservationStatus: status } : item
                     ));
 
+                    // 결제 취소가 필요한 경우 환불 처리
                     if (paymentStatus === '결제취소') {
                         const customerOrCompanyCancel = (status === '취소(업체)') ? '취소(업체)' : '취소(고객)';
                         return axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, {
@@ -211,7 +222,9 @@ function AdminReserveManage() {
                     console.log('환불 처리 완료:', response.data);
                     setUpdatingReservationId(null);
                     setNewStatusMap(prev => ({ ...prev, [reservationNo]: '' })); // 해당 예약의 상태를 초기화
-                    window.location.reload(); // 페이지 리로드
+                })
+                .finally(() => {
+                    window.location.reload();
                 })
                 .catch(error => {
                     console.error('Error updating reservation, payment, or refund status:', error);
@@ -468,7 +481,7 @@ function AdminReserveManage() {
         // React 18에서 createRoot()와 render() 사용
         const root = ReactDOM.createRoot(printWindow.document.getElementById('print-content'));
         root.render(
-            <PrintReservationInfo reservation={reservation} reservationList={reservationDetail}/>
+            <PrintReservationInfo reservation={reservation} reservationList={reservationDetail} />
         );
 
         // 프린트 실행

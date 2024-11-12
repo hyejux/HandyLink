@@ -357,7 +357,15 @@ function UserReservationConfirm() {
     }
   }, [isLoading, countdown]);
 
-  
+
+  const [showTerms, setShowTerms] = useState(false);
+  const [showRefund, setShowRefund] = useState(false);
+
+  // 토글 함수
+  const toggleTerms = () => setShowTerms(!showTerms);
+  const toggleRefund = () => setShowRefund(!showRefund);
+
+
 
   return (
     <div>
@@ -507,37 +515,41 @@ function UserReservationConfirm() {
                 />
               </div>
             </div>
-            {/* <div className="user-reserve-title"></div>
-             <div className="user-content-container3">
-                <div> 요청사항 </div>
-                 <div>  <input
-              type="text"
-              value={requestText}
-              onChange={handleRequestChange}
-            /> </div> 
-             </div> */}
           </div>
           <hr />
 
-          <div className="user-content-container2">
-            <div className="user-reserve-title">주의사항</div>
-
-          </div>
-          <hr />
-
-          <div className="user-content-container2">
-            <div className="user-reserve-title">취소 환불 규정 </div>
-
-          </div>
-          <hr />
-
-          {/* <div className="user-content-container6">
-            <div className="user-content-last">
-              <button type="button" onClick={() => { submitBtn(); goToAdminPage(); }}>
-                다음 <i className="bi bi-chevron-right"></i>
-              </button>
+          <div className="user-content-container">
+            <div className="info-row">
+              <div className="left">유의사항</div>
+              <div className="right" onClick={toggleTerms}>
+                <i className={`bi bi-chevron-${showTerms ? 'up' : 'down'}`}></i>
+              </div>
             </div>
-          </div> */}
+            {showTerms && (
+              <div className="info-content">
+                <p> <i className="bi bi-dot"></i> 예약 변경이나 취소는 고객과 업체 간의 협의를 통해 결정됩니다. </p>
+                <p> <i className="bi bi-dot"></i> 고객은 예약 전, 서비스 제공 조건 및 변경 가능 여부를 반드시 업체와 상의하여야 하며, 이로 인한 불이익을 방지하기 위해 사전에 충분히 확인해 주시기 바랍니다. </p>
+              </div>
+            )}
+          </div>
+
+          <div className="user-content-container">
+            <div className="info-row">
+              <div className="left">환불규정</div>
+              <div className="right" onClick={toggleRefund}>
+                <i className={`bi bi-chevron-${showRefund ? 'up' : 'down'}`}></i>
+              </div>
+            </div>
+            {showRefund && (
+              <div className="info-content">
+                <p> <i className="bi bi-dot"></i> 예약 취소 및 변경은 고객과 업체 간의 합의에 의해 진행됩니다. </p>
+                <p> <i className="bi bi-dot"></i> 고객은 예약 후 변경이나 취소를 원할 경우, 해당 업체와 직접 연락하여 상호 협의 후 처리해야 합니다. </p>
+                <p> <i className="bi bi-dot"></i> 각 업체는 개별적인 취소 및 변경 정책을 운영하므로, 예약 전에 반드시 확인하시기 바랍니다. </p>
+              </div>
+            )}
+          </div>
+          <hr />
+
 
           {/* 결제 부분 */}
           <div className="user-content-container2">
@@ -621,6 +633,8 @@ function UserReservationConfirm() {
               </div>
             </div>
           )}
+
+
 
 
         </div>

@@ -131,6 +131,7 @@ public class AdminStoreController {
     //지정휴무-select
     @GetMapping("/getOffSet")
     public List<DayOffSet> getOffSet(@RequestParam Long storeNo){
+//        System.out.println();
         return adminStoreService.getOffSet(storeNo);
     }
 

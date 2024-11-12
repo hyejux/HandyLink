@@ -51,17 +51,27 @@ body {
 
 
 
-
+.no-reservation-message{
+  display: flex;
+  font-size: 16px;
+  text-align: center;
+  align-items: flex-end;
+  justify-content: center;
+  height: 300px;
+  background: #fff;
+  color: gray;
+}
 
 /* --------------------------------------------------- */
 
 
-.user-content-container {
+.user-content-container11 {
   background-color: white;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
   border: none;
 }
 
@@ -211,7 +221,7 @@ body {
   /* padding : 15px; */
   margin-bottom: 100px;
   /* border : 1px solid blue; */
-  background-color: #f0f4f8;
+  background-color: #F5F5F5;
 }
 
 
@@ -370,14 +380,17 @@ body {
 
 .search-top {
   overflow: hidden;
-  padding: 10px;
+  padding: 15px 15px 10px 15px;
   background-color: #fff;
+  border-bottom: 1px solid #ddd;
 }
 
 .search-top .left {
-  float: left;
+  display: flex;
+  gap: 10px;
   font-size: 20px;
   font-weight: bold;
+  /* justify-content: center; */
 }
 
 .search-top .right {

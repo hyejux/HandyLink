@@ -10,8 +10,8 @@
     /* border: 1px solid #ddd; */
     border-top: 2px solid #38414a;
     /* border-radius: 8px; */
-    background-color: #e7eaef69;
-    box-shadow: 0 2px 4px 0 #eee, 0 3px 5px 0 #eee;
+    background-color: #e7eaef33;
+    /* box-shadow: 0 2px 4px 0 #eee, 0 3px 5px 0 #eee; */
 }
 
 .section-container h2 {
@@ -161,6 +161,7 @@ input[type="time"], textarea, select, input[type="text"] {
 .sns-btn > button {
     border: 1px solid #2e3133;
     border-radius: 5px;
+    background-color: #fff;
 }
 .sns-row > label { width: 12%; }
 
@@ -225,7 +226,17 @@ input[type="time"], textarea, select, input[type="text"] {
     color: #ffffff;
     font-weight: bold;
     border-radius: 3px;
-    background-color: #2e3133;
+    background-color: #38414a;
+    cursor: pointer;
+    float: right;
+    margin-bottom: 10px;
+}
+.unsubscribe-btn {
+    border: 1px solid #1d2830;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 3px;
+    background-color: #38414a;
     cursor: pointer;
     float: right;
     margin-bottom: 10px;

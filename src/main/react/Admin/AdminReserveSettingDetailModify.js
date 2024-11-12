@@ -293,18 +293,15 @@ const handleTimeNumChange = (e) => {
   const handleComplete = async () => {
 
     const imageUrl = await handleUpload(); // 이미지 URL을 기다림
-    if (!imageUrl) return; // 업로드 실패 시 함수 종료
-   
 
+  // 업로드 실패 시 기존 이미지 링크 사용
+    const finalImageUrl = imageUrl || imagePreview;
    
     if (reserveAdd.serviceName === ''){
       alert("서비스 명을 입력해주세요.")
       return;
     }else if (reserveAdd.servicePrice === 0) {
       alert("서비스 가격을 입력해주세요.")
-      return;
-    }else if (file === null) {
-      alert("사진은 필수입니다.")
       return;
     }else if(reserveAdd.serviceContent === ''){
       alert("서비스 설명을 입력해주세요");
@@ -368,7 +365,7 @@ const handleTimeNumChange = (e) => {
    
         console.log('메인 카테고리 설정 성공:', response.data);
         const formData = new FormData();
-        formData.append('dataUrl', imageUrl); // Cloudinary 이미지 URL을 추가
+        formData.append('dataUrl', finalImageUrl); // Cloudinary 이미지 URL을 추가
         formData.append('category_id', response.data);
     
         // 두 번째 요청: 카테고리 이미지 업로드
@@ -382,7 +379,7 @@ const handleTimeNumChange = (e) => {
         console.log('파일 업로드 성공:', response.data);
         console.log('파일 업로드 성공:', response.data);
         alert("서비스 등록이 완료되었습니다.");
-        // window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
+        window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
         
     })
     .catch(error => {

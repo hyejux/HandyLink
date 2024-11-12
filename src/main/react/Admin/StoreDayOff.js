@@ -208,6 +208,9 @@ function StoreDayOff() {
     };
 
     return (
+        <>
+    
+        <div className="main-content-title"> 휴무 관리 </div>
     <div className="store-day-off-container">
 
         <div className="day-off-calendar">
@@ -243,6 +246,8 @@ function StoreDayOff() {
         <div className="day-off-fix">
             <div className="day-off-title">
                 <i className="bi bi-chevron-double-right"><h3>고정휴무</h3></i>
+            
+             
                 <i className="bi bi-pencil-square" onClick={handleEditClick} style={{display: isEditing ? 'none' : 'inline'}}/>
                 {isEditing && (
                     <button type="button" className="day-off-btn" onClick={handleRegistDay}>
@@ -250,6 +255,7 @@ function StoreDayOff() {
                     </button>
                 )}
             </div>
+            <hr/>
 
             <div className="check-day-off">
                 {['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'].map(day => (
@@ -275,6 +281,7 @@ function StoreDayOff() {
 
         <div className="day-off-set-list">
             <i className="bi bi-chevron-double-right"><h3>지정휴무 목록</h3></i>
+            <hr/>
             {offSet.length > 0 ? (
                 <table>
                     <thead>
@@ -310,6 +317,7 @@ console.log("offSetItem:", offSetItem),
             )}
         </div>
     </div>
+    </>
 );
 }
 

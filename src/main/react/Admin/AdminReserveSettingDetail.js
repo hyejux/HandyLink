@@ -488,12 +488,12 @@ const [currentTime, setCurrentTime] = useState('');
 
 
 
-      <div className="main-content-title">예약 서비스 추가</div>
-      <div className="main-btns">
+      <div className="main-content-title">주문 상품 추가</div>
+      <div className="main-btns2">
         <button type="button" className="btn-st" onClick={handleComplete}>완료</button>
       </div>
       <div className="main-slot">
-      <div>서비스 시작일</div>
+      <div> 주문 시작일 </div>
 
       {/* 날짜 입력 필드 */}
       <input 
@@ -528,7 +528,7 @@ const [currentTime, setCurrentTime] = useState('');
         <input type="number" value={timeNumCase} onChange={handleTimeNumChange} />
       </div> */}
       <div className="main-contents">
-      <div className="reserve-container">
+      <div className="reserve-container22">
       <div className="reserve-img">
       <img 
         src={imagePreview || defaultImage}  // imagePreview가 없으면 기본 이미지 사용

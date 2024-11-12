@@ -5,6 +5,9 @@ import DatePicker from 'react-datepicker';
 import Calendar from 'react-calendar';
 import { format, addHours } from 'date-fns';
 import "./UserReservationDate.css";
+// import Calendar from 'react-calendar';
+import moment from 'moment';
+// import 'react-calendar/dist/Calendar.css';
 
 function UserReservationDate() {
   const [cateId, setCateId] = useState(0);
@@ -28,7 +31,14 @@ function UserReservationDate() {
     loadFromSessionStorage(); // 저장된 데이터를 불러옴
   }, []);
 
+  const [offDay, setOffDay] = useState([]); //고정휴무 불러오기
+  const [setDay, setSetDay] = useState([]); //고정휴무 불러오기
 
+  const storeNo = sessionStorage.getItem('storeNo');
+  const storedData = sessionStorage.getItem('storeInfo');
+  // 가져온 데이터를 변환하여 바로 사용
+  const storeInfo = storedData ? JSON.parse(storedData) : null;
+  console.log(storeInfo);
 
 
   const [disabledDates, setDisabledDates] = useState([]);
@@ -67,7 +77,22 @@ function UserReservationDate() {
       }
       )
        
-
+      axios
+      .get(`/adminStore/getOffDay?storeNo=${storeNo}`)
+      .then(response => {
+        console.log('고정', response.data); // 응답 데이터 전체를 출력
+        setOffDay(response.data);
+      }
+      )
+       
+      axios
+      .get(`/adminStore/getOffSet?storeNo=${storeNo}`)
+      .then(response => {
+        console.log('지정', response.data); // 응답 데이터 전체를 출력
+        setSetDay(response.data);
+      }
+      )
+       
 
 
   }, []);
@@ -210,12 +235,6 @@ function UserReservationDate() {
   
 
 
-  const storeNo = sessionStorage.getItem('storeNo');
-  const storedData = sessionStorage.getItem('storeInfo');
-  // 가져온 데이터를 변환하여 바로 사용
-  const storeInfo = storedData ? JSON.parse(storedData) : null;
-  console.log(storeInfo);
-
 
   
   
@@ -287,25 +306,69 @@ function UserReservationDate() {
           //   const slot = dateTime.find(slot => slot.date === formattedDate); // 해당 날짜의 슬롯 찾기
   //   return slot && slot.slotStatusCount === slot.slotCount; // 슬롯이 모두 채워졌다면 true 반환
   // };
+
+
+
+  
   const getTileClass = ({ date }) => {
     const formattedDate = date.toLocaleDateString('en-CA'); // 'yyyy-mm-dd' 형식으로 변환 (로컬 시간 기준)
-    const slot = dateTime2.find((slot) => slot.reservationSlotDate === formattedDate); // 해당 날짜의 예약 정보 찾기
     
-    // slot을 찾았는지, 그리고 slotStatusCount와 slotCount가 정확히 일치하는지 확인
+    // 고정휴무일 확인
+    const isOffDay = offDay.includes(formattedDate) || setDay.some((day) => {
+      const dayOffStart = new Date(day.dayOffStart).toLocaleDateString('en-CA');
+      const dayOffEnd = new Date(day.dayOffEnd).toLocaleDateString('en-CA');
+      return formattedDate >= dayOffStart && formattedDate <= dayOffEnd; // 해당 날짜가 고정휴무 기간에 포함되는지 체크
+    });
+    // const formattedDate = date.toLocaleDateString('en-CA'); // 'yyyy-mm-dd' 형식으로 변환 (로컬 시간 기준)
+  
+    // 날짜의 요일을 한글로 가져오기 (ex: '월요일', '화요일' 등)
+    const dayOfWeek = date.toLocaleString('ko-KR', { weekday: 'long' });
+  
+    // 고정휴무일 확인 (요일 기준)
+    const isOffDay2 = offDay.includes(dayOfWeek);
+  
+    if (isOffDay2) {
+      return 'reserved'; // 고정휴무일인 경우 'off-day' 클래스 반환
+    }
+  
+    if (isOffDay) {
+      return 'reserved'; // 고정휴무일인 경우 'off-day' 클래스 반환
+    }
+  
+    // 예약 정보 확인
+    const slot = dateTime2.find((slot) => slot.reservationSlotDate === formattedDate); // 해당 날짜의 예약 정보 찾기
     if (slot) {
-      console.log(`Checking slot for date ${formattedDate}:`, slot);
+      // console.log(`Checking slot for date ${formattedDate}:`, slot);
       if (slot.slotStatusCount === slot.slotCount) {
         return 'reserved'; // 예약이 모두 찼다면 'reserved' 클래스 반환
       }
     }
-    
+  
     return ''; // 예약이 찼지 않거나 slot이 없으면 빈 문자열 반환
   };
+  
   
     // 뒤로가기 추가
     const handleGoBack = () => {
       window.history.back();
     };
+
+
+    // const [date, setDate] = useState(new Date());
+    const [noSlotsMessage, setNoSlotsMessage] = useState(false);
+  
+
+    const handleDateClick = (selectedDate) => {
+      setDate(selectedDate);
+    
+      // 선택한 날짜가 'reserved' 클래스인지 확인
+      const isReserved = getTileClass({ date: selectedDate }) === 'reserved';
+      setNoSlotsMessage(isReserved); // 'reserved' 날짜를 클릭하면 예약 불가 메시지 표시
+      if (isReserved) {
+        console.log('예약불가');
+      }
+    };
+    
 
   return (
     <div className="user-main-container">
@@ -315,93 +378,102 @@ function UserReservationDate() {
       </div>
 
       <div className="user-main-content">
-        <div className="user-content-first">
-          <div className="user-content-first-img"></div>
-          <div className="user-content-first-content">
-            <div className="store-name">
-              <div>{storeInfo.storeName}</div>
-              <button type="button"><i className="bi bi-star"></i></button>
+      <div className="user-content-first-content">
+              <div className="store-name-box">
+                <div style={{ display: 'flex' }}>
+                  {/*<button type="button">
+                    <i className="bi bi-star"></i>
+                  </button>*/}
+
+                  {/* <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(storeInfo); }}>
+                    <i className={`bi bi-heart-fill ${isBookmarked.includes(storeInfo.storeNo) ? 'like' : ''}`}></i>
+                  </button> */}
+
+                  <div className="store-name">{storeInfo.storeName}</div>
+                </div>
+                {/* <button type="button" onClick={handleInquiryClick}><i className="bi bi-chat-dots"></i></button>문의하기 버튼 */}
+              </div>
+              <div className="store-basic-info">
+                <div className="store-addr"> <i className="bi bi-shop"></i> {storeInfo.addr}   {storeInfo.addrdetail}</div>
+              </div>
+              {/* <hr /> */}
+              <div className="store-basic-info"><i className="bi bi-alarm-fill"></i> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
+              <div className="store-basic-info"><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
             </div>
-            <div><i className="bi bi-shop"></i> {storeInfo.addr} {storeInfo.addrdetail} </div>
-            <hr />
-            <div><i className="bi bi-alarm-fill"></i> {storeInfo.storeOpenTime} ~ {storeInfo.storeCloseTime} </div>
-            <div><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
-          </div>
-        </div>
-        <div className="user-content-container2">
-          <div className="user-reserve-menu">
-            <div className="user-reserve-menu-img">
-              <img src={`${reserveModi.imageUrl}`} alt="My Image" />
-            </div>
-            <div className="user-reserve-menu-content">
-              <div>{reserveModi.serviceName} </div>
-              <div>
-                {reserveModi.serviceContent}
+
+            <div className="user-content-container10">
+            <div className="user-reserve-menu">
+              <div className="user-reserve-menu-img">
+                <img src={`${reserveModi.imageUrl}`} alt="My Image" />
+              </div>
+              <div className="user-reserve-menu-content">
+                <div>{reserveModi.serviceName} </div>
+                <div>
+                  {reserveModi.serviceContent}
+
+                </div>
+                <div> {reserveModi.servicePrice} 원 ~</div>
 
               </div>
-              <div> {reserveModi.servicePrice} 원 ~</div>
-
             </div>
           </div>
-        </div>
-
 
         <div className="user-content-container3">
           <div className="user-reserve-date-title">예약일 선택</div>
           <hr />
 
           <div className="user-reserve-date-calender">
-            <Calendar
-              onChange={handleDateChange}
-              locale="en"
-              value={date}
-              next2Label={null}
-              prev2Label={null}
-              tileDisabled={tileDisabled}
-              tileClassName={getTileClass} // tileClassName을 사용하여 날짜 스타일링
-            // 비활성화 로직 적용
+        
+          <div>
 
-            // formatDay={(locale, date) => moment(date).format('D')}
-            />
+            
+      <Calendar
+        onChange={handleDateChange}
+        value={date}
+        onClickDay={handleDateClick} // 날짜 클릭 시 이벤트
+        locale="en-US" // 미국 로케일 설정 (일요일부터 시작)
+        next2Label={null}
+        prev2Label={null}
+        tileDisabled={tileDisabled}
+        tileClassName={getTileClass} // 날짜 스타일링
+        formatDay={(locale, date) => moment(date).format('D')} // 날짜 표시 형식 (예: 1, 2, 3 등) 
+      />
+    </div>
           </div>
+
+
+
           {dateTime.map((slot) => (
-            slot.slotStatusCount !== slot.slotCount || slot.slotCount !== 0 ? (
-              <div key={slot.reservationSlotKey}>
-                {/* <button type="button">
-                  <div>임시) 해당 날짜 슬롯 상태: ({slot.slotStatusCount} / {slot.slotCount})</div>
-                </button> */}
-
-                <div className="user-reserve-date-time">
-                  {timeSlots.map((timeSlot, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => {
-                        handleSlotClick(index);  // 슬롯 선택 관리
-                        handleSlotClick2(timeSlot.time); // 슬롯 시간 출력
-                        handleSlotClick3(slot.reservationSlotKey);
-                      }}
-                      disabled={disabledTimes.includes(timeSlot.time)} // 비활성화 조건 추가
-                      style={{
-                        backgroundColor: selectedSlot === index ? '#fd8517' : 'transparent',
-                        color: selectedSlot === index ? 'white' : 'black',
-                        opacity: disabledTimes.includes(timeSlot.time) ? 0.5 : 1, // 비활성화된 슬롯의 투명도 조절
-                      }}
-                    >
-                      {timeSlot.time} {/* 슬롯 시간 표시 */}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              // <div key={slot.reservationSlotKey} style={{ display: 'none' }} > 
-
-              <h3> 예약 가능한 시간이 없습니다. 다른 날짜를 선택해주세요. </h3>
-
-              // </div> // 예약이 가득 차면 숨김
-
-            )
-          ))}
+  !noSlotsMessage ? (
+    <div key={slot.reservationSlotKey}>
+      <div className="user-reserve-date-time">
+        {timeSlots.map((timeSlot, index) => (
+          <button
+            key={index}
+            type="button"
+            onClick={() => {
+              handleSlotClick(index); // 슬롯 선택 관리
+              handleSlotClick2(timeSlot.time); // 슬롯 시간 출력
+              handleSlotClick3(slot.reservationSlotKey);
+            }}
+            disabled={disabledTimes.includes(timeSlot.time)} // 비활성화 조건 추가
+            style={{
+              backgroundColor: selectedSlot === index ? '#fd8517' : 'transparent',
+              color: selectedSlot === index ? 'white' : 'black',
+              opacity: disabledTimes.includes(timeSlot.time) ? 0.5 : 1, // 비활성화된 슬롯의 투명도 조절
+            }}
+          >
+            {timeSlot.time} {/* 슬롯 시간 표시 */}
+          </button>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div className='msg1'>
+      예약 가능한 시간이 없습니다. <br /> 다른 날짜를 선택해주세요.
+    </div>
+  )
+))}
 
         </div>
         <div className="user-content-container3">
@@ -417,13 +489,7 @@ function UserReservationDate() {
         </div>
       </div>
 
-      <div className="user-bottom-nav">
-        <a href="#"><span>메인</span></a>
-        <a href="#"><span>검색</span></a>
-        <a href="#"><span>예약</span></a>
-        <a href="#"><span>문의</span></a>
-        <a href="#"><span>MY</span></a>
-      </div>
+    
     </div>
   );
 };

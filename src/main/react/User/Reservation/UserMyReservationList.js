@@ -94,7 +94,7 @@ function UserMyReservationList() {
       <div className="user-main-content" >
 
       <div className="search-top">
-            <div className='left'>예약 내역</div>
+            <div className='left'> 예약 내역</div>
             
           </div>
 
@@ -104,7 +104,7 @@ function UserMyReservationList() {
 
 
         {reservationList.map((value, index) => (
-          <div className="user-content-container" key={index} onClick={() => { goToUserPage(value.reservationNo) }}>
+          <div className="user-content-container11" key={index} onClick={() => { goToUserPage(value.reservationNo) }}>
             <div className="reservation-header">
             <span className={`reservation-status ${
                 value.reservationStatus === '입금대기' || value.reservationStatus === '대기' ? 'status-pending' : 

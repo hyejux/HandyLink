@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 
 export default function BasicMap({ storeLocation, storeName }) {
-    const initialZoomLevel = 3; // 초기 줌 레벨
+    const initialZoomLevel = 3;
     const [currentPosition, setCurrentPosition] = useState(null);
     const [map, setMap] = useState(null);
-    const [infowindow, setInfowindow] = useState(null); // 인포윈도우 상태
-    const [isLargeMap, setIsLargeMap] = useState(false);
+    const [infowindow, setInfowindow] = useState(null);
+    const [marker, setMarker] = useState(null); // 마커 상태 추가
 
     useEffect(() => {
+        if (map) return; // 지도 객체가 이미 생성되었으면 다시 생성하지 않음
+
         const existingScript = document.getElementById('kakao-map-sdk');
         if (!existingScript) {
             const script = document.createElement('script');
@@ -21,31 +23,38 @@ export default function BasicMap({ storeLocation, storeName }) {
                     center: new window.kakao.maps.LatLng(storeLocation.lat, storeLocation.lng),
                     level: initialZoomLevel,
                 });
-                setMap(kakaoMap);
+                setMap(kakaoMap); // 지도 상태 설정
 
+                // 마커 생성
                 const markerPosition = new window.kakao.maps.LatLng(storeLocation.lat, storeLocation.lng);
                 const markerImage = new window.kakao.maps.MarkerImage(
                     'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
                     new window.kakao.maps.Size(24, 35)
                 );
-                const marker = new window.kakao.maps.Marker({
+                const newMarker = new window.kakao.maps.Marker({
                     position: markerPosition,
                     map: kakaoMap,
                     image: markerImage,
                 });
+                setMarker(newMarker); // 마커 상태 설정
 
+                // 인포윈도우 생성
                 const infowindowContent = `<div style="padding:5px; font-size:12px; max-width: 150px; white-space: normal;">${storeName}</div>`;
-                const infowindowInstance = new window.kakao.maps.InfoWindow({
+                const newInfowindow = new window.kakao.maps.InfoWindow({
                     content: infowindowContent,
                     removable: true,
                 });
-                setInfowindow(infowindowInstance);
-                infowindowInstance.open(kakaoMap, marker);
+                setInfowindow(newInfowindow); // 인포윈도우 상태 설정
 
-                window.kakao.maps.event.addListener(marker, 'click', () => {
-                    infowindowInstance.open(kakaoMap, marker);
+                // 마커 클릭 시 인포윈도우 열기
+                window.kakao.maps.event.addListener(newMarker, 'click', () => {
+                    newInfowindow.open(kakaoMap, newMarker);
                 });
 
+                // 지도 중심을 가게 위치로 설정
+                newInfowindow.open(kakaoMap, newMarker);
+
+                // 현재 위치 가져오기
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
                         (position) => {
@@ -72,9 +81,16 @@ export default function BasicMap({ storeLocation, storeName }) {
                 document.head.removeChild(script);
             };
         }
-    }, [storeLocation]); // storeLocation이 변경될 때마다 다시 실행
+    }, [storeLocation, storeName, map]); // map 상태가 없을 때만 실행
 
-    // 내 위치로 돌아가기 위한 함수
+    useEffect(() => {
+        if (infowindow && marker) {
+            const infowindowContent = `<div style="padding:5px; font-size:12px; max-width: 150px; white-space: normal;">${storeName}</div>`;
+            infowindow.setContent(infowindowContent);
+            infowindow.open(map, marker);
+        }
+    }, [storeName, infowindow, marker, map]); // storeName이 변경될 때마다 인포윈도우 내용 갱신
+
     const goToCurrentPosition = () => {
         if (currentPosition && map) {
             map.setCenter(new window.kakao.maps.LatLng(currentPosition.lat, currentPosition.lng));
@@ -84,28 +100,31 @@ export default function BasicMap({ storeLocation, storeName }) {
         }
     };
 
-    // 가게 위치로 가기 위한 함수
     const goToStoreLocation = () => {
-        if (map) {
+        if (map && infowindow && marker) {
             map.setCenter(new window.kakao.maps.LatLng(storeLocation.lat, storeLocation.lng));
             map.setLevel(initialZoomLevel);
-            // 인포윈도우 열기
-            infowindow && infowindow.open(map, new window.kakao.maps.Marker({
+
+            // 기존 마커가 있으면 지도에서 제거 후 새로운 마커로 갱신
+            marker.setMap(null);  // 기존 마커 제거
+
+            const newMarker = new window.kakao.maps.Marker({
                 position: new window.kakao.maps.LatLng(storeLocation.lat, storeLocation.lng),
                 map: map,
                 image: new window.kakao.maps.MarkerImage(
                     'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
-                    new window.kakao.maps.Size(24, 35) // 마커 크기
-                )
-            }));
+                    new window.kakao.maps.Size(24, 35)
+                ),
+            });
+
+            // 새로운 마커로 상태 업데이트
+            setMarker(newMarker);
+
+            // 인포윈도우 열기
+            infowindow.open(map, newMarker);
         } else {
             alert("지도가 준비되지 않았습니다.");
         }
-    };
-
-    // 지도 크기 토글 함수
-    const toggleMapSize = () => {
-        setIsLargeMap(!isLargeMap);
     };
 
     return (

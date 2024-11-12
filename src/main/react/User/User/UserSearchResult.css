@@ -204,6 +204,7 @@
   justify-content: space-between;
   align-items: center;
   margin: 10px 0;
+  padding: 0 5px;
 }
 
 .sub-content-option {
@@ -272,6 +273,8 @@
 
 .result-list-content-img-box img {
   border-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
   width: 100%;
   height: 100%;
   object-fit: cover

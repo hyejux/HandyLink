@@ -182,6 +182,8 @@ function UserSearch() {
     }
   }, [store, currentPosition]);
 
+ 
+
   return (
     <div className="user-main-container">
 

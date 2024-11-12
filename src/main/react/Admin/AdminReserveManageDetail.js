@@ -93,12 +93,21 @@ function AdminReserveManageDetail() {
     return `${date.getUTCFullYear()}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${String(date.getUTCDate()).padStart(2, '0')} ${String(date.getUTCHours() + 9).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}:${String(date.getUTCSeconds()).padStart(2, '0')}`;
   };
 
+
   // 예약 상태 변경
+  const [newStatusMap, setNewStatusMap] = useState({});
+
   const handleStatusChange = (reservationNo, status, storeName) => {
     console.log(reservationNo, status);
     if (window.confirm(`${reservationNo} 주문건을 ${status}로 변경하시겠습니까?`)) {
       // 결제 상태 결정
-      const paymentStatus = (status === '확정') ? '결제완료' : (status.startsWith('취소')) ? '결제취소' : '';
+      let paymentStatus = '';
+      if (status === '확정' || status === '완료') {
+        paymentStatus = '결제완료';  // '확정'일 때 결제완료로 설정
+      } else if (status.startsWith('취소')) {
+        paymentStatus = '결제취소';  // '취소'일 때 결제취소로 설정
+      }
+
 
       // 예약 상태 업데이트
       axios.post('/adminReservation/updateStatus', {
@@ -115,11 +124,12 @@ function AdminReserveManageDetail() {
           });
         })
         .then(response => {
+          // 예약 상태 리스트 업데이트
           setReservationList(prevList => prevList.map(item =>
             item.reservationNo === reservationNo ? { ...item, reservationStatus: status } : item
           ));
 
-          // 결제취소일 경우 환불 처리
+          // 결제 취소가 필요한 경우 환불 처리
           if (paymentStatus === '결제취소') {
             const customerOrCompanyCancel = (status === '취소(업체)') ? '취소(업체)' : '취소(고객)';
             return axios.post(`/userPaymentCancel/updatePaymentStatus/${reservationNo}`, {
@@ -131,22 +141,21 @@ function AdminReserveManageDetail() {
         })
         .then(response => {
           console.log('환불 처리 완료:', response.data);
-          setUpdatingReservationId(null); // 업데이트 완료 후 ID 초기화
-          setNewStatus(''); // 새로운 상태 초기화
-         
-          location.reload();
-
+          setUpdatingReservationId(null);
+          setNewStatusMap(prev => ({ ...prev, [reservationNo]: '' })); // 해당 예약의 상태를 초기화
+        })
+        .finally(() => {
+          window.location.reload();
         })
         .catch(error => {
           console.error('Error updating reservation, payment, or refund status:', error);
-          location.reload();
-
         });
     } else {
       setUpdatingReservationId(null);
-      setNewStatus('');
+      setNewStatusMap(prev => ({ ...prev, [reservationNo]: '' })); // 상태 초기화
     }
   };
+
 
 
   return (
@@ -162,8 +171,8 @@ function AdminReserveManageDetail() {
               onChange={(e) => {
                 const newStatusValue = e.target.value;
                 setNewStatus(newStatusValue);
-                // 상태 변경 후 업데이트된 상태를 반영하기 위해 useEffect를 사용할 수 있습니다.
-                handleStatusChange(reservationDetail.reservationNo, newStatusValue);
+                // 상태 변경 처리 함수 호출
+                handleStatusChange(reservationDetail.reservationNo, newStatusValue, reservationDetail.storeName);
               }}
               disabled={
                 reservationDetail.reservationStatus === '완료' ||
@@ -172,12 +181,22 @@ function AdminReserveManageDetail() {
               }
             >
               <option value={reservationDetail.reservationStatus}>{reservationDetail.reservationStatus}</option>
-              {reservationDetail.reservationStatus !== '확정' && <option value="확정">확정</option>}
-              {reservationDetail.reservationStatus !== '완료' && <option value="완료">완료</option>}
-              {reservationDetail.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
-            </select>
 
+              {reservationDetail.reservationStatus === '대기' || reservationDetail.reservationStatus === '입금대기' ? (
+                <>
+                  <option value="확정">확정</option>
+                  <option value="취소(업체)">취소(업체)</option>
+                </>
+              ) : (
+                <>
+                  {reservationDetail.reservationStatus !== '확정' && <option value="확정">확정</option>}
+                  {reservationDetail.reservationStatus !== '완료' && <option value="완료">완료</option>}
+                  {reservationDetail.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
+                </>
+              )}
+            </select>
           </div>
+
         </div>
 
 

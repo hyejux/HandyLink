@@ -174,6 +174,25 @@ function UserSearchResult() {
     }
   };
 
+  //찜 데이터 가져오기
+  useEffect(() => {
+    const getBookmarked = async () => {
+      try {
+        const resp = await axios.get('/userStoreList/getLike');
+
+        if (resp.status === 200) {
+          setIsBookmarked(resp.data.map(like => like.storeNo));
+          console.log("찜 목록 ", resp.data);
+        }
+      } catch (error) {
+        console.log("찜 데이터 가져오는 중 error ", error);
+      }
+    };
+
+    getBookmarked();
+  }, []);
+
+
 
   // const handleLoadMore = () => {
   //   if (visibleCount >= store.length) {
@@ -261,6 +280,9 @@ function UserSearchResult() {
     setSortCriterion(criterion);
     closeDropdown();
   };
+
+
+
 
 
   return (
@@ -396,12 +418,13 @@ function UserSearchResult() {
                         <span>({store.reviewCount})</span>
                       </div>
                       <div className="result-list-price">
-                        {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 1).map((category, index) => (
-                          <div key={index}>
-                            {category.servicePrice.toLocaleString()}~
-                          </div>
-                        ))}
+                        {Math.min(
+                          ...level1Categories
+                            .filter(category => category.storeNo === store.storeNo)
+                            .map(category => category.servicePrice)
+                        ).toLocaleString()}~
                       </div>
+
                     </div>
 
                   </div>
@@ -409,13 +432,13 @@ function UserSearchResult() {
               })
             ) : (
               <div className="no-search-wrap">
-              <div className="no-search-img-box">
-                <img src="./img/user-search-result/search-result.png" alt="검색 결과 없음"/>
+                <div className="no-search-img-box">
+                  <img src="./img/user-search-result/search-result.png" alt="검색 결과 없음" />
+                </div>
+                <div className="no-search-text">검색 결과가 없습니다.</div>
+                <div className="no-search-text">다른 검색어를 입력해 보세요.</div>
               </div>
-              <div className="no-search-text">검색 결과가 없습니다.</div>
-              <div className="no-search-text">다른 검색어를 입력해 보세요.</div>
-            </div>
-            
+
             )}
           </div>
         </div>

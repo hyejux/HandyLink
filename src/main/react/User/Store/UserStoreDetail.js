@@ -43,7 +43,7 @@ function UserStoreDetail() {
     try {
       await axios.post('/userStoreList/storeLike', { storeNo: store.storeNo });
       setIsBookmarked(prev =>
-          prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) : [...prev, store.storeNo]
+        prev.includes(store.storeNo) ? prev.filter(storeNo => storeNo !== store.storeNo) : [...prev, store.storeNo]
       );
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -237,7 +237,7 @@ function UserStoreDetail() {
     'https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731331851/bznpxzxdgutdtextodq0.png', // 기본 사진 경로 2
     'https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731331851/bznpxzxdgutdtextodq0.png'  // 기본 사진 경로 3
   ];
-  
+
 
   const formatServiceStartDate = (dateString) => {
     const date = new Date(dateString);
@@ -251,12 +251,12 @@ function UserStoreDetail() {
     // serviceStart 시간과 현재 시간을 비교
     const serviceStartDate = new Date(dateString);
     const isPast = serviceStartDate < currentTime; // 이미 지난 시간이라면 true
-  
+
     // 시간이 지난 경우 아무것도 렌더링하지 않음
     if (isPast) {
       return null; // 해당 시간이 지나면 아무것도 렌더링하지 않음
     }
-  
+
 
     return ` ${year}/${month}/${day} ${hours}시 OPEN `;
   };
@@ -447,13 +447,13 @@ function UserStoreDetail() {
   ].slice(0, 3);
 
   const uniquePhotos = reviewPhotoList
-  .map((photo) => photo.reviewImgUrl) // reviewImgUrl만 추출
-  .filter((url, index, self) => self.indexOf(url) === index); // 중복 제거
+    .map((photo) => photo.reviewImgUrl) // reviewImgUrl만 추출
+    .filter((url, index, self) => self.indexOf(url) === index); // 중복 제거
 
   return (
     <div>
       <div className="user-main-container">
-{/*     잠시 주석 처리하겠습니다..
+        {/*     잠시 주석 처리하겠습니다..
         <div className="user-top-nav">
           <i className="bi bi-arrow-left" onClick={handleGoBack}></i>
           <logo className="logo"> 상단바 고민중 </logo>
@@ -497,47 +497,50 @@ function UserStoreDetail() {
 
                   <div className="store-name">{storeInfo.storeName}</div>
                 </div>
-                <button type="button" onClick={handleInquiryClick}><i className="bi bi-chat-dots"></i></button>{/*문의하기 버튼*/}
+                <button className="chat-btn" type="button" onClick={handleInquiryClick}>
+                  <img src="../img/store/chat.png" />
+
+                </button>{/*문의하기 버튼*/}
               </div>
-              <div className="store-basic-info"><i className="bi bi-shop"></i>
+              <div className="store-basic-info"><img src="../img/store/shop2.png" />
                 <div className="store-addr"> {storeInfo.addr}   {storeInfo.addrdetail}</div>
               </div>
               {/* <hr /> */}
-              <div className="store-basic-info"><i className="bi bi-alarm-fill"></i> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
-              <div className="store-basic-info"><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
+              <div className="store-basic-info"><img src="../img/store/clock.png" /> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
+              <div className="store-basic-info"><img src="../img/store/telephone.png" /> {storeInfo.managerPhone}</div>
             </div>
           </div>
 
           <div className="store-detail-menu">
-  <button
-    type="button"
-    onClick={() => setActiveSection('home')}
-    className={activeSection === 'home' ? 'active' : ''}
-  >
-    홈
-  </button>
-  <button
-    type="button"
-    onClick={() => setActiveSection('info')}
-    className={activeSection === 'info' ? 'active' : ''}
-  >
-    소식
-  </button>
-  <button
-    type="button"
-    onClick={() => setActiveSection('reservation')}
-    className={activeSection === 'reservation' ? 'active' : ''}
-  >
-    예약
-  </button>
-  <button
-    type="button"
-    onClick={() => setActiveSection('review')}
-    className={activeSection === 'review' ? 'active' : ''}
-  >
-    리뷰
-  </button>
-</div>
+            <button
+              type="button"
+              onClick={() => setActiveSection('home')}
+              className={activeSection === 'home' ? 'active' : ''}
+            >
+              홈
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveSection('info')}
+              className={activeSection === 'info' ? 'active' : ''}
+            >
+              소식
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveSection('reservation')}
+              className={activeSection === 'reservation' ? 'active' : ''}
+            >
+              예약
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveSection('review')}
+              className={activeSection === 'review' ? 'active' : ''}
+            >
+              리뷰
+            </button>
+          </div>
 
 
           {/* 홈 */}
@@ -546,12 +549,12 @@ function UserStoreDetail() {
 
               <div className="user-content-container"> {/*위치, 번호, 영업시간, 주차, sns*/}
                 <div>
-                  <div className="store-basic-info"><i className="bi bi-shop"></i>
+                  <div className="store-basic-info"><img src="../img/store/shop2.png" />
                     <div className="store-addr">{storeInfo.addr}   {storeInfo.addrdetail} </div>
                   </div>
-                  <div className="store-basic-info"><i className="bi bi-alarm-fill"></i> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
+                  <div className="store-basic-info"><img src="../img/store/clock.png" /> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
                   <div className="store-basic-info">
-                    <i className="bi bi-calendar2-x"></i>
+                    <img src="../img/store/calendar.png" />
                     <div>
                       {Array.isArray(storeInfo.dayOffDayList) && storeInfo.dayOffDayList.some(day => day.dayOffDay) > 0 ? (
                         <div>
@@ -581,22 +584,32 @@ function UserStoreDetail() {
                       )}
                     </div>
                   </div>
-                  <div className="store-basic-info"><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
-                  <div className="store-basic-info"><i className="bi bi-p-square-fill"></i> {storeInfo.storeParkingYn === 'Y' ? '주차가능' : '주차불가'}</div>
+                  <div className="store-basic-info"><img src="../img/store/telephone.png" /> {storeInfo.managerPhone}</div>
+                  <div className="store-basic-info"><img src="../img/store/parking.png" /> {storeInfo.storeParkingYn === 'Y' ? '주차가능' : '주차불가'}</div>
                   <div className="store-basic-info">
-                    <i class="bi bi-phone"></i>
                     <div>
-                    {storeInfo.storeSns ? (
-                      storeInfo.storeSns.map((sns, index) => {
-                        return (
-                          <div key={index} style={{ marginBottom: '5px' }}>
-                            <a href={sns.snsLink} className="sns-name">{sns.snsName}</a>
-                          </div>
-                        );
-                      })
-                    ) : null}
+                      {storeInfo.storeSns ? (
+                        storeInfo.storeSns.map((sns, index) => {
+                          const snsImageMap = {
+                            "인스타그램": "../img/store/instagram.png",
+                            "페이스북": "../img/store/facebook.png",
+                            "네이버": "../img/store/naver.png",
+                            "유튜브": "../img/store/youtube.png"
+                          };
+                          const imageSrc = snsImageMap[sns.snsName];
+
+                          return (
+                            <div key={index} style={{ marginBottom: '5px', display: 'flex', alignItems: 'center' }}>
+                              {imageSrc && <img src={imageSrc} alt={sns.snsName} style={{ marginRight: '5px' }} />}
+                              <a href={sns.snsLink} className="sns-name">{sns.snsName}</a>
+                            </div>
+                          );
+                        })
+                      ) : null}
                     </div>
                   </div>
+
+
                 </div>
               </div>
 
@@ -609,31 +622,31 @@ function UserStoreDetail() {
                 </div>
               </div>
 
-      
-              {noticeList.length === 0 ? (
-  <></>
-) : (
-  <div className="user-content-container">
-    {noticeList.slice(0, 5).map((notice, index) => (
-      notice.status === 'Y' && (
-        <ul key={index}>
-          <li>
-            <i className="bi bi-bell"></i> {notice.noticeType} | {notice.noticeContent.slice(0, 20)}...
-          </li>
-        </ul>
-      )
-    ))}
-  </div>
-)}
 
-                
-        
+              {noticeList.length === 0 ? (
+                <></>
+              ) : (
+                <div className="user-content-container">
+                  {noticeList.slice(0, 5).map((notice, index) => (
+                    notice.status === 'Y' && (
+                      <ul key={index}>
+                        <li className="announcement-list">
+                          <img src="../img/store/announcement.png" /> {notice.noticeType} | {notice.noticeContent.slice(0, 20)}...
+                        </li>
+                      </ul>
+                    )
+                  ))}
+                </div>
+              )}
+
+
+
 
               <div className="user-store-map-box">
                 <div></div>
                 {showMap && (
                   <div>
-                    <BasicMap storeLocation={storeLocation}  storeName={storeInfo.storeName}/>
+                    <BasicMap storeLocation={storeLocation} storeName={storeInfo.storeName} />
                   </div>
                 )}
               </div>
@@ -646,62 +659,62 @@ function UserStoreDetail() {
           {activeSection === 'info' && (
 
             <div>
-                {/* 배너 */}
-          <div className="advertisement-banner">
-            <img src='https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731039442/pbc4moqfrdcsxmipvbgw.jpg' />
-          </div>
+              {/* 배너 */}
+              <div className="advertisement-banner">
+                <img src='https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731039442/pbc4moqfrdcsxmipvbgw.jpg' />
+              </div>
 
 
               {noticeList.length === 0 ? (
-                  <div className="user-content-container11" style={{marginBottom : '50%'}}>
+                <div className="user-content-container11" style={{ marginBottom: '50%' }}>
                   {/* 기본 정보는 항상 보이게 함 */}
-                      <div className='notice-content1'>등록된 소식이 없습니다.</div>
-                        
-                    </div>
-                
+                  <div className='notice-content1'>등록된 소식이 없습니다.</div>
 
-) : (
-              noticeList.map((notice, index) => (
-                notice.status === 'Y' && (
-                  <React.Fragment key={index}>
-                    <div className="user-content-container11">
-                      {/* 기본 정보는 항상 보이게 함 */}
-                      <div className="notice-top">
-                        <div
-                          className="type-title"
-                          style={{
-                            backgroundColor: notice.noticeType === '소식' ? 'rgb(255 255 255)' :
-                              notice.noticeType === '공지사항' ? 'rgb(255 242 224)' : 'transparent'
-                          }}
-                        >
-                          {notice.noticeType}
+                </div>
+
+
+              ) : (
+                noticeList.map((notice, index) => (
+                  notice.status === 'Y' && (
+                    <React.Fragment key={index}>
+                      <div className="user-content-container11">
+                        {/* 기본 정보는 항상 보이게 함 */}
+                        <div className="notice-top">
+                          <div
+                            className="type-title"
+                            style={{
+                              backgroundColor: notice.noticeType === '소식' ? 'rgb(255 255 255)' :
+                                notice.noticeType === '공지사항' ? 'rgb(255 242 224)' : 'transparent'
+                            }}
+                          >
+                            {notice.noticeType}
+                          </div>
+                          <duv>{notice.noticeRegdate}</duv>
                         </div>
-                        <duv>{notice.noticeRegdate}</duv>
+
+                        {/* noticeContent는 토글로 표시 */}
+                        {expandedRows.includes(index) ? (
+                          <div>
+                            <div className='notice-content1'>{notice.noticeContent}</div>
+                            <span onClick={() => handleToggleRow(index)} style={{ color: '#686868' }}>접기</span>
+                          </div>
+                        ) : (
+                          <div>
+                            <div>
+                              {notice.noticeContent.length > 100
+                                ? `${notice.noticeContent.slice(0, 100)}`
+                                : notice.noticeContent}
+                            </div>
+                            {notice.noticeContent.length > 100 && (
+                              <span onClick={() => handleToggleRow(index)} style={{ color: '#686868' }} >... 더보기</span>
+                            )}
+                          </div>
+                        )}
                       </div>
 
-                      {/* noticeContent는 토글로 표시 */}
-                      {expandedRows.includes(index) ? (
-                        <div>
-                          <div className='notice-content1'>{notice.noticeContent}</div>
-                          <span onClick={() => handleToggleRow(index)} style={{ color: '#686868' }}>접기</span>
-                        </div>
-                      ) : (
-                        <div>
-                          <div>
-                            {notice.noticeContent.length > 100
-                              ? `${notice.noticeContent.slice(0, 100)}`
-                              : notice.noticeContent}
-                          </div>
-                          {notice.noticeContent.length > 100 && (
-                            <span onClick={() => handleToggleRow(index)} style={{ color: '#686868' }} >... 더보기</span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-
-                  </React.Fragment>
-                )
-              )))}
+                    </React.Fragment>
+                  )
+                )))}
 
             </div>
 
@@ -741,7 +754,7 @@ function UserStoreDetail() {
                               (실시간 반영할 예정)</>
                           )} */}
                           {/* 오픈까지 {daysUntilServiceStart}일 남음  */}
-                         <div className='open-date'>{formatServiceStartDate(value.serviceStart)}  </div> 
+                          <div className='open-date'>{formatServiceStartDate(value.serviceStart)}  </div>
                           <div>{value.serviceName}</div>
                           <div>{value.serviceContent}</div>
                           <div>{value.servicePrice} 원 ~</div>
@@ -760,33 +773,33 @@ function UserStoreDetail() {
           {activeSection === 'review' && (
             <div className="user-content-container5">
               <div className="review-section">
-           
 
 
-<div className='photo-rating-box'>
 
-<div className="photo-review">
-  {photosToDisplay.map((url, index) => (
-    <div className="photo-item" key={index}>
-      <img src={url} alt="Review Photo" />
-      {index === 2 && reviewPhotoList.length > 3 && (
-        <div className="photo-item more" onClick={() => setActiveSection('photo')}>
-          +더보기
-        </div>
-      )}
-    </div>
-  ))}
-</div>
-                <div className="total-rating">
+                <div className='photo-rating-box'>
 
-{[...Array(5)].map((_, index) => (
-  <span key={index} className={`star ${totalRating > index ? 'filled' : ''}`}>
-    &#9733; {/* 별 아이콘 */}
-  </span>
-))}
-<span> {totalRating.toFixed(1)} / 5  <span style={{color : '#999'}} >({sortedReviewList.length}) </span></span>
-              </div>
-  </div>
+                  <div className="photo-review">
+                    {photosToDisplay.map((url, index) => (
+                      <div className="photo-item" key={index}>
+                        <img src={url} alt="Review Photo" />
+                        {index === 2 && reviewPhotoList.length > 3 && (
+                          <div className="photo-item more" onClick={() => setActiveSection('photo')}>
+                            +더보기
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="total-rating">
+
+                    {[...Array(5)].map((_, index) => (
+                      <span key={index} className={`star ${totalRating > index ? 'filled' : ''}`}>
+                        &#9733; {/* 별 아이콘 */}
+                      </span>
+                    ))}
+                    <span> {totalRating.toFixed(1)} / 5  <span style={{ color: '#999' }} >({sortedReviewList.length}) </span></span>
+                  </div>
+                </div>
 
                 <div className="sort-reviews">
                   {/* <label htmlFor="sortOrder">정렬 기준: </label> */}
@@ -803,7 +816,7 @@ function UserStoreDetail() {
                     <div key={review.reviewNo} className="review-item">
 
                       <div className="photo-review2">
-                      {[...new Set(review.userReviewImg)].map((imgUrl, index) => {
+                        {[...new Set(review.userReviewImg)].map((imgUrl, index) => {
                           const formattedUrl = imgUrl.replace('blob:', '');
                           return (
                             <img
@@ -889,16 +902,16 @@ function UserStoreDetail() {
 
                 <h2> <i class="bi bi-chevron-left" onClick={() => setActiveSection('review')}></i> 포토 리뷰</h2>
                 <div className="photo-review3">
-                {uniquePhotos.map((url, index) => (
-      <div key={index} className="photo-item">
-        <img
-          src={url}
-          alt="Review Photo"
-          onClick={() => openModal(url)} // 클릭 시 모달 열기
-          style={{ cursor: 'pointer' }}
-        />
-      </div>
-    ))}
+                  {uniquePhotos.map((url, index) => (
+                    <div key={index} className="photo-item">
+                      <img
+                        src={url}
+                        alt="Review Photo"
+                        onClick={() => openModal(url)} // 클릭 시 모달 열기
+                        style={{ cursor: 'pointer' }}
+                      />
+                    </div>
+                  ))}
 
                 </div>
 

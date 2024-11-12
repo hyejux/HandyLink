@@ -198,7 +198,7 @@ function UserMyReservationDetail() {
                 <img src={`${reservationList2.imageUrl}`} alt="My Image" />
               </div>
               <div className="user-reserve-menu-content">
-                <div className='store-name2' onClick={() => goToStoreDetail(reservationList2.storeNo)}><img src="../img/store.png" /> {reservationList.length > 0 ? reservationList[0].storeName : '정보 없음'}</div>
+                <div className='store-name2' onClick={() => goToStoreDetail(reservationList2.storeNo)}><img src="../img/store/shop1.png" /> {reservationList.length > 0 ? reservationList[0].storeName : '정보 없음'}</div>
                 <div className="service-name2">{reservationList2.serviceName}</div>
                 <div className="service-content2">{reservationList2.serviceContent}</div>
               </div>
@@ -390,12 +390,15 @@ function UserMyReservationDetail() {
       <hr />
       
       {refundInfo.length === 0 && (
-        <div className="user-content-container">
+        <>       <div className="user-content-container">
           <button className="reservation-cancel-btn" onClick={cancelReservation}>예약취소</button>
         </div>
-      )}
-
       <hr />
+      </>
+ 
+      )}
+      
+
 
       <div className="user-content-container">
         <div className="info-row">

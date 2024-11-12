@@ -70,12 +70,13 @@ h2 {
 .graph-filter {
     border: 1px solid #ddd;
     border-radius: 2px;
-    width: 180px;
+    width: 30%;
     height: 22px;
     margin-left: 5px;
     display: flex;
     font-size: 12px;
 }
+
 
 .graph-filter > span {
     display: flex;
@@ -88,6 +89,15 @@ h2 {
 }
 
 .graph-filter > span:nth-child(1){
+    border: none;
+}
+
+.monthly {
+    width: 20%;
+}
+
+.monthly > span{
+    width: 50%;
     border: none;
 }
 

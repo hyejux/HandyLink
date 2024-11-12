@@ -239,14 +239,6 @@ public class AdminStoreController {
         }
     }
 
-    //통계페이지
-    @GetMapping("/getReportCount")
-    public Map<String , Integer> getReportCount(@RequestParam Long storeNo){
-        Map<String , Integer>  reportCount = adminStoreService.getReportCount(storeNo);
-
-        return reportCount;
-    }
-
     //그래프
     @GetMapping("/getDailyReportChart")
     public Map<String, Object> getDailyReportChart(@RequestParam Long storeNo) {

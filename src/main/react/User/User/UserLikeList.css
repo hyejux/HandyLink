@@ -1,8 +1,7 @@
 .favorite-list {
     max-width: 360px;
-    width: 100%;
-    padding: 20px 20px 50px 20px;
-    background-color: #f5f5f5;
+    padding: 10px 10px 0 10px;
+    background-color: #edededa1;
     min-height: 900px;
 }
 
@@ -14,27 +13,45 @@
 
 .category-buttons {
     display: grid;
-    justify-content: center;
-    grid-template-columns: repeat(5, 1fr); /* First row with 5 items */
-    grid-template-rows: auto auto; /* Two rows */
-    margin-bottom: 15px;
-    gap: 7px;
+    grid-template-columns: repeat(5, 59px);
+    grid-template-rows: auto auto;
+    gap: 5px 10px;
+    padding: 0 5px;
+    margin-top: 10px;
+}
+
+/* 마지막 4개 버튼(두 번째 줄)을 위한 컨테이너 */
+.category-buttons > button:nth-last-child(-n+4) {
+    width: 60px;
+}
+
+.second-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin: 0 0 15px;
+    text-align: center;
+}
+
+.second-row .category-button {
+    width: auto; /* 버튼 너비를 그리드 셀에 맞춤 */
 }
 
 .category-button {
-    background-color: #f7f7f7;
+    background-color: #ffffff;
     border: none;
     border-radius: 20px;
     padding: 5px;
     margin: 0 5px;
-    font-size: 0.5em;
+    font-size: 12px;
     color: #333;
     cursor: pointer;
-    width: 59px;
+    width: 60px;
+    height: 30px;
 }
 
 .category-button.active {
-    background-color: #ffcad4;
+    background-color: #FE8517;
     color: #ffffff;
 }
 
@@ -53,9 +70,9 @@
     background-color: #ffffff;
     border-radius: 10px;
     padding: 15px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     position: relative; /* 위치 속성 추가 */
     z-index: 0;
+    margin-top: 5px;
 }
 
 .card-image {
@@ -67,8 +84,10 @@
 
 .category {
     font-size: 0.8em;
-    color: #ff7e87;
-    margin-bottom: 5px;
+    font-weight: bold;
+    color: #FE8517;
+    margin-bottom: 10px;
+    margin-top: 0;
 }
 
 .card-main {
@@ -83,7 +102,7 @@
 .store {
     font-size: 1.1em;
     font-weight: bold;
-    margin: 5px 0;
+    margin-top: -10px;
     text-align: right;
 }
 
@@ -96,7 +115,7 @@
 
 .rating {
     font-size: 1em;
-    color: #ffcc00;
+    color: #FE8517;
     margin-right: 10px;
 }
 

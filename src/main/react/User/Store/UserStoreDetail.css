@@ -87,6 +87,7 @@
 .photo-item>img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 
 .review-section {
@@ -688,4 +689,5 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  
 }

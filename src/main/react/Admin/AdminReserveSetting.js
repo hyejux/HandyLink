@@ -107,7 +107,11 @@ const goToAdminPage2 = (id) => {
 
                         <div className='reserve-content-text-box'>
                         <div className="reserve-content-text">
-                                              {value.serviceContent}
+                      
+  {value.serviceContent.length > 30 
+    ? `${value.serviceContent.slice(0, 50)}...` 
+    : value.serviceContent}
+
                                             </div>
                           </div>
                                           

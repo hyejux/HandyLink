@@ -321,6 +321,13 @@ body {
   }
 
 
+  .disabled {
+    background-color: red; /* 비활성화된 배경색 */
+    pointer-events: none; /* 클릭을 막음 */
+    opacity: 0.6; /* 투명도 감소 */
+  }
+  
+
 
   .user-content-first{
     /* border: 1px solid red; */
@@ -332,7 +339,7 @@ body {
   }
 
   .bi {
-    color : #fd8517;
+    color : #000;
   }
 
   .user-content-first-img-num {
@@ -399,6 +406,7 @@ body {
   .user-reserve-menu img{
     width: 120px;
     border-radius: 5px;
+    object-fit: cover;
   }
   .user-reserve-menu-content{
     display: flex;

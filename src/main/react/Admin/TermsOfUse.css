@@ -47,6 +47,8 @@ textarea {
 
 #gohome{
     color: #999;
-    font-family: 'ghanachoco';
+    font-family: 'Pretendard-Regular';
+    font-size: 16px;
     text-decoration: none;
+    font-weight: bold;
 }

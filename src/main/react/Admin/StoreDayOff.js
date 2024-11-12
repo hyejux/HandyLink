@@ -242,7 +242,7 @@ function StoreDayOff() {
 
         <div className="day-off-fix">
             <div className="day-off-title">
-                <label>고정휴무</label>
+                <i className="bi bi-chevron-double-right"><h3>고정휴무</h3></i>
                 <i className="bi bi-pencil-square" onClick={handleEditClick} style={{display: isEditing ? 'none' : 'inline'}}/>
                 {isEditing && (
                     <button type="button" className="day-off-btn" onClick={handleRegistDay}>
@@ -274,7 +274,7 @@ function StoreDayOff() {
 
 
         <div className="day-off-set-list">
-            <label>지정휴무 목록</label>
+            <i className="bi bi-chevron-double-right"><h3>지정휴무 목록</h3></i>
             {offSet.length > 0 ? (
                 <table>
                     <thead>

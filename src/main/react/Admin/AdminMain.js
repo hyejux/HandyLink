@@ -180,28 +180,28 @@ function AdminMain() {
 
         <div className="status-container main-count">
           <div className="today-reservation">
-          <i className="bi bi-chevron-double-right"><h3>Today 현황</h3></i>
+            <i className="bi bi-chevron-double-right"><h3>Today 현황</h3></i>
 
-          <div className="status-item">
-          <p className="complete" >전달완료</p>
-          <p>{count.todayCompleteCount} 건</p>
-          </div>
-          <div className="status-item">
-          <p className="remain" >남은예약</p>
-          <p>{count.todayRemainCount} 건</p>
-          </div>
+            <div className="status-item">
+              <p className="complete" >전달완료</p>
+              <p>{count.todayCompleteCount} 건</p>
+            </div>
+            <div className="status-item">
+              <p className="remain" >남은예약</p>
+              <p>{count.todayRemainCount} 건</p>
+            </div>
           </div>
 
           <div className="check-reservation">
-          <i className="bi bi-chevron-double-right"><h3>운영 현황</h3></i>
-          <div className="status-item">
-          <p className="new" >예약대기</p>
-          <p>{count.waitCount} 건</p>
-          </div>
-          <div className="status-item">
-          <p className="cancle">예약확정</p>
-          <p>{count.doingCount} 건</p>
-          </div>
+            <i className="bi bi-chevron-double-right"><h3>운영 현황</h3></i>
+            <div className="status-item">
+              <p className="new" >예약대기</p>
+              <p>{count.waitCount} 건</p>
+            </div>
+            <div className="status-item">
+              <p className="cancle">예약확정</p>
+              <p>{count.doingCount} 건</p>
+            </div>
           </div>
         </div>
       </div>

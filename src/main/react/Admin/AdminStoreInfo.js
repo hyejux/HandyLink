@@ -267,7 +267,7 @@ function AdminStoreInfo() {
                 <label htmlFor="password">비밀번호</label>
                 {isPwDisabled ? (
                     <div className="input-field password">
-                        <input type="text" id="storePw" value={storeInfo.storePw} disabled style={{width: '70%'}}/>
+                        <input type="text" id="storePw" value={storeInfo.storePw} disabled style={{width: '65%'}}/>
                         <button type="button" className="change-pw" onClick={handleClickPw}> 변경하기 </button>
                     </div>
                 ) : (

@@ -1,6 +1,7 @@
 package com.example.HiMade.admin.service;
 
 import com.example.HiMade.admin.dto.*;
+import com.example.HiMade.user.entity.Reservation;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -24,6 +25,9 @@ public interface AdminReservationService
   public List<adminReserveMangeDTO> getManageFilterList(int storeNo);
   public List<adminManagerCalDTO> getManageCalender(int storeNo);
 
+  List<priceMonthDTO> priceMonth(int id);
+  List<priceMonthDTO> priceDay(int id);
+  public void saveOrder(List<adminReservationDTO> orderedList);
   //예약 상태 변경
   void updateStatus(UpdateReservationStatusDTO dto);
 

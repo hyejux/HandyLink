@@ -528,6 +528,24 @@ body {
   display: flex;
 }
 
+.store-basic-info img {
+  width: 16px;
+  height: 16px;
+  margin: 1px 10px 0 0;
+}
+
+.chat-btn img {
+  width: 16px;
+  height: 16px;
+  margin: 1px 10px 0 0;
+}
+
+.announcement-list img {
+  width: 16px;
+  height: 16px;
+  margin: 5px 5px 0 0;
+}
+
 .sns-name {
   text-decoration: none;
   color: black;
@@ -692,3 +710,4 @@ body {
   object-fit: cover;
   
 }
+

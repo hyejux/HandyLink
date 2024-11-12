@@ -31,7 +31,7 @@ body {
     margin: 0 auto;
     border: 1px solid #ddd;
     max-width: 400px;
-    min-height: 100vh;
+    min-height: 55vh;
     position: relative;
     padding-top: 39px;
 }
@@ -60,12 +60,12 @@ body {
 
 .back-button i {
     font-size: 20px;
-    color: #FE8517;
+    color: #000;
+
 }
 
 .page-title {
     font-size: 18px;
-    color: #FE8517;
 }
 
 

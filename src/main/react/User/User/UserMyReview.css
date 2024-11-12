@@ -1,7 +1,7 @@
 
 .reviews-container {
-    background-color: #f0f4f8;
-    width: 90%;
+    /*background-color: #f0f4f8;*/
+    background-color: #edededa1;
     max-width: 500px;
     border-radius: 8px;
     padding: 0 15px;
@@ -28,7 +28,6 @@
     padding: 10px;
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 .store-image {
@@ -54,7 +53,7 @@
 }
 
 .review-date {
-    font-size: 12px;
+    font-size: 11px;
     color: #999;
     margin-bottom: 10px;
     position: absolute;
@@ -133,5 +132,10 @@
 
 .review-service {
     font-size: 13px;
-    color: #2e3133;
+    color: #676767;
+    margin: 0;
+}
+
+.rating {
+    margin-top: 10px;
 }

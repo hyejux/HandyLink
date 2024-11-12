@@ -36,54 +36,58 @@ function UserLikeList(){
 
     return (
         <div className="favorite-list">
-            <h1 className="title">찜 리스트</h1>
             <div className="category-buttons">
-                <button className={`category-button ${selectedCategory === "전체" ? "active" : ""}`} onClick={() => setSelectedCategory("전체")}>
-                    전체
+                {/* 첫 번째 줄 - 5개 버튼 */}
+                <button className={`category-button ${selectedCategory === "전체" ? "active" : ""}`}
+                        onClick={() => setSelectedCategory("전체")}>전체
                 </button>
-                <button  className={`category-button ${selectedCategory === "케이크" ? "active" : ""}`} onClick={() => setSelectedCategory("케이크")}>
-                    디저트
+                <button className={`category-button ${selectedCategory === "디저트" ? "active" : ""}`}
+                        onClick={() => setSelectedCategory("디저트")}>디저트
                 </button>
-                <button className={`category-button ${selectedCategory === "공방" ? "active" : ""}`} onClick={() => setSelectedCategory("공방")} >
-                    공예
+                <button className={`category-button ${selectedCategory === "공방" ? "active" : ""}`}
+                        onClick={() => setSelectedCategory("공방")}>공방
                 </button>
-                <button className={`category-button ${selectedCategory === "꽃" ? "active" : ""}`} onClick={() => setSelectedCategory("꽃")} >
-                    꽃
+                <button className={`category-button ${selectedCategory === "꽃" ? "active" : ""}`}
+                        onClick={() => setSelectedCategory("꽃")}>꽃
                 </button>
-                <button className={`category-button ${selectedCategory === "뷰티" ? "active" : ""}`} onClick={() => setSelectedCategory("뷰티")}>
-                    뷰티
+                <button className={`category-button ${selectedCategory === "뷰티" ? "active" : ""}`}
+                        onClick={() => setSelectedCategory("뷰티")}>뷰티
                 </button>
-                <button  className={`category-button ${selectedCategory === "패션" ? "active" : ""}`} onClick={() => setSelectedCategory("패션")}>
-                    패션
+            </div>
+            {/* 두 번째 줄 - 4개 버튼 */}
+            <div className="category-buttons second-row">
+                <button className={`category-button ${selectedCategory === "패션" ? "active" : ""}`}
+                        onClick={() => setSelectedCategory("패션")}>패션
                 </button>
-                <button className={`category-button ${selectedCategory === "주얼리" ? "active" : ""}`} onClick={() => setSelectedCategory("주얼리")} >
-                    주얼리
+                <button className={`category-button ${selectedCategory === "주얼리" ? "active" : ""}`}
+                        onClick={() => setSelectedCategory("주얼리")}>주얼리
                 </button>
-                <button className={`category-button ${selectedCategory === "디저트" ? "active" : ""}`} onClick={() => setSelectedCategory("디저트")} >
-                    디저트
+                <button className={`category-button ${selectedCategory === "디지털" ? "active" : ""}`}
+                        onClick={() => setSelectedCategory("디지털")}>디지털
                 </button>
-                <button className={`category-button ${selectedCategory === "반려동물" ? "active" : ""}`} onClick={() => setSelectedCategory("반려동물")}>
-                    반려동물
+                <button className={`category-button ${selectedCategory === "반려동물" ? "active" : ""}`}
+                        onClick={() => setSelectedCategory("반려동물")}>반려동물
                 </button>
             </div>
 
             <div className="card-list">
                 {filteredList.length > 0 ? (
-                <>
-                    {filteredList
-                        .filter(likeList => likeList.store_status === '활성화') // 활성화된 카드만 필터링
-                        .map(likeList => (
-                            <div className="likecard activate" key={likeList.store_no} onClick={() => goToStoreDetail(likeList.store_no)}>
-                                <div className="card">
-                                    <p className="category">{likeList.store_cate}</p>
-                                    <div className="card-main">
-                                        <img src={likeList.store_img_location} alt="store" className="card-image" />
-                                        <div className="card-content">
+                    <>
+                        {filteredList
+                            .filter(likeList => likeList.store_status === '활성화') // 활성화된 카드만 필터링
+                            .map(likeList => (
+                                <div className="likecard activate" key={likeList.store_no}
+                                     onClick={() => goToStoreDetail(likeList.store_no)}>
+                                    <div className="card">
+                                        <p className="category">{likeList.store_cate}</p>
+                                        <div className="card-main">
+                                            <img src={likeList.store_img_location} alt="store" className="card-image"/>
+                                            <div className="card-content">
                                             <h2 className="store">{likeList.store_name}</h2>
                                             <p className="address">{likeList.addr}</p>
                                             <p className="addrdetail">{likeList.addrdetail}</p>
                                             <div className="rating-section">
-                                                <span className="rating">⭐ {likeList.avg_rating ? likeList.avg_rating : "N/A"}</span>
+                                                <span className="rating">★ {likeList.avg_rating ? likeList.avg_rating : "N/A"}</span>
                                                 <span className="reviews">리뷰 {likeList.review_count}개</span>
                                             </div>
                                         </div>

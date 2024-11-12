@@ -5,13 +5,12 @@ import { useState, useEffect } from 'react';
 import MwChart from './MwChart.js';
 import AgeChart from './AgeChart.js';
 import ReservationBarChart from './ReservationBarChart.js';
+import MonthlySalesBarChart from './MonthlySalesBarChart.js';
 import './AdminStoreReport.css';
 
 function AdminStoreReport() {
     const storeId = sessionStorage.getItem('storeId');
     const storeNo = sessionStorage.getItem('storeNo');
-
-    const [reportCount, setReportCount] = useState({});
 
     const [genderCount, setGenderCount] = useState({});
 
@@ -22,18 +21,6 @@ function AdminStoreReport() {
     });
 
     useEffect(() => {
-        //우리가게
-        const fetchReport = async () => {
-            try {
-                const resp = await axios.get(`/adminStore/getReportCount?storeNo=${storeNo}`);
-                setReportCount(prev => ({
-                    ...prev,
-                    ...resp.data
-                }));
-            } catch (error) {
-                console.error("예약 건수 통계 중 error: ", error);
-            }
-        };
 
         //고객통계 - 성별
         const fetchGender = async () => {
@@ -73,7 +60,7 @@ function AdminStoreReport() {
 
         const fetchMonthlySales2 = async () => {
             try {
-                // 서버에서 월별 매출 데이터를 가져옵니다.
+                // 서버에서 일별 매출 데이터를 가져옵니다.
                 const response = await axios.get(`/adminReservation/priceDay/${storeNo}`);
                 console.log(response.data);
                 setSalesData2(response.data);
@@ -86,19 +73,22 @@ function AdminStoreReport() {
 
         fetchMonthlySales();
         fetchMonthlySales2();
-        fetchReport();
         fetchGender();
         fetchAge();
 
     }, [storeNo]);
 
     console.log("ageDistribution: ", ageDistribution);
-    console.log("reportCount: ", reportCount);
 
     const [selectedPeriod, setSelectedPeriod] = useState("이번달");
+    const [selectedPricePeriod, setSelectedPricePeriod] = useState("이번달");
 
     const handlePeriodChange = (newPeriod) => {
         setSelectedPeriod(newPeriod);
+    };
+
+    const handlePricePeriodChange = (newPeriod) => {
+        setSelectedPricePeriod(newPeriod);
     };
 
     const [salesData, setSalesData] = useState([]);
@@ -119,56 +109,29 @@ function AdminStoreReport() {
        setViewMode('daily');
    };
 
+    console.log("월별 매출 정보 ", salesData);
+    console.log("일별 매출 정보 ", salesData2);
+
     return (
         <div className="admin-store-report-container">
             <div className="store-report">
-
                 <div className="flex-left">
-                    {/* <div className="report-section">
-                        <h2>우리 가게</h2>
-                        <div className="reservation-status">
-                            <div className="reservation-field">
-                                <p className="userLike-count"> {reportCount.userLikeCount} </p>
-                                <p className="userLike">  <i class="bi bi-heart-fill"></i> </p>
-                            </div>
-                            <div className="reservation-field">
-                                <p className="review-count"> {reportCount.reviewCount} </p>
-                                <p className="review"> <i class="bi bi-star-fill"></i> </p>
-                            </div>
-                            <div className="reservation-field">
-                                <p className="doing-count"> {reportCount.doingCount} </p>
-                                <p className="doing"> 확정 </p>
-                            </div>
-                            <div className="reservation-field">
-                                <p className="complete-count"> {reportCount.completeCount} </p>
-                                <p className="complete"> 완료 </p>
-                            </div>
-                            <div className="reservation-field">
-                            <p className="wait-count"> {reportCount.waitCount} </p>
-                            <p className=""> 예약 대기 </p>
-                            </div>
-                            <div className="reservation-field">
-                                <p className="cancled-count"> {reportCount.cancledCount} </p>
-                                <p className="cancled"> 취소 </p>
-                            </div>
-                        </div>
-                    </div> */}
+
                     <div className="report-section">
                         <h2>매출 통계</h2>
                         <div className="reservation-graph">
-                            <div className="graph-filter">
-                                <span className={selectedPeriod === "이번달" ? 'active' : ''}
-                                    onClick={() => handlePeriodChange("이번달")}>이번 달</span>
-                                <span className={selectedPeriod === "올해" ? 'active' : ''}
-                                    onClick={() => handlePeriodChange("올해")}>올해</span>
-                                <span className={selectedPeriod === "작년" ? 'active' : ''}
-                                    onClick={() => handlePeriodChange("작년")}>작년</span>
+                            <div className="graph-filter monthly">
+                                <span className={selectedPricePeriod === "올해" ? 'active' : ''}
+                                    onClick={() => handlePricePeriodChange("올해")}>올 해</span>
+                                <span className={selectedPricePeriod === "이번달" ? 'active' : ''}
+                                    onClick={() => handlePricePeriodChange("이번달")}>이번 달</span>
                             </div>
                             <div className="graph">
-                                <ReservationBarChart period={selectedPeriod} />
+                                <MonthlySalesBarChart period={selectedPricePeriod}/>
                             </div>
                         </div>
                     </div>
+
                     <div className="report-section">
                         <h2>고객 통계</h2>
                         <div className="customer-section-box">
@@ -189,51 +152,45 @@ function AdminStoreReport() {
                                 </div>
 
                                 <div className="table-section">
-                                <div className="mw detail">
-                                    <table className="mwtable">
-                                        <thead>
-                                            <tr>
-                                                <th>남자</th>
-                                                <th>여자</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>{genderCount.males}</td>
-                                                <td>{genderCount.females}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <div className="age detail">
-                                    <table className="agetable">
-                                        <thead>
-                                            <tr>
-                                                <th>나이</th>
-                                                <th>주로 찾는 서비스</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {ageDistribution.labels.map((label, index) => (
-                                                <tr key={index}>
-                                                    <td>{label}</td>
-                                                    <td>{ageDistribution.serviceName[index] || '정보 없음'}</td> {/* Fallback if no service name */}
+                                    <div className="mw detail">
+                                        <table className="mwtable">
+                                            <thead>
+                                                <tr>
+                                                    <th>남자</th>
+                                                    <th>여자</th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{genderCount.males}</td>
+                                                    <td>{genderCount.females}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div className="age detail">
+                                        <table className="agetable">
+                                            <thead>
+                                                <tr>
+                                                    <th>나이</th>
+                                                    <th>주로 찾는 서비스</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {ageDistribution.labels.map((label, index) => (
+                                                    <tr key={index}>
+                                                        <td>{label}</td>
+                                                        <td>{ageDistribution.serviceName[index] || '정보 없음'}</td> {/* Fallback if no service name */}
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                            
-                            </div>
-
-                         
                         </div>
-
-                        
                     </div>
-                   
                 </div>
 
 

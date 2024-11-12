@@ -206,7 +206,6 @@ function UserMyPage () {
     return (
         <div>
             <div className="user-mypage-container">
-                <h2>마이 페이지</h2>
                 <div className="profile-pic">
                     <img src={userInfo.userImgUrl} alt="Profile" id="profileImage"/>
                     {!isKakaoLogin && (

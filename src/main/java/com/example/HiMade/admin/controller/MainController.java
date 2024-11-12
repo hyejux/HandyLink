@@ -25,6 +25,22 @@ public class MainController {
   public String page(@PathVariable String pageName, Model model) {
     model.addAttribute("pageName", pageName);
 
+    switch (pageName) {
+      case "UserSignUp":
+        model.addAttribute("pageTitle", "회원가입");
+        break;
+      case "UserMyReview":
+        model.addAttribute("pageTitle", "내 후기");
+        break;
+      case "UserMyPage":
+        model.addAttribute("pageTitle", "내 프로필");
+        break;
+
+      default:
+        model.addAttribute("pageTitle", "");
+        break;
+    }
+
     System.out.println("뷰이름:" + pageName);
 
     // 하단바 없는 레이아웃 적용할 페이지

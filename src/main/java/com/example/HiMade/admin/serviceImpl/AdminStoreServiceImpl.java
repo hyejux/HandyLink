@@ -219,12 +219,16 @@ public class AdminStoreServiceImpl implements AdminStoreService {
         Integer doingCount = adminStoreMapper.getDoingCount(storeNo);
         Integer todayCompleteCount = adminStoreMapper.getTodayCompleteCount(storeNo);
         Integer todayRemainCount = adminStoreMapper.getTodayRemainCount(storeNo);
+        Integer userLikeCount = adminStoreMapper.getUserLikeCount(storeNo);
+        Integer reviewCount = adminStoreMapper.getReviewCount(storeNo);
 
         Map<String ,Integer> resultMap = new HashMap<>();
         resultMap.put("doingCount", doingCount);
         resultMap.put("waitCount", waitCount);
         resultMap.put("todayCompleteCount", todayCompleteCount);
         resultMap.put("todayRemainCount", todayRemainCount);
+        resultMap.put("userLikeCount", userLikeCount);
+        resultMap.put("reviewCount", reviewCount);
 
         return resultMap;
     }

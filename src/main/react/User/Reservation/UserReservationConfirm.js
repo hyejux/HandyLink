@@ -167,8 +167,8 @@ function UserReservationConfirm() {
 
 
   // 로딩화면 부분
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태
-  const [countdown, setCountdown] = useState(3);
+ const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+ const [countdown, setCountdown] = useState(3);
   
 
   useEffect(() => {

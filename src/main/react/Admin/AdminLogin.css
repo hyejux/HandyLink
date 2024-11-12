@@ -56,33 +56,35 @@ body {
 .parts {
     display: flex;
     min-height: 100vh;
-    flex-direction: column;
+    /* flex-direction: column; */
     justify-content: center;
 }
 .part1 {
 /* border:1px solid red; */
-    width: 100%;
+    width: 50%;
     /* background-color: #2C348F; */
-    /* background-color: #38414a; */
+    background-color: #38414a;
 
     position: relative;
 }
 
 .footer {
-    font-size: 15px;
+    width: 100%;
+    margin-right: 20px;
+    font-size: 13px;
     /* display: flex; */
     /* margin-top: 100px; */
     position: absolute;
     bottom: 24px;
-    text-align: center;
-    color: #38414a;
-    width: 100%;
+    text-align: right;
+    color: #999999;
+
 }
 
 .part1 .top-text {
     font-family: 'Tenada';
     padding: 50px;
-    font-size: 70px;
+    font-size: 80px;
 }
 
 .part1 .bottom-text {
@@ -92,12 +94,12 @@ body {
     right: 0;
     text-align: right;
     padding: 50px;
-    font-size: 50px;
+    font-size: 60px;
 }
 
 .part2 {
     display: flex;
-    width: 100%;
+    width: 50%;
     /* width: 50%; */
     /* border: 1px solid red; */
     /* background-color: #ddd; */
@@ -128,7 +130,7 @@ body {
     font-family: "Black Han Sans", serif;
     font-family: "Black Han Sans", sans-serif;
     font-family: 'FlightSans-Title';
-font-size: 30px;
+font-size: 38px;
 font-weight: bold;
 margin-bottom: 20px;
 

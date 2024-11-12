@@ -447,6 +447,7 @@ function AdminReserveManage() {
         setFilterStatus(''); // 상태 필터 초기화
         // setSelectedDays(null); // 날짜 필터 초기화
         setPaginatedData(reservationList); // 원래의 예약 목록으로 복원
+        location.reload();
     };
 
 

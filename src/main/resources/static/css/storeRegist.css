@@ -53,7 +53,7 @@ body {
     width: 100%;
     height: 60px;
     /* background-color: #cccccc; */
-    background-color: rgba(79, 109, 218, 0.3);;
+    background-color: rgb(56 65 74 / 20%);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -63,7 +63,7 @@ body {
 
 .step.active .icon {
 /* background-color: #727272; */
-    background-color: rgb(79, 109, 218);
+    background-color: #38414a;
     color: white;
 }
 
@@ -96,6 +96,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin-top: 30px;
+    font-family: 'Pretendard-Regular';
 }
 
 .buttons > button {
@@ -105,16 +106,22 @@ body {
     cursor: pointer;
     font-size: 16px;
     background-color: white;
+    font-weight: bold;
+    font-family: 'Pretendard-Regular';
 }
 
 .cancel-btn {
 /* background-color: #999; */
     color: #999;
-    font-family: 'ghanachoco';
+    font-family: 'Pretendard-Regular';
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .next-btn {
-/* background-color: rgba(199, 4, 4, 0.685); */
-    color: rgb(79, 109, 218);
-    font-family: 'ghanachoco';
+    /* background-color: rgba(199, 4, 4, 0.685); */
+    color: #38414a;
+    /* font-family: 'ghanachoco'; */
+    font-family: 'Pretendard-Regular';
+    font-weight: bold;
 }

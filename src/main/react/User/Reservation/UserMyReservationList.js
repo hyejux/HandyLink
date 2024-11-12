@@ -103,56 +103,55 @@ function UserMyReservationList() {
 
 
 
-        {reservationList.map((value, index) => (
-          <div className="user-content-container11" key={index} onClick={() => { goToUserPage(value.reservationNo) }}>
-            <div className="reservation-header">
-            <span className={`reservation-status ${
-                value.reservationStatus === '입금대기' || value.reservationStatus === '대기' ? 'status-pending' : 
-                value.reservationStatus === '확정' ? 'status-confirmed' :
-                value.reservationStatus === '완료' ? 'status-completed' :
-                value.reservationStatus === '취소(고객)' || value.reservationStatus === '취소(업체)' ? 'status-canceled' :
-                ''
-              }`}
-            >
-              {value.reservationStatus}
-            </span>
-              <div className="reservation-time">{formatDate2(value.regTime)} </div>
+          {reservationList.length > 0 ? (
+  reservationList.map((value, index) => (
+    <div className="user-content-container11" key={index} onClick={() => { goToUserPage(value.reservationNo) }}>
+      <div className="reservation-header">
+        <span className={`reservation-status ${
+          value.reservationStatus === '입금대기' || value.reservationStatus === '대기' ? 'status-pending' : 
+          value.reservationStatus === '확정' ? 'status-confirmed' :
+          value.reservationStatus === '완료' ? 'status-completed' :
+          value.reservationStatus === '취소(고객)' || value.reservationStatus === '취소(업체)' ? 'status-canceled' :
+          ''
+        }`}>
+          {value.reservationStatus}
+        </span>
+        <div className="reservation-time">{formatDate2(value.regTime)} </div>
+      </div>
+      
+      <div className="store-name-title">{value.storeName} <i className="bi bi-chevron-right"></i> </div>
+      <div className="product-details">{value.serviceName} | {value.reservationPrice} 원</div>
 
-
-            
-
-
-            </div>
-            
-            <div className="store-name-title">{value.storeName} <i class="bi bi-chevron-right"></i> </div>
-            <div className="product-details">{value.serviceName} | {value.reservationPrice} 원</div>
-
-            <div className="reservation-info">
-
-              <div className="reservation-info-box">
-                <div className="date">
-                  <i className="bi bi-calendar-check-fill"></i>
-                  <span>{value.reservationSlotDate} </span>
-                </div>
-                <div className="time">
-                  <i className="bi bi-clock-fill"></i>
-                  <span>{formatDate(value.reservationTime)}</span>
-                </div>
-              </div>
-
-            </div>
-              {value.reviewCount === 0 && value.reservationStatus === '완료' && (
-              <button className="review-write-btn"
-                onClick={(event) => {
-                  event.stopPropagation(); // Prevents event bubbling
-                  goToReview(value.reservationNo); // Call the function to navigate to the review page
-                }}
-              >
-                리뷰 작성하기
-              </button>
-              )} 
+      <div className="reservation-info">
+        <div className="reservation-info-box">
+          <div className="date">
+            <i className="bi bi-calendar-check-fill"></i>
+            <span>{value.reservationSlotDate} </span>
           </div>
-        ))}
+          <div className="time">
+            <i className="bi bi-clock-fill"></i>
+            <span>{formatDate(value.reservationTime)}</span>
+          </div>
+        </div>
+      </div>
+
+      {value.reviewCount === 0 && value.reservationStatus === '완료' && (
+        <button className="review-write-btn"
+          onClick={(event) => {
+            event.stopPropagation(); // Prevents event bubbling
+            goToReview(value.reservationNo); // Call the function to navigate to the review page
+          }}
+        >
+          리뷰 작성하기
+        </button>
+      )}
+    </div>
+  ))
+) : (
+  <div className="no-reservation-message">
+    예약 내역이 없습니다.
+  </div>
+)}
 
 
       </div>

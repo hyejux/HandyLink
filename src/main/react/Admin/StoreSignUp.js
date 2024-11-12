@@ -632,7 +632,7 @@ function StoreSignUp() {
                         <label htmlFor="address">사업자 주소</label>
                         <div className="btn-group">
                             <input type="text" id="zipcode" value={storeInfoData.zipcode} ref={postcodeRef} placeholder="우편번호" style={{ width: '20%' }} readOnly />
-                            <input type="button" className="btn-postcode" onClick={openPostcode} style={{ width: '20%' }} value="우편번호 찾기" />
+                            <input type="button" className="btn-postcode" onClick={openPostcode} style={{ width: '130px' ,lineHeight: '10px' }} value="우편번호 찾기" />
                         </div>
                         <input type="text" id="addr" value={storeInfoData.addr} ref={addressRef} placeholder="주소" readOnly />
                         <input type="text" id="addrdetail" value={storeInfoData.addrdetail} ref={detailAddressRef} placeholder="상세주소"

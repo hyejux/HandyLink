@@ -530,7 +530,7 @@ function UserMain() {
                 store
                   .sort((a, b) => b.reservationCount - a.reservationCount) // 예약 많은 순으로 정렬
                   .slice(0, Math.floor(store.length / 2) * 2) // 길이를 반으로 자르기
-                  // .slice(0, 8)
+                  .slice(0, 10)
                   .map((store) => {
                     const imageUrl = store.storeImages.length > 0
                       ? store.storeImages[0].storeImgLocation
@@ -919,7 +919,7 @@ function UserMain() {
                 [...new Map(level1Categories.filter(category => category.imageUrl)  // 이미지가 있는 카테고리만 필터링
                   .map(category => [category.storeNo, category])).values()]
                   .sort(() => Math.random() - 0.5)
-                  .slice(0, 10)
+                  .slice(0, 12)
                   .map((category, index) => {
                     const imageUrl = category.imageUrl;
 

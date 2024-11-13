@@ -368,22 +368,27 @@
     </select>
 
     <select id="getDailyReportChart" parameterType="map" resultType="map">
-        SELECT TO_CHAR(date(reg_time), 'MM-DD') AS date, COUNT(*) AS count
-        FROM reservation
-        WHERE store_no = #{storeNo}
-        AND EXTRACT(YEAR FROM reg_time) = #{year}
-        AND EXTRACT(MONTH FROM reg_time) = #{month}
-        GROUP BY date(reg_time)
-        ORDER BY date(reg_time)
+        SELECT TO_CHAR(date(reservation_slot_date), 'MM-DD') AS date, COUNT(*) AS count
+        FROM reservation r
+        join reservation_slot rs on rs.reservation_slot_key = r.reservation_slot_key
+        WHERE r.store_no = #{storeNo}
+        AND EXTRACT(YEAR FROM rs.reservation_slot_date) = #{year}
+        AND EXTRACT(MONTH FROM rs.reservation_slot_date) = #{month}
+        AND (r.reservation_status='완료'
+        OR r.reservation_status='확정')
+        GROUP BY date(rs.reservation_slot_date)
+        ORDER BY date(rs.reservation_slot_date);
     </select>
 
     <select id="getMonthlyReportChart" parameterType="map" resultType="map">
-        SELECT TO_CHAR(date(reg_time), 'YYYY-MM') AS month, COUNT(*) AS count
-        FROM reservation
-        WHERE store_no = #{storeNo}
-        AND EXTRACT(YEAR FROM reg_time) = #{year}
+        SELECT TO_CHAR(date(reservation_slot_date), 'YYYY-MM') AS month, COUNT(*) AS count
+        FROM reservation r
+        join reservation_slot rs on rs.reservation_slot_key = r.reservation_slot_key
+        WHERE r.store_no = #{storeNo}
+            AND EXTRACT(YEAR FROM rs.reservation_slot_date) = #{year}
+            AND r.reservation_status='완료'
         GROUP BY month
-        ORDER BY month
+        ORDER BY month;
     </select>
 
     <select id="getGenderCount" resultType="map">

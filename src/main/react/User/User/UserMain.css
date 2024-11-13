@@ -348,8 +348,8 @@
   text-align: center;
   margin-top: 5px;
   white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .store-category {
@@ -368,8 +368,8 @@
   font-size: 14px;
   margin-top: 5px;
   white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .store-review-option-1 {
@@ -651,31 +651,6 @@
 }
 
 
-
-/* 더 보기 버튼 */
-.load-more-btn-wrap {
-  display: flex;
-  justify-content: center;
-  margin: 0 0 100px 0;
-}
-
-.load-more-btn {
-  background-color: rgba(44, 52, 143, 0.16);
-  color: #000;
-  border: none;
-  border-radius: 10px;
-  width: 400px;
-  height: 50px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.load-more-btn:hover {
-  background-color: rgba(44, 52, 143, 0.30);
-}
-
-
-
 /* 광고 슬라이더 */
 .slider {
   position: relative;
@@ -795,7 +770,7 @@
 }
 
 .search-result-list-content:last-child {
-  margin-bottom: 100px;
+  margin-bottom: 30px;
 }
 
 .search-result-list-content>.bi {
@@ -899,7 +874,6 @@
 /* 가격 */
 .result-list-price {
   font-size: 16px;
-  font-weight: bold;
   margin-right: 10px;
 }
 
@@ -922,18 +896,14 @@
 }
 
 .load-more-btn {
-  background-color: rgba(44, 52, 143, 0.16);
-  color: #000;
+  background-color: #fd8517;
+  color: #fff;
+  padding: 10px;
   border: none;
-  border-radius: 10px;
-  width: 400px;
-  height: 50px;
-  font-size: 16px;
+  border-radius: 5px;
+  width: 80%;
+  font-size: 14px;
   cursor: pointer;
-}
-
-.load-more-btn:hover {
-  background-color: rgba(44, 52, 143, 0.30);
 }
 
 
@@ -1026,7 +996,7 @@
 
 .menu-info-hashtag {
   font-size: 12px;
-  white-space: nowrap; 
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }

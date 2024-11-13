@@ -252,9 +252,9 @@ function AdminStoreReport() {
                                 <span className={selectedPeriod === "이번달" ? 'active' : ''}
                                     onClick={() => handlePeriodChange("이번달")}>이번 달</span>
                                 <span className={selectedPeriod === "올해" ? 'active' : ''}
-                                    onClick={() => handlePeriodChange("올해")}>올해</span>
+                                    onClick={() => handlePeriodChange("올해")}>올 해</span>
                                 <span className={selectedPeriod === "작년" ? 'active' : ''}
-                                    onClick={() => handlePeriodChange("작년")}>작년</span>
+                                    onClick={() => handlePeriodChange("작년")}>작 년</span>
                             </div>
                             <div className="graph">
                                 <ReservationBarChart period={selectedPeriod} />
@@ -324,7 +324,7 @@ function AdminStoreReport() {
                                             <tr>
                                                 <th>연도</th>
                                                 <th>월</th>
-                                                <th>총 매출</th>
+                                                <th>매출액</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -352,10 +352,10 @@ function AdminStoreReport() {
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>년도</th>
+                                                <th>연도</th>
                                                 <th>월</th>
                                                 <th>일</th>
-                                                <th>총 매출</th>
+                                                <th>매출액</th>
                                             </tr>
                                         </thead>
                                         <tbody>

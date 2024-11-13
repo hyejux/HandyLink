@@ -189,7 +189,7 @@ function UserSearch() {
 
       <div className="search-top">
         <div className='left'>검색</div>
-        <div className='right' onClick={() => window.location.href = '/userlikelist.user'}><img src="/img/user-main/heart.png" /></div>
+        {/* <div className='right' onClick={() => window.location.href = '/userlikelist.user'}><img src="/img/user-main/heart.png" /></div> */}
       </div>
 
       <div className="store-search-bar">

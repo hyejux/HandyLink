@@ -96,7 +96,7 @@ function UserAccountPage () {
                     <div className="user-details">
                         <h2>{isLoggedIn ? userInfo.userName : '로그인 하러 가기'}</h2>
                         <p>{isLoggedIn ? '프로필 편집' : ''}</p>
-                        <span className="arrow">></span>
+                        <span className="arrow"><i class="bi bi-chevron-right"></i></span>
                     </div>
                 </div>
 
@@ -111,7 +111,7 @@ function UserAccountPage () {
                     <ul>
                         <li>
                             <div className="menu-item">
-                            <img src="https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731338833/nv5uigrzdx9fhgrvlb8p.png"></img>
+                            <img src="./img/mypage/review.png"/>
                                 <span>후기</span>
                             </div>
                         </li>
@@ -124,7 +124,7 @@ function UserAccountPage () {
                     <ul>
                         <li>
                             <div className="menu-item">
-                            <img src="https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731338833/we7age9sr7kalzuo67wc.png"></img>
+                            <img src="./img/mypage/heart.png"/>
                                 <span>찜</span>
                             </div>
                         </li>
@@ -138,7 +138,7 @@ function UserAccountPage () {
                     <ul>
                         <li>
                             <div className="menu-item">
-                                <img src="https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731338833/x7k7z0qcijjgkfbu6i5y.png"></img>
+                            <img src="./img/mypage/calendar.png"/>
                                 <span>주문내역</span>
                             </div>
                         </li>

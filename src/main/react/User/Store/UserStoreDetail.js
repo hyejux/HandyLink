@@ -585,7 +585,15 @@ function UserStoreDetail() {
                     </div>
                   </div>
                   <div className="store-basic-info"><img src="../img/store/telephone.png" /> {storeInfo.managerPhone}</div>
-                  <div className="store-basic-info"><img src="../img/store/parking.png" /> {storeInfo.storeParkingYn === 'Y' ? '주차가능' : '주차불가'}</div>
+                  <div className="store-basic-info">
+                    {storeInfo.storeParkingYn === 'Y' ? (
+                      <img src="../img/store/parking.png" alt="주차 가능" />
+                    ) : (
+                      <img src="../img/store/noparking.png" alt="주차 불가" />
+                    )}
+                    {storeInfo.storeParkingYn === 'Y' ? '주차가능' : '주차불가'}
+                  </div>
+
                   <div className="store-basic-info">
                     <div>
                       {storeInfo.storeSns ? (
@@ -599,10 +607,11 @@ function UserStoreDetail() {
                           const imageSrc = snsImageMap[sns.snsName];
 
                           return (
-                            <div key={index} style={{ marginBottom: '5px', display: 'flex', alignItems: 'center' }}>
-                              {imageSrc && <img src={imageSrc} alt={sns.snsName} style={{ marginRight: '5px' }} />}
+                            <div key={index} className="sns-list-box">
+                              {imageSrc && <img src={imageSrc} alt={sns.snsName} className="sns-image" />}
                               <a href={sns.snsLink} className="sns-name">{sns.snsName}</a>
                             </div>
+
                           );
                         })
                       ) : null}
@@ -614,8 +623,8 @@ function UserStoreDetail() {
               </div>
 
               <div className="user-content-container">
-                <div>
-                  <i className="bi bi-emoji-smile"></i>{storeInfo.storeName}
+                <div className="store-intro-box">
+                  <img src="../img/store/smile.png" /> {storeInfo.storeName}
                 </div>
                 <div style={{ margin: '10px 10px 0 10px' }}>
                   {storeInfo.storeIntro}
@@ -773,7 +782,6 @@ function UserStoreDetail() {
           {activeSection === 'review' && (
             <div className="user-content-container5">
               <div className="review-section">
-
 
 
                 <div className='photo-rating-box'>

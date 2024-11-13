@@ -8,7 +8,7 @@
 }
 
 .user-content-container:first-child {
-  margin-top: 10px;
+  padding-top: 75px;
 }
 
 .user-content-container:last-child {
@@ -96,6 +96,9 @@
 .info-row .left {
   text-align: left;
   flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .info-row .right {
@@ -193,7 +196,7 @@ hr {
 .user-top-nav {
   display: flex;
   justify-content: space-between;
-  padding: 10px;
+  padding: 15px;
   /* text-align: center; */
   background-color: #ffffff;
   border-bottom: 1px solid #ddd;
@@ -202,8 +205,24 @@ hr {
   top: 0;
   background-color: white;
   z-index: 100; */
+  position: fixed;
+  width: 100%;
 }
 
+
+.back-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background-color: #ffffff;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0;
+}
+
+.back-btn-container span {
+  font-size: 18px;
+}
 
 
 

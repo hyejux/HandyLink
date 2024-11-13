@@ -191,7 +191,7 @@ const handleTimeNumChange = (e) => {
         formData
       );
       console.log('Uploaded Image URL:', response.data.secure_url);
-      alert(`Image uploaded successfully! URL: ${response.data.secure_url}`);
+//      alert(`Image uploaded successfully! URL: ${response.data.secure_url}`);
       return response.data.secure_url; // 업로드된 이미지 URL을 반환
     } catch (error) {
       console.error('Error uploading image:', error);

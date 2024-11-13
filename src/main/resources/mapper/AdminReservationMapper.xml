@@ -10,38 +10,35 @@
 
     <select id="priceDay" resultType="com.example.HiMade.admin.dto.priceMonthDTO">
         SELECT
-        EXTRACT(YEAR FROM p.payment_date) AS year,
-        EXTRACT(MONTH FROM p.payment_date) AS month,
-        EXTRACT(DAY FROM p.payment_date) AS day,
-        SUM(r.reservation_price) AS total_sales
-        FROM
-        reservation r
-        JOIN
-        payment p ON p.reservation_no = r.reservation_no
+            EXTRACT(YEAR FROM p.payment_date) AS year,
+            EXTRACT(MONTH FROM p.payment_date) AS month,
+            EXTRACT(DAY FROM p.payment_date) AS day,
+            SUM(r.reservation_price) AS total_sales
+        FROM reservation r
+        JOIN payment p ON p.reservation_no = r.reservation_no
         WHERE
-        r.store_no = #{id}
+            r.store_no = #{id}
+            AND EXTRACT(YEAR FROM p.payment_date) = #{year}
+            AND EXTRACT(MONTH FROM p.payment_date) = #{month}
         GROUP BY
-        EXTRACT(YEAR FROM p.payment_date),
-        EXTRACT(MONTH FROM p.payment_date),
-        EXTRACT(DAY FROM p.payment_date)
-        ORDER BY
-        year, month, day
+            EXTRACT(YEAR FROM p.payment_date),
+            EXTRACT(MONTH FROM p.payment_date),
+            EXTRACT(DAY FROM p.payment_date)
+        ORDER BY year, month, day
     </select>
 <!--    매출 통계 -->
     <select id="priceMonth" resultType="com.example.HiMade.admin.dto.priceMonthDTO">
         SELECT
-        EXTRACT(YEAR FROM p.payment_date) AS year,
-        EXTRACT(MONTH FROM p.payment_date) AS month,
-        SUM(r.reservation_price) AS total_sales
-        FROM
-        reservation r
-        JOIN
-        payment p ON p.reservation_no = r.reservation_no
-        WHERE
-        r.store_no = #{id}
+            EXTRACT(YEAR FROM p.payment_date) AS year,
+            EXTRACT(MONTH FROM p.payment_date) AS month,
+            SUM(r.reservation_price) AS total_sales
+        FROM reservation r
+        JOIN payment p ON p.reservation_no = r.reservation_no
+        WHERE r.store_no = #{id}
+            AND EXTRACT(YEAR FROM p.payment_date) = #{year}
         GROUP BY
-        EXTRACT(YEAR FROM p.payment_date),
-        EXTRACT(MONTH FROM p.payment_date)
+            EXTRACT(YEAR FROM p.payment_date),
+            EXTRACT(MONTH FROM p.payment_date)
         ORDER BY
         year, month;
 

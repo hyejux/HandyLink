@@ -176,15 +176,16 @@ function UserMyReservationDetail() {
 
   return (
     <div>
-      
-        <div className="user-top-nav">
-        <div className="back-btn-container">
-            <button className="back-btn" onClick={() => window.history.back()}><i className="bi bi-chevron-left"></i> </button>
-          </div>
-        </div>
-       
 
-      <div className="user-content-container" style={{paddingTop: "75px"}}>
+      <div className="user-top-nav">
+        <div className="back-btn-container">
+          <button className="back-btn" onClick={() => window.history.back()}><i className="bi bi-chevron-left"></i></button>
+        </div>
+
+      </div>
+
+
+      <div className="user-content-container" style={{ paddingTop: "75px" }}>
         <div className='payment-date'>{formatDate2(reservationDetail.regTime)}</div>
         <div className='payment-num'> 주문번호 {(reservationDetail.reservationNo)}</div>
       </div>

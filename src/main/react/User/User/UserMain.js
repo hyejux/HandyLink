@@ -428,55 +428,57 @@ function UserMain() {
             <img src='https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731039573/nh8d2u43ldav5tetglsb.png' />
           </div>
 
-          {/* 내 주변 가게 */}
-          <div className="user-main-content">
-            <button className="nav-button left" ref={btnLeftStoreRef1} aria-label="왼쪽으로 이동">‹</button>
-            <button className="nav-button right" ref={btnRightStoreRef1} aria-label="오른쪽으로 이동">›</button>
-            <h3>
-              <div className="title-name"><img src="/img/user-main/shop.png" /></div>
-              <div className="title-name">고객님 주변 이런 가게는 어떠신가요?</div>
-            </h3>
+         {/* 내 주변 가게 */}
+<div className="user-main-content">
+  <button className="nav-button left" ref={btnLeftStoreRef1} aria-label="왼쪽으로 이동">‹</button>
+  <button className="nav-button right" ref={btnRightStoreRef1} aria-label="오른쪽으로 이동">›</button>
+  <h3>
+    <div className="title-name"><img src="/img/user-main/shop.png" alt="쇼핑 아이콘" /></div>
+    <div className="title-name">고객님 주변 이런 가게는 어떠신가요?</div>
+  </h3>
 
-            <div className="user-main-list-wrap" ref={storeListRef1}>
-              {store.length > 0 ? (
-                store
-                  .map((store) => ({
-                    ...store,
-                    distance: distances[store.addr] || Infinity,
-                  }))
-                  .sort((a, b) => a.distance - b.distance)
-                  .map((store) => {
-                    const imageUrl = store.storeImages.length > 0
-                      ? store.storeImages[0].storeImgLocation
-                      : "/img/cake001.jpg"; // 기본 이미지 설정
+  <div className="user-main-list-wrap" ref={storeListRef1}>
+    {store.length > 0 ? (
+      store
+        .map((store) => ({
+          ...store,
+          distance: distances[store.addr] || Infinity,
+        }))
+        .sort((a, b) => a.distance - b.distance)
+        .map((store) => {
+          if (store.storeImages.length === 0) {
+            return null;
+          }
 
-                    return (
-                      <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
-                        <div className="user-category-menu">
-                          <div className="user-category-menu-img">
-                            <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
-                              <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
-                            </button>
-                            <img src={imageUrl} alt={store.storeName} />
-                          </div>
-                          <div className="store-title-1">{store.storeName}</div>
-                          <div className="store-review-option-1">
-                            <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
-                            <span className="review-count">({store.reviewCount})</span>
-                            <span className="store-option">{store.storeCate || '미등록'}</span>
-                          </div>
-                          <div className="store-distance">
-                            내 위치에서 {distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음'}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })
-              ) : (
-                <div className="no-stores">정보를 불러오지 못 했습니다 </div>
-              )}
+          const imageUrl = store.storeImages[0].storeImgLocation;
+
+          return (
+            <div className="user-main-list-container" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
+              <div className="user-category-menu">
+                <div className="user-category-menu-img">
+                  <button className="button bookmark-btn" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                    <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
+                  </button>
+                  <img src={imageUrl} alt={store.storeName} />
+                </div>
+                <div className="store-title-1">{store.storeName}</div>
+                <div className="store-review-option-1">
+                  <span className="store-review"><i className="bi bi-star-fill"></i> {store.averageRating}</span>
+                  <span className="review-count">({store.reviewCount})</span>
+                  <span className="store-option">{store.storeCate || '미등록'}</span>
+                </div>
+                <div className="store-distance">
+                  내 위치에서 {distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음'}
+                </div>
+              </div>
             </div>
-          </div>
+          );
+        })
+    ) : (
+      <div className="no-stores">정보를 불러오지 못 했습니다 </div>
+    )}
+  </div>
+</div>
 
 
           {/* 서비스 랜덤으로 뿌리기 */}

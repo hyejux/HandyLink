@@ -25,14 +25,14 @@ public class AdminReservationController {
   private AdminReservationService adminReservationService;
 
 
-  @GetMapping("/priceMonth/{id}")
-  public List<priceMonthDTO> priceMonth(@PathVariable int id){
-    return adminReservationService.priceMonth(id);
+  @GetMapping("/priceMonth/{id}/{year}")
+  public List<priceMonthDTO> priceMonth(@PathVariable int id, @PathVariable int year){
+    return adminReservationService.priceMonth(id,year);
   }
 
-  @GetMapping("/priceDay/{id}")
-  public List<priceMonthDTO> priceDay(@PathVariable int id){
-    return adminReservationService.priceDay(id);
+  @GetMapping("/priceDay/{id}/{year}/{month}")
+  public List<priceMonthDTO> priceDay(@PathVariable int id, @PathVariable int year, @PathVariable int month){
+    return adminReservationService.priceDay(id, year, month);
   }
 
   @PostMapping("/save-order")

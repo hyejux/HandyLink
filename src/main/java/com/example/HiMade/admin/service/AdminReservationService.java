@@ -25,8 +25,8 @@ public interface AdminReservationService
   public List<adminReserveMangeDTO> getManageFilterList(int storeNo);
   public List<adminManagerCalDTO> getManageCalender(int storeNo);
 
-  List<priceMonthDTO> priceMonth(int id);
-  List<priceMonthDTO> priceDay(int id);
+  List<priceMonthDTO> priceMonth(int id, int year);
+  List<priceMonthDTO> priceDay(int id, int year, int month);
   public void saveOrder(List<adminReservationDTO> orderedList);
   //예약 상태 변경
   void updateStatus(UpdateReservationStatusDTO dto);

@@ -87,7 +87,11 @@ function AgeChart() {
         },
     };
 
-    return <Pie ref={chartRef} data={chartData} options={options} />;
+    return(
+        <div style={{ width: '100%', height: 'auto' }}>
+            <Pie ref={chartRef} data={chartData} options={options} />
+        </div>
+    );
 }
 
 export default AgeChart;

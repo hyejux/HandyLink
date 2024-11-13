@@ -12,16 +12,16 @@ function MonthlySalesBarChart({ period }) {
     const currentMonth = new Date().getMonth() + 1;
 
     const [chartData, setChartData] = useState({
-        labels: Array.from({ length: 31 }, (_, i) => `${i + 1}일`), // 기본 값으로 1일부터 31일까지
+        labels: Array.from({ length: 31 }, (_, i) => `${i + 1}일`),
         datasets: [
             {
                 label: '매출액',
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(255, 159, 64, 0.6)', // 주황색 계열로 변경
+                borderColor: 'rgba(255, 159, 64, 1)',
                 borderWidth: 1,
-                hoverBackgroundColor: 'rgba(75, 192, 192, 0.8)',
-                hoverBorderColor: 'rgba(75, 192, 192, 1)',
-                data: Array(31).fill(0) // 각 일의 매출 초기화
+                hoverBackgroundColor: 'rgba(255, 159, 64, 0.8)',
+                hoverBorderColor: 'rgba(255, 159, 64, 1)',
+                data: Array(31).fill(0)
             }
         ]
     });
@@ -30,7 +30,7 @@ function MonthlySalesBarChart({ period }) {
         const fetchSalesData = async () => {
             try {
                 if (period === '올해') {
-                    const response = await axios.get(`/adminReservation/priceMonth/${storeNo}`);
+                    const response = await axios.get(`/adminReservation/priceMonth/${storeNo}/${currentYear}`);
                     const salesData = response.data;
 
                     const filteredData = salesData.filter(item => item.year === currentYear);
@@ -51,7 +51,7 @@ function MonthlySalesBarChart({ period }) {
                         ]
                     }));
                 } else if (period === '이번달') {
-                    const response = await axios.get(`/adminReservation/priceDay/${storeNo}`);
+                    const response = await axios.get(`/adminReservation/priceDay/${storeNo}/${currentYear}/${currentMonth}`);
                     const salesData = response.data;
 
                     // Filter sales data for the current month and year

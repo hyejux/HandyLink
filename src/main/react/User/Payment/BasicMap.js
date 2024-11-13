@@ -145,7 +145,8 @@ export default function BasicMap({ storeLocation, storeName }) {
                     borderRadius: "5px",
                     cursor: "pointer",
                     zIndex: 1,
-                    fontSize: "10px"
+                    fontSize: "10px",
+                    color: "#000"
                 }}>
                 내 위치
             </button>
@@ -161,7 +162,8 @@ export default function BasicMap({ storeLocation, storeName }) {
                     borderRadius: "5px",
                     cursor: "pointer",
                     zIndex: 1,
-                    fontSize: "10px"
+                    fontSize: "10px",
+                    color: "#000"
                 }}>
                 가게 위치
             </button>

@@ -9,8 +9,8 @@ function UserMain() {
   const [store, setStore] = useState([]);
   const [distances, setDistances] = useState({});
   const [currentPosition, setCurrentPosition] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(2); // 가게 표시 개수 상태
-  const LOAD_MORE_COUNT = 1; // 더 볼 가게 수
+  const [visibleCount, setVisibleCount] = useState(10); // 가게 표시 개수 상태
+  const LOAD_MORE_COUNT = 10; // 더 볼 가게 수
   const [level1Categories, setLevel1Categories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isBookmarked, setIsBookmarked] = useState([]); //찜
@@ -530,7 +530,7 @@ function UserMain() {
                 store
                   .sort((a, b) => b.reservationCount - a.reservationCount) // 예약 많은 순으로 정렬
                   .slice(0, Math.floor(store.length / 2) * 2) // 길이를 반으로 자르기
-                  // .slice(0, 8)
+                  .slice(0, 10)
                   .map((store) => {
                     const imageUrl = store.storeImages.length > 0
                       ? store.storeImages[0].storeImgLocation
@@ -919,7 +919,7 @@ function UserMain() {
                 [...new Map(level1Categories.filter(category => category.imageUrl)  // 이미지가 있는 카테고리만 필터링
                   .map(category => [category.storeNo, category])).values()]
                   .sort(() => Math.random() - 0.5)
-                  .slice(0, 10)
+                  .slice(0, 12)
                   .map((category, index) => {
                     const imageUrl = category.imageUrl;
 
@@ -1004,7 +1004,7 @@ function UserMain() {
           <div className="search-result-list-container">
             <h3>다양한 가게들을 더 많이 만나보세요!</h3>
             {store.length > 0 ? (
-              store.map((store) => {
+              store.slice(0, visibleCount).map((store) => {
                 const storeDistance = distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음';
                 const imageUrl = store.storeImages.length > 0
                   ? store.storeImages[0].storeImgLocation
@@ -1069,10 +1069,9 @@ function UserMain() {
             )}
           </div>
 
-          {/* <div className='load-more-btn-wrap'>
-          <button onClick={handleLoadMore} className="load-more-btn">추천 가게 더 보기</button>
-        </div> */}
-
+          <div className='load-more-btn-wrap'>
+          <button onClick={handleLoadMore} className="load-more-btn">가게 더 보기</button>
+        </div>
 
 
         </div>

@@ -535,15 +535,30 @@ body {
 }
 
 .chat-btn img {
-  width: 16px;
-  height: 16px;
-  margin: 1px 10px 0 0;
+  width: 24px;
+  height: 24px;
 }
 
 .announcement-list img {
   width: 16px;
   height: 16px;
   margin: 5px 5px 0 0;
+}
+
+.store-intro-box img {
+  width: 16px;
+  height: 16px;
+  margin: 0 5px -1px 0;
+}
+
+.sns-list-box {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.sns-image {
+  margin-right: 10px;
 }
 
 .sns-name {
@@ -581,6 +596,7 @@ body {
   background-color: #fff;
   border: none;
   padding-left: 0;
+  line-height: 55px;
 }
 
 .store-name-box button:active {

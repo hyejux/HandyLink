@@ -2,7 +2,7 @@
 .settings-container {
     background-color: #fff;
     /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
-    padding: 20px;
+    padding: 15px;
 }
 
 .user-info {
@@ -48,7 +48,8 @@ cursor: pointer;
 
 .arrow {
     position: absolute;
-    right: 15px;
+    right: 20px;
+    top: 40px;
     font-size: 20px;
     color: gray;
 }
@@ -160,7 +161,7 @@ settings-submenu li {
 
 .search-top {
     overflow: hidden;
-    padding: 10px 10px 0px 10px;
+    padding: 15px 15px 0px 15px;
     background-color: #fff;
   }
   

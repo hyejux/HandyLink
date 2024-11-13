@@ -176,14 +176,15 @@ function UserMyReservationDetail() {
 
   return (
     <div>
-      {/*
+      
         <div className="user-top-nav">
-          <i className="bi bi-arrow-left"></i>
-          <logo className="logo"> 주문 상세  </logo>
+        <div className="back-btn-container">
+            <button className="back-btn" onClick={() => window.history.back()}><i className="bi bi-chevron-left"></i> </button>
+          </div>
         </div>
-        */}
+       
 
-      <div className="user-content-container">
+      <div className="user-content-container" style={{paddingTop: "75px"}}>
         <div className='payment-date'>{formatDate2(reservationDetail.regTime)}</div>
         <div className='payment-num'> 주문번호 {(reservationDetail.reservationNo)}</div>
       </div>
@@ -388,16 +389,17 @@ function UserMyReservationDetail() {
       </div>
 
       <hr />
-      
-      {refundInfo.length === 0 && (
-        <>       <div className="user-content-container">
-          <button className="reservation-cancel-btn" onClick={cancelReservation}>예약취소</button>
-        </div>
-      <hr />
-      </>
- 
+
+      {(refundInfo.length === 0 && (reservationDetail.reservationStatus === '대기' || reservationDetail.reservationStatus === '입금대기')) && (
+        <>
+          <div className="user-content-container">
+            <button className="reservation-cancel-btn" onClick={cancelReservation}>예약취소</button>
+          </div>
+          <hr />
+        </>
       )}
-      
+
+
 
 
       <div className="user-content-container">

@@ -2,6 +2,7 @@ package com.example.HiMade.admin.controller;
 
 import com.example.HiMade.admin.dto.StoreRegistDTO;
 import com.example.HiMade.admin.service.AdminStoreService;
+import com.example.HiMade.user.service.UserChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -21,27 +22,36 @@ public class MainController {
   @Qualifier("adminStoreService")
   private AdminStoreService adminStoreService;
 
+  @Autowired
+  private UserChatRoomService userChatRoomService;
+
   @GetMapping("/{pageName}.user")
-  public String page(@PathVariable String pageName, Model model) {
+  public String page(@PathVariable String pageName, Model model, @RequestParam (required = false) Long storeNo) {
     model.addAttribute("pageName", pageName);
 
-    switch (pageName) {
-      case "UserSignUp":
-        model.addAttribute("pageTitle", "회원가입");
-        break;
-      case "UserMyReview":
-        model.addAttribute("pageTitle", "내 후기");
-        break;
-      case "UserMyPage":
-        model.addAttribute("pageTitle", "내 프로필");
-        break;
-      case "UserLikeList":
-        model.addAttribute("pageTitle", "찜 리스트");
-        break;
+    if ("UserChatRoom".equals(pageName) && storeNo != null) {
+      StoreRegistDTO storeInfo = userChatRoomService.getStoreInfoByStoreNo(storeNo);
+      model.addAttribute("pageTitle", storeInfo.getStoreName());
 
-      default:
-        model.addAttribute("pageTitle", "");
-        break;
+    } else {
+      switch (pageName) {
+        case "UserSignUp":
+          model.addAttribute("pageTitle", "회원가입");
+          break;
+        case "UserMyReview":
+          model.addAttribute("pageTitle", "내 후기");
+          break;
+        case "UserMyPage":
+          model.addAttribute("pageTitle", "내 프로필");
+          break;
+        case "UserLikeList":
+          model.addAttribute("pageTitle", "찜 리스트");
+          break;
+
+        default:
+          model.addAttribute("pageTitle", "");
+          break;
+      }
     }
 
     System.out.println("뷰이름:" + pageName);

@@ -21,4 +21,5 @@ public interface UserChatRoomMapper {
     void deactivateChat(String userId, Long storeNo);
     void reactivateChat(String userId, Long storeNo);
     Map<String, Object> getChatRoomStatus(String userId, Long storeNo);
+    void insertChatRoomStatus (String userId, Long storeNo, Timestamp UserLastCheckedTime);
 }

@@ -23,6 +23,7 @@
   margin-bottom: 30px;
   margin-top: 30px;
   gap: 5px;
+   cursor: pointer;
 }
 
 .main-btns2{
@@ -32,6 +33,7 @@
   margin-bottom: 30px;
   /* margin-top: 30px; */
   gap: 5px;
+   cursor: pointer;
 }
 
 .btn-ali {
@@ -39,6 +41,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+     cursor: pointer;
 }
 .main-contents{
   border-radius: 10px;
@@ -52,7 +55,7 @@
   font-weight: bold;
   border-radius: 3px;
   background-color: #2e3133;
-
+ cursor: pointer;
 }
 
 .btn-modi {
@@ -73,9 +76,6 @@
 
 
 
-.btn-del:hover {
-  background-color: #38414a0d;
-}
 
 .btn-del {
   border: 2px solid #1d2830;
@@ -93,7 +93,7 @@
 }
 
 .btn-st:hover {
-  background-color: #3e3f470d;
+
 }
 .reserve-content-text-box {
   /* border : 1px solid red; */

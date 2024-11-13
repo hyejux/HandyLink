@@ -14,7 +14,8 @@
         left join category_image ci
         on c.category_id = ci.category_id
         where category_level = 1
-        AND store_no = #{id};
+        AND store_no = #{id}
+        order by c.category_id desc
     </select>
 
     <select id="getStoreMainCategory2" resultType="com.example.HiMade.user.dto.UserCateDTO">

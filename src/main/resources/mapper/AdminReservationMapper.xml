@@ -89,7 +89,7 @@
         on rs.reservation_slot_key = r.reservation_slot_key
         LEFT JOIN payment pm
         ON pm.reservation_no = r.reservation_no
-        where r.store_no = 86
+        where r.store_no = #{storeNo}
         group by r.reservation_no, main_c.category_id, pm.payment_id, rs.reservation_slot_key
         order by r.reservation_no desc
 

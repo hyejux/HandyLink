@@ -618,13 +618,14 @@ function AdminReserveManage() {
 
 
 
-                                <div className="dropdown-menu">
-                                    <select onChange={handleServiceChange} value={selectedServiceName}>
-                                        {filterServiceName.map((value, index) => (
-                                            <option key={index} value={value.serviceName}>{value.serviceName}</option>
-                                        ))}
-                                    </select>
-                                </div>
+                            <div className="dropdown-menu">
+    <select onChange={handleServiceChange} value={selectedServiceName}>
+        <option value="" disabled selected>서비스 선택</option> {/* 기본값으로 빈 옵션 추가 */}
+        {filterServiceName.map((value, index) => (
+            <option key={index} value={value.serviceName}>{value.serviceName}</option>
+        ))}
+    </select>
+</div>
 
 
                                 <div className="search-bar-box">

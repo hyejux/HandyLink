@@ -394,11 +394,11 @@ function UserReservationDate() {
                 {/* <button type="button" onClick={handleInquiryClick}><i className="bi bi-chat-dots"></i></button>문의하기 버튼 */}
               </div>
               <div className="store-basic-info">
-                <div className="store-addr"> <i className="bi bi-shop"></i> {storeInfo.addr}   {storeInfo.addrdetail}</div>
+                <div className="store-addr"> <img src="../img/store/shop2.png"/> {storeInfo.addr}   {storeInfo.addrdetail}</div>
               </div>
               {/* <hr /> */}
-              <div className="store-basic-info"><i className="bi bi-alarm-fill"></i> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
-              <div className="store-basic-info"><i className="bi bi-telephone-fill"></i> {storeInfo.managerPhone}</div>
+              <div className="store-basic-info"><img src="../img/store/clock.png"/> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
+              <div className="store-basic-info"><img src="../img/store/telephone.png" /> {storeInfo.managerPhone}</div>
             </div>
 
             <div className="user-content-container10">

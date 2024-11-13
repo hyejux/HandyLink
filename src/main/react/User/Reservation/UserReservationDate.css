@@ -11,7 +11,8 @@
     font-weight: 400;
     font-style: normal;
   }
-
+abbr {
+    text-decoration: none;}
   .disabled-tile {
     background-color: #d3d3d3; /* 회색 */
     color: #946666;

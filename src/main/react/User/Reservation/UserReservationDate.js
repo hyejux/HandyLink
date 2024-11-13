@@ -8,10 +8,12 @@ import "./UserReservationDate.css";
 // import Calendar from 'react-calendar';
 import moment from 'moment';
 // import 'react-calendar/dist/Calendar.css';
+import 'moment/locale/ko'; // 한국어 로케일 추가
 
 function UserReservationDate() {
   const [cateId, setCateId] = useState(0);
 
+moment.locale('ko'); // moment의 로케일을 한국어로 설정
   const [storeOpenTime, setStoreOpenTime] = useState('');
   const [storeCloseTime, setStoreCloseTime] = useState('');
 
@@ -426,7 +428,7 @@ function UserReservationDate() {
         
           <div>
 
-            
+
       <Calendar
         onChange={handleDateChange}
         value={date}
@@ -436,7 +438,14 @@ function UserReservationDate() {
         prev2Label={null}
         tileDisabled={tileDisabled}
         tileClassName={getTileClass} // 날짜 스타일링
-        formatDay={(locale, date) => moment(date).format('D')} // 날짜 표시 형식 (예: 1, 2, 3 등) 
+        formatDay={(locale, date) => moment(date).format('D')} // 날짜 표시 형식 (예: 1, 2, 3 등)
+        formatDay={(locale, date) => moment(date).format('D')} // 날짜 표시 형식 (예: 1, 2, 3 등)
+              formatShortWeekday={(locale, date) =>
+                ['일', '월', '화', '수', '목', '금', '토'][date.getDay()]
+              } // 요일을 한국어로 표시
+         formatMonthYear={(locale, date) =>
+                 `${moment(date).format('YYYY년 MMM')}`
+               } // 월을 한국어로 표시
       />
     </div>
           </div>

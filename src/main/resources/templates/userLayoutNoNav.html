@@ -1,52 +1,54 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>페이지 이름</title>
   <link rel="stylesheet" th:href="@{/css/userLayoutNoNav.css}"/>
-
   <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
   <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=f2ab75dd984a8c54de2057619973c70a&libraries=services"></script>
 </head>
-
 <body>
 <div class="user-main-container-no-nav">
   <div class="top-bar">
-    <button class="back-button" onclick="history.back()">
-      <i class="bi bi-chevron-left" onclick="handleGoBack()"></i>
+    <button class="back-button" onclick="handleGoBack()">
+      <i class="bi bi-chevron-left"></i>
     </button>
-    <span class="page-title" th:text="${pageTitle}">페이지 제목</span>
+    <span class="page-title" id="pageTitle" th:text="${pageTitle}">페이지 제목</span>
   </div>
-
-
   <div id="root"></div>
 </div>
 
 <script>
-  function handleGoBack() {
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      window.location.href = '/userMain.user';
+  // 페이지 로드 시 이전 페이지 URL 저장
+  window.onload = function() {
+    const prevPage = document.referrer;
+    if (prevPage) {
+      sessionStorage.setItem('prevPage', prevPage);
     }
   }
-</script>
 
-<script th:inline="javascript">
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const storeNo = urlParams.get('storeNo');
-
+  // 채팅 페이지에서 제목 업데이트
   const updateTitle = () => {
     const storeName = localStorage.getItem('storeName');
     if (storeName && window.location.pathname.includes('UserChatRoom')) {
       document.getElementById('pageTitle').textContent = storeName;
+      // 히스토리 스택에 새로운 항목을 추가하지 않고 현재 URL 대체
+      history.replaceState(null, '', location.href);
     }
   }
-
   window.addEventListener('load', updateTitle);
+
+  // 뒤로 가기 함수
+  function handleGoBack() {
+    const prevPage = sessionStorage.getItem('prevPage');
+    // 이전 페이지가 채팅 페이지가 아닐 경우 이전 페이지로 이동, 없으면 기본 페이지로 이동
+    if (prevPage && !prevPage.includes('UserChatRoom')) {
+      window.location.href = prevPage;
+    } else {
+      window.location.href = '/userMain.user';
+    }
+  }
 </script>
 
 <script th:src="@{'/bundle/' + ${pageName} + '.bundle.js'}"></script>

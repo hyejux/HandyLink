@@ -24,6 +24,29 @@ button:disabled {
   background-color: rgba(239, 239, 239, 0.3) !important;
   color: rgba(16, 16, 16, 0.3) !important;
   border-color: rgba(118, 118, 118, 0.3) !important;
+
+    font-family: 'ghanachoco';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ghanachoco.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+  }
+abbr {
+    text-decoration: none;}
+  .disabled-tile {
+    background-color: #d3d3d3; /* 회색 */
+    color: #946666;
+  }
+
+  button:disabled {
+    background-color: rgba(239, 239, 239, 0.3) !important;
+    color: rgba(16, 16, 16, 0.3) !important;
+    border-color: rgba(118, 118, 118, 0.3) !important;
 }
 
 

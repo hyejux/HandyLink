@@ -474,7 +474,7 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
     return (
         <div>
             <div className="main-content-title">
-                <h1> 상품 주문 건수 관리 </h1>
+                <h1> 상품 예약 건수 관리 </h1>
               
             </div>
             <div className="reserve-container">
@@ -519,7 +519,7 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
             <div className="main-slot2">
 
                 <div className='main-slot-title'>
-                <div> 주문 시작일 </div>
+                <div> 예약 시작일 </div>
                 </div>
                 <div  className='main-slot-input'>
                         <input 
@@ -595,7 +595,7 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
                                         
                                             <ul className="reservation-list">
                                                     <button className='slotbtn2' type="button" onDoubleClick={handleSaveChanges2} >
-                                            주문 막기
+                                            예약 막기
                                            </button>
                                                 {reservations.map((reservation) => (
                                                     <li key={reservation.reservationSlotKey} className={reservation.slotCount === reservation.slotStatusCount ? 'equal-slot-count' : ''}>
@@ -667,7 +667,7 @@ const formattedEndDate = endDate ? endDate.toLocaleDateString() : '종료 날짜
                         <div>
  
         <div>
-        <h3>  주문 건수 수정</h3>  <hr/>
+        <h3>  예약 건수 수정</h3>  <hr/>
             <div className='slot-num-status'>
           
             <div className='box2'>

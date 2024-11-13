@@ -66,34 +66,35 @@ h2 {
     padding-top: 0;
 }
 
-
 .graph-filter {
+    font-size: 12px;
+    overflow: hidden;
+}
+
+
+.filter {
     border: 1px solid #ddd;
     border-radius: 2px;
     width: 30%;
     height: 22px;
     margin-left: 5px;
     display: flex;
-    font-size: 12px;
+    float: left;
 }
 
 
-.graph-filter > span {
+.filter > span {
     display: flex;
     justify-content: center;
     align-items: center;
     border-left: 1px solid #ddd;
-    width: 33%;
+    width: 48%;
     height: 100%;
     cursor: pointer;
 }
 
-.graph-filter > span:nth-child(1){
+.filter > span:nth-child(1){
     border: none;
-}
-
-.price {
-    width: 20%;
 }
 
 .price > span{
@@ -101,13 +102,12 @@ h2 {
     border: none;
 }
 
-.graph-filter > span:hover {
+.filter > span:hover {
     background-color: rgba(189, 189, 189 , 27%);
 }
 
-.graph-filter > span.active {
+.filter > span.active {
     background-color: rgba(189, 189, 189 , 53%);
-
 }
 
 .graph {
@@ -115,6 +115,12 @@ h2 {
     border-radius: 3px;
     padding: 15px 30px 0 0;
     margin-top: 10px;
+}
+
+.small-text {
+    float: right;
+    color: #999;
+    font-size: 12px;
 }
 
 h3 {

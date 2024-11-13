@@ -34,6 +34,21 @@
   }
 </script>
 
+<script th:inline="javascript">
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const storeNo = urlParams.get('storeNo');
+
+  const updateTitle = () => {
+    const storeName = localStorage.getItem('storeName');
+    if (storeName && window.location.pathname.includes('UserChatRoom')) {
+      document.getElementById('pageTitle').textContent = storeName;
+    }
+  }
+
+  window.addEventListener('load', updateTitle);
+</script>
+
 <script th:src="@{'/bundle/' + ${pageName} + '.bundle.js'}"></script>
 </body>
 </html>

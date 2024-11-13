@@ -44,7 +44,7 @@ public class UserChatRoomServiceImpl implements UserChatRoomService {
                 );
 
                 // 새로운 채팅방을 `actived` Y 값으로 삽입
-                userChatRoomMapper.insertChatRoomStatus(userChatDTO.getUserId(), userChatDTO.getStoreNo());
+                userChatRoomMapper.insertChatRoomStatus(userChatDTO.getUserId(), userChatDTO.getStoreNo(), userChatDTO.getSendTime());
                 logger.info("신규 채팅방 생성 완료 - userId: {}, storeNo: {}", userChatDTO.getUserId(), userChatDTO.getStoreNo());
             } else if ("N".equals(chatStatus.get("actived"))) {
                 // 기존 채팅방이 비활성화 상태인 경우 재활성화

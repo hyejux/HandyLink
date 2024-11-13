@@ -81,15 +81,15 @@
         select r.reservation_no , r.*, main_c.*, pm.*, rs.*
         FROM
         reservation r
-        JOIN   reservation_form rf
+        LEFT JOIN   reservation_form rf
         ON rf.reservation_no = r.reservation_no
-        JOIN
+        LEFT JOIN
         category main_c ON rf.main_category_id = main_c.category_id
-        JOIN reservation_slot rs
+        LEFT JOIN reservation_slot rs
         on rs.reservation_slot_key = r.reservation_slot_key
-        JOIN payment pm
+        LEFT JOIN payment pm
         ON pm.reservation_no = r.reservation_no
-        where r.store_no = #{storeNo}
+        where r.store_no = 86
         group by r.reservation_no, main_c.category_id, pm.payment_id, rs.reservation_slot_key
         order by r.reservation_no desc
 

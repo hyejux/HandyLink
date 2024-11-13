@@ -9,8 +9,8 @@ function UserMain() {
   const [store, setStore] = useState([]);
   const [distances, setDistances] = useState({});
   const [currentPosition, setCurrentPosition] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(2); // 가게 표시 개수 상태
-  const LOAD_MORE_COUNT = 1; // 더 볼 가게 수
+  const [visibleCount, setVisibleCount] = useState(10); // 가게 표시 개수 상태
+  const LOAD_MORE_COUNT = 10; // 더 볼 가게 수
   const [level1Categories, setLevel1Categories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isBookmarked, setIsBookmarked] = useState([]); //찜
@@ -1004,7 +1004,7 @@ function UserMain() {
           <div className="search-result-list-container">
             <h3>다양한 가게들을 더 많이 만나보세요!</h3>
             {store.length > 0 ? (
-              store.map((store) => {
+              store.slice(0, visibleCount).map((store) => {
                 const storeDistance = distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음';
                 const imageUrl = store.storeImages.length > 0
                   ? store.storeImages[0].storeImgLocation
@@ -1069,10 +1069,9 @@ function UserMain() {
             )}
           </div>
 
-          {/* <div className='load-more-btn-wrap'>
-          <button onClick={handleLoadMore} className="load-more-btn">추천 가게 더 보기</button>
-        </div> */}
-
+          <div className='load-more-btn-wrap'>
+          <button onClick={handleLoadMore} className="load-more-btn">가게 더 보기</button>
+        </div>
 
 
         </div>

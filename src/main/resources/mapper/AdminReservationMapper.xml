@@ -78,20 +78,35 @@
 
     <!--    -->
     <select id="getManageList" resultType="com.example.HiMade.admin.dto.adminReserveMangeDTO">
-        select r.reservation_no , r.*, main_c.*, pm.*, rs.*
+        SELECT
+        r.reservation_no,
+        r.*,
+        main_c.*,
+        pm.*,
+        rs.*,
+        u.user_name
         FROM
         reservation r
-        LEFT JOIN   reservation_form rf
+         JOIN reservation_form rf
         ON rf.reservation_no = r.reservation_no
-        LEFT JOIN
-        category main_c ON rf.main_category_id = main_c.category_id
-        LEFT JOIN reservation_slot rs
-        on rs.reservation_slot_key = r.reservation_slot_key
-        LEFT JOIN payment pm
+         JOIN category main_c
+        ON rf.main_category_id = main_c.category_id
+         JOIN reservation_slot rs
+        ON rs.reservation_slot_key = r.reservation_slot_key
+         JOIN payment pm
         ON pm.reservation_no = r.reservation_no
-        where r.store_no = #{storeNo}
-        group by r.reservation_no, main_c.category_id, pm.payment_id, rs.reservation_slot_key
-        order by r.reservation_no desc
+         JOIN users u
+        ON r.user_id = u.user_id  -- Fix the join condition here
+        WHERE
+        r.store_no = #{storeNo}
+        GROUP BY
+        r.reservation_no,
+        main_c.category_id,
+        pm.payment_id,
+        rs.reservation_slot_key,
+        u.user_id
+        ORDER BY
+        r.reservation_no DESC
 
 
     </select>

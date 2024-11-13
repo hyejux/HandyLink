@@ -247,7 +247,12 @@ const handleTimeNumChange = (e) => {
       }
      
     
-  
+   // isRequired가 true인 항목이 하나 이상 있는지 확인
+   const hasRequiredCategory = categories.some(category => category.isRequired === true);
+   if (!hasRequiredCategory) {
+     alert("필수 항목이 하나 이상 있어야 합니다.");
+     return;
+   }
   
     const storeId = sessionStorage.getItem('storeId');
     const storeNo = sessionStorage.getItem('storeNo');

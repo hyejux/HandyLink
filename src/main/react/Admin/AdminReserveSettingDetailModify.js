@@ -327,7 +327,11 @@ const handleTimeNumChange = (e) => {
       return;
     }
    
-  
+    const hasRequiredCategory = categories.some(category => category.isRequired === true);
+    if (!hasRequiredCategory) {
+      alert("필수 항목이 하나 이상 있어야 합니다.");
+      return;
+    }
 
 
     const transformedCategories = categories.map(category => ({

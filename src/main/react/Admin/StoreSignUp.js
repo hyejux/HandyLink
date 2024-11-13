@@ -257,7 +257,7 @@ function StoreSignUp() {
                         <label htmlFor="terms">이용약관 동의</label>
                         <textarea disabled>
     제1조. 목적
-    이 약관은 핸디링크(이하 "당사"라 합니다)이 운영하는 www.handyLink.com에서 제공하는 인터넷 관련 서비스(이하 "서비스"라 합니다)와 당사가 운영하는 사이버 쇼핑몰(이하 "쇼핑몰"이라 함)의 이용에 있어 당사와 이용자의 권리·의무 및 책임사항을 규정하여 고객 권익을 보호함을 목적으로 합니다.
+    이 약관은 니즈(이하 "당사"라 합니다)가 운영하는 www.NEEZ.com에서 제공하는 인터넷 관련 서비스(이하 "서비스"라 합니다)와 당사가 운영하는 사이버 쇼핑몰(이하 "쇼핑몰"이라 함)의 이용에 있어 당사와 이용자의 권리·의무 및 책임사항을 규정하여 고객 권익을 보호함을 목적으로 합니다.
 
     이용자가 되고자 하는 자가 당사가 정한 소정의 절차를 거쳐서 "등록하기" 단추를 누르면 본 약관에 동의하는 것으로 간주합니다. 본 약관에 정하는 이외의 이용자와 당사의 권리, 의무 및 책임사항에 관해서는 전기통신사업법 기타 대한민국의 관련 법령과 상관습에 의합니다.
 
@@ -662,14 +662,14 @@ function StoreSignUp() {
 
         {/* step03 가입완로 */}
         {currentStep === 3 && (
-            <div class="admin-store-regist-container">
+            <div className="admin-store-regist-container">
                 {/* Main Form */}
-                <div class="admin-singup-complete-container">
-                    <div class="singup-complete-title">
-                    <i class="bi bi-check-circle-fill"></i> 회원 가입 완료
+                <div className="admin-singup-complete-container">
+                    <div className="singup-complete-title">
+                    <i className="bi bi-check-circle-fill"></i> 회원 가입 완료
                     </div>
 
-                    <div class="singup-complete-content">
+                    <div className="singup-complete-content">
                         <div>
                             <span> {storeInfoData.storeName} </span> 승인 대기 중 ...
                         </div>

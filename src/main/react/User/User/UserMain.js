@@ -530,7 +530,7 @@ function UserMain() {
                 store
                   .sort((a, b) => b.reservationCount - a.reservationCount) // 예약 많은 순으로 정렬
                   .slice(0, Math.floor(store.length / 2) * 2) // 길이를 반으로 자르기
-                  .slice(0, 10)
+                  .slice(0, 8)
                   .map((store) => {
                     const imageUrl = store.storeImages.length > 0
                       ? store.storeImages[0].storeImgLocation
@@ -914,35 +914,41 @@ function UserMain() {
               <div className="title-name">고객님께 딱 맞는 서비스, 추천드립니다!</div>
             </h3>
             <div className="user-main-list-wrap user-main-list-wrap-33">
-              {level1Categories.length > 0 ? (
-                // 이미지 URL이 있는 카테고리만 필터링 후, storeNo 중복 제거 및 랜덤으로 하나만 선택
-                [...new Map(level1Categories.filter(category => category.imageUrl)  // 이미지가 있는 카테고리만 필터링
-                  .map(category => [category.storeNo, category])).values()]
-                  .sort(() => Math.random() - 0.5)
-                  .slice(0, 12)
-                  .map((category, index) => {
-                    const imageUrl = category.imageUrl;
+              {level1Categories.length > 0 ? (() => {
+                // 무작위로 섞기 (원본 순서와 패턴 고정)
+                const shuffledCategories = [...new Map(
+                  level1Categories.filter(category => category.imageUrl)
+                    .map(category => [category.storeNo, category])
+                ).values()].sort(() => Math.random() - 0.5).slice(0, 20);
 
-                    const classNames = ['s', 'l', 'l', 's', 's', 'l', 'l']; // 패턴 정의
-                    const className = classNames[index % 7] === 's'
-                      ? 'user-main-list-container-s'
-                      : 'user-main-list-container-l';
-                    return (
-                      <div
-                        className={`user-main-list-container ${className}`}
-                        key={category.storeNo}
-                        onClick={() => goToStoreDetail(category.storeNo)}
-                      >
-                        <div className="user-category-menu">
-                          <div className="user-category-menu-img user-category-menu-img2">
-                            <img src={imageUrl} alt={category.serviceName} />
-                            <div className="store-service-name">{category.serviceName}</div>
-                          </div>
+                // 고정된 패턴에 따라 배열을 나눔
+                const patternOrder = ['s', 'l', 'l', 's', 's', 'l', 'l', 's', 's', 'l', 'l', 's', 's', 'l', 'l', 's', 's', 'l', 'l', 's', 's', 'l', 'l'];
+
+                return patternOrder.map((size, index) => {
+                  const category = shuffledCategories[index];
+                  if (!category) return null; // 카테고리가 부족한 경우 대비
+
+                  const className = size === 's'
+                    ? 'user-main-list-container-s'
+                    : 'user-main-list-container-l';
+                  const imageUrl = category.imageUrl;
+
+                  return (
+                    <div
+                      className={`user-main-list-container ${className}`}
+                      key={category.storeNo}
+                      onClick={() => goToStoreDetail(category.storeNo)}
+                    >
+                      <div className="user-category-menu">
+                        <div className="user-category-menu-img user-category-menu-img2">
+                          <img src={imageUrl} alt={category.serviceName} />
+                          <div className="store-service-name">{category.serviceName}</div>
                         </div>
                       </div>
-                    );
-                  })
-              ) : (
+                    </div>
+                  );
+                });
+              })() : (
                 <div className="no-stores">정보를 불러오지 못 했습니다</div>
               )}
             </div>
@@ -999,79 +1005,78 @@ function UserMain() {
             <img src='https://res.cloudinary.com/dtzx9nu3d/image/upload/v1731039573/hgsu9ohdoygw2ysrkcsg.jpg' />
           </div>
 
+    <div className="search-result-list-container">
+      <h3>다양한 가게들을 더 많이 만나보세요!</h3>
+      {store.length > 0 ? (
+        store.slice(0, visibleCount).map((store) => {
+          const storeDistance = distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음';
+          const imageUrl = store.storeImages.length > 0
+            ? store.storeImages[0].storeImgLocation
+            : "/img/cake001.jpg"; // 기본 이미지 설정
 
-          {/*  */}
-          <div className="search-result-list-container">
-            <h3>다양한 가게들을 더 많이 만나보세요!</h3>
-            {store.length > 0 ? (
-              store.slice(0, visibleCount).map((store) => {
-                const storeDistance = distances[store.addr] ? formatDistance(distances[store.addr]) : '정보 없음';
-                const imageUrl = store.storeImages.length > 0
-                  ? store.storeImages[0].storeImgLocation
-                  : "/img/cake001.jpg"; // 기본 이미지 설정
+          return (
+            <div className="search-result-list-content" key={store.storeId} onClick={() => goToStoreDetail(store.storeNo)}>
+              <button className="button bookmark-btn2" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
+                <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
+              </button>
+              <div className="result-list-content-img-box">
+                <img src={imageUrl} alt={store.storeName} />
+              </div>
 
-                return (
-                  <div className="search-result-list-content" key={store.storeId} onClick={() => goToStoreDetail(store.storeNo)}>
-                    <button className="button bookmark-btn2" aria-label="북마크 추가" onClick={(e) => { e.stopPropagation(); handleStoreLike(store); }}>
-                      <i className={`bi bi-heart-fill ${isBookmarked.includes(store.storeNo) ? 'like' : ''}`}></i>
-                    </button>
-                    <div className="result-list-content-img-box">
-                      <img src={imageUrl} alt={store.storeName} />
-                    </div>
+              <div className="result-list-top">
+                <div className="result-list-container">
+                  <span className="result-list-title">{store.storeName}</span>
+                  <span className="result-list-category">{store.storeCate}</span>
+                </div>
+              </div>
 
-                    <div className="result-list-top">
-                      <div className="result-list-container">
-                        <span className="result-list-title">{store.storeName}</span>
-                        <span className="result-list-category">{store.storeCate}</span>
-                      </div>
-                    </div>
+              <div className="result-list-mid">
+                <div className="result-list-date">
+                  <i className="bi bi-clock-fill"></i>영업시간: {store.storeOpenTime ? store.storeOpenTime.slice(0, 5) : ''} - {store.storeCloseTime ? store.storeCloseTime.slice(0, 5) : ''}
+                  <span className="result-list-location">
+                    <i className="bi bi-geo-alt-fill"></i>현재 위치에서 {storeDistance}
+                  </span>
+                </div>
+              </div>
 
-                    <div className="result-list-mid">
-                      <div className="result-list-date">
-                        <i className="bi bi-clock-fill"></i>영업시간: {store.storeOpenTime ? store.storeOpenTime.slice(0, 5) : ''} - {store.storeCloseTime ? store.storeCloseTime.slice(0, 5) : ''}
-                        <span className="result-list-location">
-                          <i className="bi bi-geo-alt-fill"></i>현재 위치에서 {storeDistance}
-                        </span>
-                      </div>
-                    </div>
+              <div className="result-list-bottom">
+                <div className="result-list-option-container">
+                  {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
+                    <span key={category.id} className="result-list-option">
+                      <i className="bi bi-hash"></i>
+                      {category.serviceName}
+                    </span>
+                  ))}
+                </div>
+              </div>
 
-                    <div className="result-list-bottom">
-                      <div className="result-list-option-container">
-                        {level1Categories.filter(category => category.storeNo === store.storeNo).slice(0, 3).map((category) => (
-                          <span key={category.id} className="result-list-option">
-                            <i className="bi bi-hash"></i>
-                            {category.serviceName}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+              <div className="result-list-bottom">
+                <div className="result-list-review">
+                  <i className="bi bi-star-fill"></i> <span>{store.averageRating}</span>
+                  <span>({store.reviewCount})</span>
+                </div>
+                <div className="result-list-price">
+                  {Math.min(
+                    ...level1Categories
+                      .filter(category => category.storeNo === store.storeNo)
+                      .map(category => category.servicePrice)
+                  ).toLocaleString()}~
+                </div>
+              </div>
 
-                    <div className="result-list-bottom">
-                      <div className="result-list-review">
-                        <i className="bi bi-star-fill"></i> <span>{store.averageRating}</span>
-                        <span>({store.reviewCount})</span>
-                      </div>
-                      <div className="result-list-price">
-                        {Math.min(
-                          ...level1Categories
-                            .filter(category => category.storeNo === store.storeNo)
-                            .map(category => category.servicePrice)
-                        ).toLocaleString()}~
-                      </div>
+            </div>
+          );
+        })
+      ) : (
+        <div className="no-stores">Loading...</div>
+      )}
 
-                    </div>
+      <div className='load-more-btn-wrap'>
+        <button onClick={handleLoadMore} className="load-more-btn">추천 가게 더 보기</button>
+      </div>
+    </div>
 
-                  </div>
-                );
-              })
-            ) : (
-              <div className="no-stores">Loading...</div>
-            )}
-          </div>
 
-          <div className='load-more-btn-wrap'>
-          <button onClick={handleLoadMore} className="load-more-btn">가게 더 보기</button>
-        </div>
 
 
         </div>

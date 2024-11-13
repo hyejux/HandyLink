@@ -20,6 +20,7 @@
             r.store_no = #{id}
             AND EXTRACT(YEAR FROM p.payment_date) = #{year}
             AND EXTRACT(MONTH FROM p.payment_date) = #{month}
+            AND p.payment_status = '결제완료'
         GROUP BY
             EXTRACT(YEAR FROM p.payment_date),
             EXTRACT(MONTH FROM p.payment_date),
@@ -36,6 +37,7 @@
         JOIN payment p ON p.reservation_no = r.reservation_no
         WHERE r.store_no = #{id}
             AND EXTRACT(YEAR FROM p.payment_date) = #{year}
+            AND p.payment_status = '결제완료'
         GROUP BY
             EXTRACT(YEAR FROM p.payment_date),
             EXTRACT(MONTH FROM p.payment_date)

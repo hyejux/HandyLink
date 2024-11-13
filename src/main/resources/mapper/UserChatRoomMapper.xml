@@ -96,6 +96,11 @@
         WHERE user_id = #{userId} AND store_no = #{storeNo}
     </select>
 
+    <insert id="insertChatRoomStatus">
+        INSERT INTO chat_status (user_id, store_no, actived, user_last_checked_time)
+        VALUES (#{userId}, #{storeNo}, 'Y', #{userLastCheckedTime})
+    </insert>
+
     <resultMap id="chatListResultMap" type="map">
         <result property="storeNo" column="storeNo"/>
         <result property="storeName" column="storeName"/>

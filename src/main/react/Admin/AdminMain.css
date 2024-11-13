@@ -73,7 +73,7 @@ td {
 
 .main-grid{
     display: grid;
-    grid-template-columns: 35% 65%;
+    grid-template-columns: 35% 62%;
     gap: 10px;
 }
 
@@ -110,10 +110,32 @@ td {
 
 .reservation-status {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 50% 50%;
     grid-template-rows: repeat(3, auto);
 }
 
+.today-status {
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.today-title {
+    border: 2px solid #38414a;
+    border-radius: 3px;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: x-large;
+    font-weight: lighter;
+    color: #38414a;
+}
+
+.today-status > .status-item {
+    width: 25%;
+    margin: 0;
+}
 
 .status-item {
     padding: 10px;

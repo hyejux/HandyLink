@@ -210,7 +210,7 @@ th:nth-child(1), td:nth-child(1) {
 }
 
 th:nth-child(2), td:nth-child(2) {
-  width: 13%; /* 이미지 열 너비를 20%로 고정 */
+  width: 10%; /* 이미지 열 너비를 20%로 고정 */
 }
 
 th:nth-child(3), td:nth-child(3) {

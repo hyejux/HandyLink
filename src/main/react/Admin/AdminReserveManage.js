@@ -11,59 +11,9 @@ import PrintReservationInfo from './PrintReservationInfo';
 
 
 function AdminReserveManage() {
-    const [passengers, setPassengers] = useState([
-        {
-            id: 1,
-            name: "Clara Smith",
-            email: "tranthuy.nute@...",
-            phone: "(319) 555-0115",
-            airline: "ATLANTA JET Airlines",
-            flightStatus: "대 기",
-            date: "09/18/23",
-            time: "08:40",
-            seat: "18F",
-            destination: "RDU",
-        },
-        {
-            id: 2,
-            name: "Floyd Miles",
-            email: "vuahiuthoungnt@...",
-            phone: "(405) 555-0128",
-            airline: "PEGASUS Airlines",
-            flightStatus: "완 료",
-            date: "09/18/23",
-            time: "09:45",
-            seat: "1D",
-            destination: "RDU",
-        },
-        {
-            id: 3,
-            name: "Jerome Bell",
-            email: "manhhackit08@...",
-            phone: "(252) 555-0126",
-            airline: "UIA Airlines",
-            flightStatus: "#5028",
-            date: "09/18/23",
-            time: "12:37",
-            seat: "16A",
-            destination: "RDU",
-        },
-        {
-            id: 4,
-            name: "Ronald Richards",
-            email: "binhan628@...",
-            phone: "(208) 555-0112",
-            airline: "MONTANA Airways",
-            flightStatus: "#5028",
-            date: "09/18/23",
-            time: "16:45",
-            seat: "2E",
-            destination: "RDU",
-        },
-    ]);
+  
     const today = new Date().toISOString().split('T')[0];
     const [viewMode, setViewMode] = useState('list');
-    const [reservationList, setReservationList] = useState([]);
     const [filterServiceName, setFilterServiceName] = useState([]);
     const [manageCalender, setManageCalender] = useState([]);
     const [selectedDates, setSelectedDates] = useState([today]);
@@ -71,11 +21,19 @@ function AdminReserveManage() {
     const [startMonth] = useState(new Date());
     const [updatingReservationId, setUpdatingReservationId] = useState(null); // 현재 업데이트 중인 예약 ID
     const [newStatus, setNewStatus] = useState(''); // 새로운 예약 상태
-    const [sortOrder, setSortOrder] = useState('asc');
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredReservationList, setFilteredReservationList] = useState(reservationList);
+
+
+    const [reservationList, setReservationList] = useState([]);
+    const [paginatedData, setPaginatedData] = useState(reservationList);
     const [filterStatus, setFilterStatus] = useState('');
-    const [reservationDetail, setReservationDetail] = useState([]);
+    const [selectedDays, setSelectedDays] = useState(365);
+    const [selectedServiceName, setSelectedServiceName] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortOrder, setSortOrder] = useState('asc');
+    const [itemsPerPage, setItemsPerPage] = useState(20);
+    const [currentPage, setCurrentPage] = useState(1);
 
 
     useEffect(() => {
@@ -90,6 +48,7 @@ function AdminReserveManage() {
             .then(response => {
                 console.log(response.data);
                 setReservationList(response.data);
+                // setPaginatedData(response.data);
             })
             .catch(error => {
                 console.log('Error Category', error);
@@ -167,11 +126,6 @@ function AdminReserveManage() {
     };
 
 
-    // 선택된 날짜를 화면에 띄우고 선택된 날짜 초기화
-    const handleShowSelectedDates = () => {
-        setDisplayedDates(selectedDates);
-        setSelectedDates([]); // 선택된 날짜 초기화
-    };
 
     // 예약 상태 변경
     const [newStatusMap, setNewStatusMap] = useState({});
@@ -235,101 +189,140 @@ function AdminReserveManage() {
         }
     };
 
-
-
-
-
-
-
-    // 예약 상태 변경 취소 버튼
-    const handleCancelUpdate = () => {
-        setUpdatingReservationId(null);
-        setNewStatus('');
-    };
-
     console.log(reservationList);
 
     const goToDetail = (no) => {
         window.location.href = `/AdminReserveManageDetail.admin/${no}`;
     };
 
+    const handleSearch = () => {
+        const filteredList = reservationList.filter(reservation => {
+            const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
+            regDate.setHours(0, 0, 0, 0); // Set to start of the day for comparison
+    
+            // Search condition, checks if search term matches reservation number or customer name
+            const searchCondition =
+                !searchTerm ||
+                (reservation.reservationNo && reservation.reservationNo.toString().includes(searchTerm.toLowerCase())) || // Ensure reservationNo is a string
+                (reservation.userName && reservation.userName.toLowerCase().includes(searchTerm.toLowerCase())); // Case-insensitive search
+    
+            return searchCondition;
+        });
+    
+        // Update the displayed results based on the filtered list
+        setPaginatedData(filteredList);
+    };
+    
+
+    //===============================================================================================================
+   // 날짜 범위 변경 시 필터링
+   const handleDateRangeChange = () => {
+    const filteredList = reservationList.filter(reservation => {
+        const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
+        regDate.setHours(0, 0, 0, 0); // 자정 기준으로 시간 초기화
+
+        // 날짜 범위 필터링
+        const startCondition = startDate ? regDate >= new Date(startDate) : true;
+        const endCondition = endDate ? regDate <= new Date(endDate) : true;
+
+        // 상태 필터링
+        const statusCondition = !filterStatus || reservation.reservationStatus === filterStatus;
+
+        // 서비스 이름 필터링
+        const serviceCondition = !selectedServiceName || reservation.serviceName === selectedServiceName;
+
+   
+        return startCondition && endCondition && statusCondition && serviceCondition; // 모든 조건 만족
+    });
+
+    setPaginatedData(filteredList); // 필터링된 데이터 상태 업데이트
+};
+
+// 상태 필터 처리
+const handleFilter = (status) => {
+    setFilterStatus(status); // 상태 변경
+};
+
+// 서비스 이름 필터 처리
+const handleServiceChange = (e) => {
+    setSelectedServiceName(e.target.value); // 선택된 서비스 이름 업데이트
+};
+
+// 날짜 필터 처리
+const handleDateFilter = (days) => {
+    setSelectedDays(days);
+    const filteredList = reservationList.filter(reservation => {
+        const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
+        const today = new Date();
+        const diffDays = Math.floor((today - regDate) / (1000 * 3600 * 24));
+
+        return diffDays <= days; // 선택한 날짜 범위 내의 예약만
+    });
+    setPaginatedData(filteredList);
+};
+
+// 필터 초기화
+const resetFilter = () => {
+    setStartDate('');
+    setEndDate('');
+    setFilterStatus('');
+    setSelectedServiceName('');
+    setSearchTerm('');
+    setSelectedDays(365); // 전체 기간으로 초기화
+};
+
+useEffect(() => {
+    handleDateRangeChange(); // 날짜 또는 상태가 변경될 때마다 필터링 수행
+}, [startDate, endDate, filterStatus, selectedServiceName, searchTerm, reservationList, selectedDays]);
+
+      // 검색어 필터 처리
+ 
+
 
     // ------------------ 정렬 ------------------
     const handleSort = (field, type) => {
-        let order = sortOrder === 'asc' ? 'desc' : 'asc';
+        const order = sortOrder === 'asc' ? 'desc' : 'asc';
         setSortOrder(order);
 
-        // 정렬 대상 리스트를 filteredReservationList로 설정
-        const sortedList = [...filteredReservationList].sort((a, b) => {
+        const sortedList = [...paginatedData].sort((a, b) => {
             let valueA = a[field];
             let valueB = b[field];
 
-            // 예약일 정렬을 위한 처리
             if (field === 'regTime') {
                 const dateA = new Date(`${a.reservationSlotDate} ${a.reservationTime}`);
                 const dateB = new Date(`${b.reservationSlotDate} ${b.reservationTime}`);
                 return order === 'asc' ? dateA - dateB : dateB - dateA;
             }
 
-            // 숫자 타입 정렬
             if (type === 'number') {
                 valueA = parseFloat(valueA);
                 valueB = parseFloat(valueB);
                 return order === 'asc' ? valueA - valueB : valueB - valueA;
             }
 
-            // 날짜 타입 정렬
             if (type === 'date') {
                 valueA = new Date(valueA);
                 valueB = new Date(valueB);
                 return order === 'asc' ? valueA - valueB : valueB - valueA;
             }
 
-            // 문자 타입 정렬
             if (type === 'string') {
                 return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
             }
 
-            return 0; // 기본적으로 같으면 0 반환
+            return 0;
         });
 
-        setPaginatedData(sortedList); // 필터링된 리스트 업데이트
+        setPaginatedData(sortedList);
     };
 
-
-    // ------------------ 검색 ------------------
-    // useEffect(() => {
-    //     setFilteredReservationList(reservationList);
-    // }, [reservationList]);
-
-
-    // 검색
-    const handleSearch = () => {
-        console.log("Searching for:", searchTerm);
-        const filteredList = reservationList.filter((reservation) => {
-            const reservationNoMatch = reservation.reservationNo.toString().includes(searchTerm);
-            const userIdMatch = reservation.userId.includes(searchTerm);
-
-            return reservationNoMatch || userIdMatch;
-        });
-
-        setPaginatedData(filteredList); // 필터링된 리스트 상태 업데이트
-    };
-
-
-    // // 필터링 함수
-    // const handleFilter = (status) => {
-    //     setFilterStatus(status); // 선택한 필터 상태 설정
+    // // ------------------ 검색 ------------------
+    // const handleSearch = () => {
     //     const filteredList = reservationList.filter((reservation) => {
-    //         if (status === '대기') return reservation.reservationStatus === '대기';
-    //         if (status === '입금대기') return reservation.reservationStatus === '입금대기';
-    //         if (status === '확정') return reservation.reservationStatus === '확정';
-    //         if (status === '완료') return reservation.reservationStatus === '완료';
-    //         if (status === '취소') return reservation.reservationStatus === '취소';
-    //         return true; // 모든 상태를 포함
+    //         return reservation.reservationNo.toString().includes(searchTerm) || reservation.userId.includes(searchTerm);
     //     });
 
-    //     setFilteredReservationList(filteredList); // 필터링된 리스트 상태 업데이트
+    //     setPaginatedData(filteredList);
     // };
 
     const handleKeyPress = (event) => {
@@ -337,245 +330,23 @@ function AdminReserveManage() {
             handleSearch();
         }
     };
-
-    // // 초기화 함수
-    // const resetFilter = () => {
-    //     setFilterStatus(''); // 필터 상태 초기화
-    //     setFilteredReservationList(reservationList); // 원래의 예약 목록으로 복원
-    // };
-
-
-    const formatDate = (dateString) => {
-
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0'); // 초 추가
-
-        return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`; // 초 포함
-    };
-
-
-
-    const componentRef = useRef();
-
-
-    // const handleDateFilter = (days) => {
-    //     const now = new Date();
-    //     now.setHours(0, 0, 0, 0); // 오늘 자정으로 설정하여 시간 비교를 방지합니다.
-
-    //     const filteredList = reservationList.filter(reservation => {
-    //         const regDate = new Date(reservation.regTime);
-    //         regDate.setHours(0, 0, 0, 0); // 예약 날짜도 자정으로 설정하여 시간 부분을 제거합니다.
-
-    //         const dayDifference = (now - regDate) / (1000 * 60 * 60 * 24);
-
-    //         // days가 0일 때 오늘을 의미하며, 차이가 0인 경우만 포함
-    //         return days === 0 ? dayDifference === 0 : dayDifference >= 0 && dayDifference <= days;
-    //     });
-
-    //     setFilteredReservationList(filteredList);
-    // };
-
-
-    // 
-    const [selectedDays, setSelectedDays] = useState(365);
-
-
-    // ----------------------------------------------------
-
-
-    // 날짜 필터 핸들러 (상위 필터)
-    const handleDateFilter = (days) => {
-        const now = new Date();
-        now.setHours(0, 0, 0, 0); // 자정을 기준으로 시간 초기화
-
-        // days가 365인 경우 모든 예약을 반환
-        if (days === 365) {
-            setPaginatedData(reservationList);
-            setSelectedDays(days); // 현재 선택된 필터 값으로 업데이트
-            return;
-        }
-
-        const filteredList = reservationList.filter(reservation => {
-            const regDate = new Date(`${reservation.reservationSlotDate}`);
-            regDate.setHours(0, 0, 0, 0); // 자정을 기준으로 시간 초기화
-
-            const dayDifference = (now - regDate) / (1000 * 60 * 60 * 24);
-
-            return days === 0 ? dayDifference === 0 : dayDifference >= 0 && dayDifference <= days;
-        });
-
-
-        setPaginatedData(filteredList);
-        setSelectedDays(days); // 현재 선택된 필터 값으로 업데이트
-    };
-
-
-
-    // ----------------------------------------------------
-
-    // 상태 필터 핸들러 (하위 필터)
-    const handleFilter = (status) => {
-        setFilterStatus(status); // 선택한 상태 필터 값 설정
-    };
-
-    // // 필터링 로직: 날짜와 상태 기준으로 필터링
-    // useEffect(() => {
-    //     const now = new Date();
-    //     now.setHours(0, 0, 0, 0); // 자정 기준으로 시간 초기화
-
-    //     const filteredList = reservationList.filter(reservation => {
-    //         // 날짜 필터링
-    //         const regDate = new Date(reservation.regTime);
-    //         regDate.setHours(0, 0, 0, 0);
-    //         const dayDifference = (now - regDate) / (1000 * 60 * 60 * 24);
-    //         const dateCondition = selectedDays === null ||
-    //             (selectedDays === 0 ? dayDifference === 0 : dayDifference >= 0 && dayDifference <= selectedDays);
-
-    //         // 상태 필터링
-    //         const statusCondition = !filterStatus || reservation.reservationStatus === filterStatus;
-
-    //         // 두 조건 모두 만족하는 경우만 포함
-    //         return dateCondition && statusCondition;
-    //     });
-
-    //     setFilteredReservationList(filteredList); // 필터링된 리스트 상태 업데이트
-    // }, [selectedDays, filterStatus, reservationList]);
-
-
-
-
-
-    // 초기화 함수
-    const resetFilter = () => {
-        setFilterStatus('');
-        setSelectedServiceName(''); // 서비스명 초기화
-        setStartDate(''); // 시작 날짜 초기화
-        setEndDate(''); // 종료 날짜 초기화
-        // setFilteredReservationList(reservationList); // 원래의 예약 목록으로 복원
-        setFilterStatus(''); // 상태 필터 초기화
-        // setSelectedDays(null); // 날짜 필터 초기화
-        setPaginatedData(reservationList); // 원래의 예약 목록으로 복원
-        location.reload();
-    };
-
-
-    const handlePrint = (reservation) => {
-        const printWindow = window.open('', '', 'width=600,height=400');
-        printWindow.document.write(`
-            <html>
-            <head>
-                <link rel="stylesheet" type="text/css" href="print-style.css">
-            </head>
-            <body>
-                <div id="print-content"></div>
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
-
-        // React 18에서 createRoot()와 render() 사용
-        const root = ReactDOM.createRoot(printWindow.document.getElementById('print-content'));
-        root.render(
-            <PrintReservationInfo reservation={reservation} reservationList={reservationDetail} />
-        );
-
-        // 프린트 실행
-        printWindow.print();
-    };
-
-
-    // ------------------------
-    const [selectedServiceName, setSelectedServiceName] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-
-    // 서비스 이름 선택 핸들러
-    const handleServiceChange = (e) => {
-        const serviceName = e.target.value;
-        setSelectedServiceName(serviceName);
-    };
-
-    // 날짜 범위 핸들러
-    const handleDateRangeChange = () => {
-        // 시작 날짜와 종료 날짜가 모두 선택되면 상태를 업데이트합니다.
-        if (startDate && endDate) {
-            const filteredList = reservationList.filter(reservation => {
-                const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
-                return regDate >= new Date(startDate) && regDate <= new Date(endDate);
-            });
+    
+        // ------------------ 페이지네이션 ------------------
+        useEffect(() => {
+            const filteredList = reservationList.slice(
+                (currentPage - 1) * itemsPerPage,
+                currentPage * itemsPerPage
+            );
             setPaginatedData(filteredList);
-        }
-    };
+        }, [currentPage, itemsPerPage, reservationList]);
 
-
-    // 필터링 로직 업데이트
-    useEffect(() => {
-        const now = new Date();
-        now.setHours(0, 0, 0, 0); // 자정 기준으로 시간 초기화
-
-        // 날짜 범위가 선택되었으면 추가 필터링
-        const filteredList = reservationList.filter(reservation => {
-            const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
-            regDate.setHours(0, 0, 0, 0); // 자정 기준으로 시간 초기화
-
-            // 날짜 범위 필터링
-            const dateCondition =
-                (startDate && endDate)
-                    ? regDate >= new Date(startDate) && regDate <= new Date(endDate)
-                    : selectedDays === null ||
-                    (selectedDays === 0 ? (now - regDate) / (1000 * 60 * 60 * 24) === 0 : (now - regDate) / (1000 * 60 * 60 * 24) >= 0 && (now - regDate) / (1000 * 60 * 60 * 24) <= selectedDays);
-
-            // 서비스명 필터링
-            const serviceCondition = !selectedServiceName || reservation.serviceName === selectedServiceName;
-
-            // 상태 필터링
-            const statusCondition = !filterStatus || reservation.reservationStatus === filterStatus;
-
-            return dateCondition && serviceCondition && statusCondition;
-        });
-
-        setPaginatedData(filteredList); // 필터링된 리스트 상태 업데이트
-    }, [startDate, endDate, filterStatus, selectedServiceName, selectedDays, reservationList]);
-
-
-    // -----------------------------------------------------
-
-    // ------------------------------------
-
-    const [itemsPerPage, setItemsPerPage] = useState(20);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [paginatedData, setPaginatedData] = useState([]); // 빈 배열로 초기화
-
-    // 전체 페이지 수 계산
-    const totalPages = Math.ceil(reservationList.length / itemsPerPage);
-
-    // 페이지 변경 처리
+        
+    // ------------------ 페이지 변경 ------------------
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
 
-    // 페이지네이션 데이터 업데이트 (필터링된 리스트를 기준으로 적용)
-    useEffect(() => {
-        // 필터링된 데이터 (예: filteredReservationList)에서 페이지네이션 적용
-        const filteredList = reservationList.slice(
-            (currentPage - 1) * itemsPerPage,
-            currentPage * itemsPerPage
-        );
-
-        // 페이지네이션된 데이터 상태 업데이트
-        setPaginatedData(filteredList);
-    }, [currentPage, itemsPerPage, reservationList]); // currentPage, itemsPerPage, reservationList 변경 시마다 실행
-
-
-    // 총 페이지 수 계산
-
-
-
+    const totalPages = Math.ceil(reservationList.length / itemsPerPage);
 
     // --------------------------------------------------
 
@@ -618,13 +389,16 @@ function AdminReserveManage() {
 
 
 
-                                <div className="dropdown-menu">
-                                    <select onChange={handleServiceChange} value={selectedServiceName}>
-                                        {filterServiceName.map((value, index) => (
-                                            <option key={index} value={value.serviceName}>{value.serviceName}</option>
-                                        ))}
-                                    </select>
-                                </div>
+                            <div className="dropdown-menu">
+                <select onChange={handleServiceChange} value={selectedServiceName}>
+                    <option value="">전체 상품</option> {/* 기본값 추가 */}
+                    {filterServiceName.map((value, index) => (
+                        <option key={index} value={value.serviceName}>
+                            {value.serviceName}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
 
                                 <div className="search-bar-box">
@@ -705,7 +479,6 @@ function AdminReserveManage() {
                                     <button className={filterStatus === '취소' ? 'active' : ''} onClick={() => handleFilter('취소')}>취소</button>
                                 </div>
 
-
                             </div>
 
                         </div>
@@ -727,8 +500,8 @@ function AdminReserveManage() {
                                 <tr>
                                     <th></th>
                                     <th>예약번호<span onClick={() => handleSort('reservationNo', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
-                                    <th> 서비스명 </th>
-                                    <th>고객 명<span onClick={() => handleSort('userId', 'string')}><i className="bi bi-chevron-expand"></i></span></th>
+                                    <th> 상품명 </th>
+                                    <th>고객 명</th>
                                     <th>예약일<span onClick={() => handleSort('regTime', 'date')}><i className="bi bi-chevron-expand"></i></span></th>
                                     <th>총액<span onClick={() => handleSort('reservationPrice', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
                                     <th>요청사항 </th>
@@ -743,7 +516,7 @@ function AdminReserveManage() {
                                         <td><input type="checkbox" /></td>
                                         <td>{value.reservationNo}</td>
                                         <td>{value.serviceName}</td>
-                                        <td>{value.userId}</td>
+                                        <td>{value.userName}({value.userId})</td>
                                         <td>{value.reservationSlotDate} {value.reservationTime}</td>
                                         <td>{value.reservationPrice}</td>
                                         <td>{value.customerRequest}</td>

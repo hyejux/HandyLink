@@ -163,10 +163,15 @@ function AdminStoreReport() {
                         <h2>매출 통계</h2>
                         <div className="reservation-graph">
                             <div className="graph-filter price">
-                                <span className={selectedPricePeriod === "이번달" ? 'active' : ''}
-                                    onClick={() => handlePricePeriodChange("이번달")}>이번 달</span>
-                                <span className={selectedPricePeriod === "올해" ? 'active' : ''}
-                                    onClick={() => handlePricePeriodChange("올해")}>올 해</span>
+                                <div className="filter" style={{width: '23%'}}>
+                                    <span className={selectedPricePeriod === "이번달" ? 'active' : ''}
+                                        onClick={() => handlePricePeriodChange("이번달")}>이번 달</span>
+                                    <span className={selectedPricePeriod === "올해" ? 'active' : ''}
+                                        onClick={() => handlePricePeriodChange("올해")}>올 해</span>
+                                </div>
+                                <div className="small-text" >
+                                    * 결제일 기준 (결제완료에 한함)
+                                </div>
                             </div>
                             <div className="graph">
                                 <MonthlySalesBarChart period={selectedPricePeriod}/>
@@ -249,12 +254,17 @@ function AdminStoreReport() {
                         <h2>주문 통계</h2>
                         <div className="reservation-graph">
                             <div className="graph-filter">
-                                <span className={selectedPeriod === "이번달" ? 'active' : ''}
-                                    onClick={() => handlePeriodChange("이번달")}>이번 달</span>
-                                <span className={selectedPeriod === "올해" ? 'active' : ''}
-                                    onClick={() => handlePeriodChange("올해")}>올 해</span>
-                                <span className={selectedPeriod === "작년" ? 'active' : ''}
-                                    onClick={() => handlePeriodChange("작년")}>작 년</span>
+                                <div className="filter">
+                                    <span className={selectedPeriod === "이번달" ? 'active' : ''}
+                                        onClick={() => handlePeriodChange("이번달")}>이번 달</span>
+                                    <span className={selectedPeriod === "올해" ? 'active' : ''}
+                                        onClick={() => handlePeriodChange("올해")}>올 해</span>
+                                    <span className={selectedPeriod === "작년" ? 'active' : ''}
+                                        onClick={() => handlePeriodChange("작년")}>작 년</span>
+                                </div>
+                                <div className="small-text">
+                                    * 예약일 기준
+                                </div>
                             </div>
                             <div className="graph">
                                 <ReservationBarChart period={selectedPeriod} />
@@ -281,29 +291,29 @@ function AdminStoreReport() {
                                         </div>
                                     )}
 
-{viewMode === 'daily' && (
-<div className="monthly-search">
-    <input
-        type="text"
-        value={selectedYear}
-        onChange={handleYearChange}
-        placeholder="연도 입력 (예: 2024)"
-        maxLength="4"
-        style={{width: '12%'}}
-    />
-    <span>년</span>
-    <input
-        type="text"
-        value={selectedMonth}
-        onChange={handleMonthChange}
-        placeholder="월 입력 (예: 3)"
-        maxLength="2"
-        style={{width: '12%'}}
-    />
-    <span>월</span>
-    <button type="button" className="btn-year" onClick={handleDailyClick}>조회</button>
-</div>
-)}
+                                    {viewMode === 'daily' && (
+                                    <div className="monthly-search">
+                                        <input
+                                            type="text"
+                                            value={selectedYear}
+                                            onChange={handleYearChange}
+                                            placeholder="연도 입력 (예: 2024)"
+                                            maxLength="4"
+                                            style={{width: '12%'}}
+                                        />
+                                        <span>년</span>
+                                        <input
+                                            type="text"
+                                            value={selectedMonth}
+                                            onChange={handleMonthChange}
+                                            placeholder="월 입력 (예: 3)"
+                                            maxLength="2"
+                                            style={{width: '12%'}}
+                                        />
+                                        <span>월</span>
+                                        <button type="button" className="btn-year" onClick={handleDailyClick}>조회</button>
+                                    </div>
+                                    )}
 
                                     <div className="toggle-buttons">
                                         <button onClick={showMonthlySales} className={viewMode === 'monthly' ? 'active' : ''}>

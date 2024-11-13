@@ -87,7 +87,7 @@ function UserLikeList(){
                                             <p className="address">{likeList.addr}</p>
                                             <p className="addrdetail">{likeList.addrdetail}</p>
                                             <div className="rating-section">
-                                                <span className="rating">★ {likeList.avg_rating ? likeList.avg_rating : "N/A"}</span>
+                                                <span className="rating">★ {likeList.avg_rating ? likeList.avg_rating : "0"}</span>
                                                 <span className="reviews">리뷰 {likeList.review_count}개</span>
                                             </div>
                                         </div>

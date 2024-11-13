@@ -126,13 +126,13 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   }
 
   @Override
-  public List<priceMonthDTO> priceMonth(int id) {
-    return adminReservationMapper.priceMonth(id);
+  public List<priceMonthDTO> priceMonth(int id, int year) {
+    return adminReservationMapper.priceMonth(id, year);
   }
 
   @Override
-  public List<priceMonthDTO> priceDay(int id) {
-    return adminReservationMapper.priceDay(id);
+  public List<priceMonthDTO> priceDay(int id, int year, int month) {
+    return adminReservationMapper.priceDay(id, year, month);
   }
 
   @Transactional

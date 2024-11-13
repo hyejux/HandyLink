@@ -41,8 +41,8 @@ public interface AdminReservationMapper {
  void setSlotDel(int id);
   void updateOrder(@Param("orderedList") adminReservationDTO r);
 
-  List<priceMonthDTO> priceMonth(int id);
-  List<priceMonthDTO> priceDay(int id);
+  List<priceMonthDTO> priceMonth(@Param("id") int id, @Param("year") int year);
+  List<priceMonthDTO> priceDay(@Param("id") int id, @Param("year") int year, @Param("month") int month);
 
 
 }

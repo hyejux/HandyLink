@@ -159,6 +159,19 @@ function AdminMain() {
 
               <div className="status-container main-count">
                 <div className="reservation-status">
+                  <div className="today-title">Today 현황</div>
+
+                  <div className="today-status">
+                    <div className="status-item">
+                      <p className="complete" >전달완료</p>
+                      <p>{count.todayCompleteCount} 건</p>
+                    </div>
+                    <div className="status-item">
+                      <p className="remain" >남은예약</p>
+                      <p>{count.todayRemainCount} 건</p>
+                    </div>
+                  </div>
+
                   <div className="status-item">
                     <p className="new" >예약대기</p>
                     <p>{count.waitCount} 건</p>
@@ -167,16 +180,6 @@ function AdminMain() {
                   <div className="status-item">
                     <p className="cancle">예약확정</p>
                     <p>{count.doingCount} 건</p>
-                  </div>
-
-                  <div className="status-item">
-                    <p className="complete" >전달완료</p>
-                    <p>{count.todayCompleteCount} 건</p>
-                  </div>
-
-                  <div className="status-item">
-                    <p className="remain" >남은예약</p>
-                    <p>{count.todayRemainCount} 건</p>
                   </div>
 
                   <div className="status-item">

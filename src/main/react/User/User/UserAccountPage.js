@@ -156,8 +156,7 @@ function UserAccountPage () {
                     <ul>
                         
                         <li><a
-                            /*onClick={() => isLoggedIn ? window.location.href = '/UserAddressPage.user' : window.location.href = '/UserLoginPage.user'}*/
-                            onClick={() => window.location.href = '/UserAddressPage.user'}
+                            onClick={() => isLoggedIn ? window.location.href = '/UserAddressPage.user' : window.location.href = '/UserLoginPage.user'}
                         >배송지 관리</a></li>
                         <li><a >자주 묻는 질문</a></li>
                         <li><a

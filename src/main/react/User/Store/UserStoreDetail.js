@@ -141,7 +141,7 @@ function UserStoreDetail() {
     sessionStorage.setItem('userName', userInfo.userName);
     sessionStorage.setItem('userPhonenum', userInfo.userPhonenum);
     sessionStorage.setItem('userId', userInfo.userId);
-    sessionStorage.setItem('pickupStatus' , pickupStatus);
+    sessionStorage.setItem('pickupStatus', pickupStatus);
 
     window.location.href = `/UserReservationDate.user/${id}`;
   };
@@ -447,30 +447,36 @@ function UserStoreDetail() {
     .filter((url, index, self) => self.indexOf(url) === index); // 중복 제거
 
 
-    const [isModalOpen2, setIsModalOpen2] = useState(false);
-    const [selectedReservation, setSelectedReservation] = useState(null);
-  
-    const handleModalOpen = (value) => {
-      if (!userId) {
-        alert("로그인 후 이용 가능한 서비스입니다.");
-        window.location.href = "/UserLoginPage.user";
-        return;
-      }
-      setSelectedReservation(value); // 선택된 예약 데이터를 저장
-      setIsModalOpen2(true); // 모달 열기
-    };
-  
-    const handleModalClose = () => {
-      setIsModalOpen2(false); // 모달 닫기
-      setSelectedReservation(null); // 선택된 예약 데이터 초기화
-    };
-  
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const [selectedReservation, setSelectedReservation] = useState(null);
 
-    const [pickupStatus, setPickupStatus] = useState('');
+  const handleModalOpen = (value) => {
+    if (!userId) {
+      alert("로그인 후 이용 가능한 서비스입니다.");
+      window.location.href = "/UserLoginPage.user";
+      return;
+    }
+    setSelectedReservation(value); // 선택된 예약 데이터를 저장
+    setIsModalOpen2(true); // 모달 열기
+  };
 
-    const handleChange = (e) => {
-      setPickupStatus(e.target.value);
-    };
+  const handleModalClose = () => {
+    setIsModalOpen2(false); // 모달 닫기
+    setSelectedReservation(null); // 선택된 예약 데이터 초기화
+  };
+
+
+  const [pickupStatus, setPickupStatus] = useState('');
+
+  const handleChange = (e) => {
+    setPickupStatus(e.target.value);
+  };
+
+
+  
+const handlePickupOrDeliveryClick = (value) => {
+  setPickupStatus(value); // 상태 업데이트 (배송/픽업)
+};
 
   return (
     <div>
@@ -755,89 +761,89 @@ function UserStoreDetail() {
 
           {/* 예약 */}
           {activeSection === 'reservation' && (
-<>
-      {reservationList.map((value, index) => {
-        if (value.activated === 'Y') {
-          const serviceStartDate = new Date(value.serviceStart);
-          const isServiceStarted = serviceStartDate <= new Date(); // 현재 시간이 시작일보다 큰지 체크
+            <>
+              {reservationList.map((value, index) => {
+                if (value.activated === 'Y') {
+                  const serviceStartDate = new Date(value.serviceStart);
+                  const isServiceStarted = serviceStartDate <= new Date(); // 현재 시간이 시작일보다 큰지 체크
 
-          return (
-            <div
-              className={`user-content-container ${isServiceStarted ? '' : 'disabled'}`}
-              key={index}
-              onClick={() => {
-                if (isServiceStarted) {
-                  handleModalOpen(value); // 클릭된 항목의 value를 모달에 전달
+                  return (
+                    <div
+                      className={`user-content-container ${isServiceStarted ? '' : 'disabled'}`}
+                      key={index}
+                      onClick={() => {
+                        if (isServiceStarted) {
+                          handleModalOpen(value); // 클릭된 항목의 value를 모달에 전달
+                        }
+                      }}
+                    >
+                      <div className="user-reserve-menu">
+                        <div className="user-reserve-menu-img">
+                          <img src={`${value.imageUrl}`} alt="Service Image" />
+                        </div>
+                        <div className="user-reserve-menu-content">
+                          <div className='open-date'>{formatServiceStartDate(value.serviceStart)}</div>
+                          <div>{value.serviceName}</div>
+                          <div>{value.serviceContent}</div>
+                          <div>{value.servicePrice} 원 ~</div>
+                        </div>
+                      </div>
+                    </div>
+                  );
                 }
-              }}
-            >
-              <div className="user-reserve-menu">
-                <div className="user-reserve-menu-img">
-                  <img src={`${value.imageUrl}`} alt="Service Image" />
-                </div>
-                <div className="user-reserve-menu-content">
-                  <div className='open-date'>{formatServiceStartDate(value.serviceStart)}</div>
-                  <div>{value.serviceName}</div>
-                  <div>{value.serviceContent}</div>
-                  <div>{value.servicePrice} 원 ~</div>
-                </div>
-              </div>
-            </div>
-          );
-        }
-        return null;
-      })}
+                return null;
+              })}
 
-      {isModalOpen2 && selectedReservation && (
-        <div className="modal-overlay2">
-          <div className="modal2">
 
-          <div className="modal-box">
-          <div className="modal-btns">
-      <div>
-        <label>
-          <input
-            type="radio"
-            name="pickupDelivery"
-            value="픽업"
-            checked={pickupStatus === '픽업'}
-            onChange={handleChange}
-            disabled={storeInfo.deliveryType === '배송' || storeInfo.deliveryType === '배송+픽업'}
-          />
-          픽업
-        </label>
+{isModalOpen2 && selectedReservation && (
+  <div className="modal-overlay2">
+    <div className="modal2">
+      <div className='modal-choice-img-box'>
+        <div className="modal-choice-img">
+          <img src="../img/store/choice.png" />
+        </div>
+        <div className="modal-choice-text">주문방법을 선택해주세요</div>
       </div>
-      <div>
-        <label>
-          <input
-            type="radio"
-            name="pickupDelivery"
-            value="배송"
-            checked={pickupStatus === '배송'}
-            onChange={handleChange}
-            disabled={storeInfo.deliveryType === '픽업' || storeInfo.deliveryType === '배송+픽업'}
-          />
-          배송
-        </label>
-      </div>
-    </div>
+
+      <div className="modal-box">
+        <div className="modal-btns">
+          <div
+            className={`modal-pickup-img ${pickupStatus === '배송' ? 'selected' : ''}`}
+            onClick={() => handlePickupOrDeliveryClick('배송')}
+          >
+            <img src="../img/store/deliveryr.png" />
+            <label>배송</label>
           </div>
-          
-            <button onClick={() => {
-              goToAdminPage(selectedReservation.categoryId); // 선택된 항목의 categoryId 사용
-              handleModalClose(); // 모달 닫기
-            }}>
-              다음
-            </button>
-            <button className='modal-next' onClick={handleModalClose}>
-              X
-            </button>
+          <div
+            className={`modal-deliveryr-img ${pickupStatus === '픽업' ? 'selected' : ''}`}
+            onClick={() => handlePickupOrDeliveryClick('픽업')}
+          >
+            <img src="../img/store/pickup1.png" />
+            <label>픽업</label>
           </div>
         </div>
-      )}
-    </>
+      </div>
 
-            
+      <button className="modal-next-btn" onClick={() => {
+        goToAdminPage(selectedReservation.categoryId);
+        handleModalClose();
+      }}>
+        다음
+      </button>
+
+      <button className='modal-close' onClick={handleModalClose}>
+        X
+      </button>
+    </div>
+  </div>
+)}
+
+
+            </>
+
+
+
+
           )}
 
           {/* 리뷰 */}
@@ -953,6 +959,9 @@ function UserStoreDetail() {
             </div>
           )}
 
+
+
+
           {isModalOpen && (
             <div className="modal" onClick={closeModal}>
               <span className="close-button" onClick={closeModal}>×</span>
@@ -962,12 +971,12 @@ function UserStoreDetail() {
 
 
 
+
+
           {/* 포토 리스트  */}
           {activeSection === 'photo' && (
             <div className="user-content-container5">
               <div className="review-section">
-
-
 
 
                 <h2> <i class="bi bi-chevron-left" onClick={() => setActiveSection('review')}></i> 포토 리뷰</h2>

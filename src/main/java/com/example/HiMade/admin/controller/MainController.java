@@ -47,6 +47,9 @@ public class MainController {
         case "UserLikeList":
           model.addAttribute("pageTitle", "찜 리스트");
           break;
+        case "UserAddressPage":
+          model.addAttribute("pageTitle", "배송지 관리");
+          break;
 
         default:
           model.addAttribute("pageTitle", "");
@@ -65,7 +68,8 @@ public class MainController {
             "UserAccountFind".equals(pageName) ||
             "UserSignUpFinish".equals(pageName) ||
             "UserMyReview".equals(pageName) ||
-            "UserLikeList".equals(pageName)) {
+            "UserLikeList".equals(pageName) ||
+            "UserAddressPage".equals(pageName)) {
       return "userLayoutNoNav";
     }
 

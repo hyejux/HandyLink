@@ -66,6 +66,7 @@
         <result property="accountNumber" column="account_number"/>
         <result property="storeSignup" column="store_signup"/>
         <result property="storeStatus" column="store_status"/>
+        <result property="deliveryType" column="delivery_type"/>
 
         <!-- SNS 매핑 -->
         <collection property="storeSns" ofType="com.example.HiMade.admin.dto.StoreSnsDTO">

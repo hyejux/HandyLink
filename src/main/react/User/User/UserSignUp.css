@@ -73,6 +73,7 @@ h2 {
 
 .form-group select {
     background-color: #ffffff;
+    color: #333333;
 }
 
 .btn-checkid {
@@ -80,7 +81,7 @@ h2 {
     height: 35px;
     padding: 0;
     position: absolute;
-    top: 23%;
+    top: 253px;
     transform: translateY(-50%);
     left: 71%;
     border: 0;

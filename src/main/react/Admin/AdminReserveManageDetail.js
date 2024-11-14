@@ -225,6 +225,10 @@ function AdminReserveManageDetail() {
                 <th colSpan="2">예약 날짜</th>
               </tr>
               <tr>
+                <th>방식</th>
+                <td>{formatDate2(reservationDetail.regTime)} </td>
+              </tr>
+              <tr>
                 <th>날짜</th>
                 <td>{formatDate2(reservationDetail.regTime)} </td>
               </tr>
@@ -232,6 +236,7 @@ function AdminReserveManageDetail() {
                 <th>시간</th>
                 <td>{(reservationDetail.reservationTime || '정보 없음').slice(0, 5)}</td>
               </tr>
+              
             </tbody>
           </table>
         </div>

@@ -257,10 +257,7 @@ function UserReservationConfirm() {
       setTimeout(() => {
         // 3초 후에 리다이렉트
         setIsLoading(false);
-        const redirectUrl = paymentMethod === "bank_transfer" ?
-          `../UserMyReservationDetail.user/${reservationNum}` :
-          `../UserMyReservationList.user`;
-        window.location.href = redirectUrl;
+        window.location.href = `../UserMyReservationList.user`;
       }, 3000); // 3초 대기
     } catch (error) {
       console.error("결제 정보 저장 중 오류 발생:", error);

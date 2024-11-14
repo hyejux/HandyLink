@@ -148,7 +148,7 @@ function UserAccountFind() {
                         id="find-id-btn"
                         onClick={showIdForm}
                         style={{
-                            backgroundColor: formType === "userId" ? "#727272" : "#E5E5EA",
+                            backgroundColor: formType === "userId" ? "#FE8517" : "#E5E5EA",
                             color: formType === "userId" ? "#fff" : "#000",
                         }}
                     >
@@ -159,7 +159,7 @@ function UserAccountFind() {
                         id="find-pw-btn"
                         onClick={showPwForm}
                         style={{
-                            backgroundColor: formType === "userPw" ? "#727272" : "#E5E5EA",
+                            backgroundColor: formType === "userPw" ? "#FE8517" : "#E5E5EA",
                             color: formType === "userPw" ? "#fff" : "#000",
                         }}
                     >

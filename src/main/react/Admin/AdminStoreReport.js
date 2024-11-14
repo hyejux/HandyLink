@@ -142,11 +142,13 @@ function AdminStoreReport() {
    // 월별 매출 테이블을 보여주는 버튼 클릭 시
    const showMonthlySales = () => {
        setViewMode('monthly');
+       fetchMonthlySales(selectedYear);
    };
 
    // 일별 매출 테이블을 보여주는 버튼 클릭 시
    const showDailySales = () => {
        setViewMode('daily');
+       fetchMonthlySales2(selectedYear, selectedMonth);
    };
 
     console.log("월별 매출 정보 ", salesData);

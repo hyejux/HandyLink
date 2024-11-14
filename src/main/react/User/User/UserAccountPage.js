@@ -155,8 +155,11 @@ function UserAccountPage () {
                 <div className="settings-submenu">
                     <ul>
                         
-                        <li><a >자주묻는질문</a></li>
-                        <li><a >서비스이용약관</a></li>
+                        <li><a
+                            /*onClick={() => isLoggedIn ? window.location.href = '/UserAddressPage.user' : window.location.href = '/UserLoginPage.user'}*/
+                            onClick={() => window.location.href = '/UserAddressPage.user'}
+                        >배송지 관리</a></li>
+                        <li><a >자주 묻는 질문</a></li>
                         <li><a
                             >고객센터</a>
                         </li>

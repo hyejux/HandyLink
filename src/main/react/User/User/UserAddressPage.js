@@ -4,10 +4,9 @@ import ReactDOM from "react-dom/client";
 
 function UserAddressPage() {
     const [addresses, setAddresses] = useState([
-        { name: '홍길동', address: '[07280] 서울특별시 영등포구 선유로 00 현대아파트 000동 000호', phone: '010-0000-0000', subPhone: '010-9999-0000', isDefault: true },
-        { name: '홍이름', address: '[07280] 서울특별시 영등포구 당산동 0가 현대아파트 000동 000호', phone: '010-0000-0000', subPhone: '02-2000-0000', isDefault: false },
-        { name: '홍아름', address: '[07280] 서울특별시 영등포구 당산동 0가 현대아파트 000동 000호', phone: '010-0000-0000', subPhone: '02-2000-0000', isDefault: false },
-        { name: '김이름', address: '[07280] 서울특별시 영등포구 당산동 0가 현대아파트 000동 000호', phone: '010-0000-0000', subPhone: '02-2000-0000', isDefault: false }
+        { name: '장소영', address: '[06000] 서울 강남구 압구정동 압구정로 113 라이프미성 2차 102동 1001호', phone: '010-4624-1221', isDefault: true },
+        { name: '장소영', address: '[13455] 경기 성남시 분당구 하오개로349번길 10 파크하임 1004동 701호', phone: '010-7643-3620', isDefault: false },
+        { name: '장소영', address: '[06431] 서울 강남구 테헤란로7길 7 에스코빌딩 1층 CU', phone: '010-4624-1221', isDefault: false },
     ]);
 
     const handleAddAddress = () => {
@@ -15,10 +14,6 @@ function UserAddressPage() {
         if (newAddress) {
             setAddresses([...addresses, { name: '새 주소', address: newAddress, phone: '010-0000-0000', subPhone: '', isDefault: false }]);
         }
-    };
-
-    const handleDeleteAddress = (index) => {
-        setAddresses(addresses.filter((_, i) => i !== index));
     };
 
     const handleSelectAddress = (index) => {
@@ -30,25 +25,30 @@ function UserAddressPage() {
         );
     };
 
+    const handleDeleteAddress = (index) => {
+        alert("선택한 배송지를 삭제하시겠습니까?");
+        setAddresses(addresses.filter((_, i) => i !== index));
+    };
+
     return (
         <div className="address-page">
             <button className="add-address-btn" onClick={handleAddAddress}>+ 신규 배송지 추가</button>
             <ul className="address-list">
                 {addresses.map((address, index) => (
-                    <li key={index} className={`address-item ${address.isDefault ? 'default' : ''}`}>
+                    <li
+                        key={index}
+                        className={`address-item ${address.isDefault ? 'default' : ''}`}
+                        onClick={() => handleSelectAddress(index)}
+                    >
                         <div className="address-info">
               <span className="address-name">
-                {address.name} {address.isDefault && <span className="default-label">기본주소</span>}
+                  {address.isDefault && <i className="bi bi-check"></i>}
+                  {address.name} {address.isDefault && <span className="default-label">기본주소</span>}
               </span>
                             <p>{address.address}</p>
-                            <p>{address.phone} | {address.subPhone}</p>
+                            <p>{address.phone}</p>
                         </div>
-                        <div className="address-actions">
-                            <button onClick={() => handleSelectAddress(index)} className="select-btn">
-                                {address.isDefault ? '선택됨' : '선택'}
-                            </button>
-                            <button onClick={() => handleDeleteAddress(index)} className="delete-btn">삭제</button>
-                        </div>
+                        <button onClick={(e) => { e.stopPropagation(); handleDeleteAddress(index); }} className="delete-btn">삭제</button>
                     </li>
                 ))}
             </ul>

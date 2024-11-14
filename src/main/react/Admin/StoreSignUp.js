@@ -607,6 +607,16 @@ function StoreSignUp() {
                         </select>
                     </div>
 
+        <div className="input-group">
+            <label htmlFor="storeDelivery">배송유무</label>
+            <input type="radio" id="pickUp" value="pickUp" checked={myStoreInfo.storeParkingYn === 'Y'}  /> 방문픽업
+
+        </div>
+
+
+
+
+
                     <div className="input-group">
                         <label htmlFor="storeName">상호명</label>
                         <input type="text" id="storeName" placeholder="상호명 입력" onChange={(e)=>handleChangeStore(e)} />

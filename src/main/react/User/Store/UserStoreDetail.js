@@ -146,6 +146,22 @@ function UserStoreDetail() {
     window.location.href = `/UserReservationDate.user/${id}`;
   };
 
+  const goToAdminPage2 = (id) => {
+
+
+
+    sessionStorage.setItem('storeCloseTime', storeInfo.storeCloseTime);
+    sessionStorage.setItem('storeOpenTime', storeInfo.storeOpenTime);
+    sessionStorage.setItem('storeNo', storeInfo.storeNo);
+    sessionStorage.setItem('storeInfo', JSON.stringify(storeInfo));
+    sessionStorage.setItem('userName', userInfo.userName);
+    sessionStorage.setItem('userPhonenum', userInfo.userPhonenum);
+    sessionStorage.setItem('userId', userInfo.userId);
+    sessionStorage.setItem('pickupStatus', pickupStatus);
+
+    window.location.href = `/UserReservationOption.user/${id}`;
+  };
+
   // ------------------------------------------------------
 
   useEffect(() => {
@@ -463,6 +479,7 @@ function UserStoreDetail() {
   const handleModalClose = () => {
     setIsModalOpen2(false); // 모달 닫기
     setSelectedReservation(null); // 선택된 예약 데이터 초기화
+    setPickupStatus('');
   };
 
 
@@ -472,11 +489,28 @@ function UserStoreDetail() {
     setPickupStatus(e.target.value);
   };
 
-
   
 const handlePickupOrDeliveryClick = (value) => {
   setPickupStatus(value); // 상태 업데이트 (배송/픽업)
 };
+
+
+const handleNextClick = () => {
+  if (pickupStatus === '') {
+    alert('배송 방법을 선택해주세요!');
+    return;
+  }
+
+  if (pickupStatus === '배송') {
+    goToAdminPage2(selectedReservation.categoryId);
+  } else {
+    goToAdminPage(selectedReservation.categoryId);
+  }
+
+  // 모달 닫기
+  handleModalClose();
+};
+
 
   return (
     <div>
@@ -535,10 +569,7 @@ const handlePickupOrDeliveryClick = (value) => {
               </div>
               {/* <hr /> */}
               <div className="store-basic-info"><img src="../img/store/clock.png" /> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
-              <div className="store-basic-info">
-                <img src="../img/store/telephone.png" /> {storeInfo.managerPhone} 
-                <span className="pickup-icon">픽업</span>
-              </div>
+              <div className="store-basic-info"><img src="../img/store/telephone.png" /> {storeInfo.managerPhone} </div>
             </div>
           </div>
 
@@ -813,6 +844,7 @@ const handlePickupOrDeliveryClick = (value) => {
           <div
             className={`modal-pickup-img ${pickupStatus === '배송' ? 'selected' : ''}`}
             onClick={() => handlePickupOrDeliveryClick('배송')}
+            style={storeInfo.deliveryType === '픽업' ? { pointerEvents: 'none', opacity: 0.5 } : {}}
           >
             <img src="../img/store/deliveryr.png" />
             <label>배송</label>
@@ -820,17 +852,19 @@ const handlePickupOrDeliveryClick = (value) => {
           <div
             className={`modal-deliveryr-img ${pickupStatus === '픽업' ? 'selected' : ''}`}
             onClick={() => handlePickupOrDeliveryClick('픽업')}
+            style={storeInfo.deliveryType === '배송' ? { pointerEvents: 'none', opacity: 0.5 } : {}}
           >
-            <img src="../img/store/pickup1.png" />
+            <img src="../img/store/pickup.png" />
             <label>픽업</label>
           </div>
         </div>
       </div>
 
-      <button className="modal-next-btn" onClick={() => {
-        goToAdminPage(selectedReservation.categoryId);
-        handleModalClose();
-      }}>
+      <button 
+        className="modal-next-btn" 
+        onClick={handleNextClick}
+        disabled={pickupStatus === ''}
+      >
         다음
       </button>
 
@@ -840,6 +874,8 @@ const handlePickupOrDeliveryClick = (value) => {
     </div>
   </div>
 )}
+
+
 
 
             </>

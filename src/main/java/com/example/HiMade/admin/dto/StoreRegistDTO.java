@@ -17,6 +17,7 @@ public class StoreRegistDTO {
     private Long storeNo; //업체번호
     private String storePw; //업체pw
     private String storeCate; //업종
+    private String deliveryType; //배송유무
     private String storeName; //상호명
     private String storeMaster; //대표자명
     private String managerName; //담당자명

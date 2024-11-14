@@ -1,14 +1,15 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
-@font-face {
-font-family: 'ghanachoco';
-src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ghanachoco.woff') format('woff');
-font-weight: normal;
-font-style: normal;
-}
+
 @font-face {
 font-family: 'Pretendard-Regular';
 src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
 font-weight: 400;
+font-style: normal;
+}
+@font-face {
+font-family: 'FlightSans-Title';
+src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/FlightSans-Title.woff2') format('woff2');
+font-weight: normal;
 font-style: normal;
 }
 
@@ -23,7 +24,6 @@ body {
 .parts {
     display: flex;
     min-height: 100vh;
-    background: linear-gradient(207deg, rgba(115, 139, 227, 0.2) 0%, rgba(49, 56, 175, 0.2) 100%);
     align-items: center;
 }
 
@@ -36,7 +36,6 @@ body {
 /*    margin-top: 7%;*/
     text-align: center;
     background-color: #fff;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 
@@ -83,7 +82,7 @@ body {
 }
 
 .login-box> button {
-    background-color: rgba(79, 109, 218, 0.6);
+    background-color: #38414a;
     border : 0px solid #ddd;
     border-radius: 3px;
     width: 30%;
@@ -116,27 +115,21 @@ body {
 
 .account-find-box > button {
     height: 50px;
-    /* align-items: center; */
     width: 100%;
-    /* height: 100%; */
     font-weight: bold;
     font-size: 16px;
     border : 0px solid #ddd;
-    border-bottom: 2px solid rgba(79, 109, 218, 0.6);
-    background-color: #fff;
-
+    border-bottom: 2px solid #38414a;
 }
 
 .account-find-box > button.active {
-    background-color: rgba(79, 109, 218, 0.3);
-    /* border: 1px solid #ddd; */
+    background-color: #38414a;
+    color: white;
 }
 
 .logo {
-    color: transparent;
-    -webkit-background-clip: text;
-    background-image: linear-gradient(to right, #94b6e9, #56c9ef, #33d8d7, #73e0a7, #bfdf77);
-    font-family: 'ghanachoco';
+    color: #38414a;
+    font-family: 'FlightSans-Title';
     font-size: 45px;
 }
 

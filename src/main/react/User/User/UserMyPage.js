@@ -41,8 +41,8 @@ function UserMyPage () {
 
     const validateForm = () => {
         const namePattern = /^[가-힣a-zA-Z]+$/;
-        const phonePattern = /^[0-9-]+$/;
-        const birthPattern = /^\d{8}$/;
+        const phonePattern = /^010(?:-?\d{4})(?:-?\d{4})$/;
+        const birthPattern = /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
         const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
         if (userInfo.userName === '' || !namePattern.test(userInfo.userName)) {

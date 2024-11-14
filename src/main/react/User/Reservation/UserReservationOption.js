@@ -108,76 +108,79 @@ function UserReservationOption() {
 
 
   };
+const handleFlavorSelect1 = (subCategory, index, categoryId, isRequired) => {
+  setCombinedInputs(prev => {
+    const updatedInputs = [...prev];
+    const isSelected = updatedInputs[index]?.[index]?.includes(subCategory);
 
-  // 옵션 선택 처리 (단일 선택)
-  const handleFlavorSelect1 = (subCategory, index, categoryId, isRequired) => {
-    setCombinedInputs(prev => {
-      const updatedInputs = [...prev];
-      updatedInputs[index] = { ...updatedInputs[index], [index]: [subCategory] }; // 단일 선택 업데이트
-      return updatedInputs;
-    });
+    updatedInputs[index] = {
+      ...updatedInputs[index],
+      [index]: isSelected ? [] : [subCategory]
+    };
+    return updatedInputs;
+  });
 
-    setFormData(prev => {
-      const updatedFormDatas = [...prev];
+  setFormData(prev => {
+    let updatedFormDatas = [...prev];
+
+    // Remove item if it was already selected
+    if (updatedFormDatas.some(item => item?.subCategoryId === subCategory.categoryId)) {
+      updatedFormDatas = updatedFormDatas.filter(
+        item => item?.subCategoryId !== subCategory.categoryId
+      );
+    } else {
+      // Add new item if it wasn’t selected
       updatedFormDatas[index] = {
-        ...updatedFormDatas[index],
         mainCategoryId: reserveModi.categoryId,
         middleCategoryId: categoryId,
         subCategoryId: subCategory.categoryId,
         middleCategoryValue: null,
-        isRequired : isRequired
+        isRequired
       };
-      return updatedFormDatas;
-    })
+    }
+    return updatedFormDatas;
+  });
+};
+const handleFlavorSelectN = (subCategory, index, categoryId, isRequired) => {
+  setCombinedInputs(prev => {
+    const updatedInputs = [...prev];
+    const currentSelection = updatedInputs[index]?.[index] || [];
 
-  };
+    updatedInputs[index] = {
+      ...updatedInputs[index],
+      [index]: currentSelection.includes(subCategory)
+        ? currentSelection.filter(item => item !== subCategory)
+        : [...currentSelection, subCategory]
+    };
+    return updatedInputs;
+  });
 
-  // 옵션 선택 처리 (다중 선택) --> n 
-  const handleFlavorSelectN = (subCategory, index, categoryId,isRequired) => {
-    setCombinedInputs(prev => {
-      const updatedInputs = [...prev];
-      const currentSelection = updatedInputs[index]?.[index] || [];
-      updatedInputs[index] = {
-        ...updatedInputs[index],
-        [index]: currentSelection.includes(subCategory)
-          ? currentSelection.filter(item => item !== subCategory) // 이미 선택된 경우 제거
-          : [...currentSelection, subCategory] // 선택되지 않은 경우 추가
-      };
-      return updatedInputs;
-    });
+  setFormData(prev => {
+    let updatedFormDatas = [...prev];
 
+    const existingIndex = updatedFormDatas.findIndex(
+      item => item?.mainCategoryId === reserveModi.categoryId &&
+              item?.middleCategoryId === categoryId &&
+              item?.subCategoryId === subCategory.categoryId
+    );
 
-    setFormData(prev => {
-      const updatedFormDatas = [...prev];
+    if (existingIndex !== -1) {
+      // Remove the item if it’s already selected (deselection)
+      updatedFormDatas.splice(existingIndex, 1);
+    } else {
+      // Add new item if it wasn’t already selected
+      updatedFormDatas.push({
+        mainCategoryId: reserveModi.categoryId,
+        middleCategoryId: categoryId,
+        subCategoryId: subCategory.categoryId,
+        middleCategoryValue: subCategory.value || null,
+        isRequired
+      });
+    }
 
-      // 새로운 선택 항목을 생성
-      const newSelection = {
-        mainCategoryId: reserveModi.categoryId,  // mainCategoryId
-        middleCategoryId: categoryId,            // middleCategoryId
-        subCategoryId: subCategory.categoryId,   // subCategoryId
-        middleCategoryValue: subCategory.value || null,  // 값이 없으면 null
-        isRequired: isRequired
-      };
-
-      // 이미 해당 항목이 있는지 확인
-      const existingIndex = updatedFormDatas.findIndex(item =>
-        item.mainCategoryId === reserveModi.categoryId &&
-        item.middleCategoryId === categoryId &&
-        item.subCategoryId === subCategory.categoryId &&
-        item.isRequired === isRequired
-      );
-
-      if (existingIndex !== -1) {
-        // 항목이 이미 있으면 제거
-        updatedFormDatas.splice(existingIndex, 1);
-      } else {
-        // 항목이 없으면 추가
-        updatedFormDatas.splice(index + 1, 0, newSelection);
-      }
-
-      return updatedFormDatas;
-    });
-  };
+    return updatedFormDatas;
+  });
+};
 
 
 

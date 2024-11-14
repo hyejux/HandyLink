@@ -196,7 +196,7 @@ function UserReviewRegist() {
 
     // 기존에 업로드된 이미지 개수를 고려해서 4개 제한
     if (files.length + newImages.length + images.length > 4) {
-      alert("You can only upload up to 4 images.");
+      alert("이미지는 4개까지 업로드 가능합니다.");
       return; // 4개 초과 시 업로드 진행을 중지
     }
 

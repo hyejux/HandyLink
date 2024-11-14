@@ -76,94 +76,107 @@
         </div>
     </div>
 </div>
-
-<script th:src="@{'/bundle/' + ${pageName} + '.bundle.js'}"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // 드롭다운 버튼들
-    const dropdownButtons = document.querySelectorAll('.menu-btn.dropdown-btn, .menu-btn.dropdown-btn2');
-    const dropdowns = document.querySelectorAll('.dropdown, .dropdown2');
-
-    // 드롭다운 상태 복원 (페이지 로드 시)
-    dropdownButtons.forEach(button => {
-        const dropdown = button.nextElementSibling; // 해당 버튼의 드롭다운 요소
-        const dropdownId = button.classList.contains('dropdown-btn2') ? 'dropdown2' : 'dropdown';
-        // 이전에 열렸던 드롭다운 상태가 있으면 복원
-        if (sessionStorage.getItem(dropdownId) === 'open') {
-            dropdown.classList.add('show');
-            button.querySelector('.bi-caret-down-fill').classList.add('hidden');
-            button.querySelector('.bi-caret-left-fill').classList.remove('hidden');
-        }
-    });
-
-    // 드롭다운 버튼 클릭 시 드롭다운 토글
-    dropdownButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const dropdown = this.nextElementSibling; // 해당 버튼의 드롭다운 요소
-            const dropdownId = this.classList.contains('dropdown-btn2') ? 'dropdown2' : 'dropdown';
-
-            // 다른 드롭다운이 열려 있다면 닫기
-            dropdowns.forEach(otherDropdown => {
-                if (otherDropdown !== dropdown) {
-                    otherDropdown.classList.remove('show'); // 다른 드롭다운 숨기기
-                    const otherButton = otherDropdown.previousElementSibling; // 다른 버튼
-                    otherButton.querySelector('.bi-caret-down-fill').classList.remove('hidden'); // 화살표 아래로 보이게
-                    otherButton.querySelector('.bi-caret-left-fill').classList.add('hidden'); // 왼쪽 화살표 숨기기
-                    // sessionStorage에서 상태 초기화
-                    sessionStorage.removeItem(otherDropdown.classList.contains('dropdown') ? 'dropdown' : 'dropdown2');
-                }
-            });
-
-            // 현재 드롭다운 상태 토글
-            const isOpen = dropdown.classList.toggle('show'); // show 클래스 토글 (드롭다운 표시/숨김)
-
-            // 화살표 아이콘 상태 토글
-            this.querySelector('.bi-caret-down-fill').classList.toggle('hidden');
-            this.querySelector('.bi-caret-left-fill').classList.toggle('hidden');
-
-            // 상태 저장 (드롭다운이 열렸으면 'open', 닫혔으면 'closed')
-            if (isOpen) {
-                sessionStorage.setItem(dropdownId, 'open');
-            } else {
-                sessionStorage.setItem(dropdownId, 'closed');
+    document.addEventListener('DOMContentLoaded', function() {
+        // 드롭다운 버튼들
+        const dropdownButtons = document.querySelectorAll('.menu-btn.dropdown-btn, .menu-btn.dropdown-btn2');
+        const dropdowns = document.querySelectorAll('.dropdown, .dropdown2');
+    
+        // 드롭다운 상태 복원 (페이지 로드 시)
+        dropdownButtons.forEach(button => {
+            const dropdown = button.nextElementSibling; // 해당 버튼의 드롭다운 요소
+            const dropdownId = button.classList.contains('dropdown-btn2') ? 'dropdown2' : 'dropdown';
+            // 이전에 열렸던 드롭다운 상태가 있으면 복원
+            if (sessionStorage.getItem(dropdownId) === 'open') {
+                dropdown.classList.add('show');
+                button.querySelector('.bi-caret-down-fill').classList.add('hidden');
+                button.querySelector('.bi-caret-left-fill').classList.remove('hidden');
             }
         });
-    });
-
-    // 현재 페이지와 일치하는 메뉴에 활성화 스타일 추가
-    const currentPath = window.location.pathname.split('/').pop(); // 현재 URL에서 마지막 부분 (페이지 이름)
-    console.log(currentPath);
-
-
     
-    const menuItems = document.querySelectorAll('.menu-btn a');
-    menuItems.forEach(item => {
-        const linkPath = item.getAttribute('href').split('/').pop();
-        if (currentPath === linkPath) {
-            item.style.backgroundColor = '#c7ddea94'; // 배경색 빨간색으로 활성화
-        }
-    });
-    const menuItems2 = document.querySelectorAll('.dropdown a');
-    menuItems2.forEach(item => {
-        const linkPath = item.getAttribute('href').split('/').pop();
-        if (currentPath === linkPath) {
-            item.style.backgroundColor = '#c7ddea94'; // 배경색 빨간색으로 활성화
-        }
-    });
-
-    const menuItems3 = document.querySelectorAll('.dropdown2 a');
-    menuItems3.forEach(item => {
-        const linkPath = item.getAttribute('href').split('/').pop();
-        if (currentPath === linkPath) {
-            item.style.backgroundColor = '#c7ddea94'; // 배경색 빨간색으로 활성화
-        }
-    });
-
-
-
-    // 다른 페이지로 이동 시 드롭다운 해제
-    menuItems.forEach(item => {
-        item.addEventListener('click', function() {
+        // 드롭다운 버튼 클릭 시 드롭다운 토글
+        dropdownButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const dropdown = this.nextElementSibling; // 해당 버튼의 드롭다운 요소
+                const dropdownId = this.classList.contains('dropdown-btn2') ? 'dropdown2' : 'dropdown';
+    
+                // 다른 드롭다운이 열려 있다면 닫기
+                dropdowns.forEach(otherDropdown => {
+                    if (otherDropdown !== dropdown) {
+                        otherDropdown.classList.remove('show'); // 다른 드롭다운 숨기기
+                        const otherButton = otherDropdown.previousElementSibling; // 다른 버튼
+                        otherButton.querySelector('.bi-caret-down-fill').classList.remove('hidden'); // 화살표 아래로 보이게
+                        otherButton.querySelector('.bi-caret-left-fill').classList.add('hidden'); // 왼쪽 화살표 숨기기
+                        // sessionStorage에서 상태 초기화
+                        sessionStorage.removeItem(otherDropdown.classList.contains('dropdown') ? 'dropdown' : 'dropdown2');
+                    }
+                });
+    
+                // 현재 드롭다운 상태 토글
+                const isOpen = dropdown.classList.toggle('show'); // show 클래스 토글 (드롭다운 표시/숨김)
+    
+                // 화살표 아이콘 상태 토글
+                this.querySelector('.bi-caret-down-fill').classList.toggle('hidden');
+                this.querySelector('.bi-caret-left-fill').classList.toggle('hidden');
+    
+                // 상태 저장 (드롭다운이 열렸으면 'open', 닫혔으면 'closed')
+                if (isOpen) {
+                    sessionStorage.setItem(dropdownId, 'open');
+                } else {
+                    sessionStorage.setItem(dropdownId, 'closed');
+                }
+            });
+        });
+    
+        // 현재 페이지와 일치하는 메뉴에 활성화 스타일 추가
+        const currentPath = window.location.pathname.split('/').pop(); // 현재 URL에서 마지막 부분 (페이지 이름)
+        console.log(currentPath);
+    
+    
+        
+        const menuItems = document.querySelectorAll('.menu-btn a');
+        menuItems.forEach(item => {
+            const linkPath = item.getAttribute('href').split('/').pop();
+            if (currentPath === linkPath) {
+                item.style.backgroundColor = '#c7ddea94'; // 배경색 빨간색으로 활성화
+            }
+        });
+        const menuItems2 = document.querySelectorAll('.dropdown a');
+        menuItems2.forEach(item => {
+            const linkPath = item.getAttribute('href').split('/').pop();
+            if (currentPath === linkPath) {
+                item.style.backgroundColor = '#c7ddea94'; // 배경색 빨간색으로 활성화
+            }
+        });
+    
+        const menuItems3 = document.querySelectorAll('.dropdown2 a');
+        menuItems3.forEach(item => {
+            const linkPath = item.getAttribute('href').split('/').pop();
+            if (currentPath === linkPath) {
+                item.style.backgroundColor = '#c7ddea94'; // 배경색 빨간색으로 활성화
+            }
+        });
+    
+    
+    
+        // 다른 페이지로 이동 시 드롭다운 해제
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('show'); // 모든 드롭다운 숨기기
+                });
+                dropdownButtons.forEach(button => {
+                    button.querySelector('.bi-caret-down-fill').classList.remove('hidden'); // 모든 화살표 아래로 보이게
+                    button.querySelector('.bi-caret-left-fill').classList.add('hidden'); // 왼쪽 화살표 숨기기
+                });
+                // sessionStorage에서 모든 드롭다운 상태 초기화
+                sessionStorage.removeItem('dropdown');
+                sessionStorage.removeItem('dropdown2');
+            });
+        });
+    
+        // "adminmain.admin" 페이지로 이동할 때 드롭다운 초기화
+        if (window.location.pathname === '/adminmain.admin') {
             dropdowns.forEach(dropdown => {
                 dropdown.classList.remove('show'); // 모든 드롭다운 숨기기
             });
@@ -174,69 +187,55 @@ document.addEventListener('DOMContentLoaded', function() {
             // sessionStorage에서 모든 드롭다운 상태 초기화
             sessionStorage.removeItem('dropdown');
             sessionStorage.removeItem('dropdown2');
-        });
+        }
+    
+        // 스타일: 드롭다운 보이기/숨기기 위한 클래스
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .dropdown.show, .dropdown2.show {
+                display: block;
+            }
+            .bi-caret-left-fill.hidden, .bi-caret-down-fill.hidden {
+                display: none;
+            }
+        `;
+        document.head.appendChild(style);
     });
-
-    // "adminmain.admin" 페이지로 이동할 때 드롭다운 초기화
-    if (window.location.pathname === '/adminmain.admin') {
-        dropdowns.forEach(dropdown => {
-            dropdown.classList.remove('show'); // 모든 드롭다운 숨기기
-        });
-        dropdownButtons.forEach(button => {
-            button.querySelector('.bi-caret-down-fill').classList.remove('hidden'); // 모든 화살표 아래로 보이게
-            button.querySelector('.bi-caret-left-fill').classList.add('hidden'); // 왼쪽 화살표 숨기기
-        });
-        // sessionStorage에서 모든 드롭다운 상태 초기화
-        sessionStorage.removeItem('dropdown');
-        sessionStorage.removeItem('dropdown2');
-    }
-
-    // 스타일: 드롭다운 보이기/숨기기 위한 클래스
-    const style = document.createElement('style');
-    style.innerHTML = `
-        .dropdown.show, .dropdown2.show {
-            display: block;
-        }
-        .bi-caret-left-fill.hidden, .bi-caret-down-fill.hidden {
-            display: none;
-        }
-    `;
-    document.head.appendChild(style);
-});
-
     </script>
-<script>
-    var storeName = sessionStorage.getItem("storeId");  
-    console.log("세션: " + storeName);
-
-    // Show the correct menu based on storeName
-    if (storeName === "MASTER") {
-        // Show masterMenu, hide storeMenu
-        document.querySelectorAll(".masterMenu").forEach(function(item) {
-            item.style.display = "block";
-        });
-        document.querySelectorAll(".storeMenu").forEach(function(item) {
-            item.style.display = "none";
-        });
-    } else {
-        // Show storeMenu, hide masterMenu
-        document.querySelectorAll(".storeMenu").forEach(function(item) {
-            item.style.display = "block";
-        });
-        document.querySelectorAll(".masterMenu").forEach(function(item) {
-            item.style.display = "none";
-        });
-    }
-
-    // Set the onclick event based on storeName value
-    document.getElementById("logo").onclick = function() {
+    <script>
+        var storeName = sessionStorage.getItem("storeId");  
+        console.log("세션: " + storeName);
+    
+        // Show the correct menu based on storeName
         if (storeName === "MASTER") {
-            location.href = '../master.admin';  // Redirect to master.admin if storeName is "MASTER"
+            // Show masterMenu, hide storeMenu
+            document.querySelectorAll(".masterMenu").forEach(function(item) {
+                item.style.display = "block";
+            });
+            document.querySelectorAll(".storeMenu").forEach(function(item) {
+                item.style.display = "none";
+            });
         } else {
-            location.href = '../adminmain.admin';  // Redirect to adminmain.admin for other storeName values
+            // Show storeMenu, hide masterMenu
+            document.querySelectorAll(".storeMenu").forEach(function(item) {
+                item.style.display = "block";
+            });
+            document.querySelectorAll(".masterMenu").forEach(function(item) {
+                item.style.display = "none";
+            });
         }
-    };
-</script>
+    
+        // Set the onclick event based on storeName value
+        document.getElementById("logo").onclick = function() {
+            if (storeName === "MASTER") {
+                location.href = '../master.admin';  // Redirect to master.admin if storeName is "MASTER"
+            } else {
+                location.href = '../adminmain.admin';  // Redirect to adminmain.admin for other storeName values
+            }
+        };
+    </script>
+    
+<script th:src="@{'/bundle/' + ${pageName} + '.bundle.js'}"></script>
 
 
 

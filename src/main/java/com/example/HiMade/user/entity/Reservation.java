@@ -44,8 +44,13 @@ public class Reservation {
     @Column(name = "reservation_slot_key")
     private Long reservationSlotKey;
 
+    @Column(name = "user_delivery_type")
+    private String userDeliveryType;
+
     @ManyToOne
     @JoinColumn(name = "store_no")
     private Store store;
+
+
 
 }

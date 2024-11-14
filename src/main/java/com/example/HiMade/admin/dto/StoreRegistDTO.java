@@ -17,6 +17,7 @@ public class StoreRegistDTO {
     private Long storeNo; //업체번호
     private String storePw; //업체pw
     private String storeCate; //업종
+    private String deliveryType; //배송유무
     private String storeName; //상호명
     private String storeMaster; //대표자명
     private String managerName; //담당자명
@@ -35,6 +36,7 @@ public class StoreRegistDTO {
     private String accountNumber; //업체계좌번호
     private String storeSignup; //가입일시
     private String storeStatus; //업체활동상태
+    
 
     // 포맷된 시간 필드 추가
     private String formattedOpenTime; // 포맷된 영업 시작 시간

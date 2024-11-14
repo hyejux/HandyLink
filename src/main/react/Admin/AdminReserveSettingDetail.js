@@ -200,6 +200,21 @@ const handleTimeNumChange = (e) => {
   const handleComplete = async () => {
     const imageUrl = await handleUpload(); // 이미지 URL을 기다림
     if (!imageUrl) return; // 업로드 실패 시 함수 종료
+
+    // 필수 항목이 최상위에 있는지 유효성 검사
+    const firstNonRequiredIndex = categories.findIndex(category => !category.isRequired);
+    if (firstNonRequiredIndex !== -1) {
+      // 필수 항목이 비필수 항목 아래에 있으면 유효성 위반
+      const isValidOrder = categories
+        .slice(firstNonRequiredIndex)
+        .every(category => !category.isRequired);
+
+      if (!isValidOrder) {
+        alert("필수 항목은 항상 목록의 위쪽에 있어야 합니다.");
+        return;
+      }
+    }
+
    
       if (reserveAdd.serviceName === ''){
         alert("서비스 명을 입력해주세요.")
@@ -441,25 +456,20 @@ const [serviceDate, setServiceDate] = useState(''); // 날짜 상태
 const [serviceHour, setServiceHour] = useState(''); // 시간 상태
 
 
-  
-
-
   const onDragEnd = (result) => {
     if (!result.destination) return;
 
     const reorderedCategories = Array.from(categories);
     const [removed] = reorderedCategories.splice(result.source.index, 1);
-    reorderedCategories.splice(result.destination.index, 0, removed);
 
+    reorderedCategories.splice(result.destination.index, 0, removed);
     setCategories(reorderedCategories);
   };
-
 
   useEffect(() => {
     console.log('Category :', categories);
     console.log(serviceDate,serviceHour,serviceStart);
-}, [categories]);
-
+  }, [categories]);
 
 
 

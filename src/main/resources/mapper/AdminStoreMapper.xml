@@ -85,7 +85,8 @@
             store_status,
             zipcode,
             addr,
-            addrdetail
+            addrdetail,
+            delivery_type
         ) values (
             #{storeId},
             #{storePw},
@@ -99,7 +100,8 @@
             '대기',
             #{zipcode},
             #{addr},
-            #{addrdetail}
+            #{addrdetail},
+            #{deliveryType}
         )
         returning store_no as storeNo
     </insert>
@@ -494,6 +496,7 @@
         <foreach collection="reservationNos" item="reservationNo" open="(" separator="," close=")">
             #{reservationNo}
         </foreach>
+        order by reserve.reservation_time
     </select>
 
 

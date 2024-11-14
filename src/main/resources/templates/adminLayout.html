@@ -12,14 +12,14 @@
 
 <div class='mainBox'>
     <div class="layout-nav">
-        <logo class="logo" onclick="location.href='./adminmain.admin'"> NEEZ <span> 관리자 </span> </logo>
+        <logo class="logo" onclick="location.href='../adminmain.admin'"> NEEZ <span> 관리자 </span> </logo>
         <div class="layout-profile">
             <div class="layout-profile-info">
                 <div class="layout-profile-box">
                     <p th:text="${session.storeName}">상호명</p>
                 </div>
                 <div class="layout-profile-buttons">
-                    <button type="button" class="layout-profile-button layout-mypage-button" onclick="location.href='./adminstoreinfo.admin'">마이 페이지</button>
+                    <button type="button" class="layout-profile-button layout-mypage-button" onclick="location.href='../adminstoreinfo.admin'">마이 페이지</button>
                     <button type="button" class="layout-profile-button layout-logout-button" onclick="location.href='../adminlogin.login'">로그아웃</button>
                 </div>
             </div>
@@ -52,6 +52,7 @@
 
             <div class="menu-btn">    <a href="../AdminReserveSetting.admin"> <i class="bi bi-gear-fill"> </i> 상품</a></div>
             <div class="menu-btn">  <a href="../AdminReserveManage.admin"> <i class="bi bi-check2-circle"> </i> 예약</a></div>
+            <div class="menu-btn">    <a href="../AdminDelivery.admin"> <i class="bi bi-box-seam"></i> </i> 배송 </a></div>
             <div class="menu-btn"> <a href="./adminstorereport.admin"> <i class="bi bi-bar-chart-line-fill"></i> 통계</a></div>
             <div class="menu-btn">  <a href="../AdminReviewList.admin"> <i class="bi bi-person-circle"></i> 리뷰 </a></div>
             <div class="menu-btn"><a href="./AdminChat.admin">  <i class="bi bi-chat-left-text-fill"></i> 채팅 </a></div>

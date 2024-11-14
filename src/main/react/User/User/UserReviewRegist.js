@@ -176,7 +176,7 @@ function UserReviewRegist() {
           .then(response => {
             console.log('파일 업로드 성공:', response.data);
             alert("리뷰 등록이 완료되었습니다.");
-            // window.location.href = '/userMyReservationList.user'; // 페이지 이동;
+            window.location.href = '/userMyReservationList.user'; // 페이지 이동;
           })
           .catch(error => {
             console.error('에러 발생:', error);

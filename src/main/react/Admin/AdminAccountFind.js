@@ -150,7 +150,7 @@ function AdminAccountFind(){
     return(
     <div className="parts">
         <div className="login-find-container">
-            <logo className="logo">HandyLink</logo>
+            <logo className="logo">NEEZ</logo>
 
             <div className="account-find-box">
                 <button type="button" onClick={handleClickId} className={view === 'id' ? 'active' : ''} > 아이디 찾기 </button>

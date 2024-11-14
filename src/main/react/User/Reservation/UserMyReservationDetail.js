@@ -243,7 +243,7 @@ function UserMyReservationDetail() {
 
       <div className="user-content-container">
         <div className="info-row">
-          <div className="left2"><i class="bi bi-calendar-check-fill"></i> {formatDate3(reservationDetail.regTime)} </div>
+          <div className="left2"><i class="bi bi-calendar-check-fill"></i>{reservationDetail.reservationSlot?.reservationSlotDate} </div>
           <div className="right2"><i class="bi bi-clock-fill"></i>{(reservationDetail.reservationTime || '정보 없음').slice(0, 5)} </div>
         </div>
       </div>

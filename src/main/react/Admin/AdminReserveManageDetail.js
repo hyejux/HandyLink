@@ -247,7 +247,7 @@ function AdminReserveManageDetail() {
           
               <tr>
                 <th>날짜</th>
-                <td>{formatDate2(reservationDetail.regTime)} </td>
+                <td>{reservationDetail.reservationSlot?.reservationSlotDate}</td>
               </tr>
               <tr>
                 <th>시간</th>

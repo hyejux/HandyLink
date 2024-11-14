@@ -51,7 +51,7 @@ function AdminLogin() {
                 }
 
                 if (response.status === 200 && storeId) {
-                    alert(`로그인 성공 ${storeId} 상태 ${storeStatus}`);
+//                    alert(`로그인 성공 ${storeId} 상태 ${storeStatus}`);
 
                     if (storeStatus === '대기') {
                         window.location.href = `/adminsignupapproval.admin?${storeNo}`;
@@ -75,7 +75,7 @@ function AdminLogin() {
     return (
         <div className="parts">
             <div className="part1">
-            <div className="top-text">주문, 이제 더 편리하게 <br />관리도 손쉽게</div>
+            <div className="top-text">예약, 이제 더 편리하게 <br />관리도 손쉽게</div>
 <div className="bottom-text">NEEZ에서 경험해보세요</div>
 
             </div>

@@ -99,7 +99,7 @@ function AdminReserveManageDetail() {
 
   const handleStatusChange = (reservationNo, status, storeName) => {
     console.log(reservationNo, status);
-    if (window.confirm(`${reservationNo} 주문건을 ${status}로 변경하시겠습니까?`)) {
+    if (window.confirm(`${reservationNo} 예약을 ${status}로 변경하시겠습니까?`)) {
       // 결제 상태 결정
       let paymentStatus = '';
       if (status === '확정' || status === '완료') {

@@ -4,7 +4,7 @@
     background-color: #edededa1;
     max-width: 500px;
     border-radius: 8px;
-    padding: 0 15px;
+    padding: 5px 5px;
     overflow-y: auto;
 }
 
@@ -24,10 +24,10 @@
 .review-card {
     display: flex;
     align-items: flex-start;
-    margin-top: 20px;
     padding: 10px;
     background-color: #ffffff;
     border-radius: 8px;
+    margin: 5px;
 }
 
 .store-image {

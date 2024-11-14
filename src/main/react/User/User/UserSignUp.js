@@ -107,7 +107,7 @@ function UserSignUp() {
     const validateForm = () => {
         const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
         const namePattern = /^[가-힣a-zA-Z]+$/;
-        const phonePattern = /^[0-9-]+$/;
+        const phonePattern = /^010(?:-?\d{4})(?:-?\d{4})$/;
         const birthPattern = /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
 
         if (!isKakaoSignUp && (!formData.userPw || !passwordPattern.test(formData.userPw))) {

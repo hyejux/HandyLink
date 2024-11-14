@@ -204,7 +204,7 @@ function UserReservationConfirm() {
       storeNo: storeInfo.storeNo,
       reservationStatus: reservationStatus,
       userId: userId
-      
+
     };
 
     try {

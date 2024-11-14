@@ -21,8 +21,8 @@ function AdminStoreReport() {
         serviceName: []
     });
 
-    const [selectedYear, setSelectedYear] = useState(''); //매출 - 연도
-    const [selectedMonth, setSelectedMonth] = useState(''); //매출 - 월
+    const [selectedYear, setSelectedYear] = useState(currentYear.toString()); // 매출 - 연도
+    const [selectedMonth, setSelectedMonth] = useState(currentMonth.toString()); // 매출 - 월
 
     useEffect(() => {
 
@@ -52,18 +52,16 @@ function AdminStoreReport() {
         fetchAge();
     }, [storeNo]);
 
-    // useEffect로 컴포넌트 마운트 시 데이터 자동 조회
+    // viewMode가 변경될 때만 초기화를 수행
     useEffect(() => {
         console.log('viewMode changed:', viewMode);
-        setSelectedYear(currentYear);
-        setSelectedMonth(currentMonth);
 
         if (viewMode === 'monthly') {
-            fetchMonthlySales(currentYear);  // 월별 데이터 조회
+            fetchMonthlySales(selectedYear);  // 월별 데이터 조회
         } else if (viewMode === 'daily') {
-            fetchMonthlySales2(currentYear, currentMonth);  // 일별 데이터 조회
+            fetchMonthlySales2(selectedYear, selectedMonth);  // 일별 데이터 조회
         }
-    }, [viewMode, selectedYear, selectedMonth]);
+    }, [viewMode]); // viewMode 변경될 때만 초기화
 
     // 월별 - 매출조회
     const fetchMonthlySales = async (year) => {
@@ -185,7 +183,7 @@ function AdminStoreReport() {
                             <div className="graph-section">
                                 <div className="customer mw">
                                     <h3>성비</h3>
-                                    <div>
+                                    <div className="only-graph">
                                         <MwChart />
                                     </div>
                                 </div>
@@ -195,21 +193,14 @@ function AdminStoreReport() {
                                         <thead>
                                             <tr>
                                                 <th>남자</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>{genderCount.males}명</td>
-                                            </tr>
-                                        </tbody>
-                                        <thead>
-                                            <tr>
                                                 <th>여자</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
+                                                <td>{genderCount.males}명</td>
                                                 <td>{genderCount.females}명</td>
+
                                             </tr>
                                         </tbody>
                                     </table>
@@ -219,8 +210,8 @@ function AdminStoreReport() {
                             <div className="table-section">
                                 <div className="customer age">
                                     <h3>나이</h3>
-                                    <div>
-                                    <AgeChart data={ageDistribution} />
+                                    <div className="only-graph">
+                                        <AgeChart data={ageDistribution} />
                                     </div>
                                     </div>
 
@@ -228,18 +219,18 @@ function AdminStoreReport() {
                                     <table className="agetable">
                                         <thead>
                                         <tr>
-                                        <th>나이</th>
-                                        <th>주로 찾는 서비스</th>
+                                            <th style={{width: '30%'}}>나이</th>
+                                            <th>주로 찾는 서비스</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        {ageDistribution.labels.map((label, index) => (
-                                            <tr key={index}>
-                                                <td>{label}</td>
-                                                <td>{ageDistribution.serviceName[index] || '정보 없음'}</td> {/* Fallback if no service name */}
-                                            </tr>
-                                        ))}
-                                    </tbody>
+                                            <tbody>
+                                            {ageDistribution.labels.map((label, index) => (
+                                                <tr key={index}>
+                                                    <td>{label}</td>
+                                                    <td>{ageDistribution.serviceName[index] || '정보 없음'}</td> {/* Fallback if no service name */}
+                                                </tr>
+                                            ))}
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -251,7 +242,7 @@ function AdminStoreReport() {
 
                 <div className="flex-right">
                     <div className="report-section">
-                        <h2>주문 통계</h2>
+                        <h2>예약 통계</h2>
                         <div className="reservation-graph">
                             <div className="graph-filter">
                                 <div className="filter">
@@ -334,7 +325,7 @@ function AdminStoreReport() {
                                             <tr>
                                                 <th>연도</th>
                                                 <th>월</th>
-                                                <th>매출액</th>
+                                                <th>매출액(원)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -345,9 +336,9 @@ function AdminStoreReport() {
                                             ) : (
                                                 salesData.map((item, index) => (
                                                     <tr key={index}>
-                                                        <td>{item.year}</td>
-                                                        <td>{item.month}</td>
-                                                        <td>{item.totalSales}</td>
+                                                        <td>{item.year}년</td>
+                                                        <td>{item.month}월</td>
+                                                        <td>{item.totalSales.toLocaleString()}</td>
                                                     </tr>
                                                 ))
                                             )}
@@ -365,7 +356,7 @@ function AdminStoreReport() {
                                                 <th>연도</th>
                                                 <th>월</th>
                                                 <th>일</th>
-                                                <th>매출액</th>
+                                                <th>매출액(원)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -376,10 +367,10 @@ function AdminStoreReport() {
                                             ) : (
                                                 salesData2.map((item, index) => (
                                                     <tr key={index}>
-                                                        <td>{item.year}</td>
-                                                        <td>{item.month}</td>
-                                                        <td>{item.day}</td>
-                                                        <td>{item.totalSales}</td>
+                                                        <td>{item.year}년</td>
+                                                        <td>{item.month}월</td>
+                                                        <td>{item.day}일</td>
+                                                        <td>{item.totalSales.toLocaleString()}</td>
                                                     </tr>
                                                 ))
                                             )}

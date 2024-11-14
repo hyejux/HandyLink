@@ -193,8 +193,12 @@ function AdminReserveManage() {
 
     const goToDetail = (no) => {
         window.location.href = `/AdminReserveManageDetail.admin/${no}`;
-    };
+    };const [filteredReservationList, setFilteredReservationList] = useState(reservationList || []);
 
+
+
+
+    // 필터링 처리
     const handleSearch = () => {
         const filteredList = reservationList.filter(reservation => {
             const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
@@ -211,41 +215,40 @@ function AdminReserveManage() {
     
         // Update the displayed results based on the filtered list
         setPaginatedData(filteredList);
+        setCurrentPage(1); // 필터 변경 시 첫 페이지로 리셋
     };
-    
 
-    //===============================================================================================================
-   // 날짜 범위 변경 시 필터링
-   const handleDateRangeChange = () => {
-    const filteredList = reservationList.filter(reservation => {
-        const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
-        regDate.setHours(0, 0, 0, 0); // 자정 기준으로 시간 초기화
+    // 날짜 범위 변경 시 필터링
+    const handleDateRangeChange = () => {
+        const filteredList = reservationList.filter(reservation => {
+            const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
+            regDate.setHours(0, 0, 0, 0); // 자정 기준으로 시간 초기화
 
-        // 날짜 범위 필터링
-        const startCondition = startDate ? regDate >= new Date(startDate) : true;
-        const endCondition = endDate ? regDate <= new Date(endDate) : true;
+            // 날짜 범위 필터링
+            const startCondition = startDate ? regDate >= new Date(startDate) : true;
+            const endCondition = endDate ? regDate <= new Date(endDate) : true;
 
-        // 상태 필터링
-        const statusCondition = !filterStatus || reservation.reservationStatus === filterStatus;
+            // 상태 필터링
+            const statusCondition = !filterStatus || reservation.reservationStatus === filterStatus;
 
-        // 서비스 이름 필터링
-        const serviceCondition = !selectedServiceName || reservation.serviceName === selectedServiceName;
+            // 서비스 이름 필터링
+            const serviceCondition = !selectedServiceName || reservation.serviceName === selectedServiceName;
 
-   
-        return startCondition && endCondition && statusCondition && serviceCondition; // 모든 조건 만족
-    });
+            return startCondition && endCondition && statusCondition && serviceCondition; // 모든 조건 만족
+        });
+        setPaginatedData(filteredList); // 필터링된 데이터 상태 업데이트
+        setCurrentPage(1); // 필터 변경 시 첫 페이지로 리셋
+    };
 
-    setPaginatedData(filteredList); // 필터링된 데이터 상태 업데이트
-};
-
-// 상태 필터 처리
+// 필터 처리 함수들
 const handleFilter = (status) => {
     setFilterStatus(status); // 상태 변경
+    setCurrentPage(1); // 필터 변경 시 첫 페이지로 리셋
 };
 
-// 서비스 이름 필터 처리
 const handleServiceChange = (e) => {
     setSelectedServiceName(e.target.value); // 선택된 서비스 이름 업데이트
+    setCurrentPage(1); // 필터 변경 시 첫 페이지로 리셋
 };
 
 // 날짜 필터 처리
@@ -255,30 +258,98 @@ const handleDateFilter = (days) => {
         const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
         const today = new Date();
         const diffDays = Math.floor((today - regDate) / (1000 * 3600 * 24));
-
         return diffDays <= days; // 선택한 날짜 범위 내의 예약만
     });
     setPaginatedData(filteredList);
 };
 
-// 필터 초기화
-const resetFilter = () => {
-    setStartDate('');
-    setEndDate('');
-    setFilterStatus('');
-    setSelectedServiceName('');
-    setSearchTerm('');
-    setSelectedDays(365); // 전체 기간으로 초기화
+// 페이지네이션 처리
+const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
 };
 
 useEffect(() => {
-    handleDateRangeChange(); // 날짜 또는 상태가 변경될 때마다 필터링 수행
-}, [startDate, endDate, filterStatus, selectedServiceName, searchTerm, reservationList, selectedDays]);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 오늘 날짜에서 시간은 00:00:00으로 설정
 
-      // 검색어 필터 처리
- 
+    // 예약 데이터 필터링
+    const filteredList = reservationList.filter(reservation => {
+        // reservationSlotDate와 reservationTime을 합쳐서 Date 객체로 변환
+        const regDate = new Date(`${reservation.reservationSlotDate}T${reservation.reservationTime}`);
+        regDate.setHours(0, 0, 0, 0); // 예약 날짜의 시간을 00:00:00으로 설정
+
+        // 날짜 범위 필터링
+        const diffDays = Math.floor((today - regDate) / (1000 * 3600 * 24)); // 오늘과 예약 날짜의 차이를 일 단위로 계산
+
+        // 날짜 범위 필터링 조건
+        let dateFilterCondition = true;
+        if (selectedDays === 0) {
+            dateFilterCondition = diffDays === 0; // 오늘만 필터링
+        } else if (selectedDays > 0) {
+            dateFilterCondition = diffDays <= selectedDays; // selectedDays 이내의 예약만 필터링
+        }
+
+        // 날짜 범위 필터링 외에 다른 조건 추가
+        const startCondition = startDate ? regDate >= new Date(startDate) : true;
+        const endCondition = endDate ? regDate <= new Date(endDate) : true;
+        const statusCondition = !filterStatus || reservation.reservationStatus === filterStatus;
+        const serviceCondition = !selectedServiceName || reservation.serviceName === selectedServiceName;
+        const searchCondition =
+            !searchTerm ||
+            (reservation.reservationNo && reservation.reservationNo.toString().includes(searchTerm.toLowerCase())) ||
+            (reservation.userName && reservation.userName.toLowerCase().includes(searchTerm.toLowerCase()));
+
+        return dateFilterCondition && startCondition && endCondition && statusCondition && serviceCondition && searchCondition;
+    });
+
+    // 페이지네이션 처리
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    setPaginatedData(filteredList.slice(startIndex, endIndex));
+
+}, [currentPage, itemsPerPage, reservationList, startDate, endDate, filterStatus, selectedServiceName, searchTerm, selectedDays]);
 
 
+
+
+// 페이지 수 계산
+const totalPages = Math.ceil(reservationList.filter(reservation => {
+    const regDate = new Date(`${reservation.reservationSlotDate} ${reservation.reservationTime}`);
+    regDate.setHours(0, 0, 0, 0); // 시간을 00:00:00으로 설정하여 날짜만 비교
+
+    // 날짜 범위 필터링
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 오늘 날짜의 시간을 00:00:00으로 설정
+
+    const diffDays = Math.floor((today - regDate) / (1000 * 3600 * 24)); // 예약 날짜와 오늘 날짜의 차이 계산
+
+    let dateFilterCondition = true;
+    if (selectedDays === 0) {
+        dateFilterCondition = diffDays === 0; // 오늘만 필터링
+    } else if (selectedDays > 0) {
+        dateFilterCondition = diffDays <= selectedDays; // selectedDays 이내의 예약만 필터링
+    }
+
+    // 날짜 범위 필터링 외의 다른 조건
+    const startCondition = startDate ? regDate >= new Date(startDate) : true;
+    const endCondition = endDate ? regDate <= new Date(endDate) : true;
+    const statusCondition = !filterStatus || reservation.reservationStatus === filterStatus;
+    const serviceCondition = !selectedServiceName || reservation.serviceName === selectedServiceName;
+    const searchCondition =
+        !searchTerm ||
+        (reservation.reservationNo && reservation.reservationNo.toString().includes(searchTerm.toLowerCase())) ||
+        (reservation.userName && reservation.userName.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    // 모든 필터 조건이 만족되는지 체크
+    return dateFilterCondition && startCondition && endCondition && statusCondition && serviceCondition && searchCondition;
+}).length / itemsPerPage);
+
+
+// 페이지 수 계산을 위한 `Math.ceil`이 필터링된 데이터에 적용되도록 수정했습니다.
+
+
+
+    
     // ------------------ 정렬 ------------------
     const handleSort = (field, type) => {
         const order = sortOrder === 'asc' ? 'desc' : 'asc';
@@ -316,40 +387,23 @@ useEffect(() => {
         setPaginatedData(sortedList);
     };
 
-    // // ------------------ 검색 ------------------
-    // const handleSearch = () => {
-    //     const filteredList = reservationList.filter((reservation) => {
-    //         return reservation.reservationNo.toString().includes(searchTerm) || reservation.userId.includes(searchTerm);
-    //     });
-
-    //     setPaginatedData(filteredList);
-    // };
-
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
             handleSearch();
         }
     };
-    
-        // ------------------ 페이지네이션 ------------------
-        useEffect(() => {
-            const filteredList = reservationList.slice(
-                (currentPage - 1) * itemsPerPage,
-                currentPage * itemsPerPage
-            );
-            setPaginatedData(filteredList);
-        }, [currentPage, itemsPerPage, reservationList]);
 
-        
-    // ------------------ 페이지 변경 ------------------
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-
-    const totalPages = Math.ceil(reservationList.length / itemsPerPage);
-
-    // --------------------------------------------------
-
+    // 필터 초기화
+const resetFilter = () => {
+    setStartDate('');
+    setEndDate('');
+    setFilterStatus('');
+    setSelectedServiceName('');
+    setSearchTerm('');
+    setSelectedDays(365); // 전체 기간으로 초기화
+    setCurrentPage(1); // 필터 변경 시 첫 페이지로 리셋
+};
+  
     return (
         <div>
 
@@ -505,6 +559,7 @@ useEffect(() => {
                                     <th>예약일<span onClick={() => handleSort('regTime', 'date')}><i className="bi bi-chevron-expand"></i></span></th>
                                     <th>총액<span onClick={() => handleSort('reservationPrice', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
                                     <th>요청사항 </th>
+                                    <th>예약 등록일  <span onClick={() => handleSort('regTime', 'date')}><i className="bi bi-chevron-expand"></i></span> </th>
                                     <th> 결제 상태 </th>
                                     <th>상태 변경</th>
                                     <th> <i className="bi bi-printer"></i></th>
@@ -518,8 +573,12 @@ useEffect(() => {
                                         <td>{value.serviceName}</td>
                                         <td>{value.userName}({value.userId})</td>
                                         <td>{value.reservationSlotDate} {value.reservationTime}</td>
-                                        <td>{value.reservationPrice}</td>
+                                        <td>{value.reservationPrice.toLocaleString()}</td>
                                         <td>{value.customerRequest}</td>
+                                                                            <td>
+                                    {new Date(value.regTime).toISOString().slice(0, 19).replace('T', ' ')}
+                                    </td>
+
                                         <td>{value.paymentStatus}</td>
                                         <td>
                                             <div>

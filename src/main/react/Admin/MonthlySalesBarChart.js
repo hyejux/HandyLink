@@ -16,7 +16,7 @@ function MonthlySalesBarChart({ period }) {
         datasets: [
             {
                 label: '매출액',
-                backgroundColor: 'rgba(255, 159, 64, 0.6)', // 주황색 계열로 변경
+                backgroundColor: 'rgba(255, 159, 64, 0.6)',
                 borderColor: 'rgba(255, 159, 64, 1)',
                 borderWidth: 1,
                 hoverBackgroundColor: 'rgba(255, 159, 64, 0.8)',
@@ -37,6 +37,7 @@ function MonthlySalesBarChart({ period }) {
 
                     const updatedData = Array(12).fill(0);
                     filteredData.forEach(item => {
+                        // 만원 단위로 나누지 않고 원 단위 그대로 저장
                         updatedData[item.month - 1] = item.totalSales;
                     });
 
@@ -54,11 +55,11 @@ function MonthlySalesBarChart({ period }) {
                     const response = await axios.get(`/adminReservation/priceDay/${storeNo}/${currentYear}/${currentMonth}`);
                     const salesData = response.data;
 
-                    // Filter sales data for the current month and year
                     const filteredData = salesData.filter(item => item.year === currentYear && item.month === currentMonth);
 
                     const updatedData = Array(31).fill(0);
                     filteredData.forEach(item => {
+                        // 만원 단위로 나누지 않고 원 단위 그대로 저장
                         updatedData[item.day - 1] = item.totalSales;
                     });
 
@@ -155,7 +156,12 @@ function MonthlySalesBarChart({ period }) {
                     color: 'rgba(200, 200, 200, 0.5)'
                 },
                 ticks: {
-                    stepSize: 1000
+                    stepSize: 500,
+                    maxTicksLimit: 10,
+                    callback: (value) => {
+                        // y축 값을 100,000 이상이면 만원 단위로 표시, 그렇지 않으면 원 단위로 표시
+                        return value >= 100000 ? `${value / 10000} 만` : `${value} 원`;
+                    }
                 }
             }
         }

@@ -41,8 +41,8 @@ public class Reservation {
     @Column(name = "user_id")
     private String userId;
 
-    @Column(name = "reservation_slot_key")
-    private Long reservationSlotKey;
+//    @Column(name = "reservation_slot_key")
+//    private Long reservationSlotKey;
 
     @Column(name = "user_delivery_type")
     private String userDeliveryType;
@@ -50,6 +50,11 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "store_no")
     private Store store;
+
+    @ManyToOne
+    @JoinColumn(name = "reservation_slot_key", insertable = false, updatable = false)
+    private ReservationSlot reservationSlot;
+
 
 
 

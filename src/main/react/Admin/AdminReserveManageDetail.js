@@ -162,7 +162,8 @@ function AdminReserveManageDetail() {
     <div>
       <div className="main-contents">
 
-        <div className="reserve-status-container">
+<div className='detail-reserve-box'>
+<div className="reserve-status-container">
           <div className="left">승인 상태</div>
           <div className="mid">{reservationDetail.reservationStatus}</div>
           <div className="right">
@@ -198,9 +199,28 @@ function AdminReserveManageDetail() {
           </div>
 
         </div>
+        <div className="reserve-status-container">
+          <div className="left">수령 방식</div>
+          <div className="mid">{reservationDetail.userDeliveryType}</div>
+          <div className="right">
+           
+          </div>
 
+        </div>
 
+        <div className="reserve-status-container">
+          <div className="left">주문 등록일</div>
+          <div className="mid">{formatDate2(reservationDetail.regTime)}</div>
+          <div className="right">
+           
+          </div>
+
+        </div>
+</div>
+      
         <div className="flex-container">
+
+
           {/* 예약자 정보 */}
           <table className="reserve-table">
             <tbody>
@@ -224,6 +244,7 @@ function AdminReserveManageDetail() {
               <tr>
                 <th colSpan="2">예약 날짜</th>
               </tr>
+          
               <tr>
                 <th>날짜</th>
                 <td>{formatDate2(reservationDetail.regTime)} </td>
@@ -232,6 +253,7 @@ function AdminReserveManageDetail() {
                 <th>시간</th>
                 <td>{(reservationDetail.reservationTime || '정보 없음').slice(0, 5)}</td>
               </tr>
+              
             </tbody>
           </table>
         </div>

@@ -116,7 +116,8 @@ public class AdminStoreServiceImpl implements AdminStoreService {
 
     @Override
     public StoreRegistDTO getMyStore(Long storeNo) {
-        return adminStoreMapper.getMyStore(storeNo);
+        StoreRegistDTO mystore = adminStoreMapper.getMyStore(storeNo);
+        return mystore;
     }
 
     @Override

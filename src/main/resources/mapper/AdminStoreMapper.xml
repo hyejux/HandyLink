@@ -159,6 +159,7 @@
             account_bank = #{accountBank},
             account_number = #{accountNumber},
             store_status = #{storeStatus}
+            delivery_type = #{deliveryType}
         where store_no = #{storeNo}
     </update>
 
@@ -237,13 +238,13 @@
         <result property="storeBusinessNo" column="store_business_no"/>
         <result property="storeIntro" column="store_intro"/>
         <result property="storeParkingYn" column="store_parking_yn"/>
-        <result property="storeNotice" column="store_notice"/>
         <result property="storeOpenTime" column="store_open_time"/>
         <result property="storeCloseTime" column="store_close_time"/>
         <result property="accountBank" column="account_bank"/>
         <result property="accountNumber" column="account_number"/>
         <result property="storeSignup" column="store_signup"/>
         <result property="storeStatus" column="store_status"/>
+        <result property="deliveryType" column="delivery_type"/>
 
         <!-- SNS 매핑 -->
         <collection property="storeSns" ofType="com.example.HiMade.admin.dto.StoreSnsDTO">

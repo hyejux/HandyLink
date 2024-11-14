@@ -15,10 +15,10 @@ function MyStore() {
         storeId: storeId,
         storeNo: storeNo,
         storeIntro: '',
-        storeNotice: '',
         storeOpenTime: '',
         storeCloseTime: '',
         storeParkingYn: '',
+        deliveryType: '',
         accountBank: '',
         accountNumber: '',
         storeStatus: '',
@@ -229,6 +229,7 @@ setNewImages(storeImg);
                     return; // 저장되지 않은 SNS가 있을 경우 입력을 막음
                 }else if (  myStoreInfo.storeStatus === null ||
                             myStoreInfo.storeParkingYn === null ||
+                            myStoreInfo.deliveryType === null ||
                             myStoreInfo.storeOpenTime === null ||
                             myStoreInfo.storeCloseTime === null ||
                             myStoreInfo.storeIntro === null
@@ -263,7 +264,7 @@ setNewImages(storeImg);
                     storeId: myStoreInfo.storeId,
                     storeNo: myStoreInfo.storeNo,
                     storeIntro: myStoreInfo.storeIntro,
-                    storeNotice: myStoreInfo.storeNotice,
+                    deliveryType: myStoreInfo.deliveryType,
                     storeOpenTime: myStoreInfo.storeOpenTime,
                     storeCloseTime: myStoreInfo.storeCloseTime,
                     storeParkingYn: myStoreInfo.storeParkingYn,
@@ -410,12 +411,29 @@ setNewImages(storeImg);
                 </div>*/}
 
                 <div className="form-group">
+                    <label htmlFor="delivery">배송 여부</label>
+                    <div className="delivery">
+                        <label htmlFor="deliveryY"><input type="radio" name="deliveryType" value="배송" checked={myStoreInfo.deliveryType === '배송'} onChange={handleChangeInform} disabled={isDisabled} /> 배송</label>
+                        <label htmlFor="deliveryPick"><input type="radio" name="deliveryType" value="픽업" checked={myStoreInfo.deliveryType === '픽업'} onChange={handleChangeInform} disabled={isDisabled} /> 픽업</label>
+                        <label htmlFor="deliveryAll"><input type="radio" name="deliveryType" value="배송+픽업" checked={myStoreInfo.deliveryType === '배송+픽업'} onChange={handleChangeInform} disabled={isDisabled} /> 배송 + 픽업</label>
+                    </div>
+                </div>
+
+
+                <div className="form-group">
                     <label htmlFor="parking">주차 여부</label>
                     <div className="parking-yn">
                         <label htmlFor="parkingY"><input type="radio" name="storeParkingYn" id="parkingY" value="Y" checked={myStoreInfo.storeParkingYn === 'Y'} onChange={handleChangeInform} disabled={isDisabled} /> 주차 가능</label>
                         <label htmlFor="parkingN"><input type="radio" name="storeParkingYn" id="parkingN" value="N" checked={myStoreInfo.storeParkingYn === 'N'} onChange={handleChangeInform} disabled={isDisabled} /> 주차 불가</label>
                     </div>
                 </div>
+
+<div className="form-group">
+<label htmlFor="storeIntro">소개</label>
+<div className="input-field" >
+<textarea rows="4" id="storeIntro"  value={myStoreInfo.storeIntro} onChange={handleChangeInfo} disabled={isDisabled} />
+</div>
+</div>
 
                 <div className="form-group">
                     <label htmlFor="storeOpenTime">영업 시작 시간</label>
@@ -436,12 +454,7 @@ setNewImages(storeImg);
                 </div>
 
 
-                <div className="form-group">
-                    <label htmlFor="storeIntro">소개</label>
-                    <div className="input-field" >
-                        <textarea rows="4" id="storeIntro"  value={myStoreInfo.storeIntro} onChange={handleChangeInfo} disabled={isDisabled} />
-                    </div>
-                </div>
+
 
             </div>
         </div>

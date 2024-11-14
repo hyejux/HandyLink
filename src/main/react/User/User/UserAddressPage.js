@@ -4,9 +4,9 @@ import ReactDOM from "react-dom/client";
 
 function UserAddressPage() {
     const [addresses, setAddresses] = useState([
-        { name: '장소영', address: '[06000] 서울 강남구 압구정동 압구정로 113 라이프미성 2차 102동 1001호', phone: '010-4624-1221', isDefault: true },
-        { name: '장소영', address: '[13455] 경기 성남시 분당구 하오개로349번길 10 파크하임 1004동 701호', phone: '010-7643-3620', isDefault: false },
-        { name: '장소영', address: '[06431] 서울 강남구 테헤란로7길 7 에스코빌딩 1층 CU', phone: '010-4624-1221', isDefault: false },
+        { name: '집', address: '[06000] 서울 강남구 압구정동 압구정로 113 라이프미성 2차 102동 1001호', phone: '010-4624-1221', isDefault: true },
+        { name: '본가', address: '[13455] 경기 성남시 분당구 하오개로349번길 10 파크하임 1004동 701호', phone: '010-7643-3620', isDefault: false },
+        { name: '회사', address: '[06431] 서울 강남구 테헤란로7길 7 에스코빌딩 1층 CU', phone: '010-4624-1221', isDefault: false },
     ]);
 
     const handleAddAddress = () => {

@@ -166,7 +166,7 @@ const goToAdminPage2 = (id) => {
                         <div className="reserve-content">
                           <div className="reserve-content-title">
                             <div>{value.serviceName}</div>
-                            <div>{value.servicePrice} 원 ~</div>
+                            <div>{value.servicePrice?.toLocaleString()} 원 ~</div>
                           </div>
                           <div className="reserve-content-text-box">
                             <div className="reserve-content-text">

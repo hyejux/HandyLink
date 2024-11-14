@@ -214,6 +214,7 @@
   align-items: center;
   margin: 10px 0;
   padding: 0 5px;
+  white-space: nowrap;
 }
 
 .sub-content-option {
@@ -360,7 +361,10 @@
 /* 해시태그(메뉴명) */
 .result-list-option-container {
   display: flex;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 
 .result-list-option-container img {
   width: 12px;

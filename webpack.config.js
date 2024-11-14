@@ -66,7 +66,8 @@ module.exports = {
         AdminAccountFind: './Admin/AdminAccountFind.js',
         AdminStoreNoticeModi : './Admin/AdminStoreNoticeModi.js',
         UserLikeList:'./User/User/UserLikeList.js',
-        UserMyReview: './User/User/UserMyReview.js'
+        UserMyReview: './User/User/UserMyReview.js',
+        UserAddressPage: './User/User/UserAddressPage.js',
 
     },
 

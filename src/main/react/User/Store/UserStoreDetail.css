@@ -87,6 +87,7 @@
 .photo-item>img {
   width: 100%;
   height: 100%;
+ 
   object-fit: cover;
 }
 
@@ -114,7 +115,7 @@ h2 {
   height: 110px;
   background-color: #f0f0f0;
   border-radius: 8px;
-
+  object-fit: cover;
 }
 
 .photo-item:nth-last-child(1) {
@@ -192,12 +193,15 @@ h2 {
 
 .star {
   cursor: pointer;
-  font-size: 24px; /* 별 크기 조정 */
-  color: lightgray; /* 기본 색상 */
+  font-size: 24px;
+  /* 별 크기 조정 */
+  color: lightgray;
+  /* 기본 색상 */
 }
 
 .star.filled {
-  color: #fd8517; /* 선택된 별 색상 */
+  color: #fd8517;
+  /* 선택된 별 색상 */
 }
 
 
@@ -265,6 +269,8 @@ h2 {
   border: 1px solid #ddd;
   font-size: 14px;
   border-radius: 10px;
+  background: #fff;
+  color: #000;
 }
 
 
@@ -358,10 +364,12 @@ body {
   z-index: 100; */
 }
 
-.open-date {    color: #FF9800;
+.open-date {
+  color: #FF9800;
   font-size: 14px;
   font-style: italic;
-  margin-bottom: 5px;}
+  margin-bottom: 5px;
+}
 
 
 /* 상단 버튼 디자인 */
@@ -463,9 +471,9 @@ body {
   margin-bottom: 20px;
   border: 1px solid #e8e8e8;
   /* height: 120px; */
-  }
+}
 
-.type-title{
+.type-title {
   text-align: center;
   width: 65px;
   padding: 1px 5px;
@@ -474,6 +482,7 @@ body {
   margin-bottom: 10px;
   /* background-color: #ffdfdf; */
 }
+
 .notice-top {
   display: flex;
   justify-content: space-between;
@@ -485,6 +494,7 @@ body {
 .notice-content1 {
   /* border : 1px solid red; */
 }
+
 /* --------------------------------------------------- */
 
 
@@ -566,7 +576,7 @@ body {
   color: black;
 }
 
-.sns-name:hover{
+.sns-name:hover {
   color: #2a2ad6;
 }
 
@@ -633,7 +643,7 @@ body {
   border-bottom: 3px solid #ddd;
 }
 
-.store-detail-menu > button.active {
+.store-detail-menu>button.active {
   border-bottom: 3px solid #fd8517;
   color: #fd8517;
 }
@@ -702,7 +712,7 @@ body {
 }
 
 .total-rating {
-  margin : 20px 0px; 
+  margin: 20px 0px;
 }
 
 .user-store-map-box {
@@ -724,7 +734,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  
+
 }
 
 
@@ -734,7 +744,8 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* 반투명 배경 */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -747,39 +758,133 @@ body {
   padding: 20px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid #e8e8e8;
-  width: 80%; /* 화면 너비의 80% */
-  max-width: 400px; /* 최대 너비 제한 */
-  height: 300px; /* 높이 고정 */
-  position: fixed; /* 화면에 고정 */
-  top: 50%; /* 화면 세로 중앙 */
-  left: 50%; /* 화면 가로 중앙 */
-  transform: translate(-50%, -50%); /* 모달을 정확히 중앙에 위치시킴 */
-  margin: 0; /* margin 제거 */
-  z-index: 1000; /* 모달이 다른 요소들 위에 오도록 설정 */
+  width: 80%;
+  /* 화면 너비의 80% */
+  max-width: 400px;
+  /* 최대 너비 제한 */
+  height: 350px;
+  /* 높이 고정 */
+  position: fixed;
+  /* 화면에 고정 */
+  top: 50%;
+  /* 화면 세로 중앙 */
+  left: 50%;
+  /* 화면 가로 중앙 */
+  transform: translate(-50%, -50%);
+  /* 모달을 정확히 중앙에 위치시킴 */
+  margin: 0;
+  /* margin 제거 */
+  z-index: 1000;
+  /* 모달이 다른 요소들 위에 오도록 설정 */
 }
 
 .modal-box {
   /* border: 1px solid red; */
-  margin-top: 70px;
+  margin: 20px 0;
 }
 
 .modal-btns {
   /* border: 1px solid red; */
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 30px;
+  justify-content: space-around;
+  margin-bottom: 35px;
 }
 
-.modal-btns > div {
-    border: 1px solid red;
-  width: 100%;
-  /* height: 100%; */
-  text-align: center;
-  padding: 50px;
-}
-
-.modal-next {
+.modal-close {
   position: absolute;
-    top: 12px;
-    left: 300px;
+  top: 15px;
+  right: 15px;
+  border: none;
+  background: #fff;
+  font-size: 16px;
+}
+
+.modal-choice-img-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-choice-img {
+  width: 100px;
+  height: 100px;
+}
+
+.modal-choice-img img {
+  width: 100%;
+  ;
+  height: 100%;
+}
+
+.modal-choice-text {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.modal-deliveryr-img {
+  width: 100px;
+  height: 100px;
+}
+
+.modal-deliveryr-img img {
+  width: 100%;
+  height: 100%;
+}
+
+.modal-pickup-img {
+  width: 100px;
+  height: 100px;
+}
+
+.modal-pickup-img img {
+  width: 100%;
+  height: 100%;
+}
+
+.modal-next-btn {
+  float: right;
+  background-color: #fd8517;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.modal-pickup-img, .modal-deliveryr-img {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 10px;
+  padding: 10px 5px 0 5px;
+}
+
+.modal-pickup-img.selected, .modal-deliveryr-img.selected {
+  background-color: #fd8517; 
+  border-radius: 5px;
+}
+
+.modal-pickup-img.selected label, .modal-deliveryr-img.selected label {
+  color: white;
+}
+
+.modal-pickup-img img, .modal-deliveryr-img img {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 5px;
+}
+
+.modal-pickup-img label, .modal-deliveryr-img label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+.pickup-img {
+  position: absolute;
+  right: 15px;
+  font-size: 24px;
 }

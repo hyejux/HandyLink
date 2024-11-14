@@ -652,7 +652,7 @@ function UserMain() {
                     return (
                       <div className="user-main-menu-content-list" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
                         <div className="user-main-menu-img">
-                          <img src={imageUrl} alt={store.storeName} />
+                          <img src={imageUrl} alt={store.storeName} style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '50%' }}/>
                         </div>
                         <div className='user-main-menu-info'>
                           <div className="menu-info-store-name">{store.storeName}</div>
@@ -700,7 +700,7 @@ function UserMain() {
                     return (
                       <div className="user-main-menu-content-list" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
                         <div className="user-main-menu-img">
-                          <img src={imageUrl} alt={store.storeName} />
+                          <img src={imageUrl} alt={store.storeName} style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '50%' }}/>
                         </div>
                         <div className='user-main-menu-info'>
                           <div className="menu-info-store-name">{store.storeName}</div>
@@ -745,7 +745,7 @@ function UserMain() {
                     return (
                       <div className="user-main-menu-content-list" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
                         <div className="user-main-menu-img">
-                          <img src={imageUrl} alt={store.storeName} />
+                          <img src={imageUrl} alt={store.storeName} style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '50%' }}/>
                         </div>
                         <div className='user-main-menu-info'>
                           <div className="menu-info-store-name">{store.storeName}</div>
@@ -789,7 +789,7 @@ function UserMain() {
                     return (
                       <div className="user-main-menu-content-list" key={store.storeNo} onClick={() => goToStoreDetail(store.storeNo)}>
                         <div className="user-main-menu-img">
-                          <img src={imageUrl} alt={store.storeName} />
+                          <img src={imageUrl} alt={store.storeName} style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '50%' }}/>
                         </div>
                         <div className='user-main-menu-info'>
                           <div className="menu-info-store-name">{store.storeName}</div>

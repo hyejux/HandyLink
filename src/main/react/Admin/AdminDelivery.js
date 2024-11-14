@@ -4,13 +4,13 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import './AdminReserveManage.css';
+import './AdminDelivery.css';
 import { useRef } from 'react';
 import { isNull } from 'util';
 import PrintReservationInfo from './PrintReservationInfo';
 
 
-function AdminReserveManage() {
+function AdminDelivery() {
   
     const today = new Date().toISOString().split('T')[0];
     const [viewMode, setViewMode] = useState('list');
@@ -404,28 +404,6 @@ const resetFilter = () => {
     setCurrentPage(1); // 필터 변경 시 첫 페이지로 리셋
 };
   
-const statusColors = {
-    '대기': '#b0b0b0',         // 그레이
-    '입금대기': '#b0b0b0',     // 그레이
-    '확정': '#4CAF50',         // 그린
-    '완료': '#fd8517',         // 오렌지
-    '취소(업체)': '#F44336',   // 레드
-    '취소(고객)': '#F44336'    // 레드
-  };
-
-  const getStatusDot = (status) => (
-    <span 
-      style={{
-        display: 'inline-block',
-        width: '8px',
-        height: '8px',
-        borderRadius: '50%',
-        backgroundColor: statusColors[status],
-        marginRight: '5px'
-      }}
-    ></span>
-  );
-
     return (
         <div>
 
@@ -439,7 +417,7 @@ const statusColors = {
             </div>
 
             <div className="main-content-title">
-                <div className='header-title'> 예약 관리 </div>
+                <div className='header-title'> 배송 관리 </div>
                 <hr />
                 <div className="icon-buttons">
                     <button className="icon-button calendar-button" onClick={() => setViewMode('calendar')}>
@@ -576,74 +554,68 @@ const statusColors = {
                                 <tr>
                                     <th></th>
                                     <th>예약번호<span onClick={() => handleSort('reservationNo', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
-                                    <th> 수령방법 </th>
                                     <th> 상품명 </th>
                                     <th>고객 명</th>
-                                    <th>예약일<span onClick={() => handleSort('regTime', 'date')}><i className="bi bi-chevron-expand"></i></span></th>
+                                    {/* <th>예약일<span onClick={() => handleSort('regTime', 'date')}><i className="bi bi-chevron-expand"></i></span></th> */}
                                     <th>총액<span onClick={() => handleSort('reservationPrice', 'number')}><i className="bi bi-chevron-expand"></i></span></th>
                                     <th>요청사항 </th>
-                                    <th>예약 등록일  <span onClick={() => handleSort('regTime', 'date')}><i className="bi bi-chevron-expand"></i></span> </th>
+                                    <th> 주문일  <span onClick={() => handleSort('regTime', 'date')}><i className="bi bi-chevron-expand"></i></span> </th>
+                                    <th> 송장번호 </th>
+                                    <th> 운송장 </th>
                                     <th> 결제 상태 </th>
                                     <th>상태 변경</th>
-                                    <th> <i className="bi bi-printer"></i></th>
+                                    {/* <th> <i className="bi bi-printer"></i></th> */}
                                 </tr>
                             </thead>
                             <tbody>
                                 {paginatedData.map((value, index) => (
                                     <tr key={index} onDoubleClick={() => { goToDetail(value.reservationNo) }}>
                                         <td><input type="checkbox" /></td>
+                                        <td> {}</td>
                                         <td>{value.reservationNo}</td>
-                                        <td> {value.userDeliveryType} </td>
                                         <td>{value.serviceName}</td>
                                         <td>{value.userName}({value.userId})</td>
                                         <td>{value.reservationSlotDate} {value.reservationTime}</td>
                                         <td>{value.reservationPrice.toLocaleString()}</td>
-                                        <td>{value.customerRequest}</td>
+                                        {/* <td>{value.customerRequest}</td> */}
                                                                             <td>
                                     {new Date(value.regTime).toISOString().slice(0, 19).replace('T', ' ')}
                                     </td>
-
+                                        <td> <input type='text'/> </td>
                                         <td>{value.paymentStatus}</td>
                                         <td>
                                             <div>
-                                                <div className="status-select-wrapper">
-      {/* <div className="status-indicator">
-        {getStatusDot(newStatusMap[value.reservationNo] || value.reservationStatus)}
-        {newStatusMap[value.reservationNo] || value.reservationStatus}
-      </div> */}
-        {getStatusDot(newStatusMap[value.reservationNo] || value.reservationStatus)}
-      <select
-        className="status-select"
-        value={newStatusMap[value.reservationNo] || value.reservationStatus}
-        onChange={(e) => {
-          const selectedStatus = e.target.value;
-          setNewStatusMap(prev => ({ ...prev, [value.reservationNo]: selectedStatus }));
-          handleStatusChange(value.reservationNo, selectedStatus, value.storeName);
-        }}
-        disabled={
-          value.reservationStatus === '완료' ||
-          value.reservationStatus === '취소(업체)' ||
-          value.reservationStatus === '취소(고객)'
-        }
-      >
-        <option value={value.reservationStatus}>{value.reservationStatus}</option>
-        {(value.reservationStatus === '대기' || value.reservationStatus === '입금대기') ? (
-          <>
-            <option value="확정">확정</option>
-            <option value="취소(업체)">취소(업체)</option>
-          </>
-        ) : (
-          <>
-            {value.reservationStatus !== '확정' && <option value="확정">확정</option>}
-            {value.reservationStatus !== '완료' && <option value="완료">완료</option>}
-            {value.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
-          </>
-        )}
-      </select>
-    </div>
+                                                <select
+                                                    className='status-select'
+                                                    value={newStatusMap[value.reservationNo] || value.reservationStatus}
+                                                    onChange={(e) => {
+                                                        const selectedStatus = e.target.value;
+                                                        setNewStatusMap(prev => ({ ...prev, [value.reservationNo]: selectedStatus }));
+                                                        handleStatusChange(value.reservationNo, selectedStatus, value.storeName);
+                                                    }}
+                                                    disabled={
+                                                        value.reservationStatus === '완료' ||
+                                                        value.reservationStatus === '취소(업체)' ||
+                                                        value.reservationStatus === '취소(고객)'
+                                                    }
+                                                >
+                                                    <option value={value.reservationStatus}>{value.reservationStatus}</option>
+                                                    {value.reservationStatus === '대기' || value.reservationStatus === '입금대기' ? (
+                                                        <>
+                                                            <option value="확정">확정</option>
+                                                            <option value="취소(업체)">취소(업체)</option>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            {value.reservationStatus !== '확정' && <option value="확정">확정</option>}
+                                                            {value.reservationStatus !== '완료' && <option value="완료">완료</option>}
+                                                            {value.reservationStatus !== '취소(업체)' && <option value="취소(업체)">취소(업체)</option>}
+                                                        </>
+                                                    )}
+                                                </select>
                                             </div>
                                         </td>
-                                        <td><button className='print-btn' onClick={() => handlePrint(value)}><i className="bi bi-printer"></i></button></td>
+                                        {/* <td><button className='print-btn' onClick={() => handlePrint(value)}><i className="bi bi-printer"></i></button></td> */}
                                     </tr>
                                 ))}
                             </tbody>
@@ -784,5 +756,5 @@ const statusColors = {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <AdminReserveManage />
+    <AdminDelivery />
 );

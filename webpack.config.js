@@ -36,6 +36,7 @@ module.exports = {
         UserReservationComplete : './User/Reservation/UserReservationComplete.js',
 /*        UserStoreDetailService : '/User/Store/UserStoreDetailService.js',*/
         UserStoreDetail : './User/Store/UserStoreDetail.js',
+
          UserReservationOption : './User/Reservation/UserReservationOption.js',
         UserQnaList : './QNA/UserQnaList.js',
         UserQnaRegist : './QNA/UserQnaRegist.js',
@@ -46,6 +47,7 @@ module.exports = {
         UserAccountFind : './User/User/UserAccountFind.js',
         UserChatList : './User/Inquiry/UserChatList.js',
         UserReservationDate : './User/Reservation/UserReservationDate.js',
+        AdminDelivery : './Admin/AdminDelivery.js',
         UserMyReservationDetail : '/User/Reservation/UserMyReservationDetail.js',
         AdminReserveSettingDetailSlot : '/Admin/AdminReserveSettingDetailSlot.js',
         MyStore: './Admin/MyStore.js',
@@ -64,7 +66,7 @@ module.exports = {
         AdminAccountFind: './Admin/AdminAccountFind.js',
         AdminStoreNoticeModi : './Admin/AdminStoreNoticeModi.js',
         UserLikeList:'./User/User/UserLikeList.js',
-        UserMyReview: './User/User/UserMyReview.js',
+        UserMyReview: './User/User/UserMyReview.js'
 
     },
 

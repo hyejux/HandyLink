@@ -77,12 +77,6 @@ td {
     gap: 10px;
 }
 
-.main-grid-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 40% 60%;
-}
-
 .main-grid-container2 {
     display: grid;
     grid-template-columns: 1fr;
@@ -101,6 +95,7 @@ td {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+    width: 100%;
 }
 
 .main-count{
@@ -112,6 +107,7 @@ td {
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: repeat(3, auto);
+    padding: 15px;
 }
 
 .today-status {
@@ -145,16 +141,17 @@ td {
     align-items: center;
     justify-content: center;
     gap: 30px;
-    height: 50px;
+    height: 55px;
     border: 1px solid #ddd;
     border-radius: 3px;
-    padding: 20px;
+    padding: 10px;
     background-color: #38414a;
     color: white;
 }
 
 .status-item > p{
     font-size: 20px;
+    text-align: center;
 }
 
 .status-item p:nth-child(1) {

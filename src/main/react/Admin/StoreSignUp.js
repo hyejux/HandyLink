@@ -623,7 +623,7 @@ function StoreSignUp() {
                     </div>
 
                     <div className="input-group">
-                        <label htmlFor="managerPhone">휴대전화번호</label>
+                        <label htmlFor="managerPhone">업체번호</label>
                         <input type="text" id="managerPhone" placeholder="- 포함하여 입력" onChange={(e)=>handleChangeStore(e)} />
                         {!isManagerPhone && managerPhoneError && <p style={{ color: 'red' }} className="small-text">{managerPhoneError}</p>}
                     </div>

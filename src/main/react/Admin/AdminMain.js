@@ -306,7 +306,7 @@ function AdminMain() {
                   </div>
                   <div className="customer-group">
                     <label>결제금액</label>
-                    <div> {selectedCustomerInfo?.paymentAmount || ''} </div>
+                    <div> {(Number(selectedCustomerInfo?.paymentAmount) || 0).toLocaleString()} </div>
                   </div>
                 </div>
 

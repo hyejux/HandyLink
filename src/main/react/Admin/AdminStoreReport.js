@@ -183,7 +183,7 @@ function AdminStoreReport() {
                             <div className="graph-section">
                                 <div className="customer mw">
                                     <h3>성비</h3>
-                                    <div>
+                                    <div className="only-graph">
                                         <MwChart />
                                     </div>
                                 </div>
@@ -193,21 +193,14 @@ function AdminStoreReport() {
                                         <thead>
                                             <tr>
                                                 <th>남자</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>{genderCount.males}명</td>
-                                            </tr>
-                                        </tbody>
-                                        <thead>
-                                            <tr>
                                                 <th>여자</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
+                                                <td>{genderCount.males}명</td>
                                                 <td>{genderCount.females}명</td>
+
                                             </tr>
                                         </tbody>
                                     </table>
@@ -217,8 +210,8 @@ function AdminStoreReport() {
                             <div className="table-section">
                                 <div className="customer age">
                                     <h3>나이</h3>
-                                    <div>
-                                    <AgeChart data={ageDistribution} />
+                                    <div className="only-graph">
+                                        <AgeChart data={ageDistribution} />
                                     </div>
                                     </div>
 
@@ -226,18 +219,18 @@ function AdminStoreReport() {
                                     <table className="agetable">
                                         <thead>
                                         <tr>
-                                        <th>나이</th>
-                                        <th>주로 찾는 서비스</th>
+                                            <th style={{width: '30%'}}>나이</th>
+                                            <th>주로 찾는 서비스</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        {ageDistribution.labels.map((label, index) => (
-                                            <tr key={index}>
-                                                <td>{label}</td>
-                                                <td>{ageDistribution.serviceName[index] || '정보 없음'}</td> {/* Fallback if no service name */}
-                                            </tr>
-                                        ))}
-                                    </tbody>
+                                            <tbody>
+                                            {ageDistribution.labels.map((label, index) => (
+                                                <tr key={index}>
+                                                    <td>{label}</td>
+                                                    <td>{ageDistribution.serviceName[index] || '정보 없음'}</td> {/* Fallback if no service name */}
+                                                </tr>
+                                            ))}
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -249,7 +242,7 @@ function AdminStoreReport() {
 
                 <div className="flex-right">
                     <div className="report-section">
-                        <h2>주문 통계</h2>
+                        <h2>예약 통계</h2>
                         <div className="reservation-graph">
                             <div className="graph-filter">
                                 <div className="filter">

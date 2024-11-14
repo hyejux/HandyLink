@@ -762,7 +762,7 @@ body {
   /* 화면 너비의 80% */
   max-width: 400px;
   /* 최대 너비 제한 */
-  height: 350px;
+  height: 360px;
   /* 높이 고정 */
   position: fixed;
   /* 화면에 고정 */

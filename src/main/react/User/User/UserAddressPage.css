@@ -84,3 +84,99 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+/* 모달 기본 스타일 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    width: 75%;
+}
+
+.modal-content h2 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 입력 필드 스타일 */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.input-group input {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+/* 주소 검색 영역 */
+.address-search {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.address-search input {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.address-search button {
+    padding: 10px 16px;
+    background-color: #FE8517;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+/* 모달 버튼 영역 */
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.modal-buttons button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.submit-btn {
+    background-color: #FE8517;
+    color: white;
+    border: none;
+}
+
+.cancel-btn {
+    background-color: white;
+    border: 1px solid #ddd;
+    color: #333;
+}

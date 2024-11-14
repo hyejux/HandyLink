@@ -139,54 +139,56 @@ function UserReviewRegist() {
   //   setFiles(selectedFiles); // 상태 업데이트
   // };
 
-
   const reviewSubmit = async () => {
     const imageUrls = await handleUpload(); // 이미지 URL 배열을 기다림
-    if (imageUrls.length === 0) return; // 업로드 실패 시 함수 종료
-
+  
     const submitData = {
       reviewRating: rating,
       reviewContent: review,
-      reviewImages: imageUrls, // 업로드된 이미지 URL 배열
+      reviewImages: imageUrls.length > 0 ? imageUrls : [], // 이미지가 있으면 배열에 포함, 없으면 빈 배열
     };
-
+  
+    // 리뷰 데이터를 먼저 전송
     axios.post(`/userMyReservation/setReview/${cateId}`, submitData)
       .then(response => {
         console.log('리뷰 등록 성공 !:', response.data);
-
+  
         const reviewNoId = response.data;
-
-        // 이미지 파일을 추가할 FormData
-        const formData = new FormData();
-
-
-
-        formData.append('reviewNoId', reviewNoId);
-        // imageUrls 배열에 있는 파일들을 FormData에 추가
-        imageUrls.forEach((image, index) => {
-          formData.append('files', image); // 각각의 파일을 'files'라는 키로 추가
-        });
-        console.log([...formData]); // FormData의 내용을 확인 (Array.from을 사용하여 배열로 변환)
-
-        axios.post(`/userMyReservation/setReviewImg`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data', // 헤더 설정
-          },
-        })
-          .then(response => {
-            console.log('파일 업로드 성공:', response.data);
-            alert("리뷰 등록이 완료되었습니다.");
-            window.location.href = '/userMyReservationList.user'; // 페이지 이동;
-          })
-          .catch(error => {
-            console.error('에러 발생:', error);
+  
+        // 이미지가 있으면 추가 업로드 처리
+        if (imageUrls.length > 0) {
+          const formData = new FormData();
+          formData.append('reviewNoId', reviewNoId);
+  
+          imageUrls.forEach((image, index) => {
+            formData.append('files', image); // 각각의 파일을 'files'라는 키로 추가
           });
+          console.log([...formData]); // FormData의 내용을 확인 (Array.from을 사용하여 배열로 변환)
+  
+          axios.post(`/userMyReservation/setReviewImg`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data', // 헤더 설정
+            },
+          })
+            .then(response => {
+              console.log('파일 업로드 성공:', response.data);
+              alert("리뷰 등록이 완료되었습니다.");
+              window.location.href = '/userMyReservationList.user'; // 페이지 이동;
+            })
+            .catch(error => {
+              console.error('파일 업로드 중 에러 발생:', error);
+            });
+        } else {
+          // 이미지가 없으면 바로 페이지 이동
+          alert("리뷰 등록이 완료되었습니다.");
+          window.location.href = '/userMyReservationList.user'; // 페이지 이동
+        }
       })
       .catch(error => {
         console.error('리뷰 등록 오류:', error);
       });
   };
-
+  
 
   const handleFileUpload = (event) => {
     const files = event.target.files; // 선택된 파일들
@@ -194,7 +196,7 @@ function UserReviewRegist() {
 
     // 기존에 업로드된 이미지 개수를 고려해서 4개 제한
     if (files.length + newImages.length + images.length > 4) {
-      alert("You can only upload up to 4 images.");
+      alert("이미지는 4개까지 업로드 가능합니다.");
       return; // 4개 초과 시 업로드 진행을 중지
     }
 

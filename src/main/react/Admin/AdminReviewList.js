@@ -75,7 +75,7 @@ function AdminReviewList() {
 
   // 정렬
   const handleSort = (field, type) => {
-    let order = sortOrder === 'asc' ? 'desc' : 'asc';
+    let order = sortOrder === 'desc' ? 'asc' : 'desc';
     setSortOrder(order);
 
     const sortedList = [...reviewList].sort((a, b) => {
@@ -233,7 +233,7 @@ function AdminReviewList() {
               ))}
             </td>
             <td onClick={() => handleToggleRow(index)}>
-              {value.reviewContent.slice(0, 50)}
+              {value.reviewContent.slice(0, 35)} 
               <i
                 className="bi bi-chevron-down"
                 onClick={() => handleToggleRow(index)}

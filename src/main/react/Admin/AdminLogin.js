@@ -34,32 +34,36 @@ function AdminLogin() {
             sessionStorage.setItem('storeId', storeId);
             sessionStorage.setItem('storeNo', storeNo);
 
-            if (storeStatus === '정지') {
-                alert('해당 계정은 정지 상태입니다. 관리자에게 문의해주.');
-                window.location.href = '/adminlogin.login';
+            if(storeId === 'MASTER'){
+                window.location.href = `/MASTER.admin?${storeNo}`;
                 return;
-            }
-
-            if (storeStatus === '폐업') {
-                alert('해당 계정은 폐업 상태입니다. 관리자에게 문의해주.');
-                window.location.href = '/adminlogin.login'; 
-                return;
-            }
-
-            if (response.status === 200 && storeId) {
-                alert(`로그인 성공 ${storeId} 상태 ${storeStatus}`);
-
-                if (storeStatus === '대기') {
-                    window.location.href = `/adminsignupapproval.admin?${storeNo}`;
-
-                }else{
-                    window.location.href = `/adminmain.admin?${storeNo}`;
-
+            }else{
+                if (storeStatus === '정지') {
+                    alert('해당 계정은 정지 상태입니다. 관리자에게 문의해주세요.');
+                    window.location.href = '/adminlogin.login';
+                    return;
                 }
-            } else {
-                alert('해당 정보를 찾을 수 없습니다.');
-            }
 
+                if (storeStatus === '폐업') {
+                    alert('해당 계정은 폐업 상태입니다. 관리자에게 문의해주세요.');
+                    window.location.href = '/adminlogin.login';
+                    return;
+                }
+
+                if (response.status === 200 && storeId) {
+                    alert(`로그인 성공 ${storeId} 상태 ${storeStatus}`);
+
+                    if (storeStatus === '대기') {
+                        window.location.href = `/adminsignupapproval.admin?${storeNo}`;
+
+                    }else{
+                        window.location.href = `/adminmain.admin?${storeNo}`;
+
+                    }
+                } else {
+                    alert('해당 정보를 찾을 수 없습니다.');
+                }
+            }
         } catch (error) {
             console.error('로그인 시도 중 오류:', error);
             alert('로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.');

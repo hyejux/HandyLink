@@ -35,6 +35,7 @@ public class StoreRegistDTO {
     private String accountNumber; //업체계좌번호
     private String storeSignup; //가입일시
     private String storeStatus; //업체활동상태
+    
 
     // 포맷된 시간 필드 추가
     private String formattedOpenTime; // 포맷된 영업 시작 시간

@@ -115,11 +115,14 @@ function UserReservationConfirm() {
     console.log(`Total Price: ${newTotalPrice}`); // 업데이트된 가격 로그
   }, [combinedInputs, reserveModi]); // reserveModi 추가
 
-
+  const [pickupStatus, setPickupStatus] = useState();
 
   // 세션 스토리지에서 데이터를 불러오는 함수
   const loadFromSessionStorage = () => {
     const storedData = sessionStorage.getItem('combinedInputs');
+    const pickupStatus = sessionStorage.getItem('pickupStatus');
+    setPickupStatus(pickupStatus);
+    console.log('배송방법', pickupStatus);
     if (storedData) {
       // JSON 문자열을 다시 객체로 변환
       const parsedData = JSON.parse(storedData);
@@ -203,8 +206,8 @@ function UserReservationConfirm() {
       reservationPrice: totalPrice,  // 총액 정보
       storeNo: storeInfo.storeNo,
       reservationStatus: reservationStatus,
-      userId: userId
-      
+      userId: userId,
+      userDeliveryType : pickupStatus
     };
 
     try {
@@ -391,7 +394,9 @@ function UserReservationConfirm() {
             </div>
           </div>
           <hr />
+       
 
+          
           <div className="user-content-container2">
             <div className="user-reserve-title">예약자정보</div>
             <div className="user-content-container3">
@@ -406,7 +411,20 @@ function UserReservationConfirm() {
               </div>
             </div>
           </div>
+
+
           <hr />
+
+          <div className="user-content-container2">
+          <div className="user-content-container3">
+              <div className="sub-container5">
+                <div> 수령방식 </div>
+                <div> {pickupStatus} </div>
+              </div>
+            </div>
+            </div>
+          <hr />
+        
 
 
           <div className="user-content-container2">

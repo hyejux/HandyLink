@@ -29,6 +29,6 @@ public class  UserRD {
   private String accountNumber;
 
   private String imageUrl;
-  
+  private String userDeliveryType;
 
 }

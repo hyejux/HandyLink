@@ -10,6 +10,7 @@
         rf.reservation_no,
         rf.reservation_form_key,
         rf.middle_category_value,
+        r.user_delivery_type,
         main_c.service_name AS main_category_name,
         main_c.service_price AS main_price,
         middle_c.service_name AS middle_category_name,
@@ -135,8 +136,8 @@
 
 
     <insert id="setReservationForm" parameterType="UserReservationDTO" useGeneratedKeys="true" keyProperty="reservationNo">
-        INSERT INTO reservation (reservation_status, reservation_time, reg_time, customer_request, reservation_price, user_id, reservation_slot_key, store_no)
-        VALUES (#{reservationStatus}, #{reservationTime}, CURRENT_TIMESTAMP, #{customerRequest}, #{reservationPrice}, #{userId}, #{reservationSlotKey}, #{storeNo})
+        INSERT INTO reservation (reservation_status, reservation_time, reg_time, customer_request, reservation_price, user_id, reservation_slot_key, store_no, user_delivery_type)
+        VALUES (#{reservationStatus}, #{reservationTime}, CURRENT_TIMESTAMP, #{customerRequest}, #{reservationPrice}, #{userId}, #{reservationSlotKey}, #{storeNo}, #{userDeliveryType})
         RETURNING reservation_no
     </insert>
 

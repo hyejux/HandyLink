@@ -26,5 +26,6 @@ public class UserReservationDTO {
   private String userId;
   private int reservationSlotKey;
   private int storeNo;
+  private String userDeliveryType;
 }
 

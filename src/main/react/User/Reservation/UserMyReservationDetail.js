@@ -264,6 +264,16 @@ function UserMyReservationDetail() {
       </div>
 
       <hr />
+      
+    {/* 요청사항 */}
+    <div className="user-content-container">
+        <div className="info-row">
+          <div className="left3">수령방식</div>
+          <div className="right"> {reservationDetail.userDeliveryType} </div>
+        </div>
+      </div>
+
+      <hr />
 
       {/* 예약 정보 */}
       <div className="user-content-container">
@@ -335,6 +345,7 @@ function UserMyReservationDetail() {
 
       <hr />
 
+   
       {/* 결제 / 환불 정보 */}
       <div className="user-content-container">
         {refundInfo.length > 0 ? (

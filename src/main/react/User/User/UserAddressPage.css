@@ -10,9 +10,9 @@
     color: white;
     border: none;
     font-size: 16px;
-    text-align: left;
     margin-bottom: 20px;
     cursor: pointer;
+    text-align: center;
 }
 
 .address-list {
@@ -39,11 +39,16 @@
 }
 
 .address-name {
-    font-weight: bold;
     font-size: 16px;
     display: block;
     margin-bottom: 5px;
 }
+
+.address-name > .bi {
+    color: #FE8517;
+    font-size: 20px;
+}
+
 
 .default-label {
     color: #FE8517;
@@ -73,8 +78,8 @@
 
 .delete-btn {
     background-color: white;
-    border: 1px solid #dc3545;
-    color: #dc3545;
+    border: 1px solid #D9534F;
+    color: #D9534F;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;

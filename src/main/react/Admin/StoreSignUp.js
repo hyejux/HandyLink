@@ -29,7 +29,8 @@ function StoreSignUp() {
         storeBusinessNo:'',
         zipcode: '',
         addr:'',
-        addrdetail:''
+        addrdetail:'',
+        deliveryType: ''
     });
 
     // 스텝증가
@@ -606,6 +607,19 @@ function StoreSignUp() {
                             <option value="반려동물">반려동물</option>
                         </select>
                     </div>
+
+                    <div className="input-group">
+                        <label htmlFor="storeDelivery">배송유무</label>
+                        <div className="delivery-group">
+                            <input style={{width:'auto'}} type="radio" className="delivery-type" id="deliveryType" value="배송" checked={storeInfoData.deliveryType === '배송'} onChange={(e)=>handleChangeStore(e)} /> <span>배송</span>
+                            <input style={{width:'auto'}} type="radio" className="delivery-type" id="deliveryType" value="픽업" checked={storeInfoData.deliveryType === '픽업'}  onChange={(e)=>handleChangeStore(e)}/> <span>픽업</span>
+                            <input style={{width:'auto'}} type="radio" className="delivery-type" id="deliveryType" value="배송+픽업" checked={storeInfoData.deliveryType === '배송+픽업'}  onChange={(e)=>handleChangeStore(e)}/> <span>배송 + 픽업</span>
+                        </div>
+                    </div>
+
+
+
+
 
                     <div className="input-group">
                         <label htmlFor="storeName">상호명</label>

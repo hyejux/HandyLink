@@ -9,6 +9,12 @@
     padding: 0px 7px;
 }
 
+.delivery-group {
+    display: flex;
+    gap: 20px;
+}
+
+
 .admin-store-info-container
 .input-group input {
     width: 75%;

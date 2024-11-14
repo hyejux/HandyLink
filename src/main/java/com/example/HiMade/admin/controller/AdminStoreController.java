@@ -88,6 +88,7 @@ public class AdminStoreController {
     @GetMapping("/myStoreInfo")
     public ResponseEntity<StoreRegistDTO> getMyStore(@RequestParam Long storeNo){
         StoreRegistDTO myStore = adminStoreService.getMyStore(storeNo);
+
         return ResponseEntity.ok(myStore);
     }
 

@@ -940,7 +940,7 @@ const handlePickupOrDeliveryClick = (value) => {
                         {expandedReviews[review.reviewNo] ? review.reviewContent : review.reviewContent.slice(0, 50)}
                       </p>
 
-                      {review.reviewContent.length < 30 ? '' : (
+                      {review.reviewContent.length < 50 ? '' : (
                         <a
                           className="more-link"
                           onClick={() => toggleText(review.reviewNo)}

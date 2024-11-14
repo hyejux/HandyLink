@@ -444,22 +444,60 @@ const [serviceHour, setServiceHour] = useState(''); // 시간 상태
   
 
 
+//  const onDragEnd = (result) => {
+//    if (!result.destination) return;
+//
+//    const reorderedCategories = Array.from(categories);
+//    const [removed] = reorderedCategories.splice(result.source.index, 1);
+//    reorderedCategories.splice(result.destination.index, 0, removed);
+//
+//    setCategories(reorderedCategories);
+//  };
+//
+//  useEffect(() => {
+//    console.log('Category :', categories);
+//    console.log(serviceDate,serviceHour,serviceStart);
+//  }, [categories]);
+
   const onDragEnd = (result) => {
     if (!result.destination) return;
 
     const reorderedCategories = Array.from(categories);
     const [removed] = reorderedCategories.splice(result.source.index, 1);
+
+    // Check if user is moving a non-required item above required items
+    if (
+    !removed.isRequired &&
+    reorderedCategories.slice(0, result.destination.index).some(category => category.isRequired)
+    ) {
+      alert("필수 항목은 항상 목록의 위쪽에 있어야 합니다.");
+      return; // Prevent reordering if the rule is violated
+    }
+
     reorderedCategories.splice(result.destination.index, 0, removed);
+
+    // Validate that all required items are at the top of the reordered list
+    const firstNonRequiredIndex = reorderedCategories.findIndex(category => !category.isRequired);
+    if (firstNonRequiredIndex !== -1) {
+      // Check if any required item appears after a non-required item
+      const isValidOrder = reorderedCategories
+        .slice(firstNonRequiredIndex)
+        .every(category => !category.isRequired);
+
+      if (!isValidOrder) {
+        alert("필수 항목은 항상 목록의 위쪽에 있어야 합니다.");
+        return;
+      }
+    }
 
     setCategories(reorderedCategories);
   };
 
-
   useEffect(() => {
-    console.log('Category :', categories);
-    console.log(serviceDate,serviceHour,serviceStart);
-}, [categories]);
-
+    console.log('Category Order:', categories.map(cat => ({ name: cat.name, isRequired: cat.isRequired })));
+    console.log('Service Date:', serviceDate);
+    console.log('Service Hour:', serviceHour);
+  }, [categories, serviceDate, serviceHour]);
 
 
 

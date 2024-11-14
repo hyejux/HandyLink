@@ -494,6 +494,7 @@
         <foreach collection="reservationNos" item="reservationNo" open="(" separator="," close=")">
             #{reservationNo}
         </foreach>
+        order by reserve.reservation_time
     </select>
 
 

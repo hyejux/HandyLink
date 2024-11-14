@@ -881,3 +881,9 @@ body {
   font-size: 14px;
   font-weight: bold;
 }
+
+
+.pickup-icon {
+  position: absolute;
+  right: 15px;
+}

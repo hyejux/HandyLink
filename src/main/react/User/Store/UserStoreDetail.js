@@ -535,7 +535,10 @@ const handlePickupOrDeliveryClick = (value) => {
               </div>
               {/* <hr /> */}
               <div className="store-basic-info"><img src="../img/store/clock.png" /> {storeInfo.formattedOpenTime} ~ {storeInfo.formattedCloseTime}</div>
-              <div className="store-basic-info"><img src="../img/store/telephone.png" /> {storeInfo.managerPhone}</div>
+              <div className="store-basic-info">
+                <img src="../img/store/telephone.png" /> {storeInfo.managerPhone} 
+                <span className="pickup-icon">픽업</span>
+              </div>
             </div>
           </div>
 

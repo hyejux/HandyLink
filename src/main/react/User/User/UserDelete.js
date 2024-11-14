@@ -89,6 +89,11 @@ function UserDelete() {
                 }
             } else {
                 // 일반 회원 탈퇴 로직
+                if (password !== confirmPassword) {
+                    alert("비밀번호가 일치하지 않습니다.");
+                    return;
+                }
+
                 const response = await fetch('/user/delete', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

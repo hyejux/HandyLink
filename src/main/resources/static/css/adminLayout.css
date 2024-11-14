@@ -204,7 +204,10 @@ border-bottom: 1px solid #ddd;
   color: #464646;
   text-align: center;
 }
-
+/* 
+#storeMenu , #masterMenu {
+  display: none;
+} */
 
 .dropdown a  > .bi, .dropdown2 a  > .bi {
 margin-left : 5px;

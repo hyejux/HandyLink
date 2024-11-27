@@ -1,12 +1,22 @@
 
 ##  📋  예약 이젠 더 편리하게,  관리도 손쉽게 NEEZ 에서 경험해보세요!
 
-![제목 추가](https://github.com/user-attachments/assets/1d6e47a8-964c-4ac3-b7e2-1f77ea9d31e5)
+
+<center> 
+  
+<figure class="half">  
+
+![ezgif-4-a4c1a45d8d](https://github.com/user-attachments/assets/b0786640-29e5-47c8-b240-42fa4f8354f4)
+![ezgif-4-b3997874d8](https://github.com/user-attachments/assets/bf4f0f4c-801b-4276-888c-13ed7d5f373b)
+![ezgif-4-47f5bc466a](https://github.com/user-attachments/assets/0d907fd3-d4f8-4073-ab4f-b318d1245a78)
+</figure>
+
+ </center>
 
 ---
 
-![제목 추가 (1)](https://github.com/user-attachments/assets/645a5b62-aa7d-4384-8b41-151bc360e8c5)
 
+![제목 추가 (1)](https://github.com/user-attachments/assets/645a5b62-aa7d-4384-8b41-151bc360e8c5)
 
 
 <br>

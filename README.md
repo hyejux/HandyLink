@@ -4,12 +4,11 @@
 
 <center> 
   
-<figure class="half">  
+<figure class="thrid">  
 
 ![ezgif-4-a4c1a45d8d](https://github.com/user-attachments/assets/b0786640-29e5-47c8-b240-42fa4f8354f4)
 ![ezgif-4-47f5bc466a](https://github.com/user-attachments/assets/0d907fd3-d4f8-4073-ab4f-b318d1245a78)
 ![ezgif-4-b3997874d8](https://github.com/user-attachments/assets/bf4f0f4c-801b-4276-888c-13ed7d5f373b)
-![ezgif-4-06a291a7bf](https://github.com/user-attachments/assets/410b2192-e71f-4055-a08f-366f3cfbf011)
 
 </figure>
 
@@ -150,6 +149,7 @@
 
 ![제목 추가 (1)](https://github.com/user-attachments/assets/645a5b62-aa7d-4384-8b41-151bc360e8c5)
 ![V20241114_212250000_2075AC2B-471B-456F-B0CA-C8D81F800E14-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/260577d5-7a54-47d0-b3b0-fe06c124cbe3)
+
 
 </center>
 

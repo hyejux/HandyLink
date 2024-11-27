@@ -1,6 +1,12 @@
 
-#  🧵 NEEZ
-![ui](https://github.com/user-attachments/assets/daddd8f1-5f5c-45f7-a66e-52ff1d9d7236)
+##  🧵  예약 이젠 더 편리하게,  관리도 손쉽게 NEEZ 에서 경험해보세요!
+
+![제목 추가](https://github.com/user-attachments/assets/1d6e47a8-964c-4ac3-b7e2-1f77ea9d31e5)
+
+---
+
+![제목 추가 (1)](https://github.com/user-attachments/assets/645a5b62-aa7d-4384-8b41-151bc360e8c5)
+
 
 
 <br>
@@ -15,30 +21,20 @@
 6. [프로젝트 산출물](#프로젝트-산출물)  
 
 
-![1](https://github.com/user-attachments/assets/40e8044f-cc38-422f-b788-afbd8804d848)
-![2](https://github.com/user-attachments/assets/bcf6b558-3698-47b3-bf01-0a74b5a43bdc)
-![3](https://github.com/user-attachments/assets/63f082b2-2d66-4b23-b9ca-603e041f3043)
-![4](https://github.com/user-attachments/assets/99a8aacf-5422-4a58-8776-5793c0da3de5)
-![5](https://github.com/user-attachments/assets/dfb13ab6-6182-4655-b082-a702fff8c040)
-![6](https://github.com/user-attachments/assets/f96be072-efc6-40c1-8834-4a028960695a)
-![7](https://github.com/user-attachments/assets/5c11d28b-4f52-476e-95b6-c7078dacf45a)
-![8](https://github.com/user-attachments/assets/1d169ebc-a174-40c8-93e8-5020098a1567)
-![9](https://github.com/user-attachments/assets/79407c13-e57c-4e30-b21e-f02b4fdd1a80)
-![10](https://github.com/user-attachments/assets/4623792a-5d51-4c0d-9224-06a328fe1517)
-![11](https://github.com/user-attachments/assets/352e0993-48bf-4c41-b802-034e06b4034c)
-![12](https://github.com/user-attachments/assets/55046bf3-34a6-488c-955e-f1fd9482b82b)
-![13](https://github.com/user-attachments/assets/3520bdbd-e63c-4fab-baf9-55e649db16de)
-![14](https://github.com/user-attachments/assets/c66fc28d-238f-43f5-bf3d-ca62fa8059ab)
+<br>
+
+## NEEZ를 소개합니다 🎉
+![2024-11-27 17 03 40](https://github.com/user-attachments/assets/365fb51d-73d3-4a65-8a17-46a837b8393e)
+안녕하세요 😉 
 
 
 <br>
 
-## NEEZ
+## NEEZ 왜 만들었을까 ? 🤔
 
-**출판사**를 위한 **주문 관리 시스템**을 만들었습니다. (문학동네 출판사를 모티브로 제작되었습니다. 😃)<br>
-이 시스템은 출판사의 주문을 효율적으로 관리하고 최적화할 수 있도록 다양한 기능을 제공합니다. <br>
-주요 기능으로는 **고객 관리, 상품 관리, 주문 관리, 판매가 관리, 직원 및 권한 관리** 등이 포함되어 있습니다.<br>
-이 시스템을 통해 상품을 등록 및 업데이트를 하고, 고객의 주문을 손쉽게 관리할 수 있습니다. 주문 건에 대해서는 승인 권한을 가진 직원이 이를 승인하여 주문을 처리합니다. 상품에 대한 판매 가격을 관리하고, 판매 상황에 맞게 가격을 조정할 수 있는 기능도 제공됩니다.
+![2024-11-27 17 03 40 (2)](https://github.com/user-attachments/assets/c9ca4dd9-1057-407b-ba0b-a1ee53b532d5)
+![2024-11-27 17 03 40 (3)](https://github.com/user-attachments/assets/7ceb9e68-0ee5-460b-8eb6-ec75ae8278d0)
+
 
 
 <br>
@@ -62,7 +58,7 @@
 <br>
 
 ## 개발 일정 
-### 23.09.02 ~ 23.09.25 
+### 23.10.27 ~ 23.11.14
 ![image (6)](https://github.com/user-attachments/assets/8bfac0f4-22a9-4ea8-ba2b-f9858524e09c)
 
 
@@ -102,6 +98,26 @@
 
 ## 화면 설계 (UI)
 
+<center>
+
+### [NEEZ 화면설계 UI.pdf](https://github.com/user-attachments/files/17930899/default.pdf)
+
+</center>
+
+<br>
+<br>
+
+![1](https://github.com/user-attachments/assets/60ef56c8-0f75-4a73-8f6d-da993af8f2e9)
+![2](https://github.com/user-attachments/assets/1de60ccd-75ec-487f-a089-375da196c9eb)
+
+<center>
+
+![제목 추가 (1)](https://github.com/user-attachments/assets/645a5b62-aa7d-4384-8b41-151bc360e8c5)
+![V20241114_212250000_2075AC2B-471B-456F-B0CA-C8D81F800E14-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/260577d5-7a54-47d0-b3b0-fe06c124cbe3)
+
+</center>
+
+
 <br>
 <br>
 
@@ -113,6 +129,7 @@
 
 ## 프로젝트 시연 영상
 
+https://drive.google.com/drive/u/0/home
 
 
 
@@ -154,6 +171,17 @@
 
 </br><br><br>
 
+### ⚙ 스토리보드 (figma)
+</br>
+
+![figma1](https://github.com/user-attachments/assets/9e3c9bca-f150-438a-a618-14c6c928b5a6)
+![NEEZ](https://github.com/user-attachments/assets/cd48ebe5-0dfc-425b-8398-68636da85134)
+
+
+</br></br></br>
+
+
+
 ### ⚙ 요구사항 정의서
 </br>
 
@@ -180,6 +208,21 @@
 
 
 </br><br><br>
+
+
+###  ⚙ 테스트 계획서
+
+ <details> <summary>
+자세히 보기
+</summary>
+
+![test1](https://github.com/user-attachments/assets/4fd0fd41-9c04-4330-8c0d-f69563cb164d)
+
+</details>
+
+
+</br><br><br>
+
 
 
  ### ⚙ Confluence 협업

@@ -6,9 +6,9 @@
   
 <figure class="thrid">  
 
-![ezgif-4-a4c1a45d8d](https://github.com/user-attachments/assets/b0786640-29e5-47c8-b240-42fa4f8354f4)
-![ezgif-4-47f5bc466a](https://github.com/user-attachments/assets/0d907fd3-d4f8-4073-ab4f-b318d1245a78)
-![ezgif-4-b3997874d8](https://github.com/user-attachments/assets/bf4f0f4c-801b-4276-888c-13ed7d5f373b)
+<img src="https://github.com/user-attachments/assets/b0786640-29e5-47c8-b240-42fa4f8354f4" width="200" height="400">
+<img src="https://github.com/user-attachments/assets/bf4f0f4c-801b-4276-888c-13ed7d5f373b" width="200" height="400">
+<img src="https://github.com/user-attachments/assets/0d907fd3-d4f8-4073-ab4f-b318d1245a78" width="200" height="400">
 
 </figure>
 

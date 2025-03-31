@@ -20,16 +20,11 @@ public class adminReserveAdd {
   private int servicePrice;
   private String serviceContent;
   private List<adminRSDTO> categories;
-  @JsonProperty("ServiceStart")
-  private LocalDateTime ServiceStart;
-  @JsonProperty("DateNumCase")
-  private Integer DateNumCase;
-  @JsonProperty("TimeNumCase")
-  private Integer TimeNumCase;
-  @JsonProperty("StoreNo")
-  private Integer StoreNo;
-  @JsonProperty("StoreId")
-  private String StoreId;
+  private LocalDateTime serviceStart;
+  private Integer dateNumCase;
+  private Integer timeNumCase;
+  private Integer storeNo;
+  private String storeId;
   private Integer categoryId;
   private LocalDate reservationSlotDate;
 }

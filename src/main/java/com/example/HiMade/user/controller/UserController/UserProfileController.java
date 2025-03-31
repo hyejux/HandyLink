@@ -1,4 +1,4 @@
-package com.example.HiMade.user.controller;
+package com.example.HiMade.user.controller.UserController;
 
 import com.example.HiMade.user.entity.Users;
 import com.example.HiMade.user.service.UserService;

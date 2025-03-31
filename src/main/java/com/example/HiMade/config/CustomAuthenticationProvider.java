@@ -41,6 +41,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         } else {
             throw new BadCredentialsException("잘못된 비밀번호입니다.");
         }
+//        return authentication;
     }
 
     @Override

@@ -185,12 +185,8 @@ const handleTimeNumChange = (e) => {
         'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
         formData
       );
-      // console.log('Uploaded Image URL:', response.data.secure_url);
-      // alert(`Image uploaded successfully! URL: ${response.data.secure_url}`);
       return response.data.secure_url; // 업로드된 이미지 URL을 반환
     } catch (error) {
-      // console.error('Error uploading image:', error);
-      // alert("이미지 업로드에 실패했습니다.");
       return null; // 업로드 실패 시 null 반환
     }
   };
@@ -288,10 +284,10 @@ const handleTimeNumChange = (e) => {
       servicePrice: reserveAdd.servicePrice,
       serviceContent: reserveAdd.serviceContent,
       categories: transformedCategories,
-      ServiceStart: combinedDateTime,
-      DateNumCase: dateNumCase,
-      TimeNumCase: timeNumCase,
-      StoreNo: storeNo
+      serviceStart: combinedDateTime,
+      dateNumCase: dateNumCase,
+      timeNumCase: timeNumCase,
+      storeNo: storeNo
     };
   
     console.log(requestData);
@@ -321,8 +317,8 @@ const handleTimeNumChange = (e) => {
     })
     .then(response => {
         console.log('파일 업로드 성공:', response.data);
-        alert("서비스 등록이 완료되었습니다.");
-        window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
+        // alert("서비스 등록이 완료되었습니다.");
+        // window.location.href = '/AdminReserveSetting.admin'; // 페이지 이동
     })
     .catch(error => {
         console.error('에러 발생:', error);

@@ -162,8 +162,6 @@
         where c.category_level = 1 AND  c.category_id = #{id}
     </select>
 
-
-
     <!--   서비스 중분류 가져오기  -->
     <select id="getMiddleItem" resultType="com.example.HiMade.admin.dto.adminRSDTO">
         select c.category_id, c.category_level, c.parent_category_id, c.service_name , c.service_price, c.service_content, c.store_no, sc.category_status, sc.category_id, sc.sub_category_type, sc.is_required, sc.is_paid
@@ -187,8 +185,8 @@
 
     <!--  서비스 (대분류) 등록하기    -->
     <insert id="setMainCategory" parameterType="com.example.HiMade.admin.dto.adminReservationDTO" useGeneratedKeys="true" keyProperty="categoryId">
-        INSERT INTO category (category_level, service_name, service_price, service_content,store_no, service_start)
-        VALUES (1, #{serviceName}, #{servicePrice}, #{serviceContent},  #{storeNo}, #{serviceStart})
+        INSERT INTO category (category_level, service_name, service_price, service_content,store_no, service_start, activated)
+        VALUES (1, #{serviceName}, #{servicePrice}, #{serviceContent},  #{storeNo}, #{serviceStart} , 'Y')
         RETURNING category_id
     </insert>
 

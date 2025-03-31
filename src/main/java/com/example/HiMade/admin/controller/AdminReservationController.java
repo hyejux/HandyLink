@@ -117,7 +117,7 @@ public class AdminReservationController {
     dto2.setStoreNo(dto.getStoreNo());
 
     // 대분류 카테고리
-    int serviceId = adminReservationService.setMainCategory(dto2); // 대분류 insert
+    int serviceId = adminReservationService.setMainCategory(dto); // 대분류 insert
     System.out.println("메인 카테고리 삽입 후 아이디  : " + serviceId);
     int realId = serviceId;
     adminReservationService.setSlotModi(id, realId);
@@ -125,7 +125,7 @@ public class AdminReservationController {
     dtoSlot = dto;
     dtoSlot.setCategoryId(serviceId);
     dtoSlot.setStoreNo(dto.getStoreNo());
-    System.out.println(dtoSlot);
+//    System.out.println(dtoSlot);
 
     // 중분류 카테고리
     List<adminRSDTO> categories = dto.getCategories();
@@ -163,53 +163,53 @@ public class AdminReservationController {
 
   @PostMapping("/setMainCategory")
   public int setMainCategory(@RequestBody adminReserveAdd dto) {
+    int serviceId = adminReservationService.setMainCategory(dto);
+//
+//    adminReservationDTO dto2 = new adminReservationDTO();
+//    dto2.setServiceName(dto.getServiceName());
+//    dto2.setServicePrice(dto.getServicePrice());
+//    dto2.setServiceContent(dto.getServiceContent());
+//    dto2.setServiceStart(dto.getServiceStart());
+//    dto2.setStoreNo(dto.getStoreNo());
+//
+//    // 대분류 카테고리
+//    int serviceId = adminReservationService.setMainCategory(dto2); // 대분류
+//    System.out.println("메인 카테고리 삽입 후 아이디  : " + serviceId);
+//
+//    adminReserveAdd dtoSlot = new adminReserveAdd();
+//    dtoSlot = dto;
+//    dtoSlot.setCategoryId(serviceId);
+//    dtoSlot.setStoreNo(dto.getStoreNo());
+//    System.out.println(dtoSlot);
+//
+//    adminReservationService.setSlotAll(dtoSlot); // 서비스 슬롯 삽입
+//
+//
+//    // 중분류 카테고리
+//    List<adminRSDTO> categories = dto.getCategories();
+//    for (adminRSDTO category : categories) {
+//      category.setStoreNo(dto.getStoreNo());
+//      category.setParentCategoryId(serviceId); // 서비스 ID를 카테고리에 설정
+//      int serviceId2 = adminReservationService.setMainCategory2(category); // 중분류 insert
+//      System.out.println("중분류 카테고리 삽입 후 " + serviceId2);
+//      adminReservationService.setMainCategory3(category); // 중분류 상태 insert
+//
+//      System.out.println(category.getSubCategories());
+//      List<adminReservationDTO> subCategories = category.getSubCategories();
+//      //subCategory 배열 들어감
+//
+//      System.out.println(subCategories);
+//
+//      for (adminReservationDTO subcategory : subCategories) {
+//        System.out.println(subcategory);
+//        subcategory.setStoreNo(dto.getStoreNo());
+//        subcategory.setParentCategoryId(serviceId2); // 삽입된 중분류 아이디를 부모 아이디로 가지고 감
+//        adminReservationService.setMainCategory4(subcategory); // 소분류 insert
+//        System.out.println("중분류 삽입됨");
+//      }
+//    }
+//    // 소분류 카테고리
 
-    System.out.println(dto);
-
-    adminReservationDTO dto2 = new adminReservationDTO();
-    dto2.setServiceName(dto.getServiceName());
-    dto2.setServicePrice(dto.getServicePrice());
-    dto2.setServiceContent(dto.getServiceContent());
-    dto2.setServiceStart(dto.getServiceStart());
-    dto2.setStoreNo(dto.getStoreNo());
-
-    // 대분류 카테고리
-    int serviceId = adminReservationService.setMainCategory(dto2); // 대분류 insert
-    System.out.println("메인 카테고리 삽입 후 아이디  : " + serviceId);
-
-    adminReserveAdd dtoSlot = new adminReserveAdd();
-    dtoSlot = dto;
-    dtoSlot.setCategoryId(serviceId);
-    dtoSlot.setStoreNo(dto.getStoreNo());
-    System.out.println(dtoSlot);
-
-    adminReservationService.setSlotAll(dtoSlot); // 서비스 슬롯 삽입
-
-
-    // 중분류 카테고리
-    List<adminRSDTO> categories = dto.getCategories();
-    for (adminRSDTO category : categories) {
-      category.setStoreNo(dto.getStoreNo());
-      category.setParentCategoryId(serviceId); // 서비스 ID를 카테고리에 설정
-      int serviceId2 = adminReservationService.setMainCategory2(category); // 중분류 insert
-      System.out.println("중분류 카테고리 삽입 후 " + serviceId2);
-      adminReservationService.setMainCategory3(category); // 중분류 상태 insert 
-
-      System.out.println(category.getSubCategories());
-      List<adminReservationDTO> subCategories = category.getSubCategories();
-      //subCategory 배열 들어감
-
-      System.out.println(subCategories);
-
-      for (adminReservationDTO subcategory : subCategories) {
-        System.out.println(subcategory);
-        subcategory.setStoreNo(dto.getStoreNo());
-        subcategory.setParentCategoryId(serviceId2); // 삽입된 중분류 아이디를 부모 아이디로 가지고 감
-        adminReservationService.setMainCategory4(subcategory); // 소분류 insert
-        System.out.println("중분류 삽입됨");
-      }
-    }
-    // 소분류 카테고리
     return serviceId;
 
   }

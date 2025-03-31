@@ -3,8 +3,10 @@ package com.example.HiMade.user.service;
 import com.example.HiMade.user.dto.UserDTO;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+
 
 public interface UserAccountService {
     void insertUser(UserDTO userDTO);

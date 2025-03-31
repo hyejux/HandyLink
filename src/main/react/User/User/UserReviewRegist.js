@@ -89,32 +89,23 @@ function UserReviewRegist() {
 
 
   const handleUpload = async () => {
-    // charCount가 10자 미만일 경우 경고 메시지 출력 후 함수 종료
-    if (charCount < 10) {
-      alert("10자 이상 입력해주세요.");
-      return; // 오타 수정: 'retrun' -> 'return'
-    }
-    console.log(images);
-    // 이미지가 없으면 빈 배열 반환
-    if (!images || images.length === 0) {
+
+    if (!images || images.length === 0) { // 이미지가 없으면 빈 배열 반환
       return [];
     }
 
     const uploadedUrls = []; // 업로드된 이미지 URL을 저장할 배열
 
-    // 각 파일에 대해 Cloudinary 업로드 요청을 비동기로 수행
     for (let i = 0; i < images.length; i++) {
       const formData = new FormData();
       formData.append('file', images[i]);
-      formData.append('upload_preset', 'hye123'); // Cloudinary에서 설정한 Upload Preset
+      formData.append('upload_preset', 'hye123'); //
 
       try {
         const response = await axios.post(
           'https://api.cloudinary.com/v1_1/dtzx9nu3d/image/upload',
           formData
         );
-
-        // Cloudinary 응답 데이터에서 URL들을 추출하여 배열에 추가
         if (response.data && response.data.secure_url) {
           uploadedUrls.push(response.data.secure_url);
         }
@@ -140,8 +131,14 @@ function UserReviewRegist() {
   // };
 
   const reviewSubmit = async () => {
+
     const imageUrls = await handleUpload(); // 이미지 URL 배열을 기다림
-  
+
+    if (charCount < 10) {
+      alert("10자 이상 입력해주세요.");
+      return; 
+    }
+
     const submitData = {
       reviewRating: rating,
       reviewContent: review,

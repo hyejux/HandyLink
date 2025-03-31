@@ -19,16 +19,16 @@ public interface UserReservationMapper {
 
   public List<UserRL> getMyReserveList(UserRL dto);
 
-  public List<UserRSlotDTO> getDateTime(UserRSlotDTO Date);
-  public List<UserRSlotDTO> getDateTime2(int id);
-  public List<UserRSlotDTO> getAllDateTime(int id);
-  public int setReservationForm(UserReservationDTO dto);
-  public List<UserReservationDTO> getSlotTime(int slotkey);
-  public void setMainCategoryImg(AdminCategoryImgDTO dto);
-  public int setReservationFormDetail(UserReservationFormDTO dto);
-  public List<UserRD> getMyReservationDetail(int id);
-  public List<UserRD> getMyReservationDetail2(int id);
-  public List<LocalDate> getNoSlot(int id);
+   List<UserRSlotDTO> getDateTime(UserRSlotDTO Date);
+   List<UserRSlotDTO> getDateTime2(int id);
+   List<UserRSlotDTO> getAllDateTime(int id);
+   int setReservationForm(UserReservationDTO dto);
+   List<UserReservationDTO> getSlotTime(int slotkey);
+   void setMainCategoryImg(AdminCategoryImgDTO dto);
+   int setReservationFormDetail(UserReservationFormDTO dto);
+   List<UserRD> getMyReservationDetail(int id);
+   List<UserRD> getMyReservationDetail2(int id);
+   List<LocalDate> getNoSlot(int id);
   void setUpdateStart(UserRSlotDTO dto);
   void setUpdateSlot(@RequestBody UserUSlotDTO dto);
   void updateReservationStatus(@Param("reservationNo") int reservationNo, @Param("status") String status);

@@ -29,11 +29,12 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 // 로그인 없이 접근 가능한 페이지
-                .antMatchers("/userMain.user", "/userSearch.user", "/userStoreDetail.user/**").permitAll()
+//                .antMatchers("/userMain.user", "/userSearch.user", "/userStoreDetail.user/**").permitAll()
+                .antMatchers("/*.user", "/*.admin", "/*.master").permitAll()
 
                 // 로그인 필수 페이지
-                .antMatchers("/userMyReservationList.user").authenticated()
-                .antMatchers("/userlikelist.user").authenticated()
+//                .antMatchers("/userMyReservationList.user").authenticated()
+//                .antMatchers("/userlikelist.user").authenticated()
 
                 // 정적 리소스는 로그인 없이 접근 허용
                 .antMatchers("/css/**", "/uploads/**", "/img/**", "/bundle/**").permitAll()

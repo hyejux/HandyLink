@@ -13,7 +13,7 @@ public interface AdminReservationService
   public  adminReservationDTO  getListDetail(int id);
   public  List<adminRSDTO> getMiddleItem(int id);
 
-  public Integer setMainCategory(adminReservationDTO dto);
+  public Integer setMainCategory(adminReserveAdd dto);
   public int setMainCategory2(adminRSDTO dto);
   public void setMainCategory3(adminRSDTO dto);
   public void setMainCategory4(adminReservationDTO dto);

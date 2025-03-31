@@ -56,9 +56,48 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   }
 
   @Override
-  public Integer setMainCategory(adminReservationDTO dto) {
-//    adminReservationMapper.setActivated(id);
-    adminReservationMapper.setMainCategory(dto);
+  public Integer setMainCategory(adminReserveAdd dto) {
+
+    adminReservationDTO dto2 = new adminReservationDTO();
+    dto2.setServiceName(dto.getServiceName());
+    dto2.setServicePrice(dto.getServicePrice());
+    dto2.setServiceContent(dto.getServiceContent());
+    dto2.setServiceStart(dto.getServiceStart());
+    dto2.setStoreNo(dto.getStoreNo());
+
+    // 대분류 카테고리
+    int serviceId = adminReservationMapper.setMainCategory(dto2); // 대분류 ID
+    System.out.println("메인 카테고리 삽입 후 아이디  : " + serviceId);
+
+    adminReserveAdd dtoSlot = new adminReserveAdd();
+    dtoSlot.setCategoryId(serviceId);
+    dtoSlot.setStoreNo(dto.getStoreNo());
+    System.out.println(dtoSlot);
+
+    adminReservationMapper.setSlotAll(dtoSlot); // 서비스 슬롯 삽입
+
+
+    // 중분류 카테고리
+
+    List<adminRSDTO> categories = dto.getCategories(); // 중분류 LIST 가져오기
+
+    for (adminRSDTO category : categories) { // 중분류 LIST 순회
+      category.setStoreNo(dto.getStoreNo());
+      category.setParentCategoryId(serviceId); // 대분류 ID를 카테고리에 설정
+
+      int serviceId2 = adminReservationMapper.setMainCategory2(category); // 중분류 INSERT
+
+      adminReservationMapper.setMainCategory3(category); // 중분류 상태  INSERT
+
+      List<adminReservationDTO> subCategories = category.getSubCategories(); // 소분류 LIST 가져오기
+
+      for (adminReservationDTO subcategory : subCategories) {
+        subcategory.setStoreNo(dto.getStoreNo());
+        subcategory.setParentCategoryId(serviceId2); // 삽입된 중분류 아이디를 부모 아이디로 가지고 감
+        adminReservationMapper.setMainCategory4(subcategory); // 소분류 insert
+      }
+    }
+
 
     return dto.getCategoryId();
   }
@@ -97,17 +136,6 @@ public class AdminReservationServiceImpl implements AdminReservationService {
         adminReservationMapper.setSlotAll(dto);
         startDate = startDate.plusDays(1);
       }
-
-//    LocalDateTime startDate2 = LocalDateTime.now();
-//    LocalDateTime endDate2 = dto.getServiceStart();
-////    오늘~스타트데이트
-//    while (!startDate2.isAfter(endDate2)) {
-//      dto.setReservationSlotDate(startDate);
-//      adminReservationMapper.setSlotActivated(dto);
-//      startDate = startDate.plusDays(1);
-//    }
-
-
   }
 
   @Override

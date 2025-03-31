@@ -101,7 +101,7 @@ moment.locale('ko'); // moment의 로케일을 한국어로 설정
 
 
   // 날짜 비활성화 
-  const tileDisabled = ({ date }) => {
+  const  tileDisabled = ({ date }) => {
     const today = new Date();
     const threeMonthsLater = new Date();
     threeMonthsLater.setMonth(today.getMonth() + 3);
@@ -321,7 +321,6 @@ moment.locale('ko'); // moment의 로케일을 한국어로 설정
       const dayOffEnd = new Date(day.dayOffEnd).toLocaleDateString('en-CA');
       return formattedDate >= dayOffStart && formattedDate <= dayOffEnd; // 해당 날짜가 고정휴무 기간에 포함되는지 체크
     });
-    // const formattedDate = date.toLocaleDateString('en-CA'); // 'yyyy-mm-dd' 형식으로 변환 (로컬 시간 기준)
   
     // 날짜의 요일을 한글로 가져오기 (ex: '월요일', '화요일' 등)
     const dayOfWeek = date.toLocaleString('ko-KR', { weekday: 'long' });
@@ -330,19 +329,18 @@ moment.locale('ko'); // moment의 로케일을 한국어로 설정
     const isOffDay2 = offDay.includes(dayOfWeek);
   
     if (isOffDay2) {
-      return 'reserved'; // 고정휴무일인 경우 'off-day' 클래스 반환
+      return 'reserved'; // 고정휴무일인 경우 'off-day' 
     }
   
     if (isOffDay) {
-      return 'reserved'; // 고정휴무일인 경우 'off-day' 클래스 반환
+      return 'reserved'; // 고정휴무일인 경우 'off-day' 
     }
   
     // 예약 정보 확인
     const slot = dateTime2.find((slot) => slot.reservationSlotDate === formattedDate); // 해당 날짜의 예약 정보 찾기
     if (slot) {
-      // console.log(`Checking slot for date ${formattedDate}:`, slot);
       if (slot.slotStatusCount === slot.slotCount) {
-        return 'reserved'; // 예약이 모두 찼다면 'reserved' 클래스 반환
+        return 'reserved'; // 예약이 모두 찼다면 'reserved' 
       }
     }
   
@@ -439,7 +437,6 @@ moment.locale('ko'); // moment의 로케일을 한국어로 설정
         tileDisabled={tileDisabled}
         tileClassName={getTileClass} // 날짜 스타일링
         formatDay={(locale, date) => moment(date).format('D')} // 날짜 표시 형식 (예: 1, 2, 3 등)
-        formatDay={(locale, date) => moment(date).format('D')} // 날짜 표시 형식 (예: 1, 2, 3 등)
               formatShortWeekday={(locale, date) =>
                 ['일', '월', '화', '수', '목', '금', '토'][date.getDay()]
               } // 요일을 한국어로 표시
@@ -453,36 +450,36 @@ moment.locale('ko'); // moment의 로케일을 한국어로 설정
 
 
           {dateTime.map((slot) => (
-  !noSlotsMessage ? (
-    <div key={slot.reservationSlotKey}>
-      <div className="user-reserve-date-time">
-        {timeSlots.map((timeSlot, index) => (
-          <button
-            key={index}
-            type="button"
-            onClick={() => {
-              handleSlotClick(index); // 슬롯 선택 관리
-              handleSlotClick2(timeSlot.time); // 슬롯 시간 출력
-              handleSlotClick3(slot.reservationSlotKey);
-            }}
-            disabled={disabledTimes.includes(timeSlot.time)} // 비활성화 조건 추가
-            style={{
-              backgroundColor: selectedSlot === index ? '#fd8517' : 'transparent',
-              color: selectedSlot === index ? 'white' : 'black',
-              opacity: disabledTimes.includes(timeSlot.time) ? 0.5 : 1, // 비활성화된 슬롯의 투명도 조절
-            }}
-          >
-            {timeSlot.time} {/* 슬롯 시간 표시 */}
-          </button>
+            !noSlotsMessage ? (
+              <div key={slot.reservationSlotKey}>
+                <div className="user-reserve-date-time">
+                  {timeSlots.map((timeSlot, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => {
+                        handleSlotClick(index); // 슬롯 선택 관리
+                        handleSlotClick2(timeSlot.time); // 슬롯 시간 출력
+                        handleSlotClick3(slot.reservationSlotKey);
+                      }}
+                      //disabled={disabledTimes.includes(timeSlot.time)} // 비활성화 조건 추가
+                      //style={{
+                        //backgroundColor: selectedSlot === index ? '#fd8517' : 'transparent',
+                        //color: selectedSlot === index ? 'white' : 'black',
+                      //</div></div> opacity: disabledTimes.includes(timeSlot.time) ? 0.5 : 1, // 비활성화된 슬롯의 투명도 조절
+                      //}}
+                    >
+                      {timeSlot.time} {/* 슬롯 시간 표시 */}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className='msg1'>
+                예약 가능한 시간이 없습니다. <br /> 다른 날짜를 선택해주세요.
+              </div>
+            )
         ))}
-      </div>
-    </div>
-  ) : (
-    <div className='msg1'>
-      예약 가능한 시간이 없습니다. <br /> 다른 날짜를 선택해주세요.
-    </div>
-  )
-))}
 
         </div>
         <div className="user-content-container3">

@@ -76,7 +76,7 @@ function UserStoreDetail() {
     axios.get(`/UserStoreDetail/getStoreInfo/${storeNo}`)
       .then(response => {
         setStoreInfo(response.data);
-
+        console.log(response.data); // 가게 정보 
         // Kakao Maps API로 주소 좌표 검색
         if (window.kakao && response.data.addr) {
           const geocoder = new window.kakao.maps.services.Geocoder();
